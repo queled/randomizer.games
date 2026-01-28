@@ -345,7 +345,196 @@ function extractDomainName(url) {
 }
 
 /**
- * Détecte les nouveaux randomizers non encore en BDD
+ * Détecte les nouveaux JEUX (pas randomizers) non encore en BDD
+ * Un jeu = une entrée dans games de rando-list
+ */
+async function detectNewGames(seriesData) {
+  console.log('\n🆕 Détection des nouveaux jeux...');
+  
+  // Récupérer tous les jeux existants et leurs noms connus
+  const existingGames = await Game.find({}).select('id name displayName officialName integrations.randoList').lean();
+  
+  // Index des noms de jeux existants (normalisés)
+  const existingNames = new Set();
+  for (const game of existingGames) {
+    existingNames.add(normalizeGameName(game.id));
+    if (game.name) existingNames.add(normalizeGameName(game.name));
+    if (game.displayName) existingNames.add(normalizeGameName(game.displayName));
+    if (game.officialName) existingNames.add(normalizeGameName(game.officialName));
+    if (game.integrations?.randoList?.gameName) {
+      existingNames.add(normalizeGameName(game.integrations.randoList.gameName));
+    }
+  }
+  
+  // Collecter tous les jeux uniques de rando-list
+  const allGamesFromRandoList = new Map(); // gameName normalisé -> infos du jeu
+  
+  for (const series of seriesData) {
+    // series.games est un TABLEAU d'objets {name, genres, platforms, ...}
+    for (const gameData of series.games) {
+      const gameName = gameData.name;
+      const normalizedName = normalizeGameName(gameName);
+      
+      if (!allGamesFromRandoList.has(normalizedName)) {
+        // Trouver les randomizers pour ce jeu
+        const gameRandomizers = series.randomizers.filter(r => 
+          r.games.some(g => normalizeGameName(g) === normalizedName)
+        );
+        
+        allGamesFromRandoList.set(normalizedName, {
+          name: gameName,
+          series: series.seriesName,
+          seriesFile: series.seriesFile,
+          genres: gameData.genres || [],
+          platforms: gameData.platforms || [],
+          releaseDate: gameData.releaseDate,
+          randomizers: gameRandomizers.map(r => ({
+            identifier: r.identifier,
+            url: r.url,
+            name: r.name,
+            isArchipelago: r.isArchipelago || false,
+            obsolete: r.obsolete || false,
+            opensource: r.opensource || false
+          }))
+        });
+      } else {
+        // Fusionner les randomizers si le jeu existe déjà dans une autre série
+        const existing = allGamesFromRandoList.get(normalizedName);
+        const gameRandomizers = series.randomizers.filter(r => 
+          r.games.some(g => normalizeGameName(g) === normalizedName)
+        );
+        for (const r of gameRandomizers) {
+          if (!existing.randomizers.find(er => er.identifier === r.identifier)) {
+            existing.randomizers.push({
+              identifier: r.identifier,
+              url: r.url,
+              name: r.name,
+              isArchipelago: r.isArchipelago || false,
+              obsolete: r.obsolete || false,
+              opensource: r.opensource || false
+            });
+          }
+        }
+      }
+    }
+  }
+  
+  // Trouver les jeux qui ne sont pas en BDD
+  const newGames = [];
+  for (const [normalizedName, gameInfo] of allGamesFromRandoList) {
+    if (!existingNames.has(normalizedName)) {
+      // Ne garder que les jeux qui ont au moins un randomizer actif
+      const activeRandomizers = gameInfo.randomizers.filter(r => !r.obsolete);
+      if (activeRandomizers.length > 0) {
+        newGames.push({
+          ...gameInfo,
+          activeRandomizers
+        });
+      }
+    }
+  }
+  
+  if (newGames.length > 0) {
+    console.log(`  📋 ${newGames.length} nouveau(x) jeu(x) détecté(s):`);
+    newGames.slice(0, 15).forEach(g => {
+      console.log(`    - ${g.name} (${g.series}) - ${g.activeRandomizers.length} randomizer(s)`);
+    });
+    if (newGames.length > 15) {
+      console.log(`    ... et ${newGames.length - 15} autres`);
+    }
+  } else {
+    console.log('  ✓ Aucun nouveau jeu');
+  }
+  
+  return newGames;
+}
+
+/**
+ * Génère un rapport des nouveaux jeux pour création manuelle
+ */
+async function generateNewGamesReport(newGames, outputPath = null) {
+  if (newGames.length === 0) {
+    console.log('\n✅ Aucun nouveau jeu à rapporter');
+    return;
+  }
+  
+  console.log('\n📝 Génération du rapport des nouveaux jeux...');
+  
+  const report = {
+    generatedAt: new Date().toISOString(),
+    totalNewGames: newGames.length,
+    games: newGames.map(g => {
+      // Générer des suggestions d'ID
+      const suggestedId = generateGameId(g.name);
+      
+      return {
+        originalName: g.name,
+        series: g.series,
+        suggestedId: suggestedId,
+        // Les champs que l'utilisateur doit remplir:
+        id: suggestedId, // À modifier si besoin
+        displayName: g.name, // Le titre du jeu
+        randomizerName: `${g.name} Randomizer`,
+        randomizerShortName: `${suggestedId.toUpperCase()} Rando`,
+        randomizerTinyName: suggestedId.toUpperCase(),
+        platforms: g.platforms,
+        genres: g.genres,
+        randomizers: g.activeRandomizers.map(r => ({
+          name: r.identifier,
+          url: r.url,
+          isArchipelago: r.isArchipelago,
+          isMain: false // À définir par l'utilisateur
+        }))
+      };
+    })
+  };
+  
+  // Afficher dans la console
+  console.log('\n--- NEW_GAMES_REPORT ---');
+  console.log(JSON.stringify(report, null, 2));
+  console.log('--- END_NEW_GAMES_REPORT ---');
+  
+  // Sauvegarder dans un fichier si demandé
+  if (outputPath) {
+    const fs = require('fs');
+    fs.writeFileSync(outputPath, JSON.stringify(report, null, 2));
+    console.log(`\n📄 Rapport sauvegardé: ${outputPath}`);
+  }
+  
+  return report;
+}
+
+/**
+ * Génère un ID de jeu à partir du nom
+ */
+function generateGameId(gameName) {
+  // Extraire les initiales si le nom est long
+  const words = gameName
+    .replace(/[():\-–—]/g, ' ')
+    .replace(/[^a-zA-Z0-9\s]/g, '')
+    .split(/\s+/)
+    .filter(w => w.length > 0);
+  
+  // Si le nom est court, utiliser le nom complet
+  if (words.length <= 2) {
+    return words.join('-').toLowerCase();
+  }
+  
+  // Sinon, générer des initiales
+  const significantWords = words.filter(w => 
+    !['the', 'a', 'an', 'of', 'and', 'in', 'on', 'at', 'to', 'for'].includes(w.toLowerCase())
+  );
+  
+  if (significantWords.length <= 4) {
+    return significantWords.map(w => w.charAt(0).toLowerCase()).join('');
+  }
+  
+  // Prendre les premières lettres
+  return words.slice(0, 4).map(w => w.charAt(0).toLowerCase()).join('');
+}
+
+/**
+ * Détecte les nouveaux randomizers non encore en BDD (ancienne fonction, conservée pour compatibilité)
  */
 async function detectNewRandomizers(seriesData) {
   console.log('\n🆕 Détection des nouveaux randomizers...');
@@ -399,113 +588,6 @@ async function detectNewRandomizers(seriesData) {
   return newRandomizers;
 }
 
-/**
- * Crée les nouveaux jeux dans la BDD Games
- */
-async function createNewGames(newRandomizers, dryRun = false) {
-  if (newRandomizers.length === 0) {
-    return [];
-  }
-  
-  console.log('\n🎮 Création des nouveaux jeux...');
-  
-  const createdGames = [];
-  
-  for (const rando of newRandomizers) {
-    // Générer un ID unique basé sur l'identifier
-    const gameId = rando.identifier.toLowerCase().replace(/[^a-z0-9-]/g, '-');
-    
-    // Nom du jeu basé sur les jeux couverts
-    const gameName = rando.games.length > 0 ? rando.games[0] : rando.identifier;
-    const displayName = rando.name || `${gameName} Randomizer`;
-    
-    // Essayer de trouver un slug racetime potentiel
-    // Les slugs racetime sont généralement des abbréviations courtes
-    const potentialSlug = rando.identifier.toLowerCase().replace(/[^a-z0-9]/g, '');
-    
-    const newGame = {
-      id: gameId,
-      name: gameName,
-      displayName: displayName,
-      officialName: gameName,
-      enabled: true,
-      
-      // Métadonnées randomizer
-      randomizer: {
-        name: displayName,
-        shortName: rando.identifier,
-        opensource: rando.opensource || false,
-        multiworld: rando.multiworld || false,
-        addedDate: rando.addedDate ? new Date(rando.addedDate) : new Date()
-      },
-      
-      // Ressources
-      resources: {
-        sites: rando.url ? [{
-          url: rando.url,
-          name: rando.isArchipelago ? 'Archipelago' : 'Site officiel',
-          source: 'rando-list',
-          isArchipelago: rando.isArchipelago || false
-        }] : [],
-        officialSite: rando.url ? {
-          url: rando.url,
-          name: rando.isArchipelago ? 'Archipelago' : 'Site officiel',
-          isArchipelago: rando.isArchipelago || false
-        } : null
-      },
-      
-      // Intégrations
-      integrations: {
-        randoList: {
-          enabled: true,
-          seriesFile: rando.seriesFile,
-          gameName: gameName,
-          randomizerIdentifier: rando.identifier,
-          confidence: 'auto',
-          lastSync: new Date()
-        },
-        racetime: {
-          enabled: false,  // Sera activé manuellement si trouvé sur racetime
-          gameSlug: null,
-          confidence: 'manual'
-        }
-      },
-      
-      // Source
-      source: {
-        origin: 'rando-list',
-        createdAt: new Date(),
-        autoCreated: true
-      }
-    };
-    
-    if (dryRun) {
-      console.log(`  📋 [DRY-RUN] Créerait: ${gameId} - ${displayName}`);
-      createdGames.push(newGame);
-    } else {
-      try {
-        // Vérifier si le jeu existe déjà
-        const existing = await Game.findOne({ id: gameId });
-        if (existing) {
-          console.log(`  ⏭️  ${gameId} existe déjà, ignoré`);
-          continue;
-        }
-        
-        const game = new Game(newGame);
-        await game.save();
-        console.log(`  ✅ Créé: ${gameId} - ${displayName}`);
-        createdGames.push(newGame);
-      } catch (error) {
-        console.error(`  ❌ Erreur création ${gameId}: ${error.message}`);
-      }
-    }
-  }
-  
-  console.log(`\n  📊 ${createdGames.length} jeu(x) créé(s)`);
-  
-  return createdGames;
-}
-
 async function main() {
   const args = process.argv.slice(2);
   
@@ -515,18 +597,30 @@ Usage: node sync-rando-list-v3.js [options]
 
 Options:
   --link-games       Lier automatiquement les Games existants
-  --create-games     Créer automatiquement les nouveaux jeux
+  --detect-new       Détecter les nouveaux jeux et générer un rapport
+  --report-path      Chemin du fichier de rapport (défaut: tmp/new-games-report.json)
   --update-resources Mettre à jour uniquement les ressources
   --dry-run          Mode simulation
   --help             Affiche cette aide
+
+Workflow recommandé:
+  1. node sync-rando-list-v3.js --detect-new     # Voir les nouveaux jeux
+  2. Éditer le rapport généré pour définir les IDs
+  3. Importer manuellement les jeux validés
 `);
     process.exit(0);
   }
   
   const linkGames = args.includes('--link-games');
-  const createGames = args.includes('--create-games');
+  const detectNew = args.includes('--detect-new');
   const updateResourcesOnly = args.includes('--update-resources');
   const dryRun = args.includes('--dry-run');
+  
+  // Chemin du rapport
+  const reportPathIndex = args.indexOf('--report-path');
+  const reportPath = reportPathIndex > -1 && args[reportPathIndex + 1] 
+    ? args[reportPathIndex + 1] 
+    : path.join(__dirname, 'tmp', 'new-games-report.json');
   
   console.log('🔄 Sync Rando-List V3\n');
   
@@ -553,23 +647,31 @@ Options:
     // 5. Mettre à jour les ressources des jeux existants
     await updateGameResources(seriesData, dryRun);
     
-    // 6. Détecter les nouveaux randomizers
-    const newRandomizers = await detectNewRandomizers(seriesData);
+    // 6. Détecter les nouveaux jeux (pas les randomizers)
+    const newGames = await detectNewGames(seriesData);
     
-    // 7. Créer les nouveaux jeux si demandé
-    let createdGames = [];
-    if (createGames && newRandomizers.length > 0) {
-      createdGames = await createNewGames(newRandomizers, dryRun);
+    // 7. Générer le rapport si demandé
+    if (detectNew && newGames.length > 0) {
+      // Créer le dossier tmp si nécessaire
+      const tmpDir = path.dirname(reportPath);
+      if (!fs.existsSync(tmpDir)) {
+        fs.mkdirSync(tmpDir, { recursive: true });
+      }
+      await generateNewGamesReport(newGames, reportPath);
     }
     
     console.log('\n✅ Sync terminé avec succès');
     
     // Retourner les infos pour le workflow GitHub Actions
-    if (newRandomizers.length > 0 || createdGames.length > 0) {
+    if (newGames.length > 0) {
       console.log('\n--- SYNC_RESULTS_JSON ---');
       console.log(JSON.stringify({
-        newRandomizers: newRandomizers.map(r => r.identifier),
-        createdGames: createdGames.map(g => g.id || g.identifier)
+        newGamesCount: newGames.length,
+        newGames: newGames.slice(0, 20).map(g => ({
+          name: g.name,
+          series: g.series,
+          randomizersCount: g.activeRandomizers.length
+        }))
       }));
       console.log('--- END_SYNC_RESULTS_JSON ---');
     }

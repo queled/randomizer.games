@@ -41,6 +41,14 @@ class RacetimeAPI {
       // Defensive: racetime may return different shapes or an HTML page on rate-limit / not-found.
       const data = response.data || {};
       if (!Array.isArray(data.races)) {
+        // Debug: log what we actually got
+        console.warn(`⚠️  [${category}] API response structure issue on page ${page}:`);
+        console.warn(`   Type of response.data: ${typeof data}`);
+        console.warn(`   Has 'races' property: ${!!data.races}`);
+        console.warn(`   Keys in response: ${Object.keys(data).slice(0, 10).join(', ')}`);
+        if (data.status === 'error') {
+          console.warn(`   Error message: ${data.message}`);
+        }
         // no races array available — return empty page instead of throwing
         return { races: [], hasNext: false };
       }
@@ -49,7 +57,12 @@ class RacetimeAPI {
         hasNext: data.races.length > 0
       };
     } catch (error) {
-      console.error(`Error fetching races for ${category}:`, error.message);
+      console.error(`❌ Error fetching races for ${category} page ${page}:`, error.message);
+      if (error.response) {
+        console.error(`   Status: ${error.response.status}`);
+        console.error(`   Content-Type: ${error.response.headers['content-type']}`);
+        console.error(`   Data preview: ${JSON.stringify(error.response.data || '').substring(0, 200)}`);
+      }
       throw error;
     }
   }

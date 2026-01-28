@@ -68,7 +68,10 @@ async function syncGameRaces(game, options = {}) {
       
       const result = await racetimeAPI.getPastRaces(slug, page);
       
+      console.log(`  📊 Page ${page}: ${result.races?.length || 0} courses trouvées`);
+      
       if (!result.races || result.races.length === 0) {
+        console.log(`  ℹ️  Pas de courses supplémentaires trouvées`);
         break;
       }
       

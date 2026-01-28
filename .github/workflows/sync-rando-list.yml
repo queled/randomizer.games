@@ -57,21 +57,27 @@ jobs:
       - name: Installation des dépendances
         run: npm ci
       
+      - name: Cloner le repo rando-list
+        run: |
+          git clone --depth 1 https://github.com/video-game-randomizers/rando-list.git /tmp/rando-list
+      
       - name: Vérifier les changements rando-list
         id: check
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          RANDO_LIST_DIR: /tmp/rando-list
         run: |
-          # Clone le repo rando-list
-          git clone --depth 1 https://github.com/video-game-randomizers/rando-list.git /tmp/rando-list
           COMMIT_HASH=$(git -C /tmp/rando-list rev-parse HEAD)
           echo "commit_hash=$COMMIT_HASH" >> $GITHUB_OUTPUT
           
           # Exécute le script de vérification
-          node scripts/check-rando-list-changes.js --commit $COMMIT_HASH > /tmp/changes.json || true
+          node scripts/check-rando-list-changes.js --commit $COMMIT_HASH > /tmp/changes.json || {
+            echo "Script failed, assuming changes"
+            echo '{"hasChanges":true,"newGames":[]}' > /tmp/changes.json
+          }
           
           if [ -f /tmp/changes.json ]; then
-            HAS_CHANGES=$(cat /tmp/changes.json | jq -r '.hasChanges // "false"')
+            HAS_CHANGES=$(cat /tmp/changes.json | jq -r '.hasChanges // "true"')
             NEW_GAMES=$(cat /tmp/changes.json | jq -c '.newGames // []')
             echo "has_changes=$HAS_CHANGES" >> $GITHUB_OUTPUT
             echo "new_games=$NEW_GAMES" >> $GITHUB_OUTPUT

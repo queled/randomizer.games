@@ -76,7 +76,8 @@ async function syncGameRaces(game, options = {}) {
       }
       
       for (const raceData of result.races) {
-        const raceUrl = `/${slug}${raceData.url || ''}`;
+        // racetime.url contient déjà le slug, ne pas le dupliquer
+        const raceUrl = raceData.url && raceData.url.startsWith('/') ? raceData.url : `/${slug}${raceData.url || ''}`;
         
         // Vérifier si cette course est plus ancienne que la dernière connue
         if (lastRaceDate && raceData.startedAt) {

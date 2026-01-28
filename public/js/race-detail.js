@@ -282,8 +282,19 @@
       // Update page title
       document.title = `${getGameDisplayName(race.category)} - Race - Randomizer`;
 
+      // Fetch full game info to get the display name
+      let gameDisplayName = getGameDisplayName(race.category);
+      try {
+        const game = await fetchJson('/api/games?search=' + encodeURIComponent(race.category) + '&limit=1');
+        if (game.games && game.games.length > 0) {
+          gameDisplayName = game.games[0].displayName || gameDisplayName;
+        }
+      } catch (e) {
+        // Fallback to default name
+      }
+
       // Game name
-      gameEl.textContent = getGameDisplayName(race.category);
+      gameEl.textContent = gameDisplayName;
       
       // Goal
       goalEl.textContent = race.goal || race.name || '';
@@ -298,7 +309,7 @@
       if (race.info) {
         infoEl.innerHTML = race.info.split('\n').map(line => {
           // Convert URLs to links
-          return line.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener" style="color:#60a5fa;">$1</a>');
+          return line.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener" style="color:#60a5fa;word-break:break-word;">$1</a>');
         }).join('<br>');
       }
       

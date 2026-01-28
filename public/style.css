@@ -1407,6 +1407,25 @@ body.spoiler-mode .spoiler-text::before {
 .race-info-text {
     font-size: 0.875rem;
     margin-bottom: 1rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+}
+
+.race-info-text a {
+    word-break: break-all;
+}
+
+.race-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.race-links a {
+    word-break: break-word;
+    max-width: 100%;
 }
 
 .race-stats-grid {

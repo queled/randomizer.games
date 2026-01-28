@@ -368,15 +368,17 @@ async function detectNewRandomizers(seriesData) {
       
       const identifier = (rando.identifier || '').toLowerCase();
       if (identifier && !existingIds.has(identifier)) {
-        // Vérifier aussi par URL (peut correspondre à un jeu existant)
-        let isNew = true;
-        
         newRandomizers.push({
           identifier: rando.identifier,
           url: rando.url,
+          name: rando.name,
           games: rando.games,
           series: series.seriesName,
-          isArchipelago: rando.isArchipelago
+          seriesFile: series.seriesFile,
+          isArchipelago: rando.isArchipelago,
+          opensource: rando.opensource,
+          addedDate: rando.addedDate,
+          multiworld: rando.multiworld
         });
       }
     }
@@ -397,6 +399,113 @@ async function detectNewRandomizers(seriesData) {
   return newRandomizers;
 }
 
+/**
+ * Crée les nouveaux jeux dans la BDD Games
+ */
+async function createNewGames(newRandomizers, dryRun = false) {
+  if (newRandomizers.length === 0) {
+    return [];
+  }
+  
+  console.log('\n🎮 Création des nouveaux jeux...');
+  
+  const createdGames = [];
+  
+  for (const rando of newRandomizers) {
+    // Générer un ID unique basé sur l'identifier
+    const gameId = rando.identifier.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+    
+    // Nom du jeu basé sur les jeux couverts
+    const gameName = rando.games.length > 0 ? rando.games[0] : rando.identifier;
+    const displayName = rando.name || `${gameName} Randomizer`;
+    
+    // Essayer de trouver un slug racetime potentiel
+    // Les slugs racetime sont généralement des abbréviations courtes
+    const potentialSlug = rando.identifier.toLowerCase().replace(/[^a-z0-9]/g, '');
+    
+    const newGame = {
+      id: gameId,
+      name: gameName,
+      displayName: displayName,
+      officialName: gameName,
+      enabled: true,
+      
+      // Métadonnées randomizer
+      randomizer: {
+        name: displayName,
+        shortName: rando.identifier,
+        opensource: rando.opensource || false,
+        multiworld: rando.multiworld || false,
+        addedDate: rando.addedDate ? new Date(rando.addedDate) : new Date()
+      },
+      
+      // Ressources
+      resources: {
+        sites: rando.url ? [{
+          url: rando.url,
+          name: rando.isArchipelago ? 'Archipelago' : 'Site officiel',
+          source: 'rando-list',
+          isArchipelago: rando.isArchipelago || false
+        }] : [],
+        officialSite: rando.url ? {
+          url: rando.url,
+          name: rando.isArchipelago ? 'Archipelago' : 'Site officiel',
+          isArchipelago: rando.isArchipelago || false
+        } : null
+      },
+      
+      // Intégrations
+      integrations: {
+        randoList: {
+          enabled: true,
+          seriesFile: rando.seriesFile,
+          gameName: gameName,
+          randomizerIdentifier: rando.identifier,
+          confidence: 'auto',
+          lastSync: new Date()
+        },
+        racetime: {
+          enabled: false,  // Sera activé manuellement si trouvé sur racetime
+          gameSlug: null,
+          confidence: 'manual'
+        }
+      },
+      
+      // Source
+      source: {
+        origin: 'rando-list',
+        createdAt: new Date(),
+        autoCreated: true
+      }
+    };
+    
+    if (dryRun) {
+      console.log(`  📋 [DRY-RUN] Créerait: ${gameId} - ${displayName}`);
+      createdGames.push(newGame);
+    } else {
+      try {
+        // Vérifier si le jeu existe déjà
+        const existing = await Game.findOne({ id: gameId });
+        if (existing) {
+          console.log(`  ⏭️  ${gameId} existe déjà, ignoré`);
+          continue;
+        }
+        
+        const game = new Game(newGame);
+        await game.save();
+        console.log(`  ✅ Créé: ${gameId} - ${displayName}`);
+        createdGames.push(newGame);
+      } catch (error) {
+        console.error(`  ❌ Erreur création ${gameId}: ${error.message}`);
+      }
+    }
+  }
+  
+  console.log(`\n  📊 ${createdGames.length} jeu(x) créé(s)`);
+  
+  return createdGames;
+}
+
 async function main() {
   const args = process.argv.slice(2);
   
@@ -406,6 +515,7 @@ Usage: node sync-rando-list-v3.js [options]
 
 Options:
   --link-games       Lier automatiquement les Games existants
+  --create-games     Créer automatiquement les nouveaux jeux
   --update-resources Mettre à jour uniquement les ressources
   --dry-run          Mode simulation
   --help             Affiche cette aide
@@ -414,6 +524,7 @@ Options:
   }
   
   const linkGames = args.includes('--link-games');
+  const createGames = args.includes('--create-games');
   const updateResourcesOnly = args.includes('--update-resources');
   const dryRun = args.includes('--dry-run');
   
@@ -439,19 +550,28 @@ Options:
       await saveToCacheCollection(seriesData, commitHash);
     }
     
-    // 5. Mettre à jour les ressources des jeux
+    // 5. Mettre à jour les ressources des jeux existants
     await updateGameResources(seriesData, dryRun);
     
     // 6. Détecter les nouveaux randomizers
     const newRandomizers = await detectNewRandomizers(seriesData);
     
+    // 7. Créer les nouveaux jeux si demandé
+    let createdGames = [];
+    if (createGames && newRandomizers.length > 0) {
+      createdGames = await createNewGames(newRandomizers, dryRun);
+    }
+    
     console.log('\n✅ Sync terminé avec succès');
     
     // Retourner les infos pour le workflow GitHub Actions
-    if (newRandomizers.length > 0) {
-      console.log('\n--- NEW_RANDOMIZERS_JSON ---');
-      console.log(JSON.stringify(newRandomizers.map(r => r.identifier)));
-      console.log('--- END_NEW_RANDOMIZERS_JSON ---');
+    if (newRandomizers.length > 0 || createdGames.length > 0) {
+      console.log('\n--- SYNC_RESULTS_JSON ---');
+      console.log(JSON.stringify({
+        newRandomizers: newRandomizers.map(r => r.identifier),
+        createdGames: createdGames.map(g => g.id || g.identifier)
+      }));
+      console.log('--- END_SYNC_RESULTS_JSON ---');
     }
     
   } catch (error) {

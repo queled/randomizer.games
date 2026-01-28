@@ -101,6 +101,8 @@ jobs:
     needs: check-changes
     if: needs.check-changes.outputs.has_changes == 'true' || github.event.inputs.force_full_sync == 'true'
     runs-on: ubuntu-latest
+    outputs:
+      created_games: ${{ steps.sync.outputs.created_games }}
     
     steps:
       - name: Checkout du projet
@@ -116,6 +118,7 @@ jobs:
         run: npm ci
       
       - name: Synchroniser avec rando-list
+        id: sync
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           RANDO_LIST_DIR: /tmp/rando-list
@@ -123,11 +126,22 @@ jobs:
           # Clone le repo
           git clone --depth 1 https://github.com/video-game-randomizers/rando-list.git /tmp/rando-list
           
-          # Exécute la synchronisation
-          if [ "${{ github.event.inputs.link_games }}" = "true" ]; then
-            npm run sync-rando-list:link
+          # Exécute la synchronisation avec création des nouveaux jeux
+          npm run sync-rando-list:full > /tmp/sync-output.log 2>&1 || {
+            echo "⚠️ Sync script had issues:"
+            cat /tmp/sync-output.log
+            exit 1
+          }
+          
+          cat /tmp/sync-output.log
+          
+          # Extraire les jeux créés du JSON de résultat
+          if grep -q "SYNC_RESULTS_JSON" /tmp/sync-output.log; then
+            RESULTS=$(sed -n '/--- SYNC_RESULTS_JSON ---/,/--- END_SYNC_RESULTS_JSON ---/p' /tmp/sync-output.log | grep -v "^---")
+            CREATED_GAMES=$(echo "$RESULTS" | jq -c '.createdGames // []' 2>/dev/null || echo "[]")
+            echo "created_games=$CREATED_GAMES" >> $GITHUB_OUTPUT
           else
-            npm run sync-rando-list
+            echo "created_games=[]" >> $GITHUB_OUTPUT
           fi
       
       - name: Résumé de la synchronisation
@@ -141,7 +155,7 @@ jobs:
     name: Récupérer les races des nouveaux jeux
     needs: [check-changes, sync-cache]
     if: |
-      (needs.check-changes.outputs.new_games != '[]' && github.event.inputs.sync_races != 'false') ||
+      (needs.sync-cache.outputs.created_games != '[]' && github.event.inputs.sync_races != 'false') ||
       github.event.inputs.force_full_sync == 'true'
     runs-on: ubuntu-latest
     
@@ -163,24 +177,26 @@ jobs:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           RACETIME_RATE_LIMIT_MS: '2000'
         run: |
-          NEW_GAMES='${{ needs.check-changes.outputs.new_games }}'
+          CREATED_GAMES='${{ needs.sync-cache.outputs.created_games }}'
           
           if [ "${{ github.event.inputs.force_full_sync }}" = "true" ]; then
             # Sync complet de tous les jeux actifs
             node scripts/sync-racetime-all.js --all
-          elif [ "$NEW_GAMES" != "[]" ]; then
-            # Sync seulement les nouveaux jeux
-            echo "$NEW_GAMES" | jq -r '.[]' | while read game_id; do
+          elif [ "$CREATED_GAMES" != "[]" ] && [ -n "$CREATED_GAMES" ]; then
+            # Sync seulement les nouveaux jeux créés
+            echo "$CREATED_GAMES" | jq -r '.[]' | while read game_id; do
               echo "Syncing races for: $game_id"
               node scripts/sync-racetime-game.js --game "$game_id" || true
             done
+          else
+            echo "No new games to sync"
           fi
       
       - name: Résumé
         run: |
           echo "## Races synchronisées" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Nouveaux jeux traités: ${{ needs.check-changes.outputs.new_games }}" >> $GITHUB_STEP_SUMMARY
+          echo "Nouveaux jeux traités: ${{ needs.sync-cache.outputs.created_games }}" >> $GITHUB_STEP_SUMMARY
 
   notify:
     name: Notification

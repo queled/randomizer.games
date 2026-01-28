@@ -30,7 +30,7 @@ class RacetimeAPI {
   async getPastRaces(category, page = 1) {
     try {
       const response = await axios.get(
-        `${this.baseURL}/${category}/data`,
+        `${this.baseURL}/${category}/races/data`,
         {
           params: {
             show_entrants: true,

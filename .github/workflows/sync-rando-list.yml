@@ -70,18 +70,28 @@ jobs:
           COMMIT_HASH=$(git -C /tmp/rando-list rev-parse HEAD)
           echo "commit_hash=$COMMIT_HASH" >> $GITHUB_OUTPUT
           
-          # Exécute le script de vérification
-          node scripts/check-rando-list-changes.js --commit $COMMIT_HASH > /tmp/changes.json || {
-            echo "Script failed, assuming changes"
+          # Exécute le script de vérification (stdout only pour JSON)
+          node scripts/check-rando-list-changes.js --commit $COMMIT_HASH > /tmp/changes.json 2>/tmp/changes.err || {
+            echo "⚠️  Script check-rando-list-changes.js failed:"
+            cat /tmp/changes.err || echo "(no error output)"
+            echo "Defaulting to hasChanges=true"
             echo '{"hasChanges":true,"newGames":[]}' > /tmp/changes.json
           }
           
-          if [ -f /tmp/changes.json ]; then
-            HAS_CHANGES=$(cat /tmp/changes.json | jq -r '.hasChanges // "true"')
-            NEW_GAMES=$(cat /tmp/changes.json | jq -c '.newGames // []')
-            echo "has_changes=$HAS_CHANGES" >> $GITHUB_OUTPUT
-            echo "new_games=$NEW_GAMES" >> $GITHUB_OUTPUT
+          # Valider et parser le JSON
+          if [ -f /tmp/changes.json ] && [ -s /tmp/changes.json ]; then
+            if jq empty /tmp/changes.json 2>/dev/null; then
+              HAS_CHANGES=$(jq -r '.hasChanges // "true"' /tmp/changes.json)
+              NEW_GAMES=$(jq -c '.newGames // []' /tmp/changes.json)
+              echo "has_changes=$HAS_CHANGES" >> $GITHUB_OUTPUT
+              echo "new_games=$NEW_GAMES" >> $GITHUB_OUTPUT
+            else
+              echo "❌ Invalid JSON in changes.json, using defaults"
+              echo "has_changes=true" >> $GITHUB_OUTPUT
+              echo "new_games=[]" >> $GITHUB_OUTPUT
+            fi
           else
+            echo "❌ No changes.json file or empty, using defaults"
             echo "has_changes=true" >> $GITHUB_OUTPUT
             echo "new_games=[]" >> $GITHUB_OUTPUT
           fi

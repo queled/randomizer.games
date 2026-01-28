@@ -53,7 +53,7 @@ class RacetimeAPI {
         return { races: [], hasNext: false };
       }
       return {
-        races: data.races.map(r => this.formatRace(r)),
+        races: data.races.map(r => this.formatRace(r)).filter(r => r !== null),
         hasNext: data.races.length > 0
       };
     } catch (error) {
@@ -94,20 +94,32 @@ class RacetimeAPI {
    * Format race data
    */
   formatRace(race) {
-    return {
-      name: race.name,
-      status: race.status.value,
-      url: race.url,
-      websiteUrl: race.websocket_url,
-      category: race.category.slug,
-      goal: race.goal ? race.goal.name : null,
-      info: race.info,
-      startedAt: race.started_at,
-      endedAt: race.ended_at,
-      recordable: race.recordable,
-      entrants: race.entrants ? race.entrants.map(e => this.formatEntrant(e)) : [],
-      version: race.version
-    };
+    // Defensive: handle missing or undefined fields
+    if (!race) {
+      console.warn('⚠️  formatRace called with undefined race');
+      return null;
+    }
+    
+    try {
+      return {
+        name: race.name || 'Unknown',
+        status: race.status?.value || race.status || 'unknown',
+        url: race.url || '',
+        websiteUrl: race.websocket_url || '',
+        category: race.category?.slug || race.slug || 'unknown',
+        goal: race.goal?.name || null,
+        info: race.info || '',
+        startedAt: race.started_at,
+        endedAt: race.ended_at,
+        recordable: race.recordable || false,
+        entrants: race.entrants ? race.entrants.map(e => this.formatEntrant(e)).filter(e => e) : [],
+        version: race.version
+      };
+    } catch (error) {
+      console.error(`⚠️  Error formatting race: ${error.message}`);
+      console.error(`   Race data keys: ${Object.keys(race || {}).join(', ')}`);
+      return null;
+    }
   }
 
   /**

@@ -280,18 +280,25 @@
       }
 
       // Update page title
-      document.title = `${getGameDisplayName(race.category)} - Race - Randomizer`;
-
       // Fetch full game info to get the display name
       let gameDisplayName = getGameDisplayName(race.category);
       try {
-        const game = await fetchJson('/api/games?search=' + encodeURIComponent(race.category) + '&limit=1');
-        if (game.games && game.games.length > 0) {
-          gameDisplayName = game.games[0].displayName || gameDisplayName;
+        const gamesData = await fetchJson('/api/games');
+        if (gamesData.games && gamesData.games.length > 0) {
+          // Chercher par slug racetime
+          const gameBySlug = gamesData.games.find(g => 
+            g.integrations?.racetime?.gameSlug?.toLowerCase() === race.category?.toLowerCase()
+          );
+          if (gameBySlug) {
+            gameDisplayName = gameBySlug.displayName || gameBySlug.officialName || gameBySlug.name || gameDisplayName;
+          }
         }
       } catch (e) {
         // Fallback to default name
       }
+
+      // Update title with full name
+      document.title = `${gameDisplayName} - Race - Randomizer`;
 
       // Game name
       gameEl.textContent = gameDisplayName;

@@ -9,6 +9,7 @@
   let currentFilter = 'all';
   let currentGame = '';
   let gamesById = {};
+  let gamesBySlug = {};  // Index par slug racetime
 
   // Game slug to display name mapping
   const gameDisplayNames = {
@@ -78,9 +79,16 @@
   function getGameDisplayName(slug) {
     if (!slug) return 'Race';
     const lowerSlug = slug.toLowerCase();
-    if (gamesById[lowerSlug]) {
-      return gamesById[lowerSlug].officialName || gamesById[lowerSlug].name || slug;
+    
+    // Chercher d'abord par slug racetime
+    if (gamesBySlug[lowerSlug]) {
+      return gamesBySlug[lowerSlug].displayName || gamesBySlug[lowerSlug].officialName || gamesBySlug[lowerSlug].name || slug;
     }
+    // Sinon par ID
+    if (gamesById[lowerSlug]) {
+      return gamesById[lowerSlug].displayName || gamesById[lowerSlug].officialName || gamesById[lowerSlug].name || slug;
+    }
+    // Fallback sur les noms statiques
     return gameDisplayNames[lowerSlug] || slug;
   }
 
@@ -167,10 +175,16 @@
       
       games.forEach(g => {
         gamesById[g.id] = g;
+        
+        // Indexer aussi par slug racetime
+        if (g.integrations?.racetime?.gameSlug) {
+          gamesBySlug[g.integrations.racetime.gameSlug.toLowerCase()] = g;
+        }
+        
         // Add option to select
         const opt = document.createElement('option');
         opt.value = g.id;
-        opt.textContent = g.officialName || g.name;
+        opt.textContent = g.displayName || g.officialName || g.name;
         gameSelect.appendChild(opt);
       });
     } catch (e) {

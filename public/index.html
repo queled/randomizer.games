@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Randomizer</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" type="image/png" href="/assets/favicon.png">
+    
+    <!-- Language initialization to prevent flicker -->
+    <style>
+        body { opacity: 0; transition: opacity 0.1s ease-in; }
+        body.i18n-ready { opacity: 1; }
+    </style>
+    <script>
+        (function() {
+            try {
+                // Get saved language or detect from browser
+                let lang = localStorage.getItem('preferred-language');
+                if (!lang) {
+                    const browserLang = (navigator.language || navigator.userLanguage || 'en').split('-')[0].toLowerCase();
+                    const supported = ['en', 'fr', 'es', 'de', 'it'];
+                    lang = supported.includes(browserLang) ? browserLang : 'en';
+                }
+                // Apply language immediately to prevent flicker
+                document.documentElement.lang = lang;
+                
+                // Fallback: show page after 200ms if i18n hasn't marked it ready yet
+                // This prevents blocking on slow connections while preventing flicker on fast ones
+                window.__i18nShowTimeout = setTimeout(() => {
+                    if (document.body && !document.body.classList.contains('i18n-ready')) {
+                        document.body.classList.add('i18n-ready');
+                    }
+                }, 50);
+            } catch (e) {
+                // Fallback to English if anything fails
+                document.documentElement.lang = 'en';
+                if (document.body) document.body.classList.add('i18n-ready');
+            }
+        })();
+    </script>
+    
+    <!-- Load translations early in head (async to not block parsing) -->
+    <script async src="/js/i18n/en.js"></script>
+    <script async src="/js/i18n/fr.js"></script>
+    <script async src="/js/i18n/es.js"></script>
+    <script async src="/js/i18n/de.js"></script>
+    <script async src="/js/i18n/it.js"></script>
+    <script async src="/js/i18n.js"></script>
+</head>
+<body>
+
+    <!-- Menu en haut -->
+    <header>
+        <a href="/"><img src="/assets/favicon.png" alt="Randomizer" class="site-logo">Randomizer</a>
+
+        <button class="mobile-menu-toggle" aria-label="Menu" onclick="this.classList.toggle('open');document.querySelector('nav').classList.toggle('open');">
+            <span></span><span></span><span></span>
+        </button>
+
+        <!-- Espace entre le titre et le menu -->
+        <nav>
+            <ul>
+                <li><a href="/games.html" data-i18n="nav.games">🎮 Games</a></li>
+                <li><a href="/races.html" data-i18n="nav.races">🥇 Races</a></li>
+                <li><a href="/tournaments.html" data-i18n="nav.tournaments">🏆 Tournaments</a></li>
+                <li><a href="/players.html" data-i18n="nav.players">👤 Players</a></li>
+            </ul>
+        </nav>
+
+        <!-- Push tout à droite -->
+        <div class="flex-grow"></div>
+
+        <!-- Barre de recherche à droite -->
+        <input type="text" id="search" placeholder="Search..." data-i18n-placeholder="nav.search">
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="main-container">
+        <div class="home-grid">
+            <!-- Colonne gauche: Dernières races -->
+            <div>
+                <h2 class="section-title" data-i18n="home.recentRaces">Recent Races</h2>
+                <div id="recent-races" class="card-list"></div>
+            </div>
+            
+            <!-- Colonne droite: Derniers tournois -->
+            <div>
+                <h2 class="section-title" data-i18n="home.recentTournaments">Recent Tournaments</h2>
+                <div id="recent-tournaments" class="card-list"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/spoiler-mode.js"></script>
+    <script src="/js/global-search.js"></script>
+    <script src="/js/index.js"></script>
+    <script src="/js/footer.js"></script>
+</body>
+</html>

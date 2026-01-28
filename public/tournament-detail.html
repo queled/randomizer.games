@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title" data-i18n-page-title="tournamentDetail.pageTitle">Tournament - Randomizer</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="/assets/favicon.png">
+    
+    <!-- Language initialization to prevent flicker -->
+    <style>
+        body { opacity: 0; transition: opacity 0.1s ease-in; }
+        body.i18n-ready { opacity: 1; }
+    </style>
+    <script>
+        (function() {
+            try {
+                // Get saved language or detect from browser
+                let lang = localStorage.getItem('preferred-language');
+                if (!lang) {
+                    const browserLang = (navigator.language || navigator.userLanguage || 'en').split('-')[0].toLowerCase();
+                    const supported = ['en', 'fr', 'es', 'de', 'it'];
+                    lang = supported.includes(browserLang) ? browserLang : 'en';
+                }
+                // Apply language immediately to prevent flicker
+                document.documentElement.lang = lang;
+                
+                // Fallback: show page after 200ms if i18n hasn't marked it ready yet
+                window.__i18nShowTimeout = setTimeout(() => {
+                    if (document.body && !document.body.classList.contains('i18n-ready')) {
+                        document.body.classList.add('i18n-ready');
+                    }
+                }, 50);
+            } catch (e) {
+                document.documentElement.lang = 'en';
+                if (document.body) document.body.classList.add('i18n-ready');
+            }
+        })();
+    </script>
+    
+    <!-- Load translations early in head (async to not block parsing) -->
+    <script async src="/js/i18n/en.js"></script>
+    <script async src="/js/i18n/fr.js"></script>
+    <script async src="/js/i18n/es.js"></script>
+    <script async src="/js/i18n/de.js"></script>
+    <script async src="/js/i18n/it.js"></script>
+    <script async src="/js/i18n.js"></script>
+</head>
+<body>
+
+    <!-- Menu en haut -->
+    <header>
+        <a href="index.html" class="logo"><img src="/assets/favicon.png" alt="Randomizer" class="site-logo">Randomizer</a>
+        <button class="mobile-menu-toggle" aria-label="Menu" onclick="this.classList.toggle('open');document.querySelector('nav').classList.toggle('open');">
+            <span></span><span></span><span></span>
+        </button>
+        <nav>
+            <ul>
+                <li><a href="games.html" data-i18n="nav.games">🎮 Games</a></li>
+                <li><a href="/races.html" data-i18n="nav.races">🥇 Races</a></li>
+                <li><a href="tournaments.html" style="color: #fbbf24" data-i18n="nav.tournaments">🏆 Tournaments</a></li>
+                <li><a href="players.html" data-i18n="nav.players">👤 Players</a></li>
+            </ul>
+        </nav>
+        <div style="flex-grow: 1;"></div>
+        <input type="text" id="search" placeholder="Search..." data-i18n-placeholder="nav.search">
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="main-container detail-page">
+        <!-- En-tête du tournoi -->
+        <div class="detail-card tournament-header-card">
+            <div class="tournament-title-row">
+                <div class="tournament-title-info">
+                    <h1 id="tournament-title">Chargement...</h1>
+                    <p id="tournament-game" class="tournament-game-name"></p>
+                </div>
+                <div id="tournament-status"></div>
+            </div>
+
+            <div class="info-grid tournament-stats-grid">
+                <div class="info-card">
+                    <p class="info-label" data-i18n="tournamentDetail.startDate">Start Date</p>
+                    <p id="start-date" class="info-value-lg">-</p>
+                </div>
+                <div class="info-card">
+                    <p class="info-label" data-i18n="tournamentDetail.endDate">End Date</p>
+                    <p id="end-date" class="info-value-lg">-</p>
+                </div>
+                <div class="info-card">
+                    <p class="info-label" data-i18n="tournamentDetail.type">Type</p>
+                    <p id="tournament-type" class="info-value-lg">-</p>
+                </div>
+                <div class="info-card">
+                    <p class="info-label" data-i18n="tournamentDetail.participants">Participants</p>
+                    <p id="participants-count" class="info-value-lg">-</p>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div id="description-container" class="tournament-description">
+                <p class="info-label" data-i18n="tournamentDetail.description">Description</p>
+                <p id="tournament-description"></p>
+            </div>
+
+            <!-- Lien Challonge -->
+            <div id="challonge-link-container" class="challonge-container">
+                <a id="challonge-link" href="#" target="_blank" class="challonge-btn">
+                    <img src="assets/challonge.svg" alt="Challonge">
+                    Voir sur Challonge
+                </a>
+            </div>
+        </div>
+
+        <!-- Onglets -->
+        <div class="tabs-wrapper">
+            <div class="tabs-container">
+                <button id="tab-bracket" class="tab-btn active" data-tab="bracket" data-i18n="tournamentDetail.tabBracket">
+                    🏆 Bracket
+                </button>
+                <button id="tab-matches" class="tab-btn" data-tab="matches" data-i18n="tournamentDetail.tabMatches">
+                    ⚔️ Matches
+                </button>
+                <button id="tab-qualifications" class="tab-btn" data-tab="qualifications" data-i18n="tournamentDetail.tabQualifications">
+                    🎯 Qualifications
+                </button>
+                <button id="tab-participants" class="tab-btn" data-tab="participants" data-i18n="tournamentDetail.tabParticipants">
+                    👥 Participants
+                </button>
+            </div>
+        </div>
+
+        <!-- Contenu des onglets -->
+        <div id="tab-content-bracket" class="tab-content">
+            <h2 class="tab-content-title" data-i18n="tournamentDetail.bracket">Bracket</h2>
+            <div id="bracket-container" class="bracket-wrapper">
+                <p class="text-muted" data-i18n="common.loadingBracket">Loading bracket...</p>
+            </div>
+            
+            <!-- Group stages visualization -->
+            <div id="group-stages-container" class="group-stages">
+                <h2 class="tab-content-title" data-i18n="tournamentDetail.groupStage">Group Stage</h2>
+                <div id="group-stages-content"></div>
+            </div>
+        </div>
+
+        <div id="tab-content-matches" class="tab-content" style="display: none;">
+            <h2 class="tab-content-title" data-i18n="tournamentDetail.matches">Matches</h2>
+            <div id="matches-list">
+                <p class="text-muted" data-i18n="common.loadingMatches">Loading matches...</p>
+            </div>
+        </div>
+
+        <div id="tab-content-qualifications" class="tab-content" style="display: none;">
+            <h2 class="tab-content-title" data-i18n="tournamentDetail.qualifications">Qualifications</h2>
+            <div id="qualifications-list">
+                <p class="text-muted" data-i18n="common.loading">Loading...</p>
+            </div>
+        </div>
+
+        <div id="tab-content-participants" class="tab-content" style="display: none;">
+            <h2 class="tab-content-title" data-i18n="tournamentDetail.participantsList">Participants</h2>
+            <div id="participants-list" class="participants-list">
+                <p class="text-muted" data-i18n="common.loadingParticipants">Loading participants...</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="/js/spoiler-mode.js"></script>
+    <script src="/js/global-search.js"></script>
+    <script src="js/tournament-detail.js"></script>
+    <script src="/js/footer.js"></script>
+</body>
+</html>

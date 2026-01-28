@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n-page-title="about.pageTitle">About - Randomizer</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" type="image/png" href="/assets/favicon.png">
+    
+    <!-- Language initialization to prevent flicker -->
+    <style>
+        body { opacity: 0; transition: opacity 0.1s ease-in; }
+        body.i18n-ready { opacity: 1; }
+    </style>
+    <script>
+        (function() {
+            try {
+                // Get saved language or detect from browser
+                let lang = localStorage.getItem('preferred-language');
+                if (!lang) {
+                    const browserLang = (navigator.language || navigator.userLanguage || 'en').split('-')[0].toLowerCase();
+                    const supported = ['en', 'fr', 'es', 'de', 'it'];
+                    lang = supported.includes(browserLang) ? browserLang : 'en';
+                }
+                // Apply language immediately to prevent flicker
+                document.documentElement.lang = lang;
+                
+                // Fallback: show page after 200ms if i18n hasn't marked it ready yet
+                window.__i18nShowTimeout = setTimeout(() => {
+                    if (document.body && !document.body.classList.contains('i18n-ready')) {
+                        document.body.classList.add('i18n-ready');
+                    }
+                }, 50);
+            } catch (e) {
+                document.documentElement.lang = 'en';
+                if (document.body) document.body.classList.add('i18n-ready');
+            }
+        })();
+    </script>
+    
+    <!-- Load translations early in head (async to not block parsing) -->
+    <script async src="/js/i18n/en.js"></script>
+    <script async src="/js/i18n/fr.js"></script>
+    <script async src="/js/i18n/es.js"></script>
+    <script async src="/js/i18n/de.js"></script>
+    <script async src="/js/i18n/it.js"></script>
+    <script async src="/js/i18n.js"></script>
+</head>
+<body>
+
+    <header>
+        <a href="/"><img src="/assets/favicon.png" alt="Randomizer" class="site-logo">Randomizer</a>
+        <button class="mobile-menu-toggle" aria-label="Menu" onclick="this.classList.toggle('open');document.querySelector('nav').classList.toggle('open');">
+            <span></span><span></span><span></span>
+        </button>
+        <nav>
+            <ul>
+                <li><a href="/games.html" data-i18n="nav.games">🎮 Games</a></li>
+                <li><a href="/races.html" data-i18n="nav.races">🥇 Races</a></li>
+                <li><a href="/tournaments.html" data-i18n="nav.tournaments">🏆 Tournaments</a></li>
+                <li><a href="/players.html" data-i18n="nav.players">👤 Players</a></li>
+            </ul>
+        </nav>
+        <div class="flex-grow"></div>
+        <input type="text" id="search" placeholder="Search..." data-i18n-placeholder="nav.search">
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <div class="about-hero">
+            <h1>🎲 Randomizer</h1>
+            <p data-i18n="about.heroSubtitle"></p>
+        </div>
+
+        <!-- What is a Randomizer -->
+        <section class="about-section">
+            <h2 data-i18n="about.whatIsTitle">🎮 What is a Randomizer?</h2>
+            <p data-i18n="about.whatIsPara1">
+                A randomizer is a video game modification that randomly rearranges the location of items, skills, or other game elements. This mechanic creates a unique experience with each playthrough, transforming games you know by heart into completely new challenges.
+            </p>
+            <p data-i18n="about.whatIsPara2">
+                Imagine playing your favorite game, but this time, the legendary sword is in an unexpected chest, and the dungeon key is hidden on the other side of the world. That's the magic of randomizers: rediscovering classics from a completely different angle.
+            </p>
+            <p data-i18n="about.whatIsPara3">
+                Randomizers are particularly popular for classic RPGs, adventure games, and Metroidvanias. They add a dimension of thinking and routing (path planning) that captivates speedrunners and competitive players worldwide.
+            </p>
+        </section>
+
+        <!-- Purpose of the Site -->
+        <section class="about-section">
+            <h2 data-i18n="about.purposeTitle">🎯 Purpose of this Site</h2>
+            <p data-i18n="about.purposePara1">
+                Randomizer was created to centralize and archive all data from the randomizer community. Our goal is to provide a space where you can:
+            </p>
+            <ul style="color: #d1d5db; margin-left: 1.5rem; margin-top: 1rem;">
+                <li data-i18n="about.purposeList1">Follow ongoing and past tournaments</li>
+                <li data-i18n="about.purposeList2">View race history and results</li>
+                <li data-i18n="about.purposeList3">Discover player profiles and performances</li>
+                <li data-i18n="about.purposeList4">Explore different randomized games and their communities</li>
+                <li data-i18n="about.purposeList5"></li>
+            </ul>
+        </section>
+
+        <!-- Statistics -->
+        <section class="about-section">
+            <h2 data-i18n="about.statsTitle">📊 Statistics</h2>
+            <p data-i18n="about.statsPara">Our database grows every day thanks to the active community.</p>
+            <div class="stats-grid" id="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-value" id="stat-games">-</span>
+                    <span class="stat-label" data-i18n="about.statGames">Games</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="stat-races">-</span>
+                    <span class="stat-label" data-i18n="about.statRaces">Races</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="stat-tournaments">-</span>
+                    <span class="stat-label" data-i18n="about.statTournaments">Tournaments</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="stat-players">-</span>
+                    <span class="stat-label" data-i18n="about.statPlayers">Players</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section class="about-section">
+            <h2 data-i18n="about.featuresTitle">✨ Main Features</h2>
+            <p data-i18n="about.featuresPara">Discover what our platform offers.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3 data-i18n="about.feature1Title">🏆 Tournament Tracking</h3>
+                    <p data-i18n="about.feature1Desc">Follow brackets, matches, and community tournament results in real-time.</p>
+                </div>
+                <div class="feature-card">
+                    <h3 data-i18n="about.feature2Title">🥇 Race History</h3>
+                    <p data-i18n="about.feature2Desc">View detailed results for each race, including times, rankings, and VODs.</p>
+                </div>
+                <div class="feature-card">
+                    <h3 data-i18n="about.feature3Title">👤 Player Profiles</h3>
+                    <p data-i18n="about.feature3Desc">Explore statistics and history for each player across all games.</p>
+                </div>
+                <div class="feature-card">
+                    <h3 data-i18n="about.feature4Title">🎮 Game Catalog</h3>
+                    <p data-i18n="about.feature4Desc">Discover all randomized games with their resources, trackers, and communities.</p>
+                </div>
+                <div class="feature-card">
+                    <h3 data-i18n="about.feature5Title"></h3>
+                    <p data-i18n="about.feature5Desc"></p>
+                </div>
+                <div class="feature-card">
+                    <h3 data-i18n="about.feature6Title">🔍 Advanced Search</h3>
+                    <p data-i18n="about.feature6Desc">Easily find players, tournaments, races, or games with our search engine.</p>
+                </div>
+                <div class="feature-card">
+                    <h3 data-i18n="about.feature7Title">🙈 Anti-Spoiler Mode</h3>
+                    <p data-i18n="about.feature7Desc">Hide results to watch VODs without spoiling the winner.</p>
+                </div>
+                <div class="feature-card">
+                    <h3 data-i18n="about.feature8Title">🔗 Racetime Integration</h3>
+                    <p data-i18n="about.feature8Desc">Automatic synchronization with Racetime.gg for precise race tracking.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section class="about-section">
+            <h2 data-i18n="about.contactTitle">💬 Contact</h2>
+            <p data-i18n="about.contactPara">
+                This project is developed by an enthusiast from the randomizer community. If you have questions, suggestions, or want to contribute, feel free to contact us!
+            </p>
+        </section>
+    </main>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/spoiler-mode.js"></script>
+    <script src="/js/global-search.js"></script>
+    <script src="/js/about.js"></script>
+    <script src="/js/footer.js"></script>
+</body>
+</html>

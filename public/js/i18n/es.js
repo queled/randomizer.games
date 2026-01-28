@@ -1,0 +1,479 @@
+// Spanish translations
+const es = {
+    // Navigation
+    nav: {
+        games: "🎮 Juegos",
+        races: "🏁 Carreras",
+        tournaments: "🏆 Torneos",
+        players: "👤 Jugadores",
+        search: "Buscar..."
+    },
+    
+    // Common
+    common: {
+        all: "Todos",
+        upcoming: "Próximos",
+        inProgress: "En curso",
+        completed: "Completado",
+        loading: "Cargando...",
+        loadingBracket: "Cargando bracket...",
+        loadingMatches: "Cargando partidas...",
+        loadingParticipants: "Cargando participantes...",
+        error: "Error",
+        noResults: "Sin resultados",
+        viewMore: "Ver más",
+        viewAll: "Ver todo",
+        back: "Volver",
+        close: "Cerrar",
+        save: "Guardar",
+        cancel: "Cancelar",
+        yes: "Sí",
+        no: "No",
+        or: "o",
+        and: "y",
+        of: "de",
+        to: "a",
+        from: "de",
+        on: "el",
+        at: "a las",
+        by: "por",
+        vs: "vs",
+        unknown: "Desconocido",
+        none: "Ninguno",
+        allGames: "Todos los juegos",
+        officialSite: "Sitio oficial"
+    },
+    
+    // Home page
+    home: {
+        title: "Randomizer",
+        recentRaces: "Carreras Recientes",
+        recentTournaments: "Torneos Recientes",
+        startDate: "Inicio",
+        endDate: "Fin",
+        participants: "participantes"
+    },
+    
+    // Games page
+    games: {
+        title: "Juegos",
+        pageTitle: "Juegos - Randomizer",
+        tournaments: "torneos",
+        races: "carreras",
+        players: "jugadores",
+        liveNow: "en directo",
+        sortBy: "Ordenar por:",
+        sortName: "Nombre",
+        sortStreamersMost: "Streamers más activos",
+        sortStreamersLeast: "Streamers menos activos",
+        sortViewersMost: "Más espectadores",
+        sortViewersLeast: "Menos espectadores",
+        sortRacesMost: "Más carreras",
+        sortRacesLeast: "Menos carreras",
+        sortTournamentsMost: "Más torneos",
+        sortTournamentsLeast: "Menos torneos",
+        sortReleaseNewest: "Lanzamiento más reciente",
+        sortReleaseOldest: "Lanzamiento más antiguo"
+    },
+    
+    // Game detail page
+    gameDetail: {
+        pageTitle: "Juego - Randomizer",
+        tabLeaderboards: "🏆 Clasificaciones",
+        tabCategories: "🎯 Categorías",
+        tabStreams: "📺 Streams",
+        tabCommunity: "👥 Comunidad",
+        tabResources: "📦 Recursos",
+        tabStats: "📊 Estadísticas",
+        leaderboards: "Clasificaciones",
+        categories: "Categorías",
+        categoriesDescription: "Descubre las diferentes categorías y opciones de randomización disponibles para este juego.",
+        categoriesComingSoon: "Documentación de categorías próximamente...",
+        streams: "Streams",
+        community: "Comunidad",
+        resources: "Recursos",
+        stats: "Estadísticas",
+        liveStreams: "Streams en vivo",
+        recentRaces: "Carreras recientes",
+        recentTournaments: "Torneos recientes",
+        comingSoon: "Próximamente...",
+        noStreams: "Integración Twitch/YouTube/Kick próximamente...",
+        noCommunity: "Enlaces de la comunidad (Discord oficiales, foros...) se añadirán más tarde.",
+        noResources: "Trackers y recursos próximamente...",
+        noRecentRaces: "No hay carreras recientes",
+        noRecentTournaments: "No hay torneos recientes",
+        races: "Carreras",
+        tournaments: "Torneos"
+    },
+    
+    // Races page
+    races: {
+        title: "Carreras",
+        pageTitle: "Carreras - Randomizer",
+        filterAll: "Todas",
+        filterUpcoming: "Próximas",
+        filterInProgress: "En curso",
+        filterFinished: "Terminadas",
+        filterCompleted: "Completadas",
+        allGames: "Todos los juegos",
+        race: "carrera",
+        racePlural: "carreras"
+    },
+    
+    // Race detail page
+    raceDetail: {
+        pageTitle: "Carrera - Randomizer",
+        start: "Inicio",
+        end: "Fin",
+        duration: "Duración",
+        participants: "Participantes",
+        ranking: "Clasificación",
+        partOfTournament: "Esta carrera es parte del torneo:",
+        place: "Posición",
+        player: "Jugador",
+        time: "Tiempo",
+        status: "Estado",
+        finished: "Terminada",
+        forfeit: "Abandono",
+        dnf: "DNF",
+        dq: "DQ",
+        inProgress: "En curso"
+    },
+    
+    // Tournaments page
+    tournaments: {
+        title: "Torneos",
+        pageTitle: "Torneos - Randomizer",
+        filterAll: "Todos",
+        filterUpcoming: "Próximos",
+        filterOngoing: "En curso",
+        filterInProgress: "En curso",
+        filterFinished: "Terminados",
+        filterCompleted: "Completados",
+        allGames: "Todos los juegos",
+        participants: "participantes",
+        startDate: "Fecha de inicio",
+        endDate: "Fecha de fin",
+        tournament: "torneo",
+        tournamentPlural: "torneos",
+        noTournaments: "No se encontraron torneos"
+    },
+    
+    // Tournament detail page
+    tournamentDetail: {
+        pageTitle: "Torneo - Randomizer",
+        tabBracket: "📊 Bracket",
+        tabMatches: "⚔️ Partidas",
+        tabQualifications: "🎯 Clasificaciones",
+        tabParticipants: "👥 Participantes",
+        bracket: "Bracket",
+        matches: "Partidas",
+        qualifications: "Clasificaciones",
+        participants: "Participantes",
+        groupStage: "Fase de grupos",
+        startDate: "Fecha de inicio",
+        endDate: "Fecha de fin",
+        type: "Tipo",
+        participantsCount: "Participantes",
+        description: "Descripción",
+        viewOnChallonge: "Ver en Challonge",
+        matchesHiddenSpoiler: "Partidas ocultas en modo anti-spoiler",
+        winner: "Ganador",
+        loser: "Perdedor",
+        score: "Puntuación",
+        round: "Ronda",
+        match: "Partida",
+        finals: "Final",
+        semiFinals: "Semifinales",
+        quarterFinals: "Cuartos de final",
+        grandFinals: "Gran final",
+        losersRound: "Ronda de perdedores",
+        losersFinals: "Final de perdedores",
+        losersGrandFinals: "Gran final de perdedores",
+        winnersBracket: "Bracket de ganadores",
+        losersBracket: "Bracket de perdedores",
+        winnersRound: "Ronda de ganadores",
+        winnersFinals: "Final de ganadores",
+        winnersGrandFinals: "Gran final de ganadores",        roundOf16: "Octavos de final",
+        roundOf32: "Dieciseisavos de final",
+        roundOf64: "Treintaidosavos de final",
+        roundNumber: "Ronda",
+        wbFinal: "Final WB",
+        semifinals: "Semifinales",
+        quarterfinals: "Cuartos de final",
+        wbRound: "Ronda WB",
+        lbFinal: "Final LB",
+        lbSemifinals: "Semifinales LB",
+        lbQuarterfinals: "Cuartos de final LB",
+        lbRound: "Ronda LB",
+        finalStage: "Fase final — Eliminación simple",
+        groupStage: "Fase de grupos",
+        group: "Grupo",
+        match1: "Partido 1",
+        bracketReset: "Reinicio de bracket",
+        tbd: "Por determinar",
+        noMatches: "No hay partidos disponibles",
+        noMatchesForBracket: "No hay partidos disponibles para mostrar el bracket",
+        noFinalsMatches: "No hay partidos de fase final disponibles",
+        seed: "Seed",
+        wins: "Victorias",
+        losses: "Derrotas",
+        ties: "Empates",
+        points: "Puntos"
+    },
+    
+    // Players page
+    players: {
+        title: "Jugadores",
+        pageTitle: "Jugadores - Randomizer",
+        searchPlaceholder: "Buscar jugadores...",
+        races: "carreras",
+        tournaments: "torneos",
+        wins: "victorias"
+    },
+    
+    // Player detail page
+    playerDetail: {
+        pageTitle: "Perfil del jugador - Randomizer",
+        statistics: "Estadísticas",
+        gamesPlayed: "Juegos jugados",
+        races: "Carreras",
+        tournaments: "Torneos",
+        ranking: "Clasificación",
+        totalRaces: "Total de carreras",
+        totalTournaments: "Total de torneos",
+        totalWins: "Total de victorias",
+        winRate: "Tasa de victoria",
+        averageTime: "Tiempo promedio",
+        bestTime: "Mejor tiempo"
+    },
+    
+    // Streams page
+    streams: {
+        title: "📺 Transmisiones en vivo",
+        pageTitle: "Transmisiones en vivo - Randomizer",
+        subtitle: "Streams de la comunidad randomizer. ¡Mira a tus jugadores favoritos en vivo!",
+        allGames: "Todos los juegos",
+        loadingStreams: "Cargando streams...",
+        streamsLive: "stream en vivo | streams en vivo",
+        noStreams: "No hay streams en vivo en este momento",
+        checkRaces: "Vuelve más tarde o consulta las <a href=\"/races.html\" style=\"color: #fbbf24;\">carreras en curso</a>",
+        comeBackLater: "Vuelve más tarde o consulta las",
+        currentRaces: "carreras en curso",
+        loadError: "No se pueden cargar los streams",
+        tryAgainLater: "Inténtalo más tarde o consulta las",
+        live: "EN VIVO"
+    },
+    
+    // About page
+    about: {
+        title: "Acerca de",
+        pageTitle: "Acerca de - Randomizer",
+        heroTitle: "🎲 Randomizer",
+        heroSubtitle: "La plataforma de referencia para la comunidad internacional de randomizers",
+        whatIsTitle: "🎮 ¿Qué es un Randomizer?",
+        whatIsPara1: "Un randomizer es una modificación de un videojuego que reorganiza aleatoriamente la ubicación de objetos, habilidades u otros elementos del juego. Esta mecánica crea una experiencia única en cada partida, transformando juegos que conoces de memoria en desafíos completamente nuevos.",
+        whatIsPara2: "Imagina jugar a tu juego favorito, pero esta vez, la espada legendaria está en un cofre inesperado, y la llave del calabozo está escondida en el otro extremo del mundo. Esa es la magia del randomizer: redescubrir clásicos desde un ángulo completamente diferente.",
+        whatIsPara3: "Los randomizers son particularmente populares para RPGs clásicos, juegos de aventura y Metroidvanias. Añaden una dimensión de pensamiento y routing (planificación de rutas) que fascina a speedrunners y jugadores competitivos de todo el mundo.",
+        purposeTitle: "🎯 ¿Por qué este sitio?",
+        purposePara1: "Randomizer fue creado para centralizar y archivar todos los datos de la comunidad randomizer. Nuestro objetivo es proporcionar un espacio donde puedas:",
+        purposeList1: "Seguir torneos actuales y pasados",
+        purposeList2: "Ver el historial de carreras y resultados",
+        purposeList3: "Descubrir perfiles de jugadores y sus rendimientos",
+        purposeList4: "Explorar diferentes juegos randomizados y sus comunidades",
+        purposeList5: "Ver streams en vivo de la comunidad",
+        statsTitle: "📊 Estadísticas",
+        statsPara: "Nuestra base de datos crece cada día gracias a la comunidad activa.",
+        statGames: "Juegos",
+        statTournaments: "Torneos",
+        statRaces: "Carreras",
+        statPlayers: "Jugadores",
+        featuresTitle: "✨ Características principales",
+        featuresPara: "Descubre lo que ofrece nuestra plataforma.",
+        feature1Title: "🏆 Seguimiento de torneos",
+        feature1Desc: "Sigue brackets, partidas y resultados de torneos en tiempo real.",
+        feature2Title: "🥇 Historial de carreras",
+        feature2Desc: "Ve resultados detallados de cada carrera, con tiempos, clasificaciones y VODs.",
+        feature3Title: "👤 Perfiles de jugadores",
+        feature3Desc: "Explora estadísticas e historial de cada jugador en todos los juegos.",
+        feature4Title: "🎮 Catálogo de juegos",
+        feature4Desc: "Descubre todos los juegos randomizados con sus recursos, trackers y comunidades.",
+        feature5Title: "📺 Streams en vivo",
+        feature5Desc: "Mira a los streamers de la comunidad jugar en vivo directamente desde el sitio.",
+        feature6Title: "🔍 Búsqueda avanzada",
+        feature6Desc: "Encuentra fácilmente jugadores, torneos, carreras o juegos con nuestro motor de búsqueda.",
+        feature7Title: "🙈 Modo anti-spoiler",
+        feature7Desc: "Oculta los resultados para ver VODs sin saber el ganador.",
+        feature8Title: "🔗 Integración Racetime",
+        feature8Desc: "Sincronización automática con Racetime.gg para un seguimiento preciso de las carreras.",
+        contactTitle: "💬 Contacto",
+        contactPara: "Este proyecto es desarrollado por un apasionado de la comunidad randomizer. Si tienes preguntas, sugerencias o quieres contribuir, ¡no dudes en contactarnos!"
+    },
+    
+    // Resources page
+    resources: {
+        title: "🔗 Sitios relacionados",
+        pageTitle: "Sitios relacionados - Randomizer",
+        intro: "Aquí hay una lista de sitios y herramientas esenciales para la comunidad randomizer. Estos recursos son ampliamente utilizados por jugadores y organizadores de todo el mundo.",
+        speedrunDesc: "La referencia mundial de tablas de clasificación de speedrun. Speedrun.com aloja clasificaciones, reglas y récords para miles de juegos, incluidos muchos randomizers. Es el lugar ideal para enviar tus tiempos y comparar tu rendimiento.",
+        visitSpeedrun: "Visitar speedrun.com →",
+        racetimeDesc: "La plataforma de carreras en tiempo real para randomizers y speedruns. Racetime.gg permite organizar carreras con temporizador sincronizado, chat integrado y seguimiento automático de resultados. ¡Indispensable para las carreras comunitarias!",
+        visitRacetime: "Visitar racetime.gg →",
+        archipelagoDesc: "El sistema de randomizer multiworld entre juegos. Archipelago permite mezclar objetos entre varios juegos diferentes durante la misma sesión multijugador. ¡Una experiencia única que combina cooperación y exploración!",
+        visitArchipelago: "Visitar archipelago.gg →",
+        challongeDesc: "La herramienta de gestión de brackets y torneos más utilizada del mundo. Challonge permite crear fácilmente brackets de eliminación simple/doble, todos contra todos, y más. Perfecto para organizar tus torneos de randomizer.",
+        visitChallonge: "Visitar challonge.com →",
+        discordDesc: "La mayoría de las comunidades de randomizer están organizadas en Discord. Cada juego generalmente tiene su propio servidor donde encontrarás guías, anuncios de torneos y una comunidad activa para ayudarte.",
+        visitDiscord: "Visitar discord.com →",
+        twitchDesc: "La plataforma de streaming de referencia para ver y transmitir runs de randomizer. Muchos jugadores y torneos se transmiten en vivo en Twitch, con funciones como restreamers para grandes eventos.",
+        visitTwitch: "Visitar twitch.tv →",
+        gdqDesc: "Los maratones de speedrun benéficos más famosos del mundo. AGDQ (Awesome Games Done Quick) y SGDQ (Summer Games Done Quick) incluyen regularmente showcases de randomizers, contribuyendo a popularizar la disciplina mientras recaudan millones para obras benéficas.",
+        visitGdq: "Visitar gamesdonequick.com →",
+        emotrackerDesc: "Un tracker de objetos popular para randomizers. EmoTracker permite seguir visualmente tu progreso, objetos recolectados y ubicaciones accesibles. Soporta muchos randomizers con packs creados por la comunidad.",
+        visitEmotracker: "Visitar emotracker.net →",
+        visitSite: "Visitar"
+    },
+    
+    // Terms page
+    terms: {
+        title: "📜 Términos de uso",
+        pageTitle: "Términos de uso - Randomizer",
+        lastUpdated: "Última actualización: 12 de enero de 2026",
+        section1Title: "1. Aceptación de términos",
+        section1Content: "Al acceder y utilizar este sitio web, aceptas estar sujeto a estos términos de uso. Si no aceptas estos términos, por favor no uses este sitio.",
+        section2Title: "2. Descripción del servicio",
+        section2Content: "Randomizer es una plataforma comunitaria sin fines comerciales que agrega y presenta datos relacionados con randomizers de videojuegos, incluyendo entre otros:",
+        section2List1: "Información y resultados de torneos",
+        section2List2: "Datos de carreras de plataformas de terceros como Racetime.gg",
+        section2List3: "Perfiles y estadísticas de jugadores",
+        section2List4: "Enlaces a transmisiones en vivo",
+        section3Title: "3. Propiedad intelectual",
+        section3Content1: "Los videojuegos, sus nombres, logos y marcas comerciales asociadas son propiedad de sus respectivos editores y desarrolladores. Este sitio no está afiliado con ningún editor de videojuegos.",
+        section3Content2: "Los datos mostrados en este sitio se recopilan de fuentes públicas y APIs de terceros (Racetime.gg, Challonge, etc.). Los derechos sobre estos datos pertenecen a sus respectivos propietarios.",
+        section4Title: "4. Uso de datos",
+        section4Content: "Los datos de jugadores mostrados en este sitio (nombres de usuario, tiempos de carrera, resultados de torneos) son datos públicos accesibles en las plataformas de origen. Si deseas que se eliminen tus datos, contáctanos.",
+        section5Title: "5. Limitación de responsabilidad",
+        section5Content1: "Este sitio se proporciona \"tal cual\" sin ninguna garantía. No garantizamos la exactitud, integridad o actualidad de la información presentada.",
+        section5Content2: "No somos responsables de ningún daño directo o indirecto resultante del uso o la imposibilidad de usar este sitio.",
+        section6Title: "6. Enlaces de terceros",
+        section6Content: "Este sitio contiene enlaces a sitios web de terceros (Racetime.gg, Twitch, Challonge, etc.). Estos enlaces se proporcionan solo con fines informativos. No tenemos control sobre el contenido de estos sitios y renunciamos a cualquier responsabilidad por su contenido.",
+        section7Title: "7. Conducta del usuario",
+        section7Content: "Al usar este sitio, aceptas:",
+        section7List1: "No intentar interrumpir o dañar el funcionamiento del sitio",
+        section7List2: "No recopilar datos del sitio automáticamente sin autorización",
+        section7List3: "Respetar la comunidad de randomizers y sus miembros",
+        section8Title: "8. Cambios en los términos",
+        section8Content: "Nos reservamos el derecho de modificar estos términos de uso en cualquier momento. Los cambios entrarán en vigor tras su publicación en esta página. Tu uso continuado del sitio después de la publicación de los cambios constituye tu aceptación de los nuevos términos.",
+        section9Title: "9. Ley aplicable",
+        section9Content: "Estos términos de uso se rigen por la ley francesa. Cualquier disputa relacionada con el uso de este sitio estará sujeta a la jurisdicción exclusiva de los tribunales franceses.",
+        section10Title: "10. Contacto",
+        section10Content: "Para cualquier pregunta sobre estos términos de uso, contáctanos a través de los canales de la comunidad."
+    },
+    
+    // Search page
+    search: {
+        title: "Búsqueda",
+        pageTitle: "Búsqueda - Randomizer",
+        searchResults: "RESULTADOS DE BÚSQUEDA",
+        results: "resultados",
+        noResults: "No se encontraron resultados",
+        tabAll: "Todos",
+        tabGames: "Juegos",
+        tabTournaments: "Torneos",
+        tabRaces: "Carreras",
+        tabPlayers: "Jugadores"
+    },
+    
+    // Footer
+    footer: {
+        language: "Idioma",
+        explore: "Explorar",
+        liveStreams: "📺 Transmisiones en vivo",
+        games: "🎮 Juegos",
+        information: "Información",
+        about: "ℹ️ Acerca de",
+        relatedSites: "🔗 Sitios relacionados",
+        termsOfUse: "📜 Términos de uso",
+        socialNetwork: "Red social",
+        discord: "💬 Discord",
+        copyright: "© {year} Randomizer. Todos los derechos reservados."
+    },
+    
+    // Spoiler mode
+    spoiler: {
+        show: "Mostrar",
+        hide: "Ocultar"
+    },
+    
+    // Status badges
+    status: {
+        // Estatutos para las carreras (femenino)
+        race: {
+            ongoing: "En curso",
+            upcoming: "Próxima",
+            finished: "Terminada",
+            open: "Abierta",
+            invitational: "Por invitación",
+            inProgress: "En curso",
+            cancelled: "Cancelada",
+            pending: "Pendiente"
+        },
+        // Estatutos para los torneos (masculino)
+        tournament: {
+            ongoing: "En curso",
+            upcoming: "Próximo",
+            finished: "Terminado",
+            open: "Abierto",
+            invitational: "Por invitación",
+            inProgress: "En curso",
+            completed: "Completado",
+            cancelled: "Cancelado",
+            pending: "Pendiente"
+        },
+        // Estatutos genéricos (para retrocompatibilidad)
+        ongoing: "En curso",
+        upcoming: "Próximo",
+        finished: "Terminado",
+        open: "Abierto",
+        invitational: "Por invitación",
+        inProgress: "En curso",
+        completed: "Completado",
+        cancelled: "Cancelado",
+        pending: "Pendiente"
+    },
+    
+    // Tournament types
+    tournamentTypes: {
+        singleElimination: "Eliminación simple",
+        doubleElimination: "Doble eliminación",
+        roundRobin: "Todos contra todos",
+        swiss: "Sistema suizo",
+        groupsThenSE: "Grupos y luego Eliminación simple",
+        groupsThenSEWithAdvance: "Grupos ({groupSize} → {advance}) y luego Eliminación simple"
+    },
+    
+    // Dates and times
+    dateTime: {
+        today: "Hoy",
+        yesterday: "Ayer",
+        tomorrow: "Mañana",
+        daysAgo: "hace {n} día | hace {n} días",
+        hoursAgo: "hace {n} hora | hace {n} horas",
+        minutesAgo: "hace {n} minuto | hace {n} minutos",
+        justNow: "Ahora mismo",
+        in: "en",
+        ago: "hace"
+    },
+    
+    // Tooltips
+    tooltips: {
+        spoilerEnabled: "Modo Anti-Spoiler activado - Haz clic para desactivar",
+        spoilerDisabled: "Modo Anti-Spoiler desactivado - Haz clic para activar",
+        patreon: "Apóyanos en Patreon"
+    }
+};
+
+// Export for use in other modules
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = es;
+}

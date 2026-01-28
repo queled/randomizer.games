@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin - Randomizer</title>
+  <link rel="stylesheet" href="/admin/admin.css">
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <meta name="robots" content="noindex, nofollow">
+</head>
+<body>
+  
+  <!-- Login Modal -->
+  <div id="login-modal" class="login-modal">
+    <div class="login-box">
+      <h1 class="login-title">🎮 Admin Panel</h1>
+      <p class="login-subtitle">Connectez-vous pour gérer le site</p>
+      <form id="login-form" class="login-form">
+        <div class="form-group">
+          <label for="admin-token" class="form-label">Token Admin</label>
+          <input type="password" id="admin-token" class="form-input" placeholder="Entrez le token admin..." required>
+        </div>
+        <div id="login-error" class="login-error" style="display: none;"></div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">
+          <span class="btn-text">Connexion</span>
+          <span class="btn-loading">⏳</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main Admin Interface -->
+  <div id="admin-app" class="admin-app">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <span>🎮</span>
+          <span>Randomizer Admin</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-section="dashboard">
+          <span class="nav-icon">📊</span>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-item" data-section="games">
+          <span class="nav-icon">🎮</span>
+          <span>Jeux</span>
+        </button>
+        <button class="nav-item" data-section="resources">
+          <span class="nav-icon">📚</span>
+          <span>Ressources</span>
+        </button>
+        <button class="nav-item" data-section="sync">
+          <span class="nav-icon">🔄</span>
+          <span>Synchronisation</span>
+        </button>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <button id="logout-btn" class="btn btn-outline" style="width: 100%; margin-bottom: 0.5rem;">
+          🚪 Déconnexion
+        </button>
+        <a href="/" class="btn btn-ghost" style="width: 100%; text-decoration: none;">
+          ← Retour au site
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      
+      <!-- Dashboard Section -->
+      <section id="section-dashboard" class="admin-section active">
+        <div class="section-header">
+          <h1 class="section-title">Dashboard</h1>
+        </div>
+        
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">🎮</div>
+            <div>
+              <div class="stat-value" id="stat-games">-</div>
+              <div class="stat-label">Jeux activés</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🏁</div>
+            <div>
+              <div class="stat-value" id="stat-races">-</div>
+              <div class="stat-label">Courses</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🏆</div>
+            <div>
+              <div class="stat-value" id="stat-tournaments">-</div>
+              <div class="stat-label">Tournois</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div>
+              <div class="stat-value" id="stat-players">-</div>
+              <div class="stat-label">Joueurs</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="alerts-container" id="dashboard-alerts">
+          <!-- Alerts will be inserted here -->
+        </div>
+      </section>
+
+      <!-- Games Section -->
+      <section id="section-games" class="admin-section">
+        <div class="section-header">
+          <h1 class="section-title">Gestion des Jeux</h1>
+          <button class="btn btn-primary" onclick="admin.showNewGameModal()">
+            ➕ Nouveau jeu
+          </button>
+        </div>
+        
+        <div class="toolbar">
+          <div class="toolbar-search">
+            <input type="text" id="games-search" class="form-input" placeholder="Rechercher un jeu...">
+          </div>
+          <div class="toolbar-filters">
+            <select id="games-filter-enabled" class="form-input form-select">
+              <option value="">Tous</option>
+              <option value="true">Activés</option>
+              <option value="false">Désactivés</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="table-container">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Nom court</th>
+                <th>Racetime</th>
+                <th>Ressources</th>
+                <th>Statut</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="games-table-body">
+              <!-- Games will be inserted here -->
+            </tbody>
+          </table>
+        </div>
+        
+        <div id="games-pagination"></div>
+      </section>
+
+      <!-- Resources Section -->
+      <section id="section-resources" class="admin-section">
+        <div class="section-header">
+          <h1 class="section-title">Gestion des Ressources</h1>
+        </div>
+        
+        <div class="form-group" style="max-width: 400px;">
+          <select id="resources-game-select" class="form-input form-select">
+            <option value="">Sélectionner un jeu...</option>
+          </select>
+        </div>
+        
+        <div id="resources-placeholder" class="resources-placeholder">
+          <div class="resources-placeholder-icon">👆</div>
+          <p>Sélectionnez un jeu pour gérer ses ressources</p>
+        </div>
+        
+        <div id="resources-editor" class="card" style="display: none;">
+          
+          <!-- Official Site -->
+          <div class="resource-section">
+            <h3 class="resource-section-title">🌐 Site Officiel</h3>
+            <div id="official-site-display" class="resource-list">
+              <!-- Will be populated -->
+            </div>
+            <div class="resource-form">
+              <p class="resource-form-title">Ajouter / Modifier le site officiel :</p>
+              <div class="form-row">
+                <div class="form-group">
+                  <input type="url" id="official-site-url" class="form-input" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                  <input type="text" id="official-site-name" class="form-input" placeholder="Nom du site">
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 1rem;">
+                <label class="form-checkbox-group">
+                  <input type="checkbox" id="official-site-archipelago" class="form-checkbox">
+                  <span>Archipelago</span>
+                </label>
+                <button class="btn btn-primary btn-sm" onclick="admin.saveOfficialSite()">
+                  Enregistrer
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Sites from rando-list -->
+          <div class="resource-section">
+            <h3 class="resource-section-title">🔗 Sites (depuis rando-list)</h3>
+            <div id="sites-list" class="resource-list">
+              <!-- Will be populated -->
+            </div>
+          </div>
+          
+          <!-- Trackers -->
+          <div class="resource-section">
+            <h3 class="resource-section-title">📍 Trackers</h3>
+            <div id="trackers-list" class="resource-list">
+              <!-- Will be populated -->
+            </div>
+            <div class="resource-form">
+              <p class="resource-form-title">Ajouter un tracker :</p>
+              <div class="form-row">
+                <div class="form-group">
+                  <input type="url" id="tracker-url" class="form-input" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                  <input type="text" id="tracker-name" class="form-input" placeholder="Nom du tracker">
+                </div>
+                <div class="form-group">
+                  <input type="text" id="tracker-desc" class="form-input" placeholder="Description (optionnel)">
+                </div>
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="admin.addTracker()">
+                ➕ Ajouter
+              </button>
+            </div>
+          </div>
+          
+          <!-- Guides -->
+          <div class="resource-section">
+            <h3 class="resource-section-title">📚 Guides & Documentation</h3>
+            <div id="guides-list" class="resource-list">
+              <!-- Will be populated -->
+            </div>
+            <div class="resource-form">
+              <p class="resource-form-title">Ajouter un guide :</p>
+              <div class="form-row">
+                <div class="form-group">
+                  <input type="url" id="guide-url" class="form-input" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                  <input type="text" id="guide-name" class="form-input" placeholder="Nom du guide">
+                </div>
+                <div class="form-group">
+                  <select id="guide-type" class="form-input form-select">
+                    <option value="guide">📖 Guide</option>
+                    <option value="tutorial">🎓 Tutoriel</option>
+                    <option value="wiki">📝 Wiki</option>
+                    <option value="video">🎬 Vidéo</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <input type="text" id="guide-desc" class="form-input" placeholder="Description (optionnel)">
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="admin.addGuide()">
+                ➕ Ajouter
+              </button>
+            </div>
+          </div>
+          
+        </div>
+      </section>
+
+      <!-- Sync Section -->
+      <section id="section-sync" class="admin-section">
+        <div class="section-header">
+          <h1 class="section-title">Synchronisation</h1>
+        </div>
+        
+        <div class="sync-grid">
+          <div class="sync-card">
+            <div class="sync-card-header">
+              <span class="sync-card-icon">📥</span>
+              <span class="sync-card-title">Rando-List</span>
+            </div>
+            <p class="sync-card-desc">
+              Synchronise la liste des jeux randomizer depuis le repo GitHub 
+              <a href="https://github.com/video-game-randomizers/rando-list" target="_blank">video-game-randomizers/rando-list</a>.
+              Exécuté automatiquement chaque jour à 6h00 UTC.
+            </p>
+            <div class="sync-options">
+              <button class="btn btn-primary" onclick="admin.triggerSync('rando-list')">
+                🔄 Lancer maintenant
+              </button>
+              <button class="btn btn-outline" onclick="admin.triggerSync('rando-list', true)">
+                🔗 + Lier les jeux
+              </button>
+            </div>
+          </div>
+          
+          <div class="sync-card">
+            <div class="sync-card-header">
+              <span class="sync-card-icon">🏁</span>
+              <span class="sync-card-title">Racetime.gg</span>
+            </div>
+            <p class="sync-card-desc">
+              Récupère les nouvelles courses depuis racetime.gg pour tous les jeux actifs.
+              Exécuté automatiquement toutes les 5 minutes.
+            </p>
+            <div class="sync-options">
+              <div class="form-group">
+                <select id="sync-racetime-game" class="form-input form-select">
+                  <option value="">Tous les jeux</option>
+                </select>
+              </div>
+              <button class="btn btn-primary" onclick="admin.triggerRacetimeSync()">
+                🔄 Lancer maintenant
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="sync-log mt-4">
+          <div class="sync-log-title">📋 Logs récents</div>
+          <div id="sync-log-content">
+            <p class="text-muted">L'historique des synchronisations s'affichera ici...</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Game Edit Modal -->
+  <div id="game-modal" class="modal" style="display: none;">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h2 id="game-modal-title">Modifier le jeu</h2>
+        <button class="modal-close" onclick="admin.closeGameModal()">&times;</button>
+      </div>
+      <form id="game-form" class="game-form">
+        <div class="form-tabs">
+          <button type="button" class="form-tab active" data-tab="basic">Infos de base</button>
+          <button type="button" class="form-tab" data-tab="official">Jeu officiel</button>
+          <button type="button" class="form-tab" data-tab="randomizer">Randomizer</button>
+          <button type="button" class="form-tab" data-tab="integrations">Intégrations</button>
+        </div>
+        
+        <div class="form-tab-content active" id="form-tab-basic">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="game-id">ID *</label>
+              <input type="text" id="game-id" name="id" required pattern="[a-z0-9-]+" title="Lettres minuscules, chiffres et tirets uniquement">
+              <small>Identifiant unique (ex: alttp, ootr)</small>
+            </div>
+            <div class="form-group">
+              <label for="game-enabled">Statut</label>
+              <select id="game-enabled" name="enabled">
+                <option value="true">✅ Activé</option>
+                <option value="false">❌ Désactivé</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="game-name">Nom complet *</label>
+              <input type="text" id="game-name" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="game-series">Série</label>
+              <input type="text" id="game-series" name="series">
+              <small>Ex: Zelda Series</small>
+            </div>
+          </div>
+          
+        </div>
+        
+        <div class="form-tab-content" id="form-tab-official">
+          <div class="form-group">
+            <label for="game-official-name">Nom officiel du jeu</label>
+            <input type="text" id="game-official-name" name="official.name">
+            <small>Ex: The Legend of Zelda: A Link to the Past</small>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="game-official-releaseYear">Année de sortie</label>
+              <input type="number" id="game-official-releaseYear" name="official.releaseYear" min="1970" max="2030">
+            </div>
+            <div class="form-group">
+              <label for="game-platforms">Plateformes</label>
+              <input type="text" id="game-platforms" name="platforms">
+              <small>Séparées par des virgules (ex: SNES, GBA)</small>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-tab-content" id="form-tab-randomizer">
+          <div class="form-group">
+            <label for="game-randomizer-displayName">Nom d'affichage</label>
+            <input type="text" id="game-randomizer-displayName" name="randomizer.displayName">
+            <small>Ex: A Link to the Past Randomizer</small>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="game-randomizer-shortName">Nom court *</label>
+              <input type="text" id="game-randomizer-shortName" name="randomizer.shortName" required>
+              <small>Ex: ALttP Randomizer, OoT Randomizer</small>
+            </div>
+            <div class="form-group">
+              <label for="game-randomizer-tinyName">Nom très court</label>
+              <input type="text" id="game-randomizer-tinyName" name="randomizer.tinyName">
+              <small>Ex: ALttPR, OoTR (optionnel)</small>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="game-randomizer-website">Site web du randomizer</label>
+            <input type="url" id="game-randomizer-website" name="randomizer.website">
+          </div>
+          
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="game-randomizer-opensource" name="randomizer.opensource">
+              <span>Open source</span>
+            </label>
+          </div>
+        </div>
+        
+        <div class="form-tab-content" id="form-tab-integrations">
+          <div class="integration-section">
+            <h4>Racetime.gg</h4>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="game-racetime-enabled" name="integrations.racetime.enabled">
+                  <span>Activé</span>
+                </label>
+              </div>
+              <div class="form-group">
+                <label for="game-racetime-slug">Slug Racetime</label>
+                <input type="text" id="game-racetime-slug" name="integrations.racetime.gameSlug">
+                <small>Ex: ootr, alttpr</small>
+              </div>
+            </div>
+          </div>
+          
+          <div class="integration-section">
+            <h4>Rando-List</h4>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="game-randolist-enabled" name="integrations.randoList.enabled">
+                  <span>Activé</span>
+                </label>
+              </div>
+              <div class="form-group">
+                <label for="game-randolist-identifier">Identifier</label>
+                <input type="text" id="game-randolist-identifier" name="integrations.randoList.randomizerIdentifier">
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" onclick="admin.closeGameModal()">Annuler</button>
+          <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast notifications -->
+  <div id="toast-container"></div>
+
+  <script src="/admin/admin.js"></script>
+</body>
+</html>

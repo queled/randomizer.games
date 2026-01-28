@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n-page-title="tournaments.pageTitle">Tournaments - Randomizer</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" type="image/png" href="/assets/favicon.png">
+    
+    <!-- Language initialization to prevent flicker -->
+    <style>
+        body { opacity: 0; transition: opacity 0.1s ease-in; }
+        body.i18n-ready { opacity: 1; }
+    </style>
+    <script>
+        (function() {
+            try {
+                // Get saved language or detect from browser
+                let lang = localStorage.getItem('preferred-language');
+                if (!lang) {
+                    const browserLang = (navigator.language || navigator.userLanguage || 'en').split('-')[0].toLowerCase();
+                    const supported = ['en', 'fr', 'es', 'de', 'it'];
+                    lang = supported.includes(browserLang) ? browserLang : 'en';
+                }
+                // Apply language immediately to prevent flicker
+                document.documentElement.lang = lang;
+                
+                // Fallback: show page after 200ms if i18n hasn't marked it ready yet
+                window.__i18nShowTimeout = setTimeout(() => {
+                    if (document.body && !document.body.classList.contains('i18n-ready')) {
+                        document.body.classList.add('i18n-ready');
+                    }
+                }, 50);
+            } catch (e) {
+                document.documentElement.lang = 'en';
+                if (document.body) document.body.classList.add('i18n-ready');
+            }
+        })();
+    </script>
+    
+    <!-- Load translations early in head (async to not block parsing) -->
+    <script async src="/js/i18n/en.js"></script>
+    <script async src="/js/i18n/fr.js"></script>
+    <script async src="/js/i18n/es.js"></script>
+    <script async src="/js/i18n/de.js"></script>
+    <script async src="/js/i18n/it.js"></script>
+    <script async src="/js/i18n.js"></script>
+</head>
+<body>
+
+    <header>
+        <a href="/"><img src="/assets/favicon.png" alt="Randomizer" class="site-logo">Randomizer</a>
+        <button class="mobile-menu-toggle" aria-label="Menu" onclick="this.classList.toggle('open');document.querySelector('nav').classList.toggle('open');">
+            <span></span><span></span><span></span>
+        </button>
+        <nav>
+            <ul>
+                <li><a href="/games.html" data-i18n="nav.games">🎮 Games</a></li>
+                <li><a href="/races.html" data-i18n="nav.races">🥇 Races</a></li>
+                <li><a href="/tournaments.html" class="nav-active" data-i18n="nav.tournaments">🏆 Tournaments</a></li>
+                <li><a href="/players.html" data-i18n="nav.players">👤 Players</a></li>
+            </ul>
+        </nav>
+        <div class="flex-grow"></div>
+        <input type="text" id="search" placeholder="Search..." data-i18n-placeholder="nav.search">
+    </header>
+
+  <main class="main-container">
+    <!-- Filters -->
+    <div class="filter-row">
+      <!-- Status filters -->
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all" data-i18n="tournaments.filterAll" style="padding:0.5rem 1rem;border-radius:0.375rem;border:none;background:#374151;color:white;cursor:pointer;font-size:0.875rem;font-weight:600;"></button>
+        <button class="filter-btn" data-filter="upcoming" data-i18n="tournaments.filterUpcoming" style="padding:0.5rem 1rem;border-radius:0.375rem;border:none;background:#1f2937;color:#9ca3af;cursor:pointer;font-size:0.875rem;font-weight:600;"></button>
+        <button class="filter-btn" data-filter="ongoing" data-i18n="tournaments.filterOngoing" style="padding:0.5rem 1rem;border-radius:0.375rem;border:none;background:#1f2937;color:#9ca3af;cursor:pointer;font-size:0.875rem;font-weight:600;"></button>
+        <button class="filter-btn" data-filter="finished" data-i18n="tournaments.filterFinished" style="padding:0.5rem 1rem;border-radius:0.375rem;border:none;background:#1f2937;color:#9ca3af;cursor:pointer;font-size:0.875rem;font-weight:600;"></button>
+      </div>
+      
+      <div style="flex:1;"></div>
+      
+      <!-- Game filter -->
+      <select id="filter-game" style="padding:0.5rem 1rem;border-radius:0.375rem;border:none;background:#374151;color:white;cursor:pointer;font-size:0.875rem;">
+        <option value="" data-i18n="tournaments.allGames"></option>
+      </select>
+    </div>
+
+    <!-- Tournaments grid -->
+    <div id="tournaments-list" class="tournaments-grid"></div>
+
+    <!-- Pagination -->
+    <div id="pagination" class="pagination-container"></div>
+  </main>
+
+    <script src="/js/i18n/en.js"></script>
+
+    <script src="/js/spoiler-mode.js"></script>
+    <script src="/js/global-search.js"></script>
+    <script src="/js/tournaments.js"></script>
+    <script src="/js/footer.js"></script>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n-page-title="search.pageTitle">Search - Randomizer</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" type="image/png" href="/assets/favicon.png">
+    
+    <!-- Language initialization to prevent flicker -->
+    <style>
+        body { opacity: 0; transition: opacity 0.1s ease-in; }
+        body.i18n-ready { opacity: 1; }
+    </style>
+    <script>
+        (function() {
+            try {
+                // Get saved language or detect from browser
+                let lang = localStorage.getItem('preferred-language');
+                if (!lang) {
+                    const browserLang = (navigator.language || navigator.userLanguage || 'en').split('-')[0].toLowerCase();
+                    const supported = ['en', 'fr', 'es', 'de', 'it'];
+                    lang = supported.includes(browserLang) ? browserLang : 'en';
+                }
+                // Apply language immediately to prevent flicker
+                document.documentElement.lang = lang;
+                
+                // 50ms fallback timeout
+                window.__i18nShowTimeout = setTimeout(() => {
+                    if (document.body && !document.body.classList.contains('i18n-ready')) {
+                        document.body.classList.add('i18n-ready');
+                    }
+                }, 50);
+            } catch (e) {
+                // Fallback to English if anything fails
+                document.documentElement.lang = 'en';
+                if (document.body) document.body.classList.add('i18n-ready');
+            }
+        })();
+    </script>
+    
+    <!-- Load translations early in head (async to not block parsing) -->
+    <script async src="/js/i18n/en.js"></script>
+    <script async src="/js/i18n/fr.js"></script>
+    <script async src="/js/i18n/es.js"></script>
+    <script async src="/js/i18n/de.js"></script>
+    <script async src="/js/i18n/it.js"></script>
+    <script async src="/js/i18n.js"></script>
+    <style>
+        .search-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #374151;
+        }
+        .search-query {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fbbf24;
+            margin-bottom: 0.5rem;
+        }
+        .search-subtitle {
+            color: #9ca3af;
+            font-size: 1rem;
+        }
+        .search-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .search-tab {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            background: #1f2937;
+            color: #d1d5db;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        .search-tab:hover {
+            background: #374151;
+        }
+        .search-tab.active {
+            background: #fbbf24;
+            color: #111827;
+            font-weight: 600;
+        }
+        .search-tab .count {
+            display: inline-block;
+            background: rgba(0,0,0,0.2);
+            padding: 0.1rem 0.4rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            margin-left: 0.35rem;
+        }
+        .search-tab.active .count {
+            background: rgba(0,0,0,0.3);
+        }
+        .results-section {
+            margin-bottom: 2rem;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        .section-count {
+            background: #374151;
+            color: #fbbf24;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        .result-card {
+            background: #1f2937;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .result-card:hover {
+            background: #374151;
+            transform: translateY(-2px);
+        }
+        .result-card .title {
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .result-card .subtitle {
+            color: #9ca3af;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+        .result-card .meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+        .result-card .badge {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            background: #374151;
+            color: #d1d5db;
+        }
+        .result-card .badge.game {
+            background: #7c3aed;
+            color: white;
+        }
+        .result-card .badge.status-finished {
+            background: #059669;
+            color: white;
+        }
+        .result-card .badge.status-open {
+            background: #3b82f6;
+            color: white;
+        }
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: #6b7280;
+        }
+        .no-results-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #9ca3af;
+        }
+        .player-games {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+            margin-top: 0.5rem;
+        }
+        .player-games .game-tag {
+            background: #374151;
+            color: #d1d5db;
+            padding: 0.15rem 0.4rem;
+            border-radius: 0.2rem;
+            font-size: 0.7rem;
+        }
+        .highlight {
+            background: rgba(251, 191, 36, 0.3);
+            border-radius: 0.15rem;
+            padding: 0 0.1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menu en haut -->
+    <header>
+        <a href="/"><img src="/assets/favicon.png" alt="Randomizer" class="site-logo">Randomizer</a>
+        <button class="mobile-menu-toggle" aria-label="Menu" onclick="this.classList.toggle('open');document.querySelector('nav').classList.toggle('open');">
+            <span></span><span></span><span></span>
+        </button>
+        <nav>
+            <ul>
+                <li><a href="/games.html" data-i18n="nav.games">🎮 Games</a></li>
+                <li><a href="/races.html" data-i18n="nav.races">🥇 Races</a></li>
+                <li><a href="/tournaments.html" data-i18n="nav.tournaments">🏆 Tournaments</a></li>
+                <li><a href="/players.html" data-i18n="nav.players">👤 Players</a></li>
+            </ul>
+        </nav>
+        <div class="flex-grow"></div>
+        <input type="text" id="search" placeholder="Search..." data-i18n-placeholder="nav.search">
+    </header>
+
+    <!-- Contenu principal -->
+    <main style="max-width:1200px;margin:2rem auto;padding:1rem;">
+        <div class="search-header">
+            <div class="search-query" id="search-query"></div>
+            <div class="search-subtitle" id="search-subtitle" data-i18n="search.searchResults">SEARCH RESULTS</div>
+        </div>
+
+        <div class="search-tabs" id="search-tabs">
+            <!-- Tabs will be populated by JS -->
+        </div>
+
+        <div id="results-container">
+            <div class="loading" data-i18n="common.loading">Loading results...</div>
+        </div>
+    </main>
+
+    <script src="/js/spoiler-mode.js"></script>
+    <script src="/js/search.js"></script>
+    <script src="/js/footer.js"></script>
+</body>
+</html>

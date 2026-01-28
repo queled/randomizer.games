@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n-page-title="playerDetail.pageTitle">Player Profile - Randomizer</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  
+  <!-- Language initialization to prevent flicker -->
+  <style>
+    body { opacity: 0; transition: opacity 0.1s ease-in; }
+    body.i18n-ready { opacity: 1; }
+  </style>
+  <script>
+    (function() {
+      try {
+        // Get saved language or detect from browser
+        let lang = localStorage.getItem('preferred-language');
+        if (!lang) {
+          const browserLang = (navigator.language || navigator.userLanguage || 'en').split('-')[0].toLowerCase();
+          const supported = ['en', 'fr', 'es', 'de', 'it'];
+          lang = supported.includes(browserLang) ? browserLang : 'en';
+        }
+        // Apply language immediately to prevent flicker
+        document.documentElement.lang = lang;
+        
+        // Fallback: show page after 200ms if i18n hasn't marked it ready yet
+        window.__i18nShowTimeout = setTimeout(() => {
+          if (document.body && !document.body.classList.contains('i18n-ready')) {
+            document.body.classList.add('i18n-ready');
+          }
+        }, 50);
+      } catch (e) {
+        document.documentElement.lang = 'en';
+        if (document.body) document.body.classList.add('i18n-ready');
+      }
+    })();
+  </script>
+  
+  <!-- Load translations early in head (async to not block parsing) -->
+  <script async src="/js/i18n/en.js"></script>
+  <script async src="/js/i18n/fr.js"></script>
+  <script async src="/js/i18n/es.js"></script>
+  <script async src="/js/i18n/de.js"></script>
+  <script async src="/js/i18n/it.js"></script>
+  <script async src="/js/i18n.js"></script>
+</head>
+<body>
+  <header>
+    <a href="/"><img src="/assets/favicon.png" alt="Randomizer" class="site-logo">Randomizer</a>
+    <button class="mobile-menu-toggle" aria-label="Menu" onclick="this.classList.toggle('open');document.querySelector('nav').classList.toggle('open');">
+        <span></span><span></span><span></span>
+    </button>
+    <nav>
+      <ul>
+                <li><a href="/games.html" data-i18n="nav.games">🎮 Games</a></li>
+                <li><a href="/races.html" data-i18n="nav.races">🥇 Races</a></li>
+                <li><a href="/tournaments.html" data-i18n="nav.tournaments">🏆 Tournaments</a></li>
+                <li><a href="/players.html" class="nav-active" data-i18n="nav.players">👤 Players</a></li>
+      </ul>
+    </nav>
+    <div class="flex-grow"></div>
+    <input type="text" id="search" placeholder="Search..." data-i18n-placeholder="nav.search">
+  </header>
+
+  <main class="main-container detail-page">
+    <!-- Header with avatar and name -->
+    <div class="detail-header player-header">
+      <div class="avatar-wrap">
+        <img id="player-avatar" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Avatar">
+      </div>
+      <div class="player-info">
+        <h1 id="player-name" data-i18n="common.loading"></h1>
+        <div id="player-links" class="player-links"></div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="detail-section">
+      <h2 data-i18n="playerDetail.statistics"></h2>
+      <div id="player-stats" class="info-grid"></div>
+    </div>
+
+    <!-- Two columns: Races | Tournaments (Races à gauche, Tournois à droite) -->
+    <div class="two-column-grid">
+      <div>
+        <h2 data-i18n="playerDetail.races"></h2>
+        <div id="player-races-list" class="card-list"></div>
+      </div>
+      <div>
+        <h2 data-i18n="playerDetail.tournaments"></h2>
+        <div id="player-tournaments-list" class="card-list"></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/spoiler-mode.js"></script>
+  <script src="/js/global-search.js"></script>
+  <script src="/js/player-detail.js"></script>
+  <script src="/js/footer.js"></script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n-page-title="terms.pageTitle">Terms of Use - Randomizer</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" type="image/png" href="/assets/favicon.png">
+    
+    <!-- Language initialization to prevent flicker -->
+    <style>
+        body { opacity: 0; transition: opacity 0.1s ease-in; }
+        body.i18n-ready { opacity: 1; }
+    </style>
+    <script>
+        (function() {
+            try {
+                // Get saved language or detect from browser
+                let lang = localStorage.getItem('preferred-language');
+                if (!lang) {
+                    const browserLang = (navigator.language || navigator.userLanguage || 'en').split('-')[0].toLowerCase();
+                    const supported = ['en', 'fr', 'es', 'de', 'it'];
+                    lang = supported.includes(browserLang) ? browserLang : 'en';
+                }
+                // Apply language immediately to prevent flicker
+                document.documentElement.lang = lang;
+                
+                // Fallback: show page after 200ms if i18n hasn't marked it ready yet
+                window.__i18nShowTimeout = setTimeout(() => {
+                    if (document.body && !document.body.classList.contains('i18n-ready')) {
+                        document.body.classList.add('i18n-ready');
+                    }
+                }, 50);
+            } catch (e) {
+                document.documentElement.lang = 'en';
+                if (document.body) document.body.classList.add('i18n-ready');
+            }
+        })();
+    </script>
+    
+    <!-- Load translations early in head (async to not block parsing) -->
+    <script async src="/js/i18n/en.js"></script>
+    <script async src="/js/i18n/fr.js"></script>
+    <script async src="/js/i18n/es.js"></script>
+    <script async src="/js/i18n/de.js"></script>
+    <script async src="/js/i18n/it.js"></script>
+    <script async src="/js/i18n.js"></script>
+</head>
+<body>
+
+    <header>
+        <a href="/"><img src="/assets/favicon.png" alt="Randomizer" class="site-logo">Randomizer</a>
+        <button class="mobile-menu-toggle" aria-label="Menu" onclick="this.classList.toggle('open');document.querySelector('nav').classList.toggle('open');">
+            <span></span><span></span><span></span>
+        </button>
+        <nav>
+            <ul>
+                <li><a href="/games.html" data-i18n="nav.games">🎮 Games</a></li>
+                <li><a href="/races.html" data-i18n="nav.races">🥇 Races</a></li>
+                <li><a href="/tournaments.html" data-i18n="nav.tournaments">🏆 Tournaments</a></li>
+                <li><a href="/players.html" data-i18n="nav.players">👤 Players</a></li>
+            </ul>
+        </nav>
+        <div class="flex-grow"></div>
+        <input type="text" id="search" placeholder="Search..." data-i18n-placeholder="nav.search">
+    </header>
+
+    <main>
+        <div class="terms-content">
+            <h1 data-i18n="terms.title">📜 Terms of Use</h1>
+            <p class="terms-updated" data-i18n="terms.lastUpdated">Last updated: January 12, 2026</p>
+
+            <h2 data-i18n="terms.section1Title">1. Acceptance of Terms</h2>
+            <p data-i18n="terms.section1Content">
+                By accessing and using this website, you agree to be bound by these terms of use. If you do not accept these terms, please do not use this site.
+            </p>
+
+            <h2 data-i18n="terms.section2Title">2. Description of Service</h2>
+            <p data-i18n="terms.section2Content">
+                Randomizer is a non-commercial community platform that aggregates and presents data related to video game randomizers, including but not limited to:
+            </p>
+            <ul>
+                <li data-i18n="terms.section2List1">Tournament information and results</li>
+                <li data-i18n="terms.section2List2">Race data from third-party platforms like Racetime.gg</li>
+                <li data-i18n="terms.section2List3">Player profiles and statistics</li>
+                <li data-i18n="terms.section2List4"></li>
+            </ul>
+
+            <h2 data-i18n="terms.section3Title">3. Intellectual Property</h2>
+            <p data-i18n="terms.section3Content1">
+                Video games, their names, logos, and associated trademarks are the property of their respective publishers and developers. This site is not affiliated with any video game publisher.
+            </p>
+            <p data-i18n="terms.section3Content2">
+                Data displayed on this site is collected from public sources and third-party APIs (Racetime.gg, Challonge, etc.). Rights to this data belong to their respective owners.
+            </p>
+
+            <h2 data-i18n="terms.section4Title">4. Data Usage</h2>
+            <p data-i18n="terms.section4Content">
+                Player data displayed on this site (usernames, race times, tournament results) is public data accessible on source platforms. If you wish to have your data removed, please contact us.
+            </p>
+
+            <h2 data-i18n="terms.section5Title">5. Limitation of Liability</h2>
+            <p data-i18n="terms.section5Content1">
+                This site is provided "as is" without any warranty. We do not guarantee the accuracy, completeness, or timeliness of the information presented.
+            </p>
+            <p data-i18n="terms.section5Content2">
+                We are not responsible for any direct or indirect damages resulting from the use or inability to use this site.
+            </p>
+
+            <h2 data-i18n="terms.section6Title">6. Third-Party Links</h2>
+            <p data-i18n="terms.section6Content">
+                This site contains links to third-party websites (Racetime.gg, Twitch, Challonge, etc.). These links are provided for informational purposes only. We have no control over the content of these sites and disclaim any responsibility for their content.
+            </p>
+
+            <h2 data-i18n="terms.section7Title">7. User Conduct</h2>
+            <p data-i18n="terms.section7Content">By using this site, you agree to:</p>
+            <ul>
+                <li data-i18n="terms.section7List1">Not attempt to disrupt or damage the operation of the site</li>
+                <li data-i18n="terms.section7List2">Not collect site data automatically without authorization</li>
+                <li data-i18n="terms.section7List3">Respect the randomizer community and its members</li>
+            </ul>
+
+            <h2 data-i18n="terms.section8Title">8. Changes to Terms</h2>
+            <p data-i18n="terms.section8Content">
+                We reserve the right to modify these terms of use at any time. Changes will take effect upon publication on this page. Your continued use of the site after publication of changes constitutes your acceptance of the new terms.
+            </p>
+
+            <h2 data-i18n="terms.section9Title">9. Applicable Law</h2>
+            <p data-i18n="terms.section9Content">
+                These terms of use are governed by French law. Any dispute relating to the use of this site will be subject to the exclusive jurisdiction of French courts.
+            </p>
+
+            <h2 data-i18n="terms.section10Title">10. Contact</h2>
+            <p data-i18n="terms.section10Content">
+                For any questions regarding these terms of use, please contact us through community channels.
+            </p>
+        </div>
+    </main>
+
+    <script src="/js/i18n/en.js"></script>
+    <script src="/js/i18n/fr.js"></script>
+    <script src="/js/spoiler-mode.js"></script>
+    <script src="/js/global-search.js"></script>
+    <script src="/js/footer.js"></script>
+</body>
+</html>

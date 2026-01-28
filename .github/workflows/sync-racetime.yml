@@ -1,0 +1,123 @@
+# Workflow: Synchronisation fréquente des races racetime.gg
+# Ce workflow récupère les nouvelles courses toutes les 5 minutes
+# pour tous les jeux randomizer actifs sur le site
+
+name: Sync Racetime Races
+
+on:
+  # Exécution toutes les 5 minutes
+  schedule:
+    - cron: '*/5 * * * *'
+  
+  # Déclenchement manuel
+  workflow_dispatch:
+    inputs:
+      game_slug:
+        description: 'Slug racetime du jeu à synchroniser (laisser vide pour tous)'
+        required: false
+        default: ''
+        type: string
+      max_pages:
+        description: 'Nombre max de pages à récupérer par jeu'
+        required: false
+        default: '2'
+        type: string
+      full_sync:
+        description: 'Synchronisation complète (ignore le cache de date)'
+        required: false
+        default: 'false'
+        type: boolean
+
+env:
+  NODE_VERSION: '20'
+
+# Empêche les exécutions simultanées
+concurrency:
+  group: sync-races
+  cancel-in-progress: false
+
+jobs:
+  sync-races:
+    name: Synchroniser les races
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout du projet
+        uses: actions/checkout@v4
+      
+      - name: Configuration de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Installation des dépendances
+        run: npm ci
+      
+      - name: Récupérer les races depuis racetime.gg
+        id: sync
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          RACETIME_RATE_LIMIT_MS: ${{ vars.RACETIME_RATE_LIMIT_MS || '1500' }}
+        run: |
+          GAME_SLUG="${{ github.event.inputs.game_slug }}"
+          MAX_PAGES="${{ github.event.inputs.max_pages || '2' }}"
+          FULL_SYNC="${{ github.event.inputs.full_sync }}"
+          
+          ARGS=""
+          
+          if [ -n "$GAME_SLUG" ]; then
+            ARGS="--game $GAME_SLUG"
+          fi
+          
+          if [ "$FULL_SYNC" = "true" ]; then
+            ARGS="$ARGS --full"
+          fi
+          
+          ARGS="$ARGS --max-pages $MAX_PAGES"
+          
+          # Exécute le script de synchronisation
+          node scripts/sync-racetime-incremental.js $ARGS 2>&1 | tee /tmp/sync-output.log
+          
+          # Extraire les stats
+          NEW_RACES=$(grep -oP 'Nouvelles races: \K\d+' /tmp/sync-output.log || echo "0")
+          UPDATED_RACES=$(grep -oP 'Mises à jour: \K\d+' /tmp/sync-output.log || echo "0")
+          
+          echo "new_races=$NEW_RACES" >> $GITHUB_OUTPUT
+          echo "updated_races=$UPDATED_RACES" >> $GITHUB_OUTPUT
+      
+      - name: Résumé de la synchronisation
+        if: steps.sync.outputs.new_races != '0' || steps.sync.outputs.updated_races != '0'
+        run: |
+          echo "## Synchronisation racetime.gg" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- 🆕 Nouvelles races: ${{ steps.sync.outputs.new_races }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔄 Mises à jour: ${{ steps.sync.outputs.updated_races }}" >> $GITHUB_STEP_SUMMARY
+          echo "- ⏰ Date: $(date -u)" >> $GITHUB_STEP_SUMMARY
+
+  # Job optionnel pour détecter automatiquement de nouvelles catégories racetime
+  detect-new-categories:
+    name: Détecter nouvelles catégories
+    runs-on: ubuntu-latest
+    # N'exécute qu'une fois par heure (au cron minute 0)
+    if: github.event.schedule && contains(github.event.schedule, '0 * * * *')
+    
+    steps:
+      - name: Checkout du projet
+        uses: actions/checkout@v4
+      
+      - name: Configuration de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Installation des dépendances
+        run: npm ci
+      
+      - name: Vérifier les nouvelles catégories
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        run: |
+          node scripts/detect-new-racetime-categories.js || true

@@ -1,0 +1,181 @@
+# Workflow: Synchronisation quotidienne avec rando-list
+# Ce workflow vérifie si de nouveaux jeux ont été ajoutés au repo video-game-randomizers/rando-list
+# et met à jour le cache en BDD + récupère les races pour les nouveaux jeux
+
+name: Sync Rando-List
+
+on:
+  # Exécution quotidienne à 6h00 UTC (7h00 Paris en hiver, 8h00 en été)
+  schedule:
+    - cron: '0 6 * * *'
+  
+  # Déclenchement manuel depuis l'interface GitHub
+  workflow_dispatch:
+    inputs:
+      force_full_sync:
+        description: 'Force une synchronisation complète de tous les jeux'
+        required: false
+        default: 'false'
+        type: boolean
+      link_games:
+        description: 'Lier automatiquement les jeux existants aux entrées rando-list'
+        required: false
+        default: 'true'
+        type: boolean
+      sync_races:
+        description: 'Synchroniser les races pour les nouveaux jeux détectés'
+        required: false
+        default: 'true'
+        type: boolean
+
+  # Optionnel: Webhook depuis le repo rando-list (nécessite configuration du repo source)
+  repository_dispatch:
+    types: [rando-list-updated]
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  check-changes:
+    name: Vérifier les changements dans rando-list
+    runs-on: ubuntu-latest
+    outputs:
+      has_changes: ${{ steps.check.outputs.has_changes }}
+      new_games: ${{ steps.check.outputs.new_games }}
+      commit_hash: ${{ steps.check.outputs.commit_hash }}
+    
+    steps:
+      - name: Checkout du projet
+        uses: actions/checkout@v4
+      
+      - name: Configuration de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Installation des dépendances
+        run: npm ci
+      
+      - name: Vérifier les changements rando-list
+        id: check
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        run: |
+          # Clone le repo rando-list
+          git clone --depth 1 https://github.com/video-game-randomizers/rando-list.git /tmp/rando-list
+          COMMIT_HASH=$(git -C /tmp/rando-list rev-parse HEAD)
+          echo "commit_hash=$COMMIT_HASH" >> $GITHUB_OUTPUT
+          
+          # Exécute le script de vérification
+          node scripts/check-rando-list-changes.js --commit $COMMIT_HASH > /tmp/changes.json || true
+          
+          if [ -f /tmp/changes.json ]; then
+            HAS_CHANGES=$(cat /tmp/changes.json | jq -r '.hasChanges // "false"')
+            NEW_GAMES=$(cat /tmp/changes.json | jq -c '.newGames // []')
+            echo "has_changes=$HAS_CHANGES" >> $GITHUB_OUTPUT
+            echo "new_games=$NEW_GAMES" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "new_games=[]" >> $GITHUB_OUTPUT
+          fi
+
+  sync-cache:
+    name: Synchroniser le cache rando-list
+    needs: check-changes
+    if: needs.check-changes.outputs.has_changes == 'true' || github.event.inputs.force_full_sync == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout du projet
+        uses: actions/checkout@v4
+      
+      - name: Configuration de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Installation des dépendances
+        run: npm ci
+      
+      - name: Synchroniser avec rando-list
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          RANDO_LIST_DIR: /tmp/rando-list
+        run: |
+          # Clone le repo
+          git clone --depth 1 https://github.com/video-game-randomizers/rando-list.git /tmp/rando-list
+          
+          # Exécute la synchronisation
+          if [ "${{ github.event.inputs.link_games }}" = "true" ]; then
+            npm run sync-rando-list:link
+          else
+            npm run sync-rando-list
+          fi
+      
+      - name: Résumé de la synchronisation
+        run: |
+          echo "## Synchronisation rando-list terminée" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Commit: ${{ needs.check-changes.outputs.commit_hash }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Date: $(date -u)" >> $GITHUB_STEP_SUMMARY
+
+  sync-new-races:
+    name: Récupérer les races des nouveaux jeux
+    needs: [check-changes, sync-cache]
+    if: |
+      (needs.check-changes.outputs.new_games != '[]' && github.event.inputs.sync_races != 'false') ||
+      github.event.inputs.force_full_sync == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout du projet
+        uses: actions/checkout@v4
+      
+      - name: Configuration de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Installation des dépendances
+        run: npm ci
+      
+      - name: Récupérer les races pour les nouveaux jeux
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          RACETIME_RATE_LIMIT_MS: '2000'
+        run: |
+          NEW_GAMES='${{ needs.check-changes.outputs.new_games }}'
+          
+          if [ "${{ github.event.inputs.force_full_sync }}" = "true" ]; then
+            # Sync complet de tous les jeux actifs
+            node scripts/sync-racetime-all.js --all
+          elif [ "$NEW_GAMES" != "[]" ]; then
+            # Sync seulement les nouveaux jeux
+            echo "$NEW_GAMES" | jq -r '.[]' | while read game_id; do
+              echo "Syncing races for: $game_id"
+              node scripts/sync-racetime-game.js --game "$game_id" || true
+            done
+          fi
+      
+      - name: Résumé
+        run: |
+          echo "## Races synchronisées" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Nouveaux jeux traités: ${{ needs.check-changes.outputs.new_games }}" >> $GITHUB_STEP_SUMMARY
+
+  notify:
+    name: Notification
+    needs: [sync-cache, sync-new-races]
+    if: always() && (needs.sync-cache.result == 'failure' || needs.sync-new-races.result == 'failure')
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Notification d'erreur
+        run: |
+          echo "::error::La synchronisation a échoué. Vérifiez les logs."
+          # Optionnel: Ajouter ici une notification Discord/Slack/Email
+          # curl -X POST ${{ secrets.DISCORD_WEBHOOK_URL }} -H "Content-Type: application/json" \
+          #   -d '{"content": "⚠️ Sync rando-list échouée!"}'

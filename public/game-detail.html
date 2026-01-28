@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n-page-title="gameDetail.pageTitle">Game - Randomizer</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  
+  <!-- Language initialization to prevent flicker -->
+  <style>
+    body { opacity: 0; transition: opacity 0.1s ease-in; }
+    body.i18n-ready { opacity: 1; }
+  </style>
+  <script>
+    (function() {
+      try {
+        // Get saved language or detect from browser
+        let lang = localStorage.getItem('preferred-language');
+        if (!lang) {
+          const browserLang = (navigator.language || navigator.userLanguage || 'en').split('-')[0].toLowerCase();
+          const supported = ['en', 'fr', 'es', 'de', 'it'];
+          lang = supported.includes(browserLang) ? browserLang : 'en';
+        }
+        // Apply language immediately to prevent flicker
+        document.documentElement.lang = lang;
+        
+        // Fallback: show page after 200ms if i18n hasn't marked it ready yet
+        window.__i18nShowTimeout = setTimeout(() => {
+          if (document.body && !document.body.classList.contains('i18n-ready')) {
+            document.body.classList.add('i18n-ready');
+          }
+        }, 50);
+      } catch (e) {
+        document.documentElement.lang = 'en';
+        if (document.body) document.body.classList.add('i18n-ready');
+      }
+    })();
+  </script>
+  
+  <!-- Load translations early in head (async to not block parsing) -->
+  <script async src="/js/i18n/en.js"></script>
+  <script async src="/js/i18n/fr.js"></script>
+  <script async src="/js/i18n/es.js"></script>
+  <script async src="/js/i18n/de.js"></script>
+  <script async src="/js/i18n/it.js"></script>
+  <script async src="/js/i18n.js"></script>
+</head>
+<body>
+  <header>
+    <a href="/"><img src="/assets/favicon.png" alt="Randomizer" class="site-logo">Randomizer</a>
+    <button class="mobile-menu-toggle" aria-label="Menu" onclick="this.classList.toggle('open');document.querySelector('nav').classList.toggle('open');">
+        <span></span><span></span><span></span>
+    </button>
+    <nav>
+      <ul>
+        <li><a href="/games.html" data-i18n="nav.games">🎮 Games</a></li>
+        <li><a href="/races.html" data-i18n="nav.races">🥇 Races</a></li>
+        <li><a href="/tournaments.html" data-i18n="nav.tournaments">🏆 Tournaments</a></li>
+        <li><a href="/players.html" data-i18n="nav.players">👤 Players</a></li>
+      </ul>
+    </nav>
+    <div class="flex-grow"></div>
+    <input type="text" id="search" placeholder="Search..." data-i18n-placeholder="nav.search">
+  </header>
+
+  <main class="main-container detail-page">
+    <!-- Header with poster and title -->
+    <div class="detail-header game-header">
+      <img id="game-poster" src="" alt="" class="game-poster">
+      <div class="game-info">
+        <h1 id="game-meta" data-i18n="common.loading"></h1>
+        <h2 id="game-title"></h2>
+        <div id="game-official-site"></div>
+      </div>
+    </div>
+
+    <!-- Tabs (ordre: Leaderboards, Categories, Streams, Resources, Stats) -->
+    <div class="tabs-container">
+      <button class="tab-btn active" data-tab="leaderboards" data-i18n="gameDetail.tabLeaderboards">🏆 Leaderboards</button>
+      <button class="tab-btn" data-tab="categories" data-i18n="gameDetail.tabCategories">🎯 Categories</button>
+      <button class="tab-btn" data-tab="streams" data-i18n="gameDetail.tabStreams">📺 Streams</button>
+      <button class="tab-btn" data-tab="community" data-i18n="gameDetail.tabCommunity">👥 Community</button>
+      <button class="tab-btn" data-tab="resources" data-i18n="gameDetail.tabResources">📚 Resources</button>
+      <button class="tab-btn" data-tab="stats" data-i18n="gameDetail.tabStats">📊 Stats</button>
+    </div>
+
+    <!-- Tab contents (Leaderboards visible par défaut) -->
+    <div id="tab-content-leaderboards" class="tab-content" style="display:block;">
+      <h2 data-i18n="gameDetail.leaderboards"></h2>
+      <p class="text-muted" data-i18n="gameDetail.leaderboardsComingSoon"></p>
+    </div>
+
+    <div id="tab-content-categories" class="tab-content" style="display:none;">
+      <h2 data-i18n="gameDetail.categories"></h2>
+      <p class="text-muted" data-i18n="gameDetail.categoriesDescription"></p>
+      <div id="categories-content">
+        <p class="text-muted" data-i18n="gameDetail.categoriesComingSoon"></p>
+      </div>
+    </div>
+
+    <div id="tab-content-streams" class="tab-content" style="display:none;">
+      <h2 data-i18n="gameDetail.liveStreams"></h2>
+      <div id="streams-list">
+        <p class="text-muted" data-i18n="gameDetail.streamsComingSoon"></p>
+      </div>
+    </div>
+
+    <div id="tab-content-community" class="tab-content" style="display:none;">
+      <h2 data-i18n="gameDetail.community"></h2>
+      <div id="community-list">
+        <p class="text-muted" data-i18n="gameDetail.communityComingSoon"></p>
+      </div>
+    </div>
+
+    <div id="tab-content-resources" class="tab-content" style="display:none;">
+      <h2 data-i18n="gameDetail.resources"></h2>
+      <div id="resources-content">
+        <p class="text-muted" data-i18n="gameDetail.resourcesComingSoon"></p>
+      </div>
+    </div>
+
+    <div id="tab-content-stats" class="tab-content" style="display:none;">
+      <h2 data-i18n="gameDetail.statistics"></h2>
+      <div id="game-stats" class="detail-section"></div>
+      <div class="two-column-grid">
+        <div>
+          <h3 data-i18n="gameDetail.recentRaces"></h3>
+          <div id="game-races" class="card-list"></div>
+        </div>
+        <div>
+          <h3 data-i18n="gameDetail.recentTournaments"></h3>
+          <div id="game-tournaments" class="card-list"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/spoiler-mode.js"></script>
+  <script src="/js/global-search.js"></script>
+  <script src="/js/game-detail.js"></script>
+  <script src="/js/footer.js"></script>
+</body>
+</html>

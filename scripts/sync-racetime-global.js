@@ -104,8 +104,11 @@ async function syncGlobalRaces(options = {}) {
           const existingRace = await Race.findOne({ url: raceUrl });
           
           if (existingRace) {
-            // Mettre à jour si le statut a changé
-            if (existingRace.status !== formattedRace.status) {
+            // Mettre à jour si le statut a changé OU si la race est en cours
+            const shouldRefreshEntrants = existingRace.status !== formattedRace.status
+              || formattedRace.status !== 'finished';
+            
+            if (shouldRefreshEntrants) {
               await Race.updateOne({ url: raceUrl }, {
                 $set: {
                   status: formattedRace.status,

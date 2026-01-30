@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { Game } = require('../models');
 
 // Cache for stream results (5 minutes TTL)
 const cache = {
@@ -83,7 +84,7 @@ const COMBO_KEYWORDS = {
   'z1m1z3m3': ['z1m1z3m3', 'z1m1z3', 'multiworld', 'quad randomizer', 'quad crossover randomizer']
 };
 
-// Twitch game category names (as they appear on Twitch)
+// Twitch game category names (as they appear on Twitch) - fallback only
 const TWITCH_GAME_NAMES = {
   // === ZELDA SERIES ===
   'alttp': 'The Legend of Zelda: A Link to the Past',
@@ -477,6 +478,16 @@ router.get('/:gameId', async (req, res, next) => {
     }
 
     const gameIdLower = gameId.toLowerCase();
+    const gameDoc = await Game.findOne({ id: gameIdLower, enabled: { $ne: false } });
+    if (!gameDoc) {
+      return res.json({
+        gameId,
+        streams: [],
+        total: 0,
+        message: 'Game not supported yet',
+        fetchedAt: new Date().toISOString()
+      });
+    }
     
     // Check if it's a combo game
     const comboGames = COMBO_GAMES[gameIdLower];
@@ -502,7 +513,9 @@ router.get('/:gameId', async (req, res, next) => {
       twitchStreamsAll = filterComboStreams(twitchStreamsAll, gameIdLower);
     } else {
       // Single game
-      const twitchGameName = TWITCH_GAME_NAMES[gameIdLower];
+      const twitchNameFromDb = gameDoc.integrations?.twitch?.categoryName;
+      const fallbackName = TWITCH_GAME_NAMES[gameIdLower] || gameDoc.official?.name || gameDoc.name;
+      const twitchGameName = twitchNameFromDb || fallbackName;
 
       if (!twitchGameName) {
         return res.json({
@@ -642,15 +655,21 @@ router.get('/', async (req, res, next) => {
       return res.json({ streams: [], total: 0, message: 'Twitch API not configured' });
     }
 
-    // Build reverse map: Twitch game name -> gameIds
+    // Build reverse map: Twitch game name -> gameIds (from DB only)
     const twitchGameToGameIds = new Map();
-    for (const [gameId, twitchGameName] of Object.entries(TWITCH_GAME_NAMES)) {
+    const games = await Game.find({ enabled: { $ne: false } });
+    for (const game of games) {
+      const gameId = (game.id || '').toLowerCase();
+      const twitchNameFromDb = game.integrations?.twitch?.categoryName;
+      const fallbackName = TWITCH_GAME_NAMES[gameId] || game.official?.name || game.name;
+      const twitchGameName = twitchNameFromDb || fallbackName;
+      if (!twitchGameName) continue;
       const names = Array.isArray(twitchGameName) ? twitchGameName : [twitchGameName];
       for (const name of names) {
         if (!twitchGameToGameIds.has(name)) {
           twitchGameToGameIds.set(name, []);
         }
-        twitchGameToGameIds.get(name).push(gameId.toLowerCase());
+        twitchGameToGameIds.get(name).push(gameId);
       }
     }
 
@@ -659,8 +678,8 @@ router.get('/', async (req, res, next) => {
     const streamMap = new Map(); // To deduplicate
     
     try {
-      // Fetch streams from all known games
-      const gameNames = Object.values(TWITCH_GAME_NAMES).flat();
+      // Fetch streams from all known games (from DB)
+      const gameNames = Array.from(twitchGameToGameIds.keys());
       const uniqueGameNames = [...new Set(gameNames)];
       
       for (const gameName of uniqueGameNames) {

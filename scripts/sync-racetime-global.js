@@ -95,7 +95,24 @@ async function syncGlobalRaces(options = {}) {
         stats.categories.add(categorySlug);
         
         try {
-          const formattedRace = racetimeAPI.formatRace(raceData);
+          let formattedRace = racetimeAPI.formatRace(raceData);
+          
+          // Si les entrants sont absents/incomplets, récupérer la race détaillée
+          const hasEntrants = Array.isArray(formattedRace?.entrants) && formattedRace.entrants.length > 0;
+          const isFinished = formattedRace?.status === 'finished';
+          if ((!hasEntrants || !isFinished) && raceData.url) {
+            const raceId = String(raceData.url).split('/').filter(Boolean).pop();
+            if (raceId) {
+              try {
+                const detailedRace = await racetimeAPI.getRace(categorySlug, raceId);
+                if (detailedRace) {
+                  formattedRace = detailedRace;
+                }
+              } catch (detailError) {
+                console.warn(`  ⚠️  Détails indisponibles pour ${raceData.url}: ${detailError.message}`);
+              }
+            }
+          }
           if (!formattedRace) continue;
           
           const raceUrl = formattedRace.url;

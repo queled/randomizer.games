@@ -44,14 +44,25 @@ async function syncGlobalRaces(options = {}) {
   
   const stats = { newRaces: 0, updatedRaces: 0, errors: 0, categories: new Set() };
   
-  // Récupérer les slugs des jeux actifs
+  // Récupérer les slugs des jeux actifs (principal + additionnels)
   const activeGames = await Game.find({
     'integrations.racetime.enabled': true,
     enabled: { $ne: false }
-  }).select('integrations.racetime.gameSlug').lean();
+  }).select('integrations.racetime.gameSlug integrations.racetime.gameSlugs').lean();
   
-  const activeSlugs = new Set(activeGames.map(g => g.integrations?.racetime?.gameSlug).filter(Boolean));
-  console.log(`  ${activeSlugs.size} jeux actifs sur racetime`);
+  const activeSlugs = new Set();
+  for (const game of activeGames) {
+    const primary = game.integrations?.racetime?.gameSlug;
+    if (primary) activeSlugs.add(primary);
+    
+    const additional = game.integrations?.racetime?.gameSlugs || [];
+    for (const slug of additional) {
+      activeSlugs.add(slug);
+    }
+  }
+  
+  console.log(`  ${activeSlugs.size} slugs racetime actifs`);
+  console.log(`  Slugs: ${Array.from(activeSlugs).join(', ')}`);
   
   let page = 1;
   let hasMore = true;

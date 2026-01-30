@@ -91,7 +91,8 @@ const gameSchema = new mongoose.Schema({
     },
     racetime: {
       enabled: { type: Boolean, default: false },
-      gameSlug: String,             // e.g. "ootr", "alttpr"
+      gameSlug: String,             // e.g. "ootr", "alttpr" (slug principal)
+      gameSlugs: [String],          // e.g. ["alttpr", "alttpr-ladder"] (slugs additionnels à scanner)
       gameName: String,             // display name on racetime
       confidence: { type: String, enum: ['manual', 'auto'], default: 'manual' },
       lastSync: Date

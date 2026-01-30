@@ -84,6 +84,19 @@ const COMBO_KEYWORDS = {
   'z1m1z3m3': ['z1m1z3m3', 'z1m1z3', 'multiworld', 'quad randomizer', 'quad crossover randomizer']
 };
 
+// Per-game extra filters:
+// - PER_GAME_TITLE_KEYWORDS: require one of these keywords to appear in title/tags
+// - PER_GAME_ALLOWED_TWITCH_CATEGORIES: only accept streams whose Twitch category name matches one of these
+const PER_GAME_TITLE_KEYWORDS = {
+  // ootmq requires "master quest" or "mq" or "ootmqr" in title/tags
+  'ootmq': ['master quest', 'mq', 'ootmqr']
+};
+
+const PER_GAME_ALLOWED_TWITCH_CATEGORIES = {
+  // alttpfs should only accept streams whose Twitch category is Four Swords
+  'alttpfs': ['The Legend of Zelda: Four Swords Adventures', 'The Legend of Zelda: Four Swords']
+};
+
 // Twitch game category names (as they appear on Twitch) - fallback only
 const TWITCH_GAME_NAMES = {
   // === ZELDA SERIES ===
@@ -546,6 +559,28 @@ router.get('/:gameId', async (req, res, next) => {
       }
 
       twitchStreamsAll = twitchStreams;
+    }
+
+    // Apply per-game extra filters (title keywords, allowed Twitch categories)
+    try {
+      const titleKeywords = PER_GAME_TITLE_KEYWORDS[gameIdLower];
+      if (titleKeywords && titleKeywords.length > 0) {
+        const kws = titleKeywords.map(k => k.toLowerCase());
+        twitchStreamsAll = twitchStreamsAll.filter(s => {
+          const title = (s.title || '').toLowerCase();
+          const tags = (s.tags || []).map(t => (t || '').toLowerCase()).join(' ');
+          const combined = title + ' ' + tags;
+          return kws.some(k => combined.includes(k));
+        });
+      }
+
+      const allowedCats = PER_GAME_ALLOWED_TWITCH_CATEGORIES[gameIdLower];
+      if (allowedCats && allowedCats.length > 0) {
+        const allowed = allowedCats.map(a => a.toLowerCase());
+        twitchStreamsAll = twitchStreamsAll.filter(s => allowed.includes((s.gameName || '').toLowerCase()));
+      }
+    } catch (e) {
+      console.warn('Per-game stream filtering failed for', gameIdLower, e);
     }
 
     // Combine and sort by viewer count

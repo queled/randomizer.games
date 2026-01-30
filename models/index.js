@@ -103,6 +103,15 @@ const gameSchema = new mongoose.Schema({
       weblink: String,              // e.g. "https://www.speedrun.com/alttp"
       confidence: { type: String, enum: ['manual', 'auto'], default: 'manual' },
       lastSync: Date
+    },
+    twitch: {
+      enabled: { type: Boolean, default: false },
+      categoryId: String,           // Twitch category ID (game_id)
+      categoryName: String,         // Twitch category name (e.g. "The Legend of Zelda: A Link to the Past")
+      boxArtUrl: String,            // URL de l'image de la catégorie
+      confidence: { type: String, enum: ['manual', 'auto'], default: 'manual' },
+      lastSync: Date,
+      notFound: { type: Boolean, default: false } // True si pas de catégorie Twitch trouvée
     }
   },
   

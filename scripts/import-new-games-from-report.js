@@ -36,57 +36,81 @@ function buildGameDocument(entry) {
   const id = (entry.id || entry.suggestedId || generateSafeId(entry.originalName)).toLowerCase();
   const displayName = entry.displayName || entry.originalName;
 
+  // Map randomizers to resources.sites
   const resources = {
-    sites: (entry.randomizers || []).map(r => ({
+    sites: (entry.randomizers || []).map((r, index) => ({
       url: r.url || null,
       name: r.name || r.url || 'Source',
       source: 'rando-list',
-      isArchipelago: !!r.isArchipelago
+      isArchipelago: !!r.isArchipelago,
+      isObsolete: false
     })),
-    officialSite: null
+    officialSite: null,
+    trackers: [],
+    guides: [],
+    other: []
   };
 
-  if (resources.sites.length === 1) {
+  // Déterminer le site officiel principal (soit isMain=true, soit le premier)
+  const mainRandomizer = (entry.randomizers || []).find(r => r.isMain) || (entry.randomizers && entry.randomizers[0]);
+  if (mainRandomizer) {
     resources.officialSite = {
-      url: resources.sites[0].url,
-      name: resources.sites[0].name,
-      isArchipelago: resources.sites[0].isArchipelago
+      url: mainRandomizer.url,
+      name: mainRandomizer.name || mainRandomizer.url,
+      isArchipelago: !!mainRandomizer.isArchipelago
     };
   }
 
-  const primaryRandomizer = (entry.randomizers && entry.randomizers[0]) || {};
+  const primaryRandomizer = mainRandomizer || {};
 
   return {
     id,
-    name: entry.originalName,
-    displayName,
-    officialName: entry.originalName,
-    enabled: true,
+    name: displayName, // Le nom affiché
+    official: {
+      name: entry.originalName, // Le nom original complet
+      releaseYear: null, // À remplir manuellement plus tard
+      website: null
+    },
     randomizer: {
       name: entry.randomizerName || (entry.originalName + ' Randomizer'),
+      displayName: entry.randomizerName || (entry.originalName + ' Randomizer'),
       shortName: entry.randomizerShortName || (entry.suggestedId || id).toUpperCase() + ' Randomizer',
       tinyName: entry.randomizerTinyName || (entry.suggestedId || id).toUpperCase(),
-      opensource: !!primaryRandomizer.opensource
+      website: mainRandomizer?.url || null,
+      opensource: !!primaryRandomizer.opensource,
+      addedDate: new Date()
     },
     resources,
+    platforms: entry.platforms || [],
+    series: entry.series || null,
+    categories: [], // À remplir via l'admin
     integrations: {
       randoList: {
         enabled: true,
+        seriesFile: entry.series ? `${entry.series.replace(/\s+/g, '_')}.yml` : null,
         gameName: entry.originalName,
-        confidence: 'manual',
+        randomizerIdentifier: null,
+        confidence: 'auto',
         lastSync: new Date()
       },
       racetime: {
         enabled: false,
         gameSlug: null,
+        gameName: null,
+        confidence: 'manual'
+      },
+      speedrun: {
+        enabled: false,
+        gameId: null,
+        weblink: null,
         confidence: 'manual'
       }
     },
     source: {
       origin: 'rando-list',
-      createdAt: new Date(),
-      autoCreated: true
-    }
+      importedAt: new Date()
+    },
+    enabled: true
   };
 }
 
@@ -135,25 +159,89 @@ async function main() {
   await connectDB();
 
   const created = [];
+  const updated = [];
+  
   for (const entry of toImport) {
     const doc = buildGameDocument(entry);
     try {
       const exists = await Game.findOne({ id: doc.id });
+      
       if (exists) {
-        console.log(`Skipping ${doc.id} — already exists`);
-        continue;
+        // Mettre à jour le jeu existant avec les nouvelles informations
+        console.log(`Updating ${doc.id} — already exists, merging data...`);
+        
+        // Fusionner les sites (éviter les doublons d'URL)
+        const existingSiteUrls = new Set(exists.resources?.sites?.map(s => s.url) || []);
+        const newSites = (doc.resources?.sites || []).filter(s => !existingSiteUrls.has(s.url));
+        
+        if (newSites.length > 0) {
+          exists.resources = exists.resources || {};
+          exists.resources.sites = [...(exists.resources.sites || []), ...newSites];
+          console.log(`  → Added ${newSites.length} new randomizer site(s)`);
+        }
+        
+        // Mettre à jour le site officiel si pas déjà défini
+        if (!exists.resources?.officialSite && doc.resources?.officialSite) {
+          exists.resources.officialSite = doc.resources.officialSite;
+          console.log(`  → Set official site`);
+        }
+        
+        // Mettre à jour les informations du randomizer si manquantes
+        if (!exists.randomizer?.name && doc.randomizer?.name) {
+          exists.randomizer = exists.randomizer || {};
+          exists.randomizer.name = doc.randomizer.name;
+        }
+        if (!exists.randomizer?.shortName && doc.randomizer?.shortName) {
+          exists.randomizer = exists.randomizer || {};
+          exists.randomizer.shortName = doc.randomizer.shortName;
+        }
+        if (!exists.randomizer?.tinyName && doc.randomizer?.tinyName) {
+          exists.randomizer = exists.randomizer || {};
+          exists.randomizer.tinyName = doc.randomizer.tinyName;
+        }
+        
+        // Mettre à jour les platforms si manquantes
+        if (doc.platforms && doc.platforms.length > 0 && (!exists.platforms || exists.platforms.length === 0)) {
+          exists.platforms = doc.platforms;
+          console.log(`  → Added platforms: ${doc.platforms.join(', ')}`);
+        }
+        
+        // Mettre à jour la série si manquante
+        if (doc.series && !exists.series) {
+          exists.series = doc.series;
+          console.log(`  → Added series: ${doc.series}`);
+        }
+        
+        // Mettre à jour l'intégration rando-list
+        if (!exists.integrations?.randoList?.enabled) {
+          exists.integrations = exists.integrations || {};
+          exists.integrations.randoList = doc.integrations.randoList;
+          console.log(`  → Enabled rando-list integration`);
+        } else {
+          exists.integrations.randoList.lastSync = new Date();
+        }
+        
+        // Sauvegarder les modifications
+        await exists.save();
+        updated.push(doc.id);
+        
+      } else {
+        // Créer un nouveau jeu
+        const g = new Game(doc);
+        await g.save();
+        console.log(`Created: ${doc.id} → ${doc.name}`);
+        created.push(doc.id);
       }
-      const g = new Game(doc);
-      await g.save();
-      console.log(`Created: ${doc.id} -> ${doc.displayName}`);
-      created.push(doc.id);
+      
     } catch (err) {
-      console.error(`Error creating ${doc.id}:`, err.message);
+      console.error(`Error processing ${doc.id}:`, err.message);
     }
   }
 
   await mongoose.disconnect();
-  console.log(`\nDone. ${created.length} game(s) created.`);
+  console.log(`\n✅ Done!`);
+  console.log(`   - ${created.length} game(s) created`);
+  console.log(`   - ${updated.length} game(s) updated`);
 }
 
 main().catch(e => { console.error(e); process.exit(1); });

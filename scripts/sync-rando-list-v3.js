@@ -218,6 +218,7 @@ function normalizeGameName(name) {
 
 /**
  * Met à jour les ressources des Games existants
+ * NOTE: N'écrase pas les jeux dont source.origin='manual' ou les noms curés manuellement
  */
 async function updateGameResources(seriesData, dryRun = false) {
   console.log('\n🔗 Mise à jour des ressources des jeux...');
@@ -227,9 +228,20 @@ async function updateGameResources(seriesData, dryRun = false) {
   
   const { byIdentifier, byGameName } = buildRandomizerIndex(seriesData);
   
-  const stats = { updated: 0, notFound: 0, multipleUrls: 0 };
+  const stats = { updated: 0, notFound: 0, multipleUrls: 0, skippedManual: 0 };
   
   for (const game of games) {
+    // === PROTECTION DES DONNÉES MANUELLES ===
+    // Ne pas écraser les jeux qui ont été importés/curés manuellement
+    const origin = game.source?.origin;
+    if (origin === 'manual') {
+      stats.skippedManual++;
+      continue;
+    }
+    
+    // Si le jeu a un randoList.confidence = 'manual', on ne modifie que les sites
+    const isManuallyLinked = game.integrations?.randoList?.confidence === 'manual';
+    
     // Chercher les infos rando-list pour ce jeu
     let matchedRandomizers = [];
     
@@ -300,38 +312,51 @@ async function updateGameResources(seriesData, dryRun = false) {
     }
     
     // Préparer la mise à jour
-    const updates = {
-      'resources.sites': sites
-    };
+    // Pour les jeux manuellement liés, on ne met à jour QUE les sites (pas les infos randomizer)
+    const updates = {};
+    
+    // Toujours mettre à jour les sites (fusion avec les existants pour éviter d'écraser les sites manuels)
+    const existingManualSites = (game.resources?.sites || [])
+      .filter(s => s.source === 'manual');
+    const allSites = [...sites];
+    // Ajouter les sites manuels qui n'existent pas déjà
+    for (const manualSite of existingManualSites) {
+      if (!allSites.find(s => s.url === manualSite.url)) {
+        allSites.push(manualSite);
+      }
+    }
+    updates['resources.sites'] = allSites;
     
     // Ne mettre à jour le site officiel que s'il n'est pas déjà défini manuellement
     if (officialSite && !game.resources?.officialSite?.url) {
       updates['resources.officialSite'] = officialSite;
     }
     
-    // Mettre à jour les infos randomizer
-    const primaryRando = uniqueRandomizers[0];
-    if (primaryRando) {
-      if (primaryRando.opensource !== undefined) {
-        updates['randomizer.opensource'] = primaryRando.opensource;
-      }
-      if (primaryRando.addedDate) {
-        updates['randomizer.addedDate'] = new Date(primaryRando.addedDate);
-      }
-      if (primaryRando.updatedDate) {
-        updates['randomizer.updatedDate'] = new Date(primaryRando.updatedDate);
+    // Mettre à jour les infos randomizer SEULEMENT si pas de liaison manuelle
+    if (!isManuallyLinked) {
+      const primaryRando = uniqueRandomizers[0];
+      if (primaryRando) {
+        if (primaryRando.opensource !== undefined) {
+          updates['randomizer.opensource'] = primaryRando.opensource;
+        }
+        if (primaryRando.addedDate) {
+          updates['randomizer.addedDate'] = new Date(primaryRando.addedDate);
+        }
+        if (primaryRando.updatedDate) {
+          updates['randomizer.updatedDate'] = new Date(primaryRando.updatedDate);
+        }
       }
     }
     
     if (dryRun) {
-      console.log(`  📋 [DRY-RUN] ${game.id}: ${sites.length} site(s)`);
+      console.log(`  📋 [DRY-RUN] ${game.id}: ${allSites.length} site(s)${isManuallyLinked ? ' (liaison manuelle)' : ''}`);
     } else {
       await Game.updateOne({ id: game.id }, { $set: updates });
       stats.updated++;
     }
   }
   
-  console.log(`\n  ✓ ${stats.updated} mis à jour, ${stats.notFound} non trouvés, ${stats.multipleUrls} avec plusieurs URLs`);
+  console.log(`\n  ✓ ${stats.updated} mis à jour, ${stats.skippedManual} jeux manuels ignorés, ${stats.notFound} non trouvés, ${stats.multipleUrls} avec plusieurs URLs`);
   return stats;
 }
 

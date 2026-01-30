@@ -1,6 +1,6 @@
 # Workflow: Synchronisation fréquente des races racetime.gg
 # Ce workflow récupère les nouvelles courses toutes les 5 minutes
-# pour tous les jeux randomizer actifs sur le site
+# en partant des races globales récentes (plus efficace que jeu par jeu)
 
 name: Sync Racetime Races
 
@@ -13,17 +13,17 @@ on:
   workflow_dispatch:
     inputs:
       game_slug:
-        description: 'Slug racetime du jeu à synchroniser (laisser vide pour tous)'
+        description: 'Slug racetime du jeu à synchroniser (laisser vide pour global)'
         required: false
         default: ''
         type: string
       max_pages:
-        description: 'Nombre max de pages à récupérer par jeu'
+        description: 'Nombre max de pages à récupérer (laisser vide pour illimité si game_slug fourni)'
         required: false
-        default: '2'
+        default: ''
         type: string
-      full_sync:
-        description: 'Synchronisation complète (ignore le cache de date)'
+      no_limit:
+        description: 'Pas de limite de pages (pour sync complète d un jeu)'
         required: false
         default: 'false'
         type: boolean
@@ -40,7 +40,8 @@ jobs:
   sync-races:
     name: Synchroniser les races
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # Timeout conditionnel: 10min pour le schedule, 6h pour les runs manuels
+    timeout-minutes: ${{ github.event_name == 'schedule' && 10 || 360 }}
     
     steps:
       - name: Checkout du projet
@@ -62,23 +63,31 @@ jobs:
           RACETIME_RATE_LIMIT_MS: ${{ vars.RACETIME_RATE_LIMIT_MS || '1500' }}
         run: |
           GAME_SLUG="${{ github.event.inputs.game_slug }}"
-          MAX_PAGES="${{ github.event.inputs.max_pages || '2' }}"
-          FULL_SYNC="${{ github.event.inputs.full_sync }}"
+          MAX_PAGES="${{ github.event.inputs.max_pages }}"
+          NO_LIMIT="${{ github.event.inputs.no_limit }}"
           
           ARGS=""
           
           if [ -n "$GAME_SLUG" ]; then
+            # Sync d'un jeu spécifique
             ARGS="--game $GAME_SLUG"
+            
+            if [ "$NO_LIMIT" = "true" ]; then
+              ARGS="$ARGS --no-limit"
+            elif [ -n "$MAX_PAGES" ]; then
+              ARGS="$ARGS --max-pages $MAX_PAGES"
+            fi
+          else
+            # Sync globale (races récentes)
+            if [ -n "$MAX_PAGES" ]; then
+              ARGS="--max-pages $MAX_PAGES"
+            else
+              ARGS="--max-pages 2"
+            fi
           fi
           
-          if [ "$FULL_SYNC" = "true" ]; then
-            ARGS="$ARGS --full"
-          fi
-          
-          ARGS="$ARGS --max-pages $MAX_PAGES"
-          
-          # Exécute le script de synchronisation
-          node scripts/sync-racetime-incremental.js $ARGS 2>&1 | tee /tmp/sync-output.log
+          # Utilise le nouveau script global
+          node scripts/sync-racetime-global.js $ARGS 2>&1 | tee /tmp/sync-output.log
           
           # Extraire les stats
           NEW_RACES=$(grep -oP 'Nouvelles races: \K\d+' /tmp/sync-output.log || echo "0")

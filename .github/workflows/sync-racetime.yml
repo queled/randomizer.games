@@ -89,6 +89,13 @@ jobs:
           # Utilise le nouveau script global
           node scripts/sync-racetime-global.js $ARGS 2>&1 | tee /tmp/sync-output.log
           
+          # Si c'est une sync d'un jeu complet (plus de 5 pages ou --no-limit), finaliser les anciennes races
+          if [ -n "$GAME_SLUG" ] && ([ "$NO_LIMIT" = "true" ] || ([ -n "$MAX_PAGES" ] && [ "$MAX_PAGES" -gt 5 ])); then
+            echo ""
+            echo "🔧 Finalisation des races en cours anciennes..."
+            node scripts/sync-racetime-finalize.js --max-age 30d --limit 500 2>&1 | tee -a /tmp/sync-output.log || true
+          fi
+          
           # Extraire les stats
           NEW_RACES=$(grep -oP 'Nouvelles races: \K\d+' /tmp/sync-output.log || echo "0")
           UPDATED_RACES=$(grep -oP 'Mises à jour: \K\d+' /tmp/sync-output.log || echo "0")

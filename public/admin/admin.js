@@ -9,6 +9,11 @@ const admin = {
   currentSection: 'dashboard',
   currentGame: null,
   games: [],
+  currentResourcesFilter: null,
+  dashboardStats: null,
+  syncHistory: [],
+  players: [],
+  playersPage: 1,
   
   // ==================== INITIALIZATION ====================
   
@@ -189,6 +194,16 @@ const admin = {
         break;
       case 'sync':
         this.loadSyncGames();
+        this.loadSyncHistory();
+        break;
+      case 'players':
+        this.loadPlayers();
+        break;
+      case 'statistics':
+        this.loadStatistics();
+        break;
+      case 'monitoring':
+        this.loadMonitoring();
         break;
     }
   },
@@ -210,6 +225,9 @@ const admin = {
       document.getElementById('stat-tournaments').textContent = this.formatNumber(stats.tournaments);
       document.getElementById('stat-players').textContent = this.formatNumber(stats.players);
       
+      // Store stats for filtering
+      this.dashboardStats = stats;
+      
       // Alerts
       const alertsEl = document.getElementById('dashboard-alerts');
       let alertsHtml = '';
@@ -219,7 +237,7 @@ const admin = {
           <div class="alert alert-warning">
             <span class="alert-icon">⚠️</span>
             <span class="alert-text">${stats.games.needingResources} jeu(x) sans site officiel configuré</span>
-            <button class="btn btn-sm btn-outline" onclick="admin.navigateTo('resources')">Configurer</button>
+            <button class="btn btn-sm btn-outline" onclick="admin.navigateToResourcesWithFilter('no-official-site')">Configurer</button>
           </div>
         `;
       }
@@ -229,7 +247,7 @@ const admin = {
           <div class="alert alert-info">
             <span class="alert-icon">ℹ️</span>
             <span class="alert-text">${stats.games.needingOfficialSite} jeu(x) avec plusieurs sites (site officiel à définir)</span>
-            <button class="btn btn-sm btn-outline" onclick="admin.navigateTo('resources')">Voir</button>
+            <button class="btn btn-sm btn-outline" onclick="admin.navigateToResourcesWithFilter('multiple-sites')">Voir</button>
           </div>
         `;
       }
@@ -240,6 +258,12 @@ const admin = {
       console.error('Error loading dashboard:', error);
       this.showToast('Erreur lors du chargement', 'error');
     }
+  },
+  
+  // Navigate to resources with a specific filter
+  navigateToResourcesWithFilter(filter) {
+    this.currentResourcesFilter = filter;
+    this.navigateTo('resources');
   },
   
   // ==================== GAMES ====================
@@ -478,6 +502,7 @@ const admin = {
   },
   
   viewGameResources(gameId) {
+    this.currentResourcesFilter = null;
     this.navigateTo('resources');
     document.getElementById('resources-game-select').value = gameId;
     this.loadGameResources(gameId);
@@ -495,22 +520,58 @@ const admin = {
       
       const data = await response.json();
       
+      // Store games for filtering
+      this.allGamesForResources = data.games.filter(g => g.enabled !== false);
+      
       const select = document.getElementById('resources-game-select');
+      const filterSelect = document.getElementById('resources-filter');
       const currentValue = select.value;
       
+      // Apply filter if coming from dashboard
+      let filteredGames = this.allGamesForResources;
+      if (this.currentResourcesFilter === 'no-official-site') {
+        filteredGames = filteredGames.filter(g => 
+          !g.resources?.officialSite?.url
+        );
+        if (filterSelect) filterSelect.value = 'no-official-site';
+      } else if (this.currentResourcesFilter === 'multiple-sites') {
+        filteredGames = filteredGames.filter(g => 
+          (g.resources?.sites?.length > 1) && !g.resources?.officialSite?.url
+        );
+        if (filterSelect) filterSelect.value = 'multiple-sites';
+      }
+      
       select.innerHTML = '<option value="">Sélectionner un jeu...</option>' +
-        data.games
-          .filter(g => g.enabled !== false)
-          .map(g => `<option value="${g.id}">${g.name} (${g.id})</option>`)
+        filteredGames
+          .map(g => {
+            const hasSite = g.resources?.officialSite?.url;
+            const sitesCount = g.resources?.sites?.length || 0;
+            let status = hasSite ? '✓' : (sitesCount > 1 ? `⚠️ ${sitesCount} sites` : '✗');
+            return `<option value="${g.id}">${g.name} [${status}]</option>`;
+          })
           .join('');
       
-      if (currentValue) {
+      // Update games count in filter section
+      const gamesCountEl = document.getElementById('resources-games-count');
+      if (gamesCountEl) {
+        gamesCountEl.textContent = `${filteredGames.length} jeux`;
+      }
+      
+      if (currentValue && filteredGames.find(g => g.id === currentValue)) {
         select.value = currentValue;
       }
+      
+      // Clear filter after applying
+      this.currentResourcesFilter = null;
       
     } catch (error) {
       console.error('Error loading games for select:', error);
     }
+  },
+  
+  applyResourcesFilter(filter) {
+    this.currentResourcesFilter = filter || null;
+    this.loadGamesForSelect();
   },
   
   async loadGameResources(gameId) {
@@ -954,6 +1015,484 @@ const admin = {
       clearTimeout(timeout);
       timeout = setTimeout(later, wait);
     };
+  },
+  
+  formatDuration(ms) {
+    if (!ms) return '-';
+    const seconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    if (hours > 0) return `${hours}h ${minutes % 60}m`;
+    if (minutes > 0) return `${minutes}m ${seconds % 60}s`;
+    return `${seconds}s`;
+  },
+  
+  formatDateTime(date) {
+    if (!date) return '-';
+    const d = new Date(date);
+    return d.toLocaleDateString('fr-FR') + ' ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  },
+  
+  formatRelativeTime(date) {
+    if (!date) return '-';
+    const now = new Date();
+    const diff = now - new Date(date);
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    
+    if (days > 0) return `il y a ${days}j`;
+    if (hours > 0) return `il y a ${hours}h`;
+    if (minutes > 0) return `il y a ${minutes}m`;
+    return 'à l\'instant';
+  },
+  
+  // ==================== SYNC HISTORY ====================
+  
+  async loadSyncHistory() {
+    try {
+      const response = await fetch('/api/admin/sync/history', {
+        headers: { 'Authorization': `Bearer ${this.token}` }
+      });
+      
+      if (!response.ok) {
+        // API might not exist yet, show placeholder
+        this.renderSyncHistory([]);
+        return;
+      }
+      
+      const data = await response.json();
+      this.syncHistory = data.history || [];
+      this.renderSyncHistory(this.syncHistory);
+      
+    } catch (error) {
+      console.error('Error loading sync history:', error);
+      this.renderSyncHistory([]);
+    }
+  },
+  
+  renderSyncHistory(history) {
+    const container = document.getElementById('sync-history-content');
+    if (!container) return;
+    
+    if (history.length === 0) {
+      container.innerHTML = '<p class="text-muted">Aucun historique de synchronisation disponible</p>';
+      return;
+    }
+    
+    container.innerHTML = history.slice(0, 10).map(entry => `
+      <div class="sync-history-item ${entry.status}">
+        <div class="sync-history-header">
+          <span class="sync-history-type">${this.escapeHtml(entry.type)}</span>
+          <span class="sync-history-status badge badge-${entry.status === 'success' ? 'success' : entry.status === 'error' ? 'danger' : 'warning'}">
+            ${entry.status === 'success' ? '✓' : entry.status === 'error' ? '✗' : '⏳'}
+          </span>
+        </div>
+        <div class="sync-history-meta">
+          <span>${this.formatRelativeTime(entry.completedAt || entry.startedAt)}</span>
+          ${entry.itemsProcessed ? `<span>• ${entry.itemsProcessed} éléments</span>` : ''}
+          ${entry.duration ? `<span>• ${this.formatDuration(entry.duration)}</span>` : ''}
+        </div>
+        ${entry.error ? `<div class="sync-history-error">${this.escapeHtml(entry.error)}</div>` : ''}
+      </div>
+    `).join('');
+  },
+  
+  // ==================== PLAYERS ====================
+  
+  async loadPlayers(page = 1) {
+    this.playersPage = page;
+    
+    try {
+      const search = document.getElementById('players-search')?.value || '';
+      
+      const response = await fetch(`/api/admin/players?page=${page}&limit=50&search=${encodeURIComponent(search)}`, {
+        headers: { 'Authorization': `Bearer ${this.token}` }
+      });
+      
+      if (!response.ok) throw new Error('Failed to load players');
+      
+      const data = await response.json();
+      this.players = data.players;
+      
+      this.renderPlayersTable(data.players);
+      this.renderPagination(data.pagination, 'players');
+      
+      // Update stats
+      const statsEl = document.getElementById('players-stats');
+      if (statsEl && data.stats) {
+        statsEl.innerHTML = `
+          <div class="stat-mini">
+            <span class="stat-mini-value">${this.formatNumber(data.stats.total)}</span>
+            <span class="stat-mini-label">Total</span>
+          </div>
+          <div class="stat-mini">
+            <span class="stat-mini-value">${this.formatNumber(data.stats.withRacetime)}</span>
+            <span class="stat-mini-label">Avec Racetime</span>
+          </div>
+          <div class="stat-mini">
+            <span class="stat-mini-value">${this.formatNumber(data.stats.withTwitch)}</span>
+            <span class="stat-mini-label">Avec Twitch</span>
+          </div>
+        `;
+      }
+      
+    } catch (error) {
+      console.error('Error loading players:', error);
+      this.showToast('Erreur lors du chargement des joueurs', 'error');
+    }
+  },
+  
+  renderPlayersTable(players) {
+    const tbody = document.getElementById('players-table-body');
+    if (!tbody) return;
+    
+    if (players.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" class="text-center text-muted">Aucun joueur trouvé</td>
+        </tr>
+      `;
+      return;
+    }
+    
+    tbody.innerHTML = players.map(player => `
+      <tr>
+        <td>${this.escapeHtml(player.name)}</td>
+        <td>
+          ${player.racetimeUrl 
+            ? `<a href="${player.racetimeUrl}" target="_blank" class="badge badge-success">✓ Lié</a>` 
+            : '<span class="badge badge-muted">-</span>'}
+        </td>
+        <td>
+          ${player.twitch 
+            ? `<a href="https://twitch.tv/${player.twitch}" target="_blank" class="badge badge-success">${this.escapeHtml(player.twitch)}</a>` 
+            : '<span class="badge badge-muted">-</span>'}
+        </td>
+        <td>${player.stats?.totalRaces || 0}</td>
+        <td>${player.stats?.totalWins || 0}</td>
+        <td>
+          <button class="btn btn-sm btn-ghost" onclick="admin.editPlayer('${player.userId || player._id}')" title="Modifier">
+            ✏️
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  },
+  
+  async editPlayer(playerId) {
+    try {
+      const response = await fetch(`/api/admin/players/${playerId}`, {
+        headers: { 'Authorization': `Bearer ${this.token}` }
+      });
+      
+      if (!response.ok) throw new Error('Player not found');
+      
+      const player = await response.json();
+      
+      document.getElementById('player-modal-title').textContent = `Modifier: ${player.name}`;
+      document.getElementById('player-id').value = player.userId || player._id;
+      document.getElementById('player-name').value = player.name || '';
+      document.getElementById('player-racetime-url').value = player.racetimeUrl || '';
+      document.getElementById('player-twitch').value = player.twitch || '';
+      
+      document.getElementById('player-modal').style.display = 'flex';
+      
+    } catch (error) {
+      console.error('Error loading player:', error);
+      this.showToast('Erreur lors du chargement du joueur', 'error');
+    }
+  },
+  
+  closePlayerModal() {
+    document.getElementById('player-modal').style.display = 'none';
+  },
+  
+  async savePlayer() {
+    const playerId = document.getElementById('player-id').value;
+    const data = {
+      name: document.getElementById('player-name').value,
+      racetimeUrl: document.getElementById('player-racetime-url').value,
+      twitch: document.getElementById('player-twitch').value
+    };
+    
+    try {
+      const response = await fetch(`/api/admin/players/${playerId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.token}`
+        },
+        body: JSON.stringify(data)
+      });
+      
+      if (!response.ok) throw new Error('Failed to save player');
+      
+      this.showToast('Joueur mis à jour', 'success');
+      this.closePlayerModal();
+      this.loadPlayers(this.playersPage);
+      
+    } catch (error) {
+      console.error('Error saving player:', error);
+      this.showToast('Erreur lors de la sauvegarde', 'error');
+    }
+  },
+  
+  // ==================== STATISTICS ====================
+  
+  async loadStatistics() {
+    try {
+      const response = await fetch('/api/admin/analytics', {
+        headers: { 'Authorization': `Bearer ${this.token}` }
+      });
+      
+      // Analytics might not be implemented yet
+      if (!response.ok) {
+        this.renderStatisticsPlaceholder();
+        return;
+      }
+      
+      const data = await response.json();
+      this.renderStatistics(data);
+      
+    } catch (error) {
+      console.error('Error loading statistics:', error);
+      this.renderStatisticsPlaceholder();
+    }
+  },
+  
+  renderStatisticsPlaceholder() {
+    const container = document.getElementById('statistics-content');
+    if (!container) return;
+    
+    container.innerHTML = `
+      <div class="placeholder-box">
+        <div class="placeholder-icon">📊</div>
+        <h3>Statistiques à venir</h3>
+        <p class="text-muted">
+          Les statistiques de visite seront disponibles une fois le site en ligne.<br>
+          Intégration prévue : Google Analytics, Plausible ou Umami.
+        </p>
+        <div class="stats-preview">
+          <div class="stat-preview-card">
+            <span class="stat-preview-icon">👁️</span>
+            <span class="stat-preview-label">Visites</span>
+          </div>
+          <div class="stat-preview-card">
+            <span class="stat-preview-icon">📄</span>
+            <span class="stat-preview-label">Pages vues</span>
+          </div>
+          <div class="stat-preview-card">
+            <span class="stat-preview-icon">👤</span>
+            <span class="stat-preview-label">Visiteurs uniques</span>
+          </div>
+          <div class="stat-preview-card">
+            <span class="stat-preview-icon">⏱️</span>
+            <span class="stat-preview-label">Durée moyenne</span>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+  
+  renderStatistics(data) {
+    const container = document.getElementById('statistics-content');
+    if (!container) return;
+    
+    container.innerHTML = `
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">👁️</div>
+          <div>
+            <div class="stat-value">${this.formatNumber(data.pageViews || 0)}</div>
+            <div class="stat-label">Pages vues (30j)</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">👤</div>
+          <div>
+            <div class="stat-value">${this.formatNumber(data.uniqueVisitors || 0)}</div>
+            <div class="stat-label">Visiteurs uniques</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⏱️</div>
+          <div>
+            <div class="stat-value">${data.avgSessionDuration || '-'}</div>
+            <div class="stat-label">Durée moyenne</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📈</div>
+          <div>
+            <div class="stat-value">${data.bounceRate || '-'}%</div>
+            <div class="stat-label">Taux de rebond</div>
+          </div>
+        </div>
+      </div>
+      
+      ${data.topPages ? `
+        <div class="card mt-4">
+          <h3 class="card-title">📄 Pages les plus vues</h3>
+          <table class="table">
+            <thead>
+              <tr><th>Page</th><th>Vues</th></tr>
+            </thead>
+            <tbody>
+              ${data.topPages.map(p => `
+                <tr>
+                  <td>${this.escapeHtml(p.path)}</td>
+                  <td>${this.formatNumber(p.views)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      ` : ''}
+    `;
+  },
+  
+  // ==================== MONITORING ====================
+  
+  async loadMonitoring() {
+    try {
+      const response = await fetch('/api/admin/health', {
+        headers: { 'Authorization': `Bearer ${this.token}` }
+      });
+      
+      if (!response.ok) {
+        this.renderMonitoringError();
+        return;
+      }
+      
+      const data = await response.json();
+      this.renderMonitoring(data);
+      
+    } catch (error) {
+      console.error('Error loading monitoring:', error);
+      this.renderMonitoringError();
+    }
+  },
+  
+  renderMonitoringError() {
+    const container = document.getElementById('monitoring-content');
+    if (!container) return;
+    
+    container.innerHTML = `
+      <div class="alert alert-danger">
+        <span class="alert-icon">⚠️</span>
+        <span class="alert-text">Impossible de charger les données de monitoring</span>
+      </div>
+    `;
+  },
+  
+  renderMonitoring(data) {
+    const container = document.getElementById('monitoring-content');
+    if (!container) return;
+    
+    const getStatusClass = (status) => {
+      if (status === 'ok' || status === 'online' || status === true) return 'success';
+      if (status === 'warning') return 'warning';
+      return 'danger';
+    };
+    
+    const getStatusIcon = (status) => {
+      if (status === 'ok' || status === 'online' || status === true) return '✓';
+      if (status === 'warning') return '⚠️';
+      return '✗';
+    };
+    
+    container.innerHTML = `
+      <div class="monitoring-grid">
+        <!-- Services Status -->
+        <div class="monitoring-card">
+          <h3 class="monitoring-card-title">🔌 Services</h3>
+          <div class="monitoring-items">
+            <div class="monitoring-item">
+              <span class="monitoring-label">API Server</span>
+              <span class="badge badge-${getStatusClass(data.api?.status)}">${getStatusIcon(data.api?.status)} ${data.api?.status || 'unknown'}</span>
+            </div>
+            <div class="monitoring-item">
+              <span class="monitoring-label">MongoDB</span>
+              <span class="badge badge-${getStatusClass(data.database?.status)}">${getStatusIcon(data.database?.status)} ${data.database?.status || 'unknown'}</span>
+            </div>
+            <div class="monitoring-item">
+              <span class="monitoring-label">Racetime.gg</span>
+              <span class="badge badge-${getStatusClass(data.racetime?.status)}">${getStatusIcon(data.racetime?.status)} ${data.racetime?.status || 'unknown'}</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- System Info -->
+        <div class="monitoring-card">
+          <h3 class="monitoring-card-title">💻 Système</h3>
+          <div class="monitoring-items">
+            <div class="monitoring-item">
+              <span class="monitoring-label">Uptime</span>
+              <span class="monitoring-value">${this.formatDuration((data.system?.uptime || 0) * 1000)}</span>
+            </div>
+            <div class="monitoring-item">
+              <span class="monitoring-label">Mémoire</span>
+              <span class="monitoring-value">${data.system?.memory?.used || '-'} / ${data.system?.memory?.total || '-'}</span>
+            </div>
+            <div class="monitoring-item">
+              <span class="monitoring-label">Node.js</span>
+              <span class="monitoring-value">${data.system?.nodeVersion || '-'}</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- PM2 Status -->
+        <div class="monitoring-card">
+          <h3 class="monitoring-card-title">⚙️ PM2</h3>
+          ${data.pm2 ? `
+            <div class="monitoring-items">
+              <div class="monitoring-item">
+                <span class="monitoring-label">Status</span>
+                <span class="badge badge-${getStatusClass(data.pm2.status)}">${getStatusIcon(data.pm2.status)} ${data.pm2.status}</span>
+              </div>
+              <div class="monitoring-item">
+                <span class="monitoring-label">Restarts</span>
+                <span class="monitoring-value">${data.pm2.restarts || 0}</span>
+              </div>
+              <div class="monitoring-item">
+                <span class="monitoring-label">CPU</span>
+                <span class="monitoring-value">${data.pm2.cpu || 0}%</span>
+              </div>
+              <div class="monitoring-item">
+                <span class="monitoring-label">Mémoire</span>
+                <span class="monitoring-value">${data.pm2.memory || '-'}</span>
+              </div>
+            </div>
+          ` : `
+            <p class="text-muted">PM2 non détecté. Sera disponible en production.</p>
+          `}
+        </div>
+        
+        <!-- Last Syncs -->
+        <div class="monitoring-card">
+          <h3 class="monitoring-card-title">🔄 Dernières Synchros</h3>
+          <div class="monitoring-items">
+            <div class="monitoring-item">
+              <span class="monitoring-label">Racetime</span>
+              <span class="monitoring-value">${this.formatRelativeTime(data.lastSync?.racetime)}</span>
+            </div>
+            <div class="monitoring-item">
+              <span class="monitoring-label">Rando-List</span>
+              <span class="monitoring-value">${this.formatRelativeTime(data.lastSync?.randoList)}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Refresh Button -->
+      <div class="mt-4">
+        <button class="btn btn-outline" onclick="admin.loadMonitoring()">
+          🔄 Rafraîchir
+        </button>
+      </div>
+    `;
   }
 };
 

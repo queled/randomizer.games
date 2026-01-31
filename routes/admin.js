@@ -710,4 +710,242 @@ router.post('/sync/racetime/:gameId', requireAdmin, async (req, res, next) => {
   }
 });
 
+// ==================== PLAYERS ADMIN ====================
+
+/**
+ * GET /api/admin/players
+ * List all players with pagination and search
+ */
+router.get('/players', requireAdmin, async (req, res, next) => {
+  try {
+    const { search, limit = 50, page = 1 } = req.query;
+    
+    const query = {};
+    
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { twitch: { $regex: search, $options: 'i' } },
+        { userId: { $regex: search, $options: 'i' } }
+      ];
+    }
+    
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    
+    const [players, total, withRacetime, withTwitch] = await Promise.all([
+      Player.find(query)
+        .sort({ name: 1 })
+        .skip(skip)
+        .limit(parseInt(limit))
+        .lean(),
+      Player.countDocuments(query),
+      Player.countDocuments({ racetimeUrl: { $exists: true, $ne: null } }),
+      Player.countDocuments({ twitch: { $exists: true, $ne: null } })
+    ]);
+    
+    res.json({
+      players,
+      pagination: {
+        total,
+        page: parseInt(page),
+        limit: parseInt(limit),
+        pages: Math.ceil(total / parseInt(limit))
+      },
+      stats: {
+        total,
+        withRacetime,
+        withTwitch
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET /api/admin/players/:id
+ * Get single player
+ */
+router.get('/players/:id', requireAdmin, async (req, res, next) => {
+  try {
+    const player = await Player.findOne({ 
+      $or: [
+        { userId: req.params.id },
+        { _id: req.params.id }
+      ]
+    }).lean();
+    
+    if (!player) {
+      return res.status(404).json({ error: 'Player not found' });
+    }
+    
+    res.json(player);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * PUT /api/admin/players/:id
+ * Update a player
+ */
+router.put('/players/:id', requireAdmin, async (req, res, next) => {
+  try {
+    const { name, racetimeUrl, twitch } = req.body;
+    
+    const player = await Player.findOneAndUpdate(
+      { $or: [{ userId: req.params.id }, { _id: req.params.id }] },
+      { 
+        $set: { 
+          name,
+          racetimeUrl,
+          twitch
+        } 
+      },
+      { new: true }
+    );
+    
+    if (!player) {
+      return res.status(404).json({ error: 'Player not found' });
+    }
+    
+    res.json(player);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ==================== SYNC HISTORY ====================
+
+/**
+ * GET /api/admin/sync/history
+ * Get sync history (stored in memory or file for now)
+ */
+router.get('/sync/history', requireAdmin, async (req, res, next) => {
+  try {
+    // For now, check game lastSync dates as a proxy for sync history
+    const games = await Game.find({ 
+      'integrations.racetime.enabled': true 
+    }).select('id name integrations.racetime.lastSync').lean();
+    
+    const history = games
+      .filter(g => g.integrations?.racetime?.lastSync)
+      .map(g => ({
+        type: `Racetime: ${g.name}`,
+        status: 'success',
+        completedAt: g.integrations.racetime.lastSync
+      }))
+      .sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt))
+      .slice(0, 20);
+    
+    res.json({ history });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ==================== HEALTH & MONITORING ====================
+
+/**
+ * GET /api/admin/health
+ * Get system health status
+ */
+router.get('/health', requireAdmin, async (req, res, next) => {
+  try {
+    const mongoose = require('mongoose');
+    const os = require('os');
+    
+    // Database status
+    const dbStatus = mongoose.connection.readyState === 1 ? 'ok' : 'error';
+    
+    // Get last sync dates
+    const lastRacetimeSync = await Game.findOne({ 
+      'integrations.racetime.lastSync': { $exists: true } 
+    }).sort({ 'integrations.racetime.lastSync': -1 }).lean();
+    
+    const lastRandoListSync = await Game.findOne({ 
+      'integrations.randoList.lastSync': { $exists: true } 
+    }).sort({ 'integrations.randoList.lastSync': -1 }).lean();
+    
+    // System info
+    const totalMem = os.totalmem();
+    const freeMem = os.freemem();
+    const usedMem = totalMem - freeMem;
+    
+    // Check if running under PM2
+    let pm2Info = null;
+    if (process.env.PM2_HOME || process.env.pm_id) {
+      pm2Info = {
+        status: 'online',
+        restarts: parseInt(process.env.restart_time || '0'),
+        cpu: process.cpuUsage ? Math.round(process.cpuUsage().user / 1000000) : 0,
+        memory: formatBytes(process.memoryUsage().heapUsed)
+      };
+    }
+    
+    // Test racetime.gg connectivity
+    let racetimeStatus = 'unknown';
+    try {
+      const axios = require('axios');
+      const raceResp = await axios.get('https://racetime.gg/health', { timeout: 5000 });
+      racetimeStatus = raceResp.status === 200 ? 'ok' : 'error';
+    } catch (e) {
+      // Try simple request
+      try {
+        const axios = require('axios');
+        await axios.get('https://racetime.gg/', { timeout: 5000 });
+        racetimeStatus = 'ok';
+      } catch {
+        racetimeStatus = 'error';
+      }
+    }
+    
+    res.json({
+      api: { status: 'ok' },
+      database: { status: dbStatus },
+      racetime: { status: racetimeStatus },
+      system: {
+        uptime: process.uptime(),
+        nodeVersion: process.version,
+        memory: {
+          total: formatBytes(totalMem),
+          used: formatBytes(usedMem),
+          free: formatBytes(freeMem)
+        }
+      },
+      pm2: pm2Info,
+      lastSync: {
+        racetime: lastRacetimeSync?.integrations?.racetime?.lastSync,
+        randoList: lastRandoListSync?.integrations?.randoList?.lastSync
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Helper function
+function formatBytes(bytes) {
+  if (bytes === 0) return '0 B';
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+}
+
+// ==================== ANALYTICS (placeholder) ====================
+
+/**
+ * GET /api/admin/analytics
+ * Get site analytics - placeholder for future integration
+ */
+router.get('/analytics', requireAdmin, async (req, res) => {
+  // This is a placeholder - actual implementation would connect to
+  // Google Analytics, Plausible, Umami, or similar service
+  res.status(501).json({ 
+    message: 'Analytics not configured yet',
+    hint: 'Configure Google Analytics, Plausible, or Umami when the site goes live'
+  });
+});
+
 module.exports = router;

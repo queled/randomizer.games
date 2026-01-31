@@ -54,9 +54,21 @@
           <span class="nav-icon">📚</span>
           <span>Ressources</span>
         </button>
+        <button class="nav-item" data-section="players">
+          <span class="nav-icon">👥</span>
+          <span>Joueurs</span>
+        </button>
         <button class="nav-item" data-section="sync">
           <span class="nav-icon">🔄</span>
           <span>Synchronisation</span>
+        </button>
+        <button class="nav-item" data-section="statistics">
+          <span class="nav-icon">📈</span>
+          <span>Statistiques</span>
+        </button>
+        <button class="nav-item" data-section="monitoring">
+          <span class="nav-icon">🖥️</span>
+          <span>Monitoring</span>
         </button>
       </nav>
       
@@ -80,7 +92,7 @@
         </div>
         
         <div class="stats-grid">
-          <div class="stat-card">
+          <div class="stat-card stat-card-clickable" onclick="admin.navigateTo('games')">
             <div class="stat-icon">🎮</div>
             <div>
               <div class="stat-value" id="stat-games">-</div>
@@ -101,7 +113,7 @@
               <div class="stat-label">Tournois</div>
             </div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card stat-card-clickable" onclick="admin.navigateTo('players')">
             <div class="stat-icon">👥</div>
             <div>
               <div class="stat-value" id="stat-players">-</div>
@@ -163,12 +175,22 @@
       <section id="section-resources" class="admin-section">
         <div class="section-header">
           <h1 class="section-title">Gestion des Ressources</h1>
+          <span id="resources-games-count" class="badge badge-muted"></span>
         </div>
         
-        <div class="form-group" style="max-width: 400px;">
-          <select id="resources-game-select" class="form-input form-select">
-            <option value="">Sélectionner un jeu...</option>
-          </select>
+        <div class="toolbar">
+          <div class="form-group" style="flex: 1; max-width: 350px; margin-bottom: 0;">
+            <select id="resources-game-select" class="form-input form-select">
+              <option value="">Sélectionner un jeu...</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <select id="resources-filter" class="form-input form-select" onchange="admin.applyResourcesFilter(this.value)">
+              <option value="">Tous les jeux</option>
+              <option value="no-official-site">Sans site officiel</option>
+              <option value="multiple-sites">Plusieurs sites (à définir)</option>
+            </select>
+          </div>
         </div>
         
         <div id="resources-placeholder" class="resources-placeholder">
@@ -281,54 +303,137 @@
           <h1 class="section-title">Synchronisation</h1>
         </div>
         
-        <div class="sync-grid">
-          <div class="sync-card">
-            <div class="sync-card-header">
-              <span class="sync-card-icon">📥</span>
-              <span class="sync-card-title">Rando-List</span>
+        <div class="sync-layout">
+          <div class="sync-main">
+            <div class="sync-grid">
+              <div class="sync-card">
+                <div class="sync-card-header">
+                  <span class="sync-card-icon">📥</span>
+                  <span class="sync-card-title">Rando-List</span>
+                </div>
+                <p class="sync-card-desc">
+                  Synchronise la liste des jeux randomizer depuis le repo GitHub 
+                  <a href="https://github.com/video-game-randomizers/rando-list" target="_blank">video-game-randomizers/rando-list</a>.
+                  Exécuté automatiquement chaque jour à 6h00 UTC.
+                </p>
+                <div class="sync-options">
+                  <button class="btn btn-primary" onclick="admin.triggerSync('rando-list')">
+                    🔄 Lancer maintenant
+                  </button>
+                  <button class="btn btn-outline" onclick="admin.triggerSync('rando-list', true)">
+                    🔗 + Lier les jeux
+                  </button>
+                </div>
+              </div>
+              
+              <div class="sync-card">
+                <div class="sync-card-header">
+                  <span class="sync-card-icon">🏁</span>
+                  <span class="sync-card-title">Racetime.gg</span>
+                </div>
+                <p class="sync-card-desc">
+                  Récupère les nouvelles courses depuis racetime.gg pour tous les jeux actifs.
+                  Exécuté automatiquement toutes les 5 minutes.
+                </p>
+                <div class="sync-options">
+                  <div class="form-group">
+                    <select id="sync-racetime-game" class="form-input form-select">
+                      <option value="">Tous les jeux</option>
+                    </select>
+                  </div>
+                  <button class="btn btn-primary" onclick="admin.triggerRacetimeSync()">
+                    🔄 Lancer maintenant
+                  </button>
+                </div>
+              </div>
             </div>
-            <p class="sync-card-desc">
-              Synchronise la liste des jeux randomizer depuis le repo GitHub 
-              <a href="https://github.com/video-game-randomizers/rando-list" target="_blank">video-game-randomizers/rando-list</a>.
-              Exécuté automatiquement chaque jour à 6h00 UTC.
-            </p>
-            <div class="sync-options">
-              <button class="btn btn-primary" onclick="admin.triggerSync('rando-list')">
-                🔄 Lancer maintenant
-              </button>
-              <button class="btn btn-outline" onclick="admin.triggerSync('rando-list', true)">
-                🔗 + Lier les jeux
-              </button>
+            
+            <div class="sync-log mt-4">
+              <div class="sync-log-title">📋 Logs récents</div>
+              <div id="sync-log-content">
+                <p class="text-muted">L'historique des synchronisations s'affichera ici...</p>
+              </div>
             </div>
           </div>
           
-          <div class="sync-card">
-            <div class="sync-card-header">
-              <span class="sync-card-icon">🏁</span>
-              <span class="sync-card-title">Racetime.gg</span>
-            </div>
-            <p class="sync-card-desc">
-              Récupère les nouvelles courses depuis racetime.gg pour tous les jeux actifs.
-              Exécuté automatiquement toutes les 5 minutes.
-            </p>
-            <div class="sync-options">
-              <div class="form-group">
-                <select id="sync-racetime-game" class="form-input form-select">
-                  <option value="">Tous les jeux</option>
-                </select>
+          <div class="sync-sidebar">
+            <div class="card">
+              <h3 class="card-title">📊 Historique des synchros</h3>
+              <div id="sync-history-content">
+                <p class="text-muted">Chargement...</p>
               </div>
-              <button class="btn btn-primary" onclick="admin.triggerRacetimeSync()">
-                🔄 Lancer maintenant
-              </button>
             </div>
           </div>
         </div>
+      </section>
+
+      <!-- Players Section -->
+      <section id="section-players" class="admin-section">
+        <div class="section-header">
+          <h1 class="section-title">Gestion des Joueurs</h1>
+        </div>
         
-        <div class="sync-log mt-4">
-          <div class="sync-log-title">📋 Logs récents</div>
-          <div id="sync-log-content">
-            <p class="text-muted">L'historique des synchronisations s'affichera ici...</p>
+        <div class="section-layout">
+          <div class="section-main">
+            <div class="toolbar">
+              <div class="toolbar-search">
+                <input type="text" id="players-search" class="form-input" placeholder="Rechercher un joueur..." oninput="admin.debounce(() => admin.loadPlayers(), 300)()">
+              </div>
+            </div>
+            
+            <div class="table-container">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Nom</th>
+                    <th>Racetime</th>
+                    <th>Twitch</th>
+                    <th>Courses</th>
+                    <th>Victoires</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="players-table-body">
+                  <tr>
+                    <td colspan="6" class="text-center text-muted">Chargement...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <div id="players-pagination"></div>
           </div>
+          
+          <div class="section-sidebar">
+            <div class="card">
+              <h3 class="card-title">📊 Statistiques</h3>
+              <div id="players-stats" class="stats-mini-grid">
+                <p class="text-muted">Chargement...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Statistics Section -->
+      <section id="section-statistics" class="admin-section">
+        <div class="section-header">
+          <h1 class="section-title">Statistiques du site</h1>
+        </div>
+        
+        <div id="statistics-content">
+          <p class="text-muted">Chargement...</p>
+        </div>
+      </section>
+
+      <!-- Monitoring Section -->
+      <section id="section-monitoring" class="admin-section">
+        <div class="section-header">
+          <h1 class="section-title">Monitoring</h1>
+        </div>
+        
+        <div id="monitoring-content">
+          <p class="text-muted">Chargement...</p>
         </div>
       </section>
 
@@ -470,6 +575,39 @@
         
         <div class="form-actions">
           <button type="button" class="btn btn-outline" onclick="admin.closeGameModal()">Annuler</button>
+          <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Player Edit Modal -->
+  <div id="player-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="player-modal-title">Modifier le joueur</h2>
+        <button class="modal-close" onclick="admin.closePlayerModal()">&times;</button>
+      </div>
+      <form id="player-form" onsubmit="event.preventDefault(); admin.savePlayer();">
+        <input type="hidden" id="player-id">
+        
+        <div class="form-group">
+          <label for="player-name">Nom</label>
+          <input type="text" id="player-name" class="form-input" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="player-racetime-url">URL Racetime</label>
+          <input type="url" id="player-racetime-url" class="form-input" placeholder="https://racetime.gg/user/...">
+        </div>
+        
+        <div class="form-group">
+          <label for="player-twitch">Pseudo Twitch</label>
+          <input type="text" id="player-twitch" class="form-input" placeholder="username">
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" onclick="admin.closePlayerModal()">Annuler</button>
           <button type="submit" class="btn btn-primary">Enregistrer</button>
         </div>
       </form>

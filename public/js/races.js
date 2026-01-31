@@ -17,6 +17,7 @@
     'ootr': 'Ocarina of Time Randomizer',
     'alttp': 'A Link to the Past Randomizer',
     'alttpr': 'A Link to the Past Randomizer',
+    'alttpr-ladder': 'A Link to the Past Randomizer',
     'mm': 'Majora\'s Mask Randomizer',
     'mmr': 'Majora\'s Mask Randomizer',
     'sm': 'Super Metroid Randomizer',
@@ -176,9 +177,15 @@
       games.forEach(g => {
         gamesById[g.id] = g;
         
-        // Indexer aussi par slug racetime
+        // Indexer aussi par slug racetime (principal et additionnels)
         if (g.integrations?.racetime?.gameSlug) {
           gamesBySlug[g.integrations.racetime.gameSlug.toLowerCase()] = g;
+        }
+        // Indexer aussi les slugs additionnels (comme alttpr-ladder)
+        if (g.integrations?.racetime?.gameSlugs) {
+          g.integrations.racetime.gameSlugs.forEach(slug => {
+            gamesBySlug[slug.toLowerCase()] = g;
+          });
         }
         
         // Add option to select

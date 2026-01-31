@@ -22,9 +22,10 @@ router.get('/with-stats', async (req, res, next) => {
     const gamesWithStats = await Promise.all(games.map(async (game) => {
       const gameIdLower = game.id.toLowerCase();
       
-      // Build category query using racetime slug from integrations
-      // The race.category field contains the racetime slug (e.g., 'ootr', 'alttpr')
+      // Build category query using racetime slug(s) from integrations
+      // The race.category field contains the racetime slug (e.g., 'ootr', 'alttpr', 'alttpr-ladder')
       const racetimeSlug = game.integrations?.racetime?.gameSlug;
+      const racetimeSlugs = game.integrations?.racetime?.gameSlugs || [];
       
       // Combo games that combine multiple racetime categories
       const comboCategories = {
@@ -40,8 +41,11 @@ router.get('/with-stats', async (req, res, next) => {
       if (comboCategories[gameIdLower]) {
         // For combo games, search in all related categories
         categoryQuery = { category: { $in: comboCategories[gameIdLower] } };
+      } else if (racetimeSlug && racetimeSlugs.length > 0) {
+        // Include both primary slug and additional slugs (like alttpr-ladder)
+        categoryQuery = { category: { $in: [racetimeSlug, ...racetimeSlugs] } };
       } else if (racetimeSlug) {
-        // Use the racetime slug from integrations
+        // Use only the primary racetime slug
         categoryQuery = { category: racetimeSlug };
       } else {
         // Fallback to game id
@@ -129,7 +133,7 @@ router.get('/:id/tournaments', async (req, res, next) => {
 // Game ID aliases (maps game IDs to their racetime category slugs)
 const CATEGORY_ALIASES = {
   'oot': ['oot', 'ootr'],
-  'alttp': ['alttp', 'alttpr'],
+  'alttp': ['alttp', 'alttpr', 'alttpr-ladder'],
   'mm': ['mm', 'mmr'],
   'sm': ['sm', 'smr'],
   'sm64': ['sm64'],
@@ -177,13 +181,29 @@ router.get('/:id/stats', async (req, res, next) => {
     const gameId = req.params.id;
     const gameIdLower = gameId.toLowerCase();
     
-    // Build category query with aliases for races
+    // Build category query with aliases and integrations slugs for races
     // For combo games, search all source game categories
     const comboCategories = COMBO_GAME_CATEGORIES[gameIdLower];
-    const aliases = comboCategories || CATEGORY_ALIASES[gameIdLower];
-    const categoryQuery = aliases && aliases.length > 1 
-      ? { category: { $in: aliases } }
-      : { category: gameId };
+    let categoryQuery;
+    
+    if (comboCategories) {
+      categoryQuery = { category: { $in: comboCategories } };
+    } else {
+      // Get game doc to access integrations.racetime.gameSlugs
+      const gameDoc = await Game.findOne({ id: gameId });
+      const racetimeSlug = gameDoc?.integrations?.racetime?.gameSlug;
+      const racetimeSlugs = gameDoc?.integrations?.racetime?.gameSlugs || [];
+      
+      if (racetimeSlug && racetimeSlugs.length > 0) {
+        // Include both primary slug and additional slugs (like alttpr-ladder)
+        categoryQuery = { category: { $in: [racetimeSlug, ...racetimeSlugs] } };
+      } else {
+        const aliases = CATEGORY_ALIASES[gameIdLower];
+        categoryQuery = aliases && aliases.length > 1 
+          ? { category: { $in: aliases } }
+          : { category: gameId };
+      }
+    }
     
     // Build tournament query - search by gameName pattern or by game ObjectId
     const gameDoc = await Game.findOne({ id: gameId });

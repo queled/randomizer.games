@@ -42,10 +42,26 @@ router.get('/', async (req, res, next) => {
     
     if (tournamentId) query.tournamentId = tournamentId;
 
-    const races = await Race.find(query)
-      .sort({ startedAt: -1 })
-      .limit(parseInt(limit))
-      .skip((parseInt(page) - 1) * parseInt(limit));
+    // Use aggregation to prioritize ongoing/open races
+    const races = await Race.aggregate([
+      { $match: query },
+      {
+        $addFields: {
+          // Add a priority field: 0 for ongoing/open, 1 for others
+          priority: {
+            $cond: {
+              if: { $in: ['$status', ['in_progress', 'open']] },
+              then: 0,
+              else: 1
+            }
+          }
+        }
+      },
+      { $sort: { priority: 1, startedAt: -1 } },
+      { $skip: (parseInt(page) - 1) * parseInt(limit) },
+      { $limit: parseInt(limit) },
+      { $project: { priority: 0 } } // Remove the priority field from output
+    ]);
 
     const total = await Race.countDocuments(query);
 

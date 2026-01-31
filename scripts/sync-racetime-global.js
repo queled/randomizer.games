@@ -129,6 +129,7 @@ async function syncGlobalRaces(options = {}) {
               await Race.updateOne({ url: raceUrl }, {
                 $set: {
                   status: formattedRace.status,
+                  startedAt: formattedRace.startedAt,
                   endedAt: formattedRace.endedAt,
                   entrants: formattedRace.entrants.map(e => ({
                     userId: e.user.id,
@@ -252,6 +253,7 @@ async function syncGameComplete(gameSlug, options = {}) {
             await Race.updateOne({ url: raceUrl }, {
               $set: {
                 status: raceData.status,
+                startedAt: raceData.startedAt,
                 endedAt: raceData.endedAt,
                 entrants: raceData.entrants.map(e => ({
                   userId: e.user.id,

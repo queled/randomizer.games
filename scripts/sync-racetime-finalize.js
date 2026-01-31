@@ -62,10 +62,12 @@ async function finalizeInProgressRaces(options = {}) {
   if (dryRun) console.log('  ⚠️  Mode simulation (dry-run)');
   if (maxAge) console.log(`  Seulement races > ${Math.round(maxAge / 1000 / 60 / 60)} heures`);
   
-  // Chercher les races in_progress
+  // Chercher les races en cours (status peut être string ou objet)
   let query = {
-    status: 'in_progress',
-    startedAt: { $exists: true, $ne: null }
+    $or: [
+      { status: 'in_progress' },
+      { status: { $ne: 'finished' }, startedAt: { $exists: true, $ne: null }, endedAt: { $exists: false } }
+    ]
   };
   
   if (maxAge) {
@@ -98,8 +100,12 @@ async function finalizeInProgressRaces(options = {}) {
     
     const category = urlParts[0];
     const raceId = urlParts[1];
+    const raceStatus = typeof race.status === 'string' ? race.status : race.status?.value || 'unknown';
     
     stats.checked++;
+    
+    // Afficher le statut actuel
+    console.log(`  🔍 ${race.url}: statut local=${raceStatus}, startedAt=${race.startedAt ? race.startedAt.toISOString() : 'null'}, endedAt=${race.endedAt ? race.endedAt.toISOString() : 'null'}`);
     
     try {
       await sleep(RATE_LIMIT_MS);
@@ -117,14 +123,14 @@ async function finalizeInProgressRaces(options = {}) {
       
       // Si la race est encore in_progress, ne rien faire
       if (newStatus === 'in_progress') {
-        console.log(`  ℹ️  ${race.url}: encore en cours`);
+        console.log(`  ℹ️  ${race.url}: encore en cours sur racetime`);
         stats.noChange++;
         continue;
       }
       
-      // La race est terminée/annulée, la mettre à jour
-      console.log(`  📋 ${race.url}: ${race.status} → ${newStatus}`);
+      console.log(`  ✅ ${race.url}: ${raceStatus} → ${newStatus}`);
       
+      // La race est terminée/annulée, la mettre à jour
       if (!dryRun) {
         const update = {
           $set: {
@@ -172,7 +178,7 @@ async function main() {
   const dryRun = args.includes('--dry-run');
   const maxAgeStr = args.includes('--max-age') 
     ? args[args.indexOf('--max-age') + 1] 
-    : '7d'; // Par défaut: races > 7 jours
+    : '1h'; // Par défaut: races > 1 heure (éviter races actuellement en cours)
   const limit = args.includes('--limit')
     ? parseInt(args[args.indexOf('--limit') + 1])
     : 100;
@@ -183,7 +189,7 @@ Usage: node scripts/sync-racetime-finalize.js [options]
 
 Options:
   --dry-run          Mode simulation
-  --max-age <time>   Seulement races > time (default: 7d)
+  --max-age <time>   Seulement races > time (default: 1h)
                      Format: 30d, 24h, 60m
   --limit <n>        Max races à traiter (default: 100)
   --help             Afficher cette aide

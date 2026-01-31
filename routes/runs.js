@@ -6,7 +6,7 @@ const { validateObjectId } = require('../middleware/security');
 // Game ID aliases (maps game IDs to their racetime category slugs)
 const CATEGORY_ALIASES = {
   'oot': ['oot', 'ootr'],
-  'alttp': ['alttp', 'alttpr'],
+  'alttp': ['alttp', 'alttpr', 'alttpr-ladder'],
   'mm': ['mm', 'mmr'],
   'sm': ['sm', 'smr'],
   'sm64': ['sm64'],

@@ -1173,7 +1173,7 @@ const admin = {
         <td>${player.stats?.totalRaces || 0}</td>
         <td>${player.stats?.totalWins || 0}</td>
         <td>
-          <button class="btn btn-sm btn-ghost" onclick="admin.editPlayer('${player.userId || player._id}')" title="Modifier">
+          <button class="btn btn-sm btn-ghost" onclick="admin.editPlayer('${this.escapeHtml(player.userId)}')" title="Modifier">
             ✏️
           </button>
         </td>

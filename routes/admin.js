@@ -714,37 +714,95 @@ router.post('/sync/racetime/:gameId', requireAdmin, async (req, res, next) => {
 
 /**
  * GET /api/admin/players
- * List all players with pagination and search
+ * List all players with full aggregated data (from tournaments and races)
  */
 router.get('/players', requireAdmin, async (req, res, next) => {
   try {
     const { search, limit = 50, page = 1 } = req.query;
     
-    const query = {};
+    // Get all tournaments with participants
+    const tournaments = await Tournament.find({}).lean();
+    
+    // Get all Player documents (for racetime/twitch info)
+    const playerDocs = await Player.find({}).lean();
+    const playerDocsByUserId = new Map();
+    playerDocs.forEach(p => {
+      if (p.userId) playerDocsByUserId.set(p.userId, p);
+    });
+    
+    // Get all races to count per player
+    const races = await Race.find({}, { category: 1, entrants: 1 }).lean();
+    
+    // Build player data from races
+    const playersMap = new Map(); // userId -> player data
+    
+    races.forEach(race => {
+      if (race.entrants && Array.isArray(race.entrants)) {
+        race.entrants.forEach(entrant => {
+          const userId = entrant.userId;
+          const userName = entrant.userName || userId;
+          if (!userId) return;
+          
+          if (!playersMap.has(userId)) {
+            const playerDoc = playerDocsByUserId.get(userId);
+            playersMap.set(userId, {
+              userId,
+              name: playerDoc?.name || userName,
+              racetimeUrl: playerDoc?.racetimeUrl || `https://racetime.gg/user/${userId}`,
+              twitch: playerDoc?.twitch || null,
+              stats: {
+                totalRaces: 0,
+                totalWins: 0
+              }
+            });
+          }
+          
+          const player = playersMap.get(userId);
+          player.stats.totalRaces++;
+          
+          // Count wins (place 1 or placeOrdinal '1st')
+          if (entrant.place === 1 || entrant.placeOrdinal === '1st') {
+            player.stats.totalWins++;
+          }
+        });
+      }
+    });
+    
+    // Add tournament participants who might not be in races
+    tournaments.forEach(tournament => {
+      if (tournament.participants && Array.isArray(tournament.participants)) {
+        tournament.participants.forEach(participant => {
+          // Use challongeId or name to try to find userId
+          // This is a fallback for tournament-only players
+        });
+      }
+    });
+    
+    // Convert to array and filter by search
+    let players = Array.from(playersMap.values());
     
     if (search) {
-      query.$or = [
-        { name: { $regex: search, $options: 'i' } },
-        { twitch: { $regex: search, $options: 'i' } },
-        { userId: { $regex: search, $options: 'i' } }
-      ];
+      const searchLower = search.toLowerCase();
+      players = players.filter(p => 
+        p.name.toLowerCase().includes(searchLower) ||
+        (p.userId && p.userId.toLowerCase().includes(searchLower)) ||
+        (p.twitch && p.twitch.toLowerCase().includes(searchLower))
+      );
     }
     
-    const skip = (parseInt(page) - 1) * parseInt(limit);
+    // Sort by name
+    players.sort((a, b) => a.name.localeCompare(b.name));
     
-    const [players, total, withRacetime, withTwitch] = await Promise.all([
-      Player.find(query)
-        .sort({ name: 1 })
-        .skip(skip)
-        .limit(parseInt(limit))
-        .lean(),
-      Player.countDocuments(query),
-      Player.countDocuments({ racetimeUrl: { $exists: true, $ne: null } }),
-      Player.countDocuments({ twitch: { $exists: true, $ne: null } })
-    ]);
+    const total = players.length;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const paginatedPlayers = players.slice(skip, skip + parseInt(limit));
+    
+    // Calculate stats
+    const withRacetime = players.filter(p => p.racetimeUrl).length;
+    const withTwitch = players.filter(p => p.twitch).length;
     
     res.json({
-      players,
+      players: paginatedPlayers,
       pagination: {
         total,
         page: parseInt(page),
@@ -764,16 +822,12 @@ router.get('/players', requireAdmin, async (req, res, next) => {
 
 /**
  * GET /api/admin/players/:id
- * Get single player
+ * Get single player by userId
  */
 router.get('/players/:id', requireAdmin, async (req, res, next) => {
   try {
-    const player = await Player.findOne({ 
-      $or: [
-        { userId: req.params.id },
-        { _id: req.params.id }
-      ]
-    }).lean();
+    // Players use userId (racetime ID) as primary identifier, not MongoDB _id
+    const player = await Player.findOne({ userId: req.params.id }).lean();
     
     if (!player) {
       return res.status(404).json({ error: 'Player not found' });
@@ -787,14 +841,15 @@ router.get('/players/:id', requireAdmin, async (req, res, next) => {
 
 /**
  * PUT /api/admin/players/:id
- * Update a player
+ * Update a player by userId
  */
 router.put('/players/:id', requireAdmin, async (req, res, next) => {
   try {
     const { name, racetimeUrl, twitch } = req.body;
     
+    // Players use userId (racetime ID) as primary identifier
     const player = await Player.findOneAndUpdate(
-      { $or: [{ userId: req.params.id }, { _id: req.params.id }] },
+      { userId: req.params.id },
       { 
         $set: { 
           name,

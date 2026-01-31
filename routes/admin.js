@@ -605,16 +605,24 @@ router.get('/stats', requireAdmin, async (req, res, next) => {
       totalGames,
       enabledGames,
       totalRaces,
-      totalTournaments,
-      totalPlayers
+      totalTournaments
     ] = await Promise.all([
       Game.countDocuments(),
       Game.countDocuments({ enabled: { $ne: false } }),
       Race.countDocuments(),
-      Tournament.countDocuments(),
-      Player.countDocuments()
+      Tournament.countDocuments()
     ]);
-    
+
+    // Count unique players by entrants.userId from races (preferred source)
+    let totalPlayers = 0;
+    try {
+      const playerIds = await Race.distinct('entrants.userId', { 'entrants.userId': { $exists: true, $ne: null } });
+      totalPlayers = (playerIds && playerIds.length) ? playerIds.length : await Player.countDocuments();
+    } catch (e) {
+      // Fallback to Player collection if something goes wrong
+      totalPlayers = await Player.countDocuments();
+    }
+
     // Get games with missing resources
     const gamesNeedingResources = await Game.countDocuments({
       enabled: { $ne: false },
@@ -623,7 +631,7 @@ router.get('/stats', requireAdmin, async (req, res, next) => {
         { 'resources.officialSite.url': { $exists: false } }
       ]
     });
-    
+
     // Get games with multiple sites (need manual official site selection)
     const gamesWithMultipleSites = await Game.countDocuments({
       enabled: { $ne: false },
@@ -633,7 +641,7 @@ router.get('/stats', requireAdmin, async (req, res, next) => {
         { 'resources.officialSite.url': { $exists: false } }
       ]
     });
-    
+
     res.json({
       games: {
         total: totalGames,

@@ -362,12 +362,39 @@ async function main() {
     let stats;
     
     if (gameArg) {
-      // Sync d'un jeu spécifique
+      // Sync d'un jeu spécifique - récupérer tous les slugs du jeu
+      const game = await Game.findOne({ id: gameArg }).select('integrations.racetime').lean();
+      
+      if (!game || !game.integrations?.racetime?.gameSlug) {
+        throw new Error(`Jeu "${gameArg}" non trouvé ou sans configuration racetime`);
+      }
+      
+      const slugs = [game.integrations.racetime.gameSlug];
+      if (game.integrations.racetime.gameSlugs) {
+        slugs.push(...game.integrations.racetime.gameSlugs);
+      }
+      
+      console.log(`📡 Sync du jeu: ${gameArg}`);
+      console.log(`  Slugs racetime: ${slugs.join(', ')}`);
+      
       const maxPages = noLimit ? Infinity : (maxPagesArg || Infinity);
-      stats = await syncGameComplete(gameArg, { maxPages, noLimit });
+      
+      // Sync chaque slug
+      const allStats = { newRaces: 0, updatedRaces: 0, errors: 0, pages: 0 };
+      for (const slug of slugs) {
+        console.log(`\n  🔄 Synchronisation de ${slug}...`);
+        const slugStats = await syncGameComplete(slug, { maxPages, noLimit });
+        allStats.newRaces += slugStats.newRaces;
+        allStats.updatedRaces += slugStats.updatedRaces;
+        allStats.errors += slugStats.errors;
+        allStats.pages += slugStats.pages;
+      }
+      
+      stats = allStats;
       
       console.log('\n════════════════════════════════════');
       console.log(`Jeu: ${gameArg}`);
+      console.log(`Slugs synchronisés: ${slugs.length}`);
       console.log(`Pages parcourues: ${stats.pages}`);
       console.log(`Nouvelles races: ${stats.newRaces}`);
       console.log(`Mises à jour: ${stats.updatedRaces}`);

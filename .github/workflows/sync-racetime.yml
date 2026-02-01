@@ -1,6 +1,11 @@
 # Workflow: Synchronisation fréquente des races racetime.gg
 # Ce workflow récupère les nouvelles courses toutes les 5 minutes
-# en partant des races globales récentes (plus efficace que jeu par jeu)
+# FIXE: Ajoute la finalisation systématique des courses stuck en in_progress (>24h)
+# 
+# Étapes:
+# 1. Récupère races globales récentes (2 pages)
+# 2. Récupère aussi les premières pages par catégorie pour courses intermédiaires
+# 3. Finalise agressivement les courses stuck en in_progress depuis >24h
 
 name: Sync Racetime Races
 
@@ -62,54 +67,30 @@ jobs:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           RACETIME_RATE_LIMIT_MS: ${{ vars.RACETIME_RATE_LIMIT_MS || '1500' }}
         run: |
-          GAME_SLUG="${{ github.event.inputs.game_slug }}"
-          MAX_PAGES="${{ github.event.inputs.max_pages }}"
-          NO_LIMIT="${{ github.event.inputs.no_limit }}"
-          
-          ARGS=""
-          
-          if [ -n "$GAME_SLUG" ]; then
-            # Sync d'un jeu spécifique
-            ARGS="--game $GAME_SLUG"
-            
-            if [ "$NO_LIMIT" = "true" ]; then
-              ARGS="$ARGS --no-limit"
-            elif [ -n "$MAX_PAGES" ]; then
-              ARGS="$ARGS --max-pages $MAX_PAGES"
-            fi
-          else
-            # Sync globale (races récentes)
-            if [ -n "$MAX_PAGES" ]; then
-              ARGS="--max-pages $MAX_PAGES"
-            else
-              ARGS="--max-pages 2"
-            fi
-          fi
-          
-          # Utilise le nouveau script global
-          node scripts/sync-racetime-global.js $ARGS 2>&1 | tee /tmp/sync-output.log
-          
-          # Si c'est une sync d'un jeu complet (plus de 5 pages ou --no-limit), finaliser les anciennes races
-          if [ -n "$GAME_SLUG" ] && ([ "$NO_LIMIT" = "true" ] || ([ -n "$MAX_PAGES" ] && [ "$MAX_PAGES" -gt 5 ])); then
-            echo ""
-            echo "🔧 Finalisation des races en cours anciennes..."
-            node scripts/sync-racetime-finalize.js --max-age 30d --limit 500 2>&1 | tee -a /tmp/sync-output.log || true
-          fi
+          # Mode par défaut: sync rapide (2 pages globales + 5 pages/catégorie + finalize)
+          # Ajoute --full pour un scan plus profond
+          node scripts/sync-racetime-global.js 2>&1 | tee /tmp/sync-output.log
           
           # Extraire les stats
-          NEW_RACES=$(grep -oP 'Nouvelles races: \K\d+' /tmp/sync-output.log || echo "0")
-          UPDATED_RACES=$(grep -oP 'Mises à jour: \K\d+' /tmp/sync-output.log || echo "0")
+          GLOBAL_NEW=$(grep -oP 'API Globale: \K[0-9]+' /tmp/sync-output.log | head -1 || echo "0")
+          GLOBAL_UPD=$(grep -oP 'API Globale:.*\K[0-9]+(?= màj)' /tmp/sync-output.log || echo "0")
+          CATEGORY_NEW=$(grep -oP 'Par catégorie: \K[0-9]+' /tmp/sync-output.log || echo "0")
+          FINALIZED=$(grep -oP 'Finalisées: \K[0-9]+' /tmp/sync-output.log || echo "0")
           
-          echo "new_races=$NEW_RACES" >> $GITHUB_OUTPUT
-          echo "updated_races=$UPDATED_RACES" >> $GITHUB_OUTPUT
+          echo "global_new=$GLOBAL_NEW" >> $GITHUB_OUTPUT
+          echo "global_upd=$GLOBAL_UPD" >> $GITHUB_OUTPUT
+          echo "category_new=$CATEGORY_NEW" >> $GITHUB_OUTPUT
+          echo "finalized=$FINALIZED" >> $GITHUB_OUTPUT
       
       - name: Résumé de la synchronisation
-        if: steps.sync.outputs.new_races != '0' || steps.sync.outputs.updated_races != '0'
+        if: always()
         run: |
-          echo "## Synchronisation racetime.gg" >> $GITHUB_STEP_SUMMARY
+          echo "## ✅ Synchronisation Racetime" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- 🆕 Nouvelles races: ${{ steps.sync.outputs.new_races }}" >> $GITHUB_STEP_SUMMARY
-          echo "- 🔄 Mises à jour: ${{ steps.sync.outputs.updated_races }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 🆕 Nouvelles (API Globale): ${{ steps.sync.outputs.global_new }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔄 Mises à jour (API Globale): ${{ steps.sync.outputs.global_upd }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 📦 Nouvelles (Par catégorie): ${{ steps.sync.outputs.category_new }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔧 Finalisées (stuck races): ${{ steps.sync.outputs.finalized }}" >> $GITHUB_STEP_SUMMARY
           echo "- ⏰ Date: $(date -u)" >> $GITHUB_STEP_SUMMARY
 
   # Job optionnel pour détecter automatiquement de nouvelles catégories racetime

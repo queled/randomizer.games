@@ -753,6 +753,11 @@
     };
     const sorted = [...races].sort((a,b) => getRaceTime(b) - getRaceTime(a));
     
+    const truncateText = (text, max) => {
+      if (!text) return '';
+      return text.length > max ? text.slice(0, max - 1) + '…' : text;
+    };
+
     racesEl.innerHTML = sorted.map(r => {
       // Find the entrant data for this player
       const entrant = (r.entrants && r.entrants.length) ? r.entrants.find(e => 
@@ -765,6 +770,7 @@
       // The category field contains the game slug (e.g., 'oot', 'alttp')
       const gameName = getGameDisplayName(r.category || r.name?.split('/')[0] || '');
       const goal = r.goal || r.info || '';
+      const goalDisplay = truncateText(goal || 'Standard', 120);
 const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof window.i18n !== 'undefined' && window.i18n.getLanguage) ? window.i18n.getLanguage() : 'en', { 
         day: 'numeric', month: 'short', year: 'numeric' 
       }) : '-';
@@ -774,12 +780,12 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
       
       return `
       <a href="${raceUrl}" style="text-decoration:none;color:inherit;display:block;">
-        <div style="background:#1f2937;padding:1rem;border-radius:0.5rem;margin-bottom:1rem;transition:background 0.2s;" onmouseover="this.style.background='#374151'" onmouseout="this.style.background='#1f2937'">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.5rem;">
-            <h3 style="color:#fbbf24;font-size:1rem;flex:1;margin-right:1rem;">${gameName}</h3>
-            <span class="spoiler-block" style="color:#10b981;font-weight:bold;font-size:0.9rem;">${place && place !== '-' ? formatRank(place) : '-'}</span>
+        <div style="background:#1f2937;padding:0.75rem;border-radius:0.5rem;margin-bottom:1rem;transition:background 0.2s;" onmouseover="this.style.background='#374151'" onmouseout="this.style.background='#1f2937'">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.25rem;">
+            <h3 style="color:#fbbf24;font-size:0.95rem;flex:1;margin-right:0.75rem;">${gameName}</h3>
+            <span class="spoiler-block" style="color:#10b981;font-weight:bold;font-size:0.875rem;">${place && place !== '-' ? formatRank(place) : '-'}</span>
           </div>
-          <div style="color:#d1d5db;font-size:0.875rem;margin-bottom:0.25rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${goal || 'Standard'}</div>
+          <div style="color:#d1d5db;font-size:0.8rem;margin-bottom:0.25rem;">${goalDisplay}</div>
           <div style="color:#9ca3af;font-size:0.75rem;">${raceDate} • ${r.status || '-'}</div>
         </div>
       </a>

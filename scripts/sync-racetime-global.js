@@ -1,25 +1,22 @@
 #!/usr/bin/env node
 /**
- * Sync Racetime Global - Version Optimisée FIXE
+ * Sync Racetime Global - Version OPTIMISÉE pour < 5 minutes
  * 
- * PROBLÈME RÉSOLU: Les courses restaient en "in_progress" parce que:
- * 1. L'API /races/data ne retourne que les races TRÈS récentes
- * 2. Les anciennes courses stuck n'étaient JAMAIS finalisées
- * 3. Il n'y avait pas de scan par catégorie pour attraper les courses intermédiaires
- * 
- * SOLUTION:
- * - Récupérer races globales récentes (2 pages) via /races/data
- * - AUSSI scanner les premières 5 pages par catégorie pour races intermédiaires
- * - AGRESSIVEMENT finaliser courses anciennes (>24h) en in_progress
+ * STRATÉGIE SIMPLE ET EFFICACE:
+ * 1. L'API /races/data retourne TOUTES les races actives (open, in_progress) en 1 appel
+ * 2. On met à jour toutes les races actives de nos catégories
+ * 3. Les races en BDD qui sont "in_progress" mais ABSENTES de l'API globale → terminées!
+ * 4. On finalise ces races stuck (max 50/run pour rester < 5 min)
  * 
  * Usage:
- *   node scripts/sync-racetime-global.js                    # Mode normal (rapide)
- *   node scripts/sync-racetime-global.js --full             # Mode complet (thorough)
- *   node scripts/sync-racetime-global.js --finalize-only    # Seulement finalize stuck
+ *   node scripts/sync-racetime-global.js                    # Mode normal (< 5 min)
+ *   node scripts/sync-racetime-global.js --game <slug>      # Sync complète d'un jeu
+ *   node scripts/sync-racetime-global.js --max-pages 100    # Limiter les pages (avec --game)
  */
 
 const path = require('path');
 const mongoose = require('mongoose');
+const axios = require('axios');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
 const connectDB = require('../config/database');
@@ -28,24 +25,20 @@ const racetimeAPI = require('../services/racetime');
 
 // Configuration
 const RATE_LIMIT_MS = parseInt(process.env.RACETIME_RATE_LIMIT_MS) || 1500;
-const DEFAULT_MAX_PAGES = 2; // Pour sync incrémentale rapide (2 pages globales)
-const GAME_PAGES_TO_CHECK = 5; // Pages par jeu pour récupérer courses récentes
+const MAX_FINALIZE_PER_RUN = 50; // Max races à finaliser par run (pour rester < 5 min)
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 /**
- * Récupérer les races en cours et récentes depuis l'API globale
+ * ÉTAPE 1: Récupérer TOUTES les races actives depuis l'API globale
+ * L'API /races/data retourne toutes les races open/in_progress en 1 appel
  */
-async function syncGlobalRaces(options = {}) {
-  const { maxPages = DEFAULT_MAX_PAGES } = options;
+async function syncActiveRaces() {
+  console.log('\n📡 Récupération des races actives...');
   
-  console.log('\n📡 Récupération des races globales...');
-  
-  const stats = { newRaces: 0, updatedRaces: 0, errors: 0, categories: new Set() };
-  
-  // Récupérer les slugs des jeux actifs (principal + additionnels)
+  // Récupérer les slugs des jeux actifs
   const activeGames = await Game.find({
     'integrations.racetime.enabled': true,
     enabled: { $ne: false }
@@ -55,328 +48,133 @@ async function syncGlobalRaces(options = {}) {
   for (const game of activeGames) {
     const primary = game.integrations?.racetime?.gameSlug;
     if (primary) activeSlugs.add(primary);
-    
     const additional = game.integrations?.racetime?.gameSlugs || [];
-    for (const slug of additional) {
-      activeSlugs.add(slug);
-    }
+    for (const slug of additional) activeSlugs.add(slug);
   }
   
-  console.log(`  ${activeSlugs.size} slugs racetime actifs`);
-  console.log(`  Slugs: ${Array.from(activeSlugs).join(', ')}`);
+  console.log(`  ${activeSlugs.size} catégories actives`);
   
-  let page = 1;
-  let hasMore = true;
+  const stats = { newRaces: 0, updatedRaces: 0, errors: 0, activeUrls: new Set() };
   
-  while (hasMore && page <= maxPages) {
-    try {
-      await sleep(RATE_LIMIT_MS);
+  try {
+    // UN SEUL APPEL pour toutes les races actives
+    const response = await axios.get('https://racetime.gg/races/data', {
+      params: { show_entrants: true }
+    });
+    
+    const allRaces = response.data?.races || [];
+    console.log(`  ${allRaces.length} races actives sur racetime.gg`);
+    
+    // Filtrer par nos catégories
+    const ourRaces = allRaces.filter(r => activeSlugs.has(r.category?.slug));
+    console.log(`  ${ourRaces.length} races dans nos catégories`);
+    
+    for (const raceData of ourRaces) {
+      const categorySlug = raceData.category?.slug;
+      const raceSlug = raceData.name?.split('/')[1] || raceData.url?.split('/').pop();
+      const raceUrl = `/${categorySlug}/${raceSlug}`;
       
-      // Appeler l'API globale des races
-      const response = await require('axios').get('https://racetime.gg/races/data', {
-        params: { show_entrants: true, page }
-      });
+      stats.activeUrls.add(raceUrl);
       
-      const races = response.data?.races || [];
-      console.log(`  📊 Page ${page}: ${races.length} races`);
-      
-      if (races.length === 0) {
-        hasMore = false;
-        break;
-      }
-      
-      for (const raceData of races) {
-        const categorySlug = raceData.category?.slug;
+      try {
+        // Formatter la race
+        let formattedRace = racetimeAPI.formatRace(raceData);
         
-        // Ignorer les catégories qui ne sont pas dans nos jeux actifs
-        if (!activeSlugs.has(categorySlug)) {
-          continue;
+        // Si les entrants sont incomplets, récupérer les détails
+        if (!formattedRace?.entrants?.length && raceSlug) {
+          await sleep(RATE_LIMIT_MS);
+          const detailedRace = await racetimeAPI.getRace(categorySlug, raceSlug);
+          if (detailedRace) formattedRace = detailedRace;
         }
         
-        stats.categories.add(categorySlug);
+        if (!formattedRace) continue;
         
-        try {
-          let formattedRace = racetimeAPI.formatRace(raceData);
-          
-          // Si les entrants sont absents/incomplets, récupérer la race détaillée
-          const hasEntrants = Array.isArray(formattedRace?.entrants) && formattedRace.entrants.length > 0;
-          const isFinished = formattedRace?.status === 'finished';
-          if ((!hasEntrants || !isFinished) && raceData.url) {
-            const raceId = String(raceData.url).split('/').filter(Boolean).pop();
-            if (raceId) {
-              try {
-                const detailedRace = await racetimeAPI.getRace(categorySlug, raceId);
-                if (detailedRace) {
-                  formattedRace = detailedRace;
-                }
-              } catch (detailError) {
-                console.warn(`  ⚠️  Détails indisponibles pour ${raceData.url}: ${detailError.message}`);
-              }
+        const existingRace = await Race.findOne({ url: raceUrl });
+        
+        const entrantsData = (formattedRace.entrants || []).map(e => ({
+          userId: e.user?.id || e.userId,
+          userName: e.user?.name || e.userName,
+          userDiscriminator: e.user?.discriminator || e.userDiscriminator,
+          userUrl: e.user?.url || e.userUrl,
+          status: e.status?.value || e.status,
+          finishTime: e.finish_time || e.finishTime,
+          finishTimeMs: e.finishTimeMs,
+          finishedAt: e.finished_at || e.finishedAt,
+          place: e.place,
+          placeOrdinal: e.place_ordinal || e.placeOrdinal,
+          comment: e.comment
+        }));
+        
+        if (existingRace) {
+          await Race.updateOne({ url: raceUrl }, {
+            $set: {
+              status: formattedRace.status?.value || formattedRace.status,
+              startedAt: formattedRace.started_at || formattedRace.startedAt,
+              endedAt: formattedRace.ended_at || formattedRace.endedAt,
+              entrants: entrantsData
             }
-          }
-          if (!formattedRace) continue;
-          
-          const raceUrl = formattedRace.url;
-          
-          // Vérifier si la course existe déjà
-          const existingRace = await Race.findOne({ url: raceUrl });
-          
-          if (existingRace) {
-            // Mettre à jour si le statut a changé OU si la race est en cours
-            const shouldRefreshEntrants = existingRace.status !== formattedRace.status
-              || formattedRace.status !== 'finished';
-            
-            if (shouldRefreshEntrants) {
-              await Race.updateOne({ url: raceUrl }, {
-                $set: {
-                  status: formattedRace.status,
-                  startedAt: formattedRace.startedAt,
-                  endedAt: formattedRace.endedAt,
-                  entrants: formattedRace.entrants.map(e => ({
-                    userId: e.user.id,
-                    userName: e.user.name,
-                    userDiscriminator: e.user.discriminator,
-                    userUrl: e.user.url,
-                    status: e.status,
-                    finishTime: e.finishTime,
-                    finishTimeMs: e.finishTimeMs,
-                    finishedAt: e.finishedAt,
-                    place: e.place,
-                    placeOrdinal: e.placeOrdinal,
-                    comment: e.comment
-                  }))
-                }
-              });
-              stats.updatedRaces++;
+          });
+          stats.updatedRaces++;
+        } else {
+          const newRace = new Race({
+            name: formattedRace.name,
+            category: categorySlug,
+            url: raceUrl,
+            status: formattedRace.status?.value || formattedRace.status,
+            goal: formattedRace.goal?.name || formattedRace.goal,
+            info: formattedRace.info,
+            startedAt: formattedRace.started_at || formattedRace.startedAt,
+            endedAt: formattedRace.ended_at || formattedRace.endedAt,
+            recordable: formattedRace.recordable,
+            entrants: entrantsData,
+            source: {
+              type: 'racetime',
+              externalId: formattedRace.name,
+              url: `https://racetime.gg${raceUrl}`,
+              importedAt: new Date()
             }
-          } else {
-            // Nouvelle course
-            const newRace = new Race({
-              name: formattedRace.name,
-              category: categorySlug,
-              url: raceUrl,
-              status: formattedRace.status,
-              goal: formattedRace.goal,
-              info: formattedRace.info,
-              startedAt: formattedRace.startedAt,
-              endedAt: formattedRace.endedAt,
-              recordable: formattedRace.recordable,
-              entrants: formattedRace.entrants.map(e => ({
-                userId: e.user.id,
-                userName: e.user.name,
-                userDiscriminator: e.user.discriminator,
-                userUrl: e.user.url,
-                status: e.status,
-                finishTime: e.finishTime,
-                finishTimeMs: e.finishTimeMs,
-                finishedAt: e.finishedAt,
-                place: e.place,
-                placeOrdinal: e.placeOrdinal,
-                comment: e.comment
-              })),
-              source: {
-                type: 'racetime',
-                externalId: formattedRace.name,
-                url: `https://racetime.gg${raceUrl}`,
-                importedAt: new Date()
-              }
-            });
-            
-            await newRace.save();
-            stats.newRaces++;
-          }
-        } catch (err) {
-          console.error(`  ❌ Erreur: ${err.message}`);
+          });
+          await newRace.save();
+          stats.newRaces++;
+        }
+      } catch (err) {
+        if (err.code !== 11000) {
+          console.error(`  ❌ ${raceUrl}: ${err.message}`);
           stats.errors++;
         }
       }
-      
-      page++;
-      
-    } catch (err) {
-      console.error(`  ❌ Erreur page ${page}: ${err.message}`);
-      stats.errors++;
-      break;
-    }
-  }
-  
-  return stats;
-}
-
-/**
- * Synchroniser les premières pages de chaque catégorie active
- * pour attraper les courses récentes qui ne sont pas dans l'API globale
- */
-async function syncPerGameRecent(options = {}) {
-  console.log('\n🎮 Sync par catégorie (premières pages)...');
-  
-  const { maxPages = GAME_PAGES_TO_CHECK } = options;
-  
-  // Récupérer les slugs des jeux actifs
-  const activeGames = await Game.find({
-    'integrations.racetime.enabled': true,
-    enabled: { $ne: false }
-  }).select('id integrations.racetime.gameSlug integrations.racetime.gameSlugs').lean();
-  
-  const stats = { 
-    newRaces: 0, 
-    updatedRaces: 0, 
-    errors: 0,
-    gamesProcessed: 0
-  };
-  
-  for (const game of activeGames) {
-    const slugs = [game.integrations?.racetime?.gameSlug].filter(Boolean);
-    if (game.integrations?.racetime?.gameSlugs) {
-      slugs.push(...game.integrations.racetime.gameSlugs);
     }
     
-    for (const slug of slugs) {
-      try {
-        let page = 1;
-        let emptyPages = 0;
-        let pageCount = 0;
-        
-        while (page <= maxPages) {
-          try {
-            await sleep(RATE_LIMIT_MS);
-            
-            const result = await racetimeAPI.getPastRaces(slug, page);
-            
-            if (!result.races || result.races.length === 0) {
-              emptyPages++;
-              if (emptyPages >= 2) {
-                break;
-              }
-              page++;
-              continue;
-            }
-            
-            emptyPages = 0;
-            pageCount++;
-            
-            for (const raceData of result.races) {
-              const raceUrl = raceData.url;
-              
-              try {
-                const existingRace = await Race.findOne({ url: raceUrl });
-                
-                if (existingRace) {
-                  // Toujours mettre à jour les courses non finalisées
-                  if (existingRace.status !== 'finished' && existingRace.status !== 'cancelled') {
-                    await Race.updateOne({ url: raceUrl }, {
-                      $set: {
-                        status: raceData.status,
-                        startedAt: raceData.startedAt,
-                        endedAt: raceData.endedAt,
-                        entrants: raceData.entrants.map(e => ({
-                          userId: e.user.id,
-                          userName: e.user.name,
-                          userDiscriminator: e.user.discriminator,
-                          userUrl: e.user.url,
-                          status: e.status,
-                          finishTime: e.finishTime,
-                          finishTimeMs: e.finishTimeMs,
-                          finishedAt: e.finishedAt,
-                          place: e.place,
-                          placeOrdinal: e.placeOrdinal,
-                          comment: e.comment
-                        }))
-                      }
-                    });
-                    stats.updatedRaces++;
-                  }
-                } else {
-                  const newRace = new Race({
-                    name: raceData.name,
-                    category: slug,
-                    url: raceUrl,
-                    status: raceData.status,
-                    goal: raceData.goal,
-                    info: raceData.info,
-                    startedAt: raceData.startedAt,
-                    endedAt: raceData.endedAt,
-                    recordable: raceData.recordable,
-                    entrants: raceData.entrants.map(e => ({
-                      userId: e.user.id,
-                      userName: e.user.name,
-                      userDiscriminator: e.user.discriminator,
-                      userUrl: e.user.url,
-                      status: e.status,
-                      finishTime: e.finishTime,
-                      finishTimeMs: e.finishTimeMs,
-                      finishedAt: e.finishedAt,
-                      place: e.place,
-                      placeOrdinal: e.placeOrdinal,
-                      comment: e.comment
-                    })),
-                    source: {
-                      type: 'racetime',
-                      externalId: raceData.name,
-                      url: `https://racetime.gg${raceUrl}`,
-                      importedAt: new Date()
-                    }
-                  });
-                  
-                  await newRace.save();
-                  stats.newRaces++;
-                }
-              } catch (err) {
-                if (err.code !== 11000) {
-                  stats.errors++;
-                }
-              }
-            }
-            
-            if (!result.hasNext) {
-              break;
-            }
-            
-            page++;
-            
-          } catch (err) {
-            if (err.response?.status !== 404) {
-              stats.errors++;
-            }
-            break;
-          }
-        }
-        
-        if (pageCount > 0) {
-          stats.gamesProcessed++;
-        }
-        
-      } catch (err) {
-        stats.errors++;
-      }
-    }
+  } catch (err) {
+    console.error(`  ❌ Erreur API globale: ${err.message}`);
+    stats.errors++;
   }
   
-  console.log(`  ✓ ${stats.gamesProcessed} catégories, ${stats.newRaces} nouvelles, ${stats.updatedRaces} màj`);
+  console.log(`  ✓ ${stats.newRaces} nouvelles, ${stats.updatedRaces} màj`);
   return stats;
 }
 
 /**
- * Finaliser AGRESSIVEMENT les courses anciennes stuck en in_progress
+ * ÉTAPE 2: Finaliser les races qui ne sont plus dans l'API globale
+ * Si une race est en BDD comme "in_progress" mais n'est plus dans /races/data,
+ * c'est qu'elle est terminée sur racetime.gg
  */
-async function finializeStuckRaces(options = {}) {
-  console.log('\n🔧 Finalisation des courses stuck (>24h)...');
+async function finalizeCompletedRaces(activeUrls) {
+  console.log('\n🔧 Finalisation des races terminées...');
   
-  const maxAgeMs = 24 * 60 * 60 * 1000; // 24 heures
-  const cutoffDate = new Date(Date.now() - maxAgeMs);
-  
-  // Chercher les races stuck
+  // Trouver les races en BDD qui sont "en cours" mais pas dans activeUrls
   const stuckRaces = await Race.find({
-    status: { $in: ['in_progress', 'open', 'invitational'] },
-    startedAt: { $lt: cutoffDate, $exists: true }
+    status: { $in: ['in_progress', 'open', 'pending', 'invitational'] },
+    url: { $nin: Array.from(activeUrls) }
   })
-    .select('url category startedAt status')
-    .limit(200)
+    .select('url category status startedAt')
+    .sort({ startedAt: -1 })
+    .limit(MAX_FINALIZE_PER_RUN)
     .lean();
   
-  console.log(`  Checking ${stuckRaces.length} stuck races...`);
+  console.log(`  ${stuckRaces.length} races à vérifier (max ${MAX_FINALIZE_PER_RUN}/run)`);
   
-  const stats = { updated: 0, errors: 0, notFound: 0 };
+  const stats = { finalized: 0, errors: 0 };
   
   for (const race of stuckRaces) {
     try {
@@ -384,97 +182,79 @@ async function finializeStuckRaces(options = {}) {
       const category = parts[0];
       const raceId = parts[1];
       
-      if (!category || !raceId) {
-        continue;
-      }
+      if (!category || !raceId) continue;
       
       await sleep(RATE_LIMIT_MS);
       
       const raceDetail = await racetimeAPI.getRace(category, raceId);
       
       if (!raceDetail) {
-        await Race.updateOne(
-          { url: race.url },
-          { $set: { status: 'cancelled', endedAt: new Date() } }
-        );
-        stats.notFound++;
+        // Race n'existe plus → marquer comme cancelled
+        await Race.updateOne({ url: race.url }, { 
+          $set: { status: 'cancelled', endedAt: new Date() } 
+        });
+        stats.finalized++;
         continue;
       }
       
-      const newStatus = raceDetail.status;
+      const newStatus = raceDetail.status?.value || raceDetail.status;
+      
       if (newStatus !== race.status) {
         console.log(`  🔄 ${race.url}: ${race.status} → ${newStatus}`);
+        
+        const entrantsData = (raceDetail.entrants || []).map(e => ({
+          userId: e.user?.id || e.userId,
+          userName: e.user?.name || e.userName,
+          userDiscriminator: e.user?.discriminator || e.userDiscriminator,
+          userUrl: e.user?.url || e.userUrl,
+          status: e.status?.value || e.status,
+          finishTime: e.finish_time || e.finishTime,
+          finishTimeMs: e.finishTimeMs,
+          finishedAt: e.finished_at || e.finishedAt,
+          place: e.place,
+          placeOrdinal: e.place_ordinal || e.placeOrdinal,
+          comment: e.comment
+        }));
         
         await Race.updateOne({ url: race.url }, {
           $set: {
             status: newStatus,
-            endedAt: raceDetail.endedAt,
-            entrants: raceDetail.entrants.map(e => ({
-              userId: e.user.id,
-              userName: e.user.name,
-              userDiscriminator: e.user.discriminator,
-              userUrl: e.user.url,
-              status: e.status,
-              finishTime: e.finishTime,
-              finishTimeMs: e.finishTimeMs,
-              finishedAt: e.finishedAt,
-              place: e.place,
-              placeOrdinal: e.placeOrdinal,
-              comment: e.comment
-            }))
+            endedAt: raceDetail.ended_at || raceDetail.endedAt,
+            entrants: entrantsData
           }
         });
-        
-        stats.updated++;
+        stats.finalized++;
       }
     } catch (err) {
       stats.errors++;
     }
   }
   
-  console.log(`  ✓ ${stats.updated} finalisées, ${stats.notFound} not found, ${stats.errors} erreurs`);
+  console.log(`  ✓ ${stats.finalized} finalisées`);
   return stats;
 }
 
 /**
- * Sync complet d'un jeu spécifique (toutes les pages)
+ * Sync complète d'un jeu spécifique (pour usage manuel)
  */
 async function syncGameComplete(gameSlug, options = {}) {
-  const { maxPages = Infinity, noLimit = false } = options;
-  const effectiveMaxPages = noLimit ? Infinity : maxPages;
+  const { maxPages = Infinity } = options;
   
-  console.log(`\n📡 Sync complète du jeu: ${gameSlug}`);
-  if (effectiveMaxPages === Infinity) {
-    console.log('  ⚠️  Mode sans limite - peut prendre du temps!');
-  } else {
-    console.log(`  Max pages: ${effectiveMaxPages}`);
-  }
+  console.log(`\n📡 Sync complète: ${gameSlug} (max ${maxPages === Infinity ? '∞' : maxPages} pages)`);
   
   const stats = { newRaces: 0, updatedRaces: 0, errors: 0, pages: 0 };
-  
   let page = 1;
-  let hasMore = true;
-  let emptyPages = 0;
   
-  while (hasMore && page <= effectiveMaxPages) {
+  while (page <= maxPages) {
     try {
       await sleep(RATE_LIMIT_MS);
       
       const result = await racetimeAPI.getPastRaces(gameSlug, page);
+      
+      if (!result.races?.length) break;
+      
       stats.pages = page;
-      
-      if (!result.races || result.races.length === 0) {
-        emptyPages++;
-        if (emptyPages >= 3) {
-          console.log(`  ℹ️  ${emptyPages} pages vides consécutives, arrêt.`);
-          break;
-        }
-        page++;
-        continue;
-      }
-      
-      emptyPages = 0;
-      console.log(`  📊 Page ${page}: ${result.races.length} courses`);
+      console.log(`  Page ${page}: ${result.races.length} races`);
       
       for (const raceData of result.races) {
         const raceUrl = raceData.url;
@@ -482,26 +262,27 @@ async function syncGameComplete(gameSlug, options = {}) {
         try {
           const existingRace = await Race.findOne({ url: raceUrl });
           
+          const entrantsData = (raceData.entrants || []).map(e => ({
+            userId: e.user?.id || e.userId,
+            userName: e.user?.name || e.userName,
+            userDiscriminator: e.user?.discriminator || e.userDiscriminator,
+            userUrl: e.user?.url || e.userUrl,
+            status: e.status?.value || e.status,
+            finishTime: e.finish_time || e.finishTime,
+            finishTimeMs: e.finishTimeMs,
+            finishedAt: e.finished_at || e.finishedAt,
+            place: e.place,
+            placeOrdinal: e.place_ordinal || e.placeOrdinal,
+            comment: e.comment
+          }));
+          
           if (existingRace) {
-            // Mettre à jour
             await Race.updateOne({ url: raceUrl }, {
               $set: {
                 status: raceData.status,
                 startedAt: raceData.startedAt,
                 endedAt: raceData.endedAt,
-                entrants: raceData.entrants.map(e => ({
-                  userId: e.user.id,
-                  userName: e.user.name,
-                  userDiscriminator: e.user.discriminator,
-                  userUrl: e.user.url,
-                  status: e.status,
-                  finishTime: e.finishTime,
-                  finishTimeMs: e.finishTimeMs,
-                  finishedAt: e.finishedAt,
-                  place: e.place,
-                  placeOrdinal: e.placeOrdinal,
-                  comment: e.comment
-                }))
+                entrants: entrantsData
               }
             });
             stats.updatedRaces++;
@@ -516,19 +297,7 @@ async function syncGameComplete(gameSlug, options = {}) {
               startedAt: raceData.startedAt,
               endedAt: raceData.endedAt,
               recordable: raceData.recordable,
-              entrants: raceData.entrants.map(e => ({
-                userId: e.user.id,
-                userName: e.user.name,
-                userDiscriminator: e.user.discriminator,
-                userUrl: e.user.url,
-                status: e.status,
-                finishTime: e.finishTime,
-                finishTimeMs: e.finishTimeMs,
-                finishedAt: e.finishedAt,
-                place: e.place,
-                placeOrdinal: e.placeOrdinal,
-                comment: e.comment
-              })),
+              entrants: entrantsData,
               source: {
                 type: 'racetime',
                 externalId: raceData.name,
@@ -536,96 +305,77 @@ async function syncGameComplete(gameSlug, options = {}) {
                 importedAt: new Date()
               }
             });
-            
             await newRace.save();
             stats.newRaces++;
           }
         } catch (err) {
-          if (err.code === 11000) {
-            // Duplicate key - race already exists, skip
-            continue;
-          }
-          console.error(`  ❌ Erreur: ${err.message}`);
-          stats.errors++;
+          if (err.code !== 11000) stats.errors++;
         }
       }
       
-      if (!result.hasNext) {
-        console.log(`  ℹ️  Plus de pages disponibles.`);
-        break;
-      }
-      
+      if (!result.hasNext) break;
       page++;
       
-      // Afficher un résumé toutes les 50 pages
-      if (page % 50 === 0) {
-        console.log(`  📈 Progression: ${stats.newRaces} nouvelles, ${stats.updatedRaces} mises à jour (page ${page})`);
-      }
-      
     } catch (err) {
-      console.error(`  ❌ Erreur page ${page}: ${err.message}`);
-      stats.errors++;
-      
-      // Attendre un peu plus en cas d'erreur (rate limiting?)
-      await sleep(RATE_LIMIT_MS * 2);
+      console.error(`  ❌ Page ${page}: ${err.message}`);
+      break;
     }
   }
   
-  // Mettre à jour la date de dernière sync
-  await Game.updateOne(
-    { 'integrations.racetime.gameSlug': gameSlug },
-    { $set: { 'integrations.racetime.lastSync': new Date() } }
-  );
-  
+  console.log(`  ✓ ${stats.pages} pages, ${stats.newRaces} nouvelles, ${stats.updatedRaces} màj`);
   return stats;
 }
 
 async function main() {
   const args = process.argv.slice(2);
   
-  const full = args.includes('--full');
-  const finalizeOnly = args.includes('--finalize-only');
+  const gameArg = args.includes('--game') ? args[args.indexOf('--game') + 1] : null;
+  const maxPagesArg = args.includes('--max-pages') 
+    ? parseInt(args[args.indexOf('--max-pages') + 1]) 
+    : null;
   
-  console.log('🏁 Sync Racetime Global - FIXE\n');
+  console.log('🏁 Sync Racetime Global\n');
   
   try {
     await connectDB();
     
-    let allStats = {
-      global: { newRaces: 0, updatedRaces: 0, errors: 0 },
-      perGame: { newRaces: 0, updatedRaces: 0, errors: 0 },
-      finalize: { updated: 0, errors: 0, notFound: 0 }
-    };
-    
-    if (!finalizeOnly) {
-      // 1. Sync globale (2-5 pages)
-      console.log('ÉTAPE 1: Sync API globale');
-      const globalStats = await syncGlobalRaces({ 
-        maxPages: full ? 5 : DEFAULT_MAX_PAGES 
-      });
-      allStats.global = globalStats;
+    if (gameArg) {
+      // Mode manuel: sync complète d'un jeu
+      const game = await Game.findOne({ id: gameArg }).select('integrations.racetime').lean();
       
-      // 2. Sync par catégorie (premières 5-10 pages)
-      console.log('\nÉTAPE 2: Sync par catégorie (pages récentes)');
-      const perGameStats = await syncPerGameRecent({ 
-        maxPages: full ? 10 : GAME_PAGES_TO_CHECK 
-      });
-      allStats.perGame = perGameStats;
+      if (!game?.integrations?.racetime?.gameSlug) {
+        // Essayer avec le slug directement
+        console.log(`Sync directe du slug: ${gameArg}`);
+        await syncGameComplete(gameArg, { maxPages: maxPagesArg || Infinity });
+      } else {
+        const slugs = [game.integrations.racetime.gameSlug];
+        if (game.integrations.racetime.gameSlugs) {
+          slugs.push(...game.integrations.racetime.gameSlugs);
+        }
+        
+        for (const slug of slugs) {
+          await syncGameComplete(slug, { maxPages: maxPagesArg || Infinity });
+        }
+      }
+      
+    } else {
+      // Mode automatique (cron): rapide et efficace
+      
+      // Étape 1: Récupérer toutes les races actives
+      const activeStats = await syncActiveRaces();
+      
+      // Étape 2: Finaliser les races qui ne sont plus actives
+      const finalizeStats = await finalizeCompletedRaces(activeStats.activeUrls);
+      
+      console.log('\n════════════════════════════════════');
+      console.log('📊 RÉSUMÉ');
+      console.log('════════════════════════════════════');
+      console.log(`Nouvelles races: ${activeStats.newRaces}`);
+      console.log(`Mises à jour: ${activeStats.updatedRaces}`);
+      console.log(`Finalisées: ${finalizeStats.finalized}`);
+      console.log(`Erreurs: ${activeStats.errors + finalizeStats.errors}`);
+      console.log('════════════════════════════════════');
     }
-    
-    // 3. TOUJOURS finaliser les anciennes courses stuck
-    console.log('\nÉTAPE 3: Finalisation des courses stuck');
-    const finalizeStats = await finializeStuckRaces();
-    allStats.finalize = finalizeStats;
-    
-    console.log('\n════════════════════════════════════');
-    console.log('📊 RÉSUMÉ FINAL');
-    console.log('════════════════════════════════════');
-    console.log(`API Globale: ${allStats.global.newRaces} nouvelles, ${allStats.global.updatedRaces} màj`);
-    console.log(`Par catégorie: ${allStats.perGame.newRaces} nouvelles, ${allStats.perGame.updatedRaces} màj`);
-    console.log(`Finalisées: ${allStats.finalize.updated} courses`);
-    console.log(`\nTotal erreurs: ${allStats.global.errors + allStats.perGame.errors + allStats.finalize.errors}`);
-    console.log('════════════════════════════════════');
     
   } catch (error) {
     console.error('\n❌ Erreur:', error);

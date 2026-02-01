@@ -780,12 +780,12 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
       
       return `
       <a href="${raceUrl}" style="text-decoration:none;color:inherit;display:block;">
-        <div style="background:#1f2937;padding:0.75rem;border-radius:0.5rem;margin-bottom:1rem;transition:background 0.2s;" onmouseover="this.style.background='#374151'" onmouseout="this.style.background='#1f2937'">
+        <div style="background:#1f2937;padding:0.75rem;border-radius:0.5rem;margin-bottom:1rem;transition:background 0.2s;max-height:105px;overflow:hidden;" onmouseover="this.style.background='#374151'" onmouseout="this.style.background='#1f2937'">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.25rem;">
             <h3 style="color:#fbbf24;font-size:0.95rem;flex:1;margin-right:0.75rem;">${gameName}</h3>
             <span class="spoiler-block" style="color:#10b981;font-weight:bold;font-size:0.875rem;">${place && place !== '-' ? formatRank(place) : '-'}</span>
           </div>
-          <div style="color:#d1d5db;font-size:0.8rem;margin-bottom:0.25rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${goalDisplay}</div>
+          <div style="color:#d1d5db;font-size:0.8rem;margin-bottom:0.25rem;overflow:hidden;text-overflow:ellipsis;">${goalDisplay}</div>
           <div style="color:#9ca3af;font-size:0.75rem;">${raceDate} • ${r.status || '-'}</div>
         </div>
       </a>

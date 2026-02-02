@@ -148,6 +148,17 @@ const tournamentSchema = new mongoose.Schema({
     finalRank: Number,
     displayName: String
   }]
+  ,
+  // External IDs for other platforms (start.gg)
+  startggId: Number,
+  startggTournamentId: Number,
+  // optional source metadata for import tracing
+  source: {
+    type: { type: String },
+    externalId: String,
+    url: String,
+    importedAt: Date
+  }
 }, { timestamps: true });
 
 const matchSchema = new mongoose.Schema({

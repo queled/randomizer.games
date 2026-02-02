@@ -98,7 +98,7 @@ async function loadStreams() {
         noStreams.innerHTML = `
             <p style="font-size: 1.5rem; margin-bottom: 0.5rem;">⚠️</p>
             <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">${typeof i18n !== 'undefined' ? i18n.t('streams.loadError') : 'Unable to load streams'}</p>
-            <p style="font-size: 0.875rem;">${typeof i18n !== 'undefined' ? i18n.t('streams.checkRaces') : 'Try again later or check the ongoing races'} <a href="/races.html" style="color: #fbbf24;">${typeof i18n !== 'undefined' ? i18n.t('streams.currentRaces') : 'races'}</a></p>
+            <p style="font-size: 0.875rem;">${typeof i18n !== 'undefined' ? i18n.t('streams.comeBackLater') : 'Come back later or check the'} <a href="/races.html" style="color: #fbbf24;">${typeof i18n !== 'undefined' ? i18n.t('streams.currentRaces') : 'ongoing races'}</a></p>
         `;
         noStreams.style.display = 'block';
         grid.style.display = 'none';

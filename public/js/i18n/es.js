@@ -257,7 +257,7 @@ const es = {
         loadingStreams: "Cargando streams...",
         streamsLive: "stream en vivo | streams en vivo",
         noStreams: "No hay streams en vivo en este momento",
-        checkRaces: "Vuelve más tarde o consulta las <a href=\"/races.html\" style=\"color: #fbbf24;\">carreras en curso</a>",
+        checkRaces: "Vuelve más tarde o consulta las",
         comeBackLater: "Vuelve más tarde o consulta las",
         currentRaces: "carreras en curso",
         loadError: "No se pueden cargar los streams",

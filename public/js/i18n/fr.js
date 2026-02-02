@@ -264,7 +264,7 @@ const fr = {
         loadingStreams: "Chargement des streams...",
         streamsLive: "stream en direct | streams en direct",
         noStreams: "Aucun stream en direct pour le moment",
-        checkRaces: "Revenez plus tard ou consultez les <a href=\"/races.html\" style=\"color: #fbbf24;\">courses en cours</a>",
+        checkRaces: "Revenez plus tard ou consultez les",
         comeBackLater: "Revenez plus tard ou consultez les",
         currentRaces: "courses en cours",
         loadError: "Impossible de charger les streams",

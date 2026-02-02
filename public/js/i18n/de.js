@@ -257,7 +257,7 @@ const de = {
         loadingStreams: "Streams werden geladen...",
         streamsLive: "Stream live | Streams live",
         noStreams: "Derzeit keine Live-Streams",
-        checkRaces: "Komm später wieder oder schau dir die <a href=\"/races.html\" style=\"color: #fbbf24;\">laufenden Rennen</a> an",
+        checkRaces: "Komm später wieder oder schau dir die",
         comeBackLater: "Komm später wieder oder schau dir die",
         currentRaces: "laufenden Rennen an",
         loadError: "Streams konnten nicht geladen werden",

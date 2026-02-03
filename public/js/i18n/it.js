@@ -177,6 +177,7 @@ const it = {
         participantsCount: "Partecipanti",
         description: "Descrizione",
         viewOnChallonge: "Vedi su Challonge",
+        viewOnStartgg: "Vedi su Start.gg",
         matchesHiddenSpoiler: "Partite nascoste in modalità anti-spoiler",
         winner: "Vincitore",
         loser: "Perdente",

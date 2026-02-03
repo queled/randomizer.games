@@ -252,8 +252,18 @@ function displayTournamentInfo(tournament) {
 
   // Challonge link
   if (tournament.fullUrl) {
-    document.getElementById('challonge-link-container').style.display = 'block';
-    document.getElementById('challonge-link').href = tournament.fullUrl;
+    // Detect source type from source.type or from URL pattern
+    const sourceType = tournament.source?.type || 
+      (tournament.startggId ? 'startgg' : 
+       (tournament.challongeId ? 'challonge' : null));
+    
+    if (sourceType === 'startgg') {
+      document.getElementById('startgg-link-container').style.display = 'block';
+      document.getElementById('startgg-link').href = tournament.fullUrl;
+    } else {
+      document.getElementById('challonge-link-container').style.display = 'block';
+      document.getElementById('challonge-link').href = tournament.fullUrl;
+    }
   }
 }
 

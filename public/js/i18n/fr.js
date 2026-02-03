@@ -183,6 +183,7 @@ const fr = {
         participantsCount: "Participants",
         description: "Description",
         viewOnChallonge: "Voir sur Challonge",
+        viewOnStartgg: "Voir sur Start.gg",
         matchesHiddenSpoiler: "Matchs masqués en mode anti-spoiler",
         winner: "Vainqueur",
         loser: "Perdant",

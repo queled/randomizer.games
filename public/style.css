@@ -1546,6 +1546,17 @@ body.spoiler-mode .spoiler-text::before {
     height: 20px;
 }
 
+/* Start.gg button variant */
+.startgg-btn {
+    color: #cb3862;
+    border-color: #cb3862;
+}
+
+.startgg-btn:hover {
+    background-color: #cb3862;
+    color: #1F2937;
+}
+
 .tabs-wrapper {
     margin-bottom: 2rem;
 }

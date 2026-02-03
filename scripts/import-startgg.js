@@ -1,0 +1,271 @@
+#!/usr/bin/env node
+
+/**
+ * Import tournament from start.gg
+ * 
+ * Usage: node scripts/import-startgg.js <tournament-url-or-slug>
+ * Example: node scripts/import-startgg.js https://www.start.gg/tournament/ocarina-of-time-randomizer-standard-tournament-season-9/events
+ * Or: node scripts/import-startgg.js tournament/ocarina-of-time-randomizer-standard-tournament-season-9
+ * 
+ * Before running:
+ * 1. Set STARTGG_API_TOKEN in .env file
+ * 2. Ensure MongoDB is running
+ */
+
+const mongoose = require('mongoose');
+const path = require('path');
+require('dotenv').config({ path: path.resolve(process.cwd(), '.env') });
+const sanitizeHtml = require('sanitize-html');
+const StartGGAPI = require('../services/startgg');
+const findGameForTournament = require('../helpers/findGameForTournament');
+
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/randomizer';
+
+function parseStartGGSlug(input) {
+  if (!input) return null;
+  
+  // If it's already a slug like "tournament/xxx", return it
+  if (input.startsWith('tournament/')) return input;
+  
+  // Try to extract from URL
+  const extracted = StartGGAPI.extractSlugFromUrl(input);
+  if (extracted) return extracted;
+  
+  // Assume it's a tournament name without "tournament/" prefix
+  return `tournament/${input}`;
+}
+
+async function main() {
+  const args = process.argv.slice(2);
+  if (!args[0]) {
+    console.error('❌ Start.gg tournament URL or slug required');
+    console.error('Usage: node scripts/import-startgg.js <tournament-url-or-slug>');
+    console.error('Example: node scripts/import-startgg.js https://www.start.gg/tournament/ocarina-of-time-randomizer-standard-tournament-season-9/events');
+    process.exit(1);
+  }
+
+  if (!process.env.STARTGG_API_TOKEN) {
+    console.error('❌ STARTGG_API_TOKEN not set in environment');
+    console.error('Get your token from: https://start.gg/admin/profile/developer');
+    process.exit(1);
+  }
+
+  const raw = args[0];
+  const slug = parseStartGGSlug(raw);
+  if (!slug) {
+    console.error('❌ Unable to parse start.gg slug from input');
+    process.exit(1);
+  }
+
+  console.log(`\n📊 Importing tournament from start.gg: ${slug}\n`);
+
+  // Connect to MongoDB
+  await mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+  const { Tournament, Player } = require('../models');
+
+  const api = new StartGGAPI();
+
+  try {
+    console.log('⏳ Fetching tournament data from start.gg...');
+    const tournamentData = await api.getTournament(slug);
+    
+    if (!tournamentData) {
+      console.error('❌ No tournament data returned');
+      process.exit(1);
+    }
+
+    console.log(`✅ Fetched: ${tournamentData.name}`);
+    console.log(`   Events: ${tournamentData.events.length}`);
+    console.log(`   Attendees: ${tournamentData.numAttendees}\n`);
+
+    // Import each event as a separate tournament (or link them as needed)
+    for (const event of tournamentData.events) {
+      console.log(`\n🎮 Processing event: ${event.name}`);
+      
+      // Determine game mapping
+      const matchForGame = await findGameForTournament({
+        providedGameSlug: null,
+        providedGameId: event.game?.id,
+        tournamentName: `${tournamentData.name} - ${event.name}`,
+        tournamentDescription: event.game?.name || ''
+      });
+
+      // Build participants list from standings (if available) or entrants (for active tournaments)
+      const participants = [];
+      const playerMap = new Map(); // Track players to avoid duplicates
+      
+      // Use standings if available (completed tournaments)
+      if (event.standings && event.standings.length > 0) {
+        for (const standing of event.standings) {
+          for (const participant of standing.participants) {
+            const gamerTag = participant.gamerTag || participant.userName || 'Unknown';
+            
+            if (!playerMap.has(gamerTag)) {
+              playerMap.set(gamerTag, {
+                name: gamerTag,
+                finalRank: standing.placement,
+                startggUserId: participant.userId,
+                startggUserSlug: participant.userSlug,
+                prefix: participant.prefix
+              });
+              participants.push(playerMap.get(gamerTag));
+            }
+          }
+        }
+      }
+      // Fallback to entrants list (for active/in-progress tournaments)
+      else if (event.entrants && event.entrants.length > 0) {
+        for (const entrant of event.entrants) {
+          for (const participant of entrant.participants) {
+            const gamerTag = participant.gamerTag || participant.userName || 'Unknown';
+            
+            if (!playerMap.has(gamerTag)) {
+              playerMap.set(gamerTag, {
+                name: gamerTag,
+                seed: entrant.seed,
+                finalRank: null, // Not yet determined
+                startggUserId: participant.userId,
+                startggUserSlug: participant.userSlug,
+                prefix: participant.prefix
+              });
+              participants.push(playerMap.get(gamerTag));
+            }
+          }
+        }
+      }
+
+      console.log(`   Found ${participants.length} unique participants`);
+
+      // Create tournament document
+      // event.slug already contains full path like "tournament/xxx/event/yyy"
+      const eventUrl = `https://start.gg/${event.slug}`;
+      const tournamentPayload = {
+        name: `${tournamentData.name} - ${event.name}`,
+        startggId: event.id,
+        startggTournamentId: tournamentData.id,
+        startggSlug: event.slug,
+        url: eventUrl,
+        fullUrl: eventUrl,
+        tournamentType: 'single_elimination', // Assume single elim, adjust if needed
+        state: event.state?.toLowerCase() || 'complete',
+        participantsCount: event.numEntrants,
+        participants: participants,
+        startDate: event.startDate || tournamentData.startDate,
+        endDate: tournamentData.endDate,
+        gameName: event.game?.name || null,
+        source: {
+          type: 'startgg',
+          externalId: String(event.id),
+          tournamentId: String(tournamentData.id),
+          url: `https://start.gg/${tournamentData.slug}/events/${event.slug}`,
+          importedAt: new Date()
+        }
+      };
+
+      if (matchForGame) {
+        tournamentPayload.game = matchForGame.gameId;
+        tournamentPayload.gameSlug = matchForGame.gameSlug;
+        console.log(`   Mapped to game: ${matchForGame.gameSlug}`);
+      } else if (event.game?.id) {
+        tournamentPayload.gameId = event.game.id;
+        console.log(`   Using start.gg game ID: ${event.game.id}`);
+      }
+
+      // Upsert tournament
+      const tournament = await Tournament.findOneAndUpdate(
+        { startggId: event.id },
+        { $set: tournamentPayload, $currentDate: { updatedAt: true } },
+        { upsert: true, new: true }
+      );
+
+      console.log(`   ✅ Tournament saved: ${tournament._id}`);
+
+      // Update player records
+      let playersCreated = 0;
+      let playersUpdated = 0;
+
+      for (const participant of participants) {
+        const playerData = {
+          name: participant.name,
+          tournaments: [
+            {
+              tournamentId: tournament._id,
+              tournamentName: tournament.name,
+              finalRank: participant.finalRank,
+              date: tournament.startDate
+            }
+          ]
+        };
+
+        // Add start.gg metadata if available
+        if (participant.startggUserId) {
+          playerData['startgg.userId'] = participant.startggUserId;
+          playerData['startgg.userSlug'] = participant.startggUserSlug;
+        }
+
+        const existing = await Player.findOne({ name: participant.name });
+        
+        if (existing) {
+          // Check if this tournament is already recorded
+          const hasThisTournament = existing.tournaments.some(
+            t => t.tournamentId && t.tournamentId.toString() === tournament._id.toString()
+          );
+          
+          if (!hasThisTournament) {
+            existing.tournaments.push({
+              tournamentId: tournament._id,
+              tournamentName: tournament.name,
+              finalRank: participant.finalRank,
+              date: tournament.startDate
+            });
+            
+            // Update start.gg metadata if not present
+            if (participant.startggUserId && !existing.startgg?.userId) {
+              if (!existing.startgg) existing.startgg = {};
+              existing.startgg.userId = participant.startggUserId;
+              existing.startgg.userSlug = participant.startggUserSlug;
+            }
+            
+            await existing.save();
+            playersUpdated++;
+          }
+        } else {
+          // Create new player
+          const newPlayer = new Player({
+            name: participant.name,
+            tournaments: [{
+              tournamentId: tournament._id,
+              tournamentName: tournament.name,
+              finalRank: participant.finalRank,
+              date: tournament.startDate
+            }],
+            startgg: participant.startggUserId ? {
+              userId: participant.startggUserId,
+              userSlug: participant.startggUserSlug
+            } : undefined
+          });
+          
+          await newPlayer.save();
+          playersCreated++;
+        }
+      }
+
+      console.log(`   📊 Players: ${playersCreated} created, ${playersUpdated} updated`);
+    }
+
+    console.log('\n✅ Import completed successfully!');
+    console.log(`\n💡 View tournament at: http://localhost:3000/tournaments.html`);
+
+  } catch (error) {
+    console.error('\n❌ Import failed:', error.message);
+    if (error.response?.data) {
+      console.error('API Response:', JSON.stringify(error.response.data, null, 2));
+    }
+    console.error(error.stack);
+    process.exit(1);
+  } finally {
+    await mongoose.disconnect();
+  }
+}
+
+main();

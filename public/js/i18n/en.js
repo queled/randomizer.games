@@ -195,6 +195,7 @@ const en = {
         participantsCount: "Participants",
         description: "Description",
         viewOnChallonge: "View on Challonge",
+        viewOnStartgg: "View on Start.gg",
         matchesHiddenSpoiler: "Matches hidden in anti-spoiler mode",
         winner: "Winner",
         loser: "Loser",

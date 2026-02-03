@@ -2365,10 +2365,18 @@ function displayBracket(matches, tournament) {
   }
 
   // Normal display
-  // Check if it's a double elimination tournament
-  const isDoubleElimination = tournament.tournamentType === 'double elimination';
+  // Check if it's a double elimination tournament (handle both formats: with space or underscore)
+  const tournamentType = (tournament.tournamentType || '').toLowerCase().replace(/[\s_]+/g, '');
+  const isDoubleElimination = tournamentType === 'doubleelimination';
   
-  if (isDoubleElimination) {
+  // Check if Start.gg tournament with phase groups (pools)
+  const phaseGroups = [...new Set(matches.filter(m => m.phaseGroup).map(m => m.phaseGroup))];
+  const hasPhaseGroups = phaseGroups.length > 1;
+  
+  if (hasPhaseGroups) {
+    // Start.gg pools - display each pool as a separate bracket
+    displayPoolsBracket(matches, container, isDoubleElimination, phaseGroups);
+  } else if (isDoubleElimination) {
     displayDoubleEliminationBracket(matches, container);
   } else {
     displaySingleEliminationBracket(matches, container);
@@ -2434,6 +2442,118 @@ function displaySpoilerGroupsOnly(groupMatches, participants, container) {
   
   spoilerGroupsContainer.appendChild(gridContainer);
   container.appendChild(spoilerGroupsContainer);
+}
+
+// Display Start.gg pools/phase groups as separate brackets
+function displayPoolsBracket(matches, container, isDoubleElimination, phaseGroups) {
+  container.innerHTML = '';
+  
+  // Sort phase groups
+  phaseGroups.sort((a, b) => {
+    const numA = parseInt(a) || 0;
+    const numB = parseInt(b) || 0;
+    return numA - numB;
+  });
+  
+  // Create tabs for each pool
+  const tabsContainer = document.createElement('div');
+  tabsContainer.className = 'pools-tabs';
+  tabsContainer.style.cssText = 'display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem;';
+  
+  const poolsContent = document.createElement('div');
+  poolsContent.className = 'pools-content';
+  
+  phaseGroups.forEach((poolId, idx) => {
+    const letter = String.fromCharCode('A'.charCodeAt(0) + idx);
+    
+    // Create tab button
+    const tabBtn = document.createElement('button');
+    tabBtn.className = `pool-tab ${idx === 0 ? 'active' : ''}`;
+    tabBtn.style.cssText = `
+      padding: 0.5rem 1rem;
+      background-color: ${idx === 0 ? '#3b82f6' : '#374151'};
+      color: ${idx === 0 ? '#fff' : '#9ca3af'};
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    `;
+    tabBtn.textContent = `Pool ${letter}`;
+    tabBtn.dataset.pool = poolId;
+    
+    tabBtn.addEventListener('click', () => {
+      // Update active tab
+      tabsContainer.querySelectorAll('.pool-tab').forEach(t => {
+        t.style.backgroundColor = '#374151';
+        t.style.color = '#9ca3af';
+        t.classList.remove('active');
+      });
+      tabBtn.style.backgroundColor = '#3b82f6';
+      tabBtn.style.color = '#fff';
+      tabBtn.classList.add('active');
+      
+      // Show corresponding pool content
+      poolsContent.querySelectorAll('.pool-bracket').forEach(p => {
+        p.style.display = 'none';
+      });
+      const poolDiv = poolsContent.querySelector(`[data-pool="${poolId}"]`);
+      if (poolDiv) poolDiv.style.display = 'block';
+    });
+    
+    tabsContainer.appendChild(tabBtn);
+    
+    // Create pool bracket content
+    const poolDiv = document.createElement('div');
+    poolDiv.className = 'pool-bracket';
+    poolDiv.dataset.pool = poolId;
+    poolDiv.style.display = idx === 0 ? 'block' : 'none';
+    
+    // Filter matches for this pool
+    const poolMatches = matches.filter(m => m.phaseGroup === poolId);
+    
+    if (poolMatches.length === 0) {
+      poolDiv.innerHTML = '<p style="color: #9ca3af;">No matches in this pool</p>';
+    } else if (isDoubleElimination) {
+      // Separate winner and loser bracket matches
+      const winnerMatches = poolMatches.filter(m => m.round > 0);
+      const loserMatches = poolMatches.filter(m => m.round < 0);
+      
+      if (winnerMatches.length > 0) {
+        const winnerTitle = document.createElement('h4');
+        winnerTitle.textContent = i18n.t('tournamentDetail.winnerBracket') || 'Winner Bracket';
+        winnerTitle.style.cssText = 'color: #10b981; margin-bottom: 1rem; font-size: 1.1rem;';
+        poolDiv.appendChild(winnerTitle);
+        
+        const winnerContainer = document.createElement('div');
+        winnerContainer.className = 'bracket-section';
+        displayBracketSection(winnerMatches, winnerContainer, 'winner', true);
+        poolDiv.appendChild(winnerContainer);
+      }
+      
+      if (loserMatches.length > 0) {
+        const loserTitle = document.createElement('h4');
+        loserTitle.textContent = i18n.t('tournamentDetail.loserBracket') || 'Loser Bracket';
+        loserTitle.style.cssText = 'color: #ef4444; margin: 1.5rem 0 1rem 0; font-size: 1.1rem;';
+        poolDiv.appendChild(loserTitle);
+        
+        const loserContainer = document.createElement('div');
+        loserContainer.className = 'bracket-section';
+        // Convert negative rounds to positive for display
+        const loserMatchesForDisplay = loserMatches.map(m => ({ ...m, round: Math.abs(m.round) }));
+        displayBracketSection(loserMatchesForDisplay, loserContainer, 'loser', true);
+        poolDiv.appendChild(loserContainer);
+      }
+    } else {
+      // Single elimination pool
+      displayBracketSection(poolMatches, poolDiv, 'winner', false);
+    }
+    
+    poolsContent.appendChild(poolDiv);
+  });
+  
+  container.appendChild(tabsContainer);
+  container.appendChild(poolsContent);
 }
 
 function displaySingleEliminationBracket(matches, container) {

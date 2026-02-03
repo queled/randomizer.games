@@ -1546,17 +1546,34 @@ body.spoiler-mode .spoiler-text::before {
     height: 20px;
 }
 
-/* Start.gg button variant - gradient style */
+/* Start.gg button variant - gradient border and text */
 .startgg-btn {
-    background: linear-gradient(135deg, #47A1FF 0%, #FF3472 100%);
+    background: #1F2937;
     color: #fff;
-    border: none;
+    border: 2px solid transparent;
+    background-image: linear-gradient(#1F2937, #1F2937), linear-gradient(135deg, #47A1FF 0%, #FF3472 100%);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    position: relative;
+}
+
+.startgg-btn span {
+    background: linear-gradient(135deg, #47A1FF 0%, #FF3472 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .startgg-btn:hover {
-    background: linear-gradient(135deg, #5EB0FF 0%, #FF4D85 100%);
-    color: #fff;
+    background-image: linear-gradient(135deg, #47A1FF 0%, #FF3472 100%), linear-gradient(135deg, #47A1FF 0%, #FF3472 100%);
     box-shadow: 0 4px 15px rgba(71, 161, 255, 0.3), 0 4px 15px rgba(255, 52, 114, 0.3);
+}
+
+.startgg-btn:hover span {
+    background: #1F2937;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .tabs-wrapper {

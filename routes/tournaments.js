@@ -94,7 +94,35 @@ router.get('/:id', validateObjectId('id'), async (req, res, next) => {
 // Get tournament matches
 router.get('/:id/matches', validateObjectId('id'), async (req, res, next) => {
   try {
-    const { Match } = require('../models');
+    const { Match, Tournament } = require('../models');
+    
+    // First check if tournament has embedded matches (Start.gg)
+    const tournament = await Tournament.findById(req.params.id).lean();
+    
+    if (tournament && tournament.matches && tournament.matches.length > 0) {
+      // Start.gg tournament - return embedded matches formatted like Challonge matches
+      const formattedMatches = tournament.matches.map(m => ({
+        _id: m.startggSetId || m._id,
+        tournamentId: tournament._id,
+        state: m.completedAt ? 'complete' : (m.state === 1 ? 'pending' : 'open'),
+        round: m.round,
+        player1Name: m.player1?.name || 'TBD',
+        player2Name: m.player2?.name || 'TBD',
+        player1Id: m.player1?.startggEntrantId,
+        player2Id: m.player2?.startggEntrantId,
+        scoresCsv: m.displayScore,
+        completedAt: m.completedAt,
+        winnerId: m.winnerId,
+        groupId: null, // Start.gg uses phases instead
+        phase: m.phase,
+        phaseGroup: m.phaseGroup,
+        identifier: m.phaseGroup ? `${m.phaseGroup}-R${m.round}` : `R${m.round}`
+      }));
+      
+      return res.json({ matches: formattedMatches });
+    }
+    
+    // Challonge tournament - fetch from Match collection
     const matches = await Match.find({ tournamentId: req.params.id })
       .sort({ round: 1, completedAt: -1 });
 

@@ -450,7 +450,9 @@ const it = {
         roundRobin: "Girone all'italiana",
         swiss: "Sistema svizzero",
         groupsThenSE: "Gironi poi Eliminazione singola",
-        groupsThenSEWithAdvance: "Gironi ({groupSize} → {advance}) poi Eliminazione singola"
+        groupsThenSEWithAdvance: "Gironi ({groupSize} → {advance}) poi Eliminazione singola",
+        exhibition: "Esibizione",
+        customSchedule: "Calendario personalizzato"
     },
     
     // Dates and times

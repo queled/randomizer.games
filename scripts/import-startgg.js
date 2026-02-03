@@ -136,6 +136,65 @@ async function main() {
 
       console.log(`   Found ${participants.length} unique participants`);
 
+      // Determine bracket type from phases
+      const bracketType = event.phases?.[0]?.bracketType || 'SINGLE_ELIMINATION';
+      const bracketTypeMap = {
+        'SINGLE_ELIMINATION': 'single_elimination',
+        'DOUBLE_ELIMINATION': 'double_elimination',
+        'ROUND_ROBIN': 'round_robin',
+        'SWISS': 'swiss',
+        'EXHIBITION': 'exhibition',
+        'CUSTOM_SCHEDULE': 'custom_schedule'
+      };
+      const tournamentType = bracketTypeMap[bracketType] || bracketType.toLowerCase();
+
+      // Build matches array from sets
+      const matches = [];
+      if (event.sets && event.sets.length > 0) {
+        for (const set of event.sets) {
+          const match = {
+            startggSetId: set.id,
+            round: set.round,
+            displayScore: set.displayScore,
+            completedAt: set.completedAt,
+            state: set.state,
+            phase: set.phase?.name || null,
+            phaseGroup: set.phaseGroup?.displayIdentifier || null,
+            player1: {
+              startggEntrantId: set.entrants?.[0]?.id,
+              name: set.entrants?.[0]?.name || 'TBD'
+            },
+            player2: {
+              startggEntrantId: set.entrants?.[1]?.id,
+              name: set.entrants?.[1]?.name || 'TBD'
+            },
+            winnerId: set.winnerId
+          };
+          matches.push(match);
+        }
+      }
+
+      console.log(`   Found ${matches.length} matches (sets)`);
+      console.log(`   Bracket type: ${tournamentType}`);
+
+      // Build phases array
+      const phases = [];
+      if (event.phases && event.phases.length > 0) {
+        for (const phase of event.phases) {
+          phases.push({
+            startggPhaseId: phase.id,
+            name: phase.name,
+            bracketType: phase.bracketType,
+            phaseOrder: phase.phaseOrder,
+            numSeeds: phase.numSeeds,
+            groupCount: phase.groupCount,
+            state: phase.state
+          });
+        }
+      }
+
+      console.log(`   Found ${phases.length} phase(s)`);
+
       // Create tournament document
       // event.slug already contains full path like "tournament/xxx/event/yyy"
       const eventUrl = `https://start.gg/${event.slug}`;
@@ -146,10 +205,13 @@ async function main() {
         startggSlug: event.slug,
         url: eventUrl,
         fullUrl: eventUrl,
-        tournamentType: 'single_elimination', // Assume single elim, adjust if needed
+        tournamentType: tournamentType,
         state: event.state?.toLowerCase() || 'complete',
         participantsCount: event.numEntrants,
         participants: participants,
+        matches: matches,
+        phases: phases,
+        setsTotal: event.setsTotal || matches.length,
         startDate: event.startDate || tournamentData.startDate,
         endDate: tournamentData.endDate,
         gameName: event.game?.name || null,
@@ -230,23 +292,33 @@ async function main() {
             playersUpdated++;
           }
         } else {
-          // Create new player
-          const newPlayer = new Player({
-            name: participant.name,
-            tournaments: [{
-              tournamentId: tournament._id,
-              tournamentName: tournament.name,
-              finalRank: participant.finalRank,
-              date: tournament.startDate
-            }],
-            startgg: participant.startggUserId ? {
-              userId: participant.startggUserId,
-              userSlug: participant.startggUserSlug
-            } : undefined
-          });
+          // Create new player - wrap in try/catch to handle duplicate key errors
+          try {
+            const newPlayer = new Player({
+              name: participant.name,
+              tournaments: [{
+                tournamentId: tournament._id,
+                tournamentName: tournament.name,
+                finalRank: participant.finalRank,
+                date: tournament.startDate
+              }],
+              startgg: participant.startggUserId ? {
+                userId: participant.startggUserId,
+                userSlug: participant.startggUserSlug
+              } : undefined
+            });
           
-          await newPlayer.save();
-          playersCreated++;
+            await newPlayer.save();
+            playersCreated++;
+          } catch (err) {
+            // Handle duplicate key or other errors gracefully
+            if (err.code === 11000) {
+              // Duplicate key - player might exist with different casing or index issue
+              console.log(`   ⚠️ Could not create player "${participant.name}": duplicate key`);
+            } else {
+              console.log(`   ⚠️ Could not create player "${participant.name}": ${err.message}`);
+            }
+          }
         }
       }
 

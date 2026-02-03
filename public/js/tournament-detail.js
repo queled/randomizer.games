@@ -1913,22 +1913,26 @@ function formatDateTime(dateString) {
 
 function formatTournamentType(type) {
   if (typeof i18n !== 'undefined') {
-    const typeKey = type ? type.toLowerCase().replace(/\s+/g, '') : '';
+    const typeKey = type ? type.toLowerCase().replace(/[\s_]+/g, '') : '';
     const typeMap = {
       'singleelimination': 'tournamentTypes.singleElimination',
       'doubleelimination': 'tournamentTypes.doubleElimination',
       'roundrobin': 'tournamentTypes.roundRobin',
-      'swiss': 'tournamentTypes.swiss'
+      'swiss': 'tournamentTypes.swiss',
+      'exhibition': 'tournamentTypes.exhibition',
+      'customschedule': 'tournamentTypes.customSchedule'
     };
     if (typeMap[typeKey]) {
       return i18n.t(typeMap[typeKey]);
     }
   }
   const types = {
-    'single elimination': 'Single Elimination',
-    'double elimination': 'Double Elimination',
-    'round robin': 'Round Robin',
-    'swiss': 'Swiss System'
+    'single_elimination': 'Single Elimination',
+    'double_elimination': 'Double Elimination',
+    'round_robin': 'Round Robin',
+    'swiss': 'Swiss System',
+    'exhibition': 'Exhibition',
+    'custom_schedule': 'Custom Schedule'
   };
   return types[type] || type || 'Undefined';
 }

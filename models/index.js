@@ -147,15 +147,46 @@ const tournamentSchema = new mongoose.Schema({
     seed: Number,
     finalRank: Number,
     displayName: String
-  }]
-  ,
+  }],
+  // Matches embedded for start.gg tournaments
+  matches: [{
+    startggSetId: String,
+    round: Number,
+    displayScore: String,
+    completedAt: Date,
+    state: Number,
+    phase: String,
+    phaseGroup: String,
+    player1: {
+      startggEntrantId: String,
+      name: String
+    },
+    player2: {
+      startggEntrantId: String,
+      name: String
+    },
+    winnerId: Number
+  }],
+  // Phases for start.gg tournaments
+  phases: [{
+    startggPhaseId: String,
+    name: String,
+    bracketType: String,
+    phaseOrder: Number,
+    numSeeds: Number,
+    groupCount: Number,
+    state: String
+  }],
+  setsTotal: Number,
   // External IDs for other platforms (start.gg)
   startggId: Number,
   startggTournamentId: Number,
+  startggSlug: String,
   // optional source metadata for import tracing
   source: {
     type: { type: String },
     externalId: String,
+    tournamentId: String,
     url: String,
     importedAt: Date
   }

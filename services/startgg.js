@@ -59,10 +59,20 @@ class StartGGAPI {
             startAt
             numEntrants
             state
+            type
             videogame {
               id
               name
               displayName
+            }
+            phases {
+              id
+              name
+              numSeeds
+              bracketType
+              phaseOrder
+              state
+              groupCount
             }
             entrants(query: { perPage: 100 }) {
               nodes {
@@ -96,6 +106,33 @@ class StartGGAPI {
                       name
                       slug
                     }
+                  }
+                }
+              }
+            }
+            sets(page: 1, perPage: 100, sortType: STANDARD) {
+              pageInfo {
+                total
+                totalPages
+              }
+              nodes {
+                id
+                round
+                displayScore
+                completedAt
+                state
+                phaseGroup {
+                  id
+                  displayIdentifier
+                  phase {
+                    id
+                    name
+                  }
+                }
+                slots {
+                  entrant {
+                    id
+                    name
                   }
                 }
               }
@@ -239,18 +276,40 @@ class StartGGAPI {
           userSlug: p.user?.slug
         })) || []
       })) || [],
+      // Phases/brackets info
+      phases: event.phases?.map(p => ({
+        id: p.id,
+        name: p.name,
+        bracketType: p.bracketType,
+        phaseOrder: p.phaseOrder,
+        numSeeds: p.numSeeds,
+        groupCount: p.groupCount,
+        state: p.state
+      })) || [],
+      // Sets/matches with phase info
       sets: event.sets?.nodes?.map(s => ({
         id: s.id,
         completedAt: s.completedAt ? new Date(s.completedAt * 1000) : null,
         round: s.round,
         displayScore: s.displayScore,
         winnerId: s.winnerId,
+        state: s.state,
+        phase: s.phaseGroup?.phase ? {
+          id: s.phaseGroup.phase.id,
+          name: s.phaseGroup.phase.name
+        } : null,
+        phaseGroup: s.phaseGroup ? {
+          id: s.phaseGroup.id,
+          displayIdentifier: s.phaseGroup.displayIdentifier
+        } : null,
         entrants: s.slots?.map(slot => ({
           id: slot.entrant?.id,
           name: slot.entrant?.name,
           gamerTag: slot.entrant?.participants?.[0]?.gamerTag
         })) || []
-      })) || []
+      })) || [],
+      setsTotal: event.sets?.pageInfo?.total || 0,
+      setsTotalPages: event.sets?.pageInfo?.totalPages || 0
     };
   }
 

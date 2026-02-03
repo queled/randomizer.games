@@ -450,7 +450,9 @@ const de = {
         roundRobin: "Jeder gegen Jeden",
         swiss: "Schweizer System",
         groupsThenSE: "Gruppen dann einfache Eliminierung",
-        groupsThenSEWithAdvance: "Gruppen ({groupSize} → {advance}) dann einfache Eliminierung"
+        groupsThenSEWithAdvance: "Gruppen ({groupSize} → {advance}) dann einfache Eliminierung",
+        exhibition: "Ausstellung",
+        customSchedule: "Benutzerdefinierter Zeitplan"
     },
     
     // Dates and times

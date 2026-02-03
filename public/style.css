@@ -1546,15 +1546,17 @@ body.spoiler-mode .spoiler-text::before {
     height: 20px;
 }
 
-/* Start.gg button variant */
+/* Start.gg button variant - gradient style */
 .startgg-btn {
-    color: #cb3862;
-    border-color: #cb3862;
+    background: linear-gradient(135deg, #47A1FF 0%, #FF3472 100%);
+    color: #fff;
+    border: none;
 }
 
 .startgg-btn:hover {
-    background-color: #cb3862;
-    color: #1F2937;
+    background: linear-gradient(135deg, #5EB0FF 0%, #FF4D85 100%);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(71, 161, 255, 0.3), 0 4px 15px rgba(255, 52, 114, 0.3);
 }
 
 .tabs-wrapper {

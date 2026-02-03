@@ -469,7 +469,9 @@ const en = {
         roundRobin: "Round Robin",
         swiss: "Swiss",
         groupsThenSE: "Groups then Single Elimination",
-        groupsThenSEWithAdvance: "Groups ({groupSize} → {advance}) then Single Elimination"
+        groupsThenSEWithAdvance: "Groups ({groupSize} → {advance}) then Single Elimination",
+        exhibition: "Exhibition",
+        customSchedule: "Custom Schedule"
     },
     
     // Dates and times

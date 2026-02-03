@@ -450,7 +450,9 @@ const es = {
         roundRobin: "Todos contra todos",
         swiss: "Sistema suizo",
         groupsThenSE: "Grupos y luego Eliminación simple",
-        groupsThenSEWithAdvance: "Grupos ({groupSize} → {advance}) y luego Eliminación simple"
+        groupsThenSEWithAdvance: "Grupos ({groupSize} → {advance}) y luego Eliminación simple",
+        exhibition: "Exhibición",
+        customSchedule: "Calendario personalizado"
     },
     
     // Dates and times

@@ -231,6 +231,11 @@ const raceSchema = new mongoose.Schema({
   recordable: Boolean,
   tournamentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Tournament' },
   matchId: { type: mongoose.Schema.Types.ObjectId, ref: 'Match' },
+  // Start.gg tournament info (when not linked to a specific Match document)
+  tournamentPhase: String,  // e.g., "Preliminary Bracket", "Qualifications"
+  tournamentPool: String,   // e.g., "1", "2", "A", "B"
+  tournamentRound: Number,  // e.g., 1, 2, -1 (negative for losers bracket)
+  matchPlayers: String,     // e.g., "PlayerA vs PlayerB"
   entrants: [{
     userId: String,
     userName: String,

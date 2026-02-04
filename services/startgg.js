@@ -143,7 +143,81 @@ class StartGGAPI {
     `;
 
     const data = await this.query(query, { slug });
-    return this.formatTournament(data.tournament);
+    const tournament = this.formatTournament(data.tournament);
+    
+    // Fetch additional pages of sets if needed
+    if (tournament && tournament.events) {
+      for (let i = 0; i < tournament.events.length; i++) {
+        const event = tournament.events[i];
+        if (event.setsTotalPages > 1) {
+          const allSets = [...event.sets];
+          for (let page = 2; page <= event.setsTotalPages; page++) {
+            const additionalSets = await this.getEventSetsPage(data.tournament.events[i].id, page);
+            allSets.push(...additionalSets);
+          }
+          event.sets = allSets;
+          event.setsTotal = allSets.length;
+        }
+      }
+    }
+    
+    return tournament;
+  }
+
+  /**
+   * Get a specific page of sets for an event
+   */
+  async getEventSetsPage(eventId, page) {
+    const query = `
+      query EventSetsPage($eventId: ID!, $page: Int!) {
+        event(id: $eventId) {
+          sets(page: $page, perPage: 100, sortType: STANDARD) {
+            nodes {
+              id
+              round
+              displayScore
+              completedAt
+              state
+              phaseGroup {
+                id
+                displayIdentifier
+                phase {
+                  id
+                  name
+                }
+              }
+              slots {
+                entrant {
+                  id
+                  name
+                }
+              }
+            }
+          }
+        }
+      }
+    `;
+
+    const data = await this.query(query, { eventId, page });
+    return data.event?.sets?.nodes?.map(s => ({
+      id: s.id,
+      completedAt: s.completedAt ? new Date(s.completedAt * 1000) : null,
+      round: s.round,
+      displayScore: s.displayScore,
+      state: s.state,
+      phase: s.phaseGroup?.phase ? {
+        id: s.phaseGroup.phase.id,
+        name: s.phaseGroup.phase.name
+      } : null,
+      phaseGroup: s.phaseGroup ? {
+        id: s.phaseGroup.id,
+        displayIdentifier: s.phaseGroup.displayIdentifier
+      } : null,
+      entrants: s.slots?.map(slot => ({
+        id: slot.entrant?.id,
+        name: slot.entrant?.name
+      })) || []
+    })) || [];
   }
 
   /**

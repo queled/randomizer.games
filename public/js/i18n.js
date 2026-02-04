@@ -4,7 +4,7 @@
  */
 
 // Available languages
-const SUPPORTED_LANGUAGES = ['en', 'fr', 'es', 'de', 'it'];
+const SUPPORTED_LANGUAGES = ['en', 'fr', 'es', 'de', 'it', 'pt'];
 const DEFAULT_LANGUAGE = 'en';
 
 // Translation data storage
@@ -59,7 +59,8 @@ async function loadAllTranslations() {
         fr: typeof fr !== 'undefined' ? fr : {},
         es: typeof es !== 'undefined' ? es : {},
         de: typeof de !== 'undefined' ? de : {},
-        it: typeof it !== 'undefined' ? it : {}
+        it: typeof it !== 'undefined' ? it : {},
+        pt: typeof pt !== 'undefined' ? pt : {}
     };
 }
 
@@ -284,7 +285,8 @@ function getLanguageName(code) {
         fr: 'Français',
         es: 'Español',
         de: 'Deutsch',
-        it: 'Italiano'
+        it: 'Italiano',
+        pt: 'Português'
     };
     return names[code] || code;
 }
@@ -298,7 +300,8 @@ function getLanguageFlag(code) {
         fr: '🇫🇷',
         es: '🇪🇸',
         de: '🇩🇪',
-        it: '🇮🇹'
+        it: '🇮🇹',
+        pt: '🇧🇷'
     };
     return flags[code] || '🌐';
 }

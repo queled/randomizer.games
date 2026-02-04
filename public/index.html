@@ -19,7 +19,7 @@
                 let lang = localStorage.getItem('preferred-language');
                 if (!lang) {
                     const browserLang = (navigator.language || navigator.userLanguage || 'en').split('-')[0].toLowerCase();
-                    const supported = ['en', 'fr', 'es', 'de', 'it'];
+                    const supported = ['en', 'fr', 'es', 'de', 'it', 'pt'];
                     lang = supported.includes(browserLang) ? browserLang : 'en';
                 }
                 // Apply language immediately to prevent flicker
@@ -46,6 +46,7 @@
     <script async src="/js/i18n/es.js"></script>
     <script async src="/js/i18n/de.js"></script>
     <script async src="/js/i18n/it.js"></script>
+    <script async src="/js/i18n/pt.js"></script>
     <script async src="/js/i18n.js"></script>
 </head>
 <body>

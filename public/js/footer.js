@@ -16,6 +16,7 @@ function createFooter() {
                     <option value="es">🇪🇸 Español</option>
                     <option value="de">🇩🇪 Deutsch</option>
                     <option value="it">🇮🇹 Italiano</option>
+                    <option value="pt">🇧🇷 Português</option>
                 </select>
             </div>
             

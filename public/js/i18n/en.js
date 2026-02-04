@@ -243,6 +243,7 @@ const en = {
         noMatches: "No matches available",
         noMatchesForBracket: "No matches available to display bracket",
         noFinalsMatches: "No finals matches available",
+        bracketNotStarted: "Bracket not started yet",
         seed: "Seed",
         wins: "Wins",
         losses: "Losses",

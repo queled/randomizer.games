@@ -224,6 +224,7 @@ const de = {
         noMatches: "Keine Spiele verfügbar",
         noMatchesForBracket: "Keine Spiele verfügbar, um das Bracket anzuzeigen",
         noFinalsMatches: "Keine Finalspiele verfügbar",
+        bracketNotStarted: "Bracket noch nicht gestartet",
         seed: "Seed",
         wins: "Siege",
         losses: "Niederlagen",

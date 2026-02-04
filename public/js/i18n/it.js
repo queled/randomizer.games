@@ -222,6 +222,7 @@ const it = {
         noMatches: "Nessuna partita disponibile",
         noMatchesForBracket: "Nessuna partita disponibile per visualizzare il bracket",
         noFinalsMatches: "Nessuna partita di finale disponibile",
+        bracketNotStarted: "Bracket non ancora iniziato",
         seed: "Seed",
         wins: "Vittorie",
         losses: "Sconfitte",

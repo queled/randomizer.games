@@ -2408,11 +2408,20 @@ function displayBracket(matches, tournament) {
   const tournamentType = (tournament.tournamentType || '').toLowerCase().replace(/[\s_]+/g, '');
   const isDoubleElimination = tournamentType === 'doubleelimination';
   
+  // Check for Start.gg phases (Main Bracket vs Preliminary Bracket, etc.)
+  const phases = [...new Set(matches.filter(m => m.phase).map(m => m.phase))];
+  const hasMultiplePhases = phases.length > 1;
+  
   // Check if Start.gg tournament with phase groups (pools)
   const phaseGroups = [...new Set(matches.filter(m => m.phaseGroup).map(m => m.phaseGroup))];
   const hasPhaseGroups = phaseGroups.length > 1;
   
-  if (hasPhaseGroups) {
+  container.innerHTML = '';
+  
+  if (hasMultiplePhases) {
+    // Multi-phase Start.gg tournament (e.g., Main Bracket + Preliminary Bracket)
+    displayMultiPhaseBracket(matches, container, isDoubleElimination, phases, tournament);
+  } else if (hasPhaseGroups) {
     // Start.gg pools - display each pool as a separate bracket
     displayPoolsBracket(matches, container, isDoubleElimination, phaseGroups);
   } else if (isDoubleElimination) {
@@ -2420,6 +2429,60 @@ function displayBracket(matches, tournament) {
   } else {
     displaySingleEliminationBracket(matches, container);
   }
+}
+
+// Display multi-phase Start.gg tournament (Main Bracket + Preliminary Bracket)
+function displayMultiPhaseBracket(matches, container, isDoubleElimination, phases, tournament) {
+  // Sort phases: "Main Bracket" or "Bracket" first, then "Preliminary Bracket" or others
+  phases.sort((a, b) => {
+    const aLower = (a || '').toLowerCase();
+    const bLower = (b || '').toLowerCase();
+    
+    // Main Bracket / Bracket should come first
+    const aIsMain = aLower.includes('main') || (aLower === 'bracket' && !aLower.includes('preliminary'));
+    const bIsMain = bLower.includes('main') || (bLower === 'bracket' && !bLower.includes('preliminary'));
+    
+    if (aIsMain && !bIsMain) return -1;
+    if (!aIsMain && bIsMain) return 1;
+    return 0;
+  });
+  
+  phases.forEach((phaseName, idx) => {
+    const phaseMatches = matches.filter(m => m.phase === phaseName);
+    
+    // Create phase section
+    const phaseSection = document.createElement('div');
+    phaseSection.className = 'phase-section';
+    phaseSection.style.cssText = idx > 0 ? 'margin-top: 3rem; border-top: 2px solid #374151; padding-top: 2rem;' : '';
+    
+    // Phase title
+    const phaseTitle = document.createElement('h3');
+    phaseTitle.style.cssText = 'font-size: 1.5rem; font-weight: bold; margin-bottom: 1.5rem; text-align: center; color: #fbbf24;';
+    phaseTitle.textContent = phaseName;
+    phaseSection.appendChild(phaseTitle);
+    
+    // Check if this phase has pools
+    const phaseGroups = [...new Set(phaseMatches.filter(m => m.phaseGroup).map(m => m.phaseGroup))];
+    const hasPhaseGroups = phaseGroups.length > 1;
+    
+    const bracketContainer = document.createElement('div');
+    bracketContainer.className = 'phase-bracket-container';
+    
+    if (phaseMatches.length === 0) {
+      // No matches yet (e.g., Main Bracket not started)
+      bracketContainer.innerHTML = `<p style="color: #9ca3af; text-align: center; font-style: italic;">${i18n.t('tournamentDetail.bracketNotStarted') || 'Bracket not started yet'}</p>`;
+    } else if (hasPhaseGroups) {
+      // This phase has pools
+      displayPoolsBracket(phaseMatches, bracketContainer, isDoubleElimination, phaseGroups);
+    } else if (isDoubleElimination) {
+      displayDoubleEliminationBracket(phaseMatches, bracketContainer);
+    } else {
+      displaySingleEliminationBracket(phaseMatches, bracketContainer);
+    }
+    
+    phaseSection.appendChild(bracketContainer);
+    container.appendChild(phaseSection);
+  });
 }
 
 // Display groups in spoiler mode - only player names, alphabetically sorted, no results
@@ -3118,19 +3181,30 @@ function setupPathHighlighting(bracketContainer) {
 function getRoundNameForBracket(round, bracketType, totalRounds, roundIndex, isDoubleElimination = false, isPoolBracket = false) {
   const roundsFromEnd = totalRounds - roundIndex - 1;
 
-  // Pool bracket naming for Start.gg (no Grand Finals, uses Winners/Losers naming)
+  // Pool bracket naming for Start.gg (uses rounds from start, not from end)
   if (isPoolBracket) {
     if (bracketType === 'winner') {
-      // Winners bracket in pool
-      if (roundsFromEnd === 0) return i18n.t('tournamentDetail.winnersFinals') || 'Winners Finals';
-      if (roundsFromEnd === 1) return i18n.t('tournamentDetail.winnersSemiFinal') || 'Winners Semi-Final';
-      if (roundsFromEnd === 2) return i18n.t('tournamentDetail.winnersQuarterFinal') || 'Winners Quarter-Final';
+      // Winners bracket in pool - use roundIndex (0-based) to determine round name
+      // For a typical 4-player pool: Round 1 = Quarts, Round 2 = Semis (Winners Finals for pool)
+      if (roundsFromEnd === 0) {
+        // Last winners round in pool = Winners Semi-Finals (leads to pool finals)
+        return i18n.t('tournamentDetail.winnersSemiFinal') || 'Winners Semi-Final';
+      }
+      if (roundsFromEnd === 1) {
+        // Second to last = Winners Quarter-Finals
+        return i18n.t('tournamentDetail.winnersQuarterFinal') || 'Winners Quarter-Final';
+      }
       return `${i18n.t('tournamentDetail.winnersRound') || 'Winners Round'} ${roundIndex + 1}`;
     }
     // Losers bracket in pool
-    if (roundsFromEnd === 0) return i18n.t('tournamentDetail.losersFinals') || 'Losers Finals';
-    if (roundsFromEnd === 1) return i18n.t('tournamentDetail.losersSemiFinal') || 'Losers Semi-Final';
-    if (roundsFromEnd === 2) return i18n.t('tournamentDetail.losersQuarterFinal') || 'Losers Quarter-Final';
+    if (roundIndex === 0) {
+      // First losers round = Losers Round 1
+      return `${i18n.t('tournamentDetail.losersRound') || 'Losers Round'} 1`;
+    }
+    if (roundsFromEnd === 0) {
+      // Last losers round = Losers Quarter-Final (leads to pool finals loser side)
+      return i18n.t('tournamentDetail.losersQuarterFinal') || 'Losers Quarter-Final';
+    }
     return `${i18n.t('tournamentDetail.losersRound') || 'Losers Round'} ${roundIndex + 1}`;
   }
 

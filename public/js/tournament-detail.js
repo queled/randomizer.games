@@ -500,12 +500,18 @@ function displayParticipants(participants, matches = [], options = {}) {
       if (!match.winnerId) return null; // Skip unfinished matches
       
       // Determine if participant won (check both by ID and by name)
+      // Convert IDs to strings for comparison (Start.gg uses string IDs)
       let isWinner = false;
-      if (match.winnerId === participant.challongeId) {
+      const winnerIdStr = String(match.winnerId);
+      const participantIdStr = participant.challongeId != null ? String(participant.challongeId) : null;
+      const player1IdStr = match.player1Id != null ? String(match.player1Id) : null;
+      const player2IdStr = match.player2Id != null ? String(match.player2Id) : null;
+      
+      if (participantIdStr && winnerIdStr === participantIdStr) {
         isWinner = true;
-      } else if (match.player1Id === match.winnerId && (match.player1Name === participant.name || match.player1Name === participant.displayName)) {
+      } else if (player1IdStr && winnerIdStr === player1IdStr && (match.player1Name === participant.name || match.player1Name === participant.displayName)) {
         isWinner = true;
-      } else if (match.player2Id === match.winnerId && (match.player2Name === participant.name || match.player2Name === participant.displayName)) {
+      } else if (player2IdStr && winnerIdStr === player2IdStr && (match.player2Name === participant.name || match.player2Name === participant.displayName)) {
         isWinner = true;
       }
       
@@ -1424,7 +1430,24 @@ function createMatchCard(match, races = []) {
   let displayScore1 = null;
   let displayScore2 = null;
   
-  if (match.scoresCsv) {
+  // Handle Start.gg displayScore format: "PlayerA W - PlayerB L"
+  if (match.displayScore && typeof match.displayScore === 'string' && !match.scoresCsv) {
+    const parts = match.displayScore.split(' - ');
+    if (parts.length === 2) {
+      const p1Part = parts[0].trim(); // "PlayerA W"
+      const p2Part = parts[1].trim(); // "PlayerB L"
+      
+      if (p1Part.endsWith(' W')) {
+        displayScore1 = 1;
+        displayScore2 = 0;
+      } else if (p2Part.endsWith(' W')) {
+        displayScore1 = 0;
+        displayScore2 = 1;
+      }
+    }
+  }
+  // Handle Challonge scoresCsv
+  else if (match.scoresCsv) {
     const raw = String(match.scoresCsv).trim();
     const parts = raw.split('-');
     
@@ -1815,6 +1838,7 @@ function levenshtein(a, b){
 function formatMs(ms){
   if (ms == null) return null;
   const total = Math.round(Number(ms)/1000);
+  if (isNaN(total)) return null; // Return null if conversion failed
   const h = Math.floor(total/3600); const m = Math.floor((total%3600)/60); const s = total%60;
   if (h>0) return `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
   return `${m}:${s.toString().padStart(2,'0')}`;
@@ -3162,8 +3186,10 @@ function createBracketMatchCard(match, isFinal = false) {
     withDivider ? 'border-bottom: 1px solid #374151;' : '',
     'white-space: nowrap; overflow: hidden; text-overflow: ellipsis; gap: 0.5rem;'
   ].filter(Boolean).join(' ');
-  const player1Style = playerStyle(player1Winner, true);
-  const player2Style = playerStyle(player2Winner, false);
+  
+  // Only apply winner background if both players are defined (not TBD)
+  const player1Style = playerStyle(player1Winner && match.player1Name && match.player2Name, true);
+  const player2Style = playerStyle(player2Winner && match.player1Name && match.player2Name, false);
   
   const parsedScores = parseChallongeScores(match.scoresCsv, match.state);
   const getScore = (index) => {
@@ -3191,8 +3217,8 @@ function createBracketMatchCard(match, isFinal = false) {
     </div>
   `;
   
-  // Add match state indicator if not complete
-  if (match.state !== 'complete') {
+  // Add match state indicator only for 'open' matches (ongoing)
+  if (match.state === 'open') {
     const stateIndicator = document.createElement('div');
     stateIndicator.style.cssText = 'padding: 0.25rem; text-align: center; background-color: #374151; font-size: 0.75rem; color: #9ca3af;';
     stateIndicator.textContent = formatMatchState(match.state);

@@ -2521,19 +2521,19 @@ function displayPoolsBracket(matches, container, isDoubleElimination, phaseGroup
       
       if (winnerMatches.length > 0) {
         const winnerTitle = document.createElement('h4');
-        winnerTitle.textContent = i18n.t('tournamentDetail.winnerBracket') || 'Winner Bracket';
+        winnerTitle.textContent = i18n.t('tournamentDetail.winnersBracket') || 'Winners Bracket';
         winnerTitle.style.cssText = 'color: #10b981; margin-bottom: 1rem; font-size: 1.1rem;';
         poolDiv.appendChild(winnerTitle);
         
         const winnerContainer = document.createElement('div');
         winnerContainer.className = 'bracket-section';
-        displayBracketSection(winnerMatches, winnerContainer, 'winner', true);
+        displayBracketSection(winnerMatches, winnerContainer, 'winner', true, true);
         poolDiv.appendChild(winnerContainer);
       }
       
       if (loserMatches.length > 0) {
         const loserTitle = document.createElement('h4');
-        loserTitle.textContent = i18n.t('tournamentDetail.loserBracket') || 'Loser Bracket';
+        loserTitle.textContent = i18n.t('tournamentDetail.losersBracket') || 'Losers Bracket';
         loserTitle.style.cssText = 'color: #ef4444; margin: 1.5rem 0 1rem 0; font-size: 1.1rem;';
         poolDiv.appendChild(loserTitle);
         
@@ -2541,12 +2541,12 @@ function displayPoolsBracket(matches, container, isDoubleElimination, phaseGroup
         loserContainer.className = 'bracket-section';
         // Convert negative rounds to positive for display
         const loserMatchesForDisplay = loserMatches.map(m => ({ ...m, round: Math.abs(m.round) }));
-        displayBracketSection(loserMatchesForDisplay, loserContainer, 'loser', true);
+        displayBracketSection(loserMatchesForDisplay, loserContainer, 'loser', true, true);
         poolDiv.appendChild(loserContainer);
       }
     } else {
       // Single elimination pool
-      displayBracketSection(poolMatches, poolDiv, 'winner', false);
+      displayBracketSection(poolMatches, poolDiv, 'winner', false, true);
     }
     
     poolsContent.appendChild(poolDiv);
@@ -2636,7 +2636,7 @@ function displayDoubleEliminationBracket(matches, container) {
   }
 }
 
-function displayBracketSection(matches, container, bracketType = 'winner', isDoubleElimination = false) {
+function displayBracketSection(matches, container, bracketType = 'winner', isDoubleElimination = false, isPoolBracket = false) {
   // Group matches by round
   const byRound = {};
   matches.forEach(match => {
@@ -2675,8 +2675,8 @@ function displayBracketSection(matches, container, bracketType = 'winner', isDou
   bracketHTML.className = 'bracket-container';
   
   sortedRounds.forEach((round, index) => {
-    const isGrandFinal = bracketType === 'winner' && index === sortedRounds.length - 1;
-    const roundColumn = createRoundColumn(byRound[round], round, columnWidth, bracketType, numRounds, index, isGrandFinal, isDoubleElimination);
+    const isGrandFinal = bracketType === 'winner' && index === sortedRounds.length - 1 && !isPoolBracket;
+    const roundColumn = createRoundColumn(byRound[round], round, columnWidth, bracketType, numRounds, index, isGrandFinal, isDoubleElimination, isPoolBracket);
     bracketHTML.appendChild(roundColumn);
   });
   
@@ -2694,7 +2694,7 @@ function displayBracketSection(matches, container, bracketType = 'winner', isDou
   setTimeout(() => drawBracketConnectors(bracketHTML, svg, sortedRounds.length, bracketType, byRound, sortedRounds), 50);
 }
 
-function createRoundColumn(matches, round, width, bracketType = 'winner', totalRounds = 0, roundIndex = 0, isGrandFinal = false, isDoubleElimination = false) {
+function createRoundColumn(matches, round, width, bracketType = 'winner', totalRounds = 0, roundIndex = 0, isGrandFinal = false, isDoubleElimination = false, isPoolBracket = false) {
   const roundColumn = document.createElement('div');
   roundColumn.style.cssText = `display: flex; flex-direction: column; width: ${width}; position: relative;`;
   roundColumn.setAttribute('data-round', round);
@@ -2704,7 +2704,7 @@ function createRoundColumn(matches, round, width, bracketType = 'winner', totalR
   const header = document.createElement('div');
   header.style.cssText = 'font-weight: bold; margin-bottom: 0.75rem; text-align: center; padding: 0.4rem; background-color: #374151; border-radius: 0.25rem; font-size: 0.75rem;';
   
-  header.textContent = getRoundNameForBracket(round, bracketType, totalRounds, roundIndex, isDoubleElimination);
+  header.textContent = getRoundNameForBracket(round, bracketType, totalRounds, roundIndex, isDoubleElimination, isPoolBracket);
   header.classList.add('text-gold');
   
   roundColumn.appendChild(header);
@@ -3076,8 +3076,24 @@ function setupPathHighlighting(bracketContainer) {
   });
 }
 
-function getRoundNameForBracket(round, bracketType, totalRounds, roundIndex, isDoubleElimination = false) {
+function getRoundNameForBracket(round, bracketType, totalRounds, roundIndex, isDoubleElimination = false, isPoolBracket = false) {
   const roundsFromEnd = totalRounds - roundIndex - 1;
+
+  // Pool bracket naming for Start.gg (no Grand Finals, uses Winners/Losers naming)
+  if (isPoolBracket) {
+    if (bracketType === 'winner') {
+      // Winners bracket in pool
+      if (roundsFromEnd === 0) return i18n.t('tournamentDetail.winnersFinals') || 'Winners Finals';
+      if (roundsFromEnd === 1) return i18n.t('tournamentDetail.winnersSemiFinal') || 'Winners Semi-Final';
+      if (roundsFromEnd === 2) return i18n.t('tournamentDetail.winnersQuarterFinal') || 'Winners Quarter-Final';
+      return `${i18n.t('tournamentDetail.winnersRound') || 'Winners Round'} ${roundIndex + 1}`;
+    }
+    // Losers bracket in pool
+    if (roundsFromEnd === 0) return i18n.t('tournamentDetail.losersFinals') || 'Losers Finals';
+    if (roundsFromEnd === 1) return i18n.t('tournamentDetail.losersSemiFinal') || 'Losers Semi-Final';
+    if (roundsFromEnd === 2) return i18n.t('tournamentDetail.losersQuarterFinal') || 'Losers Quarter-Final';
+    return `${i18n.t('tournamentDetail.losersRound') || 'Losers Round'} ${roundIndex + 1}`;
+  }
 
   // Single elimination / finals bracket (i18n)
   if (bracketType === 'winner' && !isDoubleElimination) {

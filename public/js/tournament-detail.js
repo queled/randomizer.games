@@ -561,6 +561,17 @@ function enrichMatchesWithParticipantNames(matches, participants) {
   
   // Enrich each match
   matches.forEach(match => {
+    // For Start.gg matches: normalize player1/player2 objects to player1Name/player2Name
+    if (match.player1 && typeof match.player1 === 'object' && match.player1.name) {
+      match.player1Name = match.player1.name;
+      match.player1Id = match.player1.startggEntrantId || match.player1Id;
+    }
+    if (match.player2 && typeof match.player2 === 'object' && match.player2.name) {
+      match.player2Name = match.player2.name;
+      match.player2Id = match.player2.startggEntrantId || match.player2Id;
+    }
+    
+    // For Challonge matches: add names from participant map if missing
     if (!match.player1Name && match.player1Id) {
       match.player1Name = participantMap.get(match.player1Id) || null;
     }
@@ -653,7 +664,11 @@ function displayQualifications(races = []) {
   }
 
   // Filter qualification races: races without a matchId (not linked to a match)
-  const qualificationRaces = races.filter(race => !race.matchId);
+  // AND races with tournamentPhase set to 'Qualifications' (for Start.gg tournaments)
+  const qualificationRaces = races.filter(race => 
+    (!race.matchId && !race.tournamentPhase) || 
+    race.tournamentPhase === 'Qualifications'
+  );
 
   if (qualificationRaces.length === 0) {
     const noQualText = typeof i18n !== 'undefined' ? i18n.t('common.noResults') : 'No results';

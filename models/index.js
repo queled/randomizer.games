@@ -225,7 +225,7 @@ const raceSchema = new mongoose.Schema({
   url: { type: String, unique: true },
   status: String,
   goal: String,
-  info: String,
+  info: { type: String, maxlength: 10000 },
   startedAt: Date,
   endedAt: Date,
   recordable: Boolean,

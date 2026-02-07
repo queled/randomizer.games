@@ -80,8 +80,9 @@ async function syncActiveRaces() {
         // Formatter la race
         let formattedRace = racetimeAPI.formatRace(raceData);
         
-        // Si les entrants sont incomplets, récupérer les détails
-        if (!formattedRace?.entrants?.length && raceSlug) {
+        // Toujours récupérer les détails complets pour avoir info complète multi-lignes
+        // Les API globales peuvent retourner info tronquées
+        if (raceSlug) {
           await sleep(RATE_LIMIT_MS);
           const detailedRace = await racetimeAPI.getRace(categorySlug, raceSlug);
           if (detailedRace) formattedRace = detailedRace;
@@ -111,6 +112,7 @@ async function syncActiveRaces() {
               status: formattedRace.status?.value || formattedRace.status,
               startedAt: formattedRace.started_at || formattedRace.startedAt,
               endedAt: formattedRace.ended_at || formattedRace.endedAt,
+              info: formattedRace.info,
               entrants: entrantsData
             }
           });

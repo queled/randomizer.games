@@ -208,11 +208,6 @@ router.put('/games/:id', requireAdmin, async (req, res, next) => {
   try {
     const { _id, id, ...updateData } = req.body;
     
-    // Prevent changing the ID
-    if (id && id !== req.params.id) {
-      return res.status(400).json({ error: 'Cannot change game ID' });
-    }
-    
     const game = await Game.findOneAndUpdate(
       { id: req.params.id },
       { $set: updateData },
@@ -224,6 +219,204 @@ router.put('/games/:id', requireAdmin, async (req, res, next) => {
     }
     
     res.json(game);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * POST /api/admin/games/:id/change-id
+ * Change a game's ID and update all references
+ */
+router.post('/games/:id/change-id', requireAdmin, async (req, res, next) => {
+  try {
+    const { newId } = req.body;
+    const oldId = req.params.id;
+    
+    if (!newId) {
+      return res.status(400).json({ error: 'newId is required' });
+    }
+    
+    if (!/^[a-z0-9-]+$/.test(newId)) {
+      return res.status(400).json({ error: 'ID must contain only lowercase letters, numbers and hyphens' });
+    }
+    
+    if (newId === oldId) {
+      return res.json({ success: true, message: 'ID unchanged' });
+    }
+    
+    // Check if new ID already exists
+    const existing = await Game.findOne({ id: newId });
+    if (existing) {
+      return res.status(409).json({ error: `A game with ID "${newId}" already exists` });
+    }
+    
+    // Find the game
+    const game = await Game.findOne({ id: oldId });
+    if (!game) {
+      return res.status(404).json({ error: 'Game not found' });
+    }
+    
+    // Update the game ID directly in MongoDB (bypass immutable)
+    await Game.collection.updateOne(
+      { _id: game._id },
+      { $set: { id: newId } }
+    );
+    
+    // Update references in tournaments
+    await Tournament.updateMany(
+      { gameId: oldId },
+      { $set: { gameId: newId } }
+    );
+    
+    // Update references in tournaments by gameSlug
+    await Tournament.updateMany(
+      { gameSlug: oldId },
+      { $set: { gameSlug: newId } }
+    );
+    
+    // Update references in races
+    await Race.updateMany(
+      { category: oldId },
+      { $set: { category: newId } }
+    );
+    
+    res.json({ 
+      success: true, 
+      message: `Game ID changed from "${oldId}" to "${newId}"`,
+      oldId,
+      newId
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * POST /api/admin/games/:id/merge
+ * Merge a source game into this target game (resources combined, source deleted)
+ */
+router.post('/games/:id/merge', requireAdmin, async (req, res, next) => {
+  try {
+    const { sourceId } = req.body;
+    const targetId = req.params.id;
+    
+    if (!sourceId) {
+      return res.status(400).json({ error: 'sourceId is required' });
+    }
+    
+    if (sourceId === targetId) {
+      return res.status(400).json({ error: 'Cannot merge a game with itself' });
+    }
+    
+    const [target, source] = await Promise.all([
+      Game.findOne({ id: targetId }),
+      Game.findOne({ id: sourceId })
+    ]);
+    
+    if (!target) {
+      return res.status(404).json({ error: 'Target game not found' });
+    }
+    if (!source) {
+      return res.status(404).json({ error: `Source game "${sourceId}" not found` });
+    }
+    
+    // Initialize resources if needed
+    if (!target.resources) target.resources = {};
+    const sourceResources = source.resources || {};
+    let mergedCount = 0;
+    
+    // Merge official site (only if target doesn't have one)
+    if (!target.resources.officialSite?.url && sourceResources.officialSite?.url) {
+      target.resources.officialSite = sourceResources.officialSite;
+      mergedCount++;
+    }
+    
+    // Merge sites (add non-duplicate URLs)
+    if (sourceResources.sites?.length > 0) {
+      if (!target.resources.sites) target.resources.sites = [];
+      const existingUrls = new Set(target.resources.sites.map(s => s.url));
+      for (const site of sourceResources.sites) {
+        if (!existingUrls.has(site.url)) {
+          target.resources.sites.push(site);
+          existingUrls.add(site.url);
+          mergedCount++;
+        }
+      }
+    }
+    
+    // Merge trackers (add non-duplicate URLs)
+    if (sourceResources.trackers?.length > 0) {
+      if (!target.resources.trackers) target.resources.trackers = [];
+      const existingUrls = new Set(target.resources.trackers.map(t => t.url));
+      for (const tracker of sourceResources.trackers) {
+        if (!existingUrls.has(tracker.url)) {
+          target.resources.trackers.push(tracker);
+          existingUrls.add(tracker.url);
+          mergedCount++;
+        }
+      }
+    }
+    
+    // Merge guides (add non-duplicate URLs)
+    if (sourceResources.guides?.length > 0) {
+      if (!target.resources.guides) target.resources.guides = [];
+      const existingUrls = new Set(target.resources.guides.map(g => g.url));
+      for (const guide of sourceResources.guides) {
+        if (!existingUrls.has(guide.url)) {
+          target.resources.guides.push(guide);
+          existingUrls.add(guide.url);
+          mergedCount++;
+        }
+      }
+    }
+    
+    // Merge other resources
+    if (sourceResources.other?.length > 0) {
+      if (!target.resources.other) target.resources.other = [];
+      const existingUrls = new Set(target.resources.other.map(o => o.url));
+      for (const other of sourceResources.other) {
+        if (!existingUrls.has(other.url)) {
+          target.resources.other.push(other);
+          existingUrls.add(other.url);
+          mergedCount++;
+        }
+      }
+    }
+    
+    // Save target with merged resources
+    target.markModified('resources');
+    await target.save();
+    
+    // Update references from source to target
+    const sourceGameSlug = source.integrations?.racetime?.gameSlug;
+    
+    // Update tournaments
+    await Tournament.updateMany(
+      { $or: [{ gameId: sourceId }, { gameSlug: sourceId }, { game: source._id }] },
+      { $set: { gameId: targetId, gameSlug: targetId, game: target._id } }
+    );
+    
+    // Update races referencing the source game
+    if (sourceGameSlug) {
+      await Race.updateMany(
+        { category: sourceGameSlug },
+        { $set: { category: target.integrations?.racetime?.gameSlug || targetId } }
+      );
+    }
+    await Race.updateMany(
+      { category: sourceId },
+      { $set: { category: targetId } }
+    );
+    
+    // Delete the source game
+    await Game.deleteOne({ _id: source._id });
+    
+    res.json({ 
+      success: true, 
+      message: `Game "${sourceId}" merged into "${targetId}" and deleted`,
+      mergedResources: mergedCount
+    });
   } catch (error) {
     next(error);
   }

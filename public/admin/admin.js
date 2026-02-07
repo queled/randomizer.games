@@ -9,6 +9,8 @@ const admin = {
   currentSection: 'dashboard',
   currentGame: null,
   games: [],
+  gamesPage: 1,
+  gamesLimit: 20,
   currentResourcesFilter: null,
   dashboardStats: null,
   syncHistory: [],
@@ -52,12 +54,18 @@ const admin = {
     
     // Games search
     document.getElementById('games-search').addEventListener('input', 
-      this.debounce(() => this.loadGames(), 300)
+      this.debounce(() => this.loadGames(1), 300)
     );
     
     document.getElementById('games-filter-enabled').addEventListener('change', 
-      () => this.loadGames()
+      () => this.loadGames(1)
     );
+    
+    // Games per page
+    document.getElementById('games-limit').addEventListener('change', (e) => {
+      this.gamesLimit = e.target.value === 'all' ? 'all' : parseInt(e.target.value);
+      this.loadGames(1);
+    });
     
     // Resources game select
     document.getElementById('resources-game-select').addEventListener('change', (e) => {
@@ -268,12 +276,15 @@ const admin = {
   
   // ==================== GAMES ====================
   
-  async loadGames(page = 1) {
+  async loadGames(page) {
+    if (page !== undefined) this.gamesPage = page;
+    
     try {
       const search = document.getElementById('games-search').value;
       const enabled = document.getElementById('games-filter-enabled').value;
+      const limit = this.gamesLimit === 'all' ? 9999 : this.gamesLimit;
       
-      const params = new URLSearchParams({ page, limit: 20 });
+      const params = new URLSearchParams({ page: this.gamesPage, limit });
       if (search) params.append('search', search);
       if (enabled) params.append('enabled', enabled);
       
@@ -340,6 +351,9 @@ const admin = {
             <button class="btn btn-sm btn-ghost" onclick="admin.viewGameResources('${game.id}')" title="Ressources">
               📚
             </button>
+            <button class="btn btn-sm btn-ghost" onclick="admin.showMergeGameModal('${game.id}')" title="Fusionner avec un autre jeu">
+              🔀
+            </button>
           </td>
         </tr>
       `;
@@ -349,8 +363,8 @@ const admin = {
   renderPagination(pagination, type) {
     const container = document.getElementById(`${type}-pagination`);
     
-    if (pagination.pages <= 1) {
-      container.innerHTML = '';
+    if (pagination.pages <= 1 && this.gamesLimit !== 'all') {
+      container.innerHTML = pagination.total > 0 ? `<div class="pagination-buttons"><span class="pagination-info">${pagination.total} résultat(s)</span></div>` : '';
       return;
     }
     
@@ -360,7 +374,7 @@ const admin = {
       html += `<button class="btn btn-sm btn-outline" onclick="admin.load${this.capitalize(type)}(${pagination.page - 1})">←</button>`;
     }
     
-    html += `<span class="pagination-info">Page ${pagination.page} / ${pagination.pages}</span>`;
+    html += `<span class="pagination-info">Page ${pagination.page} / ${pagination.pages} (${pagination.total} résultats)</span>`;
     
     if (pagination.page < pagination.pages) {
       html += `<button class="btn btn-sm btn-outline" onclick="admin.load${this.capitalize(type)}(${pagination.page + 1})">→</button>`;
@@ -392,7 +406,7 @@ const admin = {
       
       document.getElementById('game-modal-title').textContent = `Modifier: ${game.name}`;
       document.getElementById('game-id').value = game.id;
-      document.getElementById('game-id').disabled = true;
+      document.getElementById('game-id').disabled = false;
       document.getElementById('game-name').value = game.name || '';
       document.getElementById('game-series').value = game.series || '';
       document.getElementById('game-enabled').value = game.enabled !== false ? 'true' : 'false';
@@ -474,6 +488,27 @@ const admin = {
     
     try {
       const isNew = !this.currentGame;
+      
+      // Handle ID change for existing games
+      if (!isNew && data.id !== this.currentGame.id) {
+        const changeIdResponse = await fetch(`/api/admin/games/${this.currentGame.id}/change-id`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.token}`
+          },
+          body: JSON.stringify({ newId: data.id })
+        });
+        
+        if (!changeIdResponse.ok) {
+          const error = await changeIdResponse.json();
+          throw new Error(error.error || 'Échec du changement d\'ID');
+        }
+        
+        // Update currentGame reference to new ID for the PUT
+        this.currentGame.id = data.id;
+      }
+      
       const url = isNew ? '/api/admin/games' : `/api/admin/games/${this.currentGame.id}`;
       const method = isNew ? 'POST' : 'PUT';
       
@@ -493,6 +528,7 @@ const admin = {
       
       this.showToast(isNew ? 'Jeu créé avec succès' : 'Jeu mis à jour', 'success');
       this.closeGameModal();
+      // Stay on current page after save
       this.loadGames();
       
     } catch (error) {
@@ -871,6 +907,126 @@ const admin = {
       
     } catch (error) {
       this.showToast('Erreur lors de la suppression', 'error');
+    }
+  },
+  
+  // ==================== MERGE GAMES ====================
+  
+  showMergeGameModal(gameId) {
+    const game = this.games.find(g => g.id === gameId);
+    if (!game) {
+      this.showToast('Jeu non trouvé', 'error');
+      return;
+    }
+    
+    document.getElementById('merge-target-name').textContent = `${game.name} (${gameId})`;
+    document.getElementById('merge-target-id').value = gameId;
+    document.getElementById('merge-source-id').value = '';
+    document.getElementById('merge-preview').style.display = 'none';
+    document.getElementById('merge-confirm-btn').disabled = true;
+    document.getElementById('merge-modal').style.display = 'flex';
+  },
+  
+  closeMergeModal() {
+    document.getElementById('merge-modal').style.display = 'none';
+  },
+  
+  async previewMerge() {
+    const targetId = document.getElementById('merge-target-id').value;
+    const sourceId = document.getElementById('merge-source-id').value.trim();
+    
+    if (!sourceId) {
+      this.showToast('Veuillez entrer l\'ID du jeu source', 'error');
+      return;
+    }
+    
+    if (sourceId === targetId) {
+      this.showToast('Impossible de fusionner un jeu avec lui-même', 'error');
+      return;
+    }
+    
+    try {
+      // Fetch both games
+      const [targetResp, sourceResp] = await Promise.all([
+        fetch(`/api/admin/games/${targetId}`, { headers: { 'Authorization': `Bearer ${this.token}` } }),
+        fetch(`/api/admin/games/${sourceId}`, { headers: { 'Authorization': `Bearer ${this.token}` } })
+      ]);
+      
+      if (!targetResp.ok) throw new Error('Jeu cible non trouvé');
+      if (!sourceResp.ok) throw new Error(`Jeu source "${sourceId}" non trouvé`);
+      
+      const target = await targetResp.json();
+      const source = await sourceResp.json();
+      
+      // Show preview
+      const preview = document.getElementById('merge-preview');
+      const sourceSites = source.resources?.sites?.length || 0;
+      const sourceTrackers = source.resources?.trackers?.length || 0;
+      const sourceGuides = source.resources?.guides?.length || 0;
+      const sourceOfficialSite = source.resources?.officialSite?.url ? 1 : 0;
+      
+      const targetSites = target.resources?.sites?.length || 0;
+      const targetTrackers = target.resources?.trackers?.length || 0;
+      const targetGuides = target.resources?.guides?.length || 0;
+      
+      preview.innerHTML = `
+        <div class="card mt-3">
+          <h4 class="card-title">📋 Aperçu de la fusion</h4>
+          <p><strong>Source :</strong> ${this.escapeHtml(source.name)} (<code>${sourceId}</code>)</p>
+          <p><strong>Cible :</strong> ${this.escapeHtml(target.name)} (<code>${targetId}</code>)</p>
+          <hr style="border-color: var(--admin-border); margin: 0.75rem 0;">
+          <p class="text-muted" style="font-size: 0.875rem;">Ressources qui seront fusionnées :</p>
+          <ul style="margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.875rem;">
+            ${sourceOfficialSite ? `<li>Site officiel (sera ajouté si absent dans la cible)</li>` : ''}
+            <li>${sourceSites} site(s) → ajoutés aux ${targetSites} existant(s)</li>
+            <li>${sourceTrackers} tracker(s) → ajoutés aux ${targetTrackers} existant(s)</li>
+            <li>${sourceGuides} guide(s) → ajoutés aux ${targetGuides} existant(s)</li>
+          </ul>
+          <p class="text-muted" style="font-size: 0.875rem;">
+            ⚠️ Le jeu source <strong>${this.escapeHtml(source.name)}</strong> sera <strong>supprimé</strong> après la fusion.
+            Les références (tournois, courses) seront mises à jour vers le jeu cible.
+          </p>
+        </div>
+      `;
+      preview.style.display = 'block';
+      document.getElementById('merge-confirm-btn').disabled = false;
+      
+    } catch (error) {
+      this.showToast(error.message, 'error');
+    }
+  },
+  
+  async confirmMerge() {
+    const targetId = document.getElementById('merge-target-id').value;
+    const sourceId = document.getElementById('merge-source-id').value.trim();
+    
+    if (!confirm(`⚠️ Êtes-vous sûr de vouloir fusionner "${sourceId}" dans "${targetId}" ?\n\nLe jeu source sera supprimé. Cette action est irréversible.`)) {
+      return;
+    }
+    
+    try {
+      const response = await fetch(`/api/admin/games/${targetId}/merge`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.token}`
+        },
+        body: JSON.stringify({ sourceId })
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Échec de la fusion');
+      }
+      
+      const result = await response.json();
+      this.showToast(`Fusion réussie ! ${result.mergedResources || ''} ressource(s) fusionnée(s)`, 'success');
+      this.closeMergeModal();
+      this.loadGames();
+      
+    } catch (error) {
+      console.error('Error merging games:', error);
+      this.showToast(error.message, 'error');
     }
   },
   

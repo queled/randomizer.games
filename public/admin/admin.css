@@ -567,6 +567,10 @@ a:hover {
   overflow-y: auto;
 }
 
+.modal-content.modal-large {
+  max-width: 900px;
+}
+
 .modal-header {
   display: flex;
   justify-content: space-between;
@@ -1131,6 +1135,75 @@ a:hover {
 }
 
 /* ==================== RESPONSIVE ==================== */
+
+/* Game form specific styles */
+.game-form {
+  padding: 0;
+}
+
+.game-form .form-tabs {
+  padding: 0 1.5rem;
+}
+
+.game-form .form-tab-content {
+  padding: 1.5rem;
+}
+
+.game-form .form-tab-content .form-row {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.game-form .form-tab-content .form-group {
+  width: 100%;
+}
+
+.game-form .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid var(--admin-border);
+}
+
+.game-form .integration-section {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.game-form .integration-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.game-form .integration-section h4 {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.game-form .integration-section .form-row {
+  grid-template-columns: auto 1fr;
+}
+
+.game-form label small,
+.game-form .form-group small {
+  display: block;
+  color: var(--admin-text-muted);
+  font-size: 0.8125rem;
+  margin-top: 0.25rem;
+}
+
+.game-form .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.game-form .checkbox-label input[type="checkbox"] {
+  accent-color: var(--admin-primary);
+}
 
 @media (max-width: 1024px) {
   .section-layout,

@@ -146,6 +146,12 @@
               <option value="true">Activés</option>
               <option value="false">Désactivés</option>
             </select>
+            <select id="games-limit" class="form-input form-select">
+              <option value="20">20 par page</option>
+              <option value="50">50 par page</option>
+              <option value="100">100 par page</option>
+              <option value="all">Tout afficher</option>
+            </select>
           </div>
         </div>
         
@@ -460,7 +466,7 @@
             <div class="form-group">
               <label for="game-id">ID *</label>
               <input type="text" id="game-id" name="id" required pattern="[a-z0-9-]+" title="Lettres minuscules, chiffres et tirets uniquement">
-              <small>Identifiant unique (ex: alttp, ootr)</small>
+              <small>Identifiant unique, modifiable (ex: alttp, ootr)</small>
             </div>
             <div class="form-group">
               <label for="game-enabled">Statut</label>
@@ -611,6 +617,41 @@
           <button type="submit" class="btn btn-primary">Enregistrer</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- Merge Games Modal -->
+  <div id="merge-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">🔀 Fusionner des jeux</h2>
+        <button class="modal-close" onclick="admin.closeMergeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="mb-3">Fusionner un jeu <strong>source</strong> dans le jeu <strong>cible</strong>. Les ressources (sites, trackers, guides) seront combinées. Le jeu source sera supprimé.</p>
+        
+        <div class="form-group">
+          <label class="form-label">Jeu cible (conservé)</label>
+          <p id="merge-target-name" style="font-weight: 600;"></p>
+          <input type="hidden" id="merge-target-id">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="merge-source-id">ID du jeu source (à absorber)</label>
+          <div class="form-inline">
+            <div class="form-group">
+              <input type="text" id="merge-source-id" class="form-input" placeholder="ex: alttp-duplicate" pattern="[a-z0-9-]+">
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="admin.previewMerge()">Prévisualiser</button>
+          </div>
+        </div>
+        
+        <div id="merge-preview" style="display: none;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="admin.closeMergeModal()">Annuler</button>
+        <button type="button" id="merge-confirm-btn" class="btn btn-primary" onclick="admin.confirmMerge()" disabled>Fusionner</button>
+      </div>
     </div>
   </div>
 

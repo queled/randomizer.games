@@ -354,6 +354,9 @@ const admin = {
             <button class="btn btn-sm btn-ghost" onclick="admin.showMergeGameModal('${game.id}')" title="Fusionner avec un autre jeu">
               🔀
             </button>
+            <button class="btn btn-sm btn-ghost btn-danger" onclick="admin.deleteGame('${game.id}')" title="Supprimer">
+              🗑️
+            </button>
           </td>
         </tr>
       `;
@@ -1026,6 +1029,35 @@ const admin = {
       
     } catch (error) {
       console.error('Error merging games:', error);
+      this.showToast(error.message, 'error');
+    }
+  },
+  
+  async deleteGame(gameId) {
+    const game = this.games.find(g => g.id === gameId);
+    const gameName = game ? game.name : gameId;
+    
+    if (!confirm(`⚠️ Êtes-vous sûr de vouloir supprimer le jeu "${gameName}" ?\n\nCette action est irréversible et supprimera toutes les données associées.`)) {
+      return;
+    }
+    
+    try {
+      const response = await fetch(`/api/admin/games/${gameId}?hard=true`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${this.token}`
+        }
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Erreur lors de la suppression');
+      }
+      
+      this.showToast(`Jeu "${gameName}" supprimé avec succès`, 'success');
+      this.loadGames();
+    } catch (error) {
+      console.error('Error deleting game:', error);
       this.showToast(error.message, 'error');
     }
   },

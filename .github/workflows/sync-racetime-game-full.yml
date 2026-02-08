@@ -9,15 +9,10 @@ on:
         default: ''
         type: string
       max_pages:
-        description: 'Nombre max de pages à récupérer (laisser vide pour 100, ou utiliser no_limit)'
+        description: 'Nombre max de pages à récupérer (ex: 100, 500, 99999 pour pas de limite; laisser vide pour défaut 100)'
         required: false
         default: ''
         type: string
-      no_limit:
-        description: 'Pas de limite de pages (récupère tout)'
-        required: false
-        default: false
-        type: boolean
 
 env:
   NODE_VERSION: '20'
@@ -48,15 +43,12 @@ jobs:
           RACETIME_RATE_LIMIT_MS: ${{ vars.RACETIME_RATE_LIMIT_MS || '' }}
         run: |
           # Déterminer le nombre de pages
-          if [[ "${{ inputs.no_limit }}" == "true" ]]; then
-            PAGES="99999"
-            echo "Mode: Pas de limite (récupération complète)"
-          elif [[ -n "${{ inputs.max_pages }}" ]]; then
+          if [[ -n "${{ inputs.max_pages }}" ]]; then
             PAGES="${{ inputs.max_pages }}"
-            echo "Mode: Max $PAGES pages"
+            echo "Mode: Setup personnalisé ($PAGES pages)"
           else
             PAGES="100"
-            echo "Mode: Default 100 pages"
+            echo "Mode: Default (100 pages)"
           fi
           
           # Appeler le script de sync

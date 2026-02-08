@@ -1,11 +1,12 @@
 # Workflow: Synchronisation fréquente des races racetime.gg
-# Ce workflow récupère les nouvelles courses toutes les 5 minutes
-# FIXE: Ajoute la finalisation systématique des courses stuck en in_progress (>24h)
+# Ce workflow récupère les nouvelles courses toutes les 5 minutes (global sync)
+# Optimisé pour: détection des nouvelles courses, mises à jour légères, finalisation des courses stuck
+# 
+# Pour une sync complète d'un jeu spécifique: utilise sync-racetime-game-full.yml
 # 
 # Étapes:
 # 1. Récupère races globales récentes (2 pages)
-# 2. Récupère aussi les premières pages par catégorie pour courses intermédiaires
-# 3. Finalise agressivement les courses stuck en in_progress depuis >24h
+# 2. Finalise les courses stuck en in_progress depuis >24h
 
 name: Sync Racetime Races
 
@@ -14,24 +15,8 @@ on:
   schedule:
     - cron: '*/5 * * * *'
   
-  # Déclenchement manuel
+  # Déclenchement manuel (sans paramètres - utilisé pour forcer un sync global maintenant)
   workflow_dispatch:
-    inputs:
-      game_slug:
-        description: 'Slug racetime du jeu à synchroniser (laisser vide pour global)'
-        required: false
-        default: ''
-        type: string
-      max_pages:
-        description: 'Nombre max de pages à récupérer (laisser vide pour illimité si game_slug fourni)'
-        required: false
-        default: ''
-        type: string
-      no_limit:
-        description: 'Pas de limite de pages (pour sync complète d un jeu)'
-        required: false
-        default: false
-        type: boolean
 
 env:
   NODE_VERSION: '20'

@@ -30,7 +30,7 @@ on:
       no_limit:
         description: 'Pas de limite de pages (pour sync complète d un jeu)'
         required: false
-        default: 'false'
+        default: false
         type: boolean
 
 env:
@@ -65,7 +65,7 @@ jobs:
         id: sync
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
-          RACETIME_RATE_LIMIT_MS: ${{ vars.RACETIME_RATE_LIMIT_MS || '1500' }}
+          RACETIME_RATE_LIMIT_MS: ${{ vars.RACETIME_RATE_LIMIT_MS }}
         run: |
           # Script optimisé: 1 appel API global + finalize races stuck
           # Doit terminer en < 5 minutes

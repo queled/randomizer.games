@@ -2748,9 +2748,14 @@ function displayBracketSection(matches, container, bracketType = 'winner', isDou
   });
 
   // Sort rounds
+  // Detect convention: Challonge uses -1 as first losers round (sort descending),
+  // Start.gg uses most-negative as first losers round (sort ascending)
+  const loserRoundNumbers = Object.keys(byRound).map(r => parseInt(r)).filter(r => r < 0);
+  const isChallongeConvention = loserRoundNumbers.includes(-1);
   const sortedRounds = Object.keys(byRound).map(r => parseInt(r)).sort((a, b) => {
     if (bracketType === 'loser') {
-      return b - a;
+      // Challonge: -1 first (descending). Start.gg: most negative first (ascending).
+      return isChallongeConvention ? (b - a) : (a - b);
     } else {
       return a - b;
     }
@@ -2883,6 +2888,11 @@ function drawBracketConnectors(bracketContainer, svg, totalRounds, bracketType =
     // Heuristic: if next round has exactly half the matches of current round, it's 2-to-1
     const is2to1 = nextMatches.length * 2 === currentMatches.length;
     
+    // For losers brackets where match counts are equal, this means some players
+    // come from the winners bracket and some from the previous losers round.
+    // The seeding/mapping is complex, so we use 1-to-1 positional connectors
+    // which is the best visual approximation.
+    
     if (is2to1) {
       // Each match in the next round connects to two matches in the current round
       nextMatches.forEach((nextMatch, nextIdx) => {
@@ -2897,7 +2907,8 @@ function drawBracketConnectors(bracketContainer, svg, totalRounds, bracketType =
         }
       });
     } else if (nextMatches.length === currentMatches.length) {
-      // 1-to-1 connections (e.g., when players drop from winner bracket)
+      // 1-to-1 connections (e.g., losers bracket inter-rounds where some
+      // players come from winners bracket — only draw positional connectors)
       nextMatches.forEach((nextMatch, nextIdx) => {
         if (nextIdx < currentMatches.length) {
           drawConnector(currentMatches[nextIdx], nextMatch, svg, bracketRect);
@@ -3220,18 +3231,33 @@ function getRoundNameForBracket(round, bracketType, totalRounds, roundIndex, isD
   }
 
   // Double elimination naming (i18n)
+  if (bracketType === 'loser') {
+    // roundIndex is now correct (0 = first losers round) thanks to platform-aware sort
+    // Only use named rounds (Final, Semifinals, etc.) when there are enough rounds (>=4)
+    // For small brackets (preliminary phases with 2-3 rounds), use simple numbered rounds
+    if (totalRounds >= 4) {
+      if (roundsFromEnd === 0) return i18n.t('tournamentDetail.lbFinal') || 'LB Final';
+      if (roundsFromEnd === 1) return i18n.t('tournamentDetail.lbSemifinals') || 'LB Semifinals';
+      if (roundsFromEnd === 2) return i18n.t('tournamentDetail.lbQuarterfinals') || 'LB Quarterfinals';
+    }
+    return `${i18n.t('tournamentDetail.losersRound') || 'LB Round'} ${roundIndex + 1}`;
+  }
+
+  // Winner bracket double elimination
   if (bracketType === 'winner') {
-    if (roundsFromEnd === 0) return `👑 ${i18n.t('tournamentDetail.grandFinals') || 'Grand Finals'}`;
-    if (roundsFromEnd === 1) return i18n.t('tournamentDetail.wbFinal') || 'WB Final';
-    if (roundsFromEnd === 2) return i18n.t('tournamentDetail.semifinals') || 'Semifinals';
-    if (roundsFromEnd === 3) return i18n.t('tournamentDetail.quarterfinals') || 'Quarterfinals';
+    // Only use named rounds (Grand Finals, WB Final, etc.) when there are enough rounds (>=4)
+    // For small brackets (preliminary phases with 2-3 rounds), use simple numbered rounds
+    if (totalRounds >= 4) {
+      if (roundsFromEnd === 0) return `👑 ${i18n.t('tournamentDetail.grandFinals') || 'Grand Finals'}`;
+      if (roundsFromEnd === 1) return i18n.t('tournamentDetail.wbFinal') || 'WB Final';
+      if (roundsFromEnd === 2) return i18n.t('tournamentDetail.semifinals') || 'Semifinals';
+      if (roundsFromEnd === 3) return i18n.t('tournamentDetail.quarterfinals') || 'Quarterfinals';
+    }
     return `${i18n.t('tournamentDetail.wbRound') || 'Round'} ${roundIndex + 1}`;
   }
 
-  if (roundsFromEnd === 0) return i18n.t('tournamentDetail.lbFinal') || 'LB Final';
-  if (roundsFromEnd === 1) return i18n.t('tournamentDetail.lbSemifinals') || 'LB Semifinals';
-  if (roundsFromEnd === 2) return i18n.t('tournamentDetail.lbQuarterfinals') || 'LB Quarterfinals';
-  return `${i18n.t('tournamentDetail.lbRound') || 'LB Round'} ${roundIndex + 1}`;
+  // Fallback
+  return `${i18n.t('tournamentDetail.losersRound') || 'LB Round'} ${roundIndex + 1}`;
 }
 
 function createBracketMatchCard(match, isFinal = false) {

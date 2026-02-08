@@ -9,7 +9,7 @@ on:
         default: ''
         type: string
       max_pages:
-        description: 'Nombre max de pages à récupérer (ex: 100, 500, 99999 pour pas de limite; laisser vide pour défaut 100)'
+        description: 'Nombre max de pages à récupérer (ex: 100, 500; laisser vide pour illimité)'
         required: false
         default: ''
         type: string
@@ -45,10 +45,10 @@ jobs:
           # Déterminer le nombre de pages
           if [[ -n "${{ inputs.max_pages }}" ]]; then
             PAGES="${{ inputs.max_pages }}"
-            echo "Mode: Setup personnalisé ($PAGES pages)"
+            echo "Mode: Limité à $PAGES pages"
           else
-            PAGES="100"
-            echo "Mode: Default (100 pages)"
+            PAGES="99999"
+            echo "Mode: Illimité (récupération complète)"
           fi
           
           # Appeler le script de sync

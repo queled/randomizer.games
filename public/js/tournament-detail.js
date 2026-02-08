@@ -2764,8 +2764,15 @@ function displayBracketSection(matches, container, bracketType = 'winner', isDou
   // Sort matches within each round by their ID to maintain logical order
   sortedRounds.forEach(round => {
     byRound[round].sort((a, b) => {
-      // Sort by challonge ID to maintain bracket structure
-      return (a.challongeId || 0) - (b.challongeId || 0);
+      // For Start.gg: use startggSetId, fallback to challongeId, then maintain insertion order
+      const aId = a.startggSetId || a.challongeId;
+      const bId = b.startggSetId || b.challongeId;
+      if (aId && bId) {
+        // Both have IDs, sort by ID (handle both string and numeric)
+        return aId.localeCompare ? aId.localeCompare(bId) : (aId - bId);
+      }
+      // No ID available, keep insertion order (stable sort)
+      return 0;
     });
   });
   
@@ -2798,7 +2805,7 @@ function displayBracketSection(matches, container, bracketType = 'winner', isDou
   container.appendChild(bracketWrapper);
   
   // Draw connector lines after a brief delay to ensure elements are rendered
-  setTimeout(() => drawBracketConnectors(bracketHTML, svg, sortedRounds.length, bracketType, byRound, sortedRounds), 50);
+  setTimeout(() => drawBracketConnectors(bracketHTML, svg, sortedRounds.length, bracketType, byRound, sortedRounds, isPoolBracket), 50);
 }
 
 function createRoundColumn(matches, round, width, bracketType = 'winner', totalRounds = 0, roundIndex = 0, isGrandFinal = false, isDoubleElimination = false, isPoolBracket = false) {
@@ -2846,7 +2853,7 @@ function createRoundColumn(matches, round, width, bracketType = 'winner', totalR
   return roundColumn;
 }
 
-function drawBracketConnectors(bracketContainer, svg, totalRounds, bracketType = 'winner', roundsData = {}, sortedRounds = []) {
+function drawBracketConnectors(bracketContainer, svg, totalRounds, bracketType = 'winner', roundsData = {}, sortedRounds = [], isPoolBracket = false) {
   if (!bracketContainer || !svg) return;
   
   const rounds = bracketContainer.querySelectorAll('[data-round-index]');
@@ -2868,9 +2875,16 @@ function drawBracketConnectors(bracketContainer, svg, totalRounds, bracketType =
     const isLoserBracket = bracketType === 'loser';
     const currentRoundNumber = sortedRounds ? sortedRounds[i] : null;
     
-    // Check if next round is Grand Finals (only for double elimination with Bracket Reset)
+    // For losers brackets in pools: no connectors (complex seeding from winners bracket)
+    // This avoids drawing connectors that have no meaning in pool context
+    if (isPoolBracket && bracketType === 'loser') {
+      continue;
+    }
+    
+    // Check if next round is Grand Finals (only for main double elimination brackets)
+    // NOT for pools/preliminary brackets which are self-contained
     // Grand Finals is detected by having multiple matches in the final round (Match 1 + Bracket Reset)
-    const isGrandFinalsRound = i === rounds.length - 2 && bracketType === 'winner' && nextMatches.length > 1;
+    const isGrandFinalsRound = !isPoolBracket && i === rounds.length - 2 && bracketType === 'winner' && nextMatches.length > 1;
     
     if (isGrandFinalsRound) {
       // Grand Finals: connect first match from current round to first match of GF

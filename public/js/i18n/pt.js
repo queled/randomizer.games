@@ -452,7 +452,7 @@ const pt = {
         relatedSites: "🔗 Sites Relacionados",
         termsOfUse: "📜 Termos de Uso",
         socialNetwork: "Rede Social",
-        discord: "💬 Discord",
+        discord: "Discord",
         copyright: "© {year} Randomizer. Todos os direitos reservados."
     },
     

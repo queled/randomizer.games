@@ -1156,10 +1156,50 @@ router.get('/health', requireAdmin, async (req, res, next) => {
       }
     }
     
+    // Test Twitch API connectivity
+    let twitchStatus = 'unknown';
+    try {
+      const axios = require('axios');
+      await axios.get('https://id.twitch.tv/oauth2/validate', { timeout: 5000, validateStatus: () => true });
+      twitchStatus = 'ok';
+    } catch {
+      twitchStatus = 'error';
+    }
+    
+    // Test Challonge API connectivity
+    let challongeStatus = 'unknown';
+    try {
+      const axios = require('axios');
+      const challResp = await axios.get('https://api.challonge.com/v1/tournaments.json', { 
+        timeout: 5000, 
+        validateStatus: () => true 
+      });
+      // 401 means the API is reachable (just no auth)
+      challongeStatus = (challResp.status === 200 || challResp.status === 401) ? 'ok' : 'error';
+    } catch {
+      challongeStatus = 'error';
+    }
+    
+    // Test start.gg (smash.gg) API connectivity
+    let startggStatus = 'unknown';
+    try {
+      const axios = require('axios');
+      const sgResp = await axios.post('https://api.start.gg/gql/alpha', 
+        { query: '{ __typename }' },
+        { timeout: 5000, validateStatus: () => true }
+      );
+      startggStatus = (sgResp.status === 200 || sgResp.status === 400 || sgResp.status === 401) ? 'ok' : 'error';
+    } catch {
+      startggStatus = 'error';
+    }
+    
     res.json({
-      api: { status: 'ok' },
+      api: { status: 'ok', description: 'API du site Randomizer' },
       database: { status: dbStatus },
       racetime: { status: racetimeStatus },
+      twitch: { status: twitchStatus },
+      challonge: { status: challongeStatus },
+      startgg: { status: startggStatus },
       system: {
         uptime: process.uptime(),
         nodeVersion: process.version,
@@ -1188,6 +1228,67 @@ function formatBytes(bytes) {
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
 }
+
+// ==================== GITHUB WORKFLOWS ====================
+
+/**
+ * GET /api/admin/github/workflows
+ * Get latest run status for each GitHub Actions workflow
+ */
+router.get('/github/workflows', requireAdmin, async (req, res, next) => {
+  try {
+    const githubToken = process.env.GITHUB_TOKEN;
+    const githubRepo = process.env.GITHUB_REPO || 'queled/randomizer.games';
+    
+    if (!githubToken) {
+      return res.status(501).json({ error: 'GITHUB_TOKEN not configured' });
+    }
+    
+    const axios = require('axios');
+    
+    // Fetch the latest runs for each of our 3 workflows
+    const workflowFiles = [
+      'sync-racetime.yml',
+      'sync-rando-list.yml',
+      'sync-racetime-game-full.yml'
+    ];
+    
+    const workflowResults = await Promise.all(
+      workflowFiles.map(async (wfFile) => {
+        try {
+          const resp = await axios.get(
+            `https://api.github.com/repos/${githubRepo}/actions/workflows/${wfFile}/runs?per_page=1`,
+            {
+              headers: {
+                'Authorization': `token ${githubToken}`,
+                'Accept': 'application/vnd.github.v3+json'
+              },
+              timeout: 10000
+            }
+          );
+          
+          const run = resp.data.workflow_runs?.[0];
+          if (!run) return { name: wfFile, status: 'no_runs', conclusion: null, event: null, updated_at: null };
+          
+          return {
+            name: run.name || wfFile,
+            status: run.status,
+            conclusion: run.conclusion,
+            event: run.event,
+            updated_at: run.updated_at,
+            html_url: run.html_url
+          };
+        } catch (e) {
+          return { name: wfFile, status: 'error', conclusion: 'error', event: null, updated_at: null };
+        }
+      })
+    );
+    
+    res.json({ workflows: workflowResults });
+  } catch (error) {
+    next(error);
+  }
+});
 
 // ==================== ANALYTICS (placeholder) ====================
 

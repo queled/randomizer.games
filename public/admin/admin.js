@@ -351,6 +351,11 @@ const admin = {
             <button class="btn btn-sm btn-ghost" onclick="admin.viewGameResources('${game.id}')" title="Ressources">
               📚
             </button>
+            ${hasRacetime 
+              ? `<button class="btn btn-sm btn-ghost" onclick="admin.triggerFullResync('${game.id}', '${racetimeSlug}')" title="Resync complète des races (racetime)">
+              🔄
+            </button>` 
+              : ''}
             <button class="btn btn-sm btn-ghost" onclick="admin.showMergeGameModal('${game.id}')" title="Fusionner avec un autre jeu">
               🔀
             </button>
@@ -1138,6 +1143,34 @@ const admin = {
     }
   },
   
+  async triggerFullResync(gameId, racetimeSlug) {
+    if (!confirm(`Lancer une resynchronisation complète de toutes les races pour "${gameId}" (slug: ${racetimeSlug}) ?\n\nCela peut prendre plusieurs minutes.`)) {
+      return;
+    }
+    
+    try {
+      this.showToast(`Resync lancée pour ${gameId}...`, 'info');
+      
+      const response = await fetch(`/api/admin/sync/racetime/${racetimeSlug}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.token}`
+        },
+        body: JSON.stringify({ maxPages: 99999 })
+      });
+      
+      if (!response.ok) throw new Error('Échec du lancement de la resync');
+      
+      this.showToast(`Resync complète lancée pour ${gameId} en arrière-plan`, 'success');
+      this.addSyncLog(`🔄 Resync complète lancée: ${gameId} (${racetimeSlug})`, 'info');
+      
+    } catch (error) {
+      console.error('Error triggering full resync:', error);
+      this.showToast(`Erreur: ${error.message}`, 'error');
+    }
+  },
+
   addSyncLog(message, type = 'info') {
     const logContent = document.getElementById('sync-log-content');
     const timestamp = new Date().toLocaleTimeString();
@@ -1598,7 +1631,7 @@ const admin = {
           <h3 class="monitoring-card-title">🔌 Services</h3>
           <div class="monitoring-items">
             <div class="monitoring-item">
-              <span class="monitoring-label">API Server</span>
+              <span class="monitoring-label">API Randomizer</span>
               <span class="badge badge-${getStatusClass(data.api?.status)}">${getStatusIcon(data.api?.status)} ${data.api?.status || 'unknown'}</span>
             </div>
             <div class="monitoring-item">
@@ -1608,6 +1641,18 @@ const admin = {
             <div class="monitoring-item">
               <span class="monitoring-label">Racetime.gg</span>
               <span class="badge badge-${getStatusClass(data.racetime?.status)}">${getStatusIcon(data.racetime?.status)} ${data.racetime?.status || 'unknown'}</span>
+            </div>
+            <div class="monitoring-item">
+              <span class="monitoring-label">Twitch API</span>
+              <span class="badge badge-${getStatusClass(data.twitch?.status)}">${getStatusIcon(data.twitch?.status)} ${data.twitch?.status || 'unknown'}</span>
+            </div>
+            <div class="monitoring-item">
+              <span class="monitoring-label">Challonge API</span>
+              <span class="badge badge-${getStatusClass(data.challonge?.status)}">${getStatusIcon(data.challonge?.status)} ${data.challonge?.status || 'unknown'}</span>
+            </div>
+            <div class="monitoring-item">
+              <span class="monitoring-label">start.gg API</span>
+              <span class="badge badge-${getStatusClass(data.startgg?.status)}">${getStatusIcon(data.startgg?.status)} ${data.startgg?.status || 'unknown'}</span>
             </div>
           </div>
         </div>
@@ -1663,13 +1708,16 @@ const admin = {
           <h3 class="monitoring-card-title">🔄 Dernières Synchros</h3>
           <div class="monitoring-items">
             <div class="monitoring-item">
-              <span class="monitoring-label">Racetime</span>
+              <span class="monitoring-label">Racetime (global)</span>
               <span class="monitoring-value">${this.formatRelativeTime(data.lastSync?.racetime)}</span>
             </div>
             <div class="monitoring-item">
               <span class="monitoring-label">Rando-List</span>
               <span class="monitoring-value">${this.formatRelativeTime(data.lastSync?.randoList)}</span>
             </div>
+          </div>
+          <div id="github-workflows-status" class="monitoring-items mt-3" style="border-top: 1px solid var(--admin-border); padding-top: 0.75rem;">
+            <p class="text-muted" style="font-size: 0.8125rem;">Chargement workflows GitHub...</p>
           </div>
         </div>
       </div>
@@ -1681,6 +1729,60 @@ const admin = {
         </button>
       </div>
     `;
+    
+    // Load GitHub workflow statuses
+    this.loadGitHubWorkflows();
+  },
+  
+  async loadGitHubWorkflows() {
+    const container = document.getElementById('github-workflows-status');
+    if (!container) return;
+    
+    const workflows = [
+      { id: 'sync-racetime.yml', name: 'Sync Racetime (5min)', icon: '🏁' },
+      { id: 'sync-rando-list.yml', name: 'Sync Rando-List (quotidien)', icon: '📋' },
+      { id: 'sync-racetime-game-full.yml', name: 'Sync Game Full (manuel)', icon: '🎮' }
+    ];
+    
+    try {
+      const response = await fetch('/api/admin/github/workflows', {
+        headers: { 'Authorization': `Bearer ${this.token}` }
+      });
+      
+      if (!response.ok) {
+        container.innerHTML = '<p class="text-muted" style="font-size: 0.8125rem;">⚠️ API GitHub non configurée</p>';
+        return;
+      }
+      
+      const data = await response.json();
+      
+      if (!data.workflows || data.workflows.length === 0) {
+        container.innerHTML = '<p class="text-muted" style="font-size: 0.8125rem;">Aucun workflow trouvé</p>';
+        return;
+      }
+      
+      container.innerHTML = `
+        <div style="font-size: 0.75rem; color: var(--admin-text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Workflows GitHub Actions</div>
+        ${data.workflows.map(wf => {
+          const statusClass = wf.conclusion === 'success' ? 'success' : wf.conclusion === 'failure' ? 'danger' : wf.status === 'in_progress' ? 'warning' : 'muted';
+          const statusIcon = wf.conclusion === 'success' ? '✓' : wf.conclusion === 'failure' ? '✗' : wf.status === 'in_progress' ? '⏳' : '—';
+          const trigger = wf.event === 'schedule' ? '⏰' : wf.event === 'workflow_dispatch' ? '👤' : '🔗';
+          return `
+            <div class="monitoring-item">
+              <span class="monitoring-label">${trigger} ${this.escapeHtml(wf.name)}</span>
+              <span>
+                <span class="badge badge-${statusClass}">${statusIcon} ${wf.conclusion || wf.status || 'unknown'}</span>
+                <span class="monitoring-value" style="margin-left: 0.5rem; font-size: 0.75rem;">${this.formatRelativeTime(wf.updated_at)}</span>
+              </span>
+            </div>
+          `;
+        }).join('')}
+      `;
+      
+    } catch (error) {
+      console.error('Error loading GitHub workflows:', error);
+      container.innerHTML = '<p class="text-muted" style="font-size: 0.8125rem;">❌ Erreur chargement workflows</p>';
+    }
   }
 };
 

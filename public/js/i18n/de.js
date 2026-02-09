@@ -409,7 +409,7 @@ const de = {
         relatedSites: "🔗 Verwandte Seiten",
         termsOfUse: "📜 Nutzungsbedingungen",
         socialNetwork: "Soziales Netzwerk",
-        discord: "💬 Discord",
+        discord: "Discord",
         copyright: "© {year} Randomizer. Alle Rechte vorbehalten."
     },
     

@@ -44,7 +44,7 @@
       <nav class="sidebar-nav">
         <button class="nav-item active" data-section="dashboard">
           <span class="nav-icon">📊</span>
-          <span>Dashboard</span>
+          <span>Tableau de bord</span>
         </button>
         <button class="nav-item" data-section="games">
           <span class="nav-icon">🎮</span>
@@ -88,7 +88,7 @@
       <!-- Dashboard Section -->
       <section id="section-dashboard" class="admin-section active">
         <div class="section-header">
-          <h1 class="section-title">Dashboard</h1>
+          <h1 class="section-title">Tableau de bord</h1>
         </div>
         
         <div class="stats-grid">
@@ -465,12 +465,12 @@
           <div class="form-row">
             <div class="form-group">
               <label for="game-id">ID *</label>
-              <input type="text" id="game-id" name="id" required pattern="[a-z0-9-]+" title="Lettres minuscules, chiffres et tirets uniquement">
+              <input type="text" id="game-id" name="id" class="form-input" required pattern="[a-z0-9-]+" title="Lettres minuscules, chiffres et tirets uniquement">
               <small>Identifiant unique, modifiable (ex: alttp, ootr)</small>
             </div>
             <div class="form-group">
               <label for="game-enabled">Statut</label>
-              <select id="game-enabled" name="enabled">
+              <select id="game-enabled" name="enabled" class="form-input form-select">
                 <option value="true">✅ Activé</option>
                 <option value="false">❌ Désactivé</option>
               </select>
@@ -480,11 +480,11 @@
           <div class="form-row">
             <div class="form-group">
               <label for="game-name">Nom complet *</label>
-              <input type="text" id="game-name" name="name" required>
+              <input type="text" id="game-name" name="name" class="form-input" required>
             </div>
             <div class="form-group">
               <label for="game-series">Série</label>
-              <input type="text" id="game-series" name="series">
+              <input type="text" id="game-series" name="series" class="form-input">
               <small>Ex: Zelda Series</small>
             </div>
           </div>
@@ -494,18 +494,18 @@
         <div class="form-tab-content" id="form-tab-official">
           <div class="form-group">
             <label for="game-official-name">Nom officiel du jeu</label>
-            <input type="text" id="game-official-name" name="official.name">
+            <input type="text" id="game-official-name" name="official.name" class="form-input">
             <small>Ex: The Legend of Zelda: A Link to the Past</small>
           </div>
           
           <div class="form-row">
             <div class="form-group">
               <label for="game-official-releaseYear">Année de sortie</label>
-              <input type="number" id="game-official-releaseYear" name="official.releaseYear" min="1970" max="2030">
+              <input type="number" id="game-official-releaseYear" name="official.releaseYear" class="form-input" min="1970" max="2030">
             </div>
             <div class="form-group">
               <label for="game-platforms">Plateformes</label>
-              <input type="text" id="game-platforms" name="platforms">
+              <input type="text" id="game-platforms" name="platforms" class="form-input">
               <small>Séparées par des virgules (ex: SNES, GBA)</small>
             </div>
           </div>
@@ -514,26 +514,26 @@
         <div class="form-tab-content" id="form-tab-randomizer">
           <div class="form-group">
             <label for="game-randomizer-displayName">Nom d'affichage</label>
-            <input type="text" id="game-randomizer-displayName" name="randomizer.displayName">
+            <input type="text" id="game-randomizer-displayName" name="randomizer.displayName" class="form-input">
             <small>Ex: A Link to the Past Randomizer</small>
           </div>
           
           <div class="form-row">
             <div class="form-group">
               <label for="game-randomizer-shortName">Nom court *</label>
-              <input type="text" id="game-randomizer-shortName" name="randomizer.shortName" required>
+              <input type="text" id="game-randomizer-shortName" name="randomizer.shortName" class="form-input" required>
               <small>Ex: ALttP Randomizer, OoT Randomizer</small>
             </div>
             <div class="form-group">
               <label for="game-randomizer-tinyName">Nom très court</label>
-              <input type="text" id="game-randomizer-tinyName" name="randomizer.tinyName">
+              <input type="text" id="game-randomizer-tinyName" name="randomizer.tinyName" class="form-input">
               <small>Ex: ALttPR, OoTR (optionnel)</small>
             </div>
           </div>
           
           <div class="form-group">
             <label for="game-randomizer-website">Site web du randomizer</label>
-            <input type="url" id="game-randomizer-website" name="randomizer.website">
+            <input type="url" id="game-randomizer-website" name="randomizer.website" class="form-input">
           </div>
           
           <div class="form-group">
@@ -556,7 +556,7 @@
               </div>
               <div class="form-group">
                 <label for="game-racetime-slug">Slug Racetime</label>
-                <input type="text" id="game-racetime-slug" name="integrations.racetime.gameSlug">
+                <input type="text" id="game-racetime-slug" name="integrations.racetime.gameSlug" class="form-input">
                 <small>Ex: ootr, alttpr</small>
               </div>
             </div>
@@ -573,7 +573,7 @@
               </div>
               <div class="form-group">
                 <label for="game-randolist-identifier">Identifier</label>
-                <input type="text" id="game-randolist-identifier" name="integrations.randoList.randomizerIdentifier">
+                <input type="text" id="game-randolist-identifier" name="integrations.randoList.randomizerIdentifier" class="form-input">
               </div>
             </div>
           </div>

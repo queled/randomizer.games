@@ -428,7 +428,7 @@ const en = {
         relatedSites: "🔗 Related Sites",
         termsOfUse: "📜 Terms of Use",
         socialNetwork: "Social Network",
-        discord: "💬 Discord",
+        discord: "Discord",
         copyright: "© {year} Randomizer. All rights reserved."
     },
     

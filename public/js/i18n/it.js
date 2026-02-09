@@ -407,7 +407,7 @@ const it = {
         relatedSites: "🔗 Siti correlati",
         termsOfUse: "📜 Termini di utilizzo",
         socialNetwork: "Social Network",
-        discord: "💬 Discord",
+        discord: "Discord",
         copyright: "© {year} Randomizer. Tutti i diritti riservati."
     },
     

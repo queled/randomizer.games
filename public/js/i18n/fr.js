@@ -416,7 +416,7 @@ const fr = {
         relatedSites: "🔗 Sites liés",
         termsOfUse: "📜 Conditions d'utilisation",
         socialNetwork: "Réseau social",
-        discord: "💬 Discord",
+        discord: "Discord",
         copyright: "© {year} Randomizer. Tous droits réservés."
     },
     

@@ -36,7 +36,10 @@ function createFooter() {
                 
                 <div class="footer-section">
                     <span class="footer-section-title" data-i18n="footer.socialNetwork">${getText('footer.socialNetwork', {}, 'Social Network')}</span>
-                    <a href="https://discord.gg/AyaZTFUAGe" target="_blank" rel="noopener" data-i18n="footer.discord">${getText('footer.discord', {}, '💬 Discord')}</a>
+                    <a href="https://discord.gg/AyaZTFUAGe" target="_blank" rel="noopener" class="footer-discord" title="${getText('footer.discord', {}, 'Discord')}" aria-label="${getText('footer.discord', {}, 'Discord')}" style="display:inline-flex;align-items:center;gap:0.35rem;text-decoration:none;">
+                        <img src="/assets/discord.svg" alt="${getText('footer.discord', {}, 'Discord')}" class="social-icon" style="width:1em;height:1em;vertical-align:middle;display:inline-block;">
+                        <span class="social-label">${getText('footer.discord', {}, 'Discord')}</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -103,6 +106,18 @@ window.addEventListener('languageChanged', () => {
         if (patreonBtn) {
             const title = window.i18n.t('tooltips.patreon', {}, 'Support us on Patreon');
             patreonBtn.title = title;
+        }
+        
+        // Update Discord label/icon titles
+        const discordAnchor = document.querySelector('.footer-discord');
+        if (discordAnchor) {
+            const label = discordAnchor.querySelector('.social-label');
+            const img = discordAnchor.querySelector('img');
+            const text = window.i18n.t('footer.discord', {}, 'Discord');
+            if (label) label.textContent = text;
+            if (img) img.alt = text;
+            discordAnchor.title = text;
+            discordAnchor.setAttribute('aria-label', text);
         }
     }
 });

@@ -7,64 +7,121 @@ let gamesWithStatsCache = null;
 let gamesWithStatsCacheExpiresAt = 0;
 let gamesWithStatsInFlight = null;
 
+const CATEGORY_ALIASES = {
+  'oot': ['oot', 'ootr'],
+  'alttp': ['alttp', 'alttpr', 'alttpr-ladder'],
+  'mm': ['mm', 'mmr'],
+  'sm': ['sm', 'smr'],
+  'sm64': ['sm64'],
+  'tww': ['tww'],
+  'dk64': ['dk64', 'dk64r'],
+  'tp': ['tp'],
+  'kh2fm': ['kh2fm', 'kh2r', 'kh2fmr'],
+  'sotn': ['sotn'],
+  'smz3': ['smz3'],
+  'ootmm': ['ootmm'],
+  'z1': ['z1', 'z1r'],
+  'z2': ['z2', 'z2r']
+};
+
+const COMBO_GAME_CATEGORIES = {
+  'ootmm': ['ootmm', 'oot', 'ootr', 'mm', 'mmr'],
+  'smz3': ['smz3', 'alttp', 'alttpr', 'sm', 'smr']
+};
+
+const GAME_NAME_PATTERNS = {
+  'oot': /ocarina\s*(of)?\s*time/i,
+  'alttp': /link\s*(to)?\s*(the)?\s*past/i,
+  'mm': /majora'?s?\s*mask/i,
+  'sm': /super\s*metroid/i,
+  'sm64': /super\s*mario\s*64/i,
+  'dk64': /donkey\s*kong\s*64/i,
+  'tww': /wind\s*waker/i,
+  'tp': /twilight\s*princess/i,
+  'kh2fm': /kingdom\s*hearts\s*(2|ii)/i,
+  'sotn': /symphony\s*(of)?\s*(the)?\s*night/i,
+  'smz3': /smz3|super\s*metroid.*link/i,
+  'ootmm': /ootmm|ocarina.*majora/i,
+  'z1': /(^|\W)(the\s+legend\s+of\s+zelda|zelda\s*1|z1r?)($|\W)/i,
+  'z2': /(^|\W)(zelda\s*ii|adventure\s+of\s+link|z2r?)($|\W)/i
+};
+
+const COMBO_GAME_PATTERNS = {
+  'ootmm': [/ocarina\s*(of)?\s*time/i, /majora'?s?\s*mask/i],
+  'smz3': [/link\s*(to)?\s*(the)?\s*past/i, /super\s*metroid/i]
+};
+
+function escapeRegex(text) {
+  return String(text || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function buildCategoryQuery(gameDoc, gameIdLower) {
+  const comboCategories = COMBO_GAME_CATEGORIES[gameIdLower];
+  const categories = new Set();
+
+  if (comboCategories && comboCategories.length > 0) {
+    comboCategories.forEach(c => categories.add(String(c).toLowerCase()));
+  } else {
+    categories.add(gameIdLower);
+    categories.add(`${gameIdLower}r`);
+
+    const aliases = CATEGORY_ALIASES[gameIdLower] || [];
+    aliases.forEach(c => categories.add(String(c).toLowerCase()));
+
+    const racetimeSlug = gameDoc?.integrations?.racetime?.gameSlug;
+    const racetimeSlugs = gameDoc?.integrations?.racetime?.gameSlugs || [];
+    if (racetimeSlug) categories.add(String(racetimeSlug).toLowerCase());
+    racetimeSlugs.forEach(c => categories.add(String(c).toLowerCase()));
+  }
+
+  const all = Array.from(categories).filter(Boolean);
+  if (all.length <= 1) {
+    return { category: all[0] || gameIdLower };
+  }
+  return { category: { $in: all } };
+}
+
+function buildTournamentQuery(gameDoc, gameIdLower) {
+  const comboPatterns = COMBO_GAME_PATTERNS[gameIdLower] || [];
+  const gamePattern = GAME_NAME_PATTERNS[gameIdLower];
+  const conditions = [];
+
+  if (gameDoc?._id) {
+    conditions.push({ game: gameDoc._id });
+  }
+
+  if (comboPatterns.length > 0) {
+    comboPatterns.forEach(pattern => conditions.push({ gameName: { $regex: pattern } }));
+  } else if (gamePattern) {
+    conditions.push({ gameName: { $regex: gamePattern } });
+  }
+
+  const candidateNames = [
+    gameDoc?.name,
+    gameDoc?.official?.name,
+    gameDoc?.randomizer?.displayName,
+    gameDoc?.randomizer?.shortName
+  ].filter(Boolean);
+
+  candidateNames.forEach(name => {
+    conditions.push({ gameName: { $regex: new RegExp(escapeRegex(name), 'i') } });
+  });
+
+  if (conditions.length === 0) {
+    return {};
+  }
+
+  return { $or: conditions };
+}
+
 async function computeGamesWithStats() {
   const { Tournament, Race } = require('../models');
   const games = await Game.find().sort({ name: 1 });
 
   const gamesWithStats = await Promise.all(games.map(async (game) => {
     const gameIdLower = game.id.toLowerCase();
-
-    const racetimeSlug = game.integrations?.racetime?.gameSlug;
-    const racetimeSlugs = game.integrations?.racetime?.gameSlugs || [];
-
-    const comboCategories = {
-      'ootmm': ['ootmmr', 'ootr', 'mmr'],
-      'smz3': ['smz3', 'alttpr', 'smr'],
-      'hodbt': ['hodr', 'bmtr'],
-      'mpcg': ['mpcgr', 'mpr', 'mp2r'],
-      'z1m1': ['z1m1', 'z1r', 'm1r'],
-      'z1m1z3m3': ['z1m1z3m3', 'z1r', 'm1r', 'alttpr', 'mp3r']
-    };
-
-    let categoryQuery;
-    if (comboCategories[gameIdLower]) {
-      categoryQuery = { category: { $in: comboCategories[gameIdLower] } };
-    } else if (racetimeSlug && racetimeSlugs.length > 0) {
-      categoryQuery = { category: { $in: [racetimeSlug, ...racetimeSlugs] } };
-    } else if (racetimeSlug) {
-      categoryQuery = { category: racetimeSlug };
-    } else {
-      categoryQuery = { category: gameIdLower };
-    }
-
-    const gamePatterns = {
-      'oot': /ocarina\s*(of)?\s*time/i,
-      'alttp': /link\s*(to)?\s*(the)?\s*past/i,
-      'albw': /link\s*(between)?\s*worlds/i,
-      'mm': /majora'?s?\s*mask/i,
-      'sm': /super\s*metroid/i,
-      'sm64': /super\s*mario\s*64/i,
-      'dk64': /donkey\s*kong\s*64/i,
-      'tww': /wind\s*waker/i,
-      'tp': /twilight\s*princess/i,
-      'kh2fm': /kingdom\s*hearts\s*(2|ii)/i,
-      'sotn': /symphony\s*(of)?\s*(the)?\s*night/i,
-      'smz3': /smz3|super\s*metroid.*link/i,
-      'ootmm': /ootmm|ocarina.*majora/i,
-      'hk': /hollow\s*knight/i,
-      'botw': /breath\s*(of)?\s*(the)?\s*wild/i,
-      'ss': /skyward\s*sword/i
-    };
-
-    const gamePattern = gamePatterns[gameIdLower];
-    const conditions = [{ game: game._id }];
-    if (gamePattern) {
-      conditions.push({ gameName: { $regex: gamePattern } });
-    }
-    if (game.name) {
-      conditions.push({ gameName: { $regex: new RegExp(game.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') } });
-    }
-    const tournamentQuery = { $or: conditions };
+    const categoryQuery = buildCategoryQuery(game, gameIdLower);
+    const tournamentQuery = buildTournamentQuery(game, gameIdLower);
 
     const [totalRaces, totalTournaments] = await Promise.all([
       Race.countDocuments(categoryQuery),
@@ -158,107 +215,16 @@ router.get('/:id/tournaments', async (req, res, next) => {
   }
 });
 
-// Game ID aliases (maps game IDs to their racetime category slugs)
-const CATEGORY_ALIASES = {
-  'oot': ['oot', 'ootr'],
-  'alttp': ['alttp', 'alttpr', 'alttpr-ladder'],
-  'mm': ['mm', 'mmr'],
-  'sm': ['sm', 'smr'],
-  'sm64': ['sm64'],
-  'tww': ['tww'],
-  'dk64': ['dk64', 'dk64r'],
-  'tp': ['tp'],
-  'kh2fm': ['kh2fm', 'kh2r', 'kh2fmr'],
-  'sotn': ['sotn'],
-  'smz3': ['smz3'],
-  'ootmm': ['ootmm']
-};
-
-// Combo games should also search for their source games
-const COMBO_GAME_CATEGORIES = {
-  'ootmm': ['ootmm', 'oot', 'ootr', 'mm', 'mmr'],
-  'smz3': ['smz3', 'alttp', 'alttpr', 'sm', 'smr']
-};
-
-// Game name patterns for tournament search
-const GAME_NAME_PATTERNS = {
-  'oot': /ocarina\s*(of)?\s*time/i,
-  'alttp': /link\s*(to)?\s*(the)?\s*past/i,
-  'mm': /majora'?s?\s*mask/i,
-  'sm': /super\s*metroid/i,
-  'sm64': /super\s*mario\s*64/i,
-  'dk64': /donkey\s*kong\s*64/i,
-  'tww': /wind\s*waker/i,
-  'tp': /twilight\s*princess/i,
-  'kh2fm': /kingdom\s*hearts\s*(2|ii)/i,
-  'sotn': /symphony\s*(of)?\s*(the)?\s*night/i,
-  'smz3': /smz3|super\s*metroid.*link/i,
-  'ootmm': /ootmm|ocarina.*majora/i
-};
-
-// Combo game tournament name patterns
-const COMBO_GAME_PATTERNS = {
-  'ootmm': [/ocarina\s*(of)?\s*time/i, /majora'?s?\s*mask/i],
-  'smz3': [/link\s*(to)?\s*(the)?\s*past/i, /super\s*metroid/i]
-};
-
 // Get game statistics
 router.get('/:id/stats', async (req, res, next) => {
   try {
-    const { Tournament, Race, Game } = require('../models');
+    const { Tournament, Race } = require('../models');
     const gameId = req.params.id;
     const gameIdLower = gameId.toLowerCase();
-    
-    // Build category query with aliases and integrations slugs for races
-    // For combo games, search all source game categories
-    const comboCategories = COMBO_GAME_CATEGORIES[gameIdLower];
-    let categoryQuery;
-    
-    if (comboCategories) {
-      categoryQuery = { category: { $in: comboCategories } };
-    } else {
-      // Get game doc to access integrations.racetime.gameSlugs
-      const gameDoc = await Game.findOne({ id: gameId });
-      const racetimeSlug = gameDoc?.integrations?.racetime?.gameSlug;
-      const racetimeSlugs = gameDoc?.integrations?.racetime?.gameSlugs || [];
-      
-      if (racetimeSlug && racetimeSlugs.length > 0) {
-        // Include both primary slug and additional slugs (like alttpr-ladder)
-        categoryQuery = { category: { $in: [racetimeSlug, ...racetimeSlugs] } };
-      } else {
-        const aliases = CATEGORY_ALIASES[gameIdLower];
-        categoryQuery = aliases && aliases.length > 1 
-          ? { category: { $in: aliases } }
-          : { category: gameId };
-      }
-    }
-    
-    // Build tournament query - search by gameName pattern or by game ObjectId
-    const gameDoc = await Game.findOne({ id: gameId });
-    const comboPatterns = COMBO_GAME_PATTERNS[gameIdLower];
-    const gamePattern = GAME_NAME_PATTERNS[gameIdLower];
-    
-    let tournamentQuery = {};
-    if (gameDoc) {
-      // Search by game reference OR by gameName pattern(s)
-      const conditions = [{ game: gameDoc._id }];
-      
-      if (comboPatterns) {
-        // For combo games, match any of the source game patterns
-        comboPatterns.forEach(pattern => {
-          conditions.push({ gameName: { $regex: pattern } });
-        });
-      } else if (gamePattern) {
-        conditions.push({ gameName: { $regex: gamePattern } });
-      }
-      
-      tournamentQuery = { $or: conditions };
-    } else if (comboPatterns) {
-      // For combo games without game doc, match any source pattern
-      tournamentQuery = { $or: comboPatterns.map(p => ({ gameName: { $regex: p } })) };
-    } else if (gamePattern) {
-      tournamentQuery = { gameName: { $regex: gamePattern } };
-    }
+
+    const gameDoc = await Game.findOne({ id: gameIdLower });
+    const categoryQuery = buildCategoryQuery(gameDoc, gameIdLower);
+    const tournamentQuery = buildTournamentQuery(gameDoc, gameIdLower);
     
     const totalTournaments = await Tournament.countDocuments(tournamentQuery);
     const totalRaces = await Race.countDocuments(categoryQuery);

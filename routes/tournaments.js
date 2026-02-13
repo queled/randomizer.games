@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Tournament } = require('../models');
+const { Tournament, Game } = require('../models');
 const { validateObjectId } = require('../middleware/security');
 
 // Game name patterns for tournament search (same as games.js)
@@ -26,15 +26,35 @@ router.get('/', async (req, res, next) => {
     
     const query = {};
     
-    // Filter by game using gameName pattern instead of gameId
+    // Filter by game using game reference and/or gameName patterns
     if (gameId) {
-      const gamePattern = GAME_NAME_PATTERNS[gameId.toLowerCase()];
+      const gameIdLower = String(gameId).toLowerCase();
+      const gamePattern = GAME_NAME_PATTERNS[gameIdLower];
+      const gameDoc = await Game.findOne({ id: gameIdLower }).select('_id name official randomizer').lean();
+
+      const orConditions = [];
+      if (gameDoc?._id) {
+        orConditions.push({ game: gameDoc._id });
+      }
       if (gamePattern) {
-        query.gameName = { $regex: gamePattern };
+        orConditions.push({ gameName: { $regex: gamePattern } });
+      }
+      if (gameDoc?.name) {
+        const escapedName = gameDoc.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        orConditions.push({ gameName: { $regex: new RegExp(escapedName, 'i') } });
+      }
+      if (gameDoc?.official?.name) {
+        const escapedOfficial = gameDoc.official.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        orConditions.push({ gameName: { $regex: new RegExp(escapedOfficial, 'i') } });
+      }
+
+      if (orConditions.length > 0) {
+        query.$or = orConditions;
       }
     }
     
     const tournaments = await Tournament.find(query)
+      .populate('game', 'id name official randomizer')
       .sort({ startDate: -1 })
       .limit(parseInt(limit))
       .skip((parseInt(page) - 1) * parseInt(limit));
@@ -44,6 +64,17 @@ router.get('/', async (req, res, next) => {
     // Calculate status dynamically
     const tournamentsWithStatus = tournaments.map(t => {
       const tournament = t.toObject();
+
+      if (tournament.game && typeof tournament.game === 'object') {
+        const g = tournament.game;
+        if (g.id) {
+          tournament.gameId = g.id;
+        }
+        if (!tournament.gameName) {
+          tournament.gameName = g.official?.name || g.name || g.randomizer?.shortName || tournament.gameId || null;
+        }
+      }
+
       tournament.status = calculateStatus(tournament);
       return tournament;
     });

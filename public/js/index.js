@@ -150,6 +150,39 @@ function resolveGameForCategory(cat) {
   return null;
 }
 
+function resolveGameForTournament(tournament) {
+  const candidates = [
+    tournament?.gameId,
+    (tournament?.game && typeof tournament.game === 'string') ? tournament.game : null,
+    (tournament?.game && typeof tournament.game === 'object') ? tournament.game.id : null
+  ].filter(Boolean);
+
+  for (const candidate of candidates) {
+    const resolved = resolveGameForCategory(String(candidate).toLowerCase());
+    if (resolved) return resolved;
+  }
+
+  const gameName = (tournament?.gameName || '').toLowerCase();
+  if (!gameName) return null;
+
+  for (const id in gamesById) {
+    const g = gamesById[id];
+    const names = [
+      g?.name,
+      g?.officialName,
+      g?.official?.name,
+      g?.randomizer?.displayName,
+      g?.randomizer?.shortName
+    ].filter(Boolean).map(n => String(n).toLowerCase());
+
+    if (names.some(n => gameName.includes(n) || n.includes(gameName))) {
+      return g;
+    }
+  }
+
+  return null;
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   try {
     const gamesResp = await API.getGames();
@@ -367,7 +400,7 @@ function createTournamentCard(tournament) {
   }
 
   // Resolve game name
-  const resolved = resolveGameForCategory(tournament.gameId || tournament.game);
+  const resolved = resolveGameForTournament(tournament);
   const friendlyGameName = (resolved && (resolved.officialName || resolved.name)) || tournament.gameName || 'Unknown game';
 
   card.innerHTML = `

@@ -832,7 +832,7 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
   async function loadByName(name){
     // First try the aggregated players list to get tournament data and basic info
     try {
-      const all = await fetchJson('/api/players');
+      const all = await fetchJson('/api/players?includeTournaments=1');
       const aggregated = (all.players || []).find(p => p.name.toLowerCase() === name.toLowerCase());
       
       if (aggregated) {
@@ -988,7 +988,7 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
       }
     } catch (err) {
       // Fallback to aggregated list if direct player lookup fails
-      const all = await fetchJson('/api/players');
+      const all = await fetchJson('/api/players?includeTournaments=1');
       const found = (all.players || []).find(p => p.name.toLowerCase() === name.toLowerCase());
       if(!found) throw new Error('Player not found by name');
       const tournaments = found.tournaments || [];

@@ -338,6 +338,7 @@ const RANDOMIZER_ACRONYMS = {
 
 // Cache for Twitch game IDs
 const gameIdCache = {};
+const twitchStreamsInFlight = new Map();
 
 async function getTwitchGameId(gameName, token) {
   if (gameIdCache[gameName]) {
@@ -425,6 +426,23 @@ function isRandomizerStream(stream, gameName) {
 }
 
 async function fetchTwitchStreams(gameName, includeAll = false) {
+  const normalizedGameName = String(gameName || '').trim();
+  if (!normalizedGameName) {
+    return [];
+  }
+
+  const cacheKey = `twitch-streams:${normalizedGameName.toLowerCase()}:${includeAll ? 'all' : 'filtered'}`;
+  const cachedStreams = getCached(cacheKey);
+  if (cachedStreams) {
+    return cachedStreams;
+  }
+
+  const inflight = twitchStreamsInFlight.get(cacheKey);
+  if (inflight) {
+    return inflight;
+  }
+
+  const requestPromise = (async () => {
   const token = await getTwitchToken();
   if (!token) {
     return [];
@@ -434,7 +452,7 @@ async function fetchTwitchStreams(gameName, includeAll = false) {
   
   try {
     // Get the Twitch game ID for the game category
-    const gameId = await getTwitchGameId(gameName, token);
+    const gameId = await getTwitchGameId(normalizedGameName, token);
     
     if (gameId) {
       const response = await fetch(`https://api.twitch.tv/helix/streams?game_id=${gameId}&first=100`, {
@@ -453,7 +471,7 @@ async function fetchTwitchStreams(gameName, includeAll = false) {
         // For some Twitch categories (e.g., Archipelago) we want to include all streams
         // regardless of title/tags because the category itself implies randomizer content.
         if (!includeAll) {
-          candidateStreams = candidateStreams.filter(stream => isRandomizerStream(stream, gameName));
+          candidateStreams = candidateStreams.filter(stream => isRandomizerStream(stream, normalizedGameName));
         }
 
         streams.push(...candidateStreams.map(stream => ({
@@ -475,43 +493,74 @@ async function fetchTwitchStreams(gameName, includeAll = false) {
     console.error('Error fetching Twitch streams:', error);
   }
 
+  setCache(cacheKey, streams);
   return streams;
+  })();
+
+  twitchStreamsInFlight.set(cacheKey, requestPromise);
+  try {
+    return await requestPromise;
+  } finally {
+    twitchStreamsInFlight.delete(cacheKey);
+  }
 }
 
-// Get live streams for a game
-router.get('/:gameId', async (req, res, next) => {
-  try {
-    const { gameId } = req.params;
-    const cacheKey = `streams:${gameId}`;
-    
-    // Check cache
-    const cached = getCached(cacheKey);
-    if (cached) {
-      return res.json(cached);
-    }
+async function buildGameStreamsResult(gameId) {
+  const gameIdLower = String(gameId || '').toLowerCase();
+  const cacheKey = `streams:${gameIdLower}`;
 
-    const gameIdLower = gameId.toLowerCase();
-    const gameDoc = await Game.findOne({ id: gameIdLower, enabled: { $ne: false } });
-    if (!gameDoc) {
-      return res.json({
+  const cached = getCached(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
+  const gameDoc = await Game.findOne({ id: gameIdLower, enabled: { $ne: false } });
+  if (!gameDoc) {
+    return {
+      gameId,
+      streams: [],
+      total: 0,
+      message: 'Game not supported yet',
+      fetchedAt: new Date().toISOString()
+    };
+  }
+
+  const comboGames = COMBO_GAMES[gameIdLower];
+  let twitchStreamsAll = [];
+
+  if (comboGames) {
+    const streamPromises = comboGames.map(gameName => fetchTwitchStreams(gameName, PASS_THROUGH_TWITCH_CATEGORIES.has(String(gameName).toLowerCase())));
+    const results = await Promise.all(streamPromises);
+
+    const streamMap = new Map();
+    for (const streams of results) {
+      for (const stream of streams) {
+        if (!streamMap.has(stream.id)) {
+          streamMap.set(stream.id, stream);
+        }
+      }
+    }
+    twitchStreamsAll = Array.from(streamMap.values());
+    twitchStreamsAll = filterComboStreams(twitchStreamsAll, gameIdLower);
+  } else {
+    const twitchNameFromDb = gameDoc.integrations?.twitch?.categoryName;
+    const fallbackName = TWITCH_GAME_NAMES[gameIdLower] || gameDoc.official?.name || gameDoc.name;
+    const twitchGameName = twitchNameFromDb || fallbackName;
+
+    if (!twitchGameName) {
+      return {
         gameId,
         streams: [],
         total: 0,
         message: 'Game not supported yet',
         fetchedAt: new Date().toISOString()
-      });
+      };
     }
-    
-    // Check if it's a combo game
-    const comboGames = COMBO_GAMES[gameIdLower];
-    let twitchStreamsAll = [];
-    
-    if (comboGames) {
-      // Fetch streams from all source games for combos
-      const streamPromises = comboGames.map(gameName => fetchTwitchStreams(gameName, PASS_THROUGH_TWITCH_CATEGORIES.has(String(gameName).toLowerCase())));
-      const results = await Promise.all(streamPromises);
-      
-      // Merge streams and deduplicate by stream ID
+
+    let twitchStreams = [];
+
+    if (Array.isArray(twitchGameName)) {
+      const results = await Promise.all(twitchGameName.map(name => fetchTwitchStreams(name, PASS_THROUGH_TWITCH_CATEGORIES.has(String(name).toLowerCase()))));
       const streamMap = new Map();
       for (const streams of results) {
         for (const stream of streams) {
@@ -520,92 +569,122 @@ router.get('/:gameId', async (req, res, next) => {
           }
         }
       }
-      twitchStreamsAll = Array.from(streamMap.values());
-      
-      // Apply combo-specific keyword filtering
-      twitchStreamsAll = filterComboStreams(twitchStreamsAll, gameIdLower);
+      twitchStreams = Array.from(streamMap.values());
     } else {
-      // Single game
-      const twitchNameFromDb = gameDoc.integrations?.twitch?.categoryName;
-      const fallbackName = TWITCH_GAME_NAMES[gameIdLower] || gameDoc.official?.name || gameDoc.name;
-      const twitchGameName = twitchNameFromDb || fallbackName;
-
-      if (!twitchGameName) {
-        return res.json({
-          gameId,
-          streams: [],
-          total: 0,
-          message: 'Game not supported yet',
-          fetchedAt: new Date().toISOString()
-        });
-      }
-
-      // Fetch from all platforms in parallel. Support multiple Twitch category names.
-      let twitchStreams = [];
-
-      if (Array.isArray(twitchGameName)) {
-        const results = await Promise.all(twitchGameName.map(name => fetchTwitchStreams(name, PASS_THROUGH_TWITCH_CATEGORIES.has(String(name).toLowerCase()))));
-        const streamMap = new Map();
-        for (const streams of results) {
-          for (const stream of streams) {
-            if (!streamMap.has(stream.id)) {
-              streamMap.set(stream.id, stream);
-            }
-          }
-        }
-        twitchStreams = Array.from(streamMap.values());
-      } else {
-        twitchStreams = await fetchTwitchStreams(twitchGameName, PASS_THROUGH_TWITCH_CATEGORIES.has(String(twitchGameName).toLowerCase()));
-      }
-
-      twitchStreamsAll = twitchStreams;
+      twitchStreams = await fetchTwitchStreams(twitchGameName, PASS_THROUGH_TWITCH_CATEGORIES.has(String(twitchGameName).toLowerCase()));
     }
 
-    // Apply per-game extra filters (title keywords, allowed Twitch categories)
-    try {
-      const titleKeywords = PER_GAME_TITLE_KEYWORDS[gameIdLower];
-      if (titleKeywords && titleKeywords.length > 0) {
-        const kws = titleKeywords.map(k => k.toLowerCase());
-        twitchStreamsAll = twitchStreamsAll.filter(s => {
-          const title = (s.title || '').toLowerCase();
-          const tags = (s.tags || []).map(t => (t || '').toLowerCase()).join(' ');
-          const combined = title + ' ' + tags;
-          return kws.some(k => combined.includes(k));
-        });
-      }
+    twitchStreamsAll = twitchStreams;
+  }
 
-      const allowedCats = PER_GAME_ALLOWED_TWITCH_CATEGORIES[gameIdLower];
-      if (allowedCats && allowedCats.length > 0) {
-        const allowed = allowedCats.map(a => a.toLowerCase());
-        twitchStreamsAll = twitchStreamsAll.filter(s => allowed.includes((s.gameName || '').toLowerCase()));
-      }
-    } catch (e) {
-      console.warn('Per-game stream filtering failed for', gameIdLower, e);
+  try {
+    const titleKeywords = PER_GAME_TITLE_KEYWORDS[gameIdLower];
+    if (titleKeywords && titleKeywords.length > 0) {
+      const kws = titleKeywords.map(k => k.toLowerCase());
+      twitchStreamsAll = twitchStreamsAll.filter(s => {
+        const title = (s.title || '').toLowerCase();
+        const tags = (s.tags || []).map(t => (t || '').toLowerCase()).join(' ');
+        const combined = title + ' ' + tags;
+        return kws.some(k => combined.includes(k));
+      });
     }
 
-    // Combine and sort by viewer count
-    const allStreams = [
-      ...twitchStreamsAll,
-      // ...youtubeStreams,
-      // ...kickStreams
-    ].map(stream => ({
+    const allowedCats = PER_GAME_ALLOWED_TWITCH_CATEGORIES[gameIdLower];
+    if (allowedCats && allowedCats.length > 0) {
+      const allowed = allowedCats.map(a => a.toLowerCase());
+      twitchStreamsAll = twitchStreamsAll.filter(s => allowed.includes((s.gameName || '').toLowerCase()));
+    }
+  } catch (e) {
+    console.warn('Per-game stream filtering failed for', gameIdLower, e);
+  }
+
+  const allStreams = twitchStreamsAll
+    .map(stream => ({
       ...stream,
-      gameId: gameIdLower  // Ajouter gameId pour le frontend
-    })).sort((a, b) => (b.viewerCount || 0) - (a.viewerCount || 0));
+      gameId: gameIdLower
+    }))
+    .sort((a, b) => (b.viewerCount || 0) - (a.viewerCount || 0));
 
-    const result = {
-      gameId,
-      streams: allStreams,
-      total: allStreams.length,
-      fetchedAt: new Date().toISOString()
-    };
+  const result = {
+    gameId,
+    streams: allStreams,
+    total: allStreams.length,
+    fetchedAt: new Date().toISOString()
+  };
 
-    // Sort streams by viewer count (highest first)
-    result.streams.sort((a, b) => (b.viewerCount || 0) - (a.viewerCount || 0));
+  setCache(cacheKey, result);
+  return result;
+}
 
-    // Cache the result
+async function buildStreamsStatsByGame() {
+  const games = await Game.find({ enabled: { $ne: false } }).select('id').lean();
+  const gameIds = games
+    .map(game => String(game.id || '').toLowerCase())
+    .filter(Boolean);
+
+  const stats = {};
+  const concurrency = Math.min(8, gameIds.length);
+  let index = 0;
+
+  async function worker() {
+    while (index < gameIds.length) {
+      const currentIndex = index;
+      index += 1;
+      const gameId = gameIds[currentIndex];
+
+      try {
+        const result = await buildGameStreamsResult(gameId);
+        const streams = result?.streams || [];
+        stats[gameId] = {
+          streamers: streams.length,
+          viewers: streams.reduce((sum, stream) => sum + (stream.viewerCount || 0), 0)
+        };
+      } catch (error) {
+        stats[gameId] = { streamers: 0, viewers: 0 };
+      }
+    }
+  }
+
+  await Promise.all(Array.from({ length: concurrency || 1 }, () => worker()));
+
+  return {
+    stats,
+    totalGames: gameIds.length,
+    fetchedAt: new Date().toISOString()
+  };
+}
+
+setTimeout(() => {
+  buildStreamsStatsByGame()
+    .then(result => {
+      setCache('streams:stats-by-game', result);
+    })
+    .catch(err => {
+      console.warn('Warmup /api/streams/stats/by-game failed:', err?.message || err);
+    });
+}, 2500);
+
+router.get('/stats/by-game', async (req, res, next) => {
+  try {
+    const cacheKey = 'streams:stats-by-game';
+    const cached = getCached(cacheKey);
+    if (cached) {
+      return res.json(cached);
+    }
+    const result = await buildStreamsStatsByGame();
+
     setCache(cacheKey, result);
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
+// Get live streams for a game
+router.get('/:gameId', async (req, res, next) => {
+  try {
+    const { gameId } = req.params;
+    const result = await buildGameStreamsResult(gameId);
     res.json(result);
   } catch (error) {
     next(error);

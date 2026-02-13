@@ -157,28 +157,42 @@ document.addEventListener('DOMContentLoaded', async () => {
       renderGames(sorted);
     });
     
-    // Fetch streams in background (lower priority)
-    // Fetch streams for each game in parallel to get correct filtering for combo games
-    Promise.all(gamesData.map(game => 
-      fetch(`/api/streams/${encodeURIComponent(game.id)}`)
-        .then(res => res.ok ? res.json() : { streams: [] })
-        .catch(() => ({ streams: [] }))
-    ))
-      .then(results => {
-        // Count streamers and viewers per game
+    // Fetch stream stats in background (lower priority)
+    (async () => {
+      try {
+        const statsRes = await fetch('/api/streams/stats/by-game');
+        if (!statsRes.ok) {
+          throw new Error('Failed to fetch aggregated stream stats');
+        }
+
+        const statsJson = await statsRes.json();
+        streamStats = statsJson.stats || {};
+      } catch (e) {
+        console.warn('Aggregated stream stats unavailable, using per-game fallback:', e);
+
+        // Fallback: keep previous behavior for resilience
+        const results = await Promise.all(gamesData.map(game =>
+          fetch(`/api/streams/${encodeURIComponent(game.id)}`)
+            .then(res => res.ok ? res.json() : { streams: [] })
+            .catch(() => ({ streams: [] }))
+        ));
+
+        const fallbackStats = {};
         gamesData.forEach((game, index) => {
           const gameStreams = results[index]?.streams || [];
-          streamStats[game.id] = {
+          fallbackStats[game.id] = {
             streamers: gameStreams.length,
             viewers: gameStreams.reduce((sum, s) => sum + (s.viewerCount || 0), 0)
           };
         });
-        
-        // Re-render with current sort to update stream counts
-        const currentSort = sortSelect.value || 'name-asc';
-        renderGames(sortGames(gamesData, currentSort));
-      })
-      .catch(e => console.warn('Could not load streams data:', e));
+
+        streamStats = fallbackStats;
+      }
+
+      // Re-render with current sort to update stream counts
+      const currentSort = sortSelect.value || 'name-asc';
+      renderGames(sortGames(gamesData, currentSort));
+    })();
     
   } catch (e) {
     const errText = (typeof i18n !== 'undefined' && typeof i18n.t === 'function') ? i18n.t('common.error') : 'Loading error';

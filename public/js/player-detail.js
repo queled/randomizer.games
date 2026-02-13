@@ -276,7 +276,7 @@
     return `${num}ème`;
   }
 
-  function renderProfile(p, tournaments){
+  function renderProfile(p, tournaments, races){
     headerName.textContent = p.name || p.userId || 'Joueur inconnu';
 
     // Kick off avatar loading asynchronously so the rest of the profile renders fast
@@ -353,7 +353,9 @@
     }
 
     // Stats cards
-    const gamesCount = countGamesFromTournaments(tournaments || []);
+    const gamesCount = (Array.isArray(races) && races.length > 0)
+      ? countGamesFromRaces(races)
+      : countGamesFromTournaments(tournaments || []);
     const totalRaces = p.stats ? (p.stats.totalRaces || 0) : 0;
     const totalTournaments = (tournaments || []).length;
     
@@ -386,6 +388,34 @@
   function normalizeGameName(name) {
     if (!name || name === '-' || name === 'Unknown') return null;
     const lower = name.toLowerCase();
+    const slugMap = {
+      oot: 'Ocarina of Time Randomizer',
+      ootr: 'Ocarina of Time Randomizer',
+      alttp: 'A Link to the Past Randomizer',
+      alttpr: 'A Link to the Past Randomizer',
+      'alttpr-ladder': 'A Link to the Past Randomizer',
+      mm: "Majora's Mask Randomizer",
+      mmr: "Majora's Mask Randomizer",
+      sm: 'Super Metroid Randomizer',
+      smr: 'Super Metroid Randomizer',
+      sm64: 'Super Mario 64 Randomizer',
+      dk64: 'Donkey Kong 64 Randomizer',
+      dk64r: 'Donkey Kong 64 Randomizer',
+      tww: 'The Wind Waker Randomizer',
+      tp: 'Twilight Princess Randomizer',
+      kh2fm: 'Kingdom Hearts 2 FM Randomizer',
+      kh2r: 'Kingdom Hearts 2 FM Randomizer',
+      kh2fmr: 'Kingdom Hearts 2 FM Randomizer',
+      sotn: 'Symphony of the Night Randomizer',
+      smz3: 'SMZ3 Combo Randomizer',
+      ootmm: 'OoT+MM Combo Randomizer',
+      ootmmr: 'OoT+MM Combo Randomizer',
+      z1: 'The Legend of Zelda Randomizer',
+      z1r: 'The Legend of Zelda Randomizer',
+      z2: 'Zelda II Randomizer',
+      z2r: 'Zelda II Randomizer'
+    };
+    if (slugMap[lower]) return slugMap[lower];
     // Check for known game patterns
     if (/ocarina\s*(of)?\s*time/i.test(lower)) return 'Ocarina of Time Randomizer';
     if (/link\s*(to)?\s*(the)?\s*past/i.test(lower)) return 'A Link to the Past Randomizer';
@@ -406,6 +436,18 @@
     for(const t of tournaments){
       const g = getTournamentGameName(t);
       const normalized = normalizeGameName(g);
+      if (normalized) {
+        uniqueGames.add(normalized);
+      }
+    }
+    return uniqueGames.size;
+  }
+
+  function countGamesFromRaces(races){
+    const uniqueGames = new Set();
+    for (const race of races || []) {
+      const category = race?.category || race?.game || race?.gameSlug || null;
+      const normalized = normalizeGameName(category);
       if (normalized) {
         uniqueGames.add(normalized);
       }
@@ -823,13 +865,30 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
   async function loadById(pid){
     const player = await fetchJson('/players/'+encodeURIComponent(pid));
     const tournaments = player.tournaments || [];
-    renderProfile(player, tournaments);
+    renderProfile(player, tournaments, []);
     renderTournaments(tournaments, player.name || player.userId || headerName.textContent);
     const jr = await fetchJson('/players/'+encodeURIComponent(pid)+'/races');
-    renderRaces(jr.races || []);
+    const races = jr.races || [];
+    player.stats = player.stats || {};
+    player.stats.totalRaces = races.length;
+    renderProfile(player, tournaments, races);
+    renderRaces(races);
   }
 
   async function loadByName(name){
+    headerName.textContent = name;
+
+    // Fast path: show profile name + links as early as possible
+    try {
+      const quickRes = await fetch('/api/players/by-name/' + encodeURIComponent(name));
+      if (quickRes.ok && quickRes.status !== 204) {
+        const quickPlayer = await quickRes.json();
+        renderProfile(quickPlayer, [], []);
+      }
+    } catch (e) {
+      // Ignore quick-path errors, full loading continues below
+    }
+
     // First try the aggregated players list to get tournament data and basic info
     try {
       const all = await fetchJson('/api/players?includeTournaments=1&name=' + encodeURIComponent(name));
@@ -860,7 +919,7 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
           } catch (e) { /* ignore */ }
         }
         
-        renderProfile(playerData, tournaments);
+        renderProfile(playerData, tournaments, []);
         renderTournaments(tournaments, aggregated.name || name);
         
         // Try to load races by player name
@@ -872,7 +931,7 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
             if (races.length > 0) {
               // Update stats
               playerData.stats.totalRaces = races.length;
-              renderProfile(playerData, tournaments);
+              renderProfile(playerData, tournaments, races);
               renderRaces(races);
             } else {
               racesEl.innerHTML = '<p style="color:#9ca3af;">No races found for this player.</p>';
@@ -919,7 +978,7 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
           stats: { totalRaces: races.length }
         };
 
-        renderProfile(playerData, []);
+        renderProfile(playerData, [], races);
         if (races.length) renderRaces(races);
         else racesEl.innerHTML = '<p style="color:#9ca3af;">No races found for this player.</p>';
         return;
@@ -965,20 +1024,28 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
         }
       }
 
-      renderProfile(player, displayTournaments);
+      renderProfile(player, displayTournaments, []);
       renderTournaments(displayTournaments, player.name || name || player.userId);
 
       // Load races by userId or by name
       if (player.userId) {
         const jr = await fetchJson('/api/players/'+encodeURIComponent(player.userId)+'/races');
-        renderRaces(jr.races || []);
+        const races = jr.races || [];
+        player.stats = player.stats || {};
+        player.stats.totalRaces = races.length;
+        renderProfile(player, displayTournaments, races);
+        renderRaces(races);
       } else {
         // Try by name
         try {
           const racesRes = await fetch('/api/players/by-name/' + encodeURIComponent(name) + '/races');
           if (racesRes.ok) {
             const racesData = await racesRes.json();
-            renderRaces(racesData.races || []);
+            const races = racesData.races || [];
+            player.stats = player.stats || {};
+            player.stats.totalRaces = races.length;
+            renderProfile(player, displayTournaments, races);
+            renderRaces(races);
           } else {
             racesEl.innerHTML = '<p style="color:#9ca3af;">No races found for this player.</p>';
           }
@@ -1001,7 +1068,7 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
         stats: { totalRaces: 0 }
       };
       
-      renderProfile(playerData, tournaments);
+      renderProfile(playerData, tournaments, []);
       renderTournaments(tournaments, found.name || name);
       
       // Try to load races
@@ -1009,7 +1076,10 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
         const racesRes = await fetch('/api/players/by-name/' + encodeURIComponent(name) + '/races');
         if (racesRes.ok) {
           const racesData = await racesRes.json();
-          renderRaces(racesData.races || []);
+          const races = racesData.races || [];
+          playerData.stats.totalRaces = races.length;
+          renderProfile(playerData, tournaments, races);
+          renderRaces(races);
         } else {
           racesEl.innerHTML = '<p style="color:#9ca3af;">No races found.</p>';
         }

@@ -33,6 +33,17 @@ function setPlayersCache(key, value) {
   playersCache.expires.set(key, Date.now() + PLAYERS_CACHE_TTL);
 }
 
+function filterPlayersByName(payload, rawName) {
+  const wanted = normalizeName(rawName);
+  if (!wanted) return payload;
+
+  const filteredPlayers = (payload.players || []).filter(p => normalizeName(p.name) === wanted);
+  return {
+    players: filteredPlayers,
+    total: filteredPlayers.length
+  };
+}
+
 function resolveGameDisplayNameFromDoc(game) {
   return game?.randomizer?.shortName
     || game?.randomizer?.displayName
@@ -227,7 +238,7 @@ async function buildPlayersResponse(includeTournaments) {
         count
       }))
       .sort((a, b) => b.count - a.count)
-      .slice(0, 4);
+      .slice(0, 3);
 
     return {
       name: player.name,
@@ -251,16 +262,17 @@ async function buildPlayersResponse(includeTournaments) {
 router.get('/', async (req, res, next) => {
   try {
     const includeTournaments = req.query.includeTournaments === '1' || req.query.includeTournaments === 'true';
+    const filterName = (req.query.name || '').toString();
     const cacheKey = includeTournaments ? 'players:with-tournaments' : 'players:summary';
 
     const cached = getPlayersCache(cacheKey);
     if (cached) {
-      return res.json(cached);
+      return res.json(filterName ? filterPlayersByName(cached, filterName) : cached);
     }
 
     if (playersCache.inFlight.has(cacheKey)) {
       const result = await playersCache.inFlight.get(cacheKey);
-      return res.json(result);
+      return res.json(filterName ? filterPlayersByName(result, filterName) : result);
     }
 
     const buildPromise = buildPlayersResponse(includeTournaments)
@@ -275,7 +287,7 @@ router.get('/', async (req, res, next) => {
     playersCache.inFlight.set(cacheKey, buildPromise);
 
     const result = await buildPromise;
-    res.json(result);
+    res.json(filterName ? filterPlayersByName(result, filterName) : result);
   } catch (error) {
     next(error);
   }
@@ -285,15 +297,25 @@ router.get('/', async (req, res, next) => {
 // Get player by name (search Player collection)
 router.get('/by-name/:name', async (req, res, next) => {
   try {
+    const normalizedName = normalizeName(req.params.name);
+    const cacheKey = `players:by-name:${normalizedName}`;
+    const cached = getPlayersCache(cacheKey);
+    if (cached) {
+      if (cached.__noContent) return res.status(204).end();
+      return res.json(cached);
+    }
+
     // Case-insensitive search
     const player = await Player.findOne({ 
       name: { $regex: new RegExp('^' + req.params.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$', 'i') }
     }).populate('tournaments.tournamentId');
 
     if (!player) {
+      setPlayersCache(cacheKey, { __noContent: true });
       return res.status(204).end();
     }
 
+    setPlayersCache(cacheKey, player);
     res.json(player);
   } catch (error) {
     next(error);
@@ -305,13 +327,21 @@ router.get('/by-name/:name/races', async (req, res, next) => {
   try {
     const { Race } = require('../models');
     const name = req.params.name;
+    const normalizedName = normalizeName(name);
+    const cacheKey = `players:by-name-races:${normalizedName}`;
+    const cached = getPlayersCache(cacheKey);
+    if (cached) {
+      return res.json(cached);
+    }
     
     // Search races where entrants.userName matches (case-insensitive)
     const races = await Race.find({ 
       'entrants.userName': { $regex: new RegExp('^' + name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$', 'i') }
     }).sort({ startedAt: -1 });
 
-    res.json({ races });
+    const result = { races };
+    setPlayersCache(cacheKey, result);
+    res.json(result);
   } catch (error) {
     next(error);
   }

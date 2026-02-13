@@ -276,7 +276,7 @@
     return `${num}ème`;
   }
 
-  function renderProfile(p, tournaments, races){
+  function renderProfile(p, tournaments, races, options = {}){
     headerName.textContent = p.name || p.userId || 'Joueur inconnu';
 
     // Kick off avatar loading asynchronously so the rest of the profile renders fast
@@ -355,8 +355,9 @@
     // Stats cards
     const gamesCount = (Array.isArray(races) && races.length > 0)
       ? countGamesFromRaces(races)
-      : countGamesFromTournaments(tournaments || []);
-    const totalRaces = p.stats ? (p.stats.totalRaces || 0) : 0;
+      : (options.deferCounts ? null : countGamesFromTournaments(tournaments || []));
+    const hasTotalRaces = p.stats && Number.isFinite(p.stats.totalRaces);
+    const totalRaces = hasTotalRaces ? p.stats.totalRaces : (options.deferCounts ? null : 0);
     const totalTournaments = (tournaments || []).length;
     
     const labelGamesPlayed = typeof i18n !== 'undefined' ? i18n.t('playerDetail.gamesPlayed') : 'Games Played';
@@ -364,8 +365,8 @@
     const labelTournaments = typeof i18n !== 'undefined' ? i18n.t('playerDetail.tournaments') : 'Tournaments';
     
     statsEl.innerHTML = `
-      <div style="background:#374151;padding:1rem;border-radius:0.5rem;"><div style="color:#9ca3af;font-size:0.875rem;">${labelGamesPlayed}</div><div style="color:#fff;font-size:1.5rem;font-weight:bold;">${gamesCount}</div></div>
-      <div style="background:#374151;padding:1rem;border-radius:0.5rem;"><div style="color:#9ca3af;font-size:0.875rem;">${labelRaces}</div><div style="color:#fff;font-size:1.5rem;font-weight:bold;">${totalRaces}</div></div>
+      <div style="background:#374151;padding:1rem;border-radius:0.5rem;"><div style="color:#9ca3af;font-size:0.875rem;">${labelGamesPlayed}</div><div style="color:#fff;font-size:1.5rem;font-weight:bold;">${gamesCount == null ? '…' : gamesCount}</div></div>
+      <div style="background:#374151;padding:1rem;border-radius:0.5rem;"><div style="color:#9ca3af;font-size:0.875rem;">${labelRaces}</div><div style="color:#fff;font-size:1.5rem;font-weight:bold;">${totalRaces == null ? '…' : totalRaces}</div></div>
       <div style="background:#374151;padding:1rem;border-radius:0.5rem;"><div style="color:#9ca3af;font-size:0.875rem;">${labelTournaments}</div><div style="color:#fff;font-size:1.5rem;font-weight:bold;">${totalTournaments}</div></div>
     `;
   }
@@ -878,17 +879,6 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
   async function loadByName(name){
     headerName.textContent = name;
 
-    // Fast path: show profile name + links as early as possible
-    try {
-      const quickRes = await fetch('/api/players/by-name/' + encodeURIComponent(name));
-      if (quickRes.ok && quickRes.status !== 204) {
-        const quickPlayer = await quickRes.json();
-        renderProfile(quickPlayer, [], []);
-      }
-    } catch (e) {
-      // Ignore quick-path errors, full loading continues below
-    }
-
     // First try the aggregated players list to get tournament data and basic info
     try {
       const all = await fetchJson('/api/players?includeTournaments=1&name=' + encodeURIComponent(name));
@@ -918,8 +908,18 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
             }
           } catch (e) { /* ignore */ }
         }
+
+        // Try to resolve Twitch before first render so Racetime+Twitch buttons can appear together
+        if (!playerData.twitch && playerData.racetimeUrl) {
+          try {
+            const twitchUrl = await fetchTwitchFromRacetime(playerData.racetimeUrl);
+            if (twitchUrl) {
+              playerData.twitch = twitchUrl.split('/').pop();
+            }
+          } catch (e) { /* ignore */ }
+        }
         
-        renderProfile(playerData, tournaments, []);
+        renderProfile(playerData, tournaments, [], { deferCounts: true });
         renderTournaments(tournaments, aggregated.name || name);
         
         // Try to load races by player name

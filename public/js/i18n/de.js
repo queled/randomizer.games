@@ -21,6 +21,7 @@ const de = {
         loadingParticipants: "Teilnehmer werden geladen...",
         error: "Fehler",
         noResults: "Keine Ergebnisse",
+        noGamesFound: "Keine Spiele gefunden",
         viewMore: "Mehr anzeigen",
         viewAll: "Alle anzeigen",
         back: "Zurück",

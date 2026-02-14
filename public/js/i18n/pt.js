@@ -21,6 +21,7 @@ const pt = {
         loadingParticipants: "Carregando participantes...",
         error: "Erro",
         noResults: "Sem resultados",
+        noGamesFound: "Nenhum jogo encontrado",
         viewMore: "Ver mais",
         viewAll: "Ver todos",
         back: "Voltar",

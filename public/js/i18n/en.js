@@ -21,6 +21,7 @@ const en = {
         loadingParticipants: "Loading participants...",
         error: "Error",
         noResults: "No results",
+        noGamesFound: "No games found",
         viewMore: "View more",
         viewAll: "View all",
         back: "Back",

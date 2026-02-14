@@ -4,7 +4,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   const grid = document.getElementById('games-grid');
   const sortSelect = document.getElementById('sort-select');
   
-  grid.innerHTML = '<div class="loading">Loading...</div>';
+  const loadingText = (typeof i18n !== 'undefined' && typeof i18n.t === 'function') 
+    ? i18n.t('common.loading', {}, 'Loading...')
+    : 'Loading...';
+  grid.innerHTML = `<div class="loading">${loadingText}</div>`;
   
   // Store games data and stream stats globally for sorting
   let gamesData = [];
@@ -83,7 +86,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   function renderGames(games) {
     if (!games.length) {
-      grid.innerHTML = '<div class="loading">No games found</div>';
+      const noGamesText = (typeof i18n !== 'undefined' && typeof i18n.t === 'function')
+        ? i18n.t('common.noGamesFound', {}, 'No games found')
+        : 'No games found';
+      grid.innerHTML = `<div class="loading">${noGamesText}</div>`;
       return;
     }
     

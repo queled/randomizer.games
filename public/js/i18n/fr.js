@@ -21,6 +21,7 @@ const fr = {
         loadingParticipants: "Chargement des participants...",
         error: "Erreur",
         noResults: "Aucun résultat",
+        noGamesFound: "Aucun jeu trouvé",
         viewMore: "Voir plus",
         viewAll: "Voir tout",
         back: "Retour",

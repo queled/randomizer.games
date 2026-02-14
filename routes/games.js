@@ -24,11 +24,6 @@ const CATEGORY_ALIASES = {
   'z2': ['z2', 'z2r']
 };
 
-const COMBO_GAME_CATEGORIES = {
-  'ootmm': ['ootmm', 'oot', 'ootr', 'mm', 'mmr'],
-  'smz3': ['smz3', 'alttp', 'alttpr', 'sm', 'smr']
-};
-
 const GAME_NAME_PATTERNS = {
   'oot': /ocarina\s*(of)?\s*time/i,
   'alttp': /link\s*(to)?\s*(the)?\s*past/i,
@@ -40,15 +35,10 @@ const GAME_NAME_PATTERNS = {
   'tp': /twilight\s*princess/i,
   'kh2fm': /kingdom\s*hearts\s*(2|ii)/i,
   'sotn': /symphony\s*(of)?\s*(the)?\s*night/i,
-  'smz3': /smz3|super\s*metroid.*link/i,
-  'ootmm': /ootmm|ocarina.*majora/i,
+  'smz3': /(^|\W)smz3($|\W)/i,
+  'ootmm': /(^|\W)ootmm(r)?($|\W)/i,
   'z1': /(^|\W)(the\s+legend\s+of\s+zelda|zelda\s*1|z1r?)($|\W)/i,
   'z2': /(^|\W)(zelda\s*ii|adventure\s+of\s+link|z2r?)($|\W)/i
-};
-
-const COMBO_GAME_PATTERNS = {
-  'ootmm': [/ocarina\s*(of)?\s*time/i, /majora'?s?\s*mask/i],
-  'smz3': [/link\s*(to)?\s*(the)?\s*past/i, /super\s*metroid/i]
 };
 
 function escapeRegex(text) {
@@ -56,23 +46,18 @@ function escapeRegex(text) {
 }
 
 function buildCategoryQuery(gameDoc, gameIdLower) {
-  const comboCategories = COMBO_GAME_CATEGORIES[gameIdLower];
   const categories = new Set();
 
-  if (comboCategories && comboCategories.length > 0) {
-    comboCategories.forEach(c => categories.add(String(c).toLowerCase()));
-  } else {
-    categories.add(gameIdLower);
-    categories.add(`${gameIdLower}r`);
+  categories.add(gameIdLower);
+  categories.add(`${gameIdLower}r`);
 
-    const aliases = CATEGORY_ALIASES[gameIdLower] || [];
-    aliases.forEach(c => categories.add(String(c).toLowerCase()));
+  const aliases = CATEGORY_ALIASES[gameIdLower] || [];
+  aliases.forEach(c => categories.add(String(c).toLowerCase()));
 
-    const racetimeSlug = gameDoc?.integrations?.racetime?.gameSlug;
-    const racetimeSlugs = gameDoc?.integrations?.racetime?.gameSlugs || [];
-    if (racetimeSlug) categories.add(String(racetimeSlug).toLowerCase());
-    racetimeSlugs.forEach(c => categories.add(String(c).toLowerCase()));
-  }
+  const racetimeSlug = gameDoc?.integrations?.racetime?.gameSlug;
+  const racetimeSlugs = gameDoc?.integrations?.racetime?.gameSlugs || [];
+  if (racetimeSlug) categories.add(String(racetimeSlug).toLowerCase());
+  racetimeSlugs.forEach(c => categories.add(String(c).toLowerCase()));
 
   const all = Array.from(categories).filter(Boolean);
   if (all.length <= 1) {
@@ -82,7 +67,6 @@ function buildCategoryQuery(gameDoc, gameIdLower) {
 }
 
 function buildTournamentQuery(gameDoc, gameIdLower) {
-  const comboPatterns = COMBO_GAME_PATTERNS[gameIdLower] || [];
   const gamePattern = GAME_NAME_PATTERNS[gameIdLower];
   const conditions = [];
 
@@ -90,9 +74,7 @@ function buildTournamentQuery(gameDoc, gameIdLower) {
     conditions.push({ game: gameDoc._id });
   }
 
-  if (comboPatterns.length > 0) {
-    comboPatterns.forEach(pattern => conditions.push({ gameName: { $regex: pattern } }));
-  } else if (gamePattern) {
+  if (gamePattern) {
     conditions.push({ gameName: { $regex: gamePattern } });
   }
 

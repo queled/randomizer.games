@@ -106,13 +106,13 @@ node scripts/import-games-csv.js data/games.csv --full
 
 ```bash
 # Sync le cache uniquement
-node scripts/sync-rando-list-v2.js
+node scripts/sync-rando-list-v3.js
 
 # Sync + liaison automatique aux jeux (dry-run)
-node scripts/sync-rando-list-v2.js --link-games --dry-run
+node scripts/sync-rando-list-v3.js --link-games --dry-run
 
 # Sync + liaison (apply)
-node scripts/sync-rando-list-v2.js --link-games
+node scripts/sync-rando-list-v3.js --link-games
 ```
 
 ### Étape 4: Enrichir depuis les APIs
@@ -154,7 +154,7 @@ Pour l'activer:
 
 ```bash
 # Sync quotidien
-0 3 * * * cd /path/to/project && node scripts/sync-rando-list-v2.js --link-games >> logs/sync.log 2>&1
+0 3 * * * cd /path/to/project && node scripts/sync-rando-list-v3.js --link-games >> logs/sync.log 2>&1
 
 # Enrichissement hebdomadaire
 0 4 * * 0 cd /path/to/project && node scripts/enrich-games.js --all >> logs/enrich.log 2>&1

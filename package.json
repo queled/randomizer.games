@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "sync": "node scripts/sync-data.js",
+    "sync": "npm run sync:racetime && npm run sync-rando-list",
+    "sync:racetime": "node scripts/sync-racetime-global.js",
     "sync-rando-list": "node scripts/sync-rando-list-v3.js",
     "sync-rando-list:link": "node scripts/sync-rando-list-v3.js --link-games",
     "sync-rando-list:detect": "node scripts/sync-rando-list-v3.js --detect-new",

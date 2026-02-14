@@ -8,8 +8,12 @@
 const crypto = require('crypto');
 
 // Admin token from environment (generate a secure one for production)
-const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'dev-admin-token-change-in-production';
-const ADMIN_SESSION_SECRET = process.env.ADMIN_SESSION_SECRET || 'session-secret-change-in-production';
+const DEFAULT_ADMIN_TOKEN = 'dev-admin-token-change-in-production';
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN || DEFAULT_ADMIN_TOKEN;
+
+if (process.env.NODE_ENV === 'production' && (!process.env.ADMIN_TOKEN || ADMIN_TOKEN === DEFAULT_ADMIN_TOKEN)) {
+  throw new Error('ADMIN_TOKEN must be set to a strong value in production');
+}
 
 // Simple in-memory session store (use Redis in production for multi-instance)
 const sessions = new Map();

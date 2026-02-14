@@ -104,5 +104,5 @@ node scripts/import-games-csv.js data/games.csv --full
 Tu peux maintenant lancer le sync rando-list :
 
 ```bash
-node scripts/sync-rando-list-v2.js --link-games --dry-run
+node scripts/sync-rando-list-v3.js --link-games --dry-run
 ```

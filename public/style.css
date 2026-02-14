@@ -1322,6 +1322,8 @@ body.spoiler-mode .spoiler-text::before {
     border-top: 1px solid transparent;
     display: grid;
     grid-template-columns: repeat(1, minmax(0, 1fr));
+    grid-template-rows: repeat(var(--game-summary-rows, 1), minmax(0, auto));
+    grid-auto-flow: column;
     gap: 0.25rem 0.45rem;
     min-height: 4.8rem;
     align-content: start;

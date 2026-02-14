@@ -557,6 +557,7 @@
 
     if (!gamesSummary.length) {
       playerGamesSummary.classList.add('cols-1');
+      playerGamesSummary.style.removeProperty('--game-summary-rows');
       playerGamesSummary.innerHTML = '';
       updateGamesSummaryVisibility();
       return;
@@ -574,6 +575,8 @@
     const n = gamesSummary.length;
     const columns = n <= 3 ? 1 : (n <= 6 ? 2 : 3);
     playerGamesSummary.classList.add(`cols-${columns}`);
+    const rows = Math.ceil(n / columns);
+    playerGamesSummary.style.setProperty('--game-summary-rows', String(rows));
     updateGamesSummaryVisibility();
   }
 

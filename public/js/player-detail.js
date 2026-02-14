@@ -43,9 +43,11 @@
   const headerName = document.getElementById('player-name');
   const avatarEl = document.getElementById('player-avatar');
   const playerLinks = document.getElementById('player-links');
+  const playerGamesSummary = document.getElementById('player-games-summary');
   const statsEl = document.getElementById('player-stats');
   const toursEl = document.getElementById('player-tournaments-list');
   const racesEl = document.getElementById('player-races-list');
+  let gameDisplayMap = null;
 
   if(!id && !nameParam){ headerName.textContent = 'No player specified'; }
 
@@ -429,7 +431,39 @@
     if (/symphony\s*(of)?\s*(the)?\s*night/i.test(lower)) return 'Symphony of the Night Randomizer';
     if (/smz3|super\s*metroid.*link/i.test(lower)) return 'SMZ3 Combo Randomizer';
     if (/ootmm|ocarina.*majora/i.test(lower)) return 'OoT+MM Combo Randomizer';
-    return name; // Return original if no match
+    // Avoid displaying raw slug/id when unknown
+    if (/^[a-z0-9][a-z0-9-]{1,20}$/i.test(lower)) return null;
+    return name;
+  }
+
+  async function ensureGameDisplayMap() {
+    if (gameDisplayMap) return gameDisplayMap;
+
+    const map = new Map();
+    const put = (slug, id, label) => {
+      const s = String(slug || '').toLowerCase().trim();
+      if (!s || !label) return;
+      if (!map.has(s)) map.set(s, { id, label });
+    };
+
+    try {
+      const data = await fetchJson('/api/games');
+      const games = data.games || [];
+      games.forEach(g => {
+        const label = g?.randomizer?.shortName || g?.randomizer?.displayName || g?.official?.name || g?.name;
+        const id = String(g?.id || '').toLowerCase();
+        const rt = g?.integrations?.racetime || {};
+        put(id, id, label);
+        put(`${id}r`, id, label);
+        put(rt.gameSlug, id, label);
+        (rt.gameSlugs || []).forEach(slug => put(slug, id, label));
+      });
+    } catch (e) {
+      // Silent fallback to static mapping only
+    }
+
+    gameDisplayMap = map;
+    return map;
   }
 
   function countGamesFromTournaments(tournaments){
@@ -447,13 +481,88 @@
   function countGamesFromRaces(races){
     const uniqueGames = new Set();
     for (const race of races || []) {
-      const category = race?.category || race?.game || race?.gameSlug || null;
-      const normalized = normalizeGameName(category);
-      if (normalized) {
-        uniqueGames.add(normalized);
+      const category = String(race?.category || race?.game || race?.gameSlug || '').toLowerCase().trim();
+      const slug = category.split('/')[0];
+      if (slug) {
+        uniqueGames.add(slug);
       }
     }
     return uniqueGames.size;
+  }
+
+  function getGameMetaFromCategory(category) {
+    const raw = String(category || '').toLowerCase().trim();
+    const slug = raw.split('/')[0];
+    const slugAliases = {
+      ootr: 'oot',
+      'ocarina-of-time-randomizer': 'oot',
+      alttpr: 'alttp',
+      'alttpr-ladder': 'alttp',
+      'alttp-r': 'alttp',
+      smr: 'sm',
+      smz3r: 'smz3',
+      mmr: 'mm',
+      twwr: 'tww',
+      dk64r: 'dk64',
+      kh2r: 'kh2fm',
+      kh2fmr: 'kh2fm',
+      ootmmr: 'ootmm',
+      z1r: 'z1',
+      z2r: 'z2'
+    };
+    const canonicalSlug = slugAliases[slug] || slug;
+    const mapped = gameDisplayMap && (gameDisplayMap.get(slug) || gameDisplayMap.get(canonicalSlug));
+    const gameId = mapped?.id || canonicalSlug;
+    const gameName = mapped?.label || normalizeGameName(slug) || normalizeGameName(canonicalSlug) || 'Jeu inconnu';
+    return { slug, gameId, name: gameName };
+  }
+
+  function buildGamesSummaryFromRaces(races) {
+    const map = new Map();
+
+    for (const race of races || []) {
+      const category = race?.category;
+      if (!category) continue;
+
+      const meta = getGameMetaFromCategory(category);
+      if (!meta.slug) continue;
+
+      if (!map.has(meta.slug)) {
+        map.set(meta.slug, { slug: meta.slug, gameId: meta.gameId, name: meta.name, count: 0 });
+      }
+      map.get(meta.slug).count += 1;
+    }
+
+    return Array.from(map.values())
+      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
+      .slice(0, 9);
+  }
+
+  async function renderGamesSummary(races) {
+    if (!playerGamesSummary) return;
+    await ensureGameDisplayMap();
+
+    const gamesSummary = buildGamesSummaryFromRaces(races || []);
+    playerGamesSummary.classList.remove('cols-1', 'cols-2', 'cols-3');
+
+    if (!gamesSummary.length) {
+      playerGamesSummary.classList.add('cols-1');
+      playerGamesSummary.innerHTML = '';
+      return;
+    }
+
+    playerGamesSummary.innerHTML = `
+      ${gamesSummary.map(g => `
+        <div class="player-games-summary-row">
+          <a href="/game-detail.html?id=${encodeURIComponent(g.gameId)}">${g.name}</a>
+          <span class="count">(${g.count})</span>
+        </div>
+      `).join('')}
+    `;
+
+    const n = gamesSummary.length;
+    const columns = n <= 3 ? 1 : (n <= 6 ? 2 : 3);
+    playerGamesSummary.classList.add(`cols-${columns}`);
   }
 
   function renderTournaments(tournaments, playerName){
@@ -781,6 +890,8 @@
   }
 
   function renderRaces(races){
+    renderGamesSummary(races || []);
+
     if(!races || !races.length){ racesEl.innerHTML = '<p style="color:#9ca3af;">No races found.</p>'; return; }
     // Sort by startedAt (or createdAt) descending (most recent first)
     const getRaceTime = (r) => {

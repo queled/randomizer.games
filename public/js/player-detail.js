@@ -49,7 +49,16 @@
   const racesEl = document.getElementById('player-races-list');
   let gameDisplayMap = null;
 
+  if (id || nameParam) {
+    headerName.textContent = 'Loading...';
+  }
   if(!id && !nameParam){ headerName.textContent = 'No player specified'; }
+
+  function updateGamesSummaryVisibility() {
+    if (!playerGamesSummary) return;
+    const hasGamesRows = !!playerGamesSummary.querySelector('.player-games-summary-row');
+    playerGamesSummary.classList.toggle('is-visible', hasGamesRows);
+  }
 
   async function fetchJson(url){
     const res = await fetch(url, { headers: { Accept: 'application/json' } });
@@ -304,6 +313,7 @@
     if (links.length) {
       playerLinks.innerHTML = links.join('');
     }
+    updateGamesSummaryVisibility();
     
     // If we have a racetime URL, try to fetch Twitch from racetime (only if not already in DB)
     if (racetimeUrl && !p.twitch) {
@@ -358,7 +368,7 @@
     const gamesCount = (Array.isArray(races) && races.length > 0)
       ? countGamesFromRaces(races)
       : (options.deferCounts ? null : countGamesFromTournaments(tournaments || []));
-    const hasTotalRaces = p.stats && Number.isFinite(p.stats.totalRaces);
+    const hasTotalRaces = !options.deferCounts && p.stats && Number.isFinite(p.stats.totalRaces);
     const totalRaces = hasTotalRaces ? p.stats.totalRaces : (options.deferCounts ? null : 0);
     const totalTournaments = (tournaments || []).length;
     
@@ -548,6 +558,7 @@
     if (!gamesSummary.length) {
       playerGamesSummary.classList.add('cols-1');
       playerGamesSummary.innerHTML = '';
+      updateGamesSummaryVisibility();
       return;
     }
 
@@ -563,6 +574,7 @@
     const n = gamesSummary.length;
     const columns = n <= 3 ? 1 : (n <= 6 ? 2 : 3);
     playerGamesSummary.classList.add(`cols-${columns}`);
+    updateGamesSummaryVisibility();
   }
 
   function renderTournaments(tournaments, playerName){
@@ -589,7 +601,7 @@
       const labelRanking = typeof i18n !== 'undefined' ? i18n.t('playerDetail.ranking') : 'Ranking';
       return `
       <a href="/tournament-detail.html?id=${encodeURIComponent(tid)}" style="text-decoration:none;color:inherit;display:block;">
-        <div class="tournament-card" data-tid="${encodeURIComponent(tid)}" style="background:#1f2937;padding:1rem;border-radius:0.5rem;margin-bottom:1rem;">
+        <div class="tournament-card tournament-hover-card" data-tid="${encodeURIComponent(tid)}" style="background:#1f2937;padding:1rem;border-radius:0.5rem;margin-bottom:1rem;">
           <h3 style="color:#fbbf24;font-size:1rem;margin-bottom:0.5rem;">${t.tournamentName || t.name || 'Tournoi'}</h3>
           <div class="tournament-game" style="color:#d1d5db;font-size:0.875rem;margin-bottom:0.25rem;">${gameDisplay}</div>
           <div class="spoiler-block" style="color:#9ca3af;font-size:0.875rem;">${labelRanking}: <strong style="color:#fbbf24;">${t.finalRank ? formatRank(t.finalRank) : '-'}</strong></div>
@@ -645,7 +657,7 @@
           const gameDisplay = getTournamentGameName(t);
           return `
           <a href="/tournament-detail.html?id=${encodeURIComponent(tid)}" style="text-decoration:none;color:inherit;display:block;">
-            <div class="tournament-card" data-tid="${encodeURIComponent(tid)}" style="background:#1f2937;padding:1rem;border-radius:0.5rem;margin-bottom:1rem;">
+            <div class="tournament-card tournament-hover-card" data-tid="${encodeURIComponent(tid)}" style="background:#1f2937;padding:1rem;border-radius:0.5rem;margin-bottom:1rem;">
               <h3 style="color:#fbbf24;font-size:1rem;margin-bottom:0.25rem;">${t.tournamentName || t.name || 'Tournoi'}</h3>
               <div class="tournament-game" style="color:#d1d5db;font-size:0.875rem;margin-bottom:0.25rem;">${gameDisplay}</div>
               <div class="spoiler-block" style="color:#9ca3af;font-size:0.875rem;">${labelRanking}: <strong style="color:#fbbf24;">${t.finalRank ? formatRank(t.finalRank) : '-'}</strong></div>
@@ -977,7 +989,7 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
   async function loadById(pid){
     const player = await fetchJson('/players/'+encodeURIComponent(pid));
     const tournaments = player.tournaments || [];
-    renderProfile(player, tournaments, []);
+    renderProfile(player, tournaments, [], { deferCounts: true });
     renderTournaments(tournaments, player.name || player.userId || headerName.textContent);
     const jr = await fetchJson('/players/'+encodeURIComponent(pid)+'/races');
     const races = jr.races || [];
@@ -1135,7 +1147,7 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
         }
       }
 
-      renderProfile(player, displayTournaments, []);
+      renderProfile(player, displayTournaments, [], { deferCounts: true });
       renderTournaments(displayTournaments, player.name || name || player.userId);
 
       // Load races by userId or by name
@@ -1179,7 +1191,7 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
         stats: { totalRaces: 0 }
       };
       
-      renderProfile(playerData, tournaments, []);
+      renderProfile(playerData, tournaments, [], { deferCounts: true });
       renderTournaments(tournaments, found.name || name);
       
       // Try to load races

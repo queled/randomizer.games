@@ -1309,14 +1309,21 @@ body.spoiler-mode .spoiler-text::before {
 }
 
 .player-games-summary {
-    margin-top: 0.35rem;
-    padding-top: 0.5rem;
-    border-top: 1px solid #374151;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
     display: grid;
     grid-template-columns: repeat(1, minmax(0, 1fr));
     gap: 0.25rem 0.45rem;
-    min-height: 4.8rem;
+    min-height: 0;
     align-content: start;
+}
+
+.player-games-summary.is-visible {
+    margin-top: 0.35rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #374151;
+    min-height: 4.8rem;
 }
 
 .player-games-summary.cols-1 {
@@ -1368,6 +1375,14 @@ body.spoiler-mode .spoiler-text::before {
     color: #10b981;
     font-weight: 700;
     flex: 0 0 auto;
+}
+
+.tournament-hover-card {
+    transition: background 0.2s;
+}
+
+.tournament-hover-card:hover {
+    background: #374151 !important;
 }
 
 /* Game detail */

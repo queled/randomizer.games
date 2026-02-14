@@ -25,6 +25,7 @@
 
   // Global variables for re-rendering on spoiler mode change
   let currentEntrants = [];
+  let currentRace = null;
 
   // Event listener for spoiler mode changes
   window.addEventListener('spoilerModeChanged', function(e) {
@@ -111,11 +112,9 @@
 
   function formatDateTime(d) {
     if (!d) return '-';
-    let locale = 'en-US';
-    if (typeof i18n !== 'undefined' && typeof i18n.getCurrentLanguage === 'function') {
-      const lang = i18n.getCurrentLanguage();
-      const localeMap = { 'en': 'en-US', 'fr': 'fr-FR', 'de': 'de-DE', 'es': 'es-ES', 'it': 'it-IT' };
-      locale = localeMap[lang] || 'en-US';
+    let locale = 'en';
+    if (typeof i18n !== 'undefined' && typeof i18n.getLanguage === 'function') {
+      locale = i18n.getLanguage() || 'en';
     }
     return new Date(d).toLocaleString(locale, {
       day: '2-digit',
@@ -125,6 +124,17 @@
       minute: '2-digit'
     });
   }
+
+  function refreshDateTimeFields() {
+    if (!currentRace) return;
+    startEl.textContent = formatDateTime(currentRace.startedAt);
+    endEl.textContent = formatDateTime(currentRace.endedAt);
+    durationEl.textContent = formatDuration(currentRace.startedAt, currentRace.endedAt);
+  }
+
+  window.addEventListener('languageChanged', function() {
+    refreshDateTimeFields();
+  });
 
   function formatDuration(startedAt, endedAt) {
     if (!startedAt || !endedAt) return '-';
@@ -321,9 +331,8 @@
       }
       
       // Times
-      startEl.textContent = formatDateTime(race.startedAt);
-      endEl.textContent = formatDateTime(race.endedAt);
-      durationEl.textContent = formatDuration(race.startedAt, race.endedAt);
+      currentRace = race;
+      refreshDateTimeFields();
       
       // Entrants count
       const entrantsCount = (race.entrants || []).length;

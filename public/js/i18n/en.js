@@ -197,6 +197,7 @@ const en = {
         viewOnChallonge: "View on Challonge",
         viewOnStartgg: "View on Start.gg",
         matchesHiddenSpoiler: "Matches hidden in anti-spoiler mode",
+        bracketHiddenSpoiler: "Bracket hidden in spoiler-free mode",
         winner: "Winner",
         loser: "Loser",
         score: "Score",

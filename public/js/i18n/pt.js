@@ -221,6 +221,7 @@ const pt = {
         viewOnChallonge: "Ver no Challonge",
         viewOnStartgg: "Ver no Start.gg",
         matchesHiddenSpoiler: "Partidas ocultas no modo anti-spoiler",
+        bracketHiddenSpoiler: "Bracket oculto no modo anti-spoiler",
         winner: "Vencedor",
         loser: "Perdedor",
         score: "Placar",

@@ -179,6 +179,7 @@ const de = {
         viewOnChallonge: "Auf Challonge ansehen",
         viewOnStartgg: "Auf Start.gg ansehen",
         matchesHiddenSpoiler: "Matches im Anti-Spoiler-Modus ausgeblendet",
+        bracketHiddenSpoiler: "Bracket im spoilerfreien Modus ausgeblendet",
         winner: "Gewinner",
         loser: "Verlierer",
         score: "Punktestand",

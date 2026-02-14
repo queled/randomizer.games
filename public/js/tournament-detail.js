@@ -2398,7 +2398,10 @@ function displayBracket(matches, tournament) {
       displaySpoilerGroupsOnly(groupStageMatches, tournament.participants || [], container);
     } else {
       // No groups, show message
-      container.innerHTML = '<p style="color: #9ca3af; font-style: italic; text-align: center; padding: 2rem;">Bracket hidden in spoiler-free mode</p>';
+      const bracketHiddenText = (typeof i18n !== 'undefined' && i18n.t)
+        ? i18n.t('tournamentDetail.bracketHiddenSpoiler', {}, 'Bracket hidden in spoiler-free mode')
+        : 'Bracket hidden in spoiler-free mode';
+      container.innerHTML = `<div class="spoiler-message" style="display:block;color:#9ca3af;font-style:italic;padding:2rem;text-align:center;background:#1f2937;border-radius:0.5rem;">${bracketHiddenText}</div>`;
     }
     return;
   }

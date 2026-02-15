@@ -10,7 +10,7 @@ async function loadStreams() {
     try {
         grid.style.display = 'none';
         noStreams.style.display = 'block';
-        noStreams.innerHTML = `<p style="color:#9ca3af;">${typeof i18n !== 'undefined' ? i18n.t('streams.loadingStreams') : 'Chargement des streams...'}</p>`;
+        noStreams.innerHTML = `<p style="color:#9ca3af;">${typeof i18n !== 'undefined' ? i18n.t('streams.loadingStreams') : 'Loading streams...'}</p>`;
         countEl.textContent = formatStreamsCount(0);
     } catch (e) {
         // ignore if elements missing

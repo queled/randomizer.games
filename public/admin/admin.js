@@ -13,6 +13,8 @@ const admin = {
   gamesLimit: 20,
   currentResourcesFilter: null,
   dragState: null,
+  resourceModalState: null,
+  resourceModalTranslations: {},
   dashboardStats: null,
   syncHistory: [],
   players: [],
@@ -744,11 +746,12 @@ const admin = {
           <a href="${resources.officialSite.url}" target="_blank" class="resource-link">
             ${this.escapeHtml(resources.officialSite.name || 'Site officiel')}
           </a>
+          <button class="btn btn-sm btn-ghost" onclick="admin.openResourceModal('official')" title="Modifier">✏️</button>
           <button class="btn btn-sm btn-ghost btn-danger" onclick="admin.removeOfficialSite()">×</button>
         </div>
       `;
     } else {
-      officialDisplay.innerHTML = '<p class="text-muted">Aucun site officiel défini</p>';
+      officialDisplay.innerHTML = '<p class="text-muted">Aucun site officiel défini <button class="btn btn-sm btn-ghost" onclick="admin.openResourceModal(\'official\')">Ajouter</button></p>';
     }
     
     // Pre-fill form if legacy website exists
@@ -762,11 +765,14 @@ const admin = {
       sitesList.innerHTML = resources.sites.map((site, i) => `
         <div class="resource-item ${site.isObsolete ? 'resource-item-obsolete' : ''}" data-resource-type="sites" data-resource-index="${i}">
           <span class="resource-icon">${site.isArchipelago ? '🏝️' : '🔗'}</span>
-          <a href="${site.url}" target="_blank" class="resource-link">
-            ${this.escapeHtml(site.name || site.url)}
-          </a>
+          <div class="resource-details">
+            <a href="${site.url}" target="_blank" class="resource-link">
+              ${this.escapeHtml(site.name || site.url)}
+            </a>
+            ${site.description ? `<span class="resource-desc">${this.escapeHtml(site.description)}</span>` : ''}
+          </div>
           <span class="resource-source">${site.source}</span>
-          <button class="btn btn-sm btn-ghost" onclick="admin.editSite(${i})" title="Modifier">✏️</button>
+          <button class="btn btn-sm btn-ghost" onclick="admin.openResourceModal('site', ${i})" title="Modifier">✏️</button>
           ${!resources.officialSite?.url && !site.isObsolete ? 
             `<button class="btn btn-sm btn-ghost" onclick="admin.setAsOfficialSite(${i})" title="Définir comme site officiel">⭐</button>` : 
             ''}
@@ -788,7 +794,7 @@ const admin = {
             ${tracker.description ? `<span class="resource-desc">${this.escapeHtml(tracker.description)}</span>` : ''}
           </div>
           <span class="resource-source">${this.escapeHtml(tracker.source || 'manual')}</span>
-          <button class="btn btn-sm btn-ghost" onclick="admin.editTracker(${i})" title="Modifier">✏️</button>
+          <button class="btn btn-sm btn-ghost" onclick="admin.openResourceModal('tracker', ${i})" title="Modifier">✏️</button>
           <button class="btn btn-sm btn-ghost btn-danger" onclick="admin.removeTracker(${i})">×</button>
         </div>
       `).join('');
@@ -810,7 +816,7 @@ const admin = {
           </div>
           <span class="resource-source">${this.escapeHtml(guide.source || 'manual')}</span>
           <span class="resource-type">${guide.type}</span>
-          <button class="btn btn-sm btn-ghost" onclick="admin.editGuide(${i})" title="Modifier">✏️</button>
+          <button class="btn btn-sm btn-ghost" onclick="admin.openResourceModal('guide', ${i})" title="Modifier">✏️</button>
           <button class="btn btn-sm btn-ghost btn-danger" onclick="admin.removeGuide(${i})">×</button>
         </div>
       `).join('');
@@ -838,7 +844,7 @@ const admin = {
             </div>
             <span class="resource-source">${this.escapeHtml(link.source || 'manual')}</span>
             <span class="resource-type">${this.escapeHtml(link.type || 'resource')}</span>
-            <button class="btn btn-sm btn-ghost" onclick="admin.editOtherLink(${i})" title="Modifier">✏️</button>
+            <button class="btn btn-sm btn-ghost" onclick="admin.openResourceModal('other', ${i})" title="Modifier">✏️</button>
             <button class="btn btn-sm btn-ghost btn-danger" onclick="admin.removeOtherLink(${i})">×</button>
           </div>
         `).join('');
@@ -849,39 +855,201 @@ const admin = {
     }
   },
 
-  async editSite(index) {
-    const site = this.currentGame.resources.sites?.[index];
-    if (!site) return;
+  openResourceModal(kind, index = null) {
+    if (!this.currentGame) return;
 
-    const url = prompt('URL du site :', site.url || '');
-    if (url === null) return;
-    const name = prompt('Nom du site :', site.name || '');
-    if (name === null) return;
-    const source = prompt('Source (manual/rando-list/import/community) :', site.source || 'manual');
-    if (source === null) return;
-    const isArchipelagoValue = prompt('Archipelago ? (true/false) :', String(!!site.isArchipelago));
-    if (isArchipelagoValue === null) return;
-    const isObsoleteValue = prompt('Obsolète ? (true/false) :', String(!!site.isObsolete));
-    if (isObsoleteValue === null) return;
+    const isEdit = index !== null && index !== undefined;
+    const resources = this.currentGame.resources || {};
 
-    const nextSites = [...(this.currentGame.resources.sites || [])];
-    nextSites[index] = {
-      ...site,
-      url: url.trim(),
-      name: name.trim(),
-      source: (source.trim() || 'manual'),
-      isArchipelago: isArchipelagoValue.trim().toLowerCase() === 'true',
-      isObsolete: isObsoleteValue.trim().toLowerCase() === 'true'
-    };
+    const modal = document.getElementById('resource-modal');
+    const titleEl = document.getElementById('resource-modal-title');
+    const deleteBtn = document.getElementById('resource-modal-delete');
+    const typeGroup = document.getElementById('resource-modal-type-group');
+    const sourceGroup = document.getElementById('resource-modal-source-group');
+    const siteFlags = document.getElementById('resource-modal-site-flags');
+    const i18nBlock = document.getElementById('resource-modal-i18n');
+
+    let item = null;
+    if (kind === 'official') item = resources.officialSite || {};
+    if (kind === 'site') item = (resources.sites || [])[index] || {};
+    if (kind === 'tracker') item = (resources.trackers || [])[index] || {};
+    if (kind === 'guide') item = (resources.guides || [])[index] || {};
+    if (kind === 'other') item = (resources.other || [])[index] || {};
+
+    this.resourceModalState = { kind, index, isEdit };
+    this.resourceModalTranslations = { ...(item.translations || {}) };
+
+    titleEl.textContent = `${isEdit ? 'Modifier' : 'Ajouter'} ${kind === 'official' ? 'le site officiel' : kind}`;
+    deleteBtn.style.display = isEdit ? 'inline-flex' : 'none';
+
+    document.getElementById('resource-modal-url').value = item.url || '';
+    document.getElementById('resource-modal-name').value = item.name || '';
+    document.getElementById('resource-modal-description').value = item.description || '';
+    document.getElementById('resource-modal-source').value = item.source || 'manual';
+
+    const typeSelect = document.getElementById('resource-modal-type');
+    if (kind === 'guide') {
+      typeSelect.innerHTML = `
+        <option value="guide">📖 Guide</option>
+        <option value="tutorial">🎓 Tutoriel</option>
+        <option value="wiki">📝 Wiki</option>
+        <option value="video">🎬 Vidéo</option>
+      `;
+    } else if (kind === 'other') {
+      typeSelect.innerHTML = `
+        <option value="discord">💬 Discord</option>
+        <option value="community">👥 Communauté</option>
+        <option value="seed">🎲 Seed</option>
+        <option value="resource">🔗 Ressource</option>
+      `;
+    }
+    typeSelect.value = item.type || (kind === 'guide' ? 'guide' : 'resource');
+
+    document.getElementById('resource-modal-is-archipelago').checked = !!item.isArchipelago;
+    document.getElementById('resource-modal-is-obsolete').checked = !!item.isObsolete;
+
+    sourceGroup.style.display = (kind === 'official') ? 'none' : 'block';
+    siteFlags.style.display = (kind === 'site' || kind === 'official') ? 'grid' : 'none';
+    typeGroup.style.display = (kind === 'guide' || kind === 'other') ? 'block' : 'none';
+    i18nBlock.style.display = (kind === 'guide' || kind === 'other') ? 'block' : 'none';
+
+    document.getElementById('resource-modal-lang').value = 'en';
+    this.onResourceModalLanguageChange();
+
+    modal.style.display = 'flex';
+  },
+
+  closeResourceModal() {
+    document.getElementById('resource-modal').style.display = 'none';
+    this.resourceModalState = null;
+    this.resourceModalTranslations = {};
+  },
+
+  onResourceModalLanguageChange() {
+    const lang = document.getElementById('resource-modal-lang').value;
+    const data = this.resourceModalTranslations?.[lang] || {};
+    document.getElementById('resource-modal-i18n-name').value = data.name || '';
+    document.getElementById('resource-modal-i18n-description').value = data.description || '';
+  },
+
+  collectResourceModalTranslations() {
+    const lang = document.getElementById('resource-modal-lang').value;
+    const trName = document.getElementById('resource-modal-i18n-name').value.trim();
+    const trDesc = document.getElementById('resource-modal-i18n-description').value.trim();
+
+    const next = { ...(this.resourceModalTranslations || {}) };
+    if (trName || trDesc) {
+      next[lang] = { name: trName, description: trDesc };
+    } else {
+      delete next[lang];
+    }
+    return next;
+  },
+
+  async saveResourceModal() {
+    if (!this.resourceModalState || !this.currentGame) return;
+
+    const { kind, index, isEdit } = this.resourceModalState;
+    const url = document.getElementById('resource-modal-url').value.trim();
+    const name = document.getElementById('resource-modal-name').value.trim();
+    const description = document.getElementById('resource-modal-description').value.trim();
+    const source = document.getElementById('resource-modal-source').value;
+    const type = document.getElementById('resource-modal-type').value;
+    const isArchipelago = document.getElementById('resource-modal-is-archipelago').checked;
+    const isObsolete = document.getElementById('resource-modal-is-obsolete').checked;
+
+    if (!url || !name) {
+      this.showToast('URL et titre requis', 'error');
+      return;
+    }
 
     try {
+      const resources = this.currentGame.resources || {};
+
+      if (kind === 'official') {
+        await this.replaceResources({
+          ...resources,
+          officialSite: { url, name, isArchipelago }
+        }, 'Site officiel mis à jour');
+        this.closeResourceModal();
+        return;
+      }
+
+      const keyMap = { site: 'sites', tracker: 'trackers', guide: 'guides', other: 'other' };
+      const key = keyMap[kind];
+      if (!key) return;
+
+      const list = [...(resources[key] || [])];
+      const payload = { url, name, description, source };
+      if (kind === 'site') {
+        payload.isArchipelago = isArchipelago;
+        payload.isObsolete = isObsolete;
+      }
+      if (kind === 'guide' || kind === 'other') {
+        payload.type = type;
+        payload.translations = this.collectResourceModalTranslations();
+        if (kind === 'guide' && !['guide', 'tutorial', 'wiki', 'video'].includes(payload.type)) {
+          this.showToast('Type de guide invalide', 'error');
+          return;
+        }
+        if (kind === 'other' && !['discord', 'community', 'seed', 'resource'].includes(payload.type)) {
+          this.showToast('Type de lien invalide', 'error');
+          return;
+        }
+      }
+
+      if (isEdit) {
+        list[index] = { ...list[index], ...payload };
+      } else {
+        list.push(payload);
+      }
+
       await this.replaceResources({
-        ...this.currentGame.resources,
-        sites: nextSites
-      }, 'Site modifié');
+        ...resources,
+        [key]: list
+      }, 'Ressource mise à jour');
+
+      this.closeResourceModal();
     } catch (error) {
-      this.showToast('Erreur lors de la modification', 'error');
+      this.showToast('Erreur lors de la sauvegarde', 'error');
     }
+  },
+
+  async deleteResourceModal() {
+    if (!this.resourceModalState || !this.resourceModalState.isEdit || !this.currentGame) return;
+    if (!confirm('Supprimer cette ressource ?')) return;
+
+    const { kind, index } = this.resourceModalState;
+    const resources = this.currentGame.resources || {};
+
+    try {
+      if (kind === 'official') {
+        await this.replaceResources({
+          ...resources,
+          officialSite: null
+        }, 'Site officiel supprimé');
+        this.closeResourceModal();
+        return;
+      }
+
+      const keyMap = { site: 'sites', tracker: 'trackers', guide: 'guides', other: 'other' };
+      const key = keyMap[kind];
+      if (!key) return;
+
+      const list = [...(resources[key] || [])].filter((_, i) => i !== index);
+      await this.replaceResources({
+        ...resources,
+        [key]: list
+      }, 'Ressource supprimée');
+
+      this.closeResourceModal();
+    } catch (error) {
+      this.showToast('Erreur lors de la suppression', 'error');
+    }
+  },
+
+  async editSite(index) {
+    this.openResourceModal('site', index);
   },
   
   async saveOfficialSite() {
@@ -1028,35 +1196,7 @@ const admin = {
   },
 
   async editTracker(index) {
-    const tracker = this.currentGame.resources.trackers?.[index];
-    if (!tracker) return;
-
-    const url = prompt('URL du tracker :', tracker.url || '');
-    if (url === null) return;
-    const name = prompt('Nom du tracker :', tracker.name || '');
-    if (name === null) return;
-    const description = prompt('Description :', tracker.description || '');
-    if (description === null) return;
-    const source = prompt('Source (manual/rando-list/import/community) :', tracker.source || 'manual');
-    if (source === null) return;
-
-    const nextTrackers = [...(this.currentGame.resources.trackers || [])];
-    nextTrackers[index] = {
-      ...tracker,
-      url: url.trim(),
-      name: name.trim(),
-      description: description.trim(),
-      source: source.trim() || 'manual'
-    };
-
-    try {
-      await this.replaceResources({
-        ...this.currentGame.resources,
-        trackers: nextTrackers
-      }, 'Tracker modifié');
-    } catch (error) {
-      this.showToast('Erreur lors de la modification', 'error');
-    }
+    this.openResourceModal('tracker', index);
   },
   
   async addGuide() {
@@ -1115,38 +1255,7 @@ const admin = {
   },
 
   async editGuide(index) {
-    const guide = this.currentGame.resources.guides?.[index];
-    if (!guide) return;
-
-    const url = prompt('URL du guide :', guide.url || '');
-    if (url === null) return;
-    const name = prompt('Nom du guide :', guide.name || '');
-    if (name === null) return;
-    const type = prompt('Type (guide/tutorial/wiki/video) :', guide.type || 'guide');
-    if (type === null) return;
-    const description = prompt('Description :', guide.description || '');
-    if (description === null) return;
-    const source = prompt('Source (manual/rando-list/import/community) :', guide.source || 'manual');
-    if (source === null) return;
-
-    const nextGuides = [...(this.currentGame.resources.guides || [])];
-    nextGuides[index] = {
-      ...guide,
-      url: url.trim(),
-      name: name.trim(),
-      type: type.trim() || 'guide',
-      description: description.trim(),
-      source: source.trim() || 'manual'
-    };
-
-    try {
-      await this.replaceResources({
-        ...this.currentGame.resources,
-        guides: nextGuides
-      }, 'Guide modifié');
-    } catch (error) {
-      this.showToast('Erreur lors de la modification', 'error');
-    }
+    this.openResourceModal('guide', index);
   },
 
   async addOtherLink() {
@@ -1217,38 +1326,7 @@ const admin = {
   },
 
   async editOtherLink(index) {
-    const link = this.currentGame.resources.other?.[index];
-    if (!link) return;
-
-    const url = prompt('URL du lien :', link.url || '');
-    if (url === null) return;
-    const name = prompt('Nom du lien :', link.name || '');
-    if (name === null) return;
-    const type = prompt('Type (discord/community/seed/resource) :', link.type || 'resource');
-    if (type === null) return;
-    const description = prompt('Description :', link.description || '');
-    if (description === null) return;
-    const source = prompt('Source (manual/rando-list/import/community) :', link.source || 'manual');
-    if (source === null) return;
-
-    const nextOther = [...(this.currentGame.resources.other || [])];
-    nextOther[index] = {
-      ...link,
-      url: url.trim(),
-      name: name.trim(),
-      type: type.trim() || 'resource',
-      description: description.trim(),
-      source: source.trim() || 'manual'
-    };
-
-    try {
-      await this.replaceResources({
-        ...this.currentGame.resources,
-        other: nextOther
-      }, 'Lien modifié');
-    } catch (error) {
-      this.showToast('Erreur lors de la modification', 'error');
-    }
+    this.openResourceModal('other', index);
   },
   
   // ==================== MERGE GAMES ====================

@@ -597,8 +597,16 @@
   }
 
   function renderLinkChip(link, icon = '🔗') {
-    const name = escapeHtml(link.name || getHostFromUrl(link.url) || link.url);
-    const desc = link.description ? `<div style="color:#9ca3af;font-size:0.8rem;margin-top:0.25rem;">${escapeHtml(link.description)}</div>` : '';
+    let lang = 'en';
+    if (typeof i18n !== 'undefined' && typeof i18n.getCurrentLanguage === 'function') {
+      lang = i18n.getCurrentLanguage() || 'en';
+    }
+    const tr = link?.translations?.[lang] || null;
+    const displayName = tr?.name || link.name || getHostFromUrl(link.url) || link.url;
+    const displayDescription = tr?.description || link.description || '';
+
+    const name = escapeHtml(displayName);
+    const desc = displayDescription ? `<div style="color:#9ca3af;font-size:0.8rem;margin-top:0.25rem;">${escapeHtml(displayDescription)}</div>` : '';
     return `
       <a href="${link.url}" target="_blank" rel="noopener"
          style="display:block;background:#1f2937;padding:0.875rem 1rem;border-radius:0.5rem;text-decoration:none;transition:background 0.2s;border:1px solid #374151;"

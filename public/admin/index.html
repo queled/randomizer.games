@@ -688,6 +688,96 @@
     </div>
   </div>
 
+  <!-- Resource Edit Modal -->
+  <div id="resource-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="resource-modal-title">Modifier une ressource</h2>
+        <button class="modal-close" onclick="admin.closeResourceModal()">&times;</button>
+      </div>
+      <form id="resource-modal-form" onsubmit="event.preventDefault(); admin.saveResourceModal();">
+        <div class="form-group">
+          <label for="resource-modal-url">URL *</label>
+          <input type="url" id="resource-modal-url" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label for="resource-modal-name">Titre / Nom *</label>
+          <input type="text" id="resource-modal-name" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label for="resource-modal-description">Description</label>
+          <input type="text" id="resource-modal-description" class="form-input">
+        </div>
+
+        <div class="form-group" id="resource-modal-source-group">
+          <label for="resource-modal-source">Source</label>
+          <select id="resource-modal-source" class="form-input form-select">
+            <option value="manual">manual</option>
+            <option value="rando-list">rando-list</option>
+            <option value="import">import</option>
+            <option value="community">community</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="resource-modal-type-group" style="display: none;">
+          <label for="resource-modal-type">Type</label>
+          <select id="resource-modal-type" class="form-input form-select">
+            <option value="guide">📖 Guide</option>
+            <option value="tutorial">🎓 Tutoriel</option>
+            <option value="wiki">📝 Wiki</option>
+            <option value="video">🎬 Vidéo</option>
+            <option value="discord">💬 Discord</option>
+            <option value="community">👥 Communauté</option>
+            <option value="seed">🎲 Seed</option>
+            <option value="resource">🔗 Ressource</option>
+          </select>
+        </div>
+
+        <div id="resource-modal-site-flags" class="form-row" style="display: none;">
+          <label class="form-checkbox-group">
+            <input type="checkbox" id="resource-modal-is-archipelago" class="form-checkbox">
+            <span>Archipelago</span>
+          </label>
+          <label class="form-checkbox-group">
+            <input type="checkbox" id="resource-modal-is-obsolete" class="form-checkbox">
+            <span>Obsolète</span>
+          </label>
+        </div>
+
+        <div id="resource-modal-i18n" class="resource-modal-i18n" style="display: none;">
+          <p class="resource-form-title">Traductions (site principal)</p>
+          <div class="form-group">
+            <label for="resource-modal-lang">Langue</label>
+            <select id="resource-modal-lang" class="form-input form-select" onchange="admin.onResourceModalLanguageChange()">
+              <option value="en">English</option>
+              <option value="fr">Français</option>
+              <option value="es">Español</option>
+              <option value="de">Deutsch</option>
+              <option value="it">Italiano</option>
+              <option value="pt">Português</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="resource-modal-i18n-name">Titre traduit</label>
+            <input type="text" id="resource-modal-i18n-name" class="form-input" placeholder="Laisser vide pour fallback sur le titre principal">
+          </div>
+          <div class="form-group">
+            <label for="resource-modal-i18n-description">Description traduite</label>
+            <input type="text" id="resource-modal-i18n-description" class="form-input" placeholder="Laisser vide pour fallback sur la description principale">
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" id="resource-modal-delete" class="btn btn-danger" style="display: none;" onclick="admin.deleteResourceModal()">Supprimer</button>
+          <button type="button" class="btn btn-outline" onclick="admin.closeResourceModal()">Annuler</button>
+          <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Toast notifications -->
   <div id="toast-container"></div>
 

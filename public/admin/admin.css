@@ -1204,6 +1204,12 @@ a:hover {
   font-size: 1rem;
 }
 
+.resource-modal-i18n {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--admin-border);
+}
+
 .game-form .integration-section .form-row {
   grid-template-columns: auto 1fr;
 }

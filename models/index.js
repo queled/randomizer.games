@@ -37,7 +37,8 @@ const gameSchema = new mongoose.Schema({
     sites: [{
       url: String,
       name: String,
-      source: { type: String, enum: ['rando-list', 'manual'], default: 'manual' },
+      description: String,
+      source: { type: String, enum: ['rando-list', 'manual', 'import', 'community'], default: 'manual' },
       isArchipelago: { type: Boolean, default: false },
       isObsolete: { type: Boolean, default: false }
     }],
@@ -53,6 +54,7 @@ const gameSchema = new mongoose.Schema({
       url: String,
       name: String,
       description: String,
+      translations: { type: mongoose.Schema.Types.Mixed, default: {} },
       type: { type: String, enum: ['guide', 'tutorial', 'wiki', 'video'], default: 'guide' },
       source: { type: String, enum: ['manual', 'rando-list', 'import', 'community'], default: 'manual' }
     }],
@@ -61,6 +63,7 @@ const gameSchema = new mongoose.Schema({
       url: String,
       name: String,
       description: String,
+      translations: { type: mongoose.Schema.Types.Mixed, default: {} },
       type: { type: String, default: 'resource' },
       source: { type: String, enum: ['manual', 'rando-list', 'import', 'community'], default: 'manual' }
     }]

@@ -31,7 +31,8 @@ const gameSchema = new mongoose.Schema({
     officialSite: {
       url: String,
       name: String,
-      isArchipelago: { type: Boolean, default: false }
+      isArchipelago: { type: Boolean, default: false },
+      isMultiworld: { type: Boolean, default: false }
     },
     // Tous les sites du randomizer (depuis rando-list)
     sites: [{
@@ -40,6 +41,7 @@ const gameSchema = new mongoose.Schema({
       description: String,
       source: { type: String, enum: ['rando-list', 'manual', 'import', 'community'], default: 'manual' },
       isArchipelago: { type: Boolean, default: false },
+      isMultiworld: { type: Boolean, default: false },
       isObsolete: { type: Boolean, default: false }
     }],
     // Trackers

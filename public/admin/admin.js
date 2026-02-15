@@ -733,6 +733,30 @@ const admin = {
 
     await this.replaceResources(payload, 'Ordre mis à jour');
   },
+
+  renderAdminAssetIcon(src, alt) {
+    return `<img src="${src}" alt="${this.escapeHtml(alt || '')}">`;
+  },
+
+  getAdminSiteIcon(site = {}) {
+    const url = String(site.url || '').toLowerCase();
+    const name = String(site.name || '').toLowerCase();
+    if (site.isArchipelago || url.includes('archipelago.gg') || name.includes('archipelago')) {
+      return this.renderAdminAssetIcon('/assets/archipelago.png', 'Archipelago');
+    }
+    if (site.isMultiworld || url.includes('multiworld.gg') || name.includes('multiworld')) {
+      return this.renderAdminAssetIcon('/assets/multiworld.png', 'Multiworld');
+    }
+    return '🔗';
+  },
+
+  getAdminOtherIcon(link = {}) {
+    const type = String(link.type || '').toLowerCase();
+    if (type === 'discord') {
+      return this.renderAdminAssetIcon('/assets/discord.svg', 'Discord');
+    }
+    return type === 'community' ? '👥' : (type === 'seed' ? '🎲' : '🔗');
+  },
   
   renderResources(data) {
     const resources = data.resources || {};
@@ -742,21 +766,15 @@ const admin = {
     if (resources.officialSite?.url) {
       officialDisplay.innerHTML = `
         <div class="resource-item resource-item-primary">
-          <span class="resource-icon">${resources.officialSite.isArchipelago ? '🏝️' : '🌐'}</span>
+          <span class="resource-icon">${this.getAdminSiteIcon(resources.officialSite)}</span>
           <a href="${resources.officialSite.url}" target="_blank" class="resource-link">
             ${this.escapeHtml(resources.officialSite.name || 'Site officiel')}
           </a>
-          <button class="btn btn-sm btn-ghost" onclick="admin.openResourceModal('official')" title="Modifier">✏️</button>
           <button class="btn btn-sm btn-ghost btn-danger" onclick="admin.removeOfficialSite()">×</button>
         </div>
       `;
     } else {
-      officialDisplay.innerHTML = '<p class="text-muted">Aucun site officiel défini <button class="btn btn-sm btn-ghost" onclick="admin.openResourceModal(\'official\')">Ajouter</button></p>';
-    }
-    
-    // Pre-fill form if legacy website exists
-    if (!resources.officialSite?.url && data.legacyWebsite) {
-      document.getElementById('official-site-url').value = data.legacyWebsite;
+      officialDisplay.innerHTML = '<p class="text-muted">Aucun site officiel défini</p>';
     }
     
     // Sites from rando-list
@@ -764,19 +782,17 @@ const admin = {
     if (resources.sites?.length > 0) {
       sitesList.innerHTML = resources.sites.map((site, i) => `
         <div class="resource-item ${site.isObsolete ? 'resource-item-obsolete' : ''}" data-resource-type="sites" data-resource-index="${i}">
-          <span class="resource-icon">${site.isArchipelago ? '🏝️' : '🔗'}</span>
+          <span class="resource-icon">${this.getAdminSiteIcon(site)}</span>
           <div class="resource-details">
             <a href="${site.url}" target="_blank" class="resource-link">
               ${this.escapeHtml(site.name || site.url)}
             </a>
             ${site.description ? `<span class="resource-desc">${this.escapeHtml(site.description)}</span>` : ''}
           </div>
-          <span class="resource-source">${site.source}</span>
+          ${resources.officialSite?.url === site.url ? '<span class="resource-type">officiel</span>' : ''}
+          <span class="resource-source">${this.escapeHtml(site.source || 'manual')}</span>
           <button class="btn btn-sm btn-ghost" onclick="admin.openResourceModal('site', ${i})" title="Modifier">✏️</button>
           <button class="btn btn-sm btn-ghost btn-danger" onclick="admin.removeSite(${i})" title="Supprimer">×</button>
-          ${!resources.officialSite?.url && !site.isObsolete ? 
-            `<button class="btn btn-sm btn-ghost" onclick="admin.setAsOfficialSite(${i})" title="Définir comme site officiel">⭐</button>` : 
-            ''}
         </div>
       `).join('');
       this.attachResourceDnD('sites-list', 'sites');
@@ -830,15 +846,9 @@ const admin = {
     const otherLinksList = document.getElementById('other-links-list');
     if (otherLinksList) {
       if (resources.other?.length > 0) {
-        const typeIcons = {
-          discord: '💬',
-          community: '👥',
-          seed: '🎲',
-          resource: '🔗'
-        };
         otherLinksList.innerHTML = resources.other.map((link, i) => `
           <div class="resource-item" data-resource-type="other" data-resource-index="${i}">
-            <span class="resource-icon">${typeIcons[link.type] || '🔗'}</span>
+            <span class="resource-icon">${this.getAdminOtherIcon(link)}</span>
             <div class="resource-details">
               <a href="${link.url}" target="_blank" class="resource-link">${this.escapeHtml(link.name || link.url)}</a>
               ${link.description ? `<span class="resource-desc">${this.escapeHtml(link.description)}</span>` : ''}
@@ -868,6 +878,7 @@ const admin = {
     const typeGroup = document.getElementById('resource-modal-type-group');
     const sourceGroup = document.getElementById('resource-modal-source-group');
     const siteFlags = document.getElementById('resource-modal-site-flags');
+    const siteOfficialGroup = document.getElementById('resource-modal-is-official-group');
     const i18nBlock = document.getElementById('resource-modal-i18n');
     const i18nNameGroup = document.getElementById('resource-modal-i18n-name-group');
 
@@ -908,10 +919,26 @@ const admin = {
     typeSelect.value = item.type || (kind === 'guide' ? 'guide' : 'resource');
 
     document.getElementById('resource-modal-is-archipelago').checked = !!item.isArchipelago;
+    document.getElementById('resource-modal-is-multiworld').checked = !!item.isMultiworld;
     document.getElementById('resource-modal-is-obsolete').checked = !!item.isObsolete;
+    document.getElementById('resource-modal-is-official').checked = kind === 'site' && (resources.officialSite?.url === item.url);
+
+    if (document.getElementById('resource-modal-is-archipelago').checked && document.getElementById('resource-modal-is-multiworld').checked) {
+      document.getElementById('resource-modal-is-multiworld').checked = false;
+    }
+
+    const archipelagoCheckbox = document.getElementById('resource-modal-is-archipelago');
+    const multiworldCheckbox = document.getElementById('resource-modal-is-multiworld');
+    archipelagoCheckbox.onchange = () => {
+      if (archipelagoCheckbox.checked) multiworldCheckbox.checked = false;
+    };
+    multiworldCheckbox.onchange = () => {
+      if (multiworldCheckbox.checked) archipelagoCheckbox.checked = false;
+    };
 
     sourceGroup.style.display = (kind === 'official') ? 'none' : 'block';
-    siteFlags.style.display = (kind === 'site' || kind === 'official') ? 'grid' : 'none';
+    siteFlags.style.display = (kind === 'site') ? 'grid' : 'none';
+    siteOfficialGroup.style.display = (kind === 'site') ? 'inline-flex' : 'none';
     typeGroup.style.display = (kind === 'guide' || kind === 'other') ? 'block' : 'none';
     i18nBlock.style.display = (kind === 'guide' || kind === 'other' || kind === 'tracker') ? 'block' : 'none';
     i18nNameGroup.style.display = (kind === 'tracker') ? 'none' : 'block';
@@ -997,7 +1024,9 @@ const admin = {
     const source = document.getElementById('resource-modal-source').value;
     const type = document.getElementById('resource-modal-type').value;
     const isArchipelago = document.getElementById('resource-modal-is-archipelago').checked;
+    const isMultiworld = document.getElementById('resource-modal-is-multiworld').checked;
     const isObsolete = document.getElementById('resource-modal-is-obsolete').checked;
+    const isOfficial = document.getElementById('resource-modal-is-official').checked;
 
     if (!url || !name) {
       this.showToast('URL et titre requis', 'error');
@@ -1021,9 +1050,15 @@ const admin = {
       if (!key) return;
 
       const list = [...(resources[key] || [])];
+      const previousItem = isEdit ? { ...(list[index] || {}) } : null;
       const payload = { url, name, description, source };
       if (kind === 'site') {
+        if (isArchipelago && isMultiworld) {
+          this.showToast('Archipelago et Multiworld ne peuvent pas être cochés ensemble', 'error');
+          return;
+        }
         payload.isArchipelago = isArchipelago;
+        payload.isMultiworld = isMultiworld;
         payload.isObsolete = isObsolete;
       }
       if (kind === 'guide' || kind === 'other' || kind === 'tracker') {
@@ -1048,10 +1083,27 @@ const admin = {
         list.push(payload);
       }
 
-      await this.replaceResources({
+      const nextResources = {
         ...resources,
         [key]: list
-      }, 'Ressource mise à jour');
+      };
+
+      if (kind === 'site') {
+        const previousUrl = previousItem?.url || '';
+        const wasOfficial = isEdit && !!previousUrl && resources.officialSite?.url === previousUrl;
+        if (isOfficial) {
+          nextResources.officialSite = {
+            url: payload.url,
+            name: payload.name || 'Site officiel',
+            isArchipelago: !!payload.isArchipelago,
+            isMultiworld: !!payload.isMultiworld
+          };
+        } else if (wasOfficial) {
+          nextResources.officialSite = null;
+        }
+      }
+
+      await this.replaceResources(nextResources, 'Ressource mise à jour');
 
       this.closeResourceModal();
     } catch (error) {
@@ -1081,10 +1133,19 @@ const admin = {
       if (!key) return;
 
       const list = [...(resources[key] || [])].filter((_, i) => i !== index);
-      await this.replaceResources({
+      const nextResources = {
         ...resources,
         [key]: list
-      }, 'Ressource supprimée');
+      };
+
+      if (kind === 'site') {
+        const removed = (resources.sites || [])[index];
+        if (removed?.url && resources.officialSite?.url === removed.url) {
+          nextResources.officialSite = null;
+        }
+      }
+
+      await this.replaceResources(nextResources, 'Ressource supprimée');
 
       this.closeResourceModal();
     } catch (error) {
@@ -1192,10 +1253,17 @@ const admin = {
       const currentSites = this.currentGame?.resources?.sites || [];
       const nextSites = currentSites.filter((_, i) => i !== index);
 
-      await this.replaceResources({
+      const removed = currentSites[index];
+      const nextResources = {
         ...this.currentGame.resources,
         sites: nextSites
-      }, 'Site supprimé');
+      };
+
+      if (removed?.url && this.currentGame?.resources?.officialSite?.url === removed.url) {
+        nextResources.officialSite = null;
+      }
+
+      await this.replaceResources(nextResources, 'Site supprimé');
     } catch (error) {
       this.showToast('Erreur lors de la suppression', 'error');
     }

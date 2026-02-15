@@ -212,31 +212,12 @@
             <div id="official-site-display" class="resource-list">
               <!-- Will be populated -->
             </div>
-            <div class="resource-form">
-              <p class="resource-form-title">Ajouter / Modifier le site officiel :</p>
-              <div class="form-row">
-                <div class="form-group">
-                  <input type="url" id="official-site-url" class="form-input" placeholder="https://...">
-                </div>
-                <div class="form-group">
-                  <input type="text" id="official-site-name" class="form-input" placeholder="Nom du site">
-                </div>
-              </div>
-              <div style="display: flex; align-items: center; gap: 1rem;">
-                <label class="form-checkbox-group">
-                  <input type="checkbox" id="official-site-archipelago" class="form-checkbox">
-                  <span>Archipelago</span>
-                </label>
-                <button class="btn btn-primary btn-sm" onclick="admin.saveOfficialSite()">
-                  Enregistrer
-                </button>
-              </div>
-            </div>
+            <p class="resource-form-title">Définissez le site officiel depuis la section Sites (case à cocher dans la modal).</p>
           </div>
           
           <!-- Sites from rando-list -->
           <div class="resource-section">
-            <h3 class="resource-section-title">🔗 Sites</h3>
+            <h3 class="resource-section-title">🔗 Sites <button class="btn btn-primary btn-sm" type="button" onclick="admin.openResourceModal('site')">➕ Ajouter</button></h3>
             <div id="sites-list" class="resource-list">
               <!-- Will be populated -->
             </div>
@@ -739,6 +720,14 @@
           <label class="form-checkbox-group">
             <input type="checkbox" id="resource-modal-is-archipelago" class="form-checkbox">
             <span>Archipelago</span>
+          </label>
+          <label class="form-checkbox-group">
+            <input type="checkbox" id="resource-modal-is-multiworld" class="form-checkbox">
+            <span>Multiworld</span>
+          </label>
+          <label class="form-checkbox-group" id="resource-modal-is-official-group">
+            <input type="checkbox" id="resource-modal-is-official" class="form-checkbox">
+            <span>Site officiel</span>
           </label>
           <label class="form-checkbox-group">
             <input type="checkbox" id="resource-modal-is-obsolete" class="form-checkbox">

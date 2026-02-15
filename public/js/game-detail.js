@@ -593,6 +593,7 @@
       url.includes('multiworld.gg') ||
       name.includes('archipelago') ||
       name.includes('multiworld') ||
+      !!site?.isMultiworld ||
       !!site?.isArchipelago
     );
   }

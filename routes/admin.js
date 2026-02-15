@@ -561,7 +561,7 @@ router.put('/games/:id/resources', requireAdmin, async (req, res, next) => {
  */
 router.patch('/games/:id/resources/official-site', requireAdmin, async (req, res, next) => {
   try {
-    const { url, name, isArchipelago } = req.body;
+    const { url, name, isArchipelago, isMultiworld } = req.body;
     
     if (!url) {
       return res.status(400).json({ error: 'URL is required' });
@@ -574,7 +574,8 @@ router.patch('/games/:id/resources/official-site', requireAdmin, async (req, res
           'resources.officialSite': {
             url,
             name: name || 'Site officiel',
-            isArchipelago: isArchipelago || false
+            isArchipelago: isArchipelago || false,
+            isMultiworld: isMultiworld || false
           }
         } 
       },

@@ -46,7 +46,7 @@ const gameSchema = new mongoose.Schema({
       url: String,
       name: String,
       description: String,
-      source: { type: String, enum: ['manual'], default: 'manual' }
+      source: { type: String, enum: ['manual', 'rando-list', 'import', 'community'], default: 'manual' }
     }],
     // Guides et tutoriels
     guides: [{
@@ -54,15 +54,15 @@ const gameSchema = new mongoose.Schema({
       name: String,
       description: String,
       type: { type: String, enum: ['guide', 'tutorial', 'wiki', 'video'], default: 'guide' },
-      source: { type: String, enum: ['manual'], default: 'manual' }
+      source: { type: String, enum: ['manual', 'rando-list', 'import', 'community'], default: 'manual' }
     }],
     // Autres ressources (Discord, forums, etc.)
     other: [{
       url: String,
       name: String,
       description: String,
-      type: String,
-      source: { type: String, enum: ['manual'], default: 'manual' }
+      type: { type: String, default: 'resource' },
+      source: { type: String, enum: ['manual', 'rando-list', 'import', 'community'], default: 'manual' }
     }]
   },
   

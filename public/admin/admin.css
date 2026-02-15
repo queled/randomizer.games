@@ -698,6 +698,14 @@ a:hover {
   border: 1px solid var(--admin-border);
 }
 
+.resource-item[draggable="true"] {
+  cursor: move;
+}
+
+.resource-item-dragging {
+  opacity: 0.5;
+}
+
 .resource-item-primary {
   border-color: var(--admin-primary);
   background: rgba(59, 130, 246, 0.05);

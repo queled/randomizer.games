@@ -299,6 +299,39 @@
               </button>
             </div>
           </div>
+
+          <!-- Community & Other links -->
+          <div class="resource-section">
+            <h3 class="resource-section-title">👥 Communauté & Liens Divers</h3>
+            <div id="other-links-list" class="resource-list">
+              <!-- Will be populated -->
+            </div>
+            <div class="resource-form">
+              <p class="resource-form-title">Ajouter un lien :</p>
+              <div class="form-row">
+                <div class="form-group">
+                  <input type="url" id="other-link-url" class="form-input" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                  <input type="text" id="other-link-name" class="form-input" placeholder="Nom du lien">
+                </div>
+                <div class="form-group">
+                  <select id="other-link-type" class="form-input form-select">
+                    <option value="discord">💬 Discord</option>
+                    <option value="community">👥 Communauté</option>
+                    <option value="seed">🎲 Génération de seed</option>
+                    <option value="resource">🔗 Ressource</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <input type="text" id="other-link-desc" class="form-input" placeholder="Description (optionnel)">
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="admin.addOtherLink()">
+                ➕ Ajouter
+              </button>
+            </div>
+          </div>
           
         </div>
       </section>

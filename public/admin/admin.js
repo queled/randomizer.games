@@ -12,6 +12,7 @@ const admin = {
   gamesPage: 1,
   gamesLimit: 20,
   currentResourcesFilter: null,
+  dragState: null,
   dashboardStats: null,
   syncHistory: [],
   players: [],
@@ -639,6 +640,97 @@ const admin = {
       this.showToast('Erreur lors du chargement des ressources', 'error');
     }
   },
+
+  async replaceResources(resourcesPayload, successMsg = 'Ressources mises à jour', errorMsg = 'Erreur lors de la mise à jour') {
+    const response = await fetch(`/api/admin/games/${this.currentGame.id}/resources`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.token}`
+      },
+      body: JSON.stringify(resourcesPayload)
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to replace resources');
+    }
+
+    this.showToast(successMsg, 'success');
+    this.loadGameResources(this.currentGame.id);
+  },
+
+  attachResourceDnD(listId, resourceType) {
+    const container = document.getElementById(listId);
+    if (!container) return;
+
+    const items = container.querySelectorAll('.resource-item[data-resource-index]');
+    items.forEach(item => {
+      item.setAttribute('draggable', 'true');
+      item.addEventListener('dragstart', (e) => {
+        const idx = Number(item.dataset.resourceIndex);
+        this.dragState = { resourceType, fromIndex: idx };
+        item.classList.add('resource-item-dragging');
+        if (e.dataTransfer) {
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', `${resourceType}:${idx}`);
+        }
+      });
+      item.addEventListener('dragend', () => {
+        item.classList.remove('resource-item-dragging');
+      });
+    });
+
+    if (container.dataset.dndBound !== 'true') {
+      container.dataset.dndBound = 'true';
+
+      container.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+      });
+
+      container.addEventListener('drop', async (e) => {
+        e.preventDefault();
+        if (!this.dragState || this.dragState.resourceType !== resourceType) return;
+
+        const targetItem = e.target.closest('.resource-item[data-resource-index]');
+        const toIndex = targetItem ? Number(targetItem.dataset.resourceIndex) : null;
+        const fromIndex = this.dragState.fromIndex;
+        this.dragState = null;
+
+        if (toIndex === null || Number.isNaN(fromIndex) || Number.isNaN(toIndex) || fromIndex === toIndex) return;
+
+        try {
+          await this.reorderResourceList(resourceType, fromIndex, toIndex);
+        } catch (error) {
+          this.showToast('Erreur lors du réordonnancement', 'error');
+        }
+      });
+    }
+  },
+
+  async reorderResourceList(resourceType, fromIndex, toIndex) {
+    const keyMap = {
+      sites: 'sites',
+      trackers: 'trackers',
+      guides: 'guides',
+      other: 'other'
+    };
+    const key = keyMap[resourceType];
+    if (!key) return;
+
+    const list = [...(this.currentGame.resources[key] || [])];
+    if (fromIndex < 0 || fromIndex >= list.length || toIndex < 0 || toIndex >= list.length) return;
+
+    const [moved] = list.splice(fromIndex, 1);
+    list.splice(toIndex, 0, moved);
+
+    const payload = {
+      ...this.currentGame.resources,
+      [key]: list
+    };
+
+    await this.replaceResources(payload, 'Ordre mis à jour');
+  },
   
   renderResources(data) {
     const resources = data.resources || {};
@@ -668,17 +760,19 @@ const admin = {
     const sitesList = document.getElementById('sites-list');
     if (resources.sites?.length > 0) {
       sitesList.innerHTML = resources.sites.map((site, i) => `
-        <div class="resource-item ${site.isObsolete ? 'resource-item-obsolete' : ''}">
+        <div class="resource-item ${site.isObsolete ? 'resource-item-obsolete' : ''}" data-resource-type="sites" data-resource-index="${i}">
           <span class="resource-icon">${site.isArchipelago ? '🏝️' : '🔗'}</span>
           <a href="${site.url}" target="_blank" class="resource-link">
             ${this.escapeHtml(site.name || site.url)}
           </a>
           <span class="resource-source">${site.source}</span>
+          <button class="btn btn-sm btn-ghost" onclick="admin.editSite(${i})" title="Modifier">✏️</button>
           ${!resources.officialSite?.url && !site.isObsolete ? 
             `<button class="btn btn-sm btn-ghost" onclick="admin.setAsOfficialSite(${i})" title="Définir comme site officiel">⭐</button>` : 
             ''}
         </div>
       `).join('');
+      this.attachResourceDnD('sites-list', 'sites');
     } else {
       sitesList.innerHTML = '<p class="text-muted">Aucun site depuis rando-list</p>';
     }
@@ -687,15 +781,18 @@ const admin = {
     const trackersList = document.getElementById('trackers-list');
     if (resources.trackers?.length > 0) {
       trackersList.innerHTML = resources.trackers.map((tracker, i) => `
-        <div class="resource-item">
+        <div class="resource-item" data-resource-type="trackers" data-resource-index="${i}">
           <span class="resource-icon">📍</span>
           <div class="resource-details">
             <a href="${tracker.url}" target="_blank" class="resource-link">${this.escapeHtml(tracker.name)}</a>
             ${tracker.description ? `<span class="resource-desc">${this.escapeHtml(tracker.description)}</span>` : ''}
           </div>
+          <span class="resource-source">${this.escapeHtml(tracker.source || 'manual')}</span>
+          <button class="btn btn-sm btn-ghost" onclick="admin.editTracker(${i})" title="Modifier">✏️</button>
           <button class="btn btn-sm btn-ghost btn-danger" onclick="admin.removeTracker(${i})">×</button>
         </div>
       `).join('');
+      this.attachResourceDnD('trackers-list', 'trackers');
     } else {
       trackersList.innerHTML = '<p class="text-muted">Aucun tracker</p>';
     }
@@ -705,18 +802,85 @@ const admin = {
     if (resources.guides?.length > 0) {
       const typeIcons = { guide: '📖', tutorial: '🎓', wiki: '📝', video: '🎬' };
       guidesList.innerHTML = resources.guides.map((guide, i) => `
-        <div class="resource-item">
+        <div class="resource-item" data-resource-type="guides" data-resource-index="${i}">
           <span class="resource-icon">${typeIcons[guide.type] || '📖'}</span>
           <div class="resource-details">
             <a href="${guide.url}" target="_blank" class="resource-link">${this.escapeHtml(guide.name)}</a>
             ${guide.description ? `<span class="resource-desc">${this.escapeHtml(guide.description)}</span>` : ''}
           </div>
+          <span class="resource-source">${this.escapeHtml(guide.source || 'manual')}</span>
           <span class="resource-type">${guide.type}</span>
+          <button class="btn btn-sm btn-ghost" onclick="admin.editGuide(${i})" title="Modifier">✏️</button>
           <button class="btn btn-sm btn-ghost btn-danger" onclick="admin.removeGuide(${i})">×</button>
         </div>
       `).join('');
+      this.attachResourceDnD('guides-list', 'guides');
     } else {
       guidesList.innerHTML = '<p class="text-muted">Aucun guide</p>';
+    }
+
+    // Community / other links
+    const otherLinksList = document.getElementById('other-links-list');
+    if (otherLinksList) {
+      if (resources.other?.length > 0) {
+        const typeIcons = {
+          discord: '💬',
+          community: '👥',
+          seed: '🎲',
+          resource: '🔗'
+        };
+        otherLinksList.innerHTML = resources.other.map((link, i) => `
+          <div class="resource-item" data-resource-type="other" data-resource-index="${i}">
+            <span class="resource-icon">${typeIcons[link.type] || '🔗'}</span>
+            <div class="resource-details">
+              <a href="${link.url}" target="_blank" class="resource-link">${this.escapeHtml(link.name || link.url)}</a>
+              ${link.description ? `<span class="resource-desc">${this.escapeHtml(link.description)}</span>` : ''}
+            </div>
+            <span class="resource-source">${this.escapeHtml(link.source || 'manual')}</span>
+            <span class="resource-type">${this.escapeHtml(link.type || 'resource')}</span>
+            <button class="btn btn-sm btn-ghost" onclick="admin.editOtherLink(${i})" title="Modifier">✏️</button>
+            <button class="btn btn-sm btn-ghost btn-danger" onclick="admin.removeOtherLink(${i})">×</button>
+          </div>
+        `).join('');
+        this.attachResourceDnD('other-links-list', 'other');
+      } else {
+        otherLinksList.innerHTML = '<p class="text-muted">Aucun lien communautaire / divers</p>';
+      }
+    }
+  },
+
+  async editSite(index) {
+    const site = this.currentGame.resources.sites?.[index];
+    if (!site) return;
+
+    const url = prompt('URL du site :', site.url || '');
+    if (url === null) return;
+    const name = prompt('Nom du site :', site.name || '');
+    if (name === null) return;
+    const source = prompt('Source (manual/rando-list/import/community) :', site.source || 'manual');
+    if (source === null) return;
+    const isArchipelagoValue = prompt('Archipelago ? (true/false) :', String(!!site.isArchipelago));
+    if (isArchipelagoValue === null) return;
+    const isObsoleteValue = prompt('Obsolète ? (true/false) :', String(!!site.isObsolete));
+    if (isObsoleteValue === null) return;
+
+    const nextSites = [...(this.currentGame.resources.sites || [])];
+    nextSites[index] = {
+      ...site,
+      url: url.trim(),
+      name: name.trim(),
+      source: (source.trim() || 'manual'),
+      isArchipelago: isArchipelagoValue.trim().toLowerCase() === 'true',
+      isObsolete: isObsoleteValue.trim().toLowerCase() === 'true'
+    };
+
+    try {
+      await this.replaceResources({
+        ...this.currentGame.resources,
+        sites: nextSites
+      }, 'Site modifié');
+    } catch (error) {
+      this.showToast('Erreur lors de la modification', 'error');
     }
   },
   
@@ -862,6 +1026,38 @@ const admin = {
       this.showToast('Erreur lors de la suppression', 'error');
     }
   },
+
+  async editTracker(index) {
+    const tracker = this.currentGame.resources.trackers?.[index];
+    if (!tracker) return;
+
+    const url = prompt('URL du tracker :', tracker.url || '');
+    if (url === null) return;
+    const name = prompt('Nom du tracker :', tracker.name || '');
+    if (name === null) return;
+    const description = prompt('Description :', tracker.description || '');
+    if (description === null) return;
+    const source = prompt('Source (manual/rando-list/import/community) :', tracker.source || 'manual');
+    if (source === null) return;
+
+    const nextTrackers = [...(this.currentGame.resources.trackers || [])];
+    nextTrackers[index] = {
+      ...tracker,
+      url: url.trim(),
+      name: name.trim(),
+      description: description.trim(),
+      source: source.trim() || 'manual'
+    };
+
+    try {
+      await this.replaceResources({
+        ...this.currentGame.resources,
+        trackers: nextTrackers
+      }, 'Tracker modifié');
+    } catch (error) {
+      this.showToast('Erreur lors de la modification', 'error');
+    }
+  },
   
   async addGuide() {
     const url = document.getElementById('guide-url').value.trim();
@@ -915,6 +1111,143 @@ const admin = {
       
     } catch (error) {
       this.showToast('Erreur lors de la suppression', 'error');
+    }
+  },
+
+  async editGuide(index) {
+    const guide = this.currentGame.resources.guides?.[index];
+    if (!guide) return;
+
+    const url = prompt('URL du guide :', guide.url || '');
+    if (url === null) return;
+    const name = prompt('Nom du guide :', guide.name || '');
+    if (name === null) return;
+    const type = prompt('Type (guide/tutorial/wiki/video) :', guide.type || 'guide');
+    if (type === null) return;
+    const description = prompt('Description :', guide.description || '');
+    if (description === null) return;
+    const source = prompt('Source (manual/rando-list/import/community) :', guide.source || 'manual');
+    if (source === null) return;
+
+    const nextGuides = [...(this.currentGame.resources.guides || [])];
+    nextGuides[index] = {
+      ...guide,
+      url: url.trim(),
+      name: name.trim(),
+      type: type.trim() || 'guide',
+      description: description.trim(),
+      source: source.trim() || 'manual'
+    };
+
+    try {
+      await this.replaceResources({
+        ...this.currentGame.resources,
+        guides: nextGuides
+      }, 'Guide modifié');
+    } catch (error) {
+      this.showToast('Erreur lors de la modification', 'error');
+    }
+  },
+
+  async addOtherLink() {
+    const url = document.getElementById('other-link-url')?.value.trim();
+    const name = document.getElementById('other-link-name')?.value.trim();
+    const type = document.getElementById('other-link-type')?.value || 'resource';
+    const description = document.getElementById('other-link-desc')?.value.trim();
+
+    if (!url || !name) {
+      this.showToast('URL et nom requis', 'error');
+      return;
+    }
+
+    try {
+      const currentOther = this.currentGame.resources.other || [];
+      const response = await fetch(`/api/admin/games/${this.currentGame.id}/resources`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.token}`
+        },
+        body: JSON.stringify({
+          ...this.currentGame.resources,
+          other: [...currentOther, { url, name, type, description, source: 'manual' }]
+        })
+      });
+
+      if (!response.ok) throw new Error('Failed to add other link');
+
+      this.showToast('Lien ajouté', 'success');
+      this.loadGameResources(this.currentGame.id);
+
+      document.getElementById('other-link-url').value = '';
+      document.getElementById('other-link-name').value = '';
+      document.getElementById('other-link-desc').value = '';
+      document.getElementById('other-link-type').value = 'discord';
+    } catch (error) {
+      this.showToast('Erreur lors de l\'ajout', 'error');
+    }
+  },
+
+  async removeOtherLink(index) {
+    if (!confirm('Supprimer ce lien ?')) return;
+
+    try {
+      const currentOther = this.currentGame.resources.other || [];
+      const nextOther = currentOther.filter((_, i) => i !== index);
+
+      const response = await fetch(`/api/admin/games/${this.currentGame.id}/resources`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.token}`
+        },
+        body: JSON.stringify({
+          ...this.currentGame.resources,
+          other: nextOther
+        })
+      });
+
+      if (!response.ok) throw new Error('Failed to remove other link');
+
+      this.showToast('Lien supprimé', 'success');
+      this.loadGameResources(this.currentGame.id);
+    } catch (error) {
+      this.showToast('Erreur lors de la suppression', 'error');
+    }
+  },
+
+  async editOtherLink(index) {
+    const link = this.currentGame.resources.other?.[index];
+    if (!link) return;
+
+    const url = prompt('URL du lien :', link.url || '');
+    if (url === null) return;
+    const name = prompt('Nom du lien :', link.name || '');
+    if (name === null) return;
+    const type = prompt('Type (discord/community/seed/resource) :', link.type || 'resource');
+    if (type === null) return;
+    const description = prompt('Description :', link.description || '');
+    if (description === null) return;
+    const source = prompt('Source (manual/rando-list/import/community) :', link.source || 'manual');
+    if (source === null) return;
+
+    const nextOther = [...(this.currentGame.resources.other || [])];
+    nextOther[index] = {
+      ...link,
+      url: url.trim(),
+      name: name.trim(),
+      type: type.trim() || 'resource',
+      description: description.trim(),
+      source: source.trim() || 'manual'
+    };
+
+    try {
+      await this.replaceResources({
+        ...this.currentGame.resources,
+        other: nextOther
+      }, 'Lien modifié');
+    } catch (error) {
+      this.showToast('Erreur lors de la modification', 'error');
     }
   },
   

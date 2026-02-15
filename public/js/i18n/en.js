@@ -121,7 +121,14 @@ const en = {
         noRecentRaces: "No recent races",
         noRecentTournaments: "No recent tournaments",
         races: "Races",
-        tournaments: "Tournaments"
+        tournaments: "Tournaments",
+        resourceOfficialSite: "Official site",
+        resourceSites: "Sites",
+        resourceMultiworld: "Archipelago & Multiworld",
+        resourceGenerateSeed: "Generate a seed",
+        resourceTrackers: "Trackers",
+        resourceGuides: "Guides",
+        resourceOther: "Other resources"
     },
     
     // Races page

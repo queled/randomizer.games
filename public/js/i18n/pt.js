@@ -145,7 +145,14 @@ const pt = {
         noRecentRaces: "Sem corridas recentes",
         noRecentTournaments: "Sem torneios recentes",
         races: "Corridas",
-        tournaments: "Torneios"
+        tournaments: "Torneios",
+        resourceOfficialSite: "Site oficial",
+        resourceSites: "Sites",
+        resourceMultiworld: "Archipelago e Multiworld",
+        resourceGenerateSeed: "Gerar seed",
+        resourceTrackers: "Trackers",
+        resourceGuides: "Guias",
+        resourceOther: "Outros recursos"
     },
     
     // Races page

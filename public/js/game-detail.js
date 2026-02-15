@@ -565,20 +565,100 @@
 
   // ==================== RESOURCES SECTION ====================
   let resourcesLoaded = false;
+
+  function escapeHtml(str) {
+    return String(str || '').replace(/[&<>"']/g, (m) => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[m]));
+  }
+
+  function getHostFromUrl(url) {
+    try {
+      return new URL(url).hostname;
+    } catch {
+      return '';
+    }
+  }
+
+  function isMultiworldSite(site) {
+    const url = (site?.url || '').toLowerCase();
+    const name = (site?.name || '').toLowerCase();
+    return (
+      url.includes('archipelago.gg') ||
+      url.includes('multiworld.gg') ||
+      name.includes('archipelago') ||
+      name.includes('multiworld') ||
+      !!site?.isArchipelago
+    );
+  }
+
+  function renderLinkChip(link, icon = '🔗') {
+    const name = escapeHtml(link.name || getHostFromUrl(link.url) || link.url);
+    const desc = link.description ? `<div style="color:#9ca3af;font-size:0.8rem;margin-top:0.25rem;">${escapeHtml(link.description)}</div>` : '';
+    return `
+      <a href="${link.url}" target="_blank" rel="noopener"
+         style="display:block;background:#1f2937;padding:0.875rem 1rem;border-radius:0.5rem;text-decoration:none;transition:background 0.2s;border:1px solid #374151;"
+         onmouseover="this.style.background='#374151'"
+         onmouseout="this.style.background='#1f2937'">
+        <div style="display:flex;align-items:center;gap:0.5rem;color:#60a5fa;font-weight:500;">
+          <span>${icon}</span>
+          <span>${name}</span>
+        </div>
+        ${desc}
+      </a>
+    `;
+  }
+
+  function t(key, fallback) {
+    if (typeof i18n !== 'undefined' && typeof i18n.t === 'function') {
+      const value = i18n.t(key);
+      if (value && value !== key) return value;
+    }
+    return fallback;
+  }
+
+  function renderCommunity(data, container) {
+    if (!container) return;
+
+    const other = data?.other || [];
+    const communityLinks = other.filter(link => {
+      const type = String(link.type || '').toLowerCase();
+      return type === 'discord' || type === 'community';
+    });
+
+    if (communityLinks.length === 0) {
+      const txt = t('gameDetail.communityComingSoon', 'Community links coming soon.');
+      container.innerHTML = `<p style="color:#9ca3af;">${txt}</p>`;
+      return;
+    }
+
+    container.innerHTML = `
+      <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:0.75rem;">
+        ${communityLinks.map(link => renderLinkChip(link, '💬')).join('')}
+      </div>
+    `;
+  }
   
   async function loadResources(gameId) {
     if (resourcesLoaded) return;
     resourcesLoaded = true;
     
     const resourcesEl = document.getElementById('resources-content');
+    const communityEl = document.getElementById('community-list');
     if (!resourcesEl) return;
     
     try {
       const data = await fetchJson(`/api/games/${encodeURIComponent(gameId)}/resources`);
+      renderCommunity(data, communityEl);
       renderResources(data, resourcesEl);
     } catch (e) {
       console.error('Error loading resources:', e);
       resourcesEl.innerHTML = '';
+      if (communityEl) communityEl.innerHTML = '';
     }
   }
   
@@ -588,155 +668,138 @@
       return;
     }
     
+    const officialSite = data.officialSite || null;
+    const sites = (data.sites || []).filter(s => !!s.url);
+    const trackers = (data.trackers || []).filter(t => !!t.url);
+    const guides = (data.guides || []).filter(g => !!g.url);
+    const other = (data.other || []).filter(o => !!o.url);
+
+    const seedLinks = other.filter(link => String(link.type || '').toLowerCase() === 'seed');
+    const nonCommunityOther = other.filter(link => {
+      const type = String(link.type || '').toLowerCase();
+      return type !== 'discord' && type !== 'community' && type !== 'seed';
+    });
+
+    const officialUrl = officialSite?.url || '';
+    const standardSites = sites.filter(site => site.url !== officialUrl && !isMultiworldSite(site));
+    const multiworldSites = sites.filter(site => site.url !== officialUrl && isMultiworldSite(site));
+
     let html = '';
-    
-    // Official site button (prominent display)
-    if (data.officialSite?.url) {
-      const siteName = data.officialSite.isArchipelago 
-        ? 'Archipelago' 
-        : (data.officialSite.name || (typeof i18n !== 'undefined' ? i18n.t('resources.officialSite') : 'Site officiel'));
-      const icon = data.officialSite.isArchipelago ? '🏝️' : '🌐';
-      
+
+    if (officialSite?.url) {
+      const siteName = escapeHtml(officialSite.name || t('common.officialSite', 'Official site'));
       html += `
-        <div style="margin-bottom:2rem;">
-          <a href="${data.officialSite.url}" target="_blank" rel="noopener" 
-             class="official-site-btn"
-             style="display:inline-flex;align-items:center;gap:0.75rem;background:linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);color:white;padding:0.875rem 1.5rem;border-radius:0.75rem;text-decoration:none;font-weight:600;font-size:1rem;transition:transform 0.2s, box-shadow 0.2s;box-shadow:0 4px 15px rgba(59, 130, 246, 0.4);"
+        <div style="margin-bottom:1.5rem;">
+          <h3 style="color:#fbbf24;margin-bottom:0.75rem;font-size:1.1rem;display:flex;align-items:center;gap:0.5rem;">
+            <span>🌐</span> ${t('gameDetail.resourceOfficialSite', 'Official site')}
+          </h3>
+          <a href="${officialSite.url}" target="_blank" rel="noopener"
+             style="display:inline-flex;align-items:center;gap:0.75rem;background:linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);color:white;padding:0.875rem 1.25rem;border-radius:0.75rem;text-decoration:none;font-weight:600;transition:transform 0.2s, box-shadow 0.2s;box-shadow:0 4px 15px rgba(59, 130, 246, 0.4);"
              onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(59, 130, 246, 0.5)'"
              onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 15px rgba(59, 130, 246, 0.4)'">
-            <span style="font-size:1.25rem;">${icon}</span>
+            <span style="font-size:1.125rem;">↗</span>
             <span>${siteName}</span>
-            <span style="font-size:0.875rem;opacity:0.8;">↗</span>
           </a>
         </div>
       `;
     }
-    
-    // Sites section (if multiple sites)
-    if (data.sites && data.sites.length > 1) {
-      const sitesTitle = typeof i18n !== 'undefined' ? i18n.t('resources.sites') : 'Sites';
+
+    if (standardSites.length > 0) {
       html += `
         <div style="margin-bottom:1.5rem;">
-          <h3 style="color:#fbbf24;margin-bottom:1rem;font-size:1.1rem;display:flex;align-items:center;gap:0.5rem;">
-            <span>🔗</span> ${sitesTitle}
+          <h3 style="color:#fbbf24;margin-bottom:0.75rem;font-size:1.1rem;display:flex;align-items:center;gap:0.5rem;">
+            <span>🔗</span> ${t('gameDetail.resourceSites', 'Sites')}
           </h3>
-          <div style="display:flex;flex-wrap:wrap;gap:0.75rem;">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:0.75rem;">
+            ${standardSites.map(site => renderLinkChip({
+              url: site.url,
+              name: site.name || getHostFromUrl(site.url),
+              description: ''
+            }, '🌐')).join('')}
+          </div>
+        </div>
       `;
-      
-      data.sites.forEach(site => {
-        const siteName = site.name || new URL(site.url).hostname;
-        const icon = site.isArchipelago ? '🏝️' : '🌐';
-        html += `
-          <a href="${site.url}" target="_blank" rel="noopener" 
-             style="display:inline-flex;align-items:center;gap:0.5rem;background:#374151;color:#60a5fa;padding:0.5rem 1rem;border-radius:0.5rem;text-decoration:none;transition:background 0.2s;font-size:0.9rem;"
-             onmouseover="this.style.background='#4b5563'"
-             onmouseout="this.style.background='#374151'">
-            <span>${icon}</span>
-            <span>${siteName}</span>
-          </a>
-        `;
-      });
-      
-      html += `</div></div>`;
     }
-    
-    // Trackers section
-    if (data.trackers && data.trackers.length > 0) {
-      const trackersTitle = typeof i18n !== 'undefined' ? i18n.t('resources.trackers') : 'Trackers';
+
+    if (multiworldSites.length > 0) {
       html += `
         <div style="margin-bottom:1.5rem;">
-          <h3 style="color:#fbbf24;margin-bottom:1rem;font-size:1.1rem;display:flex;align-items:center;gap:0.5rem;">
-            <span>📍</span> ${trackersTitle}
+          <h3 style="color:#fbbf24;margin-bottom:0.75rem;font-size:1.1rem;display:flex;align-items:center;gap:0.5rem;">
+            <span>🧩</span> ${t('gameDetail.resourceMultiworld', 'Archipelago & Multiworld')}
           </h3>
-          <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(250px, 1fr));gap:0.75rem;">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:0.75rem;">
+            ${multiworldSites.map(site => renderLinkChip({
+              url: site.url,
+              name: site.name || getHostFromUrl(site.url),
+              description: ''
+            }, '🏝️')).join('')}
+          </div>
+        </div>
       `;
-      
-      data.trackers.forEach(tracker => {
-        html += `
-          <a href="${tracker.url}" target="_blank" rel="noopener" 
-             style="display:block;background:#1f2937;padding:1rem;border-radius:0.5rem;text-decoration:none;transition:background 0.2s;border-left:3px solid #10b981;"
-             onmouseover="this.style.background='#374151'"
-             onmouseout="this.style.background='#1f2937'">
-            <div style="color:#60a5fa;font-weight:500;margin-bottom:0.25rem;">${tracker.name}</div>
-            ${tracker.description ? `<div style="color:#9ca3af;font-size:0.8rem;">${tracker.description}</div>` : ''}
-          </a>
-        `;
-      });
-      
-      html += `</div></div>`;
     }
-    
-    // Guides section
-    if (data.guides && data.guides.length > 0) {
-      const guidesTitle = typeof i18n !== 'undefined' ? i18n.t('resources.guides') : 'Guides & Documentation';
+
+    if (seedLinks.length > 0) {
       html += `
         <div style="margin-bottom:1.5rem;">
-          <h3 style="color:#fbbf24;margin-bottom:1rem;font-size:1.1rem;display:flex;align-items:center;gap:0.5rem;">
-            <span>📚</span> ${guidesTitle}
+          <h3 style="color:#fbbf24;margin-bottom:0.75rem;font-size:1.1rem;display:flex;align-items:center;gap:0.5rem;">
+            <span>🎲</span> ${t('gameDetail.resourceGenerateSeed', 'Generate a seed')}
           </h3>
-          <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(250px, 1fr));gap:0.75rem;">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:0.75rem;">
+            ${seedLinks.map(link => renderLinkChip(link, '🎲')).join('')}
+          </div>
+        </div>
       `;
-      
-      const typeIcons = {
-        'guide': '📖',
-        'tutorial': '🎓',
-        'wiki': '📝',
-        'video': '🎬'
-      };
-      
-      data.guides.forEach(guide => {
-        const icon = typeIcons[guide.type] || '📖';
-        html += `
-          <a href="${guide.url}" target="_blank" rel="noopener" 
-             style="display:block;background:#1f2937;padding:1rem;border-radius:0.5rem;text-decoration:none;transition:background 0.2s;border-left:3px solid #8b5cf6;"
-             onmouseover="this.style.background='#374151'"
-             onmouseout="this.style.background='#1f2937'">
-            <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.25rem;">
-              <span>${icon}</span>
-              <span style="color:#60a5fa;font-weight:500;">${guide.name}</span>
-            </div>
-            ${guide.description ? `<div style="color:#9ca3af;font-size:0.8rem;">${guide.description}</div>` : ''}
-          </a>
-        `;
-      });
-      
-      html += `</div></div>`;
     }
-    
-    // Other resources section
-    if (data.other && data.other.length > 0) {
-      const otherTitle = typeof i18n !== 'undefined' ? i18n.t('resources.other') : 'Autres ressources';
+
+    if (trackers.length > 0) {
       html += `
         <div style="margin-bottom:1.5rem;">
-          <h3 style="color:#fbbf24;margin-bottom:1rem;font-size:1.1rem;display:flex;align-items:center;gap:0.5rem;">
-            <span>🔧</span> ${otherTitle}
+          <h3 style="color:#fbbf24;margin-bottom:0.75rem;font-size:1.1rem;display:flex;align-items:center;gap:0.5rem;">
+            <span>📍</span> ${t('gameDetail.resourceTrackers', 'Trackers')}
           </h3>
-          <div style="display:flex;flex-wrap:wrap;gap:0.75rem;">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:0.75rem;">
+            ${trackers.map(tracker => renderLinkChip(tracker, '📍')).join('')}
+          </div>
+        </div>
       `;
-      
-      data.other.forEach(resource => {
-        const typeIcons = {
-          'discord': '💬',
-          'forum': '💬',
-          'github': '💻',
-          'tools': '🔧'
-        };
-        const icon = typeIcons[resource.type] || '🔗';
-        
-        html += `
-          <a href="${resource.url}" target="_blank" rel="noopener" 
-             style="display:inline-flex;align-items:center;gap:0.5rem;background:#374151;color:#60a5fa;padding:0.5rem 1rem;border-radius:0.5rem;text-decoration:none;transition:background 0.2s;font-size:0.9rem;"
-             onmouseover="this.style.background='#4b5563'"
-             onmouseout="this.style.background='#374151'">
-            <span>${icon}</span>
-            <span>${resource.name}</span>
-          </a>
-        `;
-      });
-      
-      html += `</div></div>`;
     }
-    
+
+    if (guides.length > 0) {
+      html += `
+        <div style="margin-bottom:1.5rem;">
+          <h3 style="color:#fbbf24;margin-bottom:0.75rem;font-size:1.1rem;display:flex;align-items:center;gap:0.5rem;">
+            <span>📚</span> ${t('gameDetail.resourceGuides', 'Guides')}
+          </h3>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:0.75rem;">
+            ${guides.map(guide => {
+              const typeIcons = { guide: '📖', tutorial: '🎓', wiki: '📝', video: '🎬' };
+              const icon = typeIcons[guide.type] || '📖';
+              return renderLinkChip(guide, icon);
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    if (nonCommunityOther.length > 0) {
+      html += `
+        <div style="margin-bottom:1.5rem;">
+          <h3 style="color:#fbbf24;margin-bottom:0.75rem;font-size:1.1rem;display:flex;align-items:center;gap:0.5rem;">
+            <span>🛠️</span> ${t('gameDetail.resourceOther', 'Other resources')}
+          </h3>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:0.75rem;">
+            ${nonCommunityOther.map(link => renderLinkChip(link, '🔗')).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    if (!html) {
+      const txt = t('gameDetail.resourcesComingSoon', 'Resources coming soon.');
+      container.innerHTML = `<p style="color:#9ca3af;">${txt}</p>`;
+      return;
+    }
+
     container.innerHTML = html;
   }
   // ==================== END RESOURCES SECTION ====================

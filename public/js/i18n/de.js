@@ -104,7 +104,14 @@ const de = {
         noRecentRaces: "Keine aktuellen Rennen",
         noRecentTournaments: "Keine aktuellen Turniere",
         races: "Rennen",
-        tournaments: "Turniere"
+        tournaments: "Turniere",
+        resourceOfficialSite: "Offizielle Website",
+        resourceSites: "Websites",
+        resourceMultiworld: "Archipelago & Multiworld",
+        resourceGenerateSeed: "Seed generieren",
+        resourceTrackers: "Tracker",
+        resourceGuides: "Guides",
+        resourceOther: "Weitere Ressourcen"
     },
     
     // Races page

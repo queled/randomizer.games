@@ -88,17 +88,32 @@ app.use('/api/players', validatePagination);
 // Apply stricter rate limiting to search
 app.use('/api/search', searchLimiter);
 
+// Legacy namespace hinting (non-breaking)
+function markLegacyNamespace(canonicalPath) {
+  return (req, res, next) => {
+    res.setHeader('X-API-Canonical-Path', canonicalPath);
+    next();
+  };
+}
+
 // API Routes
 app.use('/api/games', require('./routes/games'));
 app.use('/api/tournaments', require('./routes/tournaments'));
 app.use('/api/runs', require('./routes/runs'));
 app.use('/api/players', require('./routes/players'));
-app.use('/api/sync', require('./routes/sync'));
-app.use('/api/sync-rando-list', require('./routes/sync-rando-list'));
-app.use('/api/racetime', require('./routes/racetime'));
+app.use('/api/sync', markLegacyNamespace('/api/commands/sync'), require('./routes/sync'));
+app.use('/api/sync-rando-list', markLegacyNamespace('/api/hooks/rando-list'), require('./routes/sync-rando-list'));
+app.use('/api/racetime', markLegacyNamespace('/api/services/racetime'), require('./routes/racetime'));
 app.use('/api/streams', require('./routes/streams'));
-app.use('/api/search', require('./routes/search'));
-app.use('/api/proxy-image', require('./routes/proxy-image'));
+app.use('/api/search', markLegacyNamespace('/api/queries/search'), require('./routes/search'));
+app.use('/api/proxy-image', markLegacyNamespace('/api/services/proxy-image'), require('./routes/proxy-image'));
+
+// Canonical namespaces (hybrid REST + command/service/query separation)
+app.use('/api/commands/sync', require('./routes/sync'));
+app.use('/api/hooks/rando-list', require('./routes/sync-rando-list'));
+app.use('/api/services/racetime', require('./routes/racetime'));
+app.use('/api/services/proxy-image', require('./routes/proxy-image'));
+app.use('/api/queries/search', require('./routes/search'));
 
 // Admin routes (no rate limiting - authenticated)
 app.use('/api/admin', require('./routes/admin'));

@@ -1,6 +1,10 @@
 // Streams page - Display live streams from the randomizer community
 
 const API_BASE = '';
+const GAME_MAP_CACHE_KEY = 'randomizer_streams_game_map_v1';
+const GAME_MAP_CACHE_TTL = 24 * 60 * 60 * 1000; // 24h
+let gameMapMemory = null;
+let gameMapInFlight = null;
 
 async function loadStreams() {
     const grid = document.getElementById('streams-grid');
@@ -27,8 +31,8 @@ async function loadStreams() {
         const data = await res.json();
         const streams = data.streams || [];
 
-        // Build a mapping from various game display names -> game id (slug)
-        const gameMap = await buildGameMap();
+        // Use cached game mapping if available (non-blocking for first render)
+        const gameMap = getCachedGameMap();
         
         if (!streams || streams.length === 0) {
             grid.style.display = 'none';
@@ -91,6 +95,11 @@ async function loadStreams() {
                 gameLink.style.textDecorationColor = '#60a5fa';
             });
         });
+
+        // Refresh game IDs in background if cache missing/stale
+        ensureGameMapLoaded().then(freshMap => {
+            hydrateGameLinks(freshMap);
+        }).catch(() => {});
         
     } catch (error) {
         console.error('Error loading streams:', error);
@@ -134,6 +143,12 @@ function escapeHtml(text) {
 function populateGameFilter(streams) {
     const filter = document.getElementById('filter-game');
     if (!filter) return;
+
+    const defaultOption = filter.querySelector('option[value=""]');
+    filter.innerHTML = '';
+    if (defaultOption) {
+        filter.appendChild(defaultOption);
+    }
     
     const games = [...new Set(streams.map(s => s.gameName).filter(Boolean))].sort();
     
@@ -144,7 +159,70 @@ function populateGameFilter(streams) {
         filter.appendChild(option);
     });
     
-    filter.addEventListener('change', () => filterStreams(filter.value));
+    filter.onchange = () => filterStreams(filter.value);
+}
+
+function getCachedGameMap() {
+    if (gameMapMemory) return gameMapMemory;
+    try {
+        const raw = localStorage.getItem(GAME_MAP_CACHE_KEY);
+        if (!raw) return {};
+        const parsed = JSON.parse(raw);
+        if (!parsed || !parsed.map || !parsed.timestamp) return {};
+        if ((Date.now() - parsed.timestamp) > GAME_MAP_CACHE_TTL) return {};
+        gameMapMemory = parsed.map;
+        return gameMapMemory;
+    } catch (e) {
+        return {};
+    }
+}
+
+function setCachedGameMap(map) {
+    if (!map || typeof map !== 'object') return;
+    gameMapMemory = map;
+    try {
+        localStorage.setItem(GAME_MAP_CACHE_KEY, JSON.stringify({
+            timestamp: Date.now(),
+            map
+        }));
+    } catch (e) {
+        // Ignore cache write errors
+    }
+}
+
+async function ensureGameMapLoaded() {
+    const cached = getCachedGameMap();
+    if (cached && Object.keys(cached).length > 0) {
+        return cached;
+    }
+
+    if (gameMapInFlight) {
+        return gameMapInFlight;
+    }
+
+    gameMapInFlight = buildGameMap()
+        .then(map => {
+            setCachedGameMap(map);
+            return map;
+        })
+        .finally(() => {
+            gameMapInFlight = null;
+        });
+
+    return gameMapInFlight;
+}
+
+function hydrateGameLinks(gameMap) {
+    if (!gameMap || typeof gameMap !== 'object') return;
+    document.querySelectorAll('.stream-card .game-link').forEach(gameLink => {
+        const currentId = gameLink.getAttribute('data-game-id');
+        if (currentId) return;
+        const rawName = (gameLink.textContent || '').trim();
+        const resolved = resolveGameIdFromName(rawName, gameMap);
+        if (resolved) {
+            gameLink.setAttribute('data-game-id', encodeURIComponent(resolved));
+        }
+    });
 }
 
 // Fetch games list and build a lookup map from possible display names -> id

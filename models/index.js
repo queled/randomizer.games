@@ -47,6 +47,7 @@ const gameSchema = new mongoose.Schema({
       url: String,
       name: String,
       description: String,
+      translations: { type: mongoose.Schema.Types.Mixed, default: {} },
       source: { type: String, enum: ['manual', 'rando-list', 'import', 'community'], default: 'manual' }
     }],
     // Guides et tutoriels

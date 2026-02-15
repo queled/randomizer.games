@@ -259,9 +259,9 @@
         const timeColor = isWinner ? '#10b981' : isDnf ? '#ef4444' : isDq ? '#f59e0b' : '#10b981';
         
         return `
-          <div class="spoiler-block" style="display:flex;align-items:center;padding:1rem;background:${bgColor};border-left:3px solid ${borderColor};margin-bottom:0.5rem;border-radius:0.375rem;transition:background 0.2s;" onmouseover="this.style.background='#4a5568'" onmouseout="this.style.background='${bgColor}'">
-            <div style="width:60px;text-align:center;font-size:1.25rem;color:#fbbf24;">${rank}</div>
-            <a href="${playerLink}" style="flex:1;color:${nameColor};font-weight:${isWinner ? '600' : '400'};text-decoration:none;">
+          <div class="spoiler-block" style="display:flex;align-items:center;gap:0.375rem;padding:1rem;background:${bgColor};border-left:3px solid ${borderColor};margin-bottom:0.5rem;border-radius:0.375rem;transition:background 0.2s;" onmouseover="this.style.background='#4a5568'" onmouseout="this.style.background='${bgColor}'">
+            <div style="width:60px;min-width:60px;text-align:center;font-size:1.25rem;color:#fbbf24;">${rank}</div>
+            <a href="${playerLink}" style="flex:1;padding-left:0.2rem;color:${nameColor};font-weight:${isWinner ? '600' : '400'};text-decoration:none;">
               ${name}
             </a>
             <div style="color:${timeColor};font-weight:600;font-family:monospace;font-size:1rem;">${timeStr}</div>

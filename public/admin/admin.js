@@ -773,6 +773,7 @@ const admin = {
           </div>
           <span class="resource-source">${site.source}</span>
           <button class="btn btn-sm btn-ghost" onclick="admin.openResourceModal('site', ${i})" title="Modifier">✏️</button>
+          <button class="btn btn-sm btn-ghost btn-danger" onclick="admin.removeSite(${i})" title="Supprimer">×</button>
           ${!resources.officialSite?.url && !site.isObsolete ? 
             `<button class="btn btn-sm btn-ghost" onclick="admin.setAsOfficialSite(${i})" title="Définir comme site officiel">⭐</button>` : 
             ''}
@@ -780,7 +781,7 @@ const admin = {
       `).join('');
       this.attachResourceDnD('sites-list', 'sites');
     } else {
-      sitesList.innerHTML = '<p class="text-muted">Aucun site depuis rando-list</p>';
+      sitesList.innerHTML = '<p class="text-muted">Aucun site</p>';
     }
     
     // Trackers
@@ -868,6 +869,7 @@ const admin = {
     const sourceGroup = document.getElementById('resource-modal-source-group');
     const siteFlags = document.getElementById('resource-modal-site-flags');
     const i18nBlock = document.getElementById('resource-modal-i18n');
+    const i18nNameGroup = document.getElementById('resource-modal-i18n-name-group');
 
     let item = null;
     if (kind === 'official') item = resources.officialSite || {};
@@ -876,7 +878,7 @@ const admin = {
     if (kind === 'guide') item = (resources.guides || [])[index] || {};
     if (kind === 'other') item = (resources.other || [])[index] || {};
 
-    this.resourceModalState = { kind, index, isEdit };
+    this.resourceModalState = { kind, index, isEdit, lang: null };
     this.resourceModalTranslations = { ...(item.translations || {}) };
 
     titleEl.textContent = `${isEdit ? 'Modifier' : 'Ajouter'} ${kind === 'official' ? 'le site officiel' : kind}`;
@@ -911,7 +913,8 @@ const admin = {
     sourceGroup.style.display = (kind === 'official') ? 'none' : 'block';
     siteFlags.style.display = (kind === 'site' || kind === 'official') ? 'grid' : 'none';
     typeGroup.style.display = (kind === 'guide' || kind === 'other') ? 'block' : 'none';
-    i18nBlock.style.display = (kind === 'guide' || kind === 'other') ? 'block' : 'none';
+    i18nBlock.style.display = (kind === 'guide' || kind === 'other' || kind === 'tracker') ? 'block' : 'none';
+    i18nNameGroup.style.display = (kind === 'tracker') ? 'none' : 'block';
 
     document.getElementById('resource-modal-lang').value = 'en';
     this.onResourceModalLanguageChange();
@@ -926,24 +929,62 @@ const admin = {
   },
 
   onResourceModalLanguageChange() {
+    const previousLang = this.resourceModalState?.lang;
+    if (previousLang) {
+      this.persistCurrentResourceModalTranslation(previousLang);
+    }
     const lang = document.getElementById('resource-modal-lang').value;
+    if (this.resourceModalState) this.resourceModalState.lang = lang;
     const data = this.resourceModalTranslations?.[lang] || {};
     document.getElementById('resource-modal-i18n-name').value = data.name || '';
     document.getElementById('resource-modal-i18n-description').value = data.description || '';
   },
 
-  collectResourceModalTranslations() {
-    const lang = document.getElementById('resource-modal-lang').value;
-    const trName = document.getElementById('resource-modal-i18n-name').value.trim();
-    const trDesc = document.getElementById('resource-modal-i18n-description').value.trim();
+  persistCurrentResourceModalTranslation(forceLang = null) {
+    if (!this.resourceModalState) return;
+    const kind = this.resourceModalState.kind;
+    if (!['guide', 'other', 'tracker'].includes(kind)) return;
+
+    const lang = forceLang || this.resourceModalState.lang || document.getElementById('resource-modal-lang')?.value || 'en';
+    const trName = document.getElementById('resource-modal-i18n-name')?.value.trim() || '';
+    const trDesc = document.getElementById('resource-modal-i18n-description')?.value.trim() || '';
 
     const next = { ...(this.resourceModalTranslations || {}) };
-    if (trName || trDesc) {
+    if (kind === 'tracker') {
+      if (trDesc) {
+        next[lang] = { ...(next[lang] || {}), description: trDesc };
+      } else {
+        const existing = { ...(next[lang] || {}) };
+        delete existing.description;
+        if (Object.keys(existing).length === 0) delete next[lang];
+        else next[lang] = existing;
+      }
+    } else if (trName || trDesc) {
       next[lang] = { name: trName, description: trDesc };
     } else {
       delete next[lang];
     }
-    return next;
+
+    this.resourceModalTranslations = next;
+  },
+
+  collectResourceModalTranslations() {
+    this.persistCurrentResourceModalTranslation();
+
+    const kind = this.resourceModalState?.kind;
+    const translations = { ...(this.resourceModalTranslations || {}) };
+    if (kind === 'tracker') {
+      Object.keys(translations).forEach((lang) => {
+        const data = translations[lang] || {};
+        const desc = (data.description || '').trim();
+        if (!desc) {
+          delete translations[lang];
+        } else {
+          translations[lang] = { description: desc };
+        }
+      });
+    }
+    return translations;
   },
 
   async saveResourceModal() {
@@ -985,7 +1026,7 @@ const admin = {
         payload.isArchipelago = isArchipelago;
         payload.isObsolete = isObsolete;
       }
-      if (kind === 'guide' || kind === 'other') {
+      if (kind === 'guide' || kind === 'other' || kind === 'tracker') {
         payload.type = type;
         payload.translations = this.collectResourceModalTranslations();
         if (kind === 'guide' && !['guide', 'tutorial', 'wiki', 'video'].includes(payload.type)) {
@@ -995,6 +1036,9 @@ const admin = {
         if (kind === 'other' && !['discord', 'community', 'seed', 'resource'].includes(payload.type)) {
           this.showToast('Type de lien invalide', 'error');
           return;
+        }
+        if (kind === 'tracker') {
+          delete payload.type;
         }
       }
 
@@ -1138,6 +1182,22 @@ const admin = {
       
     } catch (error) {
       this.showToast('Erreur', 'error');
+    }
+  },
+
+  async removeSite(index) {
+    if (!confirm('Supprimer ce site ?')) return;
+
+    try {
+      const currentSites = this.currentGame?.resources?.sites || [];
+      const nextSites = currentSites.filter((_, i) => i !== index);
+
+      await this.replaceResources({
+        ...this.currentGame.resources,
+        sites: nextSites
+      }, 'Site supprimé');
+    } catch (error) {
+      this.showToast('Erreur lors de la suppression', 'error');
     }
   },
   

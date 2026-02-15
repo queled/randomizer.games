@@ -607,18 +607,46 @@
 
     const name = escapeHtml(displayName);
     const desc = displayDescription ? `<div style="color:#9ca3af;font-size:0.8rem;margin-top:0.25rem;">${escapeHtml(displayDescription)}</div>` : '';
+    const iconMarkup = (typeof icon === 'string' && icon.trim().startsWith('<'))
+      ? icon
+      : `<span>${icon}</span>`;
+
     return `
       <a href="${link.url}" target="_blank" rel="noopener"
          style="display:block;background:#1f2937;padding:0.875rem 1rem;border-radius:0.5rem;text-decoration:none;transition:background 0.2s;border:1px solid #374151;"
          onmouseover="this.style.background='#374151'"
          onmouseout="this.style.background='#1f2937'">
         <div style="display:flex;align-items:center;gap:0.5rem;color:#60a5fa;font-weight:500;">
-          <span>${icon}</span>
+          ${iconMarkup}
           <span>${name}</span>
         </div>
         ${desc}
       </a>
     `;
+  }
+
+  function renderAssetIcon(src, alt) {
+    return `<img src="${src}" alt="${escapeHtml(alt || '')}" style="width:1rem;height:1rem;object-fit:contain;display:block;">`;
+  }
+
+  function getCommunityIcon(link) {
+    const type = String(link?.type || '').toLowerCase();
+    if (type === 'discord') {
+      return renderAssetIcon('/assets/discord.svg', 'Discord');
+    }
+    return '👥';
+  }
+
+  function getMultiworldIcon(site) {
+    const url = (site?.url || '').toLowerCase();
+    const name = (site?.name || '').toLowerCase();
+    if (url.includes('archipelago.gg') || name.includes('archipelago') || !!site?.isArchipelago) {
+      return renderAssetIcon('/assets/archipelago.png', 'Archipelago');
+    }
+    if (url.includes('multiworld.gg') || name.includes('multiworld')) {
+      return renderAssetIcon('/assets/multiworld.png', 'Multiworld');
+    }
+    return '🏝️';
   }
 
   function t(key, fallback) {
@@ -646,7 +674,7 @@
 
     container.innerHTML = `
       <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:0.75rem;">
-        ${communityLinks.map(link => renderLinkChip(link, '💬')).join('')}
+        ${communityLinks.map(link => renderLinkChip(link, getCommunityIcon(link))).join('')}
       </div>
     `;
   }
@@ -740,7 +768,7 @@
               url: site.url,
               name: site.name || getHostFromUrl(site.url),
               description: ''
-            }, '🏝️')).join('')}
+            }, getMultiworldIcon(site))).join('')}
           </div>
         </div>
       `;

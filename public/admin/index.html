@@ -236,7 +236,7 @@
           
           <!-- Sites from rando-list -->
           <div class="resource-section">
-            <h3 class="resource-section-title">🔗 Sites (depuis rando-list)</h3>
+            <h3 class="resource-section-title">🔗 Sites</h3>
             <div id="sites-list" class="resource-list">
               <!-- Will be populated -->
             </div>
@@ -747,7 +747,7 @@
         </div>
 
         <div id="resource-modal-i18n" class="resource-modal-i18n" style="display: none;">
-          <p class="resource-form-title">Traductions (site principal)</p>
+          <p class="resource-form-title">Traductions</p>
           <div class="form-group">
             <label for="resource-modal-lang">Langue</label>
             <select id="resource-modal-lang" class="form-input form-select" onchange="admin.onResourceModalLanguageChange()">
@@ -759,7 +759,7 @@
               <option value="pt">Português</option>
             </select>
           </div>
-          <div class="form-group">
+          <div class="form-group" id="resource-modal-i18n-name-group">
             <label for="resource-modal-i18n-name">Titre traduit</label>
             <input type="text" id="resource-modal-i18n-name" class="form-input" placeholder="Laisser vide pour fallback sur le titre principal">
           </div>

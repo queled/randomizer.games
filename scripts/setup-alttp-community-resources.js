@@ -248,6 +248,20 @@ async function main() {
       }
     ];
 
+    const trackerLanguages = ['en', 'fr', 'es', 'de', 'it', 'pt'];
+    for (const tracker of trackers) {
+      const canonicalName = tracker.name;
+      const existingTranslations = tracker.translations || {};
+      tracker.translations = trackerLanguages.reduce((acc, lang) => {
+        const localized = existingTranslations[lang] || {};
+        acc[lang] = {
+          name: canonicalName,
+          description: localized.description || tracker.description || ''
+        };
+        return acc;
+      }, {});
+    }
+
     const guides = [
       {
         name: 'Common things that stump newcomers',

@@ -17,6 +17,7 @@
   const racesEl = document.getElementById('game-races');
   const streamsListEl = document.getElementById('streams-list');
   const categoriesContentEl = document.getElementById('categories-content');
+  let resourcesDataCache = null;
 
   if(!id){ titleEl.textContent = 'Game not specified'; }
 
@@ -25,8 +26,8 @@
   function formatDate(d) {
     if (!d) return '-';
     let locale = 'en-US';
-    if (typeof i18n !== 'undefined' && typeof i18n.getCurrentLanguage === 'function') {
-      const lang = i18n.getCurrentLanguage();
+    const lang = getCurrentLanguage();
+    if (lang) {
       const localeMap = { 'en': 'en-US', 'fr': 'fr-FR', 'de': 'de-DE', 'es': 'es-ES', 'it': 'it-IT' };
       locale = localeMap[lang] || 'en-US';
     }
@@ -36,8 +37,8 @@
   function formatDateTime(d) {
     if (!d) return '-';
     let locale = 'en-US';
-    if (typeof i18n !== 'undefined' && typeof i18n.getCurrentLanguage === 'function') {
-      const lang = i18n.getCurrentLanguage();
+    const lang = getCurrentLanguage();
+    if (lang) {
       const localeMap = { 'en': 'en-US', 'fr': 'fr-FR', 'de': 'de-DE', 'es': 'es-ES', 'it': 'it-IT' };
       locale = localeMap[lang] || 'en-US';
     }
@@ -597,10 +598,7 @@
   }
 
   function renderLinkChip(link, icon = '🔗') {
-    let lang = 'en';
-    if (typeof i18n !== 'undefined' && typeof i18n.getCurrentLanguage === 'function') {
-      lang = i18n.getCurrentLanguage() || 'en';
-    }
+    const lang = getCurrentLanguage() || 'en';
     const tr = link?.translations?.[lang] || null;
     const displayName = tr?.name || link.name || getHostFromUrl(link.url) || link.url;
     const displayDescription = tr?.description || link.description || '';
@@ -657,6 +655,13 @@
     return fallback;
   }
 
+  function getCurrentLanguage() {
+    if (typeof i18n === 'undefined') return 'en';
+    if (typeof i18n.getCurrentLanguage === 'function') return i18n.getCurrentLanguage() || 'en';
+    if (typeof i18n.getLanguage === 'function') return i18n.getLanguage() || 'en';
+    return 'en';
+  }
+
   function renderCommunity(data, container) {
     if (!container) return;
 
@@ -689,6 +694,7 @@
     
     try {
       const data = await fetchJson(`/api/games/${encodeURIComponent(gameId)}/resources`);
+      resourcesDataCache = data;
       renderCommunity(data, communityEl);
       renderResources(data, resourcesEl);
     } catch (e) {
@@ -696,6 +702,14 @@
       resourcesEl.innerHTML = '';
       if (communityEl) communityEl.innerHTML = '';
     }
+  }
+
+  function rerenderLocalizedResources() {
+    const resourcesEl = document.getElementById('resources-content');
+    const communityEl = document.getElementById('community-list');
+    if (!resourcesDataCache || !resourcesEl) return;
+    renderCommunity(resourcesDataCache, communityEl);
+    renderResources(resourcesDataCache, resourcesEl);
   }
   
   function renderResources(data, container) {
@@ -730,9 +744,9 @@
             <span>🌐</span> ${t('gameDetail.resourceOfficialSite', 'Official site')}
           </h3>
           <a href="${officialSite.url}" target="_blank" rel="noopener"
-             style="display:inline-flex;align-items:center;gap:0.75rem;background:linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);color:white;padding:0.875rem 1.25rem;border-radius:0.75rem;text-decoration:none;font-weight:600;transition:transform 0.2s, box-shadow 0.2s;box-shadow:0 4px 15px rgba(59, 130, 246, 0.4);"
-             onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(59, 130, 246, 0.5)'"
-             onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 15px rgba(59, 130, 246, 0.4)'">
+             style="display:inline-flex;align-items:center;gap:0.75rem;background:#374151;color:#f3f4f6;padding:0.875rem 1.25rem;border-radius:0.75rem;text-decoration:none;font-weight:600;transition:background 0.2s, transform 0.2s;border:1px solid #4b5563;"
+             onmouseover="this.style.background='#4b5563';this.style.transform='translateY(-1px)'"
+             onmouseout="this.style.background='#374151';this.style.transform='translateY(0)'">
             <span style="font-size:1.125rem;">↗</span>
             <span>${siteName}</span>
           </a>
@@ -964,4 +978,8 @@
   }
 
   if(id) load();
+
+  window.addEventListener('languageChanged', () => {
+    rerenderLocalizedResources();
+  });
 })();

@@ -5,8 +5,8 @@
 }
 
 :root {
-    --site-max-width: 80rem;
-    --site-max-width-wide: 1400px;
+    --site-max-width: clamp(80rem, 90vw, 2200px);
+    --site-max-width-wide: clamp(1400px, 92vw, 2800px);
 }
 
 body {
@@ -176,16 +176,19 @@ h1 {
 /* Games Grid */
 #games-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(clamp(288px, 18vw, 320px), 1fr));
     gap: 1.5rem;
     margin-top: 2rem;
 }
 
 .game-card {
     background-color: #1f2937;
-    padding: 1.5rem;
+    padding: 1rem;
     border-radius: 0.5rem;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     transition: transform 0.2s, background-color 0.2s;
 }
 
@@ -195,8 +198,9 @@ h1 {
 }
 
 .game-card img {
-    width: 100%;
-    height: 150px;
+    width: min(100%, 256px);
+    aspect-ratio: 256 / 360;
+    height: auto;
     object-fit: cover;
     border-radius: 0.375rem;
     margin-bottom: 1rem;
@@ -228,7 +232,8 @@ h1 {
 /* Players List */
 #players-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(clamp(280px, 22vw, 330px), 1fr));
+    align-items: stretch;
     gap: 1rem;
     margin-top: 2rem;
 }
@@ -237,6 +242,9 @@ h1 {
     background-color: #1f2937;
     padding: 1.25rem;
     border-radius: 0.5rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     transition: background-color 0.2s;
 }
 
@@ -256,6 +264,7 @@ h1 {
     gap: 1.5rem;
     font-size: 0.875rem;
     color: #9ca3af;
+    margin-top: auto;
 }
 
 .player-stats span {
@@ -759,7 +768,7 @@ body.spoiler-mode .spoiler-text::before {
 
 .streams-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(clamp(280px, 24vw, 360px), 1fr));
     gap: 1.5rem;
     margin-top: 1.5rem;
 }
@@ -1000,7 +1009,7 @@ body.spoiler-mode .spoiler-text::before {
 
 .resources-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(clamp(260px, 24vw, 320px), 1fr));
     gap: 1.5rem;
 }
 
@@ -1127,59 +1136,7 @@ body.spoiler-mode .spoiler-text::before {
     padding: 1rem;
 }
 
-/* ========================================
-   WIDE / ULTRAWIDE DENSITY
-   Afficher plus d'éléments sans les agrandir
-   ======================================== */
-
-/* 34" ultrawide (21:9) typique */
-@media (min-width: 2560px) and (min-aspect-ratio: 21/9) {
-    :root {
-        --site-max-width: min(94vw, 2600px);
-        --site-max-width-wide: min(94vw, 3000px);
-    }
-
-    .tournaments-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-
-    #players-list {
-        grid-template-columns: repeat(3, minmax(300px, 1fr));
-    }
-
-    .streams-grid {
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    }
-}
-
-/* 49" super ultrawide (32:9) typique */
-@media (min-width: 3840px) and (min-aspect-ratio: 30/9) {
-    :root {
-        --site-max-width: min(96vw, 4200px);
-        --site-max-width-wide: min(96vw, 4600px);
-    }
-
-    /* Objectif demandé: jusqu'à 8 jeux par ligne si la place le permet */
-    #games-grid {
-        grid-template-columns: repeat(8, minmax(0, 1fr));
-    }
-
-    .tournaments-grid {
-        grid-template-columns: repeat(6, 1fr);
-    }
-
-    #players-list {
-        grid-template-columns: repeat(4, minmax(300px, 1fr));
-    }
-
-    .resources-grid {
-        grid-template-columns: repeat(6, minmax(0, 1fr));
-    }
-
-    .streams-grid {
-        grid-template-columns: repeat(6, minmax(0, 1fr));
-    }
-}
+/* Densité fluide: les grilles gagnent des colonnes progressivement */
 
 .home-grid {
     display: grid;
@@ -1298,13 +1255,19 @@ body.spoiler-mode .spoiler-text::before {
 
 .tournaments-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(clamp(280px, 23vw, 340px), 1fr));
     gap: 1rem;
+}
+
+.tournament-hover-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .races-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(clamp(320px, 28vw, 380px), 1fr));
     gap: 1rem;
 }
 
@@ -1907,6 +1870,7 @@ body.spoiler-mode .spoiler-text::before {
 
     .tournaments-grid {
         grid-template-columns: 1fr;
+        justify-content: stretch;
     }
 
     .races-grid {
@@ -2247,6 +2211,7 @@ body.spoiler-mode .spoiler-text::before {
     /* Games grid */
     #games-grid {
         grid-template-columns: repeat(2, 1fr);
+        justify-content: stretch;
         gap: 1rem;
     }
 
@@ -2265,6 +2230,7 @@ body.spoiler-mode .spoiler-text::before {
     /* Players list */
     #players-list {
         grid-template-columns: 1fr;
+        justify-content: stretch;
     }
 
     /* Tournament list items */
@@ -2341,6 +2307,7 @@ body.spoiler-mode .spoiler-text::before {
     /* Games grid single column on very small screens */
     #games-grid {
         grid-template-columns: 1fr;
+        justify-content: stretch;
     }
 
     /* Player stats row wrap */
@@ -2467,6 +2434,7 @@ body.spoiler-mode .spoiler-text::before {
     /* Densifier l'affichage sans augmenter la taille des cartes */
     #games-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        justify-content: stretch;
         gap: 0.75rem;
     }
 
@@ -2475,7 +2443,8 @@ body.spoiler-mode .spoiler-text::before {
     }
 
     .game-card img {
-        height: 100px;
+        aspect-ratio: 2 / 3;
+        height: auto;
     }
 
     #tournament-list > li {

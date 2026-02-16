@@ -24,6 +24,35 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+function buildRaceUrl(slug, rawRaceUrl) {
+  const category = String(slug || '').trim().toLowerCase();
+  if (!category) return null;
+
+  let path = String(rawRaceUrl || '').trim();
+  if (!path) return null;
+
+  if (/^https?:\/\//i.test(path)) {
+    try {
+      path = new URL(path).pathname || '';
+    } catch (_) {
+      path = '';
+    }
+  }
+
+  path = path.split('?')[0].split('#')[0];
+  path = path.replace(/\\/g, '/');
+  path = path.replace(/\/+/g, '/');
+  if (!path.startsWith('/')) path = `/${path}`;
+  path = path.replace(/\/+$/, '');
+
+  if (!path) return null;
+
+  const lowerPath = path.toLowerCase();
+  if (lowerPath.startsWith(`/${category}/`)) return lowerPath;
+
+  return `/${category}/${path.replace(/^\/+/, '')}`.replace(/\/+/g, '/').toLowerCase();
+}
+
 async function syncGameRaces(gameId, maxPages = 100) {
   // Chercher le jeu par ID ou slug racetime
   let game = await Game.findOne({ id: gameId });
@@ -61,7 +90,8 @@ async function syncGameRaces(gameId, maxPages = 100) {
       }
       
       for (const raceData of result.races) {
-        const raceUrl = `/${slug}${raceData.url || ''}`;
+        const raceUrl = buildRaceUrl(slug, raceData.url);
+        if (!raceUrl) continue;
         
         try {
           const updateResult = await Race.updateOne(
@@ -171,7 +201,8 @@ async function syncDirectFromRacetime(slug, maxPages) {
       }
       
       for (const raceData of result.races) {
-        const raceUrl = `/${slug}${raceData.url || ''}`;
+        const raceUrl = buildRaceUrl(slug, raceData.url);
+        if (!raceUrl) continue;
         
         try {
           const updateResult = await Race.updateOne(

@@ -16,6 +16,7 @@
     "enrich-games": "node scripts/enrich-games.js",
     "migrate:game-schema": "node scripts/migrations/migrate-game-schema.js",
     "db:setup": "node scripts/setup-db.js",
+    "cleanup:race-duplicates": "node scripts/cleanup-race-duplicates.js",
     "check-security": "node scripts/check-security.js",
     "predeploy": "npm run check-security"
   },

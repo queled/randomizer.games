@@ -4,6 +4,11 @@
     box-sizing: border-box;
 }
 
+:root {
+    --site-max-width: 80rem;
+    --site-max-width-wide: 1400px;
+}
+
 body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background-color: #111827;
@@ -72,7 +77,7 @@ input[type="text"] {
 /* Main Content */
 main {
     padding: 1.5rem;
-    max-width: 80rem;
+    max-width: var(--site-max-width);
     margin: 0 auto;
 }
 
@@ -500,7 +505,7 @@ body.spoiler-mode .spoiler-text::before {
 }
 
 .footer-container {
-    max-width: 80rem;
+    max-width: var(--site-max-width);
     margin: 0 auto;
     display: grid;
     grid-template-columns: auto 1fr;
@@ -582,7 +587,7 @@ body.spoiler-mode .spoiler-text::before {
 
 /* Footer Bottom */
 .footer-bottom {
-    max-width: 80rem;
+    max-width: var(--site-max-width);
     margin: 2rem auto 0;
     padding-top: 1.5rem;
     border-top: 1px solid #21262d;
@@ -1117,9 +1122,63 @@ body.spoiler-mode .spoiler-text::before {
 
 /* Utility classes for responsive layouts */
 .main-container {
-    max-width: 1400px;
+    max-width: var(--site-max-width-wide);
     margin: 2rem auto;
     padding: 1rem;
+}
+
+/* ========================================
+   WIDE / ULTRAWIDE DENSITY
+   Afficher plus d'éléments sans les agrandir
+   ======================================== */
+
+/* 34" ultrawide (21:9) typique */
+@media (min-width: 2560px) and (min-aspect-ratio: 21/9) {
+    :root {
+        --site-max-width: min(94vw, 2600px);
+        --site-max-width-wide: min(94vw, 3000px);
+    }
+
+    .tournaments-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    #players-list {
+        grid-template-columns: repeat(3, minmax(300px, 1fr));
+    }
+
+    .streams-grid {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    }
+}
+
+/* 49" super ultrawide (32:9) typique */
+@media (min-width: 3840px) and (min-aspect-ratio: 30/9) {
+    :root {
+        --site-max-width: min(96vw, 4200px);
+        --site-max-width-wide: min(96vw, 4600px);
+    }
+
+    /* Objectif demandé: jusqu'à 8 jeux par ligne si la place le permet */
+    #games-grid {
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+    }
+
+    .tournaments-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    #players-list {
+        grid-template-columns: repeat(4, minmax(300px, 1fr));
+    }
+
+    .resources-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+
+    .streams-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
 }
 
 .home-grid {
@@ -2400,6 +2459,32 @@ body.spoiler-mode .spoiler-text::before {
     #challonge-link {
         padding: 0.4rem 0.75rem;
         font-size: 0.875rem;
+    }
+}
+
+/* iPhone 19.5:9 (1179x2556 / 1290x2796) en CSS pixels ~393/430 de large */
+@media (max-width: 430px) and (min-height: 800px) {
+    /* Densifier l'affichage sans augmenter la taille des cartes */
+    #games-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+    }
+
+    .game-card {
+        padding: 0.75rem;
+    }
+
+    .game-card img {
+        height: 100px;
+    }
+
+    #tournament-list > li {
+        padding: 0.85rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .player-card {
+        padding: 1rem;
     }
 }
 

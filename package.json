@@ -12,6 +12,7 @@
     "sync-rando-list:link": "node scripts/sync-rando-list-v3.js --link-games",
     "sync-rando-list:detect": "node scripts/sync-rando-list-v3.js --detect-new",
     "import-games": "node scripts/import-games-csv.js",
+    "import:multiworld-manual": "node scripts/import-multiworld-manual.js",
     "setup:alttp-resources": "node scripts/setup-alttp-community-resources.js",
     "enrich-games": "node scripts/enrich-games.js",
     "migrate:game-schema": "node scripts/migrations/migrate-game-schema.js",

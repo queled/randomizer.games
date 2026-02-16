@@ -105,9 +105,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       
       return `
         <div class="game-card" data-game-id="${encodeURIComponent(id)}" role="link" tabindex="0" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;overflow:hidden;">
-          <img src="${image}" alt="${game.name}" style="width:min(100%,256px);aspect-ratio:256/360;height:auto;object-fit:cover;border-radius:12px;box-shadow:0 2px 12px #0003;display:block;" 
+          <img src="${image}" alt="${game.name}" style="width:256px;max-width:100%;height:auto;aspect-ratio:256/360;object-fit:cover;border-radius:12px;box-shadow:0 2px 12px #0003;display:block;" 
                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div style="display:none;width:min(100%,256px);aspect-ratio:256/360;background:#1f2937;border-radius:12px;box-shadow:0 2px 12px #0003;align-items:center;justify-content:center;font-size:2.5rem;font-weight:bold;color:#6b7280;text-transform:uppercase;">${id}</div>
+          <div style="display:none;width:256px;max-width:100%;height:auto;aspect-ratio:256/360;background:#1f2937;border-radius:12px;box-shadow:0 2px 12px #0003;align-items:center;justify-content:center;font-size:2.5rem;font-weight:bold;color:#6b7280;text-transform:uppercase;">${id}</div>
           <h2 style="color:#fbbf24;font-size:1.3rem;font-weight:bold;margin:1rem 0 0.5rem 0;text-align:center;">${displayTitle}</h2>
           <p style="color:#d1d5db;font-size:1rem;text-align:center;margin:0 0 0.5rem 0;">${gameName}</p>
           <div style="display:flex;gap:1rem;color:#9ca3af;font-size:0.85rem;margin-bottom:0.5rem;">

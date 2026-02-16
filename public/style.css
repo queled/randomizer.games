@@ -2220,7 +2220,9 @@ body.spoiler-mode .spoiler-text::before {
     }
 
     .game-card img {
-        height: 120px;
+        width: min(100%, 220px);
+        aspect-ratio: 256 / 360;
+        height: auto;
     }
 
     .game-card h3 {
@@ -2443,7 +2445,8 @@ body.spoiler-mode .spoiler-text::before {
     }
 
     .game-card img {
-        aspect-ratio: 2 / 3;
+        width: min(100%, 200px);
+        aspect-ratio: 256 / 360;
         height: auto;
     }
 

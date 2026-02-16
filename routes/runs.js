@@ -3,6 +3,10 @@ const router = express.Router();
 const { Race } = require('../models');
 const { validateObjectId } = require('../middleware/security');
 
+function escapeRegex(text) {
+  return String(text || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 // Game ID aliases (maps game IDs to their racetime category slugs)
 const CATEGORY_ALIASES = {
   'oot': ['oot', 'ootr'],
@@ -35,8 +39,8 @@ router.get('/', async (req, res, next) => {
       } else if (aliases) {
         query.category = aliases[0];
       } else {
-        // Try direct match or regex for partial matches
-        query.category = { $regex: new RegExp('^' + category, 'i') };
+        // Direct, case-insensitive exact match only (no prefix match)
+        query.category = { $regex: new RegExp(`^${escapeRegex(category)}$`, 'i') };
       }
     }
     

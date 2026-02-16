@@ -45,23 +45,80 @@ function escapeRegex(text) {
   return String(text || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function buildCategoryQuery(gameDoc, gameIdLower) {
-  const categories = new Set();
+function getExplicitRacetimeSlugs(gameDoc) {
+  const slugs = new Set();
 
+  const primary = gameDoc?.integrations?.racetime?.gameSlug;
+  const extras = Array.isArray(gameDoc?.integrations?.racetime?.gameSlugs)
+    ? gameDoc.integrations.racetime.gameSlugs
+    : [];
+
+  if (primary) slugs.add(String(primary).toLowerCase().trim());
+  extras.forEach(slug => {
+    if (slug) slugs.add(String(slug).toLowerCase().trim());
+  });
+
+  return Array.from(slugs).filter(Boolean);
+}
+
+function buildCategoryResolutionContext(games) {
+  const explicitSlugOwners = new Map();
+  const allGameIds = new Set();
+
+  for (const game of games || []) {
+    const gameId = String(game?.id || '').toLowerCase().trim();
+    if (!gameId) continue;
+
+    allGameIds.add(gameId);
+    const explicitSlugs = getExplicitRacetimeSlugs(game);
+
+    for (const slug of explicitSlugs) {
+      if (!explicitSlugOwners.has(slug)) {
+        explicitSlugOwners.set(slug, new Set());
+      }
+      explicitSlugOwners.get(slug).add(gameId);
+    }
+  }
+
+  return { explicitSlugOwners, allGameIds };
+}
+
+function buildCategoryQuery(gameDoc, gameIdLower, resolutionContext = { explicitSlugOwners: new Map(), allGameIds: new Set() }) {
+  const explicitSlugs = getExplicitRacetimeSlugs(gameDoc);
+  const explicitSet = new Set(explicitSlugs);
+
+  const categories = new Set();
   categories.add(gameIdLower);
   categories.add(`${gameIdLower}r`);
 
   const aliases = CATEGORY_ALIASES[gameIdLower] || [];
   aliases.forEach(c => categories.add(String(c).toLowerCase()));
+  explicitSlugs.forEach(c => categories.add(String(c).toLowerCase()));
 
-  const racetimeSlug = gameDoc?.integrations?.racetime?.gameSlug;
-  const racetimeSlugs = gameDoc?.integrations?.racetime?.gameSlugs || [];
-  if (racetimeSlug) categories.add(String(racetimeSlug).toLowerCase());
-  racetimeSlugs.forEach(c => categories.add(String(c).toLowerCase()));
+  for (const category of Array.from(categories)) {
+    if (!category) {
+      categories.delete(category);
+      continue;
+    }
+
+    const owners = resolutionContext.explicitSlugOwners.get(category);
+    if (owners && !owners.has(gameIdLower) && !explicitSet.has(category)) {
+      categories.delete(category);
+      continue;
+    }
+
+    const isOtherGameId = resolutionContext.allGameIds.has(category) && category !== gameIdLower;
+    if (isOtherGameId && !explicitSet.has(category)) {
+      categories.delete(category);
+    }
+  }
 
   const all = Array.from(categories).filter(Boolean);
-  if (all.length <= 1) {
-    return { category: all[0] || gameIdLower };
+  if (all.length === 0) {
+    return { category: '__no_matching_category__' };
+  }
+  if (all.length === 1) {
+    return { category: all[0] };
   }
   return { category: { $in: all } };
 }
@@ -99,10 +156,11 @@ function buildTournamentQuery(gameDoc, gameIdLower) {
 async function computeGamesWithStats() {
   const { Tournament, Race } = require('../models');
   const games = await Game.find().sort({ name: 1 });
+  const resolutionContext = buildCategoryResolutionContext(games);
 
   const gamesWithStats = await Promise.all(games.map(async (game) => {
     const gameIdLower = game.id.toLowerCase();
-    const categoryQuery = buildCategoryQuery(game, gameIdLower);
+    const categoryQuery = buildCategoryQuery(game, gameIdLower, resolutionContext);
     const tournamentQuery = buildTournamentQuery(game, gameIdLower);
 
     const [totalRaces, totalTournaments] = await Promise.all([
@@ -205,7 +263,9 @@ router.get('/:id/stats', async (req, res, next) => {
     const gameIdLower = gameId.toLowerCase();
 
     const gameDoc = await Game.findOne({ id: gameIdLower });
-    const categoryQuery = buildCategoryQuery(gameDoc, gameIdLower);
+    const allGames = await Game.find().select('id integrations.racetime').lean();
+    const resolutionContext = buildCategoryResolutionContext(allGames);
+    const categoryQuery = buildCategoryQuery(gameDoc, gameIdLower, resolutionContext);
     const tournamentQuery = buildTournamentQuery(gameDoc, gameIdLower);
     
     const totalTournaments = await Tournament.countDocuments(tournamentQuery);

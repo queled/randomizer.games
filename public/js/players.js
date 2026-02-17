@@ -81,6 +81,49 @@ function debounce(fn, delay) {
   };
 }
 
+function toWellFormedString(value) {
+  const str = String(value == null ? '' : value);
+  if (typeof str.toWellFormed === 'function') {
+    return str.toWellFormed();
+  }
+
+  let out = '';
+  for (let i = 0; i < str.length; i++) {
+    const code = str.charCodeAt(i);
+    const isHigh = code >= 0xD800 && code <= 0xDBFF;
+    const isLow = code >= 0xDC00 && code <= 0xDFFF;
+
+    if (isHigh) {
+      const next = str.charCodeAt(i + 1);
+      const nextIsLow = next >= 0xDC00 && next <= 0xDFFF;
+      if (nextIsLow) {
+        out += str[i] + str[i + 1];
+        i += 1;
+      } else {
+        out += '\uFFFD';
+      }
+      continue;
+    }
+
+    if (isLow) {
+      out += '\uFFFD';
+      continue;
+    }
+
+    out += str[i];
+  }
+
+  return out;
+}
+
+function safeEncodeURIComponent(value) {
+  try {
+    return encodeURIComponent(toWellFormedString(value));
+  } catch (e) {
+    return encodeURIComponent(String(value == null ? '' : value).replace(/[\uD800-\uDFFF]/g, ''));
+  }
+}
+
 // Helper to convert blob to data URL
 function blobToDataUrl(blob) {
   return new Promise((resolve, reject) => {
@@ -136,7 +179,7 @@ async function getTwitchUsername(racetimeUrl, playerName) {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 3000);
       
-      const findRes = await fetch('/api/racetime/find?q=' + encodeURIComponent(playerName), {
+      const findRes = await fetch('/api/racetime/find?q=' + safeEncodeURIComponent(playerName), {
         signal: controller.signal
       });
       clearTimeout(timeoutId);
@@ -160,7 +203,7 @@ async function getTwitchUsername(racetimeUrl, playerName) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 3000);
     
-    const twitchRes = await fetch('/api/racetime/twitch?url=' + encodeURIComponent(profileUrl), {
+    const twitchRes = await fetch('/api/racetime/twitch?url=' + safeEncodeURIComponent(profileUrl), {
       signal: controller.signal
     });
     clearTimeout(timeoutId);
@@ -197,7 +240,7 @@ async function loadAvatarWithFallback(img) {
   
   // Step 1: Try Racetime avatar
   if (racetimeUrl) {
-    const racetimeAvatarUrl = '/api/racetime/avatar?url=' + encodeURIComponent(racetimeUrl) + '&name=' + encodeURIComponent(playerName);
+    const racetimeAvatarUrl = '/api/racetime/avatar?url=' + safeEncodeURIComponent(racetimeUrl) + '&name=' + safeEncodeURIComponent(playerName);
     const avatarData = await tryFetchImage(racetimeAvatarUrl, 8000);
     
     if (avatarData) {
@@ -219,7 +262,7 @@ async function loadAvatarWithFallback(img) {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
       
-      const findRes = await fetch('/api/racetime/find?q=' + encodeURIComponent(playerName), {
+      const findRes = await fetch('/api/racetime/find?q=' + safeEncodeURIComponent(playerName), {
         signal: controller.signal
       });
       clearTimeout(timeoutId);
@@ -230,7 +273,7 @@ async function loadAvatarWithFallback(img) {
         if (findData.url) {
           racetimeUrl = findData.url;
           
-          const racetimeAvatarUrl = '/api/racetime/avatar?url=' + encodeURIComponent(findData.url) + '&name=' + encodeURIComponent(playerName);
+          const racetimeAvatarUrl = '/api/racetime/avatar?url=' + safeEncodeURIComponent(findData.url) + '&name=' + safeEncodeURIComponent(playerName);
           const avatarData = await tryFetchImage(racetimeAvatarUrl, 8000);
           
           if (avatarData) {
@@ -253,7 +296,7 @@ async function loadAvatarWithFallback(img) {
   
   // Step 4: Try Twitch avatar
   if (twitchUsername) {
-    const twitchAvatarUrl = '/api/streams/twitch-avatar/' + encodeURIComponent(twitchUsername);
+    const twitchAvatarUrl = '/api/streams/twitch-avatar/' + safeEncodeURIComponent(twitchUsername);
     const avatarData = await tryFetchImage(twitchAvatarUrl, 8000);
     
     if (avatarData) {
@@ -290,16 +333,16 @@ function renderPlayers(players, prioritizeAvatars = false) {
     
     // Avatar setup
     const initial = (player.name && player.name[0]) ? player.name[0].toUpperCase() : '?';
-    const placeholder = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><rect width="120" height="120" fill="#374151"/><text x="50%" y="50%" dy=".35em" font-size="48" fill="#fbbf24" text-anchor="middle">' + initial + '</text></svg>');
+    const placeholder = 'data:image/svg+xml,' + safeEncodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><rect width="120" height="120" fill="#374151"/><text x="50%" y="50%" dy=".35em" font-size="48" fill="#fbbf24" text-anchor="middle">' + initial + '</text></svg>');
     
     // Get Racetime URL if available
-    const racetimeUrl = player.racetimeUrl ? player.racetimeUrl.replace(/\/+$/, '') : (player.racetimeId ? 'https://racetime.gg/user/' + encodeURIComponent(player.racetimeId) : '');
+    const racetimeUrl = player.racetimeUrl ? player.racetimeUrl.replace(/\/+$/, '') : (player.racetimeId ? 'https://racetime.gg/user/' + safeEncodeURIComponent(player.racetimeId) : '');
     
     // Get Twitch username if available (from player data)
     const twitchUsername = player.twitchUsername || player.twitch || '';
 
     return `
-      <div class="player-card" data-player-name="${encodeURIComponent(player.name)}" style="background-color: #1f2937; padding: 1.5rem; border-radius: 0.5rem; transition: background-color 0.2s; cursor: pointer; aspect-ratio: 1/1; display: flex; flex-direction: column; align-items: center;">
+      <div class="player-card" data-player-name="${safeEncodeURIComponent(player.name)}" style="background-color: #1f2937; padding: 1.5rem; border-radius: 0.5rem; transition: background-color 0.2s; cursor: pointer; aspect-ratio: 1/1; display: flex; flex-direction: column; align-items: center;">
         <h3 style="font-size: 1.1rem; font-weight: bold; color: white; margin-bottom: 0.75rem; text-align: center;">${player.name}</h3>
         
         <img class="rt-avatar" 
@@ -336,7 +379,7 @@ function renderPlayers(players, prioritizeAvatars = false) {
             const gameSlug = slugAliases[rawSlug] || rawSlug;
             return `
               <div style="font-size: 0.75rem; color: #d1d5db; font-weight: 500; display: flex; align-items: center; white-space: nowrap; overflow: hidden;">
-                <span class="game-link" data-game-id="${encodeURIComponent(gameSlug)}" style="overflow: hidden; text-overflow: ellipsis; flex: 1 1 auto; min-width: 0; cursor: pointer; text-decoration: underline; color: #60a5fa; transition: color 0.2s, text-decoration-color 0.2s;">${game.gameName}</span>
+                <span class="game-link" data-game-id="${safeEncodeURIComponent(gameSlug)}" style="overflow: hidden; text-overflow: ellipsis; flex: 1 1 auto; min-width: 0; cursor: pointer; text-decoration: underline; color: #60a5fa; transition: color 0.2s, text-decoration-color 0.2s;">${game.gameName}</span>
                 <span style="color: #10b981; font-weight: bold; margin-left: 0.5ch; flex-shrink: 0; flex-grow: 0;">(${game.count})</span>
               </div>
             `;

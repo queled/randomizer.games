@@ -61,7 +61,7 @@ async function main() {
 
   // Connect to MongoDB
   await mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-  const { Tournament, Player } = require('../models');
+  const { Tournament } = require('../models');
 
   const api = new StartGGAPI();
 
@@ -242,87 +242,7 @@ async function main() {
 
       console.log(`   ✅ Tournament saved: ${tournament._id}`);
 
-      // Update player records
-      let playersCreated = 0;
-      let playersUpdated = 0;
-
-      for (const participant of participants) {
-        const playerData = {
-          name: participant.name,
-          tournaments: [
-            {
-              tournamentId: tournament._id,
-              tournamentName: tournament.name,
-              finalRank: participant.finalRank,
-              date: tournament.startDate
-            }
-          ]
-        };
-
-        // Add start.gg metadata if available
-        if (participant.startggUserId) {
-          playerData['startgg.userId'] = participant.startggUserId;
-          playerData['startgg.userSlug'] = participant.startggUserSlug;
-        }
-
-        const existing = await Player.findOne({ name: participant.name });
-        
-        if (existing) {
-          // Check if this tournament is already recorded
-          const hasThisTournament = existing.tournaments.some(
-            t => t.tournamentId && t.tournamentId.toString() === tournament._id.toString()
-          );
-          
-          if (!hasThisTournament) {
-            existing.tournaments.push({
-              tournamentId: tournament._id,
-              tournamentName: tournament.name,
-              finalRank: participant.finalRank,
-              date: tournament.startDate
-            });
-            
-            // Update start.gg metadata if not present
-            if (participant.startggUserId && !existing.startgg?.userId) {
-              if (!existing.startgg) existing.startgg = {};
-              existing.startgg.userId = participant.startggUserId;
-              existing.startgg.userSlug = participant.startggUserSlug;
-            }
-            
-            await existing.save();
-            playersUpdated++;
-          }
-        } else {
-          // Create new player - wrap in try/catch to handle duplicate key errors
-          try {
-            const newPlayer = new Player({
-              name: participant.name,
-              tournaments: [{
-                tournamentId: tournament._id,
-                tournamentName: tournament.name,
-                finalRank: participant.finalRank,
-                date: tournament.startDate
-              }],
-              startgg: participant.startggUserId ? {
-                userId: participant.startggUserId,
-                userSlug: participant.startggUserSlug
-              } : undefined
-            });
-          
-            await newPlayer.save();
-            playersCreated++;
-          } catch (err) {
-            // Handle duplicate key or other errors gracefully
-            if (err.code === 11000) {
-              // Duplicate key - player might exist with different casing or index issue
-              console.log(`   ⚠️ Could not create player "${participant.name}": duplicate key`);
-            } else {
-              console.log(`   ⚠️ Could not create player "${participant.name}": ${err.message}`);
-            }
-          }
-        }
-      }
-
-      console.log(`   📊 Players: ${playersCreated} created, ${playersUpdated} updated`);
+      console.log(`   👤 Players: skipped (source-of-truth = races Racetime)`);
     }
 
     console.log('\n✅ Import completed successfully!');

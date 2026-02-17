@@ -751,12 +751,21 @@ function createQualificationRaceCard(race) {
   // Race link
   if (race.url) {
     const linkDiv = document.createElement('div');
-    const rawUrl = (race.url || '').toString();
-    let href = '';
-    if (/^https?:\/\//i.test(rawUrl)) href = rawUrl;
-    else if (rawUrl.startsWith('/')) href = 'https://racetime.gg' + rawUrl;
-    else if (/racetime\.gg/i.test(rawUrl)) href = 'https://' + rawUrl.replace(/^https?:\/\//i, '');
-    else href = 'https://racetime.gg/' + rawUrl;
+    const rawUrl = (race.url || '').toString().trim();
+    let path = rawUrl;
+    if (/^https?:\/\//i.test(path)) {
+      try {
+        path = new URL(path).pathname || '';
+      } catch (e) {
+        path = path.replace(/^https?:\/\/(www\.)?racetime\.gg/i, '');
+      }
+    } else if (/racetime\.gg/i.test(path)) {
+      path = path.replace(/^https?:\/\/(www\.)?racetime\.gg/i, '');
+    }
+    path = '/' + String(path || '').replace(/^\/+/, '');
+    const parts = path.split('/').filter(Boolean);
+    if (parts.length >= 3 && parts[0] === parts[1]) parts.splice(1, 1);
+    const href = 'https://racetime.gg/' + parts.join('/');
     
     const link = document.createElement('a');
     link.href = href;
@@ -1487,12 +1496,21 @@ function createMatchCard(match, races = []) {
   // Helper to get race link HTML
   const getRaceLinkHtml = (race) => {
     if (!race || !race.url) return '';
-    const rawUrl = (race.url || '').toString();
-    let href = '';
-    if (/^https?:\/\//i.test(rawUrl)) href = rawUrl;
-    else if (rawUrl.startsWith('/')) href = 'https://racetime.gg' + rawUrl;
-    else if (/racetime\.gg/i.test(rawUrl)) href = 'https://' + rawUrl.replace(/^https?:\/\//i, '');
-    else href = 'https://racetime.gg/' + rawUrl;
+    const rawUrl = (race.url || '').toString().trim();
+    let path = rawUrl;
+    if (/^https?:\/\//i.test(path)) {
+      try {
+        path = new URL(path).pathname || '';
+      } catch (e) {
+        path = path.replace(/^https?:\/\/(www\.)?racetime\.gg/i, '');
+      }
+    } else if (/racetime\.gg/i.test(path)) {
+      path = path.replace(/^https?:\/\/(www\.)?racetime\.gg/i, '');
+    }
+    path = '/' + String(path || '').replace(/^\/+/, '');
+    const parts = path.split('/').filter(Boolean);
+    if (parts.length >= 3 && parts[0] === parts[1]) parts.splice(1, 1);
+    const href = 'https://racetime.gg/' + parts.join('/');
     return `<a href="${href}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" onauxclick="event.stopPropagation();" style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.2rem 0.4rem; border-radius:0.25rem; font-size:0.7rem; color:#C2CECF; background:#222222; border:1px solid #C2CECF; text-decoration:none;"><img src="assets/racetime.svg" alt="Racetime" style="width:14px;height:14px;">Racetime</a>`;
   };
 

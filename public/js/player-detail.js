@@ -38,6 +38,29 @@
     return m ? decodeURIComponent(m[1]) : null;
   }
 
+  function normalizeRacetimeProfileUrl(input, racetimeId) {
+    const raw = String(input || '').trim();
+    if (raw) {
+      if (/^https?:\/\//i.test(raw)) {
+        return raw.replace(/^http:\/\//i, 'https://').replace(/\/+$/, '');
+      }
+      if (raw.startsWith('/')) {
+        return ('https://racetime.gg' + raw).replace(/\/+$/, '');
+      }
+      if (raw.startsWith('user/')) {
+        return ('https://racetime.gg/' + raw).replace(/\/+$/, '');
+      }
+      if (/^[A-Za-z0-9_-]{6,}$/.test(raw)) {
+        return 'https://racetime.gg/user/' + encodeURIComponent(raw);
+      }
+      return ('https://racetime.gg/' + raw.replace(/^\/+/, '')).replace(/\/+$/, '');
+    }
+
+    const id = String(racetimeId || '').trim();
+    if (!id) return null;
+    return 'https://racetime.gg/user/' + encodeURIComponent(id);
+  }
+
   const id = qs('id');
   const nameParam = qs('name');
   const headerName = document.getElementById('player-name');
@@ -69,7 +92,9 @@
   // Fetch Twitch URL from Racetime profile
   async function fetchTwitchFromRacetime(racetimeUrl) {
     try {
-      const res = await fetch('/api/racetime/twitch?url=' + encodeURIComponent(racetimeUrl));
+      const profileUrl = normalizeRacetimeProfileUrl(racetimeUrl);
+      if (!profileUrl) return null;
+      const res = await fetch('/api/racetime/twitch?url=' + encodeURIComponent(profileUrl));
       if (!res.ok) return null;
       const data = await res.json();
       return data.twitch || null;
@@ -184,7 +209,7 @@
 
     // Step 1: Try Racetime avatar if available
     if (p.racetimeUrl || p.racetimeId) {
-      racetimeUrl = p.racetimeUrl ? p.racetimeUrl.replace(/\/+$/, '') : ('https://racetime.gg/user/' + encodeURIComponent(p.racetimeId));
+      racetimeUrl = normalizeRacetimeProfileUrl(p.racetimeUrl, p.racetimeId);
 
       // Use proxy which handles parsing
       const proxy = '/api/racetime/avatar?url=' + encodeURIComponent(racetimeUrl) + (p.name ? '&name=' + encodeURIComponent(p.name) : '');
@@ -227,10 +252,10 @@
         if (find.ok) {
           const j = await find.json();
           if (j && j.url) {
-            racetimeUrl = j.url;
+            racetimeUrl = normalizeRacetimeProfileUrl(j.url);
             
             // Try avatar from found profile
-            const proxy = '/api/racetime/avatar?url=' + encodeURIComponent(j.url) + '&name=' + encodeURIComponent(p.name);
+            const proxy = '/api/racetime/avatar?url=' + encodeURIComponent(racetimeUrl || j.url) + '&name=' + encodeURIComponent(p.name);
             try {
               const res = await fetch(proxy, { method: 'GET' });
               if (res.ok && res.status !== 204) {
@@ -255,7 +280,7 @@
             
             // Try to get Twitch from found profile
             if (!twitchUsername) {
-              const fetchedTwitch = await fetchTwitchFromRacetime(j.url);
+              const fetchedTwitch = await fetchTwitchFromRacetime(racetimeUrl || j.url);
               if (fetchedTwitch) {
                 twitchUsername = fetchedTwitch.split('/').pop();
               }
@@ -296,12 +321,8 @@
     const links = [];
     
     // Racetime: prefer explicit URL, fallback to racetimeId
-    let racetimeUrl = null;
-    if (p.racetimeUrl) {
-      racetimeUrl = p.racetimeUrl;
-      links.push(`<a class="btn-racetime" href="${p.racetimeUrl}" target="_blank" rel="noopener noreferrer"><img src="/assets/racetime.svg" alt="Racetime">Racetime</a>`);
-    } else if (p.racetimeId) {
-      racetimeUrl = 'https://racetime.gg/user/' + encodeURIComponent(p.racetimeId);
+    let racetimeUrl = normalizeRacetimeProfileUrl(p.racetimeUrl, p.racetimeId);
+    if (racetimeUrl) {
       links.push(`<a class="btn-racetime" href="${racetimeUrl}" target="_blank" rel="noopener noreferrer"><img src="/assets/racetime.svg" alt="Racetime">Racetime</a>`);
     }
     

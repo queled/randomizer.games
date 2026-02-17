@@ -174,6 +174,34 @@
     return statusTexts[status] || status;
   }
 
+  function normalizeRacetimeRaceUrl(rawUrl, categoryHint) {
+    let raw = String(rawUrl || '').trim();
+    if (!raw) return null;
+
+    if (/^https?:\/\//i.test(raw)) {
+      try {
+        const parsed = new URL(raw);
+        raw = parsed.pathname || '';
+      } catch (e) {
+        raw = raw.replace(/^https?:\/\/(www\.)?racetime\.gg/i, '');
+      }
+    }
+
+    raw = '/' + raw.replace(/^\/+/, '');
+    const parts = raw.split('/').filter(Boolean);
+
+    if (parts.length >= 3 && parts[0] === parts[1]) {
+      parts.splice(1, 1);
+    }
+
+    const hint = String(categoryHint || '').toLowerCase().trim();
+    if (hint && parts.length >= 3 && parts[0] === hint && parts[1] === hint) {
+      parts.splice(1, 1);
+    }
+
+    return 'https://racetime.gg/' + parts.join('/');
+  }
+
   function formatRank(n) {
     if (n === null || typeof n === 'undefined' || n === '') return '-';
     const num = Number(n);
@@ -341,7 +369,7 @@
       // Links
       const links = [];
       if (race.url) {
-        const racetimeUrl = race.url.startsWith('http') ? race.url : 'https://racetime.gg' + race.url;
+        const racetimeUrl = normalizeRacetimeRaceUrl(race.url, race.category);
         links.push(`<a href="${racetimeUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.5rem;background-color:#1F2937;color:#E3E6E6;font-weight:600;padding:0.75rem 1.5rem;border-radius:0.5rem;border:2px solid #E3E6E6;text-decoration:none;transition:all 0.2s;font-size:1rem;" onmouseover="this.style.background='#374151'" onmouseout="this.style.background='#1F2937'"><img src="/assets/racetime.svg" alt="Racetime" style="width:24px;height:24px;">Voir sur Racetime</a>`);
       }
       linksEl.innerHTML = links.join('');

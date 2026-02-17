@@ -28,6 +28,15 @@ function levenshtein(a, b){
   return dp[m][n];
 }
 
+function normalizeRacetimeProfileUrl(urlOrId) {
+  const raw = String(urlOrId || '').trim();
+  if (!raw) return null;
+  if (/^https?:\/\//i.test(raw)) return raw.replace(/^http:\/\//i, 'https://').replace(/\/+$/, '');
+  if (raw.startsWith('/')) return ('https://racetime.gg' + raw).replace(/\/+$/, '');
+  if (raw.startsWith('user/')) return ('https://racetime.gg/' + raw).replace(/\/+$/, '');
+  return 'https://racetime.gg/user/' + encodeURIComponent(raw);
+}
+
 // Sync a specific tournament
 router.post('/tournament/:challongeId', async (req, res, next) => {
   try {
@@ -179,7 +188,7 @@ router.post('/races/:tournamentId', validateObjectId('tournamentId'), async (req
           { $set: {
               name: entrant.user.name,
               discriminator: entrant.user.discriminator,
-              racetimeUrl: entrant.user.url
+              racetimeUrl: normalizeRacetimeProfileUrl(entrant.user.url || entrant.user.id)
             },
             $inc: {
               'stats.totalRaces': 1,

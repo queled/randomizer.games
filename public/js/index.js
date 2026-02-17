@@ -330,7 +330,18 @@ function createRaceCard(race) {
     if (race._id) {
       window.location.href = `/race-detail.html?id=${encodeURIComponent(race._id)}`;
     } else if (race.url) {
-      window.open('https://racetime.gg' + race.url, '_blank');
+      let path = String(race.url || '').trim();
+      if (/^https?:\/\//i.test(path)) {
+        try {
+          path = new URL(path).pathname || '';
+        } catch (e) {
+          path = path.replace(/^https?:\/\/(www\.)?racetime\.gg/i, '');
+        }
+      }
+      path = '/' + path.replace(/^\/+/, '');
+      const parts = path.split('/').filter(Boolean);
+      if (parts.length >= 3 && parts[0] === parts[1]) parts.splice(1, 1);
+      window.open('https://racetime.gg/' + parts.join('/'), '_blank');
     }
   });
 

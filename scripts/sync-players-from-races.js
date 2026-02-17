@@ -31,6 +31,15 @@ function hasTournaments(playerDoc) {
   return Array.isArray(playerDoc?.tournaments) && playerDoc.tournaments.length > 0;
 }
 
+function normalizeRacetimeProfileUrl(urlOrId) {
+  const raw = String(urlOrId || '').trim();
+  if (!raw) return null;
+  if (/^https?:\/\//i.test(raw)) return raw.replace(/^http:\/\//i, 'https://').replace(/\/+$/, '');
+  if (raw.startsWith('/')) return ('https://racetime.gg' + raw).replace(/\/+$/, '');
+  if (raw.startsWith('user/')) return ('https://racetime.gg/' + raw).replace(/\/+$/, '');
+  return 'https://racetime.gg/user/' + encodeURIComponent(raw);
+}
+
 async function getActiveRandomizerSlugs() {
   const games = await Game.find({
     enabled: { $ne: false },
@@ -88,7 +97,7 @@ async function collectRacePlayers(allowedSlugs) {
           userId,
           name: canonicalName || userName || userId,
           discriminator: entrant?.userDiscriminator || null,
-          racetimeUrl: entrant?.userUrl || null,
+          racetimeUrl: normalizeRacetimeProfileUrl(entrant?.userUrl || userId),
           totalRaces: 0,
           totalWins: 0,
           lastSeenTs: raceTs
@@ -105,7 +114,7 @@ async function collectRacePlayers(allowedSlugs) {
         item.lastSeenTs = raceTs;
         if (canonicalName) item.name = canonicalName;
         if (entrant?.userDiscriminator) item.discriminator = entrant.userDiscriminator;
-        if (entrant?.userUrl) item.racetimeUrl = entrant.userUrl;
+        if (entrant?.userUrl) item.racetimeUrl = normalizeRacetimeProfileUrl(entrant.userUrl || userId);
       }
     }
   }
@@ -144,7 +153,7 @@ async function main() {
         name: player.name,
         discriminator: player.discriminator,
         racetimeId: player.userId,
-        racetimeUrl: player.racetimeUrl || `https://racetime.gg/user/${encodeURIComponent(player.userId)}`,
+        racetimeUrl: normalizeRacetimeProfileUrl(player.racetimeUrl || player.userId) || `https://racetime.gg/user/${encodeURIComponent(player.userId)}`,
         'stats.totalRaces': player.totalRaces,
         'stats.totalWins': player.totalWins
       };

@@ -388,6 +388,12 @@ function filterComboStreams(streams, gameId) {
 function isRandomizerStream(stream, gameName) {
   const title = (stream.title || '').toLowerCase();
   const tags = (stream.tags || []).map(t => t.toLowerCase());
+
+  // Extra global rule: accept streams with explicit multiworld/archipelago mention in title.
+  // The game category constraint is already enforced upstream via Twitch game_id filtering.
+  if (title.includes('multiworld') || title.includes('archipelago')) {
+    return true;
+  }
   
   // Check generic randomizer/rando mentions
   if (title.includes('randomizer') || title.includes('rando')) {

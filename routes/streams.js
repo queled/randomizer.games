@@ -367,6 +367,77 @@ async function getTwitchGameId(gameName, token) {
   return null;
 }
 
+async function fetchTwitchStreamsByCategoryId(categoryId, gameNameForFilter, includeAll = false) {
+  const normalizedCategoryId = String(categoryId || '').trim();
+  if (!normalizedCategoryId) {
+    return [];
+  }
+
+  const cacheKey = `twitch-streams:category-id:${normalizedCategoryId}:${includeAll ? 'all' : 'filtered'}`;
+  const cachedStreams = getCached(cacheKey);
+  if (cachedStreams) {
+    return cachedStreams;
+  }
+
+  const inflight = twitchStreamsInFlight.get(cacheKey);
+  if (inflight) {
+    return inflight;
+  }
+
+  const requestPromise = (async () => {
+    const token = await getTwitchToken();
+    if (!token) {
+      return [];
+    }
+
+    const streams = [];
+
+    try {
+      const response = await fetch(`https://api.twitch.tv/helix/streams?game_id=${encodeURIComponent(normalizedCategoryId)}&first=100`, {
+        headers: {
+          'Client-ID': TWITCH_CLIENT_ID,
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        let candidateStreams = (data.data || []);
+
+        if (!includeAll) {
+          candidateStreams = candidateStreams.filter(stream => isRandomizerStream(stream, gameNameForFilter || stream.game_name));
+        }
+
+        streams.push(...candidateStreams.map(stream => ({
+          platform: 'twitch',
+          id: stream.id,
+          userName: stream.user_name,
+          userLogin: stream.user_login,
+          title: stream.title,
+          viewerCount: stream.viewer_count,
+          thumbnailUrl: stream.thumbnail_url?.replace('{width}', '320').replace('{height}', '180'),
+          gameName: stream.game_name,
+          tags: stream.tags || [],
+          url: `https://twitch.tv/${stream.user_login}`,
+          startedAt: stream.started_at
+        })));
+      }
+    } catch (error) {
+      console.error('Error fetching Twitch streams by category ID:', error);
+    }
+
+    setCache(cacheKey, streams);
+    return streams;
+  })();
+
+  twitchStreamsInFlight.set(cacheKey, requestPromise);
+  try {
+    return await requestPromise;
+  } finally {
+    twitchStreamsInFlight.delete(cacheKey);
+  }
+}
+
 // Filter streams for combo games by checking if title/tags contain combo-specific keywords
 function filterComboStreams(streams, gameId) {
   const keywords = COMBO_KEYWORDS[gameId.toLowerCase()];
@@ -549,11 +620,18 @@ async function buildGameStreamsResult(gameId) {
     twitchStreamsAll = Array.from(streamMap.values());
     twitchStreamsAll = filterComboStreams(twitchStreamsAll, gameIdLower);
   } else {
+    const twitchCategoryId = gameDoc.integrations?.twitch?.categoryId;
     const twitchNameFromDb = gameDoc.integrations?.twitch?.categoryName;
     const fallbackName = TWITCH_GAME_NAMES[gameIdLower] || gameDoc.official?.name || gameDoc.name;
     const twitchGameName = twitchNameFromDb || fallbackName;
 
-    if (!twitchGameName) {
+    const includeAllForDocCategory = PASS_THROUGH_TWITCH_CATEGORIES.has(String(twitchNameFromDb || '').toLowerCase());
+
+    if (twitchCategoryId) {
+      twitchStreamsAll = await fetchTwitchStreamsByCategoryId(twitchCategoryId, twitchGameName, includeAllForDocCategory);
+    }
+
+    if (twitchStreamsAll.length === 0 && !twitchGameName) {
       return {
         gameId,
         streams: [],
@@ -565,7 +643,7 @@ async function buildGameStreamsResult(gameId) {
 
     let twitchStreams = [];
 
-    if (Array.isArray(twitchGameName)) {
+    if (twitchStreamsAll.length === 0 && Array.isArray(twitchGameName)) {
       const results = await Promise.all(twitchGameName.map(name => fetchTwitchStreams(name, PASS_THROUGH_TWITCH_CATEGORIES.has(String(name).toLowerCase()))));
       const streamMap = new Map();
       for (const streams of results) {
@@ -576,11 +654,13 @@ async function buildGameStreamsResult(gameId) {
         }
       }
       twitchStreams = Array.from(streamMap.values());
-    } else {
+    } else if (twitchStreamsAll.length === 0) {
       twitchStreams = await fetchTwitchStreams(twitchGameName, PASS_THROUGH_TWITCH_CATEGORIES.has(String(twitchGameName).toLowerCase()));
     }
 
-    twitchStreamsAll = twitchStreams;
+    if (twitchStreamsAll.length === 0) {
+      twitchStreamsAll = twitchStreams;
+    }
   }
 
   try {
@@ -777,12 +857,25 @@ router.get('/', async (req, res, next) => {
 
     // Build reverse map: Twitch game name -> gameIds (from DB only)
     const twitchGameToGameIds = new Map();
+    const twitchCategoryIdToGameRefs = new Map();
     const games = await Game.find({ enabled: { $ne: false } });
     for (const game of games) {
       const gameId = (game.id || '').toLowerCase();
+      const twitchCategoryId = game.integrations?.twitch?.categoryId;
       const twitchNameFromDb = game.integrations?.twitch?.categoryName;
       const fallbackName = TWITCH_GAME_NAMES[gameId] || game.official?.name || game.name;
       const twitchGameName = twitchNameFromDb || fallbackName;
+
+      if (twitchCategoryId) {
+        if (!twitchCategoryIdToGameRefs.has(twitchCategoryId)) {
+          twitchCategoryIdToGameRefs.set(twitchCategoryId, []);
+        }
+        twitchCategoryIdToGameRefs.get(twitchCategoryId).push({
+          gameId,
+          categoryName: twitchNameFromDb || ''
+        });
+      }
+
       if (!twitchGameName) continue;
       const names = Array.isArray(twitchGameName) ? twitchGameName : [twitchGameName];
       for (const name of names) {
@@ -798,7 +891,23 @@ router.get('/', async (req, res, next) => {
     const streamMap = new Map(); // To deduplicate
     
     try {
-      // Fetch streams from all known games (from DB)
+      // Fetch streams from all known games (from DB) using explicit Twitch category IDs first
+      for (const [categoryId, refs] of twitchCategoryIdToGameRefs.entries()) {
+        const primary = refs[0] || { gameId: 'unknown', categoryName: '' };
+        const includeAll = PASS_THROUGH_TWITCH_CATEGORIES.has(String(primary.categoryName || '').toLowerCase());
+        const streams = await fetchTwitchStreamsByCategoryId(categoryId, primary.categoryName, includeAll);
+
+        for (const stream of streams) {
+          if (!streamMap.has(stream.id)) {
+            streamMap.set(stream.id, {
+              ...stream,
+              gameId: primary.gameId
+            });
+          }
+        }
+      }
+
+      // Then fetch by category names (fallback for games without explicit categoryId)
       const gameNames = Array.from(twitchGameToGameIds.keys());
       const uniqueGameNames = [...new Set(gameNames)];
       

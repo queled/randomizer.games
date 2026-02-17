@@ -1,0 +1,167 @@
+{
+  "generatedAt": "2026-02-17T17:22:50.164Z",
+  "doubtful": [
+    {
+      "id": "archipelago",
+      "gameName": "Archipela-Go!",
+      "searchedWith": "Archipela-Go!",
+      "picked": {
+        "id": "6264",
+        "name": "Archipelago"
+      },
+      "candidates": [
+        {
+          "id": "6264",
+          "name": "Archipelago"
+        },
+        {
+          "id": "8548",
+          "name": "Archipelagos"
+        },
+        {
+          "id": "1062834287",
+          "name": "Archipelago"
+        },
+        {
+          "id": "1281187022",
+          "name": "Godzilla: Archipelago Shock"
+        },
+        {
+          "id": "1455030280",
+          "name": "Archipelago"
+        }
+      ]
+    },
+    {
+      "id": "clique",
+      "gameName": "Clique",
+      "searchedWith": "Clique",
+      "picked": {
+        "id": "9591",
+        "name": "Clive Barker's Jericho"
+      },
+      "candidates": [
+        {
+          "id": "9591",
+          "name": "Clive Barker's Jericho"
+        },
+        {
+          "id": "24274",
+          "name": "The Clique: Queen Teen"
+        },
+        {
+          "id": "489657",
+          "name": "Clicker Heroes"
+        },
+        {
+          "id": "94119698",
+          "name": "Climber Animals: Together"
+        },
+        {
+          "id": "642159654",
+          "name": "The Clique: Diss and Make-Up"
+        }
+      ]
+    },
+    {
+      "id": "paint",
+      "gameName": "Paint",
+      "searchedWith": "Paint",
+      "picked": {
+        "id": "490957",
+        "name": "Paint the Town Red"
+      },
+      "candidates": [
+        {
+          "id": "490957",
+          "name": "Paint the Town Red"
+        },
+        {
+          "id": "527225632",
+          "name": "Paint Drying Simulator"
+        },
+        {
+          "id": "913623099",
+          "name": "Paintball Playground"
+        },
+        {
+          "id": "1342953979",
+          "name": "Painted In Blood"
+        },
+        {
+          "id": "2136274773",
+          "name": "Painting Workshop"
+        }
+      ]
+    },
+    {
+      "id": "pkmnlv",
+      "gameName": "Pokémon LeafGreen Version",
+      "searchedWith": "Pokémon LeafGreen Version",
+      "picked": {
+        "id": "303986272",
+        "name": "Kǒudài Guàishòu Lǜyè Bǎn"
+      },
+      "candidates": [
+        {
+          "id": "303986272",
+          "name": "Kǒudài Guàishòu Lǜyè Bǎn"
+        }
+      ]
+    },
+    {
+      "id": "smpb",
+      "gameName": "Project Base",
+      "searchedWith": "Project Base",
+      "picked": {
+        "id": "460636",
+        "name": "Bloodborne"
+      },
+      "candidates": [
+        {
+          "id": "460636",
+          "name": "Bloodborne"
+        },
+        {
+          "id": "244859241",
+          "name": "Project BASSA"
+        },
+        {
+          "id": "704916208",
+          "name": "Project Bard"
+        },
+        {
+          "id": "932858888",
+          "name": "Project Maze"
+        },
+        {
+          "id": "1059662904",
+          "name": "Project Maze"
+        }
+      ]
+    },
+    {
+      "id": "toontown",
+      "gameName": "Toontown",
+      "searchedWith": "Toontown",
+      "picked": {
+        "id": "1281",
+        "name": "Toontown Online"
+      },
+      "candidates": [
+        {
+          "id": "1281",
+          "name": "Toontown Online"
+        },
+        {
+          "id": "1389771547",
+          "name": "ToontownRonpa: Citizens of Distrust"
+        },
+        {
+          "id": "1938116081",
+          "name": "Toon Toon Racing"
+        }
+      ]
+    }
+  ]
+}

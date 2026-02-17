@@ -81,3 +81,7 @@ data/import_games_racetime.csv
 
 # Logs serveur
 server.log
+
+# Rapports locaux
+reports/*
+!reports/twitch-doubtful-1771348897587.json

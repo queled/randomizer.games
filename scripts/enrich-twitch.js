@@ -17,6 +17,7 @@
  */
 
 const path = require('path');
+const fs = require('fs');
 const axios = require('axios');
 const mongoose = require('mongoose');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
@@ -107,11 +108,84 @@ async function searchTwitchCategory(gameName) {
   }
 }
 
+function normalizeName(value) {
+  return String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+}
+
+async function searchTwitchCategoryDetailed(gameName) {
+  const token = await getTwitchAccessToken();
+
+  try {
+    const exactResponse = await axios.get('https://api.twitch.tv/helix/games', {
+      headers: {
+        'Client-ID': TWITCH_CLIENT_ID,
+        'Authorization': `Bearer ${token}`
+      },
+      params: {
+        name: gameName
+      }
+    });
+
+    const exactData = exactResponse.data?.data || [];
+    if (exactData.length > 0) {
+      const first = exactData[0];
+      return {
+        category: first,
+        confidence: normalizeName(first.name) === normalizeName(gameName) ? 'exact' : 'search',
+        candidates: exactData.slice(0, 5)
+      };
+    }
+
+    const searchResponse = await axios.get('https://api.twitch.tv/helix/search/categories', {
+      headers: {
+        'Client-ID': TWITCH_CLIENT_ID,
+        'Authorization': `Bearer ${token}`
+      },
+      params: {
+        query: gameName,
+        first: 5
+      }
+    });
+
+    const candidates = searchResponse.data?.data || [];
+    if (candidates.length === 0) {
+      return { category: null, confidence: 'none', candidates: [] };
+    }
+
+    const target = normalizeName(gameName);
+    const exactCandidate = candidates.find(c => normalizeName(c.name) === target) || null;
+    if (exactCandidate) {
+      return {
+        category: exactCandidate,
+        confidence: 'exact',
+        candidates
+      };
+    }
+
+    return {
+      category: candidates[0],
+      confidence: 'doubtful',
+      candidates
+    };
+  } catch (error) {
+    if (error.response?.status === 401) {
+      accessToken = null;
+      return searchTwitchCategoryDetailed(gameName);
+    }
+    throw error;
+  }
+}
+
 /**
  * Enrichir les jeux avec leurs catégories Twitch
  */
 async function enrichTwitchCategories(options = {}) {
-  const { dryRun = false, force = false, ids = null } = options;
+  const { dryRun = false, force = false, ids = null, safeOnly = false, reportPath = null } = options;
   
   console.log('\n📺 Enrichissement des catégories Twitch...');
   if (dryRun) console.log('  ⚠️  Mode simulation (dry-run)');
@@ -137,6 +211,7 @@ async function enrichTwitchCategories(options = {}) {
   console.log(`  ${games.length} jeux à enrichir`);
   
   const stats = { found: 0, notFound: 0, errors: 0 };
+  const doubtful = [];
   
   for (const game of games) {
     await sleep(RATE_LIMIT_MS);
@@ -154,12 +229,18 @@ async function enrichTwitchCategories(options = {}) {
     const uniqueNames = [...new Set(namesToTry)];
     
     let foundCategory = null;
+    let foundConfidence = 'none';
+    let foundSearchName = null;
+    let foundCandidates = [];
     
     for (const searchName of uniqueNames) {
       try {
-        const category = await searchTwitchCategory(searchName);
-        if (category) {
-          foundCategory = category;
+        const result = await searchTwitchCategoryDetailed(searchName);
+        if (result.category) {
+          foundCategory = result.category;
+          foundConfidence = result.confidence;
+          foundSearchName = searchName;
+          foundCandidates = result.candidates || [];
           break;
         }
       } catch (error) {
@@ -169,8 +250,28 @@ async function enrichTwitchCategories(options = {}) {
     }
     
     if (foundCategory) {
+      const isDoubtful = foundConfidence !== 'exact';
+      if (isDoubtful) {
+        doubtful.push({
+          id: game.id,
+          gameName: game.name,
+          searchedWith: foundSearchName,
+          picked: {
+            id: foundCategory.id,
+            name: foundCategory.name
+          },
+          candidates: foundCandidates.map(c => ({ id: c.id, name: c.name }))
+        });
+      }
+
+      if (safeOnly && isDoubtful) {
+        console.log(`  ⚠️  ${game.id}: douteux → validation manuelle requise (proposé: ${foundCategory.name})`);
+        stats.notFound++;
+        continue;
+      }
+
       if (dryRun) {
-        console.log(`  📋 [DRY-RUN] ${game.id}: ${foundCategory.name} (${foundCategory.id})`);
+        console.log(`  📋 [DRY-RUN] ${game.id}: ${foundCategory.name} (${foundCategory.id}) [${foundConfidence}]`);
       } else {
         const twitch = game.integrations?.twitch || {};
         const updateSet = {
@@ -191,7 +292,7 @@ async function enrichTwitchCategories(options = {}) {
           updateSet['integrations.twitch.boxArtUrl'] = foundCategory.box_art_url;
         }
         if (force || !twitch.confidence) {
-          updateSet['integrations.twitch.confidence'] = 'auto';
+          updateSet['integrations.twitch.confidence'] = foundConfidence === 'exact' ? 'auto' : 'manual';
         }
 
         await Game.updateOne({ id: game.id }, { $set: updateSet });
@@ -214,6 +315,12 @@ async function enrichTwitchCategories(options = {}) {
       stats.notFound++;
     }
   }
+
+  if (reportPath && doubtful.length > 0) {
+    fs.mkdirSync(path.dirname(reportPath), { recursive: true });
+    fs.writeFileSync(reportPath, JSON.stringify({ generatedAt: new Date().toISOString(), doubtful }, null, 2), 'utf8');
+    console.log(`\n📝 Rapport des cas douteux: ${reportPath}`);
+  }
   
   console.log('\n════════════════════════════════════');
   console.log(`Trouvés: ${stats.found}`);
@@ -233,6 +340,12 @@ async function main() {
   const ids = idsIndex > -1 && args[idsIndex + 1] 
     ? args[idsIndex + 1].split(',').map(s => s.trim())
     : null;
+  const safeOnly = args.includes('--safe-only');
+
+  const reportArgIndex = args.indexOf('--report');
+  const reportPath = reportArgIndex > -1 && args[reportArgIndex + 1]
+    ? args[reportArgIndex + 1]
+    : path.join(__dirname, '..', 'reports', `twitch-doubtful-${Date.now()}.json`);
   
   if (args.includes('--help')) {
     console.log(`
@@ -241,7 +354,9 @@ Usage: node scripts/enrich-twitch.js [options]
 Options:
   --dry-run     Mode simulation (ne modifie pas la BDD)
   --force       Forcer la mise à jour même si déjà renseigné
+  --safe-only   N'applique que les correspondances exactes (les doutes vont dans un rapport)
   --ids <ids>   Liste d'IDs de jeux séparés par des virgules
+  --report <p>  Chemin du rapport JSON des cas douteux
 
 Variables d'environnement requises:
   TWITCH_CLIENT_ID
@@ -260,7 +375,7 @@ Variables d'environnement requises:
   
   try {
     await connectDB();
-    await enrichTwitchCategories({ dryRun, force, ids });
+    await enrichTwitchCategories({ dryRun, force, ids, safeOnly, reportPath });
     console.log('\n✅ Terminé');
     
   } catch (error) {

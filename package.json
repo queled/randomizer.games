@@ -10,6 +10,7 @@
     "sync:racetime": "node scripts/sync-racetime-global.js",
     "sync:players": "node scripts/sync-players-from-races.js",
     "sync:players:dry": "node scripts/sync-players-from-races.js --dry-run",
+    "normalize:race-urls": "node scripts/normalize-race-urls.js",
     "sync-rando-list": "node scripts/sync-rando-list-v3.js",
     "sync-rando-list:link": "node scripts/sync-rando-list-v3.js --link-games",
     "sync-rando-list:detect": "node scripts/sync-rando-list-v3.js --detect-new",

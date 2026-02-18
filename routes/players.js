@@ -171,6 +171,7 @@ async function buildPlayersResponse(includeTournaments) {
   }
 
   const playersMap = new Map();
+  const playersWithRaces = new Set(raceCountsByPlayer.keys());
 
   for (const row of tournamentParticipants) {
     const rawName = row.participantName;
@@ -178,6 +179,7 @@ async function buildPlayersResponse(includeTournaments) {
 
     const canonicalName = getCanonicalName(rawName);
     const normalized = normalizeName(canonicalName);
+    if (!playersWithRaces.has(normalized)) continue;
 
     if (!playersMap.has(normalized)) {
       const playerDoc = playerDocsByName.get(normalized);
@@ -215,6 +217,7 @@ async function buildPlayersResponse(includeTournaments) {
   for (const p of playerDocs) {
     const canonicalName = getCanonicalName(p.name);
     const normalized = normalizeName(canonicalName);
+    if (!playersWithRaces.has(normalized)) continue;
     if (!playersMap.has(normalized)) {
       playersMap.set(normalized, {
         name: canonicalName,

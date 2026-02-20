@@ -733,7 +733,16 @@
 
     const officialUrl = officialSite?.url || '';
     const standardSites = sites.filter(site => site.url !== officialUrl && !isMultiworldSite(site));
-    const multiworldSites = sites.filter(site => site.url !== officialUrl && isMultiworldSite(site));
+    const multiworldSites = [];
+    const multiworldSeenUrls = new Set();
+    const pushMultiworldSite = (site) => {
+      if (!site?.url || !isMultiworldSite(site) || multiworldSeenUrls.has(site.url)) return;
+      multiworldSeenUrls.add(site.url);
+      multiworldSites.push(site);
+    };
+
+    sites.forEach(pushMultiworldSite);
+    pushMultiworldSite(officialSite);
 
     let html = '';
 

@@ -770,6 +770,7 @@ const admin = {
           <a href="${resources.officialSite.url}" target="_blank" class="resource-link">
             ${this.escapeHtml(resources.officialSite.name || 'Site officiel')}
           </a>
+          <button class="btn btn-sm btn-ghost" onclick="admin.editOfficialSiteTitle()" title="Modifier le titre officiel">✏️</button>
           <button class="btn btn-sm btn-ghost btn-danger" onclick="admin.removeOfficialSite()">×</button>
         </div>
       `;
@@ -1092,9 +1093,13 @@ const admin = {
         const previousUrl = previousItem?.url || '';
         const wasOfficial = isEdit && !!previousUrl && resources.officialSite?.url === previousUrl;
         if (isOfficial) {
+          const isSameOfficialUrl = resources.officialSite?.url === payload.url;
+          const officialName = (isSameOfficialUrl && resources.officialSite?.name)
+            ? resources.officialSite.name
+            : (payload.name || 'Site officiel');
           nextResources.officialSite = {
             url: payload.url,
-            name: payload.name || 'Site officiel',
+            name: officialName,
             isArchipelago: !!payload.isArchipelago,
             isMultiworld: !!payload.isMultiworld
           };
@@ -1155,6 +1160,36 @@ const admin = {
 
   async editSite(index) {
     this.openResourceModal('site', index);
+  },
+
+  async editOfficialSiteTitle() {
+    const officialSite = this.currentGame?.resources?.officialSite;
+    if (!officialSite?.url) {
+      this.showToast('Aucun site officiel à modifier', 'error');
+      return;
+    }
+
+    const currentTitle = String(officialSite.name || '').trim() || 'Site officiel';
+    const nextTitle = prompt('Titre affiché pour le site officiel :', currentTitle);
+    if (nextTitle === null) return;
+
+    const trimmedTitle = nextTitle.trim();
+    if (!trimmedTitle) {
+      this.showToast('Le titre ne peut pas être vide', 'error');
+      return;
+    }
+
+    try {
+      await this.replaceResources({
+        ...this.currentGame.resources,
+        officialSite: {
+          ...officialSite,
+          name: trimmedTitle
+        }
+      }, 'Titre du site officiel mis à jour');
+    } catch (error) {
+      this.showToast('Erreur lors de la mise à jour du titre officiel', 'error');
+    }
   },
   
   async saveOfficialSite() {

@@ -261,6 +261,182 @@ async function buildPlayersResponse(includeTournaments) {
   };
 }
 
+// Compare two players: head-to-head stats from common races
+router.get('/compare', async (req, res, next) => {
+  try {
+    const name1 = (req.query.player1 || '').toString().trim();
+    const name2 = (req.query.player2 || '').toString().trim();
+    if (!name1 || !name2) {
+      return res.status(400).json({ error: 'Both player1 and player2 query params are required' });
+    }
+
+    const canonical1 = getCanonicalName(name1);
+    const canonical2 = getCanonicalName(name2);
+    const norm1 = normalizeName(canonical1);
+    const norm2 = normalizeName(canonical2);
+
+    if (norm1 === norm2) {
+      return res.status(400).json({ error: 'Cannot compare a player with themselves' });
+    }
+
+    // Collect all name variants (canonical + aliases) for each player
+    const { getAliases } = require('../config/player-aliases');
+    const aliases1 = [canonical1, name1, ...getAliases(canonical1)];
+    const aliases2 = [canonical2, name2, ...getAliases(canonical2)];
+
+    const nameSet1 = new Set(aliases1.map(n => normalizeName(n)));
+    const nameSet2 = new Set(aliases2.map(n => normalizeName(n)));
+
+    // Build regex patterns to match any alias for each player
+    const escapeRegex = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const makeOrRegex = names => new RegExp(
+      Array.from(names).map(n => `^${escapeRegex(n)}$`).join('|'), 'i'
+    );
+    const regex1 = makeOrRegex(new Set(aliases1));
+    const regex2 = makeOrRegex(new Set(aliases2));
+
+    // Find races where BOTH players appear in entrants
+    const commonRaces = await Race.find({
+      'entrants.userName': { $all: [regex1, regex2] }
+    }).sort({ startedAt: -1 }).lean();
+
+    // Build game display map for category → game name mapping
+    const gameDisplayBySlug = await buildGameDisplayMaps();
+
+    let p1Wins = 0;
+    let p2Wins = 0;
+    let draws = 0;
+    const raceDetails = [];
+
+    for (const race of commonRaces) {
+      const entrant1 = race.entrants.find(e => nameSet1.has(normalizeName(e.userName)));
+      const entrant2 = race.entrants.find(e => nameSet2.has(normalizeName(e.userName)));
+      if (!entrant1 || !entrant2) continue;
+
+      const p1Place = entrant1.place || null;
+      const p2Place = entrant2.place || null;
+      const p1Finished = entrant1.status === 'done' || entrant1.status === 'finished';
+      const p2Finished = entrant2.status === 'done' || entrant2.status === 'finished';
+
+      // Head-to-head: who placed higher in THIS race?
+      let h2hWinner = null;
+      if (p1Finished && p2Finished) {
+        if (p1Place && p2Place) {
+          if (p1Place < p2Place) { p1Wins++; h2hWinner = 1; }
+          else if (p2Place < p1Place) { p2Wins++; h2hWinner = 2; }
+          else { draws++; h2hWinner = 0; }
+        }
+      } else if (p1Finished && !p2Finished) {
+        p1Wins++; h2hWinner = 1;
+      } else if (!p1Finished && p2Finished) {
+        p2Wins++; h2hWinner = 2;
+      } else {
+        // Both DNF
+        draws++; h2hWinner = 0;
+      }
+
+      const category = (race.category || '').toLowerCase();
+
+      raceDetails.push({
+        raceId: race._id,
+        raceName: race.name,
+        raceUrl: race.url,
+        category: race.category,
+        gameName: gameDisplayBySlug.get(category) || race.category || null,
+        goal: race.goal || null,
+        startedAt: race.startedAt,
+        totalEntrants: race.entrants.length,
+        player1: {
+          name: entrant1.userName,
+          place: p1Place,
+          placeOrdinal: entrant1.placeOrdinal || null,
+          status: entrant1.status,
+          finishTime: entrant1.finishTime || null,
+          finishTimeMs: entrant1.finishTimeMs || null
+        },
+        player2: {
+          name: entrant2.userName,
+          place: p2Place,
+          placeOrdinal: entrant2.placeOrdinal || null,
+          status: entrant2.status,
+          finishTime: entrant2.finishTime || null,
+          finishTimeMs: entrant2.finishTimeMs || null
+        },
+        h2hWinner
+      });
+    }
+
+    // Aggregate placement distribution per player across common races
+    const p1Placements = { first: 0, second: 0, third: 0, dnf: 0, other: 0 };
+    const p2Placements = { first: 0, second: 0, third: 0, dnf: 0, other: 0 };
+
+    for (const rd of raceDetails) {
+      for (const [pKey, placements] of [['player1', p1Placements], ['player2', p2Placements]]) {
+        const p = rd[pKey];
+        const finished = p.status === 'done' || p.status === 'finished';
+        if (!finished) { placements.dnf++; }
+        else if (p.place === 1) { placements.first++; }
+        else if (p.place === 2) { placements.second++; }
+        else if (p.place === 3) { placements.third++; }
+        else { placements.other++; }
+      }
+    }
+
+    // Average finish times (only when both finished)
+    let p1TotalMs = 0, p1Count = 0, p2TotalMs = 0, p2Count = 0;
+    for (const rd of raceDetails) {
+      if (rd.player1.finishTimeMs && (rd.player1.status === 'done' || rd.player1.status === 'finished')) {
+        p1TotalMs += rd.player1.finishTimeMs;
+        p1Count++;
+      }
+      if (rd.player2.finishTimeMs && (rd.player2.status === 'done' || rd.player2.status === 'finished')) {
+        p2TotalMs += rd.player2.finishTimeMs;
+        p2Count++;
+      }
+    }
+
+    // Games breakdown
+    const gameBreakdown = {};
+    for (const rd of raceDetails) {
+      const gn = rd.gameName || rd.category || 'Unknown';
+      if (!gameBreakdown[gn]) gameBreakdown[gn] = { count: 0, p1Wins: 0, p2Wins: 0, draws: 0 };
+      gameBreakdown[gn].count++;
+      if (rd.h2hWinner === 1) gameBreakdown[gn].p1Wins++;
+      else if (rd.h2hWinner === 2) gameBreakdown[gn].p2Wins++;
+      else if (rd.h2hWinner === 0) gameBreakdown[gn].draws++;
+    }
+
+    res.json({
+      player1: { name: canonical1 },
+      player2: { name: canonical2 },
+      totalCommonRaces: raceDetails.length,
+      headToHead: {
+        player1Wins: p1Wins,
+        player2Wins: p2Wins,
+        draws
+      },
+      winRate: {
+        player1: raceDetails.length ? Math.round((p1Wins / raceDetails.length) * 1000) / 10 : 0,
+        player2: raceDetails.length ? Math.round((p2Wins / raceDetails.length) * 1000) / 10 : 0
+      },
+      placements: {
+        player1: p1Placements,
+        player2: p2Placements
+      },
+      averageFinishTimeMs: {
+        player1: p1Count ? Math.round(p1TotalMs / p1Count) : null,
+        player2: p2Count ? Math.round(p2TotalMs / p2Count) : null
+      },
+      gameBreakdown: Object.entries(gameBreakdown)
+        .map(([name, stats]) => ({ gameName: name, ...stats }))
+        .sort((a, b) => b.count - a.count),
+      races: raceDetails
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Get all players from tournaments with race counts per game
 router.get('/', async (req, res, next) => {
   try {

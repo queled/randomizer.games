@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n-page-title="comparePlayers.pageTitle">Compare Players - Randomizer</title>
+  <script defer src="/js/seo.js"></script>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  
+  <!-- Language initialization to prevent flicker -->
+  <style>
+    body { opacity: 0; transition: opacity 0.1s ease-in; }
+    body.i18n-ready { opacity: 1; }
+  </style>
+  <script>
+    (function() {
+      try {
+        let lang = localStorage.getItem('preferred-language');
+        if (!lang) {
+          const browserLang = (navigator.language || navigator.userLanguage || 'en').split('-')[0].toLowerCase();
+          const supported = ['en', 'fr', 'es', 'de', 'it', 'pt'];
+          lang = supported.includes(browserLang) ? browserLang : 'en';
+        }
+        document.documentElement.lang = lang;
+        window.__i18nShowTimeout = setTimeout(() => {
+          if (document.body && !document.body.classList.contains('i18n-ready')) {
+            document.body.classList.add('i18n-ready');
+          }
+        }, 50);
+      } catch (e) {
+        document.documentElement.lang = 'en';
+        if (document.body) document.body.classList.add('i18n-ready');
+      }
+    })();
+  </script>
+  
+  <script async src="/js/i18n/en.js"></script>
+  <script async src="/js/i18n/fr.js"></script>
+  <script async src="/js/i18n/es.js"></script>
+  <script async src="/js/i18n/de.js"></script>
+  <script async src="/js/i18n/it.js"></script>
+  <script async src="/js/i18n/pt.js"></script>
+  <script async src="/js/i18n.js"></script>
+</head>
+<body>
+  <header>
+    <a href="/"><img src="/assets/favicon.png" alt="Randomizer" class="site-logo">Randomizer</a>
+    <button class="mobile-menu-toggle" aria-label="Menu" onclick="this.classList.toggle('open');document.querySelector('nav').classList.toggle('open');">
+        <span></span><span></span><span></span>
+    </button>
+    <nav>
+      <ul>
+        <li><a href="/games.html" data-i18n="nav.games">🎮 Games</a></li>
+        <li><a href="/races.html" data-i18n="nav.races">🥇 Races</a></li>
+        <li><a href="/tournaments.html" data-i18n="nav.tournaments">🏆 Tournaments</a></li>
+        <li><a href="/players.html" class="nav-active" data-i18n="nav.players">👤 Players</a></li>
+      </ul>
+    </nav>
+    <div class="flex-grow"></div>
+    <input type="text" id="search" placeholder="Search..." data-i18n-placeholder="nav.search">
+  </header>
+
+  <main class="main-container detail-page">
+    <!-- Player selection form -->
+    <div id="compare-selector" class="compare-selector">
+      <h1 data-i18n="comparePlayers.title">⚔️ Compare Players</h1>
+      <p class="compare-subtitle" data-i18n="comparePlayers.subtitle">Compare head-to-head stats of two players across their common races.</p>
+      <div class="compare-form">
+        <div class="compare-input-group">
+          <label for="player1-input" data-i18n="comparePlayers.player1">Player 1</label>
+          <div class="compare-autocomplete-wrap">
+            <input type="text" id="player1-input" placeholder="Enter player name..." data-i18n-placeholder="comparePlayers.enterPlayer" autocomplete="off">
+            <ul id="player1-suggestions" class="compare-suggestions"></ul>
+          </div>
+        </div>
+        <span class="compare-vs">VS</span>
+        <div class="compare-input-group">
+          <label for="player2-input" data-i18n="comparePlayers.player2">Player 2</label>
+          <div class="compare-autocomplete-wrap">
+            <input type="text" id="player2-input" placeholder="Enter player name..." data-i18n-placeholder="comparePlayers.enterPlayer" autocomplete="off">
+            <ul id="player2-suggestions" class="compare-suggestions"></ul>
+          </div>
+        </div>
+        <button id="compare-btn" class="compare-btn" data-i18n="comparePlayers.compareBtn">Compare</button>
+      </div>
+    </div>
+
+    <!-- Loading spinner -->
+    <div id="compare-loading" class="loading" style="display:none;" data-i18n="common.loading">Loading...</div>
+
+    <!-- Results container (hidden until data loads) -->
+    <div id="compare-results" style="display:none;">
+      <!-- Header: Player1 VS Player2 -->
+      <div class="compare-header">
+        <div class="compare-player-card" id="cp-player1">
+          <div class="compare-avatar-wrap">
+            <img id="cp-avatar1" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="">
+          </div>
+          <a id="cp-name1" class="compare-player-name" href="#">Player 1</a>
+        </div>
+        <div class="compare-vs-badge">VS</div>
+        <div class="compare-player-card" id="cp-player2">
+          <div class="compare-avatar-wrap">
+            <img id="cp-avatar2" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="">
+          </div>
+          <a id="cp-name2" class="compare-player-name" href="#">Player 2</a>
+        </div>
+      </div>
+
+      <!-- Head to head stats -->
+      <div class="detail-section">
+        <h2 data-i18n="comparePlayers.headToHead">⚔️ Head to Head</h2>
+        <div class="h2h-bar-container">
+          <div class="h2h-score">
+            <span id="h2h-p1-wins" class="h2h-wins-left">0</span>
+            <span class="h2h-draws" id="h2h-draws"></span>
+            <span id="h2h-p2-wins" class="h2h-wins-right">0</span>
+          </div>
+          <div class="h2h-bar">
+            <div id="h2h-bar-p1" class="h2h-bar-p1" style="width:50%"></div>
+            <div id="h2h-bar-draw" class="h2h-bar-draw" style="width:0%"></div>
+            <div id="h2h-bar-p2" class="h2h-bar-p2" style="width:50%"></div>
+          </div>
+          <div class="h2h-labels">
+            <span id="h2h-pct1">0%</span>
+            <span id="h2h-pct2">0%</span>
+          </div>
+        </div>
+        <div class="h2h-total" id="h2h-total"></div>
+      </div>
+
+      <!-- Stats comparison -->
+      <div class="detail-section">
+        <h2 data-i18n="comparePlayers.statistics">📊 Statistics</h2>
+        <div class="compare-stats-grid">
+          <div class="compare-stat-row">
+            <div class="compare-stat-val left" id="stat-avg1">—</div>
+            <div class="compare-stat-label" data-i18n="comparePlayers.avgTime">Avg. Time</div>
+            <div class="compare-stat-val right" id="stat-avg2">—</div>
+          </div>
+          <div class="compare-stat-row">
+            <div class="compare-stat-val left" id="stat-1st-1">0</div>
+            <div class="compare-stat-label">🥇</div>
+            <div class="compare-stat-val right" id="stat-1st-2">0</div>
+          </div>
+          <div class="compare-stat-row">
+            <div class="compare-stat-val left" id="stat-2nd-1">0</div>
+            <div class="compare-stat-label">🥈</div>
+            <div class="compare-stat-val right" id="stat-2nd-2">0</div>
+          </div>
+          <div class="compare-stat-row">
+            <div class="compare-stat-val left" id="stat-3rd-1">0</div>
+            <div class="compare-stat-label">🥉</div>
+            <div class="compare-stat-val right" id="stat-3rd-2">0</div>
+          </div>
+          <div class="compare-stat-row">
+            <div class="compare-stat-val left" id="stat-dnf-1">0</div>
+            <div class="compare-stat-label">DNF</div>
+            <div class="compare-stat-val right" id="stat-dnf-2">0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game breakdown -->
+      <div class="detail-section">
+        <h2 data-i18n="comparePlayers.byGame">🎮 By Game</h2>
+        <div id="game-breakdown" class="card-list"></div>
+      </div>
+
+      <!-- Common races list -->
+      <div class="detail-section">
+        <h2 data-i18n="comparePlayers.commonRaces">🏁 Common Races</h2>
+        <div id="common-races-list" class="card-list"></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/spoiler-mode.js"></script>
+  <script src="/js/global-search.js"></script>
+  <script src="/js/compare-players.js"></script>
+  <script src="/js/footer.js"></script>
+</body>
+</html>

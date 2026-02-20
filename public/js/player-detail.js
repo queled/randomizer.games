@@ -66,6 +66,7 @@
   const headerName = document.getElementById('player-name');
   const avatarEl = document.getElementById('player-avatar');
   const playerLinks = document.getElementById('player-links');
+  const playerCompareAction = document.getElementById('player-compare-action');
   const playerGamesSummary = document.getElementById('player-games-summary');
   const statsEl = document.getElementById('player-stats');
   const toursEl = document.getElementById('player-tournaments-list');
@@ -334,6 +335,14 @@
     if (links.length) {
       playerLinks.innerHTML = links.join('');
     }
+
+    // Add Compare button below stats
+    const playerName = p.name || p.userId || '';
+    if (playerCompareAction && playerName) {
+      const compareLabel = typeof i18n !== 'undefined' ? (i18n.t('comparePlayers.compareWith') || 'Compare with another player') : 'Compare with another player';
+      playerCompareAction.innerHTML = `<a class="btn-compare btn-compare--stats" href="/compare-players.html?player1=${encodeURIComponent(playerName)}">⚔️ ${compareLabel}</a>`;
+    }
+
     updateGamesSummaryVisibility();
     
     // If we have a racetime URL, try to fetch Twitch from racetime (only if not already in DB)

@@ -258,6 +258,26 @@ const fr = {
         wins: "victoires"
     },
     
+    // Compare players page
+    comparePlayers: {
+        pageTitle: "Comparer des joueurs - Randomizer",
+        title: "⚔️ Comparer des joueurs",
+        subtitle: "Comparez les statistiques de deux joueurs à travers leurs courses communes.",
+        player1: "Joueur 1",
+        player2: "Joueur 2",
+        enterPlayer: "Entrez un nom de joueur...",
+        compareBtn: "Comparer",
+        headToHead: "⚔️ Face à face",
+        statistics: "📊 Statistiques",
+        byGame: "🎮 Par jeu",
+        commonRaces: "🏁 Courses communes",
+        commonRacesCount: "courses communes",
+        draws: "nuls",
+        avgTime: "Temps moyen",
+        races: "courses",
+        compareWith: "Comparer avec un autre joueur"
+    },
+
     // Player detail page
     playerDetail: {
         pageTitle: "Profil joueur - Randomizer",

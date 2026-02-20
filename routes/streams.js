@@ -340,6 +340,25 @@ const RANDOMIZER_ACRONYMS = {
 const gameIdCache = {};
 const twitchStreamsInFlight = new Map();
 
+async function mapWithConcurrency(items, concurrency, mapper) {
+  const list = Array.isArray(items) ? items : [];
+  const limit = Math.max(1, Number(concurrency) || 1);
+  const results = new Array(list.length);
+  let nextIndex = 0;
+
+  async function worker() {
+    while (nextIndex < list.length) {
+      const currentIndex = nextIndex;
+      nextIndex += 1;
+      results[currentIndex] = await mapper(list[currentIndex], currentIndex);
+    }
+  }
+
+  const workers = Array.from({ length: Math.min(limit, list.length) }, () => worker());
+  await Promise.all(workers);
+  return results;
+}
+
 async function getTwitchGameId(gameName, token) {
   if (gameIdCache[gameName]) {
     return gameIdCache[gameName];
@@ -856,7 +875,7 @@ router.get('/', async (req, res, next) => {
     }
 
     // Build reverse map: Twitch game name -> gameIds (from DB only)
-    const twitchGameToGameIds = new Map();
+    const fallbackTwitchGameToGameIds = new Map();
     const twitchCategoryIdToGameRefs = new Map();
     const games = await Game.find({ enabled: { $ne: false } });
     for (const game of games) {
@@ -874,15 +893,15 @@ router.get('/', async (req, res, next) => {
           gameId,
           categoryName: twitchNameFromDb || ''
         });
-      }
-
-      if (!twitchGameName) continue;
-      const names = Array.isArray(twitchGameName) ? twitchGameName : [twitchGameName];
-      for (const name of names) {
-        if (!twitchGameToGameIds.has(name)) {
-          twitchGameToGameIds.set(name, []);
+      } else {
+        if (!twitchGameName) continue;
+        const names = Array.isArray(twitchGameName) ? twitchGameName : [twitchGameName];
+        for (const name of names) {
+          if (!fallbackTwitchGameToGameIds.has(name)) {
+            fallbackTwitchGameToGameIds.set(name, []);
+          }
+          fallbackTwitchGameToGameIds.get(name).push(gameId);
         }
-        twitchGameToGameIds.get(name).push(gameId);
       }
     }
 
@@ -891,36 +910,41 @@ router.get('/', async (req, res, next) => {
     const streamMap = new Map(); // To deduplicate
     
     try {
-      // Fetch streams from all known games (from DB) using explicit Twitch category IDs first
-      for (const [categoryId, refs] of twitchCategoryIdToGameRefs.entries()) {
+      // Fetch streams from known categories with bounded concurrency
+      const categoryEntries = Array.from(twitchCategoryIdToGameRefs.entries());
+      const categoryResults = await mapWithConcurrency(categoryEntries, 8, async ([categoryId, refs]) => {
         const primary = refs[0] || { gameId: 'unknown', categoryName: '' };
         const includeAll = PASS_THROUGH_TWITCH_CATEGORIES.has(String(primary.categoryName || '').toLowerCase());
         const streams = await fetchTwitchStreamsByCategoryId(categoryId, primary.categoryName, includeAll);
+        return { streams, primaryGameId: primary.gameId };
+      });
 
-        for (const stream of streams) {
+      for (const result of categoryResults) {
+        for (const stream of (result?.streams || [])) {
           if (!streamMap.has(stream.id)) {
             streamMap.set(stream.id, {
               ...stream,
-              gameId: primary.gameId
+              gameId: result.primaryGameId
             });
           }
         }
       }
 
-      // Then fetch by category names (fallback for games without explicit categoryId)
-      const gameNames = Array.from(twitchGameToGameIds.keys());
-      const uniqueGameNames = [...new Set(gameNames)];
-      
-      for (const gameName of uniqueGameNames) {
+      // Fallback only for games without explicit categoryId
+      const fallbackGameNames = Array.from(fallbackTwitchGameToGameIds.keys());
+      const fallbackResults = await mapWithConcurrency(fallbackGameNames, 8, async (gameName) => {
         const streams = await fetchTwitchStreams(gameName, PASS_THROUGH_TWITCH_CATEGORIES.has(String(gameName).toLowerCase()));
-        const gameIds = twitchGameToGameIds.get(gameName) || [];
-        const primaryGameId = gameIds[0] || 'unknown'; // Use first mapped gameId
-        
-        for (const stream of streams) {
+        const gameIds = fallbackTwitchGameToGameIds.get(gameName) || [];
+        const primaryGameId = gameIds[0] || 'unknown';
+        return { streams, primaryGameId };
+      });
+
+      for (const result of fallbackResults) {
+        for (const stream of (result?.streams || [])) {
           if (!streamMap.has(stream.id)) {
             streamMap.set(stream.id, {
               ...stream,
-              gameId: primaryGameId  // Ajouter gameId
+              gameId: result.primaryGameId
             });
           }
         }

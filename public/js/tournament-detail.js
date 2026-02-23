@@ -936,6 +936,10 @@ function displayMatches(matches, tournament, races = []) {
     return;
   }
 
+  // Detect Start.gg multi-phase tournament (Main Bracket + Preliminary Bracket etc.)
+  const phases = [...new Set(matches.filter(m => m && m.phase).map(m => m.phase))];
+  const hasStartggPhases = phases.length > 1;
+
   // Detect Challonge group stage matches using `groupId` when available.
   const groupStageMatches = matches.filter(m => m && (m.groupId !== null && m.groupId !== undefined));
   const finalStageMatches = matches.filter(m => m && (m.groupId === null || m.groupId === undefined));
@@ -949,8 +953,91 @@ function displayMatches(matches, tournament, races = []) {
     return Number.isFinite(t) ? t : 0;
   };
 
-  // Only clear once at the start. When we render group stages, keep the content and append finals below.
+  // Only clear once at the start.
   container.innerHTML = '';
+
+  // Start.gg multi-phase tournament: render each phase as a separate section
+  if (hasStartggPhases && !hasGroupsThenFinal) {
+    // Sort: Main Bracket first, then Preliminary Bracket, then others
+    const sortedPhases = phases.slice().sort((a, b) => {
+      const al = (a || '').toLowerCase();
+      const bl = (b || '').toLowerCase();
+      const aIsMain = al.includes('main') || (al === 'bracket' && !al.includes('preliminary'));
+      const bIsMain = bl.includes('main') || (bl === 'bracket' && !bl.includes('preliminary'));
+      if (aIsMain && !bIsMain) return -1;
+      if (!aIsMain && bIsMain) return 1;
+      return 0;
+    });
+
+    sortedPhases.forEach((phaseName, phaseIdx) => {
+      const phaseMatches = matches.filter(m => m.phase === phaseName);
+      if (phaseMatches.length === 0) return;
+
+      // Phase header
+      const phaseHeader = document.createElement('h3');
+      phaseHeader.style.cssText = phaseIdx > 0 ? 'font-size: 1.25rem; font-weight: bold; margin-top: 2.5rem; margin-bottom: 1rem; padding-top: 1.5rem; border-top: 2px solid #374151;' : 'font-size: 1.25rem; font-weight: bold; margin-top: 0.5rem; margin-bottom: 1rem;';
+      phaseHeader.textContent = phaseName;
+      phaseHeader.classList.add('text-gold');
+      container.appendChild(phaseHeader);
+
+      // Separate winner and loser bracket matches within this phase
+      const winnerMatches = phaseMatches.filter(m => (m.round || 0) > 0);
+      const loserMatches = phaseMatches.filter(m => (m.round || 0) < 0);
+
+      const groupByRound = (matchList) => {
+        const byRound = {};
+        matchList.forEach(match => {
+          const round = match.round || 0;
+          if (!byRound[round]) byRound[round] = [];
+          byRound[round].push(match);
+        });
+        return byRound;
+      };
+
+      const winnerByRound = groupByRound(winnerMatches);
+      const loserByRound = groupByRound(loserMatches);
+      const phaseIsDE = Object.keys(loserByRound).length > 0;
+
+      // Winner bracket rounds (from Grand Finals to Round 1)
+      const winnerRounds = Object.keys(winnerByRound).map(r => parseInt(r)).sort((a, b) => b - a);
+      const totalWinnerRounds = winnerRounds.length;
+
+      winnerRounds.forEach((round, index) => {
+        const roundName = getRoundNameForBracket(round, 'winner', totalWinnerRounds, totalWinnerRounds - index - 1, phaseIsDE);
+        const roundHeader = document.createElement('h4');
+        roundHeader.style.cssText = 'font-size: 1.1rem; font-weight: bold; margin-top: 1.25rem; margin-bottom: 0.75rem;';
+        roundHeader.textContent = roundName;
+        roundHeader.classList.add('text-gold');
+        container.appendChild(roundHeader);
+
+        winnerByRound[round]
+          .slice()
+          .sort((a, b) => getMatchTime(b) - getMatchTime(a))
+          .forEach(m => container.appendChild(createMatchCard(m, races)));
+      });
+
+      // Loser bracket rounds
+      if (phaseIsDE) {
+        const loserRounds = Object.keys(loserByRound).map(r => parseInt(r)).sort((a, b) => a - b);
+        const totalLoserRounds = loserRounds.length;
+
+        loserRounds.forEach((round, index) => {
+          const roundName = getRoundNameForBracket(round, 'loser', totalLoserRounds, totalLoserRounds - index - 1, true);
+          const roundHeader = document.createElement('h4');
+          roundHeader.style.cssText = 'font-size: 1.1rem; font-weight: bold; margin-top: 1.25rem; margin-bottom: 0.75rem; color: #a78bfa;';
+          roundHeader.textContent = roundName;
+          container.appendChild(roundHeader);
+
+          loserByRound[round]
+            .slice()
+            .sort((a, b) => getMatchTime(b) - getMatchTime(a))
+            .forEach(m => container.appendChild(createMatchCard(m, races)));
+        });
+      }
+    });
+
+    return;
+  }
 
   // Special rendering for "Groups (4 → 2) then Single Elimination"
   if (isGroupsThenFinalSE) {
@@ -2467,9 +2554,30 @@ function displayMultiPhaseBracket(matches, container, isDoubleElimination, phase
     if (!aIsMain && bIsMain) return 1;
     return 0;
   });
+
+  // Build a lookup for per-phase bracket type from tournament.phases data
+  const phaseBracketTypeMap = {};
+  if (tournament && tournament.phases && Array.isArray(tournament.phases)) {
+    tournament.phases.forEach(p => {
+      if (p.name) {
+        const bt = (p.bracketType || '').toLowerCase().replace(/[\s_]+/g, '');
+        phaseBracketTypeMap[p.name] = bt === 'doubleelimination';
+      }
+    });
+  }
   
   phases.forEach((phaseName, idx) => {
     const phaseMatches = matches.filter(m => m.phase === phaseName);
+
+    // Detect per-phase double elimination: from tournament.phases data, or fallback to match round analysis
+    let phaseIsDE = isDoubleElimination; // default to global detection
+    if (phaseName in phaseBracketTypeMap) {
+      phaseIsDE = phaseBracketTypeMap[phaseName];
+    } else {
+      // Fallback: if any match in this phase has a negative round, it's double elimination
+      const hasNegativeRound = phaseMatches.some(m => m.round < 0);
+      if (hasNegativeRound) phaseIsDE = true;
+    }
     
     // Create phase section
     const phaseSection = document.createElement('div');
@@ -2494,8 +2602,8 @@ function displayMultiPhaseBracket(matches, container, isDoubleElimination, phase
       bracketContainer.innerHTML = `<p style="color: #9ca3af; text-align: center; font-style: italic;">${i18n.t('tournamentDetail.bracketNotStarted') || 'Bracket not started yet'}</p>`;
     } else if (hasPhaseGroups) {
       // This phase has pools
-      displayPoolsBracket(phaseMatches, bracketContainer, isDoubleElimination, phaseGroups);
-    } else if (isDoubleElimination) {
+      displayPoolsBracket(phaseMatches, bracketContainer, phaseIsDE, phaseGroups);
+    } else if (phaseIsDE) {
       displayDoubleEliminationBracket(phaseMatches, bracketContainer);
     } else {
       displaySingleEliminationBracket(phaseMatches, bracketContainer);

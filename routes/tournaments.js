@@ -132,23 +132,71 @@ router.get('/:id/matches', validateObjectId('id'), async (req, res, next) => {
     
     if (tournament && tournament.matches && tournament.matches.length > 0) {
       // Start.gg tournament - return embedded matches formatted like Challonge matches
-      const formattedMatches = tournament.matches.map(m => ({
-        _id: m.startggSetId || m._id,
-        tournamentId: tournament._id,
-        state: m.completedAt ? 'complete' : (m.state === 1 ? 'pending' : 'open'),
-        round: m.round,
-        player1Name: m.player1?.name || 'TBD',
-        player2Name: m.player2?.name || 'TBD',
-        player1Id: m.player1?.startggEntrantId,
-        player2Id: m.player2?.startggEntrantId,
-        scoresCsv: m.displayScore,
-        completedAt: m.completedAt,
-        winnerId: m.winnerId,
-        groupId: null, // Start.gg uses phases instead
-        phase: m.phase,
-        phaseGroup: m.phaseGroup,
-        identifier: m.phaseGroup ? `${m.phaseGroup}-R${m.round}` : `R${m.round}`
-      }));
+      const formattedMatches = tournament.matches.map(m => {
+        const player1Name = m.player1?.name || 'TBD';
+        const player2Name = m.player2?.name || 'TBD';
+        // Ensure consistent types for ID comparison on frontend (all numbers)
+        const player1Id = m.player1?.startggEntrantId ? Number(m.player1.startggEntrantId) : null;
+        const player2Id = m.player2?.startggEntrantId ? Number(m.player2.startggEntrantId) : null;
+
+        // Parse Start.gg displayScore to extract numeric scores
+        // Format: "PlayerA 2 - PlayerB 1" or "PlayerA W - PlayerB L" or "DQ" etc.
+        let scoresCsv = null;
+        let winnerId = m.winnerId ? Number(m.winnerId) : null;
+        if (m.displayScore && typeof m.displayScore === 'string') {
+          const ds = m.displayScore.trim();
+          const dashParts = ds.split(' - ');
+          if (dashParts.length === 2) {
+            const p1Part = dashParts[0].trim();
+            const p2Part = dashParts[1].trim();
+            
+            // Extract trailing number or W/L from each part
+            const p1ScoreMatch = p1Part.match(/\s+(\d+)$/);
+            const p2ScoreMatch = p2Part.match(/\s+(\d+)$/);
+            const p1W = p1Part.endsWith(' W');
+            const p2W = p2Part.endsWith(' W');
+            
+            if (p1ScoreMatch && p2ScoreMatch) {
+              // BO3/BO5 format: "PlayerA 2 - PlayerB 1" -> "2-1"
+              scoresCsv = `${p1ScoreMatch[1]}-${p2ScoreMatch[1]}`;
+            } else if (p1W || p2W) {
+              // Win/Loss format: "PlayerA W - PlayerB L" -> "1-0" or "0-1"
+              scoresCsv = p1W ? '1-0' : '0-1';
+            }
+            
+            // Resolve winnerId from displayScore if not set
+            if (!winnerId) {
+              if (p1W || (p1ScoreMatch && p2ScoreMatch && parseInt(p1ScoreMatch[1]) > parseInt(p2ScoreMatch[1]))) {
+                winnerId = player1Id;
+              } else if (p2W || (p1ScoreMatch && p2ScoreMatch && parseInt(p2ScoreMatch[1]) > parseInt(p1ScoreMatch[1]))) {
+                winnerId = player2Id;
+              }
+            }
+          } else if (ds === 'DQ') {
+            scoresCsv = 'DQ';
+          }
+        }
+
+        return {
+          _id: m.startggSetId || m._id,
+          startggSetId: m.startggSetId || null,
+          tournamentId: tournament._id,
+          state: m.completedAt ? 'complete' : (m.state === 1 ? 'pending' : 'open'),
+          round: m.round,
+          player1Name,
+          player2Name,
+          player1Id,
+          player2Id,
+          scoresCsv,
+          displayScore: m.displayScore || null,
+          completedAt: m.completedAt,
+          winnerId,
+          groupId: null, // Start.gg uses phases instead
+          phase: m.phase,
+          phaseGroup: m.phaseGroup,
+          identifier: m.phaseGroup ? `${m.phaseGroup}-R${m.round}` : `R${m.round}`
+        };
+      });
       
       return res.json({ matches: formattedMatches });
     }

@@ -119,6 +119,7 @@ class StartGGAPI {
                 id
                 round
                 displayScore
+                winnerId
                 completedAt
                 state
                 phaseGroup {
@@ -176,6 +177,7 @@ class StartGGAPI {
               id
               round
               displayScore
+              winnerId
               completedAt
               state
               phaseGroup {
@@ -204,6 +206,7 @@ class StartGGAPI {
       completedAt: s.completedAt ? new Date(s.completedAt * 1000) : null,
       round: s.round,
       displayScore: s.displayScore,
+      winnerId: s.winnerId,
       state: s.state,
       phase: s.phaseGroup?.phase ? {
         id: s.phaseGroup.phase.id,

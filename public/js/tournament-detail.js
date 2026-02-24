@@ -202,7 +202,7 @@ function displayTournamentInfo(tournament) {
   // End date will be updated after matches are loaded
   document.getElementById('end-date').textContent = formatDate(tournament.endDate);
   
-  document.getElementById('tournament-type').textContent = formatTournamentType(tournament.tournamentType);
+  document.getElementById('tournament-type').textContent = formatTournamentTypeForDisplay(tournament);
   document.getElementById('participants-count').textContent = tournament.participantsCount || '0';
 
   // Description (may contain HTML coming from Challonge)
@@ -2081,6 +2081,38 @@ function formatTournamentType(type) {
   return types[type] || type || 'Undefined';
 }
 
+// Build a composite tournament type label from phases data when available
+function formatTournamentTypeForDisplay(tournament) {
+  if (!tournament) return formatTournamentType(null);
+  
+  // If tournament has multi-phase data, build a composite label
+  if (tournament.phases && Array.isArray(tournament.phases) && tournament.phases.length > 1) {
+    const bracketTypeLabel = (bt) => {
+      const map = {
+        'SINGLE_ELIMINATION': 'SE',
+        'DOUBLE_ELIMINATION': 'DE',
+        'ROUND_ROBIN': 'Round Robin',
+        'SWISS': 'Swiss',
+        'EXHIBITION': 'Exhibition',
+        'CUSTOM_SCHEDULE': 'Custom'
+      };
+      return map[bt] || (bt || '').replace(/_/g, ' ');
+    };
+    
+    // Sort phases by phaseOrder
+    const sorted = [...tournament.phases].sort((a, b) => (a.phaseOrder || 0) - (b.phaseOrder || 0));
+    const parts = sorted.map(p => {
+      const name = p.name || 'Phase';
+      const bt = bracketTypeLabel(p.bracketType);
+      const pools = p.groupCount > 1 ? ` (${p.groupCount} pools)` : '';
+      return `${name} (${bt}${pools})`;
+    });
+    return parts.join(' → ');
+  }
+  
+  return formatTournamentType(tournament.tournamentType);
+}
+
 function formatMatchState(state) {
   const states = {
     'complete': 'Finished',
@@ -2729,7 +2761,32 @@ function displayPoolsBracket(matches, container, isDoubleElimination, phaseGroup
         p.style.display = 'none';
       });
       const poolDiv = poolsContent.querySelector(`[data-pool="${poolId}"]`);
-      if (poolDiv) poolDiv.style.display = 'block';
+      if (poolDiv) {
+        poolDiv.style.display = 'block';
+        // Redraw SVG connectors for this pool now that it's visible
+        setTimeout(() => {
+          poolDiv.querySelectorAll('.bracket-section, .phase-bracket-container').forEach(section => {
+            const bracketHTML = section.querySelector('.bracket-container');
+            const svg = section.querySelector('svg');
+            if (bracketHTML && svg) {
+              // Re-trigger connector drawing
+              const roundCols = bracketHTML.querySelectorAll('[data-round-index]');
+              const totalRounds = roundCols.length;
+              // Gather round data from the DOM
+              const sortedRounds = [];
+              const byRound = {};
+              roundCols.forEach(col => {
+                const round = parseInt(col.getAttribute('data-round'));
+                sortedRounds.push(round);
+                byRound[round] = [];
+              });
+              const bracketType = section.classList.contains('loser-bracket-section') ? 'loser' : 'winner';
+              const isPoolBracket = true;
+              drawBracketConnectors(bracketHTML, svg, totalRounds, bracketType, byRound, sortedRounds, isPoolBracket);
+            }
+          });
+        }, 50);
+      }
     });
     
     tabsContainer.appendChild(tabBtn);
@@ -2757,7 +2814,7 @@ function displayPoolsBracket(matches, container, isDoubleElimination, phaseGroup
         poolDiv.appendChild(winnerTitle);
         
         const winnerContainer = document.createElement('div');
-        winnerContainer.className = 'bracket-section';
+        winnerContainer.className = 'bracket-section winner-bracket-section';
         displayBracketSection(winnerMatches, winnerContainer, 'winner', true, true);
         poolDiv.appendChild(winnerContainer);
       }
@@ -2769,7 +2826,7 @@ function displayPoolsBracket(matches, container, isDoubleElimination, phaseGroup
         poolDiv.appendChild(loserTitle);
         
         const loserContainer = document.createElement('div');
-        loserContainer.className = 'bracket-section';
+        loserContainer.className = 'bracket-section loser-bracket-section';
         // Convert negative rounds to positive for display
         const loserMatchesForDisplay = loserMatches.map(m => ({ ...m, round: Math.abs(m.round) }));
         displayBracketSection(loserMatchesForDisplay, loserContainer, 'loser', true, true);
@@ -3004,11 +3061,9 @@ function drawBracketConnectors(bracketContainer, svg, totalRounds, bracketType =
     const isLoserBracket = bracketType === 'loser';
     const currentRoundNumber = sortedRounds ? sortedRounds[i] : null;
     
-    // For losers brackets in pools: no connectors (complex seeding from winners bracket)
-    // This avoids drawing connectors that have no meaning in pool context
-    if (isPoolBracket && bracketType === 'loser') {
-      continue;
-    }
+    // For losers brackets in pools: in DE, some losers rounds have cross-bracket seeding
+    // from the winners bracket, so 1-to-1 connectors may not be perfectly accurate.
+    // However, we still draw them as visual aids for bracket progression.
     
     // Check if next round is Grand Finals (only for main double elimination brackets)
     // NOT for pools/preliminary brackets which are self-contained

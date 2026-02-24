@@ -141,14 +141,16 @@ router.get('/:id/matches', validateObjectId('id'), async (req, res, next) => {
 
         // Parse Start.gg displayScore to extract numeric scores
         // Format: "PlayerA 2 - PlayerB 1" or "PlayerA W - PlayerB L" or "DQ" etc.
+        // IMPORTANT: The player order in displayScore may differ from the match's player1/player2,
+        // so we must match names to assign scores to the correct player.
         let scoresCsv = null;
         let winnerId = m.winnerId ? Number(m.winnerId) : null;
         if (m.displayScore && typeof m.displayScore === 'string') {
           const ds = m.displayScore.trim();
           const dashParts = ds.split(' - ');
           if (dashParts.length === 2) {
-            const p1Part = dashParts[0].trim();
-            const p2Part = dashParts[1].trim();
+            const p1Part = dashParts[0].trim(); // displayScore left side
+            const p2Part = dashParts[1].trim(); // displayScore right side
             
             // Extract trailing number or W/L from each part
             const p1ScoreMatch = p1Part.match(/\s+(\d+)$/);
@@ -156,20 +158,61 @@ router.get('/:id/matches', validateObjectId('id'), async (req, res, next) => {
             const p1W = p1Part.endsWith(' W');
             const p2W = p2Part.endsWith(' W');
             
+            // Extract player names from displayScore parts (strip trailing score/W/L)
+            let dsName1 = p1Part.replace(/\s+(W|L|\d+)$/, '').trim();
+            let dsName2 = p2Part.replace(/\s+(W|L|\d+)$/, '').trim();
+            
+            // Determine raw scores from displayScore (in displayScore order)
+            let dsScore1 = null, dsScore2 = null;
             if (p1ScoreMatch && p2ScoreMatch) {
-              // BO3/BO5 format: "PlayerA 2 - PlayerB 1" -> "2-1"
-              scoresCsv = `${p1ScoreMatch[1]}-${p2ScoreMatch[1]}`;
+              dsScore1 = parseInt(p1ScoreMatch[1]);
+              dsScore2 = parseInt(p2ScoreMatch[1]);
             } else if (p1W || p2W) {
-              // Win/Loss format: "PlayerA W - PlayerB L" -> "1-0" or "0-1"
-              scoresCsv = p1W ? '1-0' : '0-1';
+              dsScore1 = p1W ? 1 : 0;
+              dsScore2 = p2W ? 1 : 0;
+            }
+            
+            if (dsScore1 !== null && dsScore2 !== null) {
+              // Match displayScore names to actual player1Name/player2Name
+              // to assign scores correctly
+              const norm = s => (s || '').toLowerCase().trim();
+              const dsN1 = norm(dsName1);
+              const dsN2 = norm(dsName2);
+              const matchP1 = norm(player1Name);
+              const matchP2 = norm(player2Name);
+              
+              // Check if displayScore order matches match order or is swapped
+              const dsFirstIsPlayer1 = dsN1 === matchP1 || matchP1.includes(dsN1) || dsN1.includes(matchP1);
+              const dsFirstIsPlayer2 = dsN1 === matchP2 || matchP2.includes(dsN1) || dsN1.includes(matchP2);
+              
+              if (dsFirstIsPlayer2 && !dsFirstIsPlayer1) {
+                // displayScore order is swapped relative to match — swap scores
+                scoresCsv = `${dsScore2}-${dsScore1}`;
+              } else {
+                // displayScore order matches match order (or we can't determine — keep original)
+                scoresCsv = `${dsScore1}-${dsScore2}`;
+              }
             }
             
             // Resolve winnerId from displayScore if not set
             if (!winnerId) {
               if (p1W || (p1ScoreMatch && p2ScoreMatch && parseInt(p1ScoreMatch[1]) > parseInt(p2ScoreMatch[1]))) {
-                winnerId = player1Id;
+                // displayScore left-side player won — match to the correct entrant
+                const norm = s => (s || '').toLowerCase().trim();
+                const dsWinnerName = norm(dsName1);
+                if (norm(player1Name).includes(dsWinnerName) || dsWinnerName.includes(norm(player1Name))) {
+                  winnerId = player1Id;
+                } else {
+                  winnerId = player2Id;
+                }
               } else if (p2W || (p1ScoreMatch && p2ScoreMatch && parseInt(p2ScoreMatch[1]) > parseInt(p1ScoreMatch[1]))) {
-                winnerId = player2Id;
+                const norm = s => (s || '').toLowerCase().trim();
+                const dsWinnerName = norm(dsName2);
+                if (norm(player1Name).includes(dsWinnerName) || dsWinnerName.includes(norm(player1Name))) {
+                  winnerId = player1Id;
+                } else {
+                  winnerId = player2Id;
+                }
               }
             }
           } else if (ds === 'DQ') {

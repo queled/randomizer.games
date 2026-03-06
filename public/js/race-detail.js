@@ -31,7 +31,15 @@
   window.addEventListener('spoilerModeChanged', function(e) {
     updateParticipantsTitle();
     renderParticipants(currentEntrants);
+    refreshDateTimeFields();
   });
+
+  function isSpoilerModeEnabled() {
+    if (typeof window.isSpoilerModeEnabled === 'function') {
+      return window.isSpoilerModeEnabled();
+    }
+    return sessionStorage.getItem('spoilerModeEnabled') === 'true';
+  }
 
   function updateParticipantsTitle() {
     if (!participantsTitleEl) return;
@@ -127,9 +135,12 @@
 
   function refreshDateTimeFields() {
     if (!currentRace) return;
+
+    const spoilerMode = isSpoilerModeEnabled();
+
     startEl.textContent = formatDateTime(currentRace.startedAt);
-    endEl.textContent = formatDateTime(currentRace.endedAt);
-    durationEl.textContent = formatDuration(currentRace.startedAt, currentRace.endedAt);
+    endEl.textContent = spoilerMode ? '-' : formatDateTime(currentRace.endedAt);
+    durationEl.textContent = spoilerMode ? '-' : formatDuration(currentRace.startedAt, currentRace.endedAt);
   }
 
   window.addEventListener('languageChanged', function() {

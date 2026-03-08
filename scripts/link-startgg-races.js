@@ -21,35 +21,97 @@ const {
   rankMatchesForRace,
   selectBestCandidate,
   getMatchPlayers,
-  extractRaceEntrants
+  extractRaceEntrants,
+  getRaceLabel,
+  parseRaceStageInfo
 } = require('../helpers/race-match-linking');
 
 function parseArgs() {
   const args = process.argv.slice(2);
+  const raceUrls = [];
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === '--race-url' && args[i + 1]) {
+      raceUrls.push(args[i + 1]);
+      i++;
+    }
+  }
   return {
     dryRun: args.includes('--dry-run'),
+    explore: args.includes('--explore'),
     all: args.includes('--all'),
+    raceUrls,
     tournamentId: args.find((arg) => !arg.startsWith('--')) || null
   };
 }
 
-async function processTournament(tournament, { Race }, dryRun) {
-  const races = await Race.find({ tournamentId: tournament._id }).lean();
+function getExplorationMatches(race, matches) {
+  const stageInfo = parseRaceStageInfo(race);
+  const label = getRaceLabel(race).toLowerCase();
+  if (stageInfo.type === 'qualifier' || label.startsWith('qualifier')) {
+    return [];
+  }
+  if (stageInfo.type === 'group-match' && stageInfo.group) {
+    return matches.filter((match) => (
+      String(match.phase || '').toLowerCase() === 'preliminary bracket' &&
+      String(match.phaseGroup || '') === String(stageInfo.group)
+    ));
+  }
+  if (label.startsWith('qualifier')) {
+    return matches.filter((match) => String(match.phase || '').toLowerCase() === 'preliminary bracket');
+  }
+  if (race.tournamentPhase) {
+    return matches.filter((match) => String(match.phase || '').toLowerCase() === String(race.tournamentPhase || '').toLowerCase());
+  }
+  return matches;
+}
+
+async function processTournament(tournament, { Race }, options) {
+  const { dryRun, explore } = options;
+  const raceQuery = { $or: [{ tournamentId: tournament._id }] };
+  if (options.raceUrls?.length) {
+    raceQuery.$or.push({ url: { $in: options.raceUrls } });
+  }
+  const races = await Race.find(raceQuery).lean();
   const matches = Array.isArray(tournament.matches) ? tournament.matches : [];
-  const stats = { linked: 0, skipped: 0, ambiguous: 0 };
+  const stats = { linked: 0, skipped: 0, ambiguous: 0, explored: 0 };
 
   console.log(`\n🏁 ${tournament.name}`);
   console.log(`   races=${races.length} embeddedMatches=${matches.length}`);
 
   for (const race of races) {
     const extracted = extractRaceEntrants(race, { requireDirect: true });
-    if (!extracted.direct) {
-      console.log(`   ⏭️  skip ${race.url} (${extracted.entrantCount || 0} entrants, no direct pair)`);
+    const stageInfo = parseRaceStageInfo(race);
+
+    if (stageInfo.type === 'qualifier') {
+      console.log(`   ⏭️  qualifier room ${race.url} [${getRaceLabel(race)}] -> pas de link set-level`);
       stats.skipped++;
       continue;
     }
 
-    const scored = rankMatchesForRace(race, matches, {
+    if (!extracted.direct) {
+      if (!explore) {
+        console.log(`   ⏭️  skip ${race.url} (${extracted.entrantCount || 0} entrants, no direct pair)`);
+        stats.skipped++;
+        continue;
+      }
+
+      const explorationMatches = getExplorationMatches(race, matches);
+      const exploratoryScores = rankMatchesForRace(race, explorationMatches.length ? explorationMatches : matches, {
+        requireDirect: false,
+        allowOccupiedMatchReassign: false
+      });
+
+      console.log(`   🔎 explore ${race.url} [${getRaceLabel(race)}] (${extracted.entrantCount || 0} entrants)`);
+      exploratoryScores.slice(0, 3).forEach((entry, index) => {
+        const players = getMatchPlayers(entry.match);
+        console.log(`      ${index + 1}. set=${entry.match.startggSetId} score=${entry.score} phase=${entry.match.phase}/${entry.match.phaseGroup} round=${entry.match.round} players=${players.player1} vs ${players.player2}`);
+      });
+      stats.explored++;
+      continue;
+    }
+
+    const candidateMatches = getExplorationMatches(race, matches);
+    const scored = rankMatchesForRace(race, candidateMatches.length ? candidateMatches : matches, {
       requireDirect: true,
       allowOccupiedMatchReassign: false
     });
@@ -83,6 +145,7 @@ async function processTournament(tournament, { Race }, dryRun) {
         { _id: race._id },
         {
           $set: {
+            tournamentId: tournament._id,
             startggSetId: chosen.match.startggSetId,
             tournamentPhase: chosen.match.phase || race.tournamentPhase || null,
             tournamentPool: chosen.match.phaseGroup || race.tournamentPool || null,
@@ -138,13 +201,14 @@ async function main() {
 
   const total = { linked: 0, skipped: 0, ambiguous: 0 };
   for (const tournament of tournaments) {
-    const stats = await processTournament(tournament, { Race }, opts.dryRun);
+    const stats = await processTournament(tournament, { Race }, opts);
     total.linked += stats.linked;
     total.skipped += stats.skipped;
     total.ambiguous += stats.ambiguous;
+    total.explored = (total.explored || 0) + stats.explored;
   }
 
-  console.log(`\n📊 Summary: linked=${total.linked} skipped=${total.skipped} ambiguous=${total.ambiguous}${opts.dryRun ? ' [DRY-RUN]' : ''}`);
+  console.log(`\n📊 Summary: linked=${total.linked} skipped=${total.skipped} ambiguous=${total.ambiguous} explored=${total.explored || 0}${opts.dryRun ? ' [DRY-RUN]' : ''}`);
   await mongoose.disconnect();
 }
 

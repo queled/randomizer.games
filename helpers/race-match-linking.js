@@ -52,9 +52,52 @@ function parseVsText(text) {
   ];
 }
 
+function getRaceLabel(race) {
+  return String(race?.info || '').split('\n')[0].trim() || String(race?.name || '').trim() || String(race?.url || '').trim();
+}
+
+function parseRaceStageInfo(race) {
+  const label = getRaceLabel(race);
+  const lower = label.toLowerCase();
+
+  const qualifierMatch = /^qualifier\s+(\d+)$/i.exec(label);
+  if (qualifierMatch) {
+    return {
+      type: 'qualifier',
+      label,
+      index: Number(qualifierMatch[1])
+    };
+  }
+
+  const groupMatch = /^group\s+(\d+)\s+(openers|winners|losers|decider|finals?)\s*:\s*(.+)$/i.exec(label);
+  if (groupMatch) {
+    return {
+      type: 'group-match',
+      label,
+      group: groupMatch[1],
+      stage: groupMatch[2].toLowerCase(),
+      players: parseVsText(groupMatch[3])
+    };
+  }
+
+  if (lower.startsWith('preliminary bracket')) {
+    return {
+      type: 'preliminary-match',
+      label,
+      players: parseVsText(label)
+    };
+  }
+
+  return {
+    type: 'unknown',
+    label
+  };
+}
+
 function extractRaceEntrants(race, options = {}) {
   const requireDirect = options.requireDirect !== false;
   const rawEntrants = Array.isArray(race?.entrants) ? race.entrants : [];
+  const stageInfo = parseRaceStageInfo(race);
 
   let entrants = rawEntrants
     .map((e) => ({
@@ -80,12 +123,33 @@ function extractRaceEntrants(race, options = {}) {
     };
   }
 
+  if (stageInfo.type === 'group-match' && stageInfo.players) {
+    return {
+      entrants: stageInfo.players,
+      source: 'group-label',
+      entrantCount: rawEntrants.length,
+      direct: true,
+      stageInfo
+    };
+  }
+
+  if (stageInfo.type === 'preliminary-match' && stageInfo.players) {
+    return {
+      entrants: stageInfo.players,
+      source: 'stage-label',
+      entrantCount: rawEntrants.length,
+      direct: true,
+      stageInfo
+    };
+  }
+
   if (entrants.length === 2) {
     return {
       entrants,
       source: 'entrants',
       entrantCount: rawEntrants.length,
-      direct: true
+      direct: stageInfo.type !== 'qualifier',
+      stageInfo
     };
   }
 
@@ -95,16 +159,18 @@ function extractRaceEntrants(race, options = {}) {
       entrants: parsed,
       source: 'name-info',
       entrantCount: rawEntrants.length,
-      direct: true
+      direct: stageInfo.type !== 'qualifier',
+      stageInfo
     };
   }
 
   if (requireDirect) {
     return {
       entrants: [],
-      source: 'multi-entrant',
+      source: stageInfo.type === 'qualifier' ? 'qualifier-room' : 'multi-entrant',
       entrantCount: rawEntrants.length,
-      direct: false
+      direct: false,
+      stageInfo
     };
   }
 
@@ -112,7 +178,8 @@ function extractRaceEntrants(race, options = {}) {
     entrants,
     source: 'entrants',
     entrantCount: rawEntrants.length,
-    direct: entrants.length === 2
+    direct: entrants.length === 2 && stageInfo.type !== 'qualifier',
+    stageInfo
   };
 }
 
@@ -234,8 +301,27 @@ function scoreRaceAgainstMatch(race, match, options = {}) {
 
   if (extracted.direct) total += 80;
   if (extracted.source === 'matchPlayers') total += 120;
+  if (extracted.source === 'group-label') total += 180;
+  if (extracted.source === 'stage-label') total += 120;
   if (race?.matchPlayers) total += 40;
   if ((race?.entrants || []).length > 2 && !extracted.direct) total -= 250;
+
+  if (extracted.stageInfo?.type === 'group-match') {
+    if (String(match?.phase || '').toLowerCase() === 'preliminary bracket') total += 40;
+    if (String(match?.phaseGroup || '') === String(extracted.stageInfo.group || '')) total += 220;
+    else total -= 160;
+
+    const stage = extracted.stageInfo.stage;
+    const round = Number(match?.round || 0);
+    if (stage === 'openers' && round === 1) total += 160;
+    if (stage === 'winners' && round === 2) total += 160;
+    if (stage === 'losers' && round < 0) total += 160;
+    if (stage === 'decider' && round < 0) total += 140;
+  }
+
+  if (extracted.stageInfo?.type === 'qualifier') {
+    total -= 500;
+  }
 
   const matchRaceUrl = getMatchRaceUrl(match);
   if (matchRaceUrl && race?.url && matchRaceUrl !== race.url) {
@@ -316,6 +402,8 @@ function selectBestCandidate(scored, options = {}) {
 module.exports = {
   normalizeName,
   parseVsText,
+  getRaceLabel,
+  parseRaceStageInfo,
   extractRaceEntrants,
   scoreNameMatch,
   scoreRaceAgainstMatch,

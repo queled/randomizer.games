@@ -13,7 +13,7 @@ const {
   destroySession, 
   requireAdmin 
 } = require('../middleware/admin-auth');
-const { Game, Tournament, Race, Player } = require('../models');
+const { Game, Tournament, Match, Race, Player } = require('../models');
 
 // ==================== AUTH ====================
 
@@ -1286,6 +1286,643 @@ router.get('/github/workflows', requireAdmin, async (req, res, next) => {
     );
     
     res.json({ workflows: workflowResults });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ==================== RACE-MATCH LINKING ====================
+
+const {
+  scoreRaceAgainstMatch,
+  rankMatchesForRace,
+  selectBestCandidate,
+  getMatchPlayers,
+  extractRaceEntrants,
+  getRaceLabel,
+  parseRaceStageInfo
+} = require('../helpers/race-match-linking');
+
+/**
+ * GET /api/admin/tournaments
+ * List tournaments for race linking
+ */
+router.get('/tournaments', requireAdmin, async (req, res, next) => {
+  try {
+    const { search, limit = 30, page = 1 } = req.query;
+    const query = {};
+
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { gameName: { $regex: search, $options: 'i' } }
+      ];
+    }
+
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const [tournaments, total] = await Promise.all([
+      Tournament.find(query)
+        .populate('game', 'id name')
+        .sort({ startDate: -1 })
+        .skip(skip)
+        .limit(parseInt(limit))
+        .select('name gameName gameId startDate endDate startggId challongeId participantsCount matches setsTotal game')
+        .lean(),
+      Tournament.countDocuments(query)
+    ]);
+
+    const results = tournaments.map(t => ({
+      _id: t._id,
+      name: t.name,
+      gameName: t.gameName || t.game?.name || t.gameId || '-',
+      startDate: t.startDate,
+      endDate: t.endDate,
+      isStartgg: !!t.startggId,
+      isChallonge: !!t.challongeId,
+      participantsCount: t.participantsCount || 0,
+      matchesCount: t.startggId ? (t.matches?.length || 0) : (t.setsTotal || 0)
+    }));
+
+    res.json({
+      tournaments: results,
+      pagination: { total, page: parseInt(page), limit: parseInt(limit), pages: Math.ceil(total / parseInt(limit)) }
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET /api/admin/tournaments/:id/linking
+ * Get tournament matches and races with linking status
+ */
+router.get('/tournaments/:id/linking', requireAdmin, async (req, res, next) => {
+  try {
+    const tournament = await Tournament.findById(req.params.id).lean();
+    if (!tournament) return res.status(404).json({ error: 'Tournament not found' });
+
+    // Get matches (embedded for start.gg, separate for challonge)
+    let matches = [];
+    const isStartgg = !!tournament.startggId;
+
+    if (isStartgg && Array.isArray(tournament.matches)) {
+      matches = tournament.matches.map(m => ({
+        _id: m.startggSetId || m._id,
+        startggSetId: m.startggSetId,
+        round: m.round,
+        phase: m.phase || null,
+        phaseGroup: m.phaseGroup || null,
+        player1Name: m.player1?.name || 'TBD',
+        player2Name: m.player2?.name || 'TBD',
+        displayScore: m.displayScore || null,
+        state: m.state,
+        completedAt: m.completedAt,
+        raceUrl: m.raceUrl || null,
+        raceUrls: Array.isArray(m.raceUrls) ? m.raceUrls : (m.raceUrl ? [m.raceUrl] : []),
+        linkScore: m.linkScore || null,
+        isEmbedded: true
+      }));
+    } else {
+      const challongeMatches = await Match.find({ tournamentId: tournament._id }).lean();
+      matches = challongeMatches.map(m => ({
+        _id: m._id.toString(),
+        round: m.round,
+        phase: null,
+        phaseGroup: m.groupId || null,
+        player1Name: m.player1Name || 'TBD',
+        player2Name: m.player2Name || 'TBD',
+        displayScore: null,
+        scoresCsv: m.scoresCsv || null,
+        state: m.state,
+        completedAt: m.completedAt,
+        raceUrl: m.raceUrl || null,
+        raceUrls: m.raceUrl ? [m.raceUrl] : [],
+        linkScore: null,
+        isEmbedded: false
+      }));
+    }
+
+    // Get races for this tournament
+    const races = await Race.find({ tournamentId: tournament._id })
+      .sort({ startedAt: -1 })
+      .lean();
+
+    const racesFormatted = races.map(r => {
+      const stageInfo = parseRaceStageInfo(r);
+      const extracted = extractRaceEntrants(r, { requireDirect: false });
+      return {
+        _id: r._id.toString(),
+        url: r.url,
+        name: r.name,
+        info: (r.info || '').split('\n')[0].substring(0, 120),
+        label: getRaceLabel(r),
+        startedAt: r.startedAt,
+        endedAt: r.endedAt,
+        entrantCount: (r.entrants || []).length,
+        entrantNames: extracted.entrants.map(e => e.name).slice(0, 4),
+        matchId: r.matchId?.toString() || null,
+        startggSetId: r.startggSetId || null,
+        matchConfidence: r.matchConfidence || null,
+        matchPlayers: r.matchPlayers || null,
+        stageType: stageInfo.type,
+        isQualifier: stageInfo.type === 'qualifier',
+        isLinked: !!(r.matchId || r.startggSetId)
+      };
+    });
+
+    // Compute stats
+    const linkedRaces = racesFormatted.filter(r => r.isLinked).length;
+    const qualifierRaces = racesFormatted.filter(r => r.isQualifier).length;
+    const linkedMatches = matches.filter(m => m.raceUrl || (m.raceUrls && m.raceUrls.length > 0)).length;
+
+    // Get phases for start.gg tournaments
+    const phases = isStartgg && Array.isArray(tournament.phases) ? tournament.phases : [];
+
+    res.json({
+      tournament: {
+        _id: tournament._id,
+        name: tournament.name,
+        gameName: tournament.gameName || tournament.gameId,
+        isStartgg,
+        isChallonge: !!tournament.challongeId,
+        startDate: tournament.startDate,
+        endDate: tournament.endDate
+      },
+      matches,
+      races: racesFormatted,
+      phases,
+      stats: {
+        totalMatches: matches.length,
+        linkedMatches,
+        unlinkedMatches: matches.length - linkedMatches,
+        totalRaces: racesFormatted.length,
+        linkedRaces,
+        unlinkedRaces: racesFormatted.length - linkedRaces,
+        qualifierRaces
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET /api/admin/tournaments/:id/suggestions/:matchId
+ * Get race suggestions for a specific match using heuristic scoring
+ */
+router.get('/tournaments/:id/suggestions/:matchId', requireAdmin, async (req, res, next) => {
+  try {
+    const tournament = await Tournament.findById(req.params.id).lean();
+    if (!tournament) return res.status(404).json({ error: 'Tournament not found' });
+
+    // Find the match
+    let match = null;
+    const isStartgg = !!tournament.startggId;
+
+    if (isStartgg && Array.isArray(tournament.matches)) {
+      const embedded = tournament.matches.find(m =>
+        (m.startggSetId || '').toString() === req.params.matchId ||
+        (m._id || '').toString() === req.params.matchId
+      );
+      if (embedded) {
+        match = {
+          ...embedded,
+          player1Name: embedded.player1?.name,
+          player2Name: embedded.player2?.name
+        };
+      }
+    } else {
+      match = await Match.findById(req.params.matchId).lean();
+    }
+
+    if (!match) return res.status(404).json({ error: 'Match not found' });
+
+    // Get all races for this tournament
+    const races = await Race.find({ tournamentId: tournament._id }).lean();
+
+    // Score each race against this match
+    const suggestions = [];
+    for (const race of races) {
+      const extracted = extractRaceEntrants(race, { requireDirect: false });
+
+      const result = scoreRaceAgainstMatch(race, match, {
+        requireDirect: false,
+        allowOccupiedMatchReassign: true
+      });
+
+      if (result.score > 0) {
+        suggestions.push({
+          raceId: race._id.toString(),
+          raceUrl: race.url,
+          label: getRaceLabel(race),
+          entrantCount: (race.entrants || []).length,
+          entrantNames: extracted.entrants.map(e => e.name).slice(0, 4),
+          startedAt: race.startedAt,
+          endedAt: race.endedAt,
+          score: result.score,
+          reason: result.reason,
+          isAlreadyLinked: !!(race.matchId || race.startggSetId),
+          matchPlayers: race.matchPlayers || null,
+          stageType: parseRaceStageInfo(race).type
+        });
+      }
+    }
+
+    // Sort by score descending
+    suggestions.sort((a, b) => b.score - a.score);
+
+    res.json({
+      matchId: req.params.matchId,
+      player1: match.player1Name || match.player1?.name || 'TBD',
+      player2: match.player2Name || match.player2?.name || 'TBD',
+      suggestions: suggestions.slice(0, 15)
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * POST /api/admin/tournaments/:id/link-race
+ * Link a race to a match (manual association)
+ */
+router.post('/tournaments/:id/link-race', requireAdmin, async (req, res, next) => {
+  try {
+    const { raceUrl, matchId, isQualifier } = req.body;
+    if (!raceUrl) return res.status(400).json({ error: 'raceUrl is required' });
+
+    const tournament = await Tournament.findById(req.params.id);
+    if (!tournament) return res.status(404).json({ error: 'Tournament not found' });
+
+    const race = await Race.findOne({ url: raceUrl });
+    if (!race) return res.status(404).json({ error: 'Race not found' });
+
+    const isStartgg = !!tournament.startggId;
+
+    if (isQualifier) {
+      // For qualifiers: just attach race to tournament without match linking
+      race.tournamentId = tournament._id;
+      race.matchId = undefined;
+      race.startggSetId = undefined;
+      race.matchConfidence = undefined;
+      race.matchPlayers = undefined;
+      await race.save();
+
+      return res.json({ success: true, message: 'Race linked as qualifier' });
+    }
+
+    if (!matchId) return res.status(400).json({ error: 'matchId is required for non-qualifier linking' });
+
+    if (isStartgg) {
+      // Start.gg: update embedded match
+      const embeddedMatch = tournament.matches?.find(m =>
+        (m.startggSetId || '').toString() === matchId ||
+        (m._id || '').toString() === matchId
+      );
+      if (!embeddedMatch) return res.status(404).json({ error: 'Embedded match not found' });
+
+      const setId = embeddedMatch.startggSetId;
+
+      // Update race
+      race.tournamentId = tournament._id;
+      race.startggSetId = setId;
+      race.matchPlayers = `${embeddedMatch.player1?.name || ''} vs ${embeddedMatch.player2?.name || ''}`.trim();
+      race.matchConfidence = 999; // Manual link = high confidence
+      race.tournamentPhase = embeddedMatch.phase || race.tournamentPhase;
+      race.tournamentPool = embeddedMatch.phaseGroup || race.tournamentPool;
+      race.tournamentRound = embeddedMatch.round ?? race.tournamentRound;
+      await race.save();
+
+      // Update embedded match: add raceUrl
+      await Tournament.updateOne(
+        { _id: tournament._id },
+        {
+          $set: { 'matches.$[m].raceUrl': raceUrl, 'matches.$[m].linkScore': 999 },
+          $addToSet: { 'matches.$[m].raceUrls': raceUrl },
+          $currentDate: { updatedAt: true }
+        },
+        { arrayFilters: [{ 'm.startggSetId': setId }] }
+      );
+    } else {
+      // Challonge: update separate Match document
+      const matchDoc = await Match.findById(matchId);
+      if (!matchDoc) return res.status(404).json({ error: 'Match not found' });
+
+      // Update race
+      race.tournamentId = tournament._id;
+      race.matchId = matchDoc._id;
+      race.matchConfidence = 999;
+      race.matchPlayers = `${matchDoc.player1Name || ''} vs ${matchDoc.player2Name || ''}`.trim();
+      await race.save();
+
+      // Update match
+      matchDoc.raceUrl = raceUrl;
+      matchDoc.completedAt = race.endedAt || matchDoc.completedAt;
+      await matchDoc.save();
+    }
+
+    res.json({ success: true, message: 'Race linked to match' });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * POST /api/admin/tournaments/:id/unlink-race
+ * Unlink a race from its match
+ */
+router.post('/tournaments/:id/unlink-race', requireAdmin, async (req, res, next) => {
+  try {
+    const { raceUrl } = req.body;
+    if (!raceUrl) return res.status(400).json({ error: 'raceUrl is required' });
+
+    const tournament = await Tournament.findById(req.params.id);
+    if (!tournament) return res.status(404).json({ error: 'Tournament not found' });
+
+    const race = await Race.findOne({ url: raceUrl });
+    if (!race) return res.status(404).json({ error: 'Race not found' });
+
+    const isStartgg = !!tournament.startggId;
+
+    if (isStartgg) {
+      // Find and clear embedded match
+      const setId = race.startggSetId;
+      if (setId) {
+        await Tournament.updateOne(
+          { _id: tournament._id },
+          {
+            $pull: { 'matches.$[m].raceUrls': raceUrl },
+            $currentDate: { updatedAt: true }
+          },
+          { arrayFilters: [{ 'm.startggSetId': setId }] }
+        );
+
+        // If this was the primary raceUrl, clear it
+        const embeddedMatch = tournament.matches?.find(m => m.startggSetId === setId);
+        if (embeddedMatch?.raceUrl === raceUrl) {
+          const remainingUrls = (embeddedMatch.raceUrls || []).filter(u => u !== raceUrl);
+          await Tournament.updateOne(
+            { _id: tournament._id },
+            {
+              $set: {
+                'matches.$[m].raceUrl': remainingUrls[0] || null,
+                'matches.$[m].linkScore': remainingUrls.length > 0 ? embeddedMatch.linkScore : null
+              }
+            },
+            { arrayFilters: [{ 'm.startggSetId': setId }] }
+          );
+        }
+      }
+    } else {
+      // Challonge: clear match raceUrl
+      if (race.matchId) {
+        await Match.updateOne(
+          { _id: race.matchId },
+          { $unset: { raceUrl: 1 }, $currentDate: { updatedAt: true } }
+        );
+      }
+    }
+
+    // Clear race linking fields
+    race.matchId = undefined;
+    race.startggSetId = undefined;
+    race.matchConfidence = undefined;
+    race.matchPlayers = undefined;
+    race.tournamentPhase = undefined;
+    race.tournamentPool = undefined;
+    race.tournamentRound = undefined;
+    await race.save();
+
+    res.json({ success: true, message: 'Race unlinked' });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET /api/admin/tournaments/:id/auto-link-preview
+ * Preview auto-link results without applying them
+ */
+router.get('/tournaments/:id/auto-link-preview', requireAdmin, async (req, res, next) => {
+  try {
+    const tournament = await Tournament.findById(req.params.id).lean();
+    if (!tournament) return res.status(404).json({ error: 'Tournament not found' });
+
+    const isStartgg = !!tournament.startggId;
+    const races = await Race.find({ tournamentId: tournament._id }).lean();
+    const threshold = 300; // Lower threshold for preview to show more options
+
+    const proposals = [];
+    let skipped = 0;
+
+    if (isStartgg && Array.isArray(tournament.matches)) {
+      const liveMatches = tournament.matches.map(m => ({ ...m }));
+
+      for (const race of races) {
+        if (race.startggSetId) { skipped++; continue; }
+        const stageInfo = parseRaceStageInfo(race);
+        if (stageInfo.type === 'qualifier') { skipped++; continue; }
+
+        const scored = rankMatchesForRace(race, liveMatches, {
+          requireDirect: true,
+          allowOccupiedMatchReassign: false
+        });
+
+        const chosen = selectBestCandidate(scored, {
+          threshold,
+          minGap: 50,
+          raceUrl: race.url
+        });
+
+        if (!chosen) { skipped++; continue; }
+
+        const players = getMatchPlayers(chosen.match);
+        proposals.push({
+          raceUrl: race.url,
+          raceLabel: getRaceLabel(race),
+          raceEntrants: (race.entrants || []).length,
+          matchId: chosen.match.startggSetId || chosen.match._id?.toString(),
+          matchPlayers: `${players.player1} vs ${players.player2}`,
+          matchPhase: chosen.match.phase || null,
+          matchRound: chosen.match.round || null,
+          score: chosen.score,
+          isStartgg: true
+        });
+
+        // Mark match as occupied in live state
+        const liveIdx = liveMatches.findIndex(m => m.startggSetId === chosen.match.startggSetId);
+        if (liveIdx >= 0) {
+          liveMatches[liveIdx] = { ...liveMatches[liveIdx], raceUrl: race.url };
+        }
+      }
+    } else {
+      const allMatches = await Match.find({ tournamentId: tournament._id }).lean();
+      const liveMatches = allMatches.map(m => ({ ...m }));
+
+      for (const race of races) {
+        if (race.matchId) { skipped++; continue; }
+
+        const scored = rankMatchesForRace(race, liveMatches, {
+          requireDirect: true,
+          allowOccupiedMatchReassign: false
+        });
+
+        const chosen = selectBestCandidate(scored, {
+          threshold,
+          minGap: 50,
+          raceUrl: race.url
+        });
+
+        if (!chosen) { skipped++; continue; }
+
+        const players = getMatchPlayers(chosen.match);
+        proposals.push({
+          raceUrl: race.url,
+          raceLabel: getRaceLabel(race),
+          raceEntrants: (race.entrants || []).length,
+          matchId: chosen.match._id.toString(),
+          matchPlayers: `${players.player1} vs ${players.player2}`,
+          matchPhase: null,
+          matchRound: chosen.match.round || null,
+          score: chosen.score,
+          isStartgg: false
+        });
+
+        // Mark match as occupied
+        const liveIdx = liveMatches.findIndex(m => m._id.toString() === chosen.match._id.toString());
+        if (liveIdx >= 0) {
+          liveMatches[liveIdx] = { ...liveMatches[liveIdx], raceUrl: race.url };
+        }
+      }
+    }
+
+    // Sort proposals by score descending
+    proposals.sort((a, b) => b.score - a.score);
+
+    res.json({ proposals, skipped, total: races.length });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * POST /api/admin/tournaments/:id/auto-link-confirm
+ * Apply selected auto-link proposals (batch)
+ */
+router.post('/tournaments/:id/auto-link-confirm', requireAdmin, async (req, res, next) => {
+  try {
+    const { proposals } = req.body;
+    if (!Array.isArray(proposals) || !proposals.length) {
+      return res.status(400).json({ error: 'proposals array is required' });
+    }
+
+    const tournament = await Tournament.findById(req.params.id);
+    if (!tournament) return res.status(404).json({ error: 'Tournament not found' });
+
+    const isStartgg = !!tournament.startggId;
+    let linked = 0;
+    const errors = [];
+
+    for (const p of proposals) {
+      try {
+        const race = await Race.findOne({ url: p.raceUrl });
+        if (!race) { errors.push(`Race ${p.raceUrl} not found`); continue; }
+
+        if (isStartgg) {
+          const embeddedMatch = tournament.matches?.find(m =>
+            (m.startggSetId || '').toString() === p.matchId ||
+            (m._id || '').toString() === p.matchId
+          );
+          if (!embeddedMatch) { errors.push(`Match ${p.matchId} not found`); continue; }
+
+          const setId = embeddedMatch.startggSetId;
+
+          race.tournamentId = tournament._id;
+          race.startggSetId = setId;
+          race.matchPlayers = p.matchPlayers;
+          race.matchConfidence = p.score;
+          race.tournamentPhase = embeddedMatch.phase || null;
+          race.tournamentPool = embeddedMatch.phaseGroup || null;
+          race.tournamentRound = embeddedMatch.round ?? null;
+          await race.save();
+
+          await Tournament.updateOne(
+            { _id: tournament._id },
+            {
+              $set: { 'matches.$[m].raceUrl': p.raceUrl, 'matches.$[m].linkScore': p.score },
+              $addToSet: { 'matches.$[m].raceUrls': p.raceUrl },
+              $currentDate: { updatedAt: true }
+            },
+            { arrayFilters: [{ 'm.startggSetId': setId }] }
+          );
+        } else {
+          const matchDoc = await Match.findById(p.matchId);
+          if (!matchDoc) { errors.push(`Match ${p.matchId} not found`); continue; }
+
+          race.tournamentId = tournament._id;
+          race.matchId = matchDoc._id;
+          race.matchConfidence = p.score;
+          race.matchPlayers = p.matchPlayers;
+          await race.save();
+
+          matchDoc.raceUrl = p.raceUrl;
+          matchDoc.completedAt = race.endedAt || matchDoc.completedAt;
+          await matchDoc.save();
+        }
+
+        linked++;
+      } catch (err) {
+        errors.push(`Error linking ${p.raceUrl}: ${err.message}`);
+      }
+    }
+
+    res.json({ success: true, linked, total: proposals.length, errors });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * POST /api/admin/tournaments/:id/reorder-races
+ * Reorder races within a match (for BO series)
+ */
+router.post('/tournaments/:id/reorder-races', requireAdmin, async (req, res, next) => {
+  try {
+    const { matchId, raceUrls } = req.body;
+    if (!matchId || !Array.isArray(raceUrls)) {
+      return res.status(400).json({ error: 'matchId and raceUrls[] required' });
+    }
+
+    const tournament = await Tournament.findById(req.params.id);
+    if (!tournament) return res.status(404).json({ error: 'Tournament not found' });
+
+    const isStartgg = !!tournament.startggId;
+
+    if (isStartgg) {
+      // Update embedded match raceUrls order
+      const embeddedMatch = tournament.matches?.find(m =>
+        (m.startggSetId || '').toString() === matchId ||
+        (m._id || '').toString() === matchId
+      );
+      if (!embeddedMatch) return res.status(404).json({ error: 'Match not found' });
+
+      const setId = embeddedMatch.startggSetId;
+
+      await Tournament.updateOne(
+        { _id: tournament._id },
+        {
+          $set: {
+            'matches.$[m].raceUrls': raceUrls,
+            'matches.$[m].raceUrl': raceUrls[0] || null
+          },
+          $currentDate: { updatedAt: true }
+        },
+        { arrayFilters: [{ 'm.startggSetId': setId }] }
+      );
+    }
+    // For Challonge, raceUrl is singular so reordering doesn't apply yet
+
+    res.json({ success: true });
   } catch (error) {
     next(error);
   }

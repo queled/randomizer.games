@@ -364,13 +364,36 @@ function scoreRaceAgainstMatch(race, match, options = {}) {
   }
 
   if (best1.entrant && best2.entrant && best1.entrant === best2.entrant) {
+    // Try both resolution directions and pick the best total
+
+    // Option A: keep best1 for player1, find secondBest for player2
     let secondBest2 = { score: 0, entrant: null };
     for (const entrant of extracted.entrants) {
       if (entrant === best1.entrant) continue;
       const s = scoreNameMatch(entrant.name, player2);
       if (s > secondBest2.score) secondBest2 = { score: s, entrant };
     }
-    if (secondBest2.score > 0) best2 = secondBest2;
+
+    // Option B: keep best2 for player2, find secondBest for player1
+    let secondBest1 = { score: 0, entrant: null };
+    for (const entrant of extracted.entrants) {
+      if (entrant === best2.entrant) continue;
+      const s = scoreNameMatch(entrant.name, player1);
+      if (s > secondBest1.score) secondBest1 = { score: s, entrant };
+    }
+
+    const totalA = best1.score + secondBest2.score;
+    const totalB = secondBest1.score + best2.score;
+
+    if (totalA >= totalB && secondBest2.score > 0) {
+      best2 = secondBest2;
+    } else if (totalB > totalA && secondBest1.score > 0) {
+      best1 = secondBest1;
+    } else if (secondBest2.score > 0) {
+      best2 = secondBest2;
+    } else if (secondBest1.score > 0) {
+      best1 = secondBest1;
+    }
   }
 
   if (!best1.entrant || !best2.entrant || best1.entrant === best2.entrant) {

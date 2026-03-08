@@ -54,6 +54,10 @@
           <span class="nav-icon">📚</span>
           <span>Ressources</span>
         </button>
+        <button class="nav-item" data-section="race-linking">
+          <span class="nav-icon">🔗</span>
+          <span>Race ↔ Match</span>
+        </button>
         <button class="nav-item" data-section="players">
           <span class="nav-icon">👥</span>
           <span>Joueurs</span>
@@ -443,6 +447,176 @@
         
         <div id="statistics-content">
           <p class="text-muted">Chargement...</p>
+        </div>
+      </section>
+
+      <!-- Race-Match Linking Section -->
+      <section id="section-race-linking" class="admin-section">
+        <div class="section-header">
+          <h1 class="section-title">Association Race ↔ Match</h1>
+        </div>
+
+        <!-- Tournament selector -->
+        <div class="toolbar" id="rl-search-toolbar">
+          <div class="toolbar-search" style="max-width: 500px;">
+            <input type="text" id="rl-tournament-search" class="form-input" placeholder="Rechercher un tournoi...">
+          </div>
+        </div>
+
+        <div id="rl-tournament-list" class="rl-tournament-list">
+          <p class="text-muted">Recherchez ou parcourez les tournois ci-dessus</p>
+        </div>
+        <div id="rl-tournament-pagination"></div>
+
+        <!-- Selected tournament detail -->
+        <div id="rl-detail" class="rl-detail" style="display: none;">
+          <div class="rl-detail-header">
+            <div>
+              <h2 id="rl-tournament-name" class="rl-tournament-name"></h2>
+              <span id="rl-tournament-meta" class="text-muted"></span>
+            </div>
+            <div class="rl-detail-actions">
+              <button class="btn btn-primary btn-sm" onclick="admin.rlAutoLinkPreview()">⚡ Auto-link</button>
+              <button class="btn btn-outline btn-sm" onclick="admin.rlCloseDetail()">✕ Fermer</button>
+            </div>
+          </div>
+
+          <!-- Stats bar -->
+          <div class="rl-stats-bar" id="rl-stats-bar"></div>
+
+          <!-- Filters -->
+          <div id="rl-filters" class="toolbar" style="display: none;">
+            <select id="rl-phase-select" class="form-input form-select" style="max-width: 300px;" onchange="admin.rlFilterByPhase()">
+              <option value="">Toutes les phases</option>
+            </select>
+            <select id="rl-link-filter" class="form-input form-select" style="max-width: 200px;" onchange="admin.rlFilterByLinkStatus()">
+              <option value="">Tous les matchs</option>
+              <option value="linked">Liés</option>
+              <option value="unlinked">Non liés</option>
+            </select>
+          </div>
+
+          <!-- Matches panel (full width) -->
+          <div class="rl-panel">
+            <div class="rl-panel-header">
+              <h3>🏁 Matchs du tournoi <span id="rl-matches-count" class="badge badge-muted"></span></h3>
+            </div>
+            <div id="rl-matches-list" class="rl-items-list">
+              <p class="text-muted">Chargement...</p>
+            </div>
+          </div>
+
+          <!-- Qualifier races section -->
+          <div id="rl-qualifiers-section" class="rl-panel mt-4" style="display: none;">
+            <div class="rl-panel-header">
+              <h3>🏅 Races de qualification <span id="rl-qualifiers-count" class="badge badge-muted"></span></h3>
+              <button class="btn btn-sm btn-outline" onclick="admin.rlShowAddQualifier()">➕ Ajouter</button>
+            </div>
+            <p class="text-muted" style="padding: 0.5rem 1rem; font-size: 0.85rem;">
+              Races associées au tournoi en tant que qualifications (sans match spécifique).
+            </p>
+            <div id="rl-qualifiers-list" class="rl-items-list">
+              <p class="text-muted">Aucune race de qualification</p>
+            </div>
+          </div>
+
+          <!-- Unlinked races section -->
+          <div id="rl-unlinked-section" class="rl-panel mt-4" style="display: none;">
+            <div class="rl-panel-header">
+              <h3>📋 Races non associées <span id="rl-unlinked-count" class="badge badge-warning"></span></h3>
+            </div>
+            <p class="text-muted" style="padding: 0.5rem 1rem; font-size: 0.85rem;">
+              Races du tournoi pas encore liées à un match. Cliquez sur un match ci-dessus pour voir les suggestions.
+            </p>
+            <div id="rl-unlinked-list" class="rl-items-list">
+            </div>
+          </div>
+        </div>
+
+        <!-- Suggestion modal (match click) -->
+        <div id="rl-suggestion-panel" class="modal" style="display: none;">
+          <div class="modal-content modal-large">
+            <div class="modal-header">
+              <h2 id="rl-suggestion-title">Suggestions de races</h2>
+              <button class="modal-close" onclick="admin.rlCloseSuggestions()">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div id="rl-suggestion-match-info" class="rl-suggestion-match-info"></div>
+              <div id="rl-suggestions-list" class="rl-suggestions-list">
+                <p class="text-muted">Chargement des suggestions...</p>
+              </div>
+              <div class="rl-manual-link mt-4">
+                <h4>Lien manuel</h4>
+                <p class="text-muted" style="font-size: 0.85rem; margin-bottom: 0.5rem;">URL racetime.gg : le chemin après racetime.gg (ex: <code>/ootr/priceless-mamamu-3174</code>)</p>
+                <div class="form-inline">
+                  <div class="form-group">
+                    <input type="text" id="rl-manual-race-url" class="form-input" placeholder="/categorie/room-name-1234">
+                  </div>
+                  <button type="button" class="btn btn-primary" onclick="admin.rlManualLink()">Lier</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add qualifier modal -->
+        <div id="rl-qualifier-modal" class="modal" style="display: none;">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2>Ajouter une race de qualification</h2>
+              <button class="modal-close" onclick="admin.rlCloseQualifierModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+              <p class="text-muted" style="font-size: 0.85rem; margin-bottom: 1rem;">
+                Marque une race comme qualification pour ce tournoi. La race sera liée au tournoi sans être associée à un match spécifique.
+              </p>
+              <div class="form-group">
+                <label class="form-label">URL de la race (chemin racetime.gg)</label>
+                <input type="text" id="rl-qualifier-url" class="form-input" placeholder="/categorie/room-name-1234">
+              </div>
+              <p class="text-muted" style="font-size: 0.85rem;">
+                Tu peux aussi sélectionner une race non liée depuis la liste ci-dessous :
+              </p>
+              <div id="rl-qualifier-unlinked-list" class="rl-qualifier-pick-list"></div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-outline" onclick="admin.rlCloseQualifierModal()">Annuler</button>
+              <button class="btn btn-primary" onclick="admin.rlConfirmAddQualifier()">🏅 Marquer comme qualification</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Auto-link preview modal -->
+        <div id="rl-autolink-modal" class="modal" style="display: none;">
+          <div class="modal-content modal-large">
+            <div class="modal-header">
+              <h2>⚡ Prévisualisation Auto-link</h2>
+              <button class="modal-close" onclick="admin.rlCloseAutoLinkModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+              <p class="text-muted" style="margin-bottom: 1rem;">
+                Voici les associations proposées par le système heuristique. Coche celles que tu veux valider, puis confirme.
+              </p>
+              <div class="rl-autolink-controls">
+                <label class="form-checkbox-group">
+                  <input type="checkbox" id="rl-autolink-select-all" class="form-checkbox" onchange="admin.rlAutoLinkToggleAll(this.checked)">
+                  <span>Tout sélectionner</span>
+                </label>
+                <div>
+                  <span class="text-muted" id="rl-autolink-summary"></span>
+                </div>
+              </div>
+              <div id="rl-autolink-list" class="rl-autolink-list">
+                <p class="text-muted">Calcul en cours...</p>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-outline" onclick="admin.rlCloseAutoLinkModal()">Annuler</button>
+              <button class="btn btn-primary" id="rl-autolink-confirm" onclick="admin.rlConfirmAutoLink()" disabled>
+                ✅ Valider les associations sélectionnées
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 

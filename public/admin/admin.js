@@ -19,6 +19,17 @@ const admin = {
   syncHistory: [],
   players: [],
   playersPage: 1,
+  // Race-linking state
+  rlTournamentsPage: 1,
+  rlCurrentTournament: null,
+  rlMatches: [],
+  rlRaces: [],
+  rlPhases: [],
+  rlStats: null,
+  rlPhaseFilter: '',
+  rlLinkFilter: '',
+  rlCurrentMatchId: null,
+  rlAutoLinkData: null,
   
   // ==================== INITIALIZATION ====================
   
@@ -92,6 +103,11 @@ const admin = {
       e.preventDefault();
       this.saveGame();
     });
+
+    // Race-linking tournament search
+    document.getElementById('rl-tournament-search').addEventListener('input',
+      this.debounce(() => this.rlLoadTournaments(1), 400)
+    );
   },
   
   // ==================== AUTH ====================
@@ -209,6 +225,9 @@ const admin = {
         break;
       case 'players':
         this.loadPlayers();
+        break;
+      case 'race-linking':
+        this.rlLoadTournaments();
         break;
       case 'statistics':
         this.loadStatistics();
@@ -2033,7 +2052,758 @@ const admin = {
       this.showToast('Erreur lors de la sauvegarde', 'error');
     }
   },
-  
+
+  // ==================== RACE-MATCH LINKING ====================
+
+  async rlLoadTournaments(page = 1) {
+    this.rlTournamentsPage = page;
+    try {
+      const search = document.getElementById('rl-tournament-search')?.value || '';
+      const params = new URLSearchParams({ page, limit: 15 });
+      if (search) params.append('search', search);
+
+      const response = await fetch(`/api/admin/tournaments?${params}`, {
+        headers: { 'Authorization': `Bearer ${this.token}` }
+      });
+      if (!response.ok) throw new Error('Failed');
+
+      const data = await response.json();
+      this.rlRenderTournamentList(data.tournaments, data.pagination);
+    } catch (error) {
+      console.error('Error loading tournaments:', error);
+      this.showToast('Erreur lors du chargement des tournois', 'error');
+    }
+  },
+
+  rlRenderTournamentList(tournaments, pagination) {
+    const container = document.getElementById('rl-tournament-list');
+    if (!tournaments.length) {
+      container.innerHTML = '<p class="text-muted">Aucun tournoi trouvé</p>';
+      document.getElementById('rl-tournament-pagination').innerHTML = '';
+      return;
+    }
+
+    container.innerHTML = `
+      <div class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Tournoi</th>
+              <th>Jeu</th>
+              <th>Type</th>
+              <th>Matchs</th>
+              <th>Participants</th>
+              <th>Date</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            ${tournaments.map(t => `
+              <tr>
+                <td>${this.escapeHtml(t.name)}</td>
+                <td>${this.escapeHtml(t.gameName)}</td>
+                <td>
+                  ${t.isStartgg ? '<span class="badge badge-success">start.gg</span>' : ''}
+                  ${t.isChallonge ? '<span class="badge badge-warning">challonge</span>' : ''}
+                </td>
+                <td>${t.matchesCount || 0}</td>
+                <td>${t.participantsCount || 0}</td>
+                <td>${t.startDate ? new Date(t.startDate).toLocaleDateString('fr-FR') : '-'}</td>
+                <td>
+                  <button class="btn btn-sm btn-primary" onclick="admin.rlSelectTournament('${t._id}')">
+                    🔗 Gérer
+                  </button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+
+    // Pagination
+    const pagEl = document.getElementById('rl-tournament-pagination');
+    if (pagination.pages > 1) {
+      let html = '<div class="pagination-buttons">';
+      if (pagination.page > 1) html += `<button class="btn btn-sm btn-outline" onclick="admin.rlLoadTournaments(${pagination.page - 1})">←</button>`;
+      html += `<span class="pagination-info">Page ${pagination.page} / ${pagination.pages} (${pagination.total})</span>`;
+      if (pagination.page < pagination.pages) html += `<button class="btn btn-sm btn-outline" onclick="admin.rlLoadTournaments(${pagination.page + 1})">→</button>`;
+      html += '</div>';
+      pagEl.innerHTML = html;
+    } else {
+      pagEl.innerHTML = pagination.total > 0 ? `<div class="pagination-buttons"><span class="pagination-info">${pagination.total} tournoi(s)</span></div>` : '';
+    }
+  },
+
+  async rlSelectTournament(tournamentId) {
+    try {
+      const response = await fetch(`/api/admin/tournaments/${tournamentId}/linking`, {
+        headers: { 'Authorization': `Bearer ${this.token}` }
+      });
+      if (!response.ok) throw new Error('Failed');
+
+      const data = await response.json();
+      this.rlCurrentTournament = data.tournament;
+      this.rlMatches = data.matches;
+      this.rlRaces = data.races;
+      this.rlPhases = data.phases;
+      this.rlStats = data.stats;
+      this.rlPhaseFilter = '';
+      this.rlLinkFilter = '';
+
+      // Hide tournament list, show detail
+      document.getElementById('rl-tournament-list').style.display = 'none';
+      document.getElementById('rl-tournament-pagination').style.display = 'none';
+      document.getElementById('rl-search-toolbar').style.display = 'none';
+      document.getElementById('rl-detail').style.display = 'block';
+
+      // Header
+      document.getElementById('rl-tournament-name').textContent = data.tournament.name;
+      document.getElementById('rl-tournament-meta').textContent =
+        `${data.tournament.gameName || ''} · ${data.tournament.isStartgg ? 'start.gg' : 'Challonge'} · ${data.tournament.startDate ? new Date(data.tournament.startDate).toLocaleDateString('fr-FR') : ''}`;
+
+      // Phase filter
+      const filtersBar = document.getElementById('rl-filters');
+      const phaseSelect = document.getElementById('rl-phase-select');
+      if (data.tournament.isStartgg && data.phases.length > 0) {
+        phaseSelect.innerHTML = '<option value="">Toutes les phases</option>' +
+          data.phases.map(p => `<option value="${this.escapeHtml(p.name)}">${this.escapeHtml(p.name)}</option>`).join('');
+        phaseSelect.style.display = '';
+      } else {
+        phaseSelect.style.display = 'none';
+      }
+      filtersBar.style.display = (data.matches.length > 0) ? 'flex' : 'none';
+
+      this.rlRenderStats();
+      this.rlRenderMatches();
+      this.rlRenderQualifiers();
+      this.rlRenderUnlinked();
+    } catch (error) {
+      console.error('Error loading tournament:', error);
+      this.showToast('Erreur lors du chargement du tournoi', 'error');
+    }
+  },
+
+  rlCloseDetail() {
+    document.getElementById('rl-detail').style.display = 'none';
+    document.getElementById('rl-tournament-list').style.display = '';
+    document.getElementById('rl-tournament-pagination').style.display = '';
+    document.getElementById('rl-search-toolbar').style.display = '';
+    this.rlCurrentTournament = null;
+    this.rlMatches = [];
+    this.rlRaces = [];
+  },
+
+  rlRenderStats() {
+    const s = this.rlStats;
+    if (!s) return;
+    document.getElementById('rl-stats-bar').innerHTML = `
+      <div class="rl-stat"><span class="rl-stat-value">${s.totalMatches}</span><span class="rl-stat-label">Matchs</span></div>
+      <div class="rl-stat rl-stat-success"><span class="rl-stat-value">${s.linkedMatches}</span><span class="rl-stat-label">Liés</span></div>
+      <div class="rl-stat rl-stat-warning"><span class="rl-stat-value">${s.unlinkedMatches}</span><span class="rl-stat-label">Non liés</span></div>
+      <div class="rl-stat"><span class="rl-stat-value">${s.totalRaces}</span><span class="rl-stat-label">Races</span></div>
+      <div class="rl-stat rl-stat-success"><span class="rl-stat-value">${s.linkedRaces}</span><span class="rl-stat-label">Races liées</span></div>
+      ${s.qualifierRaces > 0 ? `<div class="rl-stat rl-stat-info"><span class="rl-stat-value">${s.qualifierRaces}</span><span class="rl-stat-label">Qualifs</span></div>` : ''}
+    `;
+  },
+
+  rlFilterByPhase() {
+    this.rlPhaseFilter = document.getElementById('rl-phase-select')?.value || '';
+    this.rlRenderMatches();
+  },
+
+  rlFilterByLinkStatus() {
+    this.rlLinkFilter = document.getElementById('rl-link-filter')?.value || '';
+    this.rlRenderMatches();
+  },
+
+  rlRenderMatches() {
+    const container = document.getElementById('rl-matches-list');
+    let matches = [...this.rlMatches];
+
+    if (this.rlPhaseFilter) {
+      matches = matches.filter(m => m.phase === this.rlPhaseFilter);
+    }
+    if (this.rlLinkFilter === 'linked') {
+      matches = matches.filter(m => m.raceUrl || (m.raceUrls && m.raceUrls.length > 0));
+    } else if (this.rlLinkFilter === 'unlinked') {
+      matches = matches.filter(m => !m.raceUrl && (!m.raceUrls || m.raceUrls.length === 0));
+    }
+
+    document.getElementById('rl-matches-count').textContent = `${matches.length}`;
+
+    if (!matches.length) {
+      container.innerHTML = '<p class="text-muted">Aucun match</p>';
+      return;
+    }
+
+    // Group by phase if available
+    const grouped = new Map();
+    for (const m of matches) {
+      const key = m.phase || 'Matchs';
+      if (!grouped.has(key)) grouped.set(key, []);
+      grouped.get(key).push(m);
+    }
+
+    let html = '';
+    for (const [phase, phaseMatches] of grouped) {
+      if (grouped.size > 1) {
+        html += `<div class="rl-phase-group-title">${this.escapeHtml(phase)}</div>`;
+      }
+      html += phaseMatches.map(m => {
+        const raceUrls = m.raceUrls?.length ? m.raceUrls : (m.raceUrl ? [m.raceUrl] : []);
+        const hasRace = raceUrls.length > 0;
+        const raceCount = raceUrls.length;
+        const scoreInfo = m.linkScore ? `(score: ${m.linkScore})` : '';
+        const roundLabel = m.round ? (m.round > 0 ? `R${m.round}` : `L${Math.abs(m.round)}`) : '';
+        const groupLabel = m.phaseGroup ? `G${m.phaseGroup}` : '';
+        const matchLabel = [groupLabel, roundLabel].filter(Boolean).join(' ');
+        const matchId = String(m._id);
+        // BO info: if multiple races linked, show BO badge
+        const boLabel = raceCount > 1 ? `<span class="badge badge-muted">BO${raceCount}</span>` : '';
+
+        return `
+          <div class="rl-match-item ${hasRace ? 'rl-match-linked' : 'rl-match-unlinked'}" data-match-id="${this.escapeHtml(matchId)}">
+            <div class="rl-match-main" onclick="admin.rlShowSuggestions('${this.escapeHtml(matchId)}')">
+              <div class="rl-match-players">
+                <span class="rl-match-label">${matchLabel ? `<code>${this.escapeHtml(matchLabel)}</code>` : ''}</span>
+                <strong>${this.escapeHtml(m.player1Name)}</strong> vs <strong>${this.escapeHtml(m.player2Name)}</strong>
+                ${m.displayScore ? `<span class="text-muted">${this.escapeHtml(m.displayScore)}</span>` : ''}
+                ${boLabel}
+              </div>
+              <div class="rl-match-status">
+                ${hasRace
+                  ? `<span class="badge badge-success">✓ ${raceCount} race${raceCount > 1 ? 's' : ''} ${scoreInfo}</span>`
+                  : '<span class="badge badge-warning">Non lié</span>'}
+              </div>
+            </div>
+            ${hasRace ? `
+              <div class="rl-match-races" id="rl-match-races-${this.escapeHtml(matchId)}" ${raceCount > 1 ? 'data-sortable="true"' : ''}>
+                ${raceUrls.map((url, idx) => `
+                  <div class="rl-linked-race" draggable="${raceCount > 1 ? 'true' : 'false'}" data-race-url="${this.escapeHtml(url)}" data-match-id="${this.escapeHtml(matchId)}" data-index="${idx}">
+                    ${raceCount > 1 ? `<span class="rl-race-order" title="Manche">⠿ ${idx + 1}</span>` : ''}
+                    <a href="https://racetime.gg${url}" target="_blank" class="rl-race-link">${this.escapeHtml(url)}</a>
+                    <button class="btn btn-sm btn-ghost btn-danger" onclick="event.stopPropagation(); admin.rlUnlinkRace('${this.escapeHtml(url)}')" title="Délier">✕</button>
+                  </div>
+                `).join('')}
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    container.innerHTML = html;
+
+    // Attach drag-and-drop for BO match races
+    this.rlInitDragAndDrop();
+  },
+
+  /** Initialize drag-and-drop for BO race reordering */
+  rlInitDragAndDrop() {
+    const sortableContainers = document.querySelectorAll('[data-sortable="true"]');
+    sortableContainers.forEach(container => {
+      const items = container.querySelectorAll('.rl-linked-race[draggable="true"]');
+      let dragItem = null;
+
+      items.forEach(item => {
+        item.addEventListener('dragstart', (e) => {
+          dragItem = item;
+          item.classList.add('rl-dragging');
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', item.dataset.raceUrl);
+        });
+
+        item.addEventListener('dragend', () => {
+          item.classList.remove('rl-dragging');
+          dragItem = null;
+          // Remove all drag-over styles
+          container.querySelectorAll('.rl-linked-race').forEach(el => el.classList.remove('rl-drag-over'));
+        });
+
+        item.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          if (dragItem && item !== dragItem) {
+            item.classList.add('rl-drag-over');
+          }
+        });
+
+        item.addEventListener('dragleave', () => {
+          item.classList.remove('rl-drag-over');
+        });
+
+        item.addEventListener('drop', (e) => {
+          e.preventDefault();
+          item.classList.remove('rl-drag-over');
+          if (!dragItem || item === dragItem) return;
+
+          // Reorder: insert dragged before or after target
+          const allItems = [...container.querySelectorAll('.rl-linked-race')];
+          const fromIdx = allItems.indexOf(dragItem);
+          const toIdx = allItems.indexOf(item);
+
+          if (fromIdx < toIdx) {
+            container.insertBefore(dragItem, item.nextSibling);
+          } else {
+            container.insertBefore(dragItem, item);
+          }
+
+          // Update order numbers
+          container.querySelectorAll('.rl-linked-race').forEach((el, i) => {
+            const orderSpan = el.querySelector('.rl-race-order');
+            if (orderSpan) orderSpan.textContent = `⠿ ${i + 1}`;
+            el.dataset.index = i;
+          });
+
+          // Save new order
+          const matchId = container.id.replace('rl-match-races-', '');
+          const newOrder = [...container.querySelectorAll('.rl-linked-race')].map(el => el.dataset.raceUrl);
+          admin.rlSaveRaceOrder(matchId, newOrder);
+        });
+      });
+    });
+  },
+
+  /** Save new race order for a BO match */
+  async rlSaveRaceOrder(matchId, raceUrls) {
+    if (!this.rlCurrentTournament) return;
+    try {
+      const response = await fetch(`/api/admin/tournaments/${this.rlCurrentTournament._id}/reorder-races`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.token}`
+        },
+        body: JSON.stringify({ matchId, raceUrls })
+      });
+      if (!response.ok) throw new Error('Failed');
+      // Update local state so re-renders keep the new order
+      const matchIdx = this.rlMatches.findIndex(m => String(m._id) === String(matchId));
+      if (matchIdx >= 0) {
+        this.rlMatches[matchIdx].raceUrls = [...raceUrls];
+        this.rlMatches[matchIdx].raceUrl = raceUrls[0] || null;
+      }
+      this.showToast('Ordre des manches mis à jour', 'success');
+    } catch (error) {
+      console.error('Error saving race order:', error);
+      this.showToast('Erreur lors de la mise à jour de l\'ordre', 'error');
+    }
+  },
+
+  /** Render qualifier races section */
+  rlRenderQualifiers() {
+    const qualifiers = this.rlRaces.filter(r => r.isQualifier);
+    const section = document.getElementById('rl-qualifiers-section');
+    const list = document.getElementById('rl-qualifiers-list');
+    const count = document.getElementById('rl-qualifiers-count');
+
+    // Always show the section so users know it exists
+    section.style.display = 'block';
+    count.textContent = `${qualifiers.length}`;
+
+    if (!qualifiers.length) {
+      list.innerHTML = '<p class="text-muted" style="padding: 0.5rem 1rem;">Aucune race de qualification pour ce tournoi.</p>';
+      return;
+    }
+
+    list.innerHTML = qualifiers.map(r => `
+      <div class="rl-race-item rl-race-qualifier">
+        <div class="rl-race-main">
+          <div class="rl-race-info">
+            <a href="https://racetime.gg${r.url}" target="_blank" class="rl-race-link">${this.escapeHtml(r.label || r.url)}</a>
+            <span class="text-muted">${r.entrantCount} entrant${r.entrantCount > 1 ? 's' : ''}</span>
+            ${r.entrantNames.length ? `<span class="text-muted">· ${r.entrantNames.slice(0, 3).map(n => this.escapeHtml(n)).join(', ')}</span>` : ''}
+          </div>
+          <div class="rl-race-meta">
+            <span class="badge badge-muted">🏅 Qualification</span>
+            ${r.startedAt ? `<span class="text-muted">${new Date(r.startedAt).toLocaleDateString('fr-FR')}</span>` : ''}
+          </div>
+        </div>
+        <div class="rl-race-actions">
+          <button class="btn btn-sm btn-ghost btn-danger" onclick="admin.rlUnlinkRace('${this.escapeHtml(r.url)}')" title="Retirer des qualifications">✕</button>
+        </div>
+      </div>
+    `).join('');
+  },
+
+  /** Render unlinked races section */
+  rlRenderUnlinked() {
+    const unlinked = this.rlRaces.filter(r => !r.isLinked && !r.isQualifier);
+    const section = document.getElementById('rl-unlinked-section');
+    const list = document.getElementById('rl-unlinked-list');
+    const count = document.getElementById('rl-unlinked-count');
+
+    if (!unlinked.length) {
+      section.style.display = 'none';
+      return;
+    }
+
+    section.style.display = 'block';
+    count.textContent = `${unlinked.length}`;
+
+    list.innerHTML = unlinked.map(r => `
+      <div class="rl-race-item rl-race-unlinked">
+        <div class="rl-race-main">
+          <div class="rl-race-info">
+            <a href="https://racetime.gg${r.url}" target="_blank" class="rl-race-link">${this.escapeHtml(r.label || r.url)}</a>
+            <span class="text-muted">${r.entrantCount} entrant${r.entrantCount > 1 ? 's' : ''}</span>
+            ${r.entrantNames.length ? `<span class="text-muted">· ${r.entrantNames.slice(0, 2).map(n => this.escapeHtml(n)).join(' vs ')}</span>` : ''}
+          </div>
+          <div class="rl-race-meta">
+            <span class="badge badge-warning">Non liée</span>
+            ${r.startedAt ? `<span class="text-muted">${new Date(r.startedAt).toLocaleDateString('fr-FR')}</span>` : ''}
+          </div>
+        </div>
+        <div class="rl-race-actions">
+          <button class="btn btn-sm btn-ghost" onclick="admin.rlMarkAsQualifier('${this.escapeHtml(r.url)}')" title="Marquer comme qualification">🏅</button>
+        </div>
+      </div>
+    `).join('');
+  },
+
+  /** Show qualifier add modal */
+  rlShowAddQualifier() {
+    const modal = document.getElementById('rl-qualifier-modal');
+    modal.style.display = 'flex';
+    document.getElementById('rl-qualifier-url').value = '';
+
+    // Show unlinked races as pick list
+    const unlinked = this.rlRaces.filter(r => !r.isLinked && !r.isQualifier);
+    const list = document.getElementById('rl-qualifier-unlinked-list');
+    if (!unlinked.length) {
+      list.innerHTML = '<p class="text-muted">Toutes les races sont déjà associées.</p>';
+    } else {
+      list.innerHTML = unlinked.map(r => `
+        <div class="rl-qualifier-pick" onclick="admin.rlPickQualifier('${this.escapeHtml(r.url)}')">
+          <span>${this.escapeHtml(r.label || r.url)}</span>
+          <span class="text-muted">${r.entrantCount} entrant${r.entrantCount > 1 ? 's' : ''} ${r.startedAt ? '· ' + new Date(r.startedAt).toLocaleDateString('fr-FR') : ''}</span>
+        </div>
+      `).join('');
+    }
+  },
+
+  rlPickQualifier(url) {
+    document.getElementById('rl-qualifier-url').value = url;
+  },
+
+  rlCloseQualifierModal() {
+    document.getElementById('rl-qualifier-modal').style.display = 'none';
+  },
+
+  async rlConfirmAddQualifier() {
+    const url = document.getElementById('rl-qualifier-url').value.trim();
+    if (!url) {
+      this.showToast('URL requise', 'error');
+      return;
+    }
+    await this.rlMarkAsQualifier(url);
+    this.rlCloseQualifierModal();
+  },
+
+  async rlShowSuggestions(matchId) {
+    this.rlCurrentMatchId = matchId;
+    const panel = document.getElementById('rl-suggestion-panel');
+    const listEl = document.getElementById('rl-suggestions-list');
+    const infoEl = document.getElementById('rl-suggestion-match-info');
+
+    // Show modal
+    panel.style.display = 'flex';
+    listEl.innerHTML = '<p class="text-muted">Chargement des suggestions...</p>';
+
+    // Find match info
+    const match = this.rlMatches.find(m => String(m._id) === matchId);
+    if (match) {
+      const roundLabel = match.round ? (match.round > 0 ? `Round ${match.round}` : `Losers R${Math.abs(match.round)}`) : '';
+      infoEl.innerHTML = `
+        <div class="rl-suggestion-match-detail">
+          <strong>${this.escapeHtml(match.player1Name)}</strong> vs <strong>${this.escapeHtml(match.player2Name)}</strong>
+          ${match.phase ? ` · ${this.escapeHtml(match.phase)}` : ''}
+          ${roundLabel ? ` · ${roundLabel}` : ''}
+          ${match.displayScore ? ` · ${this.escapeHtml(match.displayScore)}` : ''}
+        </div>
+      `;
+    }
+
+    try {
+      const response = await fetch(`/api/admin/tournaments/${this.rlCurrentTournament._id}/suggestions/${matchId}`, {
+        headers: { 'Authorization': `Bearer ${this.token}` }
+      });
+      if (!response.ok) throw new Error('Failed');
+
+      const data = await response.json();
+      this.rlRenderSuggestions(data);
+    } catch (error) {
+      console.error('Error loading suggestions:', error);
+      listEl.innerHTML = '<p class="text-muted">Erreur lors du chargement des suggestions</p>';
+    }
+  },
+
+  rlRenderSuggestions(data) {
+    const listEl = document.getElementById('rl-suggestions-list');
+
+    if (!data.suggestions.length) {
+      listEl.innerHTML = '<p class="text-muted">Aucune suggestion trouvée. Utilisez le lien manuel ci-dessous.</p>';
+      return;
+    }
+
+    const maxScore = data.suggestions[0]?.score || 1;
+
+    listEl.innerHTML = data.suggestions.map((s, i) => {
+      const barWidth = Math.min(100, Math.round((s.score / maxScore) * 100));
+      const scoreClass = s.score >= 500 ? 'rl-score-high' : s.score >= 300 ? 'rl-score-medium' : 'rl-score-low';
+
+      return `
+        <div class="rl-suggestion-item ${s.isAlreadyLinked ? 'rl-suggestion-linked' : ''}">
+          <div class="rl-suggestion-rank">#${i + 1}</div>
+          <div class="rl-suggestion-info">
+            <div class="rl-suggestion-label">${this.escapeHtml(s.label)}</div>
+            <div class="rl-suggestion-details">
+              <span>${s.entrantCount} entrant${s.entrantCount > 1 ? 's' : ''}</span>
+              ${s.entrantNames.length ? `<span>· ${s.entrantNames.slice(0, 2).map(n => this.escapeHtml(n)).join(' vs ')}</span>` : ''}
+              ${s.startedAt ? `<span>· ${new Date(s.startedAt).toLocaleDateString('fr-FR')}</span>` : ''}
+              ${s.isAlreadyLinked ? '<span class="badge badge-muted">Déjà liée</span>' : ''}
+            </div>
+            <div class="rl-score-bar-container">
+              <div class="rl-score-bar ${scoreClass}" style="width: ${barWidth}%"></div>
+            </div>
+          </div>
+          <div class="rl-suggestion-score">
+            <span class="rl-score-value ${scoreClass}">${s.score}</span>
+          </div>
+          <div class="rl-suggestion-actions">
+            <button class="btn btn-sm btn-primary" onclick="admin.rlLinkRace('${this.escapeHtml(s.raceUrl)}', '${this.escapeHtml(String(admin.rlCurrentMatchId))}')">
+              Lier
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  },
+
+  rlCloseSuggestions() {
+    document.getElementById('rl-suggestion-panel').style.display = 'none';
+    this.rlCurrentMatchId = null;
+  },
+
+  async rlLinkRace(raceUrl, matchId) {
+    if (!this.rlCurrentTournament) return;
+
+    try {
+      const response = await fetch(`/api/admin/tournaments/${this.rlCurrentTournament._id}/link-race`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.token}`
+        },
+        body: JSON.stringify({ raceUrl, matchId })
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error || 'Failed');
+      }
+
+      this.showToast('Race liée avec succès', 'success');
+      this.rlCloseSuggestions();
+      await this.rlSelectTournament(this.rlCurrentTournament._id);
+    } catch (error) {
+      console.error('Error linking race:', error);
+      this.showToast(`Erreur: ${error.message}`, 'error');
+    }
+  },
+
+  async rlUnlinkRace(raceUrl) {
+    if (!this.rlCurrentTournament) return;
+    if (!confirm(`Délier la race ${raceUrl} ?`)) return;
+
+    try {
+      const response = await fetch(`/api/admin/tournaments/${this.rlCurrentTournament._id}/unlink-race`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.token}`
+        },
+        body: JSON.stringify({ raceUrl })
+      });
+
+      if (!response.ok) throw new Error('Failed');
+
+      this.showToast('Race déliée', 'success');
+      await this.rlSelectTournament(this.rlCurrentTournament._id);
+    } catch (error) {
+      console.error('Error unlinking race:', error);
+      this.showToast('Erreur lors du déliage', 'error');
+    }
+  },
+
+  async rlMarkAsQualifier(raceUrl) {
+    if (!this.rlCurrentTournament) return;
+
+    try {
+      const response = await fetch(`/api/admin/tournaments/${this.rlCurrentTournament._id}/link-race`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.token}`
+        },
+        body: JSON.stringify({ raceUrl, isQualifier: true })
+      });
+
+      if (!response.ok) throw new Error('Failed');
+
+      this.showToast('Race marquée comme qualification', 'success');
+      await this.rlSelectTournament(this.rlCurrentTournament._id);
+    } catch (error) {
+      console.error('Error marking as qualifier:', error);
+      this.showToast('Erreur', 'error');
+    }
+  },
+
+  async rlManualLink() {
+    let raceUrl = document.getElementById('rl-manual-race-url')?.value.trim();
+    if (!raceUrl || !this.rlCurrentMatchId || !this.rlCurrentTournament) {
+      this.showToast('URL de race requise', 'error');
+      return;
+    }
+
+    // Normalize: accept full racetime.gg URLs or just the path
+    if (raceUrl.includes('racetime.gg')) {
+      try {
+        raceUrl = new URL(raceUrl).pathname;
+      } catch { /* keep as-is */ }
+    }
+
+    await this.rlLinkRace(raceUrl, this.rlCurrentMatchId);
+    document.getElementById('rl-manual-race-url').value = '';
+  },
+
+  // ==================== AUTO-LINK PREVIEW ====================
+
+  async rlAutoLinkPreview() {
+    if (!this.rlCurrentTournament) return;
+
+    const modal = document.getElementById('rl-autolink-modal');
+    const list = document.getElementById('rl-autolink-list');
+    const summary = document.getElementById('rl-autolink-summary');
+    const confirmBtn = document.getElementById('rl-autolink-confirm');
+    const selectAll = document.getElementById('rl-autolink-select-all');
+
+    modal.style.display = 'flex';
+    list.innerHTML = '<p class="text-muted">Calcul des suggestions en cours...</p>';
+    confirmBtn.disabled = true;
+    selectAll.checked = false;
+    summary.textContent = '';
+
+    try {
+      const response = await fetch(`/api/admin/tournaments/${this.rlCurrentTournament._id}/auto-link-preview`, {
+        headers: { 'Authorization': `Bearer ${this.token}` }
+      });
+      if (!response.ok) throw new Error('Failed');
+
+      const data = await response.json();
+      this.rlAutoLinkData = data.proposals;
+
+      if (!data.proposals.length) {
+        list.innerHTML = '<p class="text-muted">Aucune association possible trouvée.</p>';
+        summary.textContent = `${data.skipped} race(s) ignorée(s)`;
+        return;
+      }
+
+      summary.textContent = `${data.proposals.length} association(s) proposée(s), ${data.skipped} ignorée(s)`;
+
+      list.innerHTML = data.proposals.map((p, i) => {
+        const scoreClass = p.score >= 500 ? 'rl-score-high' : p.score >= 300 ? 'rl-score-medium' : 'rl-score-low';
+        return `
+          <div class="rl-autolink-item" data-index="${i}">
+            <label class="rl-autolink-check">
+              <input type="checkbox" class="form-checkbox rl-autolink-cb" data-index="${i}" checked onchange="admin.rlAutoLinkUpdateCount()">
+            </label>
+            <div class="rl-autolink-info">
+              <div class="rl-autolink-race">
+                <strong>${this.escapeHtml(p.raceLabel)}</strong>
+                <span class="text-muted">${p.raceEntrants} entrant${p.raceEntrants > 1 ? 's' : ''}</span>
+              </div>
+              <div class="rl-autolink-arrow">→</div>
+              <div class="rl-autolink-match">
+                <strong>${this.escapeHtml(p.matchPlayers)}</strong>
+                ${p.matchPhase ? `<span class="text-muted">${this.escapeHtml(p.matchPhase)}</span>` : ''}
+                ${p.matchRound ? `<code>${p.matchRound > 0 ? 'R' + p.matchRound : 'L' + Math.abs(p.matchRound)}</code>` : ''}
+              </div>
+            </div>
+            <div class="rl-autolink-score">
+              <span class="rl-score-value ${scoreClass}">${p.score}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      selectAll.checked = true;
+      this.rlAutoLinkUpdateCount();
+    } catch (error) {
+      console.error('Error loading auto-link preview:', error);
+      list.innerHTML = '<p class="text-muted">Erreur lors du calcul</p>';
+    }
+  },
+
+  rlAutoLinkUpdateCount() {
+    const checked = document.querySelectorAll('.rl-autolink-cb:checked').length;
+    const total = document.querySelectorAll('.rl-autolink-cb').length;
+    const confirmBtn = document.getElementById('rl-autolink-confirm');
+    confirmBtn.disabled = checked === 0;
+    confirmBtn.textContent = `✅ Valider ${checked} association${checked > 1 ? 's' : ''}`;
+  },
+
+  rlAutoLinkToggleAll(checked) {
+    document.querySelectorAll('.rl-autolink-cb').forEach(cb => { cb.checked = checked; });
+    this.rlAutoLinkUpdateCount();
+  },
+
+  rlCloseAutoLinkModal() {
+    document.getElementById('rl-autolink-modal').style.display = 'none';
+    this.rlAutoLinkData = null;
+  },
+
+  async rlConfirmAutoLink() {
+    if (!this.rlCurrentTournament || !this.rlAutoLinkData) return;
+
+    // Get selected items
+    const checkboxes = document.querySelectorAll('.rl-autolink-cb:checked');
+    const selected = [...checkboxes].map(cb => {
+      const idx = parseInt(cb.dataset.index);
+      return this.rlAutoLinkData[idx];
+    }).filter(Boolean);
+
+    if (!selected.length) return;
+
+    const confirmBtn = document.getElementById('rl-autolink-confirm');
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = '⏳ Liaison en cours...';
+
+    try {
+      const response = await fetch(`/api/admin/tournaments/${this.rlCurrentTournament._id}/auto-link-confirm`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.token}`
+        },
+        body: JSON.stringify({ proposals: selected })
+      });
+
+      if (!response.ok) throw new Error('Failed');
+
+      const data = await response.json();
+      this.showToast(`${data.linked} race(s) liée(s) avec succès`, 'success');
+      this.rlCloseAutoLinkModal();
+      await this.rlSelectTournament(this.rlCurrentTournament._id);
+    } catch (error) {
+      console.error('Error confirming auto-link:', error);
+      this.showToast('Erreur lors de la liaison', 'error');
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = '✅ Valider les associations sélectionnées';
+    }
+  },
+
   // ==================== STATISTICS ====================
   
   async loadStatistics() {

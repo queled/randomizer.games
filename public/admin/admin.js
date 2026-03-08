@@ -2299,9 +2299,11 @@ const admin = {
     this.rlInitDragAndDrop();
   },
 
-  /** Initialize drag-and-drop for BO race reordering */
-  rlInitDragAndDrop() {
-    const sortableContainers = document.querySelectorAll('[data-sortable="true"]');
+  /** Initialize drag-and-drop for BO race reordering
+   * @param {Element|Document} [scope=document] - root to search for sortable containers
+   */
+  rlInitDragAndDrop(scope = document) {
+    const sortableContainers = scope.querySelectorAll('[data-sortable="true"]');
     sortableContainers.forEach(container => {
       const items = container.querySelectorAll('.rl-linked-race[draggable="true"]');
       let dragItem = null;
@@ -2357,7 +2359,7 @@ const admin = {
           });
 
           // Save new order
-          const matchId = container.id.replace('rl-match-races-', '');
+          const matchId = dragItem.dataset.matchId || container.id.replace('rl-match-races-', '');
           const newOrder = [...container.querySelectorAll('.rl-linked-race')].map(el => el.dataset.raceUrl);
           admin.rlSaveRaceOrder(matchId, newOrder);
         });
@@ -2523,36 +2525,6 @@ const admin = {
           ${match.displayScore ? ` · ${this.escapeHtml(match.displayScore)}` : ''}
         </div>
       `;
-
-      // Show currently linked races with drag-and-drop reorder
-      const linkedSection = document.getElementById('rl-suggestion-linked-races');
-      const raceUrls = match.raceUrls?.length ? match.raceUrls : (match.raceUrl ? [match.raceUrl] : []);
-      if (raceUrls.length > 0 && linkedSection) {
-        const isSortable = raceUrls.length > 1;
-        linkedSection.innerHTML = `
-          <div class="rl-suggestion-linked-section">
-            <div class="rl-suggestion-linked-header">
-              <span>${raceUrls.length} race${raceUrls.length > 1 ? 's' : ''} liée${raceUrls.length > 1 ? 's' : ''}</span>
-              ${isSortable ? '<span class="text-muted" style="font-size:0.8rem;">⠿ Glisser pour réordonner</span>' : ''}
-            </div>
-            <div class="rl-match-races" id="rl-modal-races-${this.escapeHtml(matchId)}" ${isSortable ? 'data-sortable="true"' : ''}>
-              ${raceUrls.map((url, idx) => `
-                <div class="rl-linked-race" draggable="${isSortable ? 'true' : 'false'}"
-                     data-race-url="${this.escapeHtml(url)}" data-match-id="${this.escapeHtml(matchId)}" data-index="${idx}">
-                  ${isSortable ? `<span class="rl-race-order" title="Manche">⠣ ${idx + 1}</span>` : ''}
-                  <a href="https://racetime.gg${url}" target="_blank" class="rl-race-link">${this.escapeHtml(url)}</a>
-                  <button class="btn btn-sm btn-ghost btn-danger" onclick="event.stopPropagation(); admin.rlUnlinkRace('${this.escapeHtml(url)}')" title="Délier">✕</button>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        `;
-        linkedSection.style.display = 'block';
-        if (isSortable) this.rlInitDragAndDrop();
-      } else if (linkedSection) {
-        linkedSection.innerHTML = '';
-        linkedSection.style.display = 'none';
-      }
     }
 
     try {
@@ -2571,44 +2543,93 @@ const admin = {
 
   rlRenderSuggestions(data) {
     const listEl = document.getElementById('rl-suggestions-list');
+    const matchId = this.rlCurrentMatchId;
 
-    if (!data.suggestions.length) {
+    // Get the raceUrls already linked to THIS match (in their saved order)
+    const match = this.rlMatches.find(m => String(m._id) === matchId);
+    const linkedUrls = match
+      ? (match.raceUrls?.length ? match.raceUrls : (match.raceUrl ? [match.raceUrl] : []))
+      : [];
+    const linkedSet = new Set(linkedUrls);
+    const isBo = linkedUrls.length > 1;
+
+    // Separate suggestions: linked-to-THIS-match vs unlinked suggestions
+    const linkedSuggestions = linkedUrls
+      .map(url => data.suggestions.find(s => s.raceUrl === url))
+      .filter(Boolean);
+    const unlinkedSuggestions = data.suggestions.filter(s => !linkedSet.has(s.raceUrl));
+
+    let html = '';
+
+    // Section 1: races already linked to this match (in manche order, draggable if BO)
+    if (linkedSuggestions.length > 0) {
+      const sortableAttr = isBo ? 'data-sortable="true"' : '';
+      html += `
+        <div class="rl-match-races rl-suggestion-linked-section" id="rl-match-races-modal-${this.escapeHtml(String(matchId))}" data-match-id="${this.escapeHtml(String(matchId))}" ${sortableAttr}>
+          ${linkedSuggestions.map((s, idx) => `
+            <div class="rl-linked-race" draggable="${isBo ? 'true' : 'false'}"
+                 data-race-url="${this.escapeHtml(s.raceUrl)}" data-match-id="${this.escapeHtml(String(matchId))}" data-index="${idx}">
+              <span class="rl-race-order" title="Manche">⠿ ${idx + 1}</span>
+              <div class="rl-suggestion-info" style="flex:1;">
+                <div class="rl-suggestion-label">${this.escapeHtml(s.label)}</div>
+                <div class="rl-suggestion-details">
+                  ${s.entrantNames.length ? `<span>${s.entrantNames.slice(0, 2).map(n => this.escapeHtml(n)).join(' vs ')}</span>` : ''}
+                  ${s.startedAt ? `<span>· ${new Date(s.startedAt).toLocaleDateString('fr-FR')}</span>` : ''}
+                  <a href="https://racetime.gg${s.raceUrl}" target="_blank" class="rl-race-link" style="font-size:0.8rem;">${this.escapeHtml(s.raceUrl)}</a>
+                </div>
+              </div>
+              <button class="btn btn-sm btn-ghost btn-danger" onclick="event.stopPropagation(); admin.rlUnlinkRace('${this.escapeHtml(s.raceUrl)}')" title="Délier">✕</button>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // Section 2: unlinked suggestions
+    if (unlinkedSuggestions.length > 0) {
+      const maxScore = unlinkedSuggestions[0]?.score || 1;
+      html += unlinkedSuggestions.map((s, i) => {
+        const barWidth = Math.min(100, Math.round((s.score / maxScore) * 100));
+        const scoreClass = s.score >= 500 ? 'rl-score-high' : s.score >= 300 ? 'rl-score-medium' : 'rl-score-low';
+        return `
+          <div class="rl-suggestion-item ${s.isAlreadyLinked ? 'rl-suggestion-linked' : ''}">
+            <div class="rl-suggestion-rank">#${i + 1}</div>
+            <div class="rl-suggestion-info">
+              <div class="rl-suggestion-label">${this.escapeHtml(s.label)}</div>
+              <div class="rl-suggestion-details">
+                <span>${s.entrantCount} entrant${s.entrantCount > 1 ? 's' : ''}</span>
+                ${s.entrantNames.length ? `<span>· ${s.entrantNames.slice(0, 2).map(n => this.escapeHtml(n)).join(' vs ')}</span>` : ''}
+                ${s.startedAt ? `<span>· ${new Date(s.startedAt).toLocaleDateString('fr-FR')}</span>` : ''}
+                ${s.isAlreadyLinked ? '<span class="badge badge-muted">Déjà liée</span>' : ''}
+              </div>
+              <div class="rl-score-bar-container">
+                <div class="rl-score-bar ${scoreClass}" style="width: ${barWidth}%"></div>
+              </div>
+            </div>
+            <div class="rl-suggestion-score">
+              <span class="rl-score-value ${scoreClass}">${s.score}</span>
+            </div>
+            <div class="rl-suggestion-actions">
+              <button class="btn btn-sm btn-primary" onclick="admin.rlLinkRace('${this.escapeHtml(s.raceUrl)}', '${this.escapeHtml(String(this.rlCurrentMatchId))}')">
+                Lier
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    if (!html) {
       listEl.innerHTML = '<p class="text-muted">Aucune suggestion trouvée. Utilisez le lien manuel ci-dessous.</p>';
       return;
     }
 
-    const maxScore = data.suggestions[0]?.score || 1;
+    listEl.innerHTML = html;
 
-    listEl.innerHTML = data.suggestions.map((s, i) => {
-      const barWidth = Math.min(100, Math.round((s.score / maxScore) * 100));
-      const scoreClass = s.score >= 500 ? 'rl-score-high' : s.score >= 300 ? 'rl-score-medium' : 'rl-score-low';
-
-      return `
-        <div class="rl-suggestion-item ${s.isAlreadyLinked ? 'rl-suggestion-linked' : ''}">
-          <div class="rl-suggestion-rank">#${i + 1}</div>
-          <div class="rl-suggestion-info">
-            <div class="rl-suggestion-label">${this.escapeHtml(s.label)}</div>
-            <div class="rl-suggestion-details">
-              <span>${s.entrantCount} entrant${s.entrantCount > 1 ? 's' : ''}</span>
-              ${s.entrantNames.length ? `<span>· ${s.entrantNames.slice(0, 2).map(n => this.escapeHtml(n)).join(' vs ')}</span>` : ''}
-              ${s.startedAt ? `<span>· ${new Date(s.startedAt).toLocaleDateString('fr-FR')}</span>` : ''}
-              ${s.isAlreadyLinked ? '<span class="badge badge-muted">Déjà liée</span>' : ''}
-            </div>
-            <div class="rl-score-bar-container">
-              <div class="rl-score-bar ${scoreClass}" style="width: ${barWidth}%"></div>
-            </div>
-          </div>
-          <div class="rl-suggestion-score">
-            <span class="rl-score-value ${scoreClass}">${s.score}</span>
-          </div>
-          <div class="rl-suggestion-actions">
-            <button class="btn btn-sm btn-primary" onclick="admin.rlLinkRace('${this.escapeHtml(s.raceUrl)}', '${this.escapeHtml(String(admin.rlCurrentMatchId))}')">
-              Lier
-            </button>
-          </div>
-        </div>
-      `;
-    }).join('');
+    // Init drag-and-drop for BO reorder inside the modal only (avoids duplicate listeners on main panel)
+    if (isBo && linkedSuggestions.length > 1) {
+      this.rlInitDragAndDrop(document.getElementById('rl-suggestion-panel'));
+    }
   },
 
   rlCloseSuggestions() {

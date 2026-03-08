@@ -1678,23 +1678,28 @@ a:hover {
   font-size: 0.9375rem;
 }
 
-/* Linked races section inside suggestion modal */
+/* Linked races section inside suggestion modal (replaces suggestion items for linked races) */
 .rl-suggestion-linked-section {
   background: rgba(59, 130, 246, 0.06);
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.25);
   border-radius: 8px;
-  padding: 0.75rem 1rem;
+  padding: 0.5rem;
   margin-bottom: 1rem;
+  position: relative;
 }
 
-.rl-suggestion-linked-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.8125rem;
+.rl-suggestion-linked-section::before {
+  content: 'Manche liée';
+  display: block;
+  font-size: 0.75rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
   color: var(--admin-info);
+  padding: 0.25rem 0.5rem 0.5rem;
+  letter-spacing: 0.03em;
+}
+
+.rl-suggestion-linked-section[data-sortable="true"]::before {
+  content: '⠿ Manches liées — glisser pour réordonner';
 }
 
 /* Auto-link preview */

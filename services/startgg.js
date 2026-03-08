@@ -391,6 +391,97 @@ class StartGGAPI {
   }
 
   /**
+   * Search tournaments by name/keyword.
+   * @param {string} name - search term
+   * @param {number} perPage - results per page (max 100)
+   * @param {number} page - page number (1-based)
+   * @param {Object} extraFilter - additional filter fields (afterDate, beforeDate, videogameIds…)
+   * @returns {Object} { tournaments, totalPages, total }
+   */
+  async searchTournaments(name, { perPage = 25, page = 1, afterDate = null, beforeDate = null, videogameIds = null } = {}) {
+    const filter = {};
+    if (name) filter.name = name;
+    if (afterDate) filter.afterDate = Math.floor(new Date(afterDate).getTime() / 1000);
+    if (beforeDate) filter.beforeDate = Math.floor(new Date(beforeDate).getTime() / 1000);
+    if (videogameIds && videogameIds.length) filter.videogameIds = videogameIds;
+
+    const q = `
+      query SearchTournaments($perPage: Int!, $page: Int!, $filter: TournamentPageFilter) {
+        tournaments(query: {
+          perPage: $perPage,
+          page: $page,
+          filter: $filter
+        }) {
+          pageInfo {
+            total
+            totalPages
+            page
+            perPage
+          }
+          nodes {
+            id
+            name
+            slug
+            startAt
+            endAt
+            numAttendees
+            state
+            events {
+              id
+              name
+              slug
+              numEntrants
+              state
+              videogame {
+                id
+                name
+                displayName
+              }
+            }
+          }
+        }
+      }
+    `;
+
+    const data = await this.query(q, { perPage, page, filter });
+    const result = data.tournaments || {};
+    return {
+      tournaments: (result.nodes || []).map(t => ({
+        id: t.id,
+        name: t.name,
+        slug: t.slug,
+        startDate: t.startAt ? new Date(t.startAt * 1000) : null,
+        endDate: t.endAt ? new Date(t.endAt * 1000) : null,
+        numAttendees: t.numAttendees,
+        state: t.state,
+        events: (t.events || []).map(e => ({
+          id: e.id,
+          name: e.name,
+          slug: e.slug,
+          numEntrants: e.numEntrants,
+          state: e.state,
+          game: e.videogame ? {
+            id: e.videogame.id,
+            name: e.videogame.displayName || e.videogame.name
+          } : null
+        }))
+      })),
+      totalPages: result.pageInfo?.totalPages || 0,
+      total: result.pageInfo?.total || 0
+    };
+  }
+
+  /**
+   * Search tournaments by videogame ID(s) on start.gg.
+   * @param {Array<number>} videogameIds
+   * @param {Object} options
+   * @returns {Object} { tournaments, totalPages, total }
+   */
+  async searchTournamentsByGame(videogameIds, options = {}) {
+    return this.searchTournaments(null, { ...options, videogameIds });
+  }
+
+  /**
    * Extract tournament slug from start.gg URL
    */
   static extractSlugFromUrl(url) {

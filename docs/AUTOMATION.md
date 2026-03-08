@@ -11,15 +11,20 @@ Ce document décrit l'architecture d'automatisation complète du site Randomizer
 │                                                                                 │
 │  ┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐        │
 │  │  rando-list      │     │  racetime.gg     │     │  challonge.com   │        │
-│  │  (GitHub)        │     │  (API)           │     │  (API)           │        │
+│  │  (GitHub)        │     │  (API)           │     │  (API v1)        │        │
 │  └────────┬─────────┘     └────────┬─────────┘     └────────┬─────────┘        │
 │           │                        │                        │                   │
 │           ▼                        ▼                        ▼                   │
 │  ┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐        │
-│  │ Workflow         │     │ Workflow         │     │ Import manuel    │        │
-│  │ sync-rando-list  │     │ sync-racetime    │     │ (scripts)        │        │
-│  │ (1x/jour)        │     │ (5 min)          │     │                  │        │
+│  │ Workflow         │     │ Workflow         │     │ sync-tournaments │        │
+│  │ sync-rando-list  │     │ sync-racetime    │     │ discover-tourn.  │        │
+│  │ (1x/jour)        │     │ (5 min)          │     │ (1x/jour)        │        │
 │  └────────┬─────────┘     └────────┬─────────┘     └────────┬─────────┘        │
+│           │                        │                        │                   │
+│           │                        │              ┌─────────┴─────────┐        │
+│           │                        │              │  start.gg         │        │
+│           │                        │              │  (GraphQL API)    │        │
+│           │                        │              └─────────┬─────────┘        │
 │           │                        │                        │                   │
 │           └────────────────┬───────┴────────────────────────┘                   │
 │                            ▼                                                    │
@@ -80,14 +85,83 @@ Ce document décrit l'architecture d'automatisation complète du site Randomizer
 3. Insérer/mettre à jour les courses en BDD
 4. Respecter les rate limits (1.5s entre requêtes)
 
+### 3. sync-tournaments (Quotidien ou manuel)
+
+**Objectif**: Découvrir et importer automatiquement les tournois "Randomizer" et "Multiworld" depuis start.gg et challonge.com.
+
+**Déclencheurs**:
+- ⏰ Cron: `0 4 * * *` (tous les jours à 4h00 UTC) – recommandé
+- 🔘 Manuel: `npm run sync:tournaments` ou `npm run discover:tournaments`
+
+**Architecture**:
+
+```
+discover-tournaments.js          sync-tournaments.js
+    │                                │
+    ├── Cherche sur start.gg         ├── Met à jour les tournois actifs
+    │   (GraphQL search API)         │   (re-fetch participants/matches)
+    │                                │
+    ├── Cherche sur Challonge        ├── Découvre les nouveaux tournois
+    │   (REST API v1)                │   (délègue à discover-tournaments.js)
+    │                                │
+    ├── Filtre par mots-clés         └── Conçu pour exécution cron
+    │   "randomizer", "multiworld"
+    │   + noms de jeux de la BDD
+    │
+    └── Importe & upsert en BDD
+```
+
+**Scripts**:
+
+| Commande | Description |
+|----------|-------------|
+| `npm run discover:tournaments` | Découverte complète (toutes sources) |
+| `npm run discover:tournaments:dry` | Mode aperçu sans import |
+| `npm run discover:tournaments:startgg` | Start.gg uniquement |
+| `npm run discover:tournaments:challonge` | Challonge uniquement |
+| `npm run sync:tournaments` | Sync automatique (mise à jour + découverte) |
+| `npm run sync:tournaments:dry` | Sync en mode aperçu |
+| `npm run import:startgg <url>` | Import d'un tournoi start.gg spécifique |
+| `npm run import:challonge <id>` | Import d'un tournoi Challonge spécifique |
+
+**Options CLI**:
+```bash
+node scripts/discover-tournaments.js --source startgg     # Source unique
+node scripts/discover-tournaments.js --since 2024-01-01   # Depuis une date
+node scripts/discover-tournaments.js --game ootr           # Un seul jeu
+node scripts/discover-tournaments.js --max-pages 5         # Limiter la pagination
+node scripts/discover-tournaments.js --keywords "keyword"  # Mots-clés supplémentaires
+node scripts/sync-tournaments.js --days 7                  # Derniers N jours
+node scripts/sync-tournaments.js --update-only             # Mise à jour uniquement
+```
+
+**Détection des tournois randomizer**:
+Le script identifie les tournois via :
+1. Mots-clés de base : `randomizer`, `randomiser`, `rando`, `multiworld`, `archipelago`…
+2. Noms des jeux présents en BDD (nom court, tinyName, etc.)
+3. Noms de jeu start.gg / gameName Challonge
+4. Helper `findGameForTournament()` pour le mapping vers les jeux internes
+
+**Variables d'environnement requises**:
+```bash
+STARTGG_API_TOKEN=xxx     # Token API start.gg (GraphQL)
+CHALLONGE_API_KEY=xxx     # Clé API Challonge v1
+CHALLONGE_USERNAME=xxx    # Username Challonge (pour listing)
+```
+
 ## 📁 Structure des scripts
 
 ```
 scripts/
-├── sync-rando-list-v3.js      # Sync principal avec rando-list
-├── check-rando-list-changes.js # Détection des changements
+├── sync-rando-list-v3.js        # Sync principal avec rando-list
+├── check-rando-list-changes.js  # Détection des changements
 ├── sync-racetime-incremental.js # Sync races (5 min)
-├── sync-racetime-all.js        # Sync complet des races
+├── sync-racetime-all.js         # Sync complet des races
+├── sync-racetime-game.js        # Sync races pour un jeu
+├── discover-tournaments.js      # Découverte de tournois (start.gg + challonge)
+├── sync-tournaments.js          # Sync automatique des tournois (cron)
+├── import-startgg.js            # Import d'un tournoi start.gg spécifique
+├── import-challonge.js          # Import d'un tournoi Challonge spécifique
 ├── sync-racetime-game.js       # Sync races pour un jeu
 └── detect-new-racetime-categories.js # (à créer si besoin)
 ```

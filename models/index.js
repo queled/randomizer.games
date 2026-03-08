@@ -118,6 +118,21 @@ const gameSchema = new mongoose.Schema({
       confidence: { type: String, enum: ['manual', 'auto'], default: 'manual' },
       lastSync: Date,
       notFound: { type: Boolean, default: false } // True si pas de catégorie Twitch trouvée
+    },
+    startgg: {
+      enabled: { type: Boolean, default: false },
+      videogameId: Number,          // start.gg videogame ID for this game
+      searchKeywords: [String],     // Extra keywords to search for this game's tournaments
+      confidence: { type: String, enum: ['manual', 'auto'], default: 'manual' },
+      lastSync: Date
+    },
+    challonge: {
+      enabled: { type: Boolean, default: false },
+      gameId: Number,               // Challonge game_id for this game
+      subdomain: String,            // Organisation subdomain (e.g. "ootrmm") if applicable
+      searchKeywords: [String],     // Extra keywords to search for this game's tournaments
+      confidence: { type: String, enum: ['manual', 'auto'], default: 'manual' },
+      lastSync: Date
     }
   },
   

@@ -94,6 +94,54 @@ class ChallongeAPI {
   }
 
   /**
+   * List all tournaments accessible to the authenticated user.
+   * Supports filtering by state and created_after.
+   * @param {Object} options
+   * @param {string}  options.state - 'all', 'pending', 'underway', 'ended' (default: 'all')
+   * @param {string}  options.createdAfter - ISO date string, only return tournaments created after this date
+   * @param {string}  options.subdomain - (optional) organisation subdomain on Challonge
+   * @returns {Array} formatted tournament list
+   */
+  async listTournaments({ state = 'all', createdAfter = null, subdomain = null } = {}) {
+    try {
+      const params = {
+        api_key: this.apiKey,
+        state
+      };
+      if (createdAfter) params.created_after = createdAfter;
+      if (subdomain) params.subdomain = subdomain;
+
+      const response = await axios.get(
+        `${this.baseURL}/tournaments.json`,
+        { params }
+      );
+
+      return (response.data || []).map(t => this.formatTournament(t.tournament));
+    } catch (error) {
+      console.error('Error listing Challonge tournaments:', error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * Filter tournaments by keywords in name/description.
+   * Fetches all tournaments from the authenticated account and filters locally.
+   * @param {Array<string>} keywords - words to match (OR logic)
+   * @param {Object} options - same as listTournaments
+   * @returns {Array} matching tournaments
+   */
+  async searchTournaments(keywords = [], options = {}) {
+    const all = await this.listTournaments(options);
+    if (!keywords.length) return all;
+
+    const lowerKeywords = keywords.map(k => k.toLowerCase());
+    return all.filter(t => {
+      const text = `${t.name || ''} ${t.description || ''} ${t.gameName || ''}`.toLowerCase();
+      return lowerKeywords.some(kw => text.includes(kw));
+    });
+  }
+
+  /**
    * Format tournament data
    */
   formatTournament(tournament) {

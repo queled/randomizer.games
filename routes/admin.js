@@ -1402,8 +1402,11 @@ router.get('/tournaments/:id/linking', requireAdmin, async (req, res, next) => {
       }));
     }
 
-    // Get races for this tournament
-    const races = await Race.find({ tournamentId: tournament._id })
+    // Get races for this tournament (exclude pending & cancelled for linking overview)
+    const races = await Race.find({
+      tournamentId: tournament._id,
+      status: { $nin: ['pending', 'cancelled'] }
+    })
       .sort({ startedAt: -1 })
       .lean();
 
@@ -1497,8 +1500,18 @@ router.get('/tournaments/:id/suggestions/:matchId', requireAdmin, async (req, re
 
     if (!match) return res.status(404).json({ error: 'Match not found' });
 
-    // Get all races for this tournament
-    const races = await Race.find({ tournamentId: tournament._id }).lean();
+    // Skip TBD matches — no players determined yet
+    const p1Name = match.player1Name || match.player1?.name || '';
+    const p2Name = match.player2Name || match.player2?.name || '';
+    if (!p1Name || !p2Name || p1Name === 'TBD' || p2Name === 'TBD') {
+      return res.json({ matchId: req.params.matchId, player1: p1Name || 'TBD', player2: p2Name || 'TBD', suggestions: [] });
+    }
+
+    // Get all linkable races for this tournament (exclude pending & cancelled)
+    const races = await Race.find({
+      tournamentId: tournament._id,
+      status: { $nin: ['pending', 'cancelled'] }
+    }).lean();
 
     // Score each race against this match
     const suggestions = [];
@@ -1716,10 +1729,17 @@ router.get('/tournaments/:id/auto-link-preview', requireAdmin, async (req, res, 
     let skipped = 0;
 
     if (isStartgg && Array.isArray(tournament.matches)) {
-      const liveMatches = tournament.matches.map(m => ({ ...m }));
+      const liveMatches = tournament.matches
+        .filter(m => {
+          const p1 = m.player1?.name || '';
+          const p2 = m.player2?.name || '';
+          return p1 && p2 && p1 !== 'TBD' && p2 !== 'TBD';
+        })
+        .map(m => ({ ...m }));
 
       for (const race of races) {
         if (race.startggSetId) { skipped++; continue; }
+        if (['pending', 'cancelled'].includes(race.status)) { skipped++; continue; }
         const stageInfo = parseRaceStageInfo(race);
         if (stageInfo.type === 'qualifier') { skipped++; continue; }
 
@@ -1757,10 +1777,17 @@ router.get('/tournaments/:id/auto-link-preview', requireAdmin, async (req, res, 
       }
     } else {
       const allMatches = await Match.find({ tournamentId: tournament._id }).lean();
-      const liveMatches = allMatches.map(m => ({ ...m }));
+      const liveMatches = allMatches
+        .filter(m => {
+          const p1 = m.player1Name || '';
+          const p2 = m.player2Name || '';
+          return p1 && p2 && p1 !== 'TBD' && p2 !== 'TBD';
+        })
+        .map(m => ({ ...m }));
 
       for (const race of races) {
         if (race.matchId) { skipped++; continue; }
+        if (['pending', 'cancelled'].includes(race.status)) { skipped++; continue; }
 
         const scored = rankMatchesForRace(race, liveMatches, {
           requireDirect: true,

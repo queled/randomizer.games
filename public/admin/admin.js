@@ -2523,6 +2523,36 @@ const admin = {
           ${match.displayScore ? ` · ${this.escapeHtml(match.displayScore)}` : ''}
         </div>
       `;
+
+      // Show currently linked races with drag-and-drop reorder
+      const linkedSection = document.getElementById('rl-suggestion-linked-races');
+      const raceUrls = match.raceUrls?.length ? match.raceUrls : (match.raceUrl ? [match.raceUrl] : []);
+      if (raceUrls.length > 0 && linkedSection) {
+        const isSortable = raceUrls.length > 1;
+        linkedSection.innerHTML = `
+          <div class="rl-suggestion-linked-section">
+            <div class="rl-suggestion-linked-header">
+              <span>${raceUrls.length} race${raceUrls.length > 1 ? 's' : ''} liée${raceUrls.length > 1 ? 's' : ''}</span>
+              ${isSortable ? '<span class="text-muted" style="font-size:0.8rem;">⠿ Glisser pour réordonner</span>' : ''}
+            </div>
+            <div class="rl-match-races" id="rl-modal-races-${this.escapeHtml(matchId)}" ${isSortable ? 'data-sortable="true"' : ''}>
+              ${raceUrls.map((url, idx) => `
+                <div class="rl-linked-race" draggable="${isSortable ? 'true' : 'false'}"
+                     data-race-url="${this.escapeHtml(url)}" data-match-id="${this.escapeHtml(matchId)}" data-index="${idx}">
+                  ${isSortable ? `<span class="rl-race-order" title="Manche">⠣ ${idx + 1}</span>` : ''}
+                  <a href="https://racetime.gg${url}" target="_blank" class="rl-race-link">${this.escapeHtml(url)}</a>
+                  <button class="btn btn-sm btn-ghost btn-danger" onclick="event.stopPropagation(); admin.rlUnlinkRace('${this.escapeHtml(url)}')" title="Délier">✕</button>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+        linkedSection.style.display = 'block';
+        if (isSortable) this.rlInitDragAndDrop();
+      } else if (linkedSection) {
+        linkedSection.innerHTML = '';
+        linkedSection.style.display = 'none';
+      }
     }
 
     try {

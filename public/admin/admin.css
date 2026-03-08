@@ -1678,6 +1678,25 @@ a:hover {
   font-size: 0.9375rem;
 }
 
+/* Linked races section inside suggestion modal */
+.rl-suggestion-linked-section {
+  background: rgba(59, 130, 246, 0.06);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.rl-suggestion-linked-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--admin-info);
+}
+
 /* Auto-link preview */
 .rl-autolink-controls {
   display: flex;

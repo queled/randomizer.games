@@ -79,21 +79,70 @@ function getSetGameCount(match) {
   return { gamesPlayed: parsed.gamesPlayed, bestOf: parsed.bestOf };
 }
 
+function uniqueByUrl(races) {
+  const seen = new Set();
+  const result = [];
+  for (const race of races) {
+    if (!race?.url || seen.has(race.url)) continue;
+    seen.add(race.url);
+    result.push(race);
+  }
+  return result;
+}
+
+/**
+ * Load all candidate races: those attached to the tournament AND nearby
+ * 1v1 / group / bracket races that may not have tournamentId yet.
+ */
+async function loadCandidateRaces(Race, tournament, extraRaceUrls = []) {
+  const attachedRaces = await Race.find({ tournamentId: tournament._id }).lean();
+
+  const embeddedMatches = Array.isArray(tournament.matches) ? tournament.matches : [];
+  const completedDates = embeddedMatches
+    .map((m) => m.completedAt || null)
+    .filter(Boolean)
+    .map((d) => new Date(d).getTime())
+    .filter((v) => !Number.isNaN(v));
+
+  const minDate = completedDates.length ? new Date(Math.min(...completedDates) - (14 * 24 * 60 * 60 * 1000)) : null;
+  const maxDate = completedDates.length ? new Date(Math.max(...completedDates) + (14 * 24 * 60 * 60 * 1000)) : null;
+
+  const categorySet = new Set(attachedRaces.map((race) => race.category).filter(Boolean));
+  const categories = [...categorySet];
+
+  const nearbyQuery = categories.length ? {
+    category: { $in: categories },
+    ...(minDate && maxDate ? { startedAt: { $gte: minDate, $lte: maxDate } } : {}),
+    $or: [
+      { info: /^(Group|Preliminary Bracket|Main Bracket)/i },
+      { matchPlayers: { $exists: true, $ne: null } },
+      { startggSetId: { $exists: true, $ne: null } },
+      { $expr: { $eq: [{ $size: { $ifNull: ['$entrants', []] } }, 2] } }
+    ]
+  } : null;
+
+  const nearbyRaces = nearbyQuery ? await Race.find(nearbyQuery).lean() : [];
+
+  // Extra races provided via --race-url
+  const extraRaces = extraRaceUrls.length ? await Race.find({ url: { $in: extraRaceUrls } }).lean() : [];
+
+  return uniqueByUrl([...attachedRaces, ...nearbyRaces, ...extraRaces]);
+}
+
 async function processTournament(tournament, { Race }, options) {
   const { dryRun, explore } = options;
-  const raceQuery = { $or: [{ tournamentId: tournament._id }] };
-  if (options.raceUrls?.length) {
-    raceQuery.$or.push({ url: { $in: options.raceUrls } });
-  }
-  const races = await Race.find(raceQuery).lean();
+
+  const races = await loadCandidateRaces(Race, tournament, options.raceUrls || []);
   const matches = Array.isArray(tournament.matches) ? tournament.matches : [];
+  // In-memory copy to track links during the run (prevents false positives)
+  const liveMatches = matches.map((m) => ({ ...m }));
   const stats = { linked: 0, skipped: 0, ambiguous: 0, explored: 0 };
 
   // Track which races are linked to each set (for BO3 logging)
   const setLinks = new Map(); // startggSetId -> [{ raceUrl, score }]
 
   console.log(`\n🏁 ${tournament.name}`);
-  console.log(`   races=${races.length} embeddedMatches=${matches.length}`);
+  console.log(`   races=${races.length} embeddedMatches=${liveMatches.length}`);
 
   for (const race of races) {
     const extracted = extractRaceEntrants(race, { requireDirect: true });
@@ -112,8 +161,8 @@ async function processTournament(tournament, { Race }, options) {
         continue;
       }
 
-      const explorationMatches = getExplorationMatches(race, matches);
-      const exploratoryScores = rankMatchesForRace(race, explorationMatches.length ? explorationMatches : matches, {
+      const explorationMatches = getExplorationMatches(race, liveMatches);
+      const exploratoryScores = rankMatchesForRace(race, explorationMatches.length ? explorationMatches : liveMatches, {
         requireDirect: false,
         allowOccupiedMatchReassign: false
       });
@@ -127,8 +176,8 @@ async function processTournament(tournament, { Race }, options) {
       continue;
     }
 
-    const candidateMatches = getExplorationMatches(race, matches);
-    const scored = rankMatchesForRace(race, candidateMatches.length ? candidateMatches : matches, {
+    const candidateLiveMatches = getExplorationMatches(race, liveMatches);
+    const scored = rankMatchesForRace(race, candidateLiveMatches.length ? candidateLiveMatches : liveMatches, {
       requireDirect: true,
       allowOccupiedMatchReassign: false
     });
@@ -140,7 +189,7 @@ async function processTournament(tournament, { Race }, options) {
     }
 
     const chosen = selectBestCandidate(scored, {
-      threshold: 320,
+      threshold: 500,
       minGap: 80,
       raceUrl: race.url
     });
@@ -161,9 +210,19 @@ async function processTournament(tournament, { Race }, options) {
 
     console.log(`   ✅ ${race.url} -> set ${setId} score=${chosen.score} (${chosenPlayers.player1} vs ${chosenPlayers.player2})${gameLabel}${dryRun ? ' [DRY-RUN]' : ''}`);
 
-    // Track this link
+    // Track this link and update liveMatches to prevent false positives on subsequent races
     if (!setLinks.has(setId)) setLinks.set(setId, []);
     setLinks.get(setId).push({ raceUrl: race.url, score: chosen.score });
+
+    // Update in-memory match to reflect the new link (prevents double-linking single-game sets)
+    const liveMatchIdx = liveMatches.findIndex((m) => m.startggSetId === setId);
+    if (liveMatchIdx >= 0) {
+      const prev = liveMatches[liveMatchIdx];
+      if (!prev.raceUrl) {
+        // First link: set raceUrl
+        liveMatches[liveMatchIdx] = { ...prev, raceUrl: race.url };
+      }
+    }
 
     if (!dryRun) {
       // Update Race
@@ -184,7 +243,7 @@ async function processTournament(tournament, { Race }, options) {
       );
 
       // Update embedded match: add to raceUrls array, keep raceUrl as primary
-      const isFirstLink = !setLinks.get(setId) || setLinks.get(setId).length <= 1;
+      const isFirstLink = setLinks.get(setId).length <= 1;
       const updateOps = {
         $addToSet: { 'matches.$[m].raceUrls': race.url },
         $currentDate: { updatedAt: true }

@@ -56,6 +56,64 @@ function getRaceLabel(race) {
   return String(race?.info || '').split('\n')[0].trim() || String(race?.name || '').trim() || String(race?.url || '').trim();
 }
 
+/**
+ * Parse "A vs B, game 3" → { players, gameNumber }
+ * Also handles "A vs B" without game number.
+ */
+function parseVsAndGame(text) {
+  const raw = String(text || '').trim();
+  const gameMatch = /,\s*game\s+(\d+)\s*$/i.exec(raw);
+  const gameNumber = gameMatch ? Number(gameMatch[1]) : null;
+  const cleanText = gameMatch ? raw.slice(0, gameMatch.index).trim() : raw;
+  return {
+    players: parseVsText(cleanText),
+    gameNumber
+  };
+}
+
+/**
+ * Parse start.gg displayScore like "PlayerA 2 - PlayerB 1" or "PlayerA W - PlayerB L"
+ * Returns { score1, score2, gamesPlayed, bestOf } or null.
+ */
+function parseStartggDisplayScore(displayScore) {
+  if (!displayScore || typeof displayScore !== 'string') return null;
+  const ds = displayScore.trim();
+  if (ds === 'DQ') return null;
+
+  const parts = ds.split(' - ');
+  if (parts.length !== 2) return null;
+
+  const p1Part = parts[0].trim();
+  const p2Part = parts[1].trim();
+
+  const p1ScoreMatch = p1Part.match(/\s+(\d+)$/);
+  const p2ScoreMatch = p2Part.match(/\s+(\d+)$/);
+  const p1W = p1Part.endsWith(' W');
+  const p2W = p2Part.endsWith(' W');
+
+  let score1 = null;
+  let score2 = null;
+
+  if (p1ScoreMatch && p2ScoreMatch) {
+    score1 = parseInt(p1ScoreMatch[1], 10);
+    score2 = parseInt(p2ScoreMatch[1], 10);
+  } else if (p1W || p2W) {
+    score1 = p1W ? 1 : 0;
+    score2 = p2W ? 1 : 0;
+  }
+
+  if (score1 === null || score2 === null) return null;
+
+  const gamesPlayed = score1 + score2;
+  const maxWins = Math.max(score1, score2);
+  let bestOf = null;
+  if (maxWins === 1 && gamesPlayed === 1) bestOf = 1;
+  else if (maxWins === 2) bestOf = 3;
+  else if (maxWins === 3) bestOf = 5;
+
+  return { score1, score2, gamesPlayed, bestOf };
+}
+
 function parseRaceStageInfo(race) {
   const label = getRaceLabel(race);
   const lower = label.toLowerCase();
@@ -69,28 +127,46 @@ function parseRaceStageInfo(race) {
     };
   }
 
-  const groupMatch = /^group\s+(\d+)\s+(openers|winners|losers|decider|finals?)\s*:\s*(.+)$/i.exec(label);
+  const groupMatch = /^group\s+(\d+)\s+(openers|winners|losers|decider|finals?|tiebreakers?)\s*:\s*(.+)$/i.exec(label);
   if (groupMatch) {
+    const vsAndGame = parseVsAndGame(groupMatch[3]);
     return {
       type: 'group-match',
       label,
       group: groupMatch[1],
-      stage: groupMatch[2].toLowerCase(),
-      players: parseVsText(groupMatch[3])
+      stage: groupMatch[2].toLowerCase().replace(/s$/, ''),
+      players: vsAndGame.players,
+      gameNumber: vsAndGame.gameNumber
     };
   }
 
   if (lower.startsWith('preliminary bracket')) {
+    const vsAndGame = parseVsAndGame(label);
     return {
       type: 'preliminary-match',
       label,
-      players: parseVsText(label)
+      players: vsAndGame.players,
+      gameNumber: vsAndGame.gameNumber
     };
   }
 
+  if (lower.startsWith('main bracket')) {
+    const vsAndGame = parseVsAndGame(label);
+    return {
+      type: 'main-bracket-match',
+      label,
+      players: vsAndGame.players,
+      gameNumber: vsAndGame.gameNumber
+    };
+  }
+
+  // Generic fallback: try to detect "game N" and "A vs B" in any label
+  const vsAndGame = parseVsAndGame(label);
   return {
     type: 'unknown',
-    label
+    label,
+    players: vsAndGame.players,
+    gameNumber: vsAndGame.gameNumber
   };
 }
 
@@ -134,6 +210,16 @@ function extractRaceEntrants(race, options = {}) {
   }
 
   if (stageInfo.type === 'preliminary-match' && stageInfo.players) {
+    return {
+      entrants: stageInfo.players,
+      source: 'stage-label',
+      entrantCount: rawEntrants.length,
+      direct: true,
+      stageInfo
+    };
+  }
+
+  if (stageInfo.type === 'main-bracket-match' && stageInfo.players) {
     return {
       entrants: stageInfo.players,
       source: 'stage-label',
@@ -317,14 +403,23 @@ function scoreRaceAgainstMatch(race, match, options = {}) {
     if (stage === 'winners' && round === 2) total += 160;
     if (stage === 'losers' && round < 0) total += 160;
     if (stage === 'decider' && round < 0) total += 140;
+    if (stage === 'tiebreaker' && round < 0) total += 140;
+  }
+
+  if (extracted.stageInfo?.type === 'main-bracket-match') {
+    if (String(match?.phase || '').toLowerCase() === 'main bracket') total += 120;
+    else total -= 80;
   }
 
   if (extracted.stageInfo?.type === 'qualifier') {
     total -= 500;
   }
 
+  // Check raceUrl AND raceUrls array for occupied match detection
   const matchRaceUrl = getMatchRaceUrl(match);
-  if (matchRaceUrl && race?.url && matchRaceUrl !== race.url) {
+  const matchRaceUrls = Array.isArray(match?.raceUrls) ? match.raceUrls : [];
+  const raceAlreadyLinked = matchRaceUrl === race?.url || matchRaceUrls.includes(race?.url);
+  if (matchRaceUrl && race?.url && !raceAlreadyLinked) {
     total -= options.allowOccupiedMatchReassign ? 250 : 600;
   }
 
@@ -402,8 +497,10 @@ function selectBestCandidate(scored, options = {}) {
 module.exports = {
   normalizeName,
   parseVsText,
+  parseVsAndGame,
   getRaceLabel,
   parseRaceStageInfo,
+  parseStartggDisplayScore,
   extractRaceEntrants,
   scoreNameMatch,
   scoreRaceAgainstMatch,

@@ -1469,14 +1469,28 @@ function attachMatchTooltip(card, match, parsedScores) {
   card.addEventListener('mouseleave', hide);
 }
 
-// Find all races linked to a match (by matchId or by raceUrl)
+// Find all races linked to a match (by matchId, startggSetId, raceUrls, or raceUrl)
 function findRacesForMatch(match, races) {
   if (!races || races.length === 0) return [];
   
   const matchId = match._id || match.id || null;
   const normalizeUrl = u => (u || '').toString().replace(/^\/+/, '').toLowerCase();
   
-  // First, find races by matchId
+  // First, find races by startggSetId (start.gg tournaments, supports BO3)
+  if (match.startggSetId) {
+    const setId = String(match.startggSetId);
+    const bySetId = races.filter(r => r.startggSetId && String(r.startggSetId) === setId);
+    if (bySetId.length > 0) {
+      bySetId.sort((a, b) => {
+        const dateA = a.startedAt ? new Date(a.startedAt).getTime() : 0;
+        const dateB = b.startedAt ? new Date(b.startedAt).getTime() : 0;
+        return dateA - dateB;
+      });
+      return bySetId;
+    }
+  }
+
+  // Then, find races by matchId (Challonge matches)
   let matchedRaces = races.filter(r => {
     if (r.matchId && matchId) {
       return String(r.matchId) === String(matchId);
@@ -1484,7 +1498,16 @@ function findRacesForMatch(match, races) {
     return false;
   });
   
-  // If no races found by matchId and match has raceUrl, find by URL
+  // If no races found, try raceUrls array (BO3 support for start.gg)
+  if (matchedRaces.length === 0 && match.raceUrls && match.raceUrls.length > 0) {
+    const targets = match.raceUrls.map(u => normalizeUrl(u));
+    matchedRaces = races.filter(r => {
+      const ru = normalizeUrl(r.url);
+      return targets.some(t => ru === t || ru.endsWith(t) || t.endsWith(ru));
+    });
+  }
+
+  // Fallback: single raceUrl
   if (matchedRaces.length === 0 && match.raceUrl) {
     const target = normalizeUrl(match.raceUrl);
     const slug = target.split('/').filter(Boolean).pop();

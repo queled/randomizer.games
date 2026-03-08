@@ -6,6 +6,9 @@
  * like a 1v1 set (exactly 2 entrants or an explicit "A vs B" pattern).
  * Large multi-entrant rooms are intentionally left at tournament-level only.
  *
+ * Supports BO3/BO5: multiple races can be linked to the same set.
+ * Each race gets startggSetId; the embedded match accumulates raceUrls[].
+ *
  * Usage:
  *   node scripts/link-startgg-races.js <tournamentId>
  *   node scripts/link-startgg-races.js <tournamentId> --dry-run
@@ -23,7 +26,8 @@ const {
   getMatchPlayers,
   extractRaceEntrants,
   getRaceLabel,
-  parseRaceStageInfo
+  parseRaceStageInfo,
+  parseStartggDisplayScore
 } = require('../helpers/race-match-linking');
 
 function parseArgs() {
@@ -56,13 +60,23 @@ function getExplorationMatches(race, matches) {
       String(match.phaseGroup || '') === String(stageInfo.group)
     ));
   }
-  if (label.startsWith('qualifier')) {
-    return matches.filter((match) => String(match.phase || '').toLowerCase() === 'preliminary bracket');
+  if (stageInfo.type === 'main-bracket-match') {
+    return matches.filter((match) => String(match.phase || '').toLowerCase() === 'main bracket');
   }
   if (race.tournamentPhase) {
     return matches.filter((match) => String(match.phase || '').toLowerCase() === String(race.tournamentPhase || '').toLowerCase());
   }
   return matches;
+}
+
+/**
+ * Determine how many games are expected for a set based on displayScore.
+ * Returns { gamesPlayed, bestOf } or null if can't determine.
+ */
+function getSetGameCount(match) {
+  const parsed = parseStartggDisplayScore(match.displayScore);
+  if (!parsed) return null;
+  return { gamesPlayed: parsed.gamesPlayed, bestOf: parsed.bestOf };
 }
 
 async function processTournament(tournament, { Race }, options) {
@@ -74,6 +88,9 @@ async function processTournament(tournament, { Race }, options) {
   const races = await Race.find(raceQuery).lean();
   const matches = Array.isArray(tournament.matches) ? tournament.matches : [];
   const stats = { linked: 0, skipped: 0, ambiguous: 0, explored: 0 };
+
+  // Track which races are linked to each set (for BO3 logging)
+  const setLinks = new Map(); // startggSetId -> [{ raceUrl, score }]
 
   console.log(`\n🏁 ${tournament.name}`);
   console.log(`   races=${races.length} embeddedMatches=${matches.length}`);
@@ -138,15 +155,24 @@ async function processTournament(tournament, { Race }, options) {
     }
 
     const chosenPlayers = getMatchPlayers(chosen.match);
-    console.log(`   ✅ ${race.url} -> set ${chosen.match.startggSetId} score=${chosen.score} (${chosenPlayers.player1} vs ${chosenPlayers.player2})${dryRun ? ' [DRY-RUN]' : ''}`);
+    const setId = chosen.match.startggSetId;
+    const gameInfo = getSetGameCount(chosen.match);
+    const gameLabel = gameInfo && gameInfo.gamesPlayed > 1 ? ` [BO${gameInfo.bestOf || '?'} game ${(setLinks.get(setId)?.length || 0) + 1}/${gameInfo.gamesPlayed}]` : '';
+
+    console.log(`   ✅ ${race.url} -> set ${setId} score=${chosen.score} (${chosenPlayers.player1} vs ${chosenPlayers.player2})${gameLabel}${dryRun ? ' [DRY-RUN]' : ''}`);
+
+    // Track this link
+    if (!setLinks.has(setId)) setLinks.set(setId, []);
+    setLinks.get(setId).push({ raceUrl: race.url, score: chosen.score });
 
     if (!dryRun) {
+      // Update Race
       await Race.updateOne(
         { _id: race._id },
         {
           $set: {
             tournamentId: tournament._id,
-            startggSetId: chosen.match.startggSetId,
+            startggSetId: setId,
             tournamentPhase: chosen.match.phase || race.tournamentPhase || null,
             tournamentPool: chosen.match.phaseGroup || race.tournamentPool || null,
             tournamentRound: chosen.match.round ?? race.tournamentRound ?? null,
@@ -157,22 +183,36 @@ async function processTournament(tournament, { Race }, options) {
         }
       );
 
+      // Update embedded match: add to raceUrls array, keep raceUrl as primary
+      const isFirstLink = !setLinks.get(setId) || setLinks.get(setId).length <= 1;
+      const updateOps = {
+        $addToSet: { 'matches.$[m].raceUrls': race.url },
+        $currentDate: { updatedAt: true }
+      };
+      if (isFirstLink) {
+        updateOps.$set = {
+          'matches.$[m].raceUrl': race.url,
+          'matches.$[m].linkScore': chosen.score
+        };
+      }
+
       await require('mongoose').model('Tournament').updateOne(
         { _id: tournament._id },
-        {
-          $set: {
-            'matches.$[m].raceUrl': race.url,
-            'matches.$[m].linkScore': chosen.score
-          },
-          $currentDate: { updatedAt: true }
-        },
-        {
-          arrayFilters: [{ 'm.startggSetId': chosen.match.startggSetId }]
-        }
+        updateOps,
+        { arrayFilters: [{ 'm.startggSetId': setId }] }
       );
     }
 
     stats.linked++;
+  }
+
+  // Summary per set (BO3 stats)
+  const multiGameSets = [...setLinks.entries()].filter(([, links]) => links.length > 1);
+  if (multiGameSets.length) {
+    console.log(`\n   📐 Multi-game sets:`);
+    for (const [setId, links] of multiGameSets) {
+      console.log(`      set ${setId}: ${links.length} races linked`);
+    }
   }
 
   return stats;

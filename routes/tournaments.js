@@ -237,6 +237,8 @@ router.get('/:id/matches', validateObjectId('id'), async (req, res, next) => {
           groupId: null, // Start.gg uses phases instead
           phase: m.phase,
           phaseGroup: m.phaseGroup,
+          raceUrl: m.raceUrl || null,
+          raceUrls: Array.isArray(m.raceUrls) ? m.raceUrls : (m.raceUrl ? [m.raceUrl] : []),
           identifier: m.phaseGroup ? `${m.phaseGroup}-R${m.round}` : `R${m.round}`
         };
       });

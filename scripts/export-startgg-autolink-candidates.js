@@ -22,6 +22,7 @@ const {
   getMatchPlayers,
   getRaceLabel,
   parseRaceStageInfo,
+  parseStartggDisplayScore,
   extractRaceEntrants
 } = require('../helpers/race-match-linking');
 
@@ -83,27 +84,69 @@ function buildRaceCandidateSummary(race, scoreDetails) {
   };
 }
 
-function buildAutoLinkDecision(candidates) {
+function buildAutoLinkDecision(candidates, gamesExpected) {
+  const numGames = gamesExpected || 1;
+
   if (!candidates.length) {
     return {
       autoLinkable: false,
       threshold: null,
       gap: null,
-      reason: 'no-candidate'
+      reason: 'no-candidate',
+      gamesExpected: numGames,
+      gamesFound: 0
     };
   }
 
-  const top = candidates[0];
-  const second = candidates[1] || null;
-  const gap = second ? top.score - second.score : top.score;
-  const threshold = top.direct ? 900 : 1200;
-  const autoLinkable = top.score >= threshold && gap >= 120;
+  if (numGames === 1) {
+    // Single-game set: same logic as before
+    const top = candidates[0];
+    const second = candidates[1] || null;
+    const gap = second ? top.score - second.score : top.score;
+    const threshold = top.direct ? 900 : 1200;
+    const autoLinkable = top.score >= threshold && gap >= 120;
+
+    return {
+      autoLinkable,
+      threshold,
+      gap,
+      reason: autoLinkable ? 'high-confidence' : 'manual-review',
+      gamesExpected: 1,
+      gamesFound: 1
+    };
+  }
+
+  // Multi-game set (BO3, BO5): need top N candidates above threshold.
+  // Lower threshold since early games may get time-proximity penalties
+  // (set completedAt is end of last game, earlier games are further away).
+  const threshold = candidates[0].direct ? 600 : 800;
+  const qualifying = candidates.filter((c) => c.score >= threshold);
+  const gamesFound = Math.min(numGames, qualifying.length);
+
+  if (gamesFound === 0) {
+    return {
+      autoLinkable: false,
+      threshold,
+      gap: null,
+      reason: 'manual-review',
+      gamesExpected: numGames,
+      gamesFound: 0
+    };
+  }
+
+  // Check gap between last qualifying and first non-qualifying
+  const lastQIdx = gamesFound - 1;
+  const nextIdx = lastQIdx + 1;
+  const gap = nextIdx < candidates.length ? candidates[lastQIdx].score - candidates[nextIdx].score : candidates[lastQIdx].score;
+  const autoLinkable = gamesFound >= numGames && gap >= 80;
 
   return {
     autoLinkable,
     threshold,
     gap,
-    reason: autoLinkable ? 'high-confidence' : 'manual-review'
+    reason: autoLinkable ? 'high-confidence' : (gamesFound > 0 ? 'manual-review' : 'no-candidate'),
+    gamesExpected: numGames,
+    gamesFound
   };
 }
 
@@ -126,7 +169,7 @@ async function loadCandidateRaces(tournament) {
     category: { $in: categories },
     ...(minDate && maxDate ? { startedAt: { $gte: minDate, $lte: maxDate } } : {}),
     $or: [
-      { info: /^(Group|Preliminary Bracket)/i },
+      { info: /^(Group|Preliminary Bracket|Main Bracket)/i },
       { matchPlayers: { $exists: true, $ne: null } },
       { startggSetId: { $exists: true, $ne: null } },
       { $expr: { $eq: [{ $size: { $ifNull: ['$entrants', []] } }, 2] } }
@@ -168,6 +211,11 @@ async function main() {
 
   for (const match of matches) {
     const players = getMatchPlayers(match);
+    const dsInfo = parseStartggDisplayScore(match.displayScore);
+    const gamesExpected = dsInfo ? dsInfo.gamesPlayed : 1;
+
+    // For BO3+, increase top candidates to show enough games
+    const topForMatch = Math.max(top, gamesExpected + 2);
     const candidates = candidateRaces
       .map((race) => {
         const details = scoreRaceAgainstMatch(race, match, {
@@ -178,10 +226,10 @@ async function main() {
       })
       .filter((entry) => entry.details.score > 0)
       .sort((a, b) => b.details.score - a.details.score)
-      .slice(0, top)
+      .slice(0, topForMatch)
       .map((entry) => buildRaceCandidateSummary(entry.race, entry.details));
 
-    const decision = buildAutoLinkDecision(candidates);
+    const decision = buildAutoLinkDecision(candidates, gamesExpected);
 
     report.matches.push({
       startggSetId: match.startggSetId,
@@ -193,9 +241,13 @@ async function main() {
       player1: players.player1,
       player2: players.player2,
       existingRaceUrl: match.raceUrl || null,
+      existingRaceUrls: Array.isArray(match.raceUrls) ? match.raceUrls : [],
       existingLinkScore: match.linkScore ?? null,
+      gamesExpected,
+      bestOf: dsInfo?.bestOf || null,
       autoLinkable: decision.autoLinkable,
       decisionReason: decision.reason,
+      gamesFound: decision.gamesFound,
       threshold: decision.threshold,
       scoreGap: decision.gap,
       topCandidates: candidates
@@ -222,23 +274,30 @@ async function main() {
       'player1',
       'player2',
       'completedAt',
-      'existingRaceUrl',
+      'displayScore',
+      'bestOf',
+      'gamesExpected',
+      'gamesFound',
       'autoLinkable',
       'decisionReason',
-      'topRaceUrl',
-      'topRaceLabel',
-      'topScore',
-      'topRaceType',
-      'topRaceEntrantCount',
-      'secondRaceUrl',
-      'secondScore',
+      'game1_raceUrl',
+      'game1_raceLabel',
+      'game1_score',
+      'game1_raceType',
+      'game2_raceUrl',
+      'game2_raceLabel',
+      'game2_score',
+      'game3_raceUrl',
+      'game3_raceLabel',
+      'game3_score',
       'scoreGap'
-    ].join(',')
+    ].join(';')
   ];
 
   for (const match of report.matches) {
-    const first = match.topCandidates[0] || {};
-    const second = match.topCandidates[1] || {};
+    const c1 = match.topCandidates[0] || {};
+    const c2 = match.topCandidates[1] || {};
+    const c3 = match.topCandidates[2] || {};
     csvRows.push([
       match.startggSetId,
       match.phase,
@@ -247,26 +306,33 @@ async function main() {
       match.player1,
       match.player2,
       match.completedAt,
-      match.existingRaceUrl,
+      match.displayScore,
+      match.bestOf,
+      match.gamesExpected,
+      match.gamesFound,
       match.autoLinkable,
       match.decisionReason,
-      first.raceUrl,
-      first.raceLabel,
-      first.score,
-      first.raceInfoType,
-      first.entrantCount,
-      second.raceUrl,
-      second.score,
+      c1.raceUrl,
+      c1.raceLabel,
+      c1.score,
+      c1.raceInfoType,
+      c2.raceUrl,
+      c2.raceLabel,
+      c2.score,
+      c3.raceUrl,
+      c3.raceLabel,
+      c3.score,
       match.scoreGap
-    ].map(toCsvValue).join(','));
+    ].map(toCsvValue).join(';'));
   }
 
   fs.writeFileSync(csvPath, `${csvRows.join('\n')}\n`);
 
   const autoLinkableCount = report.matches.filter((m) => m.autoLinkable).length;
+  const boMultiCount = report.matches.filter((m) => m.gamesExpected > 1).length;
   console.log(`Report JSON: ${jsonPath}`);
   console.log(`Report CSV: ${csvPath}`);
-  console.log(`Matches: ${report.matches.length}`);
+  console.log(`Matches: ${report.matches.length} (${boMultiCount} multi-game sets)`);
   console.log(`Candidate races considered: ${candidateRaces.length}`);
   console.log(`Auto-linkable matches: ${autoLinkableCount}`);
 

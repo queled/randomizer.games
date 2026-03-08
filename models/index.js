@@ -179,6 +179,7 @@ const tournamentSchema = new mongoose.Schema({
     phase: String,
     phaseGroup: String,
     raceUrl: String,
+    raceUrls: [String],
     linkScore: Number,
     player1: {
       startggEntrantId: String,

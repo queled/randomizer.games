@@ -178,6 +178,8 @@ const tournamentSchema = new mongoose.Schema({
     state: Number,
     phase: String,
     phaseGroup: String,
+    raceUrl: String,
+    linkScore: Number,
     player1: {
       startggEntrantId: String,
       name: String
@@ -257,6 +259,9 @@ const raceSchema = new mongoose.Schema({
   tournamentPool: String,   // e.g., "1", "2", "A", "B"
   tournamentRound: Number,  // e.g., 1, 2, -1 (negative for losers bracket)
   matchPlayers: String,     // e.g., "PlayerA vs PlayerB"
+  startggSetId: String,
+  matchConfidence: Number,
+  previousMatchCompletedAt: Date,
   entrants: [{
     userId: String,
     userName: String,

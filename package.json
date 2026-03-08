@@ -19,6 +19,7 @@
     "discover:tournaments:challonge": "node scripts/discover-tournaments.js --source challonge",
     "import:startgg": "node scripts/import-startgg.js",
     "import:challonge": "node scripts/import-challonge.js",
+    "link:startgg-races": "node scripts/link-startgg-races.js",
     "normalize:race-urls": "node scripts/normalize-race-urls.js",
     "sync-rando-list": "node scripts/sync-rando-list-v3.js",
     "sync-rando-list:link": "node scripts/sync-rando-list-v3.js --link-games",

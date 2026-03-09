@@ -506,29 +506,29 @@
             </div>
           </div>
 
-          <!-- Qualifier races section -->
+          <!-- Qualifier races section (collapsible) -->
           <div id="rl-qualifiers-section" class="rl-panel mt-4" style="display: none;">
-            <div class="rl-panel-header">
-              <h3>🏅 Races de qualification <span id="rl-qualifiers-count" class="badge badge-muted"></span></h3>
-              <button class="btn btn-sm btn-outline" onclick="admin.rlShowAddQualifier()">➕ Ajouter</button>
+            <div class="rl-panel-header rl-collapsible-header" onclick="admin.rlToggleSection('rl-qualifiers-section')">
+              <h3><span class="rl-collapse-icon">▶</span> 🏅 Races de qualification <span id="rl-qualifiers-count" class="badge badge-muted"></span></h3>
+              <button class="btn btn-sm btn-outline" onclick="event.stopPropagation(); admin.rlShowAddQualifier()">➕ Ajouter</button>
             </div>
-            <p class="text-muted" style="padding: 0.5rem 1rem; font-size: 0.85rem;">
+            <p class="text-muted rl-section-desc" style="padding: 0.5rem 1rem; font-size: 0.85rem; display: none;">
               Races associées au tournoi en tant que qualifications (sans match spécifique).
             </p>
-            <div id="rl-qualifiers-list" class="rl-items-list">
+            <div id="rl-qualifiers-list" class="rl-items-list" style="display: none;">
               <p class="text-muted">Aucune race de qualification</p>
             </div>
           </div>
 
-          <!-- Unlinked races section -->
+          <!-- Unlinked races section (collapsible) -->
           <div id="rl-unlinked-section" class="rl-panel mt-4" style="display: none;">
-            <div class="rl-panel-header">
-              <h3>📋 Races non associées <span id="rl-unlinked-count" class="badge badge-warning"></span></h3>
+            <div class="rl-panel-header rl-collapsible-header" onclick="admin.rlToggleSection('rl-unlinked-section')">
+              <h3><span class="rl-collapse-icon">▶</span> 📋 Races non associées <span id="rl-unlinked-count" class="badge badge-warning"></span></h3>
             </div>
-            <p class="text-muted" style="padding: 0.5rem 1rem; font-size: 0.85rem;">
+            <p class="text-muted rl-section-desc" style="padding: 0.5rem 1rem; font-size: 0.85rem; display: none;">
               Races du tournoi pas encore liées à un match. Cliquez sur un match ci-dessus pour voir les suggestions.
             </p>
-            <div id="rl-unlinked-list" class="rl-items-list">
+            <div id="rl-unlinked-list" class="rl-items-list" style="display: none;">
             </div>
           </div>
         </div>

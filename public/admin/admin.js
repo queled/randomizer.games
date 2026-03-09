@@ -2404,6 +2404,13 @@ const admin = {
     section.style.display = 'block';
     count.textContent = `${qualifiers.length}`;
 
+    // Default to collapsed
+    if (!section.dataset.initialized) {
+      section.dataset.initialized = 'true';
+      list.style.display = 'none';
+      section.classList.add('rl-collapsed');
+    }
+
     if (!qualifiers.length) {
       list.innerHTML = '<p class="text-muted" style="padding: 0.5rem 1rem;">Aucune race de qualification pour ce tournoi.</p>';
       return;
@@ -2444,7 +2451,18 @@ const admin = {
     section.style.display = 'block';
     count.textContent = `${unlinked.length}`;
 
-    list.innerHTML = unlinked.map(r => `
+    // Default to collapsed
+    if (!section.dataset.initialized) {
+      section.dataset.initialized = 'true';
+      list.style.display = 'none';
+      section.classList.add('rl-collapsed');
+    }
+
+    list.innerHTML = unlinked.map(r => {
+      const statusBadge = r.status && r.status !== 'finished'
+        ? `<span class="badge ${r.status === 'in_progress' ? 'badge-success' : 'badge-muted'}">${this.escapeHtml(r.status)}</span>`
+        : '';
+      return `
       <div class="rl-race-item rl-race-unlinked">
         <div class="rl-race-main">
           <div class="rl-race-info">
@@ -2453,6 +2471,7 @@ const admin = {
             ${r.entrantNames.length ? `<span class="text-muted">· ${r.entrantNames.slice(0, 2).map(n => this.escapeHtml(n)).join(' vs ')}</span>` : ''}
           </div>
           <div class="rl-race-meta">
+            ${statusBadge}
             <span class="badge badge-warning">Non liée</span>
             ${r.startedAt ? `<span class="text-muted">${new Date(r.startedAt).toLocaleDateString('fr-FR')}</span>` : ''}
           </div>
@@ -2461,7 +2480,19 @@ const admin = {
           <button class="btn btn-sm btn-ghost" onclick="admin.rlMarkAsQualifier('${this.escapeHtml(r.url)}')" title="Marquer comme qualification">🏅</button>
         </div>
       </div>
-    `).join('');
+    `}).join('');
+  },
+
+  /** Toggle collapsible section */
+  rlToggleSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+    const list = section.querySelector('.rl-items-list');
+    const desc = section.querySelector('.rl-section-desc');
+    if (!list) return;
+    const isCollapsed = section.classList.toggle('rl-collapsed');
+    list.style.display = isCollapsed ? 'none' : '';
+    if (desc) desc.style.display = isCollapsed ? 'none' : '';
   },
 
   /** Show qualifier add modal */
@@ -2656,8 +2687,15 @@ const admin = {
       }
 
       this.showToast('Race liée avec succès', 'success');
-      this.rlCloseSuggestions();
+
+      // Reload tournament data
       await this.rlSelectTournament(this.rlCurrentTournament._id);
+
+      // If the suggestion modal is open, refresh it with updated data
+      if (document.getElementById('rl-suggestion-panel').style.display === 'flex') {
+        this.rlCurrentMatchId = matchId;
+        await this.rlShowSuggestions(matchId);
+      }
     } catch (error) {
       console.error('Error linking race:', error);
       this.showToast(`Erreur: ${error.message}`, 'error');
@@ -2681,7 +2719,14 @@ const admin = {
       if (!response.ok) throw new Error('Failed');
 
       this.showToast('Race déliée', 'success');
+      const savedMatchId = this.rlCurrentMatchId;
       await this.rlSelectTournament(this.rlCurrentTournament._id);
+
+      // If the suggestion modal is open, refresh it with updated data
+      if (savedMatchId && document.getElementById('rl-suggestion-panel').style.display === 'flex') {
+        this.rlCurrentMatchId = savedMatchId;
+        await this.rlShowSuggestions(savedMatchId);
+      }
     } catch (error) {
       console.error('Error unlinking race:', error);
       this.showToast('Erreur lors du déliage', 'error');

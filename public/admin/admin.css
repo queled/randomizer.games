@@ -1702,6 +1702,33 @@ a:hover {
   content: '⠿ Manches liées — glisser pour réordonner';
 }
 
+/* Collapsible sections */
+.rl-collapsible-header {
+  cursor: pointer;
+  user-select: none;
+}
+
+.rl-collapsible-header:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.rl-collapse-icon {
+  display: inline-block;
+  font-size: 0.7rem;
+  transition: transform 0.15s ease;
+  margin-right: 0.25rem;
+}
+
+.rl-panel:not(.rl-collapsed) .rl-collapse-icon {
+  transform: rotate(90deg);
+}
+
+/* Full-width race-linking section */
+#section-race-linking {
+  margin: -0.5rem;
+  padding: 0.5rem;
+}
+
 /* Auto-link preview */
 .rl-autolink-controls {
   display: flex;

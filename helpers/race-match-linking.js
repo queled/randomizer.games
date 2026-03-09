@@ -443,7 +443,11 @@ function scoreRaceAgainstMatch(race, match, options = {}) {
   const matchRaceUrls = Array.isArray(match?.raceUrls) ? match.raceUrls : [];
   const raceAlreadyLinked = matchRaceUrl === race?.url || matchRaceUrls.includes(race?.url);
   if (matchRaceUrl && race?.url && !raceAlreadyLinked) {
-    total -= options.allowOccupiedMatchReassign ? 250 : 600;
+    if (options.skipOccupiedPenalty) {
+      // In suggestion/BO mode: no penalty for occupied matches
+    } else {
+      total -= options.allowOccupiedMatchReassign ? 250 : 600;
+    }
   }
 
   const matchFinished = getMatchCompletedAt(match);

@@ -1481,6 +1481,23 @@ function findRacesForMatch(match, races) {
     const setId = String(match.startggSetId);
     const bySetId = races.filter(r => r.startggSetId && String(r.startggSetId) === setId);
     if (bySetId.length > 0) {
+      // If raceUrls order is available, use it (admin-set manche order)
+      if (match.raceUrls && match.raceUrls.length > 0) {
+        const targets = match.raceUrls.map(u => normalizeUrl(u));
+        const ordered = [];
+        for (const t of targets) {
+          const found = bySetId.find(r => {
+            const ru = normalizeUrl(r.url);
+            return ru === t || ru.endsWith(t) || t.endsWith(ru);
+          });
+          if (found) ordered.push(found);
+        }
+        // Append any races found by setId but not in raceUrls (shouldn't happen, but defensive)
+        for (const r of bySetId) {
+          if (!ordered.includes(r)) ordered.push(r);
+        }
+        if (ordered.length > 0) return ordered;
+      }
       bySetId.sort((a, b) => {
         const dateA = a.startedAt ? new Date(a.startedAt).getTime() : 0;
         const dateB = b.startedAt ? new Date(b.startedAt).getTime() : 0;
@@ -1501,6 +1518,17 @@ function findRacesForMatch(match, races) {
   // If no races found, try raceUrls array (BO3 support for start.gg)
   if (matchedRaces.length === 0 && match.raceUrls && match.raceUrls.length > 0) {
     const targets = match.raceUrls.map(u => normalizeUrl(u));
+    // Preserve raceUrls order (admin-set manche order)
+    const ordered = [];
+    for (const t of targets) {
+      const found = races.find(r => {
+        const ru = normalizeUrl(r.url);
+        return ru === t || ru.endsWith(t) || t.endsWith(ru);
+      });
+      if (found) ordered.push(found);
+    }
+    if (ordered.length > 0) return ordered;
+    // Fallback: unordered match
     matchedRaces = races.filter(r => {
       const ru = normalizeUrl(r.url);
       return targets.some(t => ru === t || ru.endsWith(t) || t.endsWith(ru));
@@ -3547,6 +3575,14 @@ function createBracketMatchCard(match, isFinal = false) {
   }
 
   // Tooltip: détail des manches sur le bracket uniquement (pas dans l'onglet Matchs).
+  // When races are linked in a specific order (via raceUrls), the manche order is known
+  // → override the "ordre non contractuel" flag on synthetic games
+  if (parsedScores && parsedScores.isSeriesOnly && match.raceUrls && match.raceUrls.length >= 2) {
+    parsedScores.isSeriesOnly = false;
+    if (parsedScores.games) {
+      parsedScores.games.forEach(g => { g.ambiguous = false; });
+    }
+  }
   try { attachMatchTooltip(card, match, parsedScores); } catch (e) {}
   
   return card;

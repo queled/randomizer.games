@@ -3575,15 +3575,61 @@ function createBracketMatchCard(match, isFinal = false) {
   }
 
   // Tooltip: détail des manches sur le bracket uniquement (pas dans l'onglet Matchs).
-  // When races are linked in a specific order (via raceUrls), the manche order is known
-  // → override the "ordre non contractuel" flag on synthetic games
-  if (parsedScores && parsedScores.isSeriesOnly && match.raceUrls && match.raceUrls.length >= 2) {
-    parsedScores.isSeriesOnly = false;
-    if (parsedScores.games) {
-      parsedScores.games.forEach(g => { g.ambiguous = false; });
+  // When races are linked in a specific order (via raceUrls), build games from actual race data
+  let tooltipScores = parsedScores;
+  if (match.raceUrls && match.raceUrls.length >= 2 && typeof currentRaces !== 'undefined' && currentRaces.length > 0) {
+    const matchRaces = findRacesForMatch(match, currentRaces);
+    if (matchRaces.length >= 2) {
+      // Build games from actual race results
+      const p1Name = (match.player1Name || '').toLowerCase();
+      const p2Name = (match.player2Name || '').toLowerCase();
+      const realGames = [];
+      let cum1 = 0, cum2 = 0;
+      for (const race of matchRaces) {
+        if (!race.entrants || race.entrants.length < 2) {
+          realGames.push({ p1: 0, p2: 0, ambiguous: false });
+          continue;
+        }
+        // Find winner: entrant with place === 1
+        const winner = race.entrants.find(e => e.place === 1);
+        if (!winner) {
+          realGames.push({ p1: 0, p2: 0, ambiguous: false });
+          continue;
+        }
+        const winnerName = (winner.user?.name || winner.userName || '').toLowerCase();
+        // Match winner to player1 or player2
+        const isP1 = winnerName === p1Name || p1Name.includes(winnerName) || winnerName.includes(p1Name);
+        const isP2 = winnerName === p2Name || p2Name.includes(winnerName) || winnerName.includes(p2Name);
+        if (isP1) {
+          realGames.push({ p1: 1, p2: 0, ambiguous: false });
+          cum1++;
+        } else if (isP2) {
+          realGames.push({ p1: 0, p2: 1, ambiguous: false });
+          cum2++;
+        } else {
+          // Couldn't determine — use player aliases if available, else fallback
+          realGames.push({ p1: 0, p2: 0, ambiguous: true });
+        }
+      }
+      tooltipScores = {
+        games: realGames,
+        seriesP1: cum1,
+        seriesP2: cum2,
+        played: realGames.length,
+        denom: realGames.length,
+        label: `${cum1}-${cum2}`,
+        isMultiGame: true,
+        isSeriesOnly: false
+      };
+    }
+  } else if (tooltipScores && tooltipScores.isSeriesOnly && match.raceUrls && match.raceUrls.length >= 2) {
+    // Fallback: just remove "ordre non contractuel" when raceUrls ordering is available
+    tooltipScores.isSeriesOnly = false;
+    if (tooltipScores.games) {
+      tooltipScores.games.forEach(g => { g.ambiguous = false; });
     }
   }
-  try { attachMatchTooltip(card, match, parsedScores); } catch (e) {}
+  try { attachMatchTooltip(card, match, tooltipScores); } catch (e) {}
   
   return card;
 }

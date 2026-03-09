@@ -1302,6 +1302,20 @@ const {
   getRaceLabel,
   parseRaceStageInfo
 } = require('../helpers/race-match-linking');
+const racetimeAPI = require('../services/racetime');
+
+/**
+ * Parse a racetime URL to extract category and raceId.
+ * Accepts: https://racetime.gg/ootr/chaotic-volvagia-4238, /ootr/chaotic-volvagia-4238, ootr/chaotic-volvagia-4238
+ * Returns { category, raceId, normalizedUrl } or null
+ */
+function parseRacetimeUrl(url) {
+  if (!url) return null;
+  const cleaned = url.replace(/^https?:\/\/(www\.)?racetime\.gg/, '').replace(/^\/+/, '');
+  const parts = cleaned.split('/').filter(Boolean);
+  if (parts.length < 2) return null;
+  return { category: parts[0], raceId: parts[1], normalizedUrl: `/${parts[0]}/${parts[1]}` };
+}
 
 /**
  * GET /api/admin/tournaments
@@ -1366,7 +1380,16 @@ router.get('/tournaments/:id/linking', requireAdmin, async (req, res, next) => {
     const isStartgg = !!tournament.startggId;
 
     if (isStartgg && Array.isArray(tournament.matches)) {
-      matches = tournament.matches.map(m => ({
+      matches = tournament.matches
+        .filter(m => {
+          // Filter out TBD/not-started matches (state 3 = completed in start.gg)
+          const p1 = m.player1?.name || '';
+          const p2 = m.player2?.name || '';
+          if (!p1 || !p2 || p1 === 'TBD' || p2 === 'TBD') return false;
+          if (m.state !== undefined && m.state !== null && m.state !== 3) return false;
+          return true;
+        })
+        .map(m => ({
         _id: m.startggSetId || m._id,
         startggSetId: m.startggSetId,
         round: m.round,
@@ -1384,7 +1407,15 @@ router.get('/tournaments/:id/linking', requireAdmin, async (req, res, next) => {
       }));
     } else {
       const challongeMatches = await Match.find({ tournamentId: tournament._id }).lean();
-      matches = challongeMatches.map(m => ({
+      matches = challongeMatches
+        .filter(m => {
+          const p1 = m.player1Name || '';
+          const p2 = m.player2Name || '';
+          if (!p1 || !p2 || p1 === 'TBD' || p2 === 'TBD') return false;
+          if (m.state && m.state !== 'complete') return false;
+          return true;
+        })
+        .map(m => ({
         _id: m._id.toString(),
         round: m.round,
         phase: null,
@@ -1561,6 +1592,7 @@ router.get('/tournaments/:id/suggestions/:matchId', requireAdmin, async (req, re
 /**
  * POST /api/admin/tournaments/:id/link-race
  * Link a race to a match (manual association)
+ * If the race doesn't exist in DB, auto-imports it from racetime.gg
  */
 router.post('/tournaments/:id/link-race', requireAdmin, async (req, res, next) => {
   try {
@@ -1570,27 +1602,59 @@ router.post('/tournaments/:id/link-race', requireAdmin, async (req, res, next) =
     const tournament = await Tournament.findById(req.params.id);
     if (!tournament) return res.status(404).json({ error: 'Tournament not found' });
 
-    const race = await Race.findOne({ url: raceUrl });
-    if (!race) return res.status(404).json({ error: 'Race not found' });
+    // Normalize URL and find race — auto-import from racetime if missing
+    const parsed = parseRacetimeUrl(raceUrl);
+    const normalizedUrl = parsed ? parsed.normalizedUrl : raceUrl;
+    let race = await Race.findOne({ url: normalizedUrl });
+    if (!race && parsed) {
+      race = await Race.findOne({ url: raceUrl });
+    }
+    if (!race) {
+      if (!parsed) return res.status(404).json({ error: 'Race not found and URL cannot be parsed for import' });
+      try {
+        const raceData = await racetimeAPI.getRace(parsed.category, parsed.raceId);
+        if (!raceData) return res.status(404).json({ error: 'Race not found on racetime.gg' });
+        race = await Race.findOneAndUpdate(
+          { url: raceData.url || parsed.normalizedUrl },
+          { $set: {
+            ...raceData,
+            url: raceData.url || parsed.normalizedUrl,
+            tournamentId: tournament._id,
+            source: { type: 'racetime', externalId: parsed.raceId, url: raceData.url || parsed.normalizedUrl, importedAt: new Date() }
+          } },
+          { upsert: true, new: true }
+        );
+        for (const entrant of (raceData.entrants || [])) {
+          if (entrant.user?.id) {
+            await Player.findOneAndUpdate(
+              { userId: entrant.user.id },
+              { $set: { name: entrant.user.name, discriminator: entrant.user.discriminator, racetimeUrl: entrant.user.url || entrant.user.id } },
+              { upsert: true }
+            );
+          }
+        }
+      } catch (importErr) {
+        console.error('Failed to import race from racetime:', importErr.message);
+        return res.status(404).json({ error: `Race not found in DB and import failed: ${importErr.message}` });
+      }
+    }
 
+    const effectiveRaceUrl = race.url;
     const isStartgg = !!tournament.startggId;
 
     if (isQualifier) {
-      // For qualifiers: just attach race to tournament without match linking
       race.tournamentId = tournament._id;
       race.matchId = undefined;
       race.startggSetId = undefined;
       race.matchConfidence = undefined;
       race.matchPlayers = undefined;
       await race.save();
-
       return res.json({ success: true, message: 'Race linked as qualifier' });
     }
 
     if (!matchId) return res.status(400).json({ error: 'matchId is required for non-qualifier linking' });
 
     if (isStartgg) {
-      // Start.gg: update embedded match
       const embeddedMatch = tournament.matches?.find(m =>
         (m.startggSetId || '').toString() === matchId ||
         (m._id || '').toString() === matchId
@@ -1599,39 +1663,35 @@ router.post('/tournaments/:id/link-race', requireAdmin, async (req, res, next) =
 
       const setId = embeddedMatch.startggSetId;
 
-      // Update race
       race.tournamentId = tournament._id;
       race.startggSetId = setId;
       race.matchPlayers = `${embeddedMatch.player1?.name || ''} vs ${embeddedMatch.player2?.name || ''}`.trim();
-      race.matchConfidence = 999; // Manual link = high confidence
+      race.matchConfidence = 999;
       race.tournamentPhase = embeddedMatch.phase || race.tournamentPhase;
       race.tournamentPool = embeddedMatch.phaseGroup || race.tournamentPool;
       race.tournamentRound = embeddedMatch.round ?? race.tournamentRound;
       await race.save();
 
-      // Update embedded match: add raceUrl (use save() to avoid type-mismatch with arrayFilters)
-      embeddedMatch.raceUrl = raceUrl;
+      embeddedMatch.raceUrl = effectiveRaceUrl;
       embeddedMatch.linkScore = 999;
       if (!Array.isArray(embeddedMatch.raceUrls)) embeddedMatch.raceUrls = [];
-      if (!embeddedMatch.raceUrls.includes(raceUrl)) {
-        embeddedMatch.raceUrls.push(raceUrl);
+      if (!embeddedMatch.raceUrls.includes(effectiveRaceUrl)) {
+        embeddedMatch.raceUrls.push(effectiveRaceUrl);
       }
+      tournament.markModified('matches');
       tournament.updatedAt = new Date();
       await tournament.save();
     } else {
-      // Challonge: update separate Match document
       const matchDoc = await Match.findById(matchId);
       if (!matchDoc) return res.status(404).json({ error: 'Match not found' });
 
-      // Update race
       race.tournamentId = tournament._id;
       race.matchId = matchDoc._id;
       race.matchConfidence = 999;
       race.matchPlayers = `${matchDoc.player1Name || ''} vs ${matchDoc.player2Name || ''}`.trim();
       await race.save();
 
-      // Update match
-      matchDoc.raceUrl = raceUrl;
+      matchDoc.raceUrl = effectiveRaceUrl;
       matchDoc.completedAt = race.endedAt || matchDoc.completedAt;
       await matchDoc.save();
     }
@@ -1674,6 +1734,7 @@ router.post('/tournaments/:id/unlink-race', requireAdmin, async (req, res, next)
           if (!embeddedMatch.raceUrls.length) {
             embeddedMatch.linkScore = null;
           }
+          tournament.markModified('matches');
           tournament.updatedAt = new Date();
           await tournament.save();
         }
@@ -1897,6 +1958,7 @@ router.post('/tournaments/:id/auto-link-confirm', requireAdmin, async (req, res,
 
     // Save tournament once after all proposals (for start.gg embedded matches)
     if (tournamentDirty) {
+      tournament.markModified('matches');
       tournament.updatedAt = new Date();
       await tournament.save();
     }
@@ -1933,6 +1995,7 @@ router.post('/tournaments/:id/reorder-races', requireAdmin, async (req, res, nex
 
       embeddedMatch.raceUrls = raceUrls;
       embeddedMatch.raceUrl = raceUrls[0] || null;
+      tournament.markModified('matches');
       tournament.updatedAt = new Date();
       await tournament.save();
     }

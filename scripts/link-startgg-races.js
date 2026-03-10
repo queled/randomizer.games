@@ -281,6 +281,33 @@ async function processTournament(tournament, { Race }, options) {
     }
   }
 
+  // Sort raceUrls by chronological order (oldest to newest)
+  if (!dryRun && setLinks.size > 0) {
+    for (const [setId] of setLinks) {
+      const linkedRaces = await Race.find({ startggSetId: setId }).lean();
+      if (!linkedRaces.length) continue;
+
+      // Sort by date (startedAt > endedAt > createdAt)
+      linkedRaces.sort((a, b) => {
+        const dateA = new Date(a.startedAt || a.endedAt || a.createdAt || 0).getTime();
+        const dateB = new Date(b.startedAt || b.endedAt || b.createdAt || 0).getTime();
+        return dateA - dateB;
+      });
+
+      const sortedUrls = linkedRaces.map((r) => r.url);
+
+      // Update match raceUrls with chronological order
+      await require('mongoose').model('Tournament').updateOne(
+        { _id: tournament._id },
+        {
+          $set: { 'matches.$[m].raceUrls': sortedUrls },
+          $currentDate: { updatedAt: true }
+        },
+        { arrayFilters: [{ 'm.startggSetId': setId }] }
+      );
+    }
+  }
+
   return stats;
 }
 

@@ -1657,26 +1657,23 @@ function createMatchCard(match, races = []) {
     let t1 = null, t2 = null;
     if (!race) return { time1: t1, time2: t2 };
     
-    // Try name-based lookup first
-    t1 = findEntrantTime(race, match.player1Name);
-    t2 = findEntrantTime(race, match.player2Name);
-    
-    // Sanity check: if both times are identical and non-null, the name matching likely failed
-    // (two players with same time is virtually impossible). Reset and try other methods.
+    // Prefer a pairwise mapping so the two players cannot resolve to the same entrant.
+    try {
+      const mapped = computeTimesFromRace(match, race);
+      if (mapped) {
+        if (mapped.time1 !== null && mapped.time1 !== undefined) t1 = mapped.time1;
+        if (mapped.time2 !== null && mapped.time2 !== undefined) t2 = mapped.time2;
+      }
+    } catch (e) {}
+
+    // Fallback to per-name lookup for any still-missing side.
+    if (t1 === null || t1 === undefined) t1 = findEntrantTime(race, match.player1Name);
+    if (t2 === null || t2 === undefined) t2 = findEntrantTime(race, match.player2Name);
+
+    // Sanity check: if both times are identical and non-null, matching likely failed.
     if (t1 && t2 && t1 === t2 && t1 !== 'DNF' && t1 !== 'DQ') {
       t1 = null;
       t2 = null;
-    }
-    
-    // Fallback to computed mapping
-    if ((t1 === null || t1 === undefined) && (t2 === null || t2 === undefined)) {
-      try {
-        const mapped = computeTimesFromRace(match, race);
-        if (mapped) {
-          if (!t1 && mapped.time1) t1 = mapped.time1;
-          if (!t2 && mapped.time2) t2 = mapped.time2;
-        }
-      } catch (e) {}
     }
     
     // Fallback to place-based mapping
@@ -2299,40 +2296,67 @@ function computeTimesFromRace(match, race){
   const p1 = normalizeName(match.player1Name || '');
   const p2 = normalizeName(match.player2Name || '');
 
-  const scoreSim = (a,b) => {
-    if (!a || !b) return 0;
-    const lev = levenshtein(a,b);
-    return 1 - (lev / Math.max(a.length, b.length, 1));
-  };
+  const scoreEntrantForPlayer = (playerNorm, ent) => {
+    if (!playerNorm || !ent || !ent.norm) return -Infinity;
 
-  // For each player, find best entrant by similarity, boosting entrants that have times
-  const pickFor = (playerNorm) => {
-    let best = {score: -1, ent: null};
-    entrants.forEach(ent => {
-      const sim = scoreSim(ent.norm, playerNorm) + (ent.finishTime || ent.finishTimeMs || ent.finishedAt ? 0.25 : 0);
-      if (sim > best.score) best = {score: sim, ent};
-    });
-    return best;
-  };
+    const playerTokens = playerNorm.split(' ').filter(Boolean);
+    const entrantTokens = ent.norm.split(' ').filter(Boolean);
+    let score = 0;
 
-  const b1 = pickFor(p1);
-  const b2 = pickFor(p2);
+    if (ent.norm === playerNorm) score += 1000;
 
-  // Avoid assigning same entrant to both players
-  if (b1.ent && b2.ent && b1.ent.raw === b2.ent.raw) {
-    // if one has a time and the other not, assign the timed one to that player
-    const b1Has = b1.ent.finishTime || b1.ent.finishTimeMs || b1.ent.finishedAt;
-    const b2Has = b2.ent.finishTime || b2.ent.finishTimeMs || b2.ent.finishedAt;
-    if (b1Has && !b2Has) {
-      b2.ent = entrants.find(e => e !== b1.ent) || null;
-    } else if (b2Has && !b1Has) {
-      b1.ent = entrants.find(e => e !== b2.ent) || null;
+    if (playerTokens.length && playerTokens.every(token => entrantTokens.includes(token))) score += 350;
+
+    if (playerTokens.some(token => entrantTokens.includes(token))) score += 260;
+
+    try {
+      const re = new RegExp('\\b' + escapeRegExp(playerNorm) + '\\b');
+      if (re.test(ent.norm)) score += 220;
+    } catch (e) {}
+
+    for (const pTok of playerTokens) {
+      for (const eTok of entrantTokens) {
+        if (pTok === eTok) {
+          score += 180;
+          continue;
+        }
+        if ((eTok.startsWith(pTok) || pTok.startsWith(eTok)) && Math.abs(eTok.length - pTok.length) <= 4) {
+          score += 120;
+        }
+      }
     }
+
+    const lev = levenshtein(ent.norm, playerNorm);
+    const similarity = 1 - (lev / Math.max(ent.norm.length, playerNorm.length, 1));
+    if (similarity > 0.9) score += 160;
+    else if (similarity > 0.75) score += 80;
+
+    if (ent.finishTime || ent.finishTimeMs || ent.finishedAt || ent.status === 'dnf' || ent.status === 'dq') {
+      score += 15;
+    }
+
+    return score;
+  };
+
+  let bestPair = { score: -Infinity, ent1: null, ent2: null };
+  entrants.forEach((ent1, idx1) => {
+    entrants.forEach((ent2, idx2) => {
+      if (idx1 === idx2) return;
+      const totalScore = scoreEntrantForPlayer(p1, ent1) + scoreEntrantForPlayer(p2, ent2);
+      if (totalScore > bestPair.score) {
+        bestPair = { score: totalScore, ent1, ent2 };
+      }
+    });
+  });
+
+  // Single-player or malformed race fallback.
+  if (!bestPair.ent1 && entrants.length === 1) {
+    bestPair.ent1 = entrants[0];
   }
 
   const out = {time1: null, time2: null};
-  if (b1.ent) out.time1 = getTimeFromEntrantObj(b1.ent.obj, race);
-  if (b2.ent) out.time2 = getTimeFromEntrantObj(b2.ent.obj, race);
+  if (bestPair.ent1) out.time1 = getTimeFromEntrantObj(bestPair.ent1.obj, race);
+  if (bestPair.ent2) out.time2 = getTimeFromEntrantObj(bestPair.ent2.obj, race);
 
   return out;
 }

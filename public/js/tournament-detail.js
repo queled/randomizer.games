@@ -1661,6 +1661,13 @@ function createMatchCard(match, races = []) {
     t1 = findEntrantTime(race, match.player1Name);
     t2 = findEntrantTime(race, match.player2Name);
     
+    // Sanity check: if both times are identical and non-null, the name matching likely failed
+    // (two players with same time is virtually impossible). Reset and try other methods.
+    if (t1 && t2 && t1 === t2 && t1 !== 'DNF' && t1 !== 'DQ') {
+      t1 = null;
+      t2 = null;
+    }
+    
     // Fallback to computed mapping
     if ((t1 === null || t1 === undefined) && (t2 === null || t2 === undefined)) {
       try {

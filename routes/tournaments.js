@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { Tournament, Game } = require('../models');
 const { validateObjectId } = require('../middleware/security');
+const racetimeAPI = require('../services/racetime');
 
 // Game name patterns for tournament search (same as games.js)
 const GAME_NAME_PATTERNS = {
@@ -18,6 +19,71 @@ const GAME_NAME_PATTERNS = {
   'smz3': /smz3|super\s*metroid.*link/i,
   'ootmm': /ootmm|ocarina.*majora/i
 };
+
+function extractRaceSlug(race) {
+  const externalId = race?.source?.externalId;
+  if (externalId && !String(externalId).includes('/')) return String(externalId);
+
+  const raw = String(race?.url || race?.name || '').replace(/^https?:\/\/(www\.)?racetime\.gg/i, '');
+  const parts = raw.replace(/^\/+/, '').split('/').filter(Boolean);
+  return parts.length >= 2 ? parts[1] : null;
+}
+
+function raceNeedsEntrantHydration(race) {
+  const entrants = Array.isArray(race?.entrants) ? race.entrants : [];
+  if (!entrants.length) return false;
+  return entrants.some((entrant) => {
+    const name = entrant?.userName || entrant?.user?.name || entrant?.name || entrant?.displayName || null;
+    return !name;
+  });
+}
+
+async function hydrateMissingRaceEntrants(races, Race) {
+  const hydrated = [];
+
+  for (const race of races) {
+    if (!raceNeedsEntrantHydration(race) || !race?.category) {
+      hydrated.push(race);
+      continue;
+    }
+
+    const raceSlug = extractRaceSlug(race);
+    if (!raceSlug) {
+      hydrated.push(race);
+      continue;
+    }
+
+    try {
+      const freshRace = await racetimeAPI.getRace(race.category, raceSlug);
+      if (!freshRace || !Array.isArray(freshRace.entrants) || !freshRace.entrants.length) {
+        hydrated.push(race);
+        continue;
+      }
+
+      await Race.updateOne(
+        { _id: race._id },
+        {
+          $set: {
+            entrants: freshRace.entrants,
+            goal: freshRace.goal || race.goal,
+            info: freshRace.info || race.info,
+            status: freshRace.status || race.status,
+            startedAt: freshRace.startedAt || race.startedAt,
+            endedAt: freshRace.endedAt || race.endedAt
+          },
+          $currentDate: { updatedAt: true }
+        }
+      );
+
+      hydrated.push({ ...race, ...freshRace, _id: race._id, tournamentId: race.tournamentId, startggSetId: race.startggSetId, matchPlayers: race.matchPlayers, matchConfidence: race.matchConfidence, tournamentPhase: race.tournamentPhase, tournamentPool: race.tournamentPool, tournamentRound: race.tournamentRound, source: race.source });
+    } catch (error) {
+      console.warn(`Unable to hydrate race entrants for ${race.category}/${raceSlug}:`, error.message);
+      hydrated.push(race);
+    }
+  }
+
+  return hydrated;
+}
 
 // Get all tournaments
 router.get('/', async (req, res, next) => {
@@ -263,7 +329,9 @@ router.get('/:id/races', async (req, res, next) => {
     const races = await Race.find({ tournamentId: req.params.id })
       .sort({ startedAt: -1 });
 
-    res.json({ races });
+    const hydratedRaces = await hydrateMissingRaceEntrants(races.map((race) => race.toObject()), Race);
+
+    res.json({ races: hydratedRaces });
   } catch (error) {
     next(error);
   }

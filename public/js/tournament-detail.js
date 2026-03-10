@@ -1685,13 +1685,29 @@ function createMatchCard(match, races = []) {
         if (winnerEntr) {
           const wt = getTimeFromEntrantObj(winnerEntr, race);
           const lt = loserEntr ? getTimeFromEntrantObj(loserEntr, race) : null;
-          // Determine who won this race by place
-          if (player1Winner) {
-            t1 = t1 || wt;
-            t2 = t2 || lt;
-          } else if (player2Winner) {
-            t2 = t2 || wt;
-            t1 = t1 || lt;
+          const winnerName = normalizeName(winnerEntr.userName || (winnerEntr.user && winnerEntr.user.name) || winnerEntr.name || winnerEntr.displayName || '');
+          const loserName = normalizeName((loserEntr && (loserEntr.userName || (loserEntr.user && loserEntr.user.name) || loserEntr.name || loserEntr.displayName)) || '');
+          const matchP1 = normalizeName(match.player1Name || '');
+          const matchP2 = normalizeName(match.player2Name || '');
+
+          // Prefer mapping winner/loser by actual entrant names when available.
+          if (winnerName && loserName) {
+            if (winnerName === matchP1 && loserName === matchP2) {
+              t1 = t1 || wt;
+              t2 = t2 || lt;
+            } else if (winnerName === matchP2 && loserName === matchP1) {
+              t2 = t2 || wt;
+              t1 = t1 || lt;
+            }
+          } else if (!isMultiRaceSeries) {
+            // Only use overall set winner as a last resort for single-race matches.
+            if (player1Winner) {
+              t1 = t1 || wt;
+              t2 = t2 || lt;
+            } else if (player2Winner) {
+              t2 = t2 || wt;
+              t1 = t1 || lt;
+            }
           }
         }
       } catch (e) {}

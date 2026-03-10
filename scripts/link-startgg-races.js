@@ -222,6 +222,13 @@ async function processTournament(tournament, { Race }, options) {
         // First link: set raceUrl
         liveMatches[liveMatchIdx] = { ...prev, raceUrl: race.url };
       }
+      // Track all linked races in raceUrls array (for BO3/BO5 occupation detection)
+      if (!Array.isArray(liveMatches[liveMatchIdx].raceUrls)) {
+        liveMatches[liveMatchIdx].raceUrls = [];
+      }
+      if (!liveMatches[liveMatchIdx].raceUrls.includes(race.url)) {
+        liveMatches[liveMatchIdx].raceUrls.push(race.url);
+      }
     }
 
     if (!dryRun) {

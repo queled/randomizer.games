@@ -1303,6 +1303,12 @@ const {
   parseRaceStageInfo
 } = require('../helpers/race-match-linking');
 const racetimeAPI = require('../services/racetime');
+const {
+  loadNormalizedMatches,
+  loadCandidateRaces,
+  buildAutoLinkPreview,
+  applyAutoLinkProposals
+} = require('../services/tournament-autolink');
 
 /**
  * Parse a racetime URL to extract category and raceId.
@@ -1345,6 +1351,21 @@ router.get('/tournaments', requireAdmin, async (req, res, next) => {
       Tournament.countDocuments(query)
     ]);
 
+    const challongeTournamentIds = tournaments
+      .filter(t => !!t.challongeId)
+      .map(t => t._id);
+
+    const challongeCounts = challongeTournamentIds.length
+      ? await Match.aggregate([
+        { $match: { tournamentId: { $in: challongeTournamentIds } } },
+        { $group: { _id: '$tournamentId', count: { $sum: 1 } } }
+      ])
+      : [];
+
+    const challongeCountMap = new Map(
+      challongeCounts.map(entry => [String(entry._id), entry.count])
+    );
+
     const results = tournaments.map(t => ({
       _id: t._id,
       name: t.name,
@@ -1354,7 +1375,9 @@ router.get('/tournaments', requireAdmin, async (req, res, next) => {
       isStartgg: !!t.startggId,
       isChallonge: !!t.challongeId,
       participantsCount: t.participantsCount || 0,
-      matchesCount: t.startggId ? (t.matches?.length || 0) : (t.setsTotal || 0)
+      matchesCount: t.startggId
+        ? (t.matches?.length || 0)
+        : (challongeCountMap.get(String(t._id)) || 0)
     }));
 
     res.json({
@@ -1372,74 +1395,18 @@ router.get('/tournaments', requireAdmin, async (req, res, next) => {
  */
 router.get('/tournaments/:id/linking', requireAdmin, async (req, res, next) => {
   try {
-    const tournament = await Tournament.findById(req.params.id).lean();
+    const tournament = await Tournament.findById(req.params.id)
+      .populate('game')
+      .lean();
     if (!tournament) return res.status(404).json({ error: 'Tournament not found' });
 
-    // Get matches (embedded for start.gg, separate for challonge)
-    let matches = [];
+    const matches = await loadNormalizedMatches({ tournament, Match });
     const isStartgg = !!tournament.startggId;
 
-    if (isStartgg && Array.isArray(tournament.matches)) {
-      matches = tournament.matches
-        .filter(m => {
-          // Filter out TBD/not-started matches (state 3 = completed in start.gg)
-          const p1 = m.player1?.name || '';
-          const p2 = m.player2?.name || '';
-          if (!p1 || !p2 || p1 === 'TBD' || p2 === 'TBD') return false;
-          if (m.state !== undefined && m.state !== null && m.state !== 3) return false;
-          return true;
-        })
-        .map(m => ({
-        _id: m.startggSetId || m._id,
-        startggSetId: m.startggSetId,
-        round: m.round,
-        phase: m.phase || null,
-        phaseGroup: m.phaseGroup || null,
-        player1Name: m.player1?.name || 'TBD',
-        player2Name: m.player2?.name || 'TBD',
-        displayScore: m.displayScore || null,
-        state: m.state,
-        completedAt: m.completedAt,
-        raceUrl: m.raceUrl || null,
-        raceUrls: Array.isArray(m.raceUrls) ? m.raceUrls : (m.raceUrl ? [m.raceUrl] : []),
-        linkScore: m.linkScore || null,
-        isEmbedded: true
-      }));
-    } else {
-      const challongeMatches = await Match.find({ tournamentId: tournament._id }).lean();
-      matches = challongeMatches
-        .filter(m => {
-          const p1 = m.player1Name || '';
-          const p2 = m.player2Name || '';
-          if (!p1 || !p2 || p1 === 'TBD' || p2 === 'TBD') return false;
-          if (m.state && m.state !== 'complete') return false;
-          return true;
-        })
-        .map(m => ({
-        _id: m._id.toString(),
-        round: m.round,
-        phase: null,
-        phaseGroup: m.groupId || null,
-        player1Name: m.player1Name || 'TBD',
-        player2Name: m.player2Name || 'TBD',
-        displayScore: null,
-        scoresCsv: m.scoresCsv || null,
-        state: m.state,
-        completedAt: m.completedAt,
-        raceUrl: m.raceUrl || null,
-        raceUrls: m.raceUrl ? [m.raceUrl] : [],
-        linkScore: null,
-        isEmbedded: false
-      }));
-    }
-
-    // Get races for this tournament (exclude pending & cancelled for linking overview)
-    const races = await Race.find({
-      tournamentId: tournament._id,
-      status: { $nin: ['pending', 'cancelled'] }
-    })
-      .sort({ startedAt: -1 })
-      .lean();
+    // Get races for this tournament, including nearby candidates useful for auto-link/admin.
+    const races = (await loadCandidateRaces({ tournament, Race, matches }))
+      .filter(r => !['pending', 'cancelled'].includes(r.status))
+      .sort((a, b) => new Date(b.startedAt || 0).getTime() - new Date(a.startedAt || 0).getTime());
 
     const racesFormatted = races.map(r => {
       const stageInfo = parseRaceStageInfo(r);
@@ -1507,7 +1474,9 @@ router.get('/tournaments/:id/linking', requireAdmin, async (req, res, next) => {
  */
 router.get('/tournaments/:id/suggestions/:matchId', requireAdmin, async (req, res, next) => {
   try {
-    const tournament = await Tournament.findById(req.params.id).lean();
+    const tournament = await Tournament.findById(req.params.id)
+      .populate('game')
+      .lean();
     if (!tournament) return res.status(404).json({ error: 'Tournament not found' });
 
     // Find the match
@@ -1540,10 +1509,10 @@ router.get('/tournaments/:id/suggestions/:matchId', requireAdmin, async (req, re
     }
 
     // Get all linkable races for this tournament (exclude pending & cancelled)
-    const races = await Race.find({
-      tournamentId: tournament._id,
-      status: { $nin: ['pending', 'cancelled'] }
-    }).lean();
+    const matches = await loadNormalizedMatches({ tournament, Match });
+    const races = (await loadCandidateRaces({ tournament, Race, matches }))
+      .filter(race => !['pending', 'cancelled'].includes(race.status))
+      .filter(race => !race.tournamentId || String(race.tournamentId) === String(tournament._id) || !(race.matchId || race.startggSetId));
 
     // Score each race against this match
     const suggestions = [];
@@ -1771,115 +1740,24 @@ router.post('/tournaments/:id/unlink-race', requireAdmin, async (req, res, next)
  */
 router.get('/tournaments/:id/auto-link-preview', requireAdmin, async (req, res, next) => {
   try {
-    const tournament = await Tournament.findById(req.params.id).lean();
+    const tournament = await Tournament.findById(req.params.id)
+      .populate('game')
+      .lean();
     if (!tournament) return res.status(404).json({ error: 'Tournament not found' });
 
-    const isStartgg = !!tournament.startggId;
-    const races = await Race.find({ tournamentId: tournament._id }).lean();
-    const threshold = 300; // Lower threshold for preview to show more options
+    const preview = await buildAutoLinkPreview({
+      tournament,
+      Match,
+      Race,
+      threshold: 300,
+      minGap: 50
+    });
 
-    const proposals = [];
-    let skipped = 0;
-
-    if (isStartgg && Array.isArray(tournament.matches)) {
-      const liveMatches = tournament.matches
-        .filter(m => {
-          const p1 = m.player1?.name || '';
-          const p2 = m.player2?.name || '';
-          return p1 && p2 && p1 !== 'TBD' && p2 !== 'TBD';
-        })
-        .map(m => ({ ...m }));
-
-      for (const race of races) {
-        if (race.startggSetId) { skipped++; continue; }
-        if (['pending', 'cancelled'].includes(race.status)) { skipped++; continue; }
-        const stageInfo = parseRaceStageInfo(race);
-        if (stageInfo.type === 'qualifier') { skipped++; continue; }
-
-        const scored = rankMatchesForRace(race, liveMatches, {
-          requireDirect: true,
-          allowOccupiedMatchReassign: false
-        });
-
-        const chosen = selectBestCandidate(scored, {
-          threshold,
-          minGap: 50,
-          raceUrl: race.url
-        });
-
-        if (!chosen) { skipped++; continue; }
-
-        const players = getMatchPlayers(chosen.match);
-        proposals.push({
-          raceUrl: race.url,
-          raceLabel: getRaceLabel(race),
-          raceEntrants: (race.entrants || []).length,
-          matchId: chosen.match.startggSetId || chosen.match._id?.toString(),
-          matchPlayers: `${players.player1} vs ${players.player2}`,
-          matchPhase: chosen.match.phase || null,
-          matchRound: chosen.match.round || null,
-          score: chosen.score,
-          isStartgg: true
-        });
-
-        // Mark match as occupied in live state
-        const liveIdx = liveMatches.findIndex(m => m.startggSetId === chosen.match.startggSetId);
-        if (liveIdx >= 0) {
-          liveMatches[liveIdx] = { ...liveMatches[liveIdx], raceUrl: race.url };
-        }
-      }
-    } else {
-      const allMatches = await Match.find({ tournamentId: tournament._id }).lean();
-      const liveMatches = allMatches
-        .filter(m => {
-          const p1 = m.player1Name || '';
-          const p2 = m.player2Name || '';
-          return p1 && p2 && p1 !== 'TBD' && p2 !== 'TBD';
-        })
-        .map(m => ({ ...m }));
-
-      for (const race of races) {
-        if (race.matchId) { skipped++; continue; }
-        if (['pending', 'cancelled'].includes(race.status)) { skipped++; continue; }
-
-        const scored = rankMatchesForRace(race, liveMatches, {
-          requireDirect: true,
-          allowOccupiedMatchReassign: false
-        });
-
-        const chosen = selectBestCandidate(scored, {
-          threshold,
-          minGap: 50,
-          raceUrl: race.url
-        });
-
-        if (!chosen) { skipped++; continue; }
-
-        const players = getMatchPlayers(chosen.match);
-        proposals.push({
-          raceUrl: race.url,
-          raceLabel: getRaceLabel(race),
-          raceEntrants: (race.entrants || []).length,
-          matchId: chosen.match._id.toString(),
-          matchPlayers: `${players.player1} vs ${players.player2}`,
-          matchPhase: null,
-          matchRound: chosen.match.round || null,
-          score: chosen.score,
-          isStartgg: false
-        });
-
-        // Mark match as occupied
-        const liveIdx = liveMatches.findIndex(m => m._id.toString() === chosen.match._id.toString());
-        if (liveIdx >= 0) {
-          liveMatches[liveIdx] = { ...liveMatches[liveIdx], raceUrl: race.url };
-        }
-      }
-    }
-
-    // Sort proposals by score descending
-    proposals.sort((a, b) => b.score - a.score);
-
-    res.json({ proposals, skipped, total: races.length });
+    res.json({
+      proposals: preview.proposals,
+      skipped: preview.skipped,
+      total: preview.total
+    });
   } catch (error) {
     next(error);
   }
@@ -1896,74 +1774,18 @@ router.post('/tournaments/:id/auto-link-confirm', requireAdmin, async (req, res,
       return res.status(400).json({ error: 'proposals array is required' });
     }
 
-    const tournament = await Tournament.findById(req.params.id);
+    const tournament = await Tournament.findById(req.params.id)
+      .populate('game');
     if (!tournament) return res.status(404).json({ error: 'Tournament not found' });
 
-    const isStartgg = !!tournament.startggId;
-    let linked = 0;
-    const errors = [];
-    let tournamentDirty = false;
+    const result = await applyAutoLinkProposals({
+      tournament,
+      proposals,
+      Race,
+      Match
+    });
 
-    for (const p of proposals) {
-      try {
-        const race = await Race.findOne({ url: p.raceUrl });
-        if (!race) { errors.push(`Race ${p.raceUrl} not found`); continue; }
-
-        if (isStartgg) {
-          const embeddedMatch = tournament.matches?.find(m =>
-            (m.startggSetId || '').toString() === p.matchId ||
-            (m._id || '').toString() === p.matchId
-          );
-          if (!embeddedMatch) { errors.push(`Match ${p.matchId} not found`); continue; }
-
-          const setId = embeddedMatch.startggSetId;
-
-          race.tournamentId = tournament._id;
-          race.startggSetId = setId;
-          race.matchPlayers = p.matchPlayers;
-          race.matchConfidence = p.score;
-          race.tournamentPhase = embeddedMatch.phase || null;
-          race.tournamentPool = embeddedMatch.phaseGroup || null;
-          race.tournamentRound = embeddedMatch.round ?? null;
-          await race.save();
-
-          // Update embedded match (use save() to avoid type-mismatch with arrayFilters)
-          embeddedMatch.raceUrl = p.raceUrl;
-          embeddedMatch.linkScore = p.score;
-          if (!Array.isArray(embeddedMatch.raceUrls)) embeddedMatch.raceUrls = [];
-          if (!embeddedMatch.raceUrls.includes(p.raceUrl)) {
-            embeddedMatch.raceUrls.push(p.raceUrl);
-          }
-          tournamentDirty = true;
-        } else {
-          const matchDoc = await Match.findById(p.matchId);
-          if (!matchDoc) { errors.push(`Match ${p.matchId} not found`); continue; }
-
-          race.tournamentId = tournament._id;
-          race.matchId = matchDoc._id;
-          race.matchConfidence = p.score;
-          race.matchPlayers = p.matchPlayers;
-          await race.save();
-
-          matchDoc.raceUrl = p.raceUrl;
-          matchDoc.completedAt = race.endedAt || matchDoc.completedAt;
-          await matchDoc.save();
-        }
-
-        linked++;
-      } catch (err) {
-        errors.push(`Error linking ${p.raceUrl}: ${err.message}`);
-      }
-    }
-
-    // Save tournament once after all proposals (for start.gg embedded matches)
-    if (tournamentDirty) {
-      tournament.markModified('matches');
-      tournament.updatedAt = new Date();
-      await tournament.save();
-    }
-
-    res.json({ success: true, linked, total: proposals.length, errors });
+    res.json({ success: true, ...result });
   } catch (error) {
     next(error);
   }

@@ -1,5 +1,6 @@
 // Homepage logic
 let gamesById = {};
+let gamesBySlug = {};
 const playersCache = {};
 
 // Parse ISO 8601 duration (PT1H23M45S) to milliseconds
@@ -134,19 +135,31 @@ async function getLastMatchDate(tournamentId) {
 }
 
 // Resolve a friendly game/category name
+function getGameDisplayName(game) {
+  return game?.official?.name
+    || game?.name
+    || game?.randomizer?.displayName
+    || game?.randomizer?.shortName
+    || game?.id
+    || null;
+}
+
 function resolveGameForCategory(cat) {
   if (!cat) return null;
-  if (gamesById[cat]) return gamesById[cat];
-  for (const id in gamesById) {
-    if (cat === id) return gamesById[id];
-  }
-  for (const id in gamesById) {
-    if (cat.startsWith(id) || cat.indexOf(id) !== -1) return gamesById[id];
-  }
-  if (cat.endsWith('r')) {
-    const alt = cat.slice(0, -1);
+  const normalized = String(cat).toLowerCase().trim();
+
+  if (gamesBySlug[normalized]) return gamesBySlug[normalized];
+  if (gamesById[normalized]) return gamesById[normalized];
+
+  if (normalized.endsWith('r')) {
+    const alt = normalized.slice(0, -1);
     if (gamesById[alt]) return gamesById[alt];
   }
+
+  for (const id in gamesById) {
+    if (normalized.startsWith(id) || normalized.includes(id)) return gamesById[id];
+  }
+
   return null;
 }
 
@@ -187,10 +200,33 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     const gamesResp = await API.getGames();
     const games = gamesResp.games || [];
-    gamesById = games.reduce((acc, g) => { acc[g.id] = g; return acc; }, {});
+    gamesById = {};
+    gamesBySlug = {};
+
+    games.forEach(g => {
+      const gameId = String(g.id || '').toLowerCase().trim();
+      if (gameId) {
+        gamesById[gameId] = g;
+        gamesById[`${gameId}r`] = g;
+      }
+
+      const primarySlug = String(g?.integrations?.racetime?.gameSlug || '').toLowerCase().trim();
+      if (primarySlug) {
+        gamesBySlug[primarySlug] = g;
+      }
+
+      const extraSlugs = Array.isArray(g?.integrations?.racetime?.gameSlugs)
+        ? g.integrations.racetime.gameSlugs
+        : [];
+      extraSlugs.forEach(slug => {
+        const normalizedSlug = String(slug || '').toLowerCase().trim();
+        if (normalizedSlug) gamesBySlug[normalizedSlug] = g;
+      });
+    });
   } catch (e) {
     console.warn('Could not load games list for name mapping', e);
     gamesById = {};
+    gamesBySlug = {};
   }
 
   await Promise.all([
@@ -306,7 +342,7 @@ function createRaceCard(race) {
   const totalEntrants = race.entrants?.length || 0;
   
   const resolved = resolveGameForCategory(race.category);
-  const friendlyGameName = (resolved && (resolved.officialName || resolved.name)) || race.category || 'N/A';
+  const friendlyGameName = getGameDisplayName(resolved) || race.category || 'N/A';
 
   card.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:0.5rem;">
@@ -412,7 +448,7 @@ function createTournamentCard(tournament) {
 
   // Resolve game name
   const resolved = resolveGameForTournament(tournament);
-  const friendlyGameName = (resolved && (resolved.officialName || resolved.name)) || tournament.gameName || 'Unknown game';
+  const friendlyGameName = getGameDisplayName(resolved) || tournament.gameName || 'Unknown game';
 
   card.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:0.5rem;">

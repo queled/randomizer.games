@@ -26,6 +26,8 @@
   // Global variables for re-rendering on spoiler mode change
   let currentEntrants = [];
   let currentRace = null;
+  let gamesById = {};
+  let gamesBySlug = {};
 
   // Event listener for spoiler mode changes
   window.addEventListener('spoilerModeChanged', function(e) {
@@ -53,6 +55,7 @@
     'ootr': 'Ocarina of Time Randomizer',
     'alttp': 'A Link to the Past Randomizer',
     'alttpr': 'A Link to the Past Randomizer',
+    'alttpr-ladder': 'A Link to the Past Randomizer',
     'mm': 'Majora\'s Mask Randomizer',
     'mmr': 'Majora\'s Mask Randomizer',
     'sm': 'Super Metroid Randomizer',
@@ -70,10 +73,70 @@
     'ootmm': 'OoT+MM Combo Randomizer'
   };
 
+  function resolveGameLabel(game) {
+    return game?.official?.name
+      || game?.name
+      || game?.randomizer?.displayName
+      || game?.randomizer?.shortName
+      || game?.id
+      || null;
+  }
+
   function getGameDisplayName(slug) {
     if (!slug) return 'Race';
-    const lowerSlug = slug.toLowerCase();
+    const lowerSlug = String(slug).toLowerCase().trim();
+
+    if (gamesBySlug[lowerSlug]) {
+      return resolveGameLabel(gamesBySlug[lowerSlug]) || slug;
+    }
+
+    if (gamesById[lowerSlug]) {
+      return resolveGameLabel(gamesById[lowerSlug]) || slug;
+    }
+
+    if (lowerSlug.endsWith('r')) {
+      const alt = lowerSlug.slice(0, -1);
+      if (gamesById[alt]) {
+        return resolveGameLabel(gamesById[alt]) || slug;
+      }
+    }
+
     return gameDisplayNames[lowerSlug] || slug;
+  }
+
+  async function loadGames() {
+    try {
+      const gamesData = await fetchJson('/api/games');
+      const games = gamesData.games || [];
+
+      gamesById = {};
+      gamesBySlug = {};
+
+      games.forEach(game => {
+        const gameId = String(game.id || '').toLowerCase().trim();
+        if (gameId) {
+          gamesById[gameId] = game;
+          gamesById[`${gameId}r`] = game;
+        }
+
+        const primarySlug = String(game?.integrations?.racetime?.gameSlug || '').toLowerCase().trim();
+        if (primarySlug) {
+          gamesBySlug[primarySlug] = game;
+        }
+
+        const extraSlugs = Array.isArray(game?.integrations?.racetime?.gameSlugs)
+          ? game.integrations.racetime.gameSlugs
+          : [];
+
+        extraSlugs.forEach(slug => {
+          const normalizedSlug = String(slug || '').toLowerCase().trim();
+          if (normalizedSlug) gamesBySlug[normalizedSlug] = game;
+        });
+      });
+    } catch (e) {
+      gamesById = {};
+      gamesBySlug = {};
+    }
   }
 
   // Parse ISO 8601 duration to milliseconds
@@ -314,6 +377,8 @@
 
   async function load() {
     try {
+      await loadGames();
+
       let race;
       
       if (raceId) {
@@ -328,23 +393,7 @@
         return;
       }
 
-      // Update page title
-      // Fetch full game info to get the display name
       let gameDisplayName = getGameDisplayName(race.category);
-      try {
-        const gamesData = await fetchJson('/api/games');
-        if (gamesData.games && gamesData.games.length > 0) {
-          // Chercher par slug racetime
-          const gameBySlug = gamesData.games.find(g => 
-            g.integrations?.racetime?.gameSlug?.toLowerCase() === race.category?.toLowerCase()
-          );
-          if (gameBySlug) {
-            gameDisplayName = gameBySlug.displayName || gameBySlug.officialName || gameBySlug.name || gameDisplayName;
-          }
-        }
-      } catch (e) {
-        // Fallback to default name
-      }
 
       // Update title with full name
       document.title = `${gameDisplayName} - Race - Randomizer`;

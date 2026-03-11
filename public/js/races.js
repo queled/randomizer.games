@@ -35,6 +35,15 @@
     'ootmm': 'OoT+MM Combo Randomizer'
   };
 
+  function resolveGameLabel(game) {
+    return game?.official?.name
+      || game?.name
+      || game?.randomizer?.displayName
+      || game?.randomizer?.shortName
+      || game?.id
+      || null;
+  }
+
   // Parse ISO 8601 duration to milliseconds
   function parseISODuration(str) {
     if (!str) return null;
@@ -79,15 +88,18 @@
 
   function getGameDisplayName(slug) {
     if (!slug) return 'Race';
-    const lowerSlug = slug.toLowerCase();
+    const lowerSlug = String(slug).toLowerCase().trim();
     
     // Chercher d'abord par slug racetime
     if (gamesBySlug[lowerSlug]) {
-      return gamesBySlug[lowerSlug].displayName || gamesBySlug[lowerSlug].officialName || gamesBySlug[lowerSlug].name || slug;
+      return resolveGameLabel(gamesBySlug[lowerSlug]) || slug;
     }
     // Sinon par ID
     if (gamesById[lowerSlug]) {
-      return gamesById[lowerSlug].displayName || gamesById[lowerSlug].officialName || gamesById[lowerSlug].name || slug;
+      return resolveGameLabel(gamesById[lowerSlug]) || slug;
+    }
+    if (lowerSlug.endsWith('r') && gamesById[lowerSlug.slice(0, -1)]) {
+      return resolveGameLabel(gamesById[lowerSlug.slice(0, -1)]) || slug;
     }
     // Fallback sur les noms statiques
     return gameDisplayNames[lowerSlug] || slug;
@@ -175,7 +187,11 @@
       const games = data.games || [];
       
       games.forEach(g => {
-        gamesById[g.id] = g;
+        const gameId = String(g.id || '').toLowerCase().trim();
+        if (gameId) {
+          gamesById[gameId] = g;
+          gamesById[`${gameId}r`] = g;
+        }
         
         // Indexer aussi par slug racetime (principal et additionnels)
         if (g.integrations?.racetime?.gameSlug) {
@@ -191,7 +207,7 @@
         // Add option to select
         const opt = document.createElement('option');
         opt.value = g.id;
-        opt.textContent = g.displayName || g.officialName || g.name;
+        opt.textContent = resolveGameLabel(g) || g.id;
         gameSelect.appendChild(opt);
       });
     } catch (e) {

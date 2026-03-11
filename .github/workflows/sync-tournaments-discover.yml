@@ -1,0 +1,165 @@
+# Workflow: Découverte de nouveaux tournois Randomizer
+# Ce workflow cherche de nouveaux tournois sur start.gg et Challonge toutes les heures,
+# en se basant sur les jeux présents dans la base de données du site.
+#
+# Stratégie de recherche:
+# - Utilise les noms/acronymes des jeux en BDD comme termes de recherche
+# - Mots-clés: randomizer, rando, multiworld, archipelago, seed...
+# - Filtre les résultats pour ne garder que les tournois pertinents
+# - Import automatique avec détection du jeu associé
+#
+# Le script ne ré-importe pas les tournois déjà présents en BDD.
+
+name: Sync Tournaments (Discover New)
+
+on:
+  # Exécution toutes les heures
+  schedule:
+    - cron: '15 * * * *'
+
+  # Déclenchement manuel avec options
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Mode dry-run (aperçu sans modification)'
+        required: false
+        default: 'false'
+        type: boolean
+      source:
+        description: 'Source à explorer (all, startgg, challonge)'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - startgg
+          - challonge
+      days:
+        description: 'Chercher les tournois des N derniers jours'
+        required: false
+        default: '7'
+        type: string
+      max_pages:
+        description: 'Nombre max de pages de résultats par requête'
+        required: false
+        default: '5'
+        type: string
+      game:
+        description: 'Slug du jeu spécifique (laisser vide pour tous)'
+        required: false
+        default: ''
+        type: string
+
+env:
+  NODE_VERSION: '20'
+
+# Empêche les exécutions simultanées
+concurrency:
+  group: sync-tournaments-discover
+  cancel-in-progress: false
+
+jobs:
+  discover-tournaments:
+    name: Découvrir de nouveaux tournois
+    runs-on: ubuntu-latest
+    # Timeout: 15min pour les scheduled, 1h pour les manuels
+    timeout-minutes: ${{ github.event_name == 'schedule' && 15 || 60 }}
+
+    steps:
+      - name: Checkout du projet
+        uses: actions/checkout@v4
+
+      - name: Configuration de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Découvrir et importer les tournois
+        id: discover
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          STARTGG_API_TOKEN: ${{ secrets.STARTGG_API_TOKEN }}
+          CHALLONGE_API_KEY: ${{ secrets.CHALLONGE_API_KEY }}
+        run: |
+          # Construire les arguments
+          ARGS=""
+
+          # Source
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            SOURCE="${{ inputs.source }}"
+            DAYS="${{ inputs.days }}"
+            MAX_PAGES="${{ inputs.max_pages }}"
+            GAME="${{ inputs.game }}"
+            DRY_RUN="${{ inputs.dry_run }}"
+          else
+            # Scheduled run: valeurs par défaut pour le cron horaire
+            SOURCE="all"
+            DAYS="2"
+            MAX_PAGES="3"
+            GAME=""
+            DRY_RUN="false"
+          fi
+
+          if [[ "$SOURCE" != "all" ]]; then
+            ARGS="$ARGS --source $SOURCE"
+          fi
+
+          if [[ -n "$DAYS" ]]; then
+            SINCE_DATE=$(date -u -d "-${DAYS} days" +%Y-%m-%d 2>/dev/null || date -u -v-${DAYS}d +%Y-%m-%d)
+            ARGS="$ARGS --since $SINCE_DATE"
+          fi
+
+          if [[ -n "$MAX_PAGES" ]]; then
+            ARGS="$ARGS --max-pages $MAX_PAGES"
+          fi
+
+          if [[ -n "$GAME" ]]; then
+            ARGS="$ARGS --game $GAME"
+          fi
+
+          if [[ "$DRY_RUN" == "true" ]]; then
+            ARGS="$ARGS --dry-run"
+          fi
+
+          echo "🔍 Running: node scripts/discover-tournaments.js $ARGS"
+          node scripts/discover-tournaments.js $ARGS 2>&1 | tee /tmp/discover-output.log
+
+          # Extraire les stats du résumé (le script affiche une table avec Found/Imported/Skipped/Errors)
+          STARTGG_IMPORTED=$(grep -oP 'STARTGG\s+Found:\s+\d+\s+│\s+Imported:\s+\K\d+' /tmp/discover-output.log || echo "0")
+          CHALLONGE_IMPORTED=$(grep -oP 'CHALLONGE\s+Found:\s+\d+\s+│\s+Imported:\s+\K\d+' /tmp/discover-output.log || echo "0")
+          STARTGG_FOUND=$(grep -oP 'STARTGG\s+Found:\s+\K\d+' /tmp/discover-output.log || echo "0")
+          CHALLONGE_FOUND=$(grep -oP 'CHALLONGE\s+Found:\s+\K\d+' /tmp/discover-output.log || echo "0")
+          TOTAL_IMPORTED=$(grep -oP 'Total imported:\s+\K\d+' /tmp/discover-output.log || echo "0")
+          TOTAL_ERRORS=$(grep -oP 'Errors:\s+\K\d+' /tmp/discover-output.log || echo "0")
+
+          echo "startgg_found=$STARTGG_FOUND" >> $GITHUB_OUTPUT
+          echo "startgg_imported=$STARTGG_IMPORTED" >> $GITHUB_OUTPUT
+          echo "challonge_found=$CHALLONGE_FOUND" >> $GITHUB_OUTPUT
+          echo "challonge_imported=$CHALLONGE_IMPORTED" >> $GITHUB_OUTPUT
+          echo "total_imported=$TOTAL_IMPORTED" >> $GITHUB_OUTPUT
+          echo "total_errors=$TOTAL_ERRORS" >> $GITHUB_OUTPUT
+
+      - name: Résumé de la découverte
+        if: always()
+        run: |
+          echo "## 🔍 Découverte de tournois" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Start.gg" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔎 Trouvés: ${{ steps.discover.outputs.startgg_found }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 🆕 Importés: ${{ steps.discover.outputs.startgg_imported }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Challonge" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔎 Trouvés: ${{ steps.discover.outputs.challonge_found }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 🆕 Importés: ${{ steps.discover.outputs.challonge_imported }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Total" >> $GITHUB_STEP_SUMMARY
+          echo "- 📥 Importés: ${{ steps.discover.outputs.total_imported }}" >> $GITHUB_STEP_SUMMARY
+          echo "- ❌ Erreurs: ${{ steps.discover.outputs.total_errors }}" >> $GITHUB_STEP_SUMMARY
+          echo "- ⏰ Date: $(date -u)" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ inputs.dry_run }}" == "true" ]]; then
+            echo "- 🔍 **Mode DRY-RUN**" >> $GITHUB_STEP_SUMMARY
+          fi

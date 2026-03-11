@@ -270,9 +270,14 @@ async function main() {
 
   await connectDB();
 
+  let totalUpdated = 0, totalSkipped = 0, totalErrors = 0;
+
   // Phase 1: Update active tournaments
   if (!opts.discoverOnly) {
     const updateStats = await updateActiveTournaments({ dryRun: opts.dryRun });
+    totalUpdated += updateStats.updated;
+    totalSkipped += updateStats.skipped;
+    totalErrors += updateStats.errors;
     console.log(`\n   📊 Update: ${updateStats.updated} updated, ${updateStats.skipped} skipped, ${updateStats.errors} errors`);
   }
 
@@ -281,8 +286,15 @@ async function main() {
     await discoverNewTournaments({ days: opts.days, dryRun: opts.dryRun });
   }
 
+  // Parseable summary (used by GitHub Actions to extract stats)
+  console.log('\n── RÉSUMÉ ──');
+  console.log(`Mis à jour: ${totalUpdated}`);
+  console.log(`Ignorés: ${totalSkipped}`);
+  console.log(`Erreurs: ${totalErrors}`);
+
   console.log('\n✅ Tournament sync completed');
   await mongoose.disconnect();
+  process.exit(totalErrors > 0 ? 1 : 0);
 }
 
 main().catch(err => {

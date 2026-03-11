@@ -58,57 +58,59 @@ async function buildGameDisplayMaps() {
     .select('id name official randomizer integrations.racetime')
     .lean();
 
-  const bySlug = new Map();
+  const displayBySlug = new Map();
+  const canonicalIdBySlug = new Map();
 
-  const add = (slug, label) => {
+  const add = (slug, label, canonicalId) => {
     const s = String(slug || '').toLowerCase().trim();
     if (!s || !label) return;
-    if (!bySlug.has(s)) bySlug.set(s, label);
+    if (!displayBySlug.has(s)) displayBySlug.set(s, label);
+    if (canonicalId && !canonicalIdBySlug.has(s)) canonicalIdBySlug.set(s, canonicalId);
   };
 
   for (const game of games) {
     const label = resolveGameDisplayNameFromDoc(game);
-    const gameId = String(game.id || '').toLowerCase();
+    const gameId = String(game.id || '').toLowerCase().trim();
     const primarySlug = String(game?.integrations?.racetime?.gameSlug || '').toLowerCase();
     const extraSlugs = Array.isArray(game?.integrations?.racetime?.gameSlugs)
       ? game.integrations.racetime.gameSlugs.map(s => String(s || '').toLowerCase())
       : [];
 
-    add(gameId, label);
-    add(`${gameId}r`, label);
-    add(primarySlug, label);
-    extraSlugs.forEach(slug => add(slug, label));
+    add(gameId, label, gameId);
+    add(`${gameId}r`, label, gameId);
+    add(primarySlug, label, gameId);
+    extraSlugs.forEach(slug => add(slug, label, gameId));
   }
 
   const fallback = {
-    oot: 'Ocarina of Time Randomizer',
-    ootr: 'Ocarina of Time Randomizer',
-    alttp: 'A Link to the Past Randomizer',
-    alttpr: 'A Link to the Past Randomizer',
-    mm: 'Majora\'s Mask Randomizer',
-    mmr: 'Majora\'s Mask Randomizer',
-    sm: 'Super Metroid Randomizer',
-    smr: 'Super Metroid Randomizer',
-    sm64: 'Super Mario 64 Randomizer',
-    dk64: 'Donkey Kong 64 Randomizer',
-    dk64r: 'Donkey Kong 64 Randomizer',
-    tww: 'The Wind Waker Randomizer',
-    tp: 'Twilight Princess Randomizer',
-    kh2fm: 'Kingdom Hearts 2 FM Randomizer',
-    sotn: 'Symphony of the Night Randomizer',
-    smz3: 'SMZ3 Combo Randomizer',
-    ootmm: 'OoT+MM Combo Randomizer',
-    z1: 'The Legend of Zelda Randomizer',
-    z1r: 'The Legend of Zelda Randomizer'
+    oot: { label: 'Ocarina of Time Randomizer', gameId: 'oot' },
+    ootr: { label: 'Ocarina of Time Randomizer', gameId: 'oot' },
+    alttp: { label: 'A Link to the Past Randomizer', gameId: 'alttp' },
+    alttpr: { label: 'A Link to the Past Randomizer', gameId: 'alttp' },
+    mm: { label: 'Majora\'s Mask Randomizer', gameId: 'mm' },
+    mmr: { label: 'Majora\'s Mask Randomizer', gameId: 'mm' },
+    sm: { label: 'Super Metroid Randomizer', gameId: 'sm' },
+    smr: { label: 'Super Metroid Randomizer', gameId: 'sm' },
+    sm64: { label: 'Super Mario 64 Randomizer', gameId: 'sm64' },
+    dk64: { label: 'Donkey Kong 64 Randomizer', gameId: 'dk64' },
+    dk64r: { label: 'Donkey Kong 64 Randomizer', gameId: 'dk64' },
+    tww: { label: 'The Wind Waker Randomizer', gameId: 'tww' },
+    tp: { label: 'Twilight Princess Randomizer', gameId: 'tp' },
+    kh2fm: { label: 'Kingdom Hearts 2 FM Randomizer', gameId: 'kh2fm' },
+    sotn: { label: 'Symphony of the Night Randomizer', gameId: 'sotn' },
+    smz3: { label: 'SMZ3 Combo Randomizer', gameId: 'smz3' },
+    ootmm: { label: 'OoT+MM Combo Randomizer', gameId: 'ootmm' },
+    z1: { label: 'The Legend of Zelda Randomizer', gameId: 'z1' },
+    z1r: { label: 'The Legend of Zelda Randomizer', gameId: 'z1' }
   };
 
-  Object.entries(fallback).forEach(([slug, label]) => add(slug, label));
+  Object.entries(fallback).forEach(([slug, entry]) => add(slug, entry.label, entry.gameId));
 
-  return bySlug;
+  return { displayBySlug, canonicalIdBySlug };
 }
 
 async function buildPlayersResponse(includeTournaments) {
-  const gameDisplayBySlug = await buildGameDisplayMaps();
+  const { displayBySlug: gameDisplayBySlug, canonicalIdBySlug: canonicalGameIdBySlug } = await buildGameDisplayMaps();
 
   const [playerDocs, tournamentParticipants, raceCounts] = await Promise.all([
     Player.find({}).select('name racetimeUrl racetimeId userId twitch').lean(),
@@ -236,6 +238,7 @@ async function buildPlayersResponse(includeTournaments) {
 
     const racesByGame = Array.from(playerRaceCounts.entries())
       .map(([slug, count]) => ({
+        gameId: canonicalGameIdBySlug.get(String(slug || '').toLowerCase()) || String(slug || '').toLowerCase(),
         gameSlug: slug,
         gameName: gameDisplayBySlug.get(String(slug || '').toLowerCase()) || slug,
         count
@@ -301,7 +304,7 @@ router.get('/compare', async (req, res, next) => {
     }).sort({ startedAt: -1 }).lean();
 
     // Build game display map for category → game name mapping
-    const gameDisplayBySlug = await buildGameDisplayMaps();
+    const { displayBySlug: gameDisplayBySlug } = await buildGameDisplayMaps();
 
     let p1Wins = 0;
     let p2Wins = 0;

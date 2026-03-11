@@ -35,17 +35,17 @@ on:
           - startgg
           - challonge
       days:
-        description: 'Chercher les tournois des N derniers jours'
+        description: 'Chercher les tournois des N derniers jours (laisser vide = sans limite)'
         required: false
-        default: '7'
+        default: ''
         type: string
       max_pages:
-        description: 'Nombre max de pages de résultats par requête'
+        description: 'Nombre max de pages de résultats par requête (laisser vide = sans limite)'
         required: false
-        default: '5'
+        default: ''
         type: string
       game:
-        description: 'Slug du jeu spécifique (laisser vide pour tous)'
+        description: 'Slug du jeu spécifique (laisser vide pour tous les jeux)'
         required: false
         default: ''
         type: string

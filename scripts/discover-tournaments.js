@@ -30,7 +30,7 @@ const sanitizeHtml = require('sanitize-html');
 // ─── Configuration ───────────────────────────────────────────────────────────
 
 const RATE_LIMIT_MS = 1500; // ms between API calls
-const DEFAULT_MAX_PAGES = 10;
+const DEFAULT_MAX_PAGES = null;
 
 // Keywords that strongly indicate an actual randomizer / multiworld tournament
 const RANDOMIZER_SIGNAL_KEYWORDS = [
@@ -71,7 +71,11 @@ function parseArgs() {
         opts.keywords = (args[++i] || '').split(',').map(s => s.trim()).filter(Boolean);
         break;
       case '--max-pages':
-        opts.maxPages = parseInt(args[++i]) || DEFAULT_MAX_PAGES;
+        {
+          const raw = args[++i];
+          const parsed = parseInt(raw, 10);
+          opts.maxPages = Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+        }
         break;
       case '--since':
         opts.since = args[++i] || null;
@@ -165,32 +169,32 @@ function buildTournamentSearchText(tournament) {
   return normalizeText(`${tournament.name || ''} ${eventText}`);
 }
 
-function buildStartGGSearchQueries(games = [], extraKeywords = []) {
+function buildStartGGSearchQueries(game, extraKeywords = []) {
   const queries = new Set();
 
-  for (const game of games) {
-    const aliases = getGameAliases(game);
-    const randomizerAliases = getRandomizerAliases(game);
+  if (!game) return [];
 
-    for (const alias of randomizerAliases) {
+  const aliases = getGameAliases(game);
+  const randomizerAliases = getRandomizerAliases(game);
+
+  for (const alias of randomizerAliases) {
+    queries.add(alias);
+  }
+
+  for (const alias of aliases.slice(0, 8)) {
+    if (
+      alias.includes('randomizer') ||
+      alias.includes('randomiser') ||
+      alias.includes('rando') ||
+      alias.includes('multiworld') ||
+      alias.includes('archipelago')
+    ) {
       queries.add(alias);
+      continue;
     }
 
-    for (const alias of aliases.slice(0, 8)) {
-      if (
-        alias.includes('randomizer') ||
-        alias.includes('randomiser') ||
-        alias.includes('rando') ||
-        alias.includes('multiworld') ||
-        alias.includes('archipelago')
-      ) {
-        queries.add(alias);
-        continue;
-      }
-
-      for (const suffix of QUERY_SUFFIX_KEYWORDS) {
-        queries.add(`${alias} ${suffix}`);
-      }
+    for (const suffix of QUERY_SUFFIX_KEYWORDS) {
+      queries.add(`${alias} ${suffix}`);
     }
   }
 
@@ -200,6 +204,10 @@ function buildStartGGSearchQueries(games = [], extraKeywords = []) {
   }
 
   return [...queries];
+}
+
+function formatMaxPages(maxPages) {
+  return maxPages == null ? '∞' : String(maxPages);
 }
 
 function findMatchingGame(tournament, games = []) {
@@ -311,76 +319,74 @@ async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun,
   const api = new StartGGAPI();
   const stats = { found: 0, imported: 0, skipped: 0, errors: 0 };
 
-  // Build targeted queries from known game aliases instead of broad generic words.
-  // This dramatically reduces false positives like unrelated "random" tournaments.
-  const searchQueries = buildStartGGSearchQueries(games, keywords);
-
-  console.log(`\n🔍 Start.gg: Searching with ${searchQueries.length} queries...`);
-  console.log(`   Queries: ${searchQueries.slice(0, 10).join(', ')}${searchQueries.length > 10 ? ` ... (+${searchQueries.length - 10} more)` : ''}`);
-
   const seenSlugs = new Set();
   // Check which startgg tournaments already exist
   const existingStartgg = await Tournament.find({ startggId: { $exists: true, $ne: null } }).select('startggId startggSlug').lean();
   const existingStartggIds = new Set(existingStartgg.map(t => t.startggId));
 
-  for (const searchQuery of searchQueries) {
-    console.log(`\n   🔎 Searching: "${searchQuery}"`);
+  console.log(`\n🔍 Start.gg: Searching ${games.length} game(s)...`);
 
-    for (let page = 1; page <= maxPages; page++) {
-      try {
-        await sleep(RATE_LIMIT_MS);
+  for (const game of games) {
+    const searchQueries = buildStartGGSearchQueries(game, keywords);
+    console.log(`\n   🎮 Game: ${game.id} — ${game.name}`);
+    console.log(`      Queries: ${searchQueries.slice(0, 8).join(', ')}${searchQueries.length > 8 ? ` ... (+${searchQueries.length - 8} more)` : ''}`);
+    console.log(`      Max pages: ${formatMaxPages(maxPages)}`);
 
-        const searchOpts = { perPage: 25, page };
-        if (since) searchOpts.afterDate = since;
+    for (const searchQuery of searchQueries) {
+      console.log(`\n      🔎 Searching: "${searchQuery}"`);
 
-        const result = await api.searchTournaments(searchQuery, searchOpts);
+      for (let page = 1; maxPages == null || page <= maxPages; page++) {
+        try {
+          await sleep(RATE_LIMIT_MS);
 
-        if (!result.tournaments.length) break;
+          const searchOpts = { perPage: 25, page };
+          if (since) searchOpts.afterDate = since;
 
-        console.log(`      Page ${page}/${result.totalPages} – ${result.tournaments.length} results (total: ${result.total})`);
+          const result = await api.searchTournaments(searchQuery, searchOpts);
 
-        for (const tournament of result.tournaments) {
-          if (seenSlugs.has(tournament.slug)) continue;
-          seenSlugs.add(tournament.slug);
-          stats.found++;
+          if (!result.tournaments.length) break;
 
-          // Check if any event looks like a randomizer tournament
-          const isRandomizer = isRandomizerTournament(tournament, games);
-          if (!isRandomizer) continue;
+          console.log(`         Page ${page}/${result.totalPages} – ${result.tournaments.length} results (total: ${result.total})`);
 
-          // Check if already imported
-          const alreadyExists = tournament.events?.some(e => existingStartggIds.has(e.id));
-          if (alreadyExists) {
-            stats.skipped++;
-            continue;
+          for (const tournament of result.tournaments) {
+            if (seenSlugs.has(tournament.slug)) continue;
+            seenSlugs.add(tournament.slug);
+            stats.found++;
+
+            const isRandomizer = isRandomizerTournament(tournament, [game]);
+            if (!isRandomizer) continue;
+
+            const alreadyExists = tournament.events?.some(e => existingStartggIds.has(e.id));
+            if (alreadyExists) {
+              stats.skipped++;
+              continue;
+            }
+
+            if (dryRun) {
+              console.log(`         📋 [DRY-RUN] Would import: ${tournament.name} (${tournament.slug}) → ${game.id}`);
+              tournament.events?.forEach(e => {
+                console.log(`            └── Event: ${e.name} (${e.numEntrants || '?'} entrants) – Game: ${e.game?.name || 'N/A'}`);
+              });
+              stats.imported++;
+              continue;
+            }
+
+            try {
+              await importStartGGTournament(api, tournament);
+              stats.imported++;
+            } catch (err) {
+              console.error(`         ❌ Error importing ${tournament.slug}: ${err.message}`);
+              stats.errors++;
+            }
           }
 
-          if (dryRun) {
-            console.log(`      📋 [DRY-RUN] Would import: ${tournament.name} (${tournament.slug})`);
-            tournament.events?.forEach(e => {
-              console.log(`         └── Event: ${e.name} (${e.numEntrants || '?'} entrants) – Game: ${e.game?.name || 'N/A'}`);
-            });
-            stats.imported++;
-            continue;
-          }
+          if (page >= result.totalPages) break;
 
-          // Import tournament
-          try {
-            await importStartGGTournament(api, tournament);
-            stats.imported++;
-          } catch (err) {
-            console.error(`      ❌ Error importing ${tournament.slug}: ${err.message}`);
-            stats.errors++;
-          }
+        } catch (err) {
+          console.error(`         ❌ Search error page ${page}: ${err.message}`);
+          stats.errors++;
+          break;
         }
-
-        // Don't go beyond available pages
-        if (page >= result.totalPages) break;
-
-      } catch (err) {
-        console.error(`      ❌ Search error page ${page}: ${err.message}`);
-        stats.errors++;
-        break;
       }
     }
   }
@@ -698,7 +704,7 @@ async function main() {
   console.log('╚═══════════════════════════════════════════════════════════╝');
   console.log(`  Source:    ${opts.source}`);
   console.log(`  Dry-run:   ${opts.dryRun}`);
-  console.log(`  Max pages: ${opts.maxPages}`);
+  console.log(`  Max pages: ${formatMaxPages(opts.maxPages)}`);
   console.log(`  Since:     ${opts.since || 'no limit'}`);
   console.log(`  Game:      ${opts.game || 'all games'}`);
   if (opts.keywords.length) console.log(`  Extra kw:  ${opts.keywords.join(', ')}`);

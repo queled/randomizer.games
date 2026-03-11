@@ -23,7 +23,7 @@ on:
       dry_run:
         description: 'Mode dry-run (aperçu sans modification)'
         required: false
-        default: 'false'
+        default: false
         type: boolean
       source:
         description: 'Source à explorer (all, startgg, challonge)'
@@ -129,12 +129,23 @@ jobs:
           node scripts/discover-tournaments.js $ARGS 2>&1 | tee /tmp/discover-output.log
 
           # Extraire les stats du résumé (le script affiche une table avec Found/Imported/Skipped/Errors)
-          STARTGG_IMPORTED=$(grep -oP 'STARTGG\s+Found:\s+\d+\s+│\s+Imported:\s+\K\d+' /tmp/discover-output.log || echo "0")
-          CHALLONGE_IMPORTED=$(grep -oP 'CHALLONGE\s+Found:\s+\d+\s+│\s+Imported:\s+\K\d+' /tmp/discover-output.log || echo "0")
-          STARTGG_FOUND=$(grep -oP 'STARTGG\s+Found:\s+\K\d+' /tmp/discover-output.log || echo "0")
-          CHALLONGE_FOUND=$(grep -oP 'CHALLONGE\s+Found:\s+\K\d+' /tmp/discover-output.log || echo "0")
-          TOTAL_IMPORTED=$(grep -oP 'Total imported:\s+\K\d+' /tmp/discover-output.log || echo "0")
-          TOTAL_ERRORS=$(grep -oP 'Errors:\s+\K\d+' /tmp/discover-output.log || echo "0")
+          extract_single_value() {
+            local pattern="$1"
+            local fallback="$2"
+            local value
+            value=$(grep -oP "$pattern" /tmp/discover-output.log | tail -n 1 | tr -d '\r\n' || true)
+            if [[ -z "$value" ]]; then
+              value="$fallback"
+            fi
+            echo "$value"
+          }
+
+          STARTGG_IMPORTED=$(extract_single_value 'STARTGG\s+Found:\s+\d+\s+│\s+Imported:\s+\K\d+' '0')
+          CHALLONGE_IMPORTED=$(extract_single_value 'CHALLONGE\s+Found:\s+\d+\s+│\s+Imported:\s+\K\d+' '0')
+          STARTGG_FOUND=$(extract_single_value 'STARTGG\s+Found:\s+\K\d+' '0')
+          CHALLONGE_FOUND=$(extract_single_value 'CHALLONGE\s+Found:\s+\K\d+' '0')
+          TOTAL_IMPORTED=$(extract_single_value 'Total imported:\s+\K\d+' '0')
+          TOTAL_ERRORS=$(extract_single_value 'Errors:\s+\K\d+' '0')
 
           echo "startgg_found=$STARTGG_FOUND" >> $GITHUB_OUTPUT
           echo "startgg_imported=$STARTGG_IMPORTED" >> $GITHUB_OUTPUT

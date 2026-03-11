@@ -18,7 +18,7 @@ on:
       dry_run:
         description: 'Mode dry-run (aperçu sans modification)'
         required: false
-        default: 'false'
+        default: false
         type: boolean
 
 env:
@@ -63,9 +63,20 @@ jobs:
           node scripts/sync-tournaments.js --update-only $DRY_RUN_FLAG 2>&1 | tee /tmp/sync-output.log
 
           # Extraire les stats du résumé
-          UPDATED=$(grep -oP 'Mis à jour: \K[0-9]+' /tmp/sync-output.log || echo "0")
-          SKIPPED=$(grep -oP 'Ignorés: \K[0-9]+' /tmp/sync-output.log || echo "0")
-          ERRORS=$(grep -oP 'Erreurs: \K[0-9]+' /tmp/sync-output.log || echo "0")
+          extract_single_value() {
+            local pattern="$1"
+            local fallback="$2"
+            local value
+            value=$(grep -oP "$pattern" /tmp/sync-output.log | tail -n 1 | tr -d '\r\n' || true)
+            if [[ -z "$value" ]]; then
+              value="$fallback"
+            fi
+            echo "$value"
+          }
+
+          UPDATED=$(extract_single_value 'Mis à jour: \K[0-9]+' '0')
+          SKIPPED=$(extract_single_value 'Ignorés: \K[0-9]+' '0')
+          ERRORS=$(extract_single_value 'Erreurs: \K[0-9]+' '0')
 
           echo "updated=$UPDATED" >> $GITHUB_OUTPUT
           echo "skipped=$SKIPPED" >> $GITHUB_OUTPUT

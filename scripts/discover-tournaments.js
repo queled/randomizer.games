@@ -32,12 +32,18 @@ const sanitizeHtml = require('sanitize-html');
 const RATE_LIMIT_MS = 1500; // ms between API calls
 const DEFAULT_MAX_PAGES = 10;
 
-// Keywords used to identify randomizer/multiworld tournaments
-const BASE_KEYWORDS = [
+// Keywords that strongly indicate an actual randomizer / multiworld tournament
+const RANDOMIZER_SIGNAL_KEYWORDS = [
   'randomizer', 'randomiser', 'rando',
   'multiworld', 'multi-world', 'multi world',
-  'archipelago',
-  'seed', 'mystery seed'
+  'archipelago'
+];
+
+// Extra suffixes used to build targeted search queries from known game aliases
+const QUERY_SUFFIX_KEYWORDS = [
+  'randomizer',
+  'multiworld',
+  'archipelago'
 ];
 
 // ─── CLI argument parsing ────────────────────────────────────────────────────
@@ -85,6 +91,154 @@ function parseArgs() {
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function normalizeText(value) {
+  return String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function escapeRegExp(value) {
+  return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function uniqueNormalized(values) {
+  const seen = new Set();
+  const result = [];
+
+  for (const value of values) {
+    const normalized = normalizeText(value);
+    if (!normalized || seen.has(normalized)) continue;
+    seen.add(normalized);
+    result.push(normalized);
+  }
+
+  return result;
+}
+
+function getGameAliases(game) {
+  return uniqueNormalized([
+    game.id,
+    game.name,
+    game.official?.name,
+    game.randomizer?.displayName,
+    game.randomizer?.shortName,
+    game.randomizer?.tinyName,
+    game.randomizer?.name,
+    ...(game.integrations?.startgg?.searchKeywords || []),
+    ...(game.integrations?.challonge?.searchKeywords || [])
+  ]).filter(alias => alias.length >= 3);
+}
+
+function getRandomizerAliases(game) {
+  return uniqueNormalized([
+    game.id,
+    game.randomizer?.displayName,
+    game.randomizer?.shortName,
+    game.randomizer?.tinyName,
+    game.randomizer?.name,
+    ...(game.integrations?.startgg?.searchKeywords || []),
+    ...(game.integrations?.challonge?.searchKeywords || [])
+  ]).filter(alias => alias.length >= 3);
+}
+
+function textContainsAlias(text, alias) {
+  if (!text || !alias) return false;
+
+  if (alias.length <= 4 && /^[a-z0-9+]+$/i.test(alias)) {
+    const pattern = new RegExp(`(^|[^a-z0-9])${escapeRegExp(alias)}([^a-z0-9]|$)`, 'i');
+    return pattern.test(text);
+  }
+
+  return text.includes(alias);
+}
+
+function buildTournamentSearchText(tournament) {
+  const eventText = (tournament.events || [])
+    .map(event => `${event.name || ''} ${event.game?.name || ''}`)
+    .join(' ');
+
+  return normalizeText(`${tournament.name || ''} ${eventText}`);
+}
+
+function buildStartGGSearchQueries(games = [], extraKeywords = []) {
+  const queries = new Set();
+
+  for (const game of games) {
+    const aliases = getGameAliases(game);
+    const randomizerAliases = getRandomizerAliases(game);
+
+    for (const alias of randomizerAliases) {
+      queries.add(alias);
+    }
+
+    for (const alias of aliases.slice(0, 8)) {
+      if (
+        alias.includes('randomizer') ||
+        alias.includes('randomiser') ||
+        alias.includes('rando') ||
+        alias.includes('multiworld') ||
+        alias.includes('archipelago')
+      ) {
+        queries.add(alias);
+        continue;
+      }
+
+      for (const suffix of QUERY_SUFFIX_KEYWORDS) {
+        queries.add(`${alias} ${suffix}`);
+      }
+    }
+  }
+
+  for (const keyword of extraKeywords || []) {
+    const normalized = normalizeText(keyword);
+    if (normalized) queries.add(normalized);
+  }
+
+  return [...queries];
+}
+
+function findMatchingGame(tournament, games = []) {
+  const text = buildTournamentSearchText(tournament);
+  const eventGameIds = new Set(
+    (tournament.events || [])
+      .map(event => Number(event.game?.id))
+      .filter(Number.isFinite)
+  );
+
+  for (const game of games) {
+    const configuredGameId = Number(game.integrations?.startgg?.videogameId);
+    if (Number.isFinite(configuredGameId) && eventGameIds.has(configuredGameId)) {
+      return { game, reason: 'startggGameId' };
+    }
+  }
+
+  for (const game of games) {
+    const aliases = getGameAliases(game).sort((a, b) => b.length - a.length);
+    for (const alias of aliases) {
+      if (textContainsAlias(text, alias)) {
+        return { game, reason: 'alias', alias };
+      }
+    }
+  }
+
+  return null;
+}
+
+function hasRandomizerSignal(tournament, games = []) {
+  const text = buildTournamentSearchText(tournament);
+
+  if (RANDOMIZER_SIGNAL_KEYWORDS.some(keyword => text.includes(keyword))) {
+    return true;
+  }
+
+  return games.some(game =>
+    getRandomizerAliases(game).some(alias => textContainsAlias(text, alias))
+  );
 }
 
 // ─── Build search terms from games in database ──────────────────────────────
@@ -157,25 +311,9 @@ async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun,
   const api = new StartGGAPI();
   const stats = { found: 0, imported: 0, skipped: 0, errors: 0 };
 
-  // Combine base keywords + extra keywords + game-derived search terms
-  // For start.gg search we use concise, targeted queries
-  const allKeywords = [...new Set([...BASE_KEYWORDS, ...keywords])];
-  
-  // Also include short game identifiers that work well as search terms
-  const gameSearchNames = [];
-  if (games) {
-    for (const game of games) {
-      // Use tinyName/shortName as they're good for start.gg search
-      const candidates = [
-        game.randomizer?.tinyName,   // e.g. "ALttPR", "OoTR"
-        game.randomizer?.shortName   // e.g. "ALttP Randomizer"
-      ].filter(Boolean);
-      gameSearchNames.push(...candidates);
-    }
-  }
-
-  // Unique search queries: keywords + game names
-  const searchQueries = [...new Set([...allKeywords, ...gameSearchNames])];
+  // Build targeted queries from known game aliases instead of broad generic words.
+  // This dramatically reduces false positives like unrelated "random" tournaments.
+  const searchQueries = buildStartGGSearchQueries(games, keywords);
 
   console.log(`\n🔍 Start.gg: Searching with ${searchQueries.length} queries...`);
   console.log(`   Queries: ${searchQueries.slice(0, 10).join(', ')}${searchQueries.length > 10 ? ` ... (+${searchQueries.length - 10} more)` : ''}`);
@@ -207,7 +345,7 @@ async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun,
           stats.found++;
 
           // Check if any event looks like a randomizer tournament
-          const isRandomizer = isRandomizerTournament(tournament, searchTerms);
+          const isRandomizer = isRandomizerTournament(tournament, games);
           if (!isRandomizer) continue;
 
           // Check if already imported
@@ -254,19 +392,10 @@ async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun,
  * Check whether a tournament (from search results) looks like a randomizer/multiworld event
  */
 function isRandomizerTournament(tournament, searchTerms) {
-  const text = `${tournament.name || ''} ${tournament.events?.map(e => `${e.name} ${e.game?.name || ''}`).join(' ') || ''}`.toLowerCase();
+  const matchingGame = findMatchingGame(tournament, searchTerms);
+  if (!matchingGame) return false;
 
-  // Check base keywords
-  for (const kw of BASE_KEYWORDS) {
-    if (text.includes(kw)) return true;
-  }
-
-  // Check game names from our database
-  for (const term of searchTerms) {
-    if (text.includes(term)) return true;
-  }
-
-  return false;
+  return hasRandomizerSignal(tournament, [matchingGame.game]);
 }
 
 /**
@@ -405,14 +534,14 @@ async function importStartGGTournament(api, tournamentPreview) {
 
 // ─── Challonge Discovery ────────────────────────────────────────────────────
 
-async function discoverChallonge({ searchTerms, keywords, since, dryRun }) {
+async function discoverChallonge({ searchTerms, games, keywords, since, dryRun }) {
   if (!process.env.CHALLONGE_API_KEY) {
     console.warn('⚠️  CHALLONGE_API_KEY not set – skipping Challonge discovery');
     return { found: 0, imported: 0, skipped: 0, errors: 0 };
   }
 
   const stats = { found: 0, imported: 0, skipped: 0, errors: 0 };
-  const allKeywords = [...new Set([...BASE_KEYWORDS, ...keywords])];
+  const allKeywords = [...new Set([...RANDOMIZER_SIGNAL_KEYWORDS, ...keywords])];
 
   console.log(`\n🔍 Challonge: Searching tournaments...`);
 
@@ -438,7 +567,7 @@ async function discoverChallonge({ searchTerms, keywords, since, dryRun }) {
       // Extra check: is this really a randomizer tournament?
       const isRando = isRandomizerTournament(
         { name: tournament.name, events: [{ name: tournament.name, game: { name: tournament.gameName || '' } }] },
-        searchTerms
+        games
       );
       if (!isRando) continue;
 
@@ -595,6 +724,7 @@ async function main() {
   if (opts.source === 'all' || opts.source === 'challonge') {
     results.challonge = await discoverChallonge({
       searchTerms,
+      games,
       keywords: opts.keywords,
       since: opts.since,
       dryRun: opts.dryRun

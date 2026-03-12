@@ -1408,6 +1408,53 @@ router.get('/tournaments/:id/linking', requireAdmin, async (req, res, next) => {
       .filter(r => !['pending', 'cancelled'].includes(r.status))
       .sort((a, b) => new Date(b.startedAt || 0).getTime() - new Date(a.startedAt || 0).getTime());
 
+    // Reconstruct raceUrl/raceUrls from Race documents for matches that lost
+    // their embedded link data (e.g. after tournament sync overwrote matches array).
+    // This uses startggSetId (for start.gg) or matchId (for Challonge) on Race docs.
+    const raceByMatch = new Map(); // matchId/setId → [raceUrl, ...] (sorted chronologically)
+    for (const r of races) {
+      const key = r.startggSetId ? String(r.startggSetId) : (r.matchId ? String(r.matchId) : null);
+      if (!key || !r.url) continue;
+      if (!raceByMatch.has(key)) raceByMatch.set(key, []);
+      raceByMatch.get(key).push({ url: r.url, startedAt: r.startedAt });
+    }
+    // Sort each group chronologically (oldest first)
+    for (const [, arr] of raceByMatch) {
+      arr.sort((a, b) => new Date(a.startedAt || 0).getTime() - new Date(b.startedAt || 0).getTime());
+    }
+
+    for (const m of matches) {
+      const key = m.startggSetId ? String(m.startggSetId) : String(m._id);
+      const fromRaces = raceByMatch.get(key);
+      if (!fromRaces || !fromRaces.length) continue;
+
+      const raceUrls = fromRaces.map(r => r.url);
+      // If embedded match already has links, keep them (preserve manual ordering);
+      // otherwise reconstruct from Race documents.
+      if (!m.raceUrl && (!m.raceUrls || !m.raceUrls.length)) {
+        m.raceUrls = raceUrls;
+        m.raceUrl = raceUrls[0];
+      }
+    }
+
+    // Sort matches: by phase, then by round (winners first), then chronologically
+    matches.sort((a, b) => {
+      // Same phase grouping
+      if (a.phase !== b.phase) return (a.phase || '').localeCompare(b.phase || '');
+      // Round: positive rounds ascending, negative (losers) after positives
+      const ra = a.round || 0;
+      const rb = b.round || 0;
+      if (ra !== rb) {
+        if (ra >= 0 && rb >= 0) return ra - rb;
+        if (ra < 0 && rb < 0) return ra - rb; // both losers: closer to 0 = earlier
+        return ra >= 0 ? -1 : 1; // winners before losers
+      }
+      // Then by completedAt
+      const ta = a.completedAt ? new Date(a.completedAt).getTime() : 0;
+      const tb = b.completedAt ? new Date(b.completedAt).getTime() : 0;
+      return ta - tb;
+    });
+
     const tournamentIdStr = String(tournament._id);
     const racesFormatted = races.map(r => {
       const stageInfo = parseRaceStageInfo(r);

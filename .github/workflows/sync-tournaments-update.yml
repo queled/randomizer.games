@@ -82,6 +82,41 @@ jobs:
           echo "skipped=$SKIPPED" >> $GITHUB_OUTPUT
           echo "errors=$ERRORS" >> $GITHUB_OUTPUT
 
+      - name: Tenter l'auto-link des races existantes
+        id: autolink
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        run: |
+          DRY_RUN_FLAG=""
+          if [[ "${{ inputs.dry_run }}" == "true" ]]; then
+            DRY_RUN_FLAG="--dry-run"
+          fi
+
+          node scripts/auto-link-tournaments.js $DRY_RUN_FLAG 2>&1 | tee /tmp/autolink-output.log
+
+          extract_single_value() {
+            local pattern="$1"
+            local fallback="$2"
+            local value
+            value=$(grep -oP "$pattern" /tmp/autolink-output.log | tail -n 1 | tr -d '\r\n' || true)
+            if [[ -z "$value" ]]; then
+              value="$fallback"
+            fi
+            echo "$value"
+          }
+
+          TOURNAMENTS=$(extract_single_value 'Tournois: \K[0-9]+' '0')
+          PROPOSED=$(extract_single_value 'Propositions: \K[0-9]+' '0')
+          LINKED=$(extract_single_value 'Liés: \K[0-9]+' '0')
+          SKIPPED=$(extract_single_value 'Ignorés: \K[0-9]+' '0')
+          ERRORS=$(extract_single_value 'Erreurs: \K[0-9]+' '0')
+
+          echo "tournaments=$TOURNAMENTS" >> $GITHUB_OUTPUT
+          echo "proposed=$PROPOSED" >> $GITHUB_OUTPUT
+          echo "linked=$LINKED" >> $GITHUB_OUTPUT
+          echo "skipped=$SKIPPED" >> $GITHUB_OUTPUT
+          echo "errors=$ERRORS" >> $GITHUB_OUTPUT
+
       - name: Résumé de la synchronisation
         if: always()
         run: |
@@ -90,6 +125,14 @@ jobs:
           echo "- 🔄 Mis à jour: ${{ steps.sync.outputs.updated }}" >> $GITHUB_STEP_SUMMARY
           echo "- ⏭️ Ignorés: ${{ steps.sync.outputs.skipped }}" >> $GITHUB_STEP_SUMMARY
           echo "- ❌ Erreurs: ${{ steps.sync.outputs.errors }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔗 Auto-link des races" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- 🏁 Tournois analysés: ${{ steps.autolink.outputs.tournaments }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 🧠 Propositions: ${{ steps.autolink.outputs.proposed }}" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Liens créés: ${{ steps.autolink.outputs.linked }}" >> $GITHUB_STEP_SUMMARY
+          echo "- ⏭️ Ignorés: ${{ steps.autolink.outputs.skipped }}" >> $GITHUB_STEP_SUMMARY
+          echo "- ❌ Erreurs: ${{ steps.autolink.outputs.errors }}" >> $GITHUB_STEP_SUMMARY
           echo "- ⏰ Date: $(date -u)" >> $GITHUB_STEP_SUMMARY
           if [[ "${{ inputs.dry_run }}" == "true" ]]; then
             echo "- 🔍 **Mode DRY-RUN**" >> $GITHUB_STEP_SUMMARY

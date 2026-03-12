@@ -13,6 +13,7 @@
     "sync:tournaments": "node scripts/sync-tournaments.js",
     "sync:tournaments:dry": "node scripts/sync-tournaments.js --dry-run",
     "sync:tournaments:update": "node scripts/sync-tournaments.js --update-only",
+    "link:tournaments:active": "node scripts/auto-link-tournaments.js",
     "discover:tournaments": "node scripts/discover-tournaments.js",
     "discover:tournaments:dry": "node scripts/discover-tournaments.js --dry-run",
     "discover:tournaments:startgg": "node scripts/discover-tournaments.js --source startgg",

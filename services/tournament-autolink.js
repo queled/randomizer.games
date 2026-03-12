@@ -79,13 +79,28 @@ function getTournamentWindow(tournament, matches = []) {
   };
 }
 
+function isLinkableStartggState(state) {
+  if (state === undefined || state === null || state === '') return true;
+  const numericState = Number(state);
+  return numericState === 2 || numericState === 3;
+}
+
+function isLinkableChallongeMatch(match) {
+  const state = String(match?.state || '').toLowerCase();
+  if (!state) return true;
+  if (['complete', 'completed', 'done', 'closed'].includes(state)) return true;
+  if (['underway', 'in_progress', 'in-progress', 'active'].includes(state)) return true;
+  if (state === 'open' && match?.startedAt) return true;
+  return false;
+}
+
 function normalizeStartggMatches(tournament) {
   return (Array.isArray(tournament?.matches) ? tournament.matches : [])
     .filter((match) => {
       const p1 = match?.player1?.name || '';
       const p2 = match?.player2?.name || '';
       if (!p1 || !p2 || p1 === 'TBD' || p2 === 'TBD') return false;
-      if (match.state !== undefined && match.state !== null && match.state !== 3) return false;
+      if (!isLinkableStartggState(match.state)) return false;
       return true;
     })
     .map((match) => ({
@@ -98,6 +113,7 @@ function normalizeStartggMatches(tournament) {
       player2Name: match.player2?.name || 'TBD',
       displayScore: match.displayScore || null,
       state: match.state,
+      startedAt: match.startedAt || null,
       completedAt: match.completedAt,
       raceUrl: match.raceUrl || null,
       raceUrls: Array.isArray(match.raceUrls) ? [...match.raceUrls] : (match.raceUrl ? [match.raceUrl] : []),
@@ -112,7 +128,7 @@ function normalizeChallongeMatches(matches) {
       const p1 = match?.player1Name || '';
       const p2 = match?.player2Name || '';
       if (!p1 || !p2 || p1 === 'TBD' || p2 === 'TBD') return false;
-      if (match.state && match.state !== 'complete') return false;
+      if (!isLinkableChallongeMatch(match)) return false;
       return true;
     })
     .map((match) => ({
@@ -125,6 +141,7 @@ function normalizeChallongeMatches(matches) {
       displayScore: null,
       scoresCsv: match.scoresCsv || null,
       state: match.state,
+      startedAt: match.startedAt || null,
       completedAt: match.completedAt,
       raceUrl: match.raceUrl || null,
       raceUrls: match.raceUrl ? [match.raceUrl] : [],
@@ -289,10 +306,52 @@ async function buildAutoLinkPreview({
   return { proposals, skipped, total: races.length, matches, races };
 }
 
+function getRaceSortTimestamp(race) {
+  const value = race?.startedAt || race?.endedAt || race?.createdAt || race?.updatedAt || null;
+  if (!value) return 0;
+  const timestamp = new Date(value).getTime();
+  return Number.isNaN(timestamp) ? 0 : timestamp;
+}
+
+async function sortStartggLinkedRaces({ tournament, Race, touchedSetIds }) {
+  if (!touchedSetIds?.size || !Array.isArray(tournament?.matches)) return;
+
+  const setIds = [...touchedSetIds].filter(Boolean);
+  if (!setIds.length) return;
+
+  const linkedRaces = await Race.find({
+    tournamentId: tournament._id,
+    startggSetId: { $in: setIds }
+  }).lean();
+
+  const racesBySet = new Map();
+  for (const race of linkedRaces) {
+    const setId = String(race?.startggSetId || '');
+    if (!setId) continue;
+    if (!racesBySet.has(setId)) racesBySet.set(setId, []);
+    racesBySet.get(setId).push(race);
+  }
+
+  for (const setId of setIds) {
+    const embeddedMatch = tournament.matches.find((match) => String(match?.startggSetId || '') === String(setId));
+    if (!embeddedMatch) continue;
+
+    const sortedUrls = (racesBySet.get(String(setId)) || [])
+      .sort((a, b) => getRaceSortTimestamp(a) - getRaceSortTimestamp(b))
+      .map((race) => race.url)
+      .filter(Boolean);
+
+    if (!sortedUrls.length) continue;
+    embeddedMatch.raceUrls = sortedUrls;
+    embeddedMatch.raceUrl = sortedUrls[0] || null;
+  }
+}
+
 async function applyAutoLinkProposals({ tournament, proposals, Race, Match }) {
   let linked = 0;
   let tournamentDirty = false;
   const errors = [];
+  const touchedStartggSetIds = new Set();
 
   for (const proposal of proposals) {
     try {
@@ -346,6 +405,7 @@ async function applyAutoLinkProposals({ tournament, proposals, Race, Match }) {
           embeddedMatch.raceUrls.push(proposal.raceUrl);
         }
         tournamentDirty = true;
+        touchedStartggSetIds.add(String(embeddedMatch.startggSetId || proposal.matchId || ''));
       } else {
         const matchDoc = await Match.findById(proposal.matchId);
         if (!matchDoc) {
@@ -380,6 +440,7 @@ async function applyAutoLinkProposals({ tournament, proposals, Race, Match }) {
   }
 
   if (tournamentDirty) {
+    await sortStartggLinkedRaces({ tournament, Race, touchedSetIds: touchedStartggSetIds });
     tournament.markModified('matches');
     tournament.updatedAt = new Date();
     await tournament.save();

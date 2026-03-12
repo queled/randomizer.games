@@ -218,6 +218,7 @@ function findMatchingGame(tournament, games = []) {
       .filter(Number.isFinite)
   );
 
+  // 1) Primary: match by start.gg videogame ID
   for (const game of games) {
     const configuredGameId = Number(game.integrations?.startgg?.videogameId);
     if (Number.isFinite(configuredGameId) && eventGameIds.has(configuredGameId)) {
@@ -225,6 +226,18 @@ function findMatchingGame(tournament, games = []) {
     }
   }
 
+  // 2) If the tournament events all have game IDs that don't match any of our
+  //    configured videogameIds, do NOT fall back to text matching — this avoids
+  //    false positives when start.gg provides a definitive game identity.
+  if (eventGameIds.size > 0) {
+    const anyGameHasId = games.some(g => Number.isFinite(Number(g.integrations?.startgg?.videogameId)));
+    if (anyGameHasId) {
+      // All our games have IDs configured but none matched → not our game
+      return null;
+    }
+  }
+
+  // 3) Fallback: text alias matching (only when game IDs are not available)
   for (const game of games) {
     const aliases = getGameAliases(game).sort((a, b) => b.length - a.length);
     for (const alias of aliases) {
@@ -401,7 +414,17 @@ function isRandomizerTournament(tournament, searchTerms) {
   const matchingGame = findMatchingGame(tournament, searchTerms);
   if (!matchingGame) return false;
 
-  return hasRandomizerSignal(tournament, [matchingGame.game]);
+  const hasSignal = hasRandomizerSignal(tournament, [matchingGame.game]);
+  if (!hasSignal) return false;
+
+  // Log the match reason for debugging
+  const gameName = matchingGame.game.id || matchingGame.game.name;
+  const reason = matchingGame.reason === 'startggGameId'
+    ? `gameId match`
+    : `alias "${matchingGame.alias}"`;
+  console.log(`         ✓ ${tournament.name} → ${gameName} (${reason})`);
+
+  return true;
 }
 
 /**
@@ -465,7 +488,7 @@ async function importStartGGTournament(api, tournamentPreview) {
     const tournamentType = bracketTypeMap[bracketType] || bracketType.toLowerCase();
 
     // Build matches from sets
-    const matches = (event.sets || []).map(set => ({
+    const newMatches = (event.sets || []).map(set => ({
       startggSetId: set.id,
       round: set.round,
       displayScore: set.displayScore,
@@ -483,6 +506,29 @@ async function importStartGGTournament(api, tournamentPreview) {
       },
       winnerId: set.winnerId
     }));
+
+    // Preserve existing race links (raceUrl, raceUrls, linkScore) when re-importing
+    const existingTournament = await Tournament.findOne({ startggId: event.id }).select('matches').lean();
+    const existingLinkMap = new Map();
+    if (existingTournament?.matches) {
+      for (const m of existingTournament.matches) {
+        if (m.startggSetId && (m.raceUrl || m.raceUrls?.length || m.linkScore)) {
+          existingLinkMap.set(String(m.startggSetId), {
+            raceUrl: m.raceUrl || null,
+            raceUrls: m.raceUrls || [],
+            linkScore: m.linkScore || null
+          });
+        }
+      }
+    }
+
+    const matches = newMatches.map(m => {
+      const existing = existingLinkMap.get(String(m.startggSetId));
+      if (existing) {
+        return { ...m, ...existing };
+      }
+      return m;
+    });
 
     // Build phases
     const phases = (event.phases || []).map(phase => ({
@@ -534,7 +580,8 @@ async function importStartGGTournament(api, tournamentPreview) {
       { upsert: true, new: true }
     );
 
-    console.log(`         ✅ ${tournamentPayload.name} – ${participants.length} participants, ${matches.length} matches${matchForGame ? ` → ${matchForGame.gameSlug}` : ''}`);
+    const preservedLinks = existingLinkMap.size;
+    console.log(`         ✅ ${tournamentPayload.name} – ${participants.length} participants, ${matches.length} matches${matchForGame ? ` → ${matchForGame.gameSlug}` : ''}${preservedLinks ? ` (${preservedLinks} liens préservés)` : ''}`);
   }
 }
 

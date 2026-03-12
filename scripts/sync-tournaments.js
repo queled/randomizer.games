@@ -108,8 +108,8 @@ async function updateActiveTournaments({ dryRun }) {
         const event = tournamentData.events?.find(e => e.id === tournament.startggId);
         if (!event) { stats.skipped++; continue; }
 
-        // Build updated matches
-        const matches = (event.sets || []).map(set => ({
+        // Build updated matches from API
+        const newMatches = (event.sets || []).map(set => ({
           startggSetId: set.id,
           round: set.round,
           displayScore: set.displayScore,
@@ -121,6 +121,28 @@ async function updateActiveTournaments({ dryRun }) {
           player2: { startggEntrantId: set.entrants?.[1]?.id, name: set.entrants?.[1]?.name || 'TBD' },
           winnerId: set.winnerId
         }));
+
+        // Preserve existing race links (raceUrl, raceUrls, linkScore) from current DB data
+        const existingLinkMap = new Map();
+        if (Array.isArray(tournament.matches)) {
+          for (const m of tournament.matches) {
+            if (m.startggSetId && (m.raceUrl || m.raceUrls?.length || m.linkScore)) {
+              existingLinkMap.set(String(m.startggSetId), {
+                raceUrl: m.raceUrl || null,
+                raceUrls: m.raceUrls || [],
+                linkScore: m.linkScore || null
+              });
+            }
+          }
+        }
+
+        const matches = newMatches.map(m => {
+          const existing = existingLinkMap.get(String(m.startggSetId));
+          if (existing) {
+            return { ...m, ...existing };
+          }
+          return m;
+        });
 
         // Build participants from standings or entrants
         const participants = [];

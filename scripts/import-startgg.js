@@ -149,7 +149,7 @@ async function main() {
       const tournamentType = bracketTypeMap[bracketType] || bracketType.toLowerCase();
 
       // Build matches array from sets
-      const matches = [];
+      const newMatches = [];
       if (event.sets && event.sets.length > 0) {
         for (const set of event.sets) {
           const match = {
@@ -170,8 +170,35 @@ async function main() {
             },
             winnerId: set.winnerId
           };
-          matches.push(match);
+          newMatches.push(match);
         }
+      }
+
+      // Preserve existing race links (raceUrl, raceUrls, linkScore) when re-importing
+      const existingTournament = await Tournament.findOne({ startggId: event.id }).select('matches').lean();
+      const existingLinkMap = new Map();
+      if (existingTournament?.matches) {
+        for (const m of existingTournament.matches) {
+          if (m.startggSetId && (m.raceUrl || m.raceUrls?.length || m.linkScore)) {
+            existingLinkMap.set(String(m.startggSetId), {
+              raceUrl: m.raceUrl || null,
+              raceUrls: m.raceUrls || [],
+              linkScore: m.linkScore || null
+            });
+          }
+        }
+      }
+
+      const matches = newMatches.map(m => {
+        const existing = existingLinkMap.get(String(m.startggSetId));
+        if (existing) {
+          return { ...m, ...existing };
+        }
+        return m;
+      });
+
+      if (existingLinkMap.size) {
+        console.log(`   Preserved ${existingLinkMap.size} existing race link(s)`);
       }
 
       console.log(`   Found ${matches.length} matches (sets)`);

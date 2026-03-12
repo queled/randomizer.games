@@ -2438,7 +2438,8 @@ const admin = {
 
   /** Render unlinked races section */
   rlRenderUnlinked() {
-    const unlinked = this.rlRaces.filter(r => !r.isLinked && !r.isQualifier);
+    // Only show races attached to this tournament (not nearby candidates) as unlinked
+    const unlinked = this.rlRaces.filter(r => !r.isLinked && !r.isQualifier && r.isAttached);
     const section = document.getElementById('rl-unlinked-section');
     const list = document.getElementById('rl-unlinked-list');
     const count = document.getElementById('rl-unlinked-count');

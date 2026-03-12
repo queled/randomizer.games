@@ -1408,6 +1408,7 @@ router.get('/tournaments/:id/linking', requireAdmin, async (req, res, next) => {
       .filter(r => !['pending', 'cancelled'].includes(r.status))
       .sort((a, b) => new Date(b.startedAt || 0).getTime() - new Date(a.startedAt || 0).getTime());
 
+    const tournamentIdStr = String(tournament._id);
     const racesFormatted = races.map(r => {
       const stageInfo = parseRaceStageInfo(r);
       const extracted = extractRaceEntrants(r, { requireDirect: false });
@@ -1428,7 +1429,8 @@ router.get('/tournaments/:id/linking', requireAdmin, async (req, res, next) => {
         status: r.status || null,
         stageType: stageInfo.type,
         isQualifier: stageInfo.type === 'qualifier',
-        isLinked: !!(r.matchId || r.startggSetId)
+        isLinked: !!(r.matchId || r.startggSetId),
+        isAttached: !!r.tournamentId && String(r.tournamentId) === tournamentIdStr
       };
     });
 
@@ -1436,6 +1438,8 @@ router.get('/tournaments/:id/linking', requireAdmin, async (req, res, next) => {
     const linkedRaces = racesFormatted.filter(r => r.isLinked).length;
     const qualifierRaces = racesFormatted.filter(r => r.isQualifier).length;
     const linkedMatches = matches.filter(m => m.raceUrl || (m.raceUrls && m.raceUrls.length > 0)).length;
+    // Only count races attached to this tournament (not nearby candidates) as "unlinked"
+    const attachedUnlinked = racesFormatted.filter(r => r.isAttached && !r.isLinked && !r.isQualifier).length;
 
     // Get phases for start.gg tournaments
     const phases = isStartgg && Array.isArray(tournament.phases) ? tournament.phases : [];
@@ -1459,7 +1463,7 @@ router.get('/tournaments/:id/linking', requireAdmin, async (req, res, next) => {
         unlinkedMatches: matches.length - linkedMatches,
         totalRaces: racesFormatted.length,
         linkedRaces,
-        unlinkedRaces: racesFormatted.length - linkedRaces,
+        unlinkedRaces: attachedUnlinked,
         qualifierRaces
       }
     });

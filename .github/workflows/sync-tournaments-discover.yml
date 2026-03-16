@@ -13,9 +13,9 @@
 name: Sync Tournaments (Discover New)
 
 on:
-  # Exécution toutes les heures
+  # Exécution 1 fois par jour à 7h du matin (UTC)
   schedule:
-    - cron: '15 * * * *'
+    - cron: '0 7 * * *'
 
   # Déclenchement manuel avec options
   workflow_dispatch:

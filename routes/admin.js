@@ -1880,6 +1880,455 @@ router.post('/tournaments/:id/reorder-races', requireAdmin, async (req, res, nex
   }
 });
 
+// ==================== TOURNAMENT MANAGEMENT ====================
+
+const StartGGAPI = require('../services/startgg');
+const challongeService = require('../services/challonge');
+const sanitizeHtml = require('sanitize-html');
+
+/**
+ * Parse a start.gg URL to extract the tournament slug.
+ * Accepts various formats:
+ *   https://start.gg/tournament/my-tournament
+ *   https://www.start.gg/tournament/my-tournament/event/bracket
+ *   https://smash.gg/tournament/my-tournament/...
+ */
+function parseStartggSlug(url) {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace(/^www\./, '');
+    if (host !== 'start.gg' && host !== 'smash.gg') return null;
+    const match = parsed.pathname.match(/^\/(tournament\/[^/]+)/);
+    return match ? match[1] : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Parse a Challonge URL to extract the tournament identifier.
+ * Accepts:
+ *   https://challonge.com/MMRSeason6
+ *   https://challonge.com/fr/MMRSeason6
+ *   https://challonge.com/tournaments/12345
+ *   https://community.challonge.com/MMRSeason6
+ */
+function parseChallongeId(url) {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace(/^www\./, '');
+    if (!host.endsWith('challonge.com')) return null;
+    const parts = parsed.pathname.split('/').filter(Boolean);
+    // Skip language codes like 'fr', 'en', etc.
+    const filtered = parts.filter(p => !/^[a-z]{2}$/.test(p) && p !== 'tournaments');
+    return filtered.length ? filtered[filtered.length - 1] : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Detect source from URL string
+ */
+function detectTournamentSource(url) {
+  const startggSlug = parseStartggSlug(url);
+  if (startggSlug) return { source: 'startgg', slug: startggSlug };
+  const challongeId = parseChallongeId(url);
+  if (challongeId) return { source: 'challonge', id: challongeId };
+  return null;
+}
+
+function cleanHtml(description) {
+  if (!description) return null;
+  return sanitizeHtml(description, {
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'br']),
+    allowedAttributes: {
+      a: ['href', 'name', 'target', 'rel'],
+      img: ['src', 'alt', 'title', 'width', 'height']
+    },
+    allowedSchemesByTag: {
+      a: ['http', 'https', 'mailto'],
+      img: ['http', 'https', 'data']
+    }
+  });
+}
+
+/**
+ * GET /api/admin/tournaments-mgmt
+ * List tournaments with pagination, search and filters
+ */
+router.get('/tournaments-mgmt', requireAdmin, async (req, res, next) => {
+  try {
+    const { search, source, game, limit = 20, page = 1 } = req.query;
+    const query = {};
+
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { gameSlug: { $regex: search, $options: 'i' } },
+        { gameName: { $regex: search, $options: 'i' } },
+        { startggSlug: { $regex: search, $options: 'i' } },
+        { url: { $regex: search, $options: 'i' } }
+      ];
+    }
+
+    if (source === 'startgg') {
+      query.startggId = { $exists: true, $ne: null };
+    } else if (source === 'challonge') {
+      query.challongeId = { $exists: true, $ne: null };
+    }
+
+    if (game) {
+      query.gameSlug = game;
+    }
+
+    const pageNum = Math.max(1, parseInt(page, 10) || 1);
+    const limitNum = Math.min(100, Math.max(1, parseInt(limit, 10) || 20));
+
+    const [tournaments, total] = await Promise.all([
+      Tournament.find(query)
+        .sort({ startDate: -1, createdAt: -1 })
+        .skip((pageNum - 1) * limitNum)
+        .limit(limitNum)
+        .populate('game', 'id name randomizer.shortName')
+        .lean(),
+      Tournament.countDocuments(query)
+    ]);
+
+    // Compute match counts
+    const results = tournaments.map(t => {
+      const matchCount = (t.matches || []).length || 0;
+      const source = t.startggId ? 'startgg' : t.challongeId ? 'challonge' : 'unknown';
+      return {
+        _id: t._id,
+        name: t.name,
+        source,
+        gameSlug: t.gameSlug,
+        gameName: t.gameName || t.game?.name,
+        gameShortName: t.game?.randomizer?.shortName,
+        participantsCount: t.participantsCount || (t.participants || []).length,
+        matchCount,
+        state: t.state,
+        startDate: t.startDate,
+        endDate: t.endDate,
+        startggSlug: t.startggSlug,
+        challongeId: t.challongeId,
+        url: t.fullUrl || t.url,
+        createdAt: t.createdAt
+      };
+    });
+
+    res.json({ tournaments: results, total, page: pageNum, totalPages: Math.ceil(total / limitNum) });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * GET /api/admin/tournaments-mgmt/games-list
+ * Get list of games for tournament association dropdown
+ */
+router.get('/tournaments-mgmt/games-list', requireAdmin, async (req, res, next) => {
+  try {
+    const games = await Game.find({ enabled: true })
+      .select('id name randomizer.shortName')
+      .sort({ name: 1 })
+      .lean();
+    res.json(games);
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * GET /api/admin/tournaments-mgmt/:id
+ * Get tournament detail
+ */
+router.get('/tournaments-mgmt/:id', requireAdmin, async (req, res, next) => {
+  try {
+    const tournament = await Tournament.findById(req.params.id).populate('game', 'id name randomizer.shortName').lean();
+    if (!tournament) return res.status(404).json({ error: 'Tournament not found' });
+
+    // Count linked races
+    const linkedRaces = await Race.countDocuments({ tournamentId: tournament._id });
+    // For challonge, also count Match docs
+    let matchCount = (tournament.matches || []).length;
+    if (tournament.challongeId) {
+      matchCount = await Match.countDocuments({ tournamentId: tournament._id });
+    }
+
+    const source = tournament.startggId ? 'startgg' : tournament.challongeId ? 'challonge' : 'unknown';
+
+    res.json({
+      ...tournament,
+      source,
+      linkedRaces,
+      matchCountTotal: matchCount
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * POST /api/admin/tournaments-mgmt/preview
+ * Preview (fetch without saving) a tournament from its URL
+ */
+router.post('/tournaments-mgmt/preview', requireAdmin, async (req, res, next) => {
+  try {
+    const { url } = req.body;
+    if (!url) return res.status(400).json({ error: 'URL requise' });
+
+    const detected = detectTournamentSource(url);
+    if (!detected) return res.status(400).json({ error: 'URL non reconnue. Utilisez une URL start.gg ou challonge.com.' });
+
+    if (detected.source === 'startgg') {
+      const api = new StartGGAPI();
+      const tournamentData = await api.getTournament(detected.slug);
+      if (!tournamentData) return res.status(404).json({ error: 'Tournoi start.gg introuvable' });
+
+      // Check if already imported
+      const existing = await Tournament.findOne({ startggSlug: detected.slug }).lean();
+
+      return res.json({
+        source: 'startgg',
+        alreadyImported: !!existing,
+        existingId: existing?._id,
+        preview: {
+          name: tournamentData.name,
+          slug: tournamentData.slug,
+          startDate: tournamentData.startDate,
+          endDate: tournamentData.endDate,
+          numAttendees: tournamentData.numAttendees,
+          events: tournamentData.events?.map(e => ({
+            name: e.name,
+            numEntrants: e.numEntrants,
+            setsTotal: e.setsTotal,
+            game: e.game
+          })) || []
+        }
+      });
+    }
+
+    if (detected.source === 'challonge') {
+      const tournamentData = await challongeService.getTournament(detected.id);
+      if (!tournamentData) return res.status(404).json({ error: 'Tournoi Challonge introuvable' });
+
+      const existing = await Tournament.findOne({ challongeId: tournamentData.id }).lean();
+
+      return res.json({
+        source: 'challonge',
+        alreadyImported: !!existing,
+        existingId: existing?._id,
+        preview: {
+          name: tournamentData.name,
+          challongeId: tournamentData.id,
+          url: tournamentData.fullUrl || tournamentData.url,
+          state: tournamentData.state,
+          participantsCount: tournamentData.participantsCount,
+          tournamentType: tournamentData.tournamentType,
+          gameName: tournamentData.gameName
+        }
+      });
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * POST /api/admin/tournaments-mgmt/import
+ * Import a tournament from start.gg or challonge.com and associate to a game
+ */
+router.post('/tournaments-mgmt/import', requireAdmin, async (req, res, next) => {
+  try {
+    const { url, gameSlug } = req.body;
+    if (!url) return res.status(400).json({ error: 'URL requise' });
+    if (!gameSlug) return res.status(400).json({ error: 'Jeu requis' });
+
+    const game = await Game.findOne({ id: gameSlug });
+    if (!game) return res.status(404).json({ error: `Jeu "${gameSlug}" introuvable` });
+
+    const detected = detectTournamentSource(url);
+    if (!detected) return res.status(400).json({ error: 'URL non reconnue' });
+
+    if (detected.source === 'startgg') {
+      const api = new StartGGAPI();
+      const tournamentData = await api.getTournament(detected.slug);
+      if (!tournamentData) return res.status(404).json({ error: 'Tournoi start.gg introuvable' });
+
+      // Pick the first event (or the one matching the game) for sets/participants
+      const event = tournamentData.events?.[0];
+
+      const tournamentPayload = {
+        name: tournamentData.name,
+        startggId: tournamentData.id,
+        startggSlug: tournamentData.slug,
+        startDate: tournamentData.startDate,
+        endDate: tournamentData.endDate,
+        participantsCount: tournamentData.numAttendees,
+        game: game._id,
+        gameSlug: game.id,
+        gameName: game.name,
+        source: { type: 'startgg', externalId: String(tournamentData.id), url: tournamentData.sourceUrl, importedAt: new Date() }
+      };
+
+      if (event) {
+        tournamentPayload.setsTotal = event.setsTotal;
+        tournamentPayload.phases = event.phases?.map(p => ({
+          startggPhaseId: String(p.id),
+          name: p.name,
+          bracketType: p.bracketType,
+          phaseOrder: p.phaseOrder,
+          numSeeds: p.numSeeds,
+          groupCount: p.groupCount,
+          state: p.state
+        })) || [];
+        tournamentPayload.matches = event.sets?.map(s => ({
+          startggSetId: String(s.id),
+          round: s.round,
+          displayScore: s.displayScore,
+          completedAt: s.completedAt,
+          state: s.state,
+          phase: s.phase?.name,
+          phaseGroup: s.phaseGroup?.displayIdentifier,
+          player1: { startggEntrantId: String(s.entrants?.[0]?.id || ''), name: s.entrants?.[0]?.name || '' },
+          player2: { startggEntrantId: String(s.entrants?.[1]?.id || ''), name: s.entrants?.[1]?.name || '' },
+          winnerId: s.winnerId
+        })) || [];
+        tournamentPayload.participants = event.standings?.length
+          ? event.standings.map(s => ({ name: s.entrantName, finalRank: s.placement, displayName: s.entrantName }))
+          : event.entrants?.map(e => ({ name: e.name, seed: e.seed, displayName: e.name })) || [];
+      }
+
+      const tournament = await Tournament.findOneAndUpdate(
+        { startggSlug: detected.slug },
+        { $set: tournamentPayload },
+        { upsert: true, new: true }
+      );
+
+      return res.json({ success: true, tournament: { _id: tournament._id, name: tournament.name }, created: !tournament.isNew });
+    }
+
+    if (detected.source === 'challonge') {
+      const tournamentData = await challongeService.getTournament(detected.id);
+      if (!tournamentData) return res.status(404).json({ error: 'Tournoi Challonge introuvable' });
+
+      const participants = await challongeService.getParticipants(detected.id);
+      const matches = await challongeService.getMatches(detected.id);
+
+      const tournamentPayload = {
+        name: tournamentData.name,
+        challongeId: tournamentData.id,
+        url: tournamentData.url,
+        fullUrl: tournamentData.fullUrl,
+        tournamentType: tournamentData.tournamentType,
+        state: tournamentData.state,
+        participantsCount: tournamentData.participantsCount,
+        description: cleanHtml(tournamentData.description),
+        participants,
+        startDate: tournamentData.startedAt,
+        endDate: tournamentData.completedAt,
+        gameName: tournamentData.gameName,
+        game: game._id,
+        gameSlug: game.id,
+        source: { type: 'challonge', externalId: String(tournamentData.id), url: tournamentData.fullUrl, importedAt: new Date() }
+      };
+
+      const tournament = await Tournament.findOneAndUpdate(
+        { challongeId: tournamentData.id },
+        { $set: tournamentPayload },
+        { upsert: true, new: true }
+      );
+
+      // Upsert matches
+      const participantMap = new Map();
+      participants.forEach(p => {
+        participantMap.set(p.challongeId, p);
+        if (p.groupPlayerIds && Array.isArray(p.groupPlayerIds)) {
+          p.groupPlayerIds.forEach(gid => participantMap.set(gid, p));
+        }
+      });
+
+      for (const m of matches) {
+        const player1 = participantMap.get(m.player1Id);
+        const player2 = participantMap.get(m.player2Id);
+        await Match.findOneAndUpdate(
+          { challongeId: m.id },
+          { $set: {
+            ...m,
+            tournamentId: tournament._id,
+            tournamentChallongeId: tournament.challongeId,
+            player1Name: player1 ? (player1.displayName || player1.name) : null,
+            player2Name: player2 ? (player2.displayName || player2.name) : null
+          } },
+          { upsert: true }
+        );
+      }
+
+      return res.json({ success: true, tournament: { _id: tournament._id, name: tournament.name }, matchesImported: matches.length });
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * PUT /api/admin/tournaments-mgmt/:id/game
+ * Update the game association for a tournament
+ */
+router.put('/tournaments-mgmt/:id/game', requireAdmin, async (req, res, next) => {
+  try {
+    const { gameSlug } = req.body;
+    const tournament = await Tournament.findById(req.params.id);
+    if (!tournament) return res.status(404).json({ error: 'Tournament not found' });
+
+    if (gameSlug) {
+      const game = await Game.findOne({ id: gameSlug });
+      if (!game) return res.status(404).json({ error: `Jeu "${gameSlug}" introuvable` });
+      tournament.game = game._id;
+      tournament.gameSlug = game.id;
+      tournament.gameName = game.name;
+    } else {
+      tournament.game = null;
+      tournament.gameSlug = null;
+    }
+
+    await tournament.save();
+    res.json({ success: true });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * DELETE /api/admin/tournaments-mgmt/:id
+ * Delete a tournament and its linked data
+ */
+router.delete('/tournaments-mgmt/:id', requireAdmin, async (req, res, next) => {
+  try {
+    const tournament = await Tournament.findById(req.params.id);
+    if (!tournament) return res.status(404).json({ error: 'Tournament not found' });
+
+    // Unlink races that were associated to this tournament
+    await Race.updateMany(
+      { tournamentId: tournament._id },
+      { $unset: { tournamentId: 1, matchId: 1, startggSetId: 1, matchPlayers: 1, matchConfidence: 1, tournamentPhase: 1, tournamentPool: 1, tournamentRound: 1 } }
+    );
+
+    // Delete challonge matches if any
+    if (tournament.challongeId) {
+      await Match.deleteMany({ tournamentId: tournament._id });
+    }
+
+    await Tournament.deleteOne({ _id: tournament._id });
+
+    res.json({ success: true, name: tournament.name });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // ==================== ANALYTICS (placeholder) ====================
 
 /**

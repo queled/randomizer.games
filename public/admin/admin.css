@@ -1877,3 +1877,29 @@ a:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* ==================== Tournament Management ==================== */
+.tm-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.tm-detail-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.tm-detail-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+@media (max-width: 640px) {
+  .tm-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}

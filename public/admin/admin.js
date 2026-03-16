@@ -108,6 +108,11 @@ const admin = {
     document.getElementById('rl-tournament-search').addEventListener('input',
       this.debounce(() => this.rlLoadTournaments(1), 400)
     );
+
+    // Tournament management search
+    document.getElementById('tm-search').addEventListener('input',
+      this.debounce(() => this.tmLoadTournaments(1), 400)
+    );
   },
   
   // ==================== AUTH ====================
@@ -228,6 +233,9 @@ const admin = {
         break;
       case 'race-linking':
         this.rlLoadTournaments();
+        break;
+      case 'tournaments-mgmt':
+        this.tmLoadTournaments();
         break;
       case 'statistics':
         this.loadStatistics();
@@ -3223,6 +3231,351 @@ const admin = {
     } catch (error) {
       console.error('Error loading GitHub workflows:', error);
       container.innerHTML = '<p class="text-muted" style="font-size: 0.8125rem;">❌ Erreur chargement workflows</p>';
+    }
+  },
+
+  // ==================== TOURNAMENTS MANAGEMENT ====================
+
+  tmPage: 1,
+  tmGamesCache: null,
+  tmImportPreviewData: null,
+
+  async tmLoadTournaments(page) {
+    if (page) this.tmPage = page;
+    const search = document.getElementById('tm-search')?.value || '';
+    const source = document.getElementById('tm-source-filter')?.value || '';
+    const game = document.getElementById('tm-game-filter')?.value || '';
+    const limit = document.getElementById('tm-limit')?.value || 20;
+
+    try {
+      const params = new URLSearchParams({ page: this.tmPage, limit, search, source, game });
+      const response = await fetch(`/api/admin/tournaments-mgmt?${params}`, {
+        headers: { 'Authorization': `Bearer ${this.token}` }
+      });
+      if (!response.ok) throw new Error('Failed to load tournaments');
+      const data = await response.json();
+
+      this.tmRenderTable(data.tournaments);
+      this.tmRenderPagination(data.page, data.totalPages, data.total);
+
+      // Load games for filter dropdown (once)
+      if (!this.tmGamesCache) {
+        await this.tmLoadGamesList();
+      }
+    } catch (error) {
+      console.error('Error loading tournaments:', error);
+      document.getElementById('tm-table-body').innerHTML = '<tr><td colspan="8" class="text-center text-muted">Erreur de chargement</td></tr>';
+    }
+  },
+
+  async tmLoadGamesList() {
+    try {
+      const response = await fetch('/api/admin/tournaments-mgmt/games-list', {
+        headers: { 'Authorization': `Bearer ${this.token}` }
+      });
+      if (!response.ok) return;
+      this.tmGamesCache = await response.json();
+
+      // Populate filter dropdown
+      const filterSelect = document.getElementById('tm-game-filter');
+      if (filterSelect && filterSelect.options.length <= 1) {
+        this.tmGamesCache.forEach(g => {
+          const opt = document.createElement('option');
+          opt.value = g.id;
+          opt.textContent = g.randomizer?.shortName || g.name;
+          filterSelect.appendChild(opt);
+        });
+      }
+    } catch (e) {
+      console.error('Error loading games list:', e);
+    }
+  },
+
+  tmRenderTable(tournaments) {
+    const body = document.getElementById('tm-table-body');
+    if (!tournaments.length) {
+      body.innerHTML = '<tr><td colspan="8" class="text-center text-muted">Aucun tournoi trouvé</td></tr>';
+      return;
+    }
+
+    body.innerHTML = tournaments.map(t => {
+      const sourceIcon = t.source === 'startgg' ? '🟣' : t.source === 'challonge' ? '🟠' : '❓';
+      const sourceName = t.source === 'startgg' ? 'start.gg' : t.source === 'challonge' ? 'Challonge' : t.source;
+      const stateClass = t.state === 'complete' || t.state === 'completed' ? 'success' : t.state === 'underway' || t.state === 'active' ? 'warning' : 'muted';
+      const stateLabel = t.state || 'n/a';
+      const date = t.startDate ? new Date(t.startDate).toLocaleDateString('fr-FR') : '-';
+      const gameName = t.gameShortName || t.gameSlug || t.gameName || '-';
+      const externalUrl = t.url || (t.startggSlug ? `https://start.gg/${t.startggSlug}` : null);
+
+      return `<tr>
+        <td>
+          <strong>${this.escapeHtml(t.name)}</strong>
+          ${externalUrl ? `<br><a href="${this.escapeHtml(externalUrl)}" target="_blank" rel="noopener" class="text-muted" style="font-size:0.75rem;">↗ Voir sur ${sourceName}</a>` : ''}
+        </td>
+        <td><span class="badge badge-${t.source === 'startgg' ? 'info' : 'warning'}">${sourceIcon} ${sourceName}</span></td>
+        <td>${this.escapeHtml(gameName)}</td>
+        <td>${t.participantsCount || '-'}</td>
+        <td>${t.matchCount || '-'}</td>
+        <td><span class="badge badge-${stateClass}">${this.escapeHtml(stateLabel)}</span></td>
+        <td>${date}</td>
+        <td class="table-actions">
+          <button class="btn btn-sm btn-outline" onclick="admin.tmShowDetail('${t._id}')" title="Détails">👁</button>
+          <button class="btn btn-sm btn-outline" onclick="admin.tmShowEditGame('${t._id}', '${this.escapeHtml(t.gameSlug || '')}')" title="Modifier le jeu">🎮</button>
+          <button class="btn btn-sm btn-danger" onclick="admin.tmDeleteTournament('${t._id}', '${this.escapeHtml(t.name).replace(/'/g, "\\'")}')" title="Supprimer">🗑️</button>
+        </td>
+      </tr>`;
+    }).join('');
+  },
+
+  tmRenderPagination(page, totalPages, total) {
+    const container = document.getElementById('tm-pagination');
+    if (totalPages <= 1) { container.innerHTML = ''; return; }
+
+    let html = '<div class="pagination">';
+    if (page > 1) html += `<button class="btn btn-sm btn-outline" onclick="admin.tmLoadTournaments(${page - 1})">← Précédent</button>`;
+    html += `<span class="pagination-info">Page ${page} / ${totalPages} (${total} tournois)</span>`;
+    if (page < totalPages) html += `<button class="btn btn-sm btn-outline" onclick="admin.tmLoadTournaments(${page + 1})">Suivant →</button>`;
+    html += '</div>';
+    container.innerHTML = html;
+  },
+
+  // Import
+  tmShowImportModal() {
+    document.getElementById('tm-import-modal').style.display = 'flex';
+    document.getElementById('tm-import-url').value = '';
+    document.getElementById('tm-import-preview').style.display = 'none';
+    document.getElementById('tm-import-error').style.display = 'none';
+    document.getElementById('tm-import-success').style.display = 'none';
+    document.getElementById('tm-import-confirm-btn').disabled = true;
+    this.tmImportPreviewData = null;
+
+    // Populate games dropdown
+    const select = document.getElementById('tm-import-game');
+    select.innerHTML = '<option value="">Sélectionner un jeu...</option>';
+    const games = this.tmGamesCache || [];
+    games.forEach(g => {
+      const opt = document.createElement('option');
+      opt.value = g.id;
+      opt.textContent = `${g.randomizer?.shortName || g.name} (${g.id})`;
+      select.appendChild(opt);
+    });
+  },
+
+  tmCloseImportModal() {
+    document.getElementById('tm-import-modal').style.display = 'none';
+  },
+
+  async tmPreviewImport() {
+    const url = document.getElementById('tm-import-url').value.trim();
+    const errorEl = document.getElementById('tm-import-error');
+    const previewEl = document.getElementById('tm-import-preview');
+    const successEl = document.getElementById('tm-import-success');
+    errorEl.style.display = 'none';
+    previewEl.style.display = 'none';
+    successEl.style.display = 'none';
+    document.getElementById('tm-import-confirm-btn').disabled = true;
+
+    if (!url) { errorEl.textContent = 'Veuillez saisir une URL.'; errorEl.style.display = 'block'; return; }
+
+    const btn = document.getElementById('tm-import-preview-btn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Chargement...';
+
+    try {
+      const response = await fetch('/api/admin/tournaments-mgmt/preview', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${this.token}` },
+        body: JSON.stringify({ url })
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Erreur');
+
+      this.tmImportPreviewData = data;
+
+      let previewHtml = '';
+      if (data.alreadyImported) {
+        previewHtml += '<p class="text-muted">⚠️ Ce tournoi est déjà importé. L\'import mettra à jour les données existantes.</p>';
+      }
+
+      if (data.source === 'startgg') {
+        const p = data.preview;
+        previewHtml += `<p><strong>${this.escapeHtml(p.name)}</strong></p>`;
+        previewHtml += `<p class="text-muted">📅 ${p.startDate ? new Date(p.startDate).toLocaleDateString('fr-FR') : '?'} — 👥 ${p.numAttendees || '?'} participants</p>`;
+        if (p.events?.length) {
+          previewHtml += '<ul>';
+          p.events.forEach(e => {
+            previewHtml += `<li>${this.escapeHtml(e.name)} — ${e.numEntrants || '?'} entrants, ${e.setsTotal || '?'} sets${e.game ? ` (${this.escapeHtml(e.game.name)})` : ''}</li>`;
+          });
+          previewHtml += '</ul>';
+        }
+      } else {
+        const p = data.preview;
+        previewHtml += `<p><strong>${this.escapeHtml(p.name)}</strong></p>`;
+        previewHtml += `<p class="text-muted">Type: ${p.tournamentType || '?'} — État: ${p.state || '?'} — 👥 ${p.participantsCount || '?'} participants</p>`;
+        if (p.gameName) previewHtml += `<p class="text-muted">🎮 ${this.escapeHtml(p.gameName)}</p>`;
+      }
+
+      document.getElementById('tm-import-preview-title').textContent = `Prévisualisation (${data.source === 'startgg' ? 'start.gg' : 'Challonge'})`;
+      document.getElementById('tm-import-preview-content').innerHTML = previewHtml;
+      previewEl.style.display = 'block';
+      document.getElementById('tm-import-confirm-btn').disabled = false;
+
+    } catch (error) {
+      errorEl.textContent = error.message;
+      errorEl.style.display = 'block';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '👁 Prévisualiser';
+    }
+  },
+
+  async tmConfirmImport() {
+    const url = document.getElementById('tm-import-url').value.trim();
+    const gameSlug = document.getElementById('tm-import-game').value;
+    const errorEl = document.getElementById('tm-import-error');
+    const successEl = document.getElementById('tm-import-success');
+    errorEl.style.display = 'none';
+    successEl.style.display = 'none';
+
+    if (!url) { errorEl.textContent = 'URL requise'; errorEl.style.display = 'block'; return; }
+    if (!gameSlug) { errorEl.textContent = 'Veuillez sélectionner un jeu.'; errorEl.style.display = 'block'; return; }
+
+    const btn = document.getElementById('tm-import-confirm-btn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Import en cours...';
+
+    try {
+      const response = await fetch('/api/admin/tournaments-mgmt/import', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${this.token}` },
+        body: JSON.stringify({ url, gameSlug })
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Erreur');
+
+      successEl.textContent = `✅ Tournoi "${data.tournament.name}" importé avec succès !`;
+      successEl.style.display = 'block';
+      document.getElementById('tm-import-preview').style.display = 'none';
+
+      // Refresh list after short delay
+      setTimeout(() => {
+        this.tmCloseImportModal();
+        this.tmLoadTournaments(1);
+      }, 1500);
+
+    } catch (error) {
+      errorEl.textContent = error.message;
+      errorEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = '📥 Importer';
+    }
+  },
+
+  // Detail
+  async tmShowDetail(id) {
+    document.getElementById('tm-detail-modal').style.display = 'flex';
+    document.getElementById('tm-detail-content').innerHTML = '<p class="text-muted">Chargement...</p>';
+
+    try {
+      const response = await fetch(`/api/admin/tournaments-mgmt/${id}`, {
+        headers: { 'Authorization': `Bearer ${this.token}` }
+      });
+      if (!response.ok) throw new Error('Failed to load tournament');
+      const t = await response.json();
+
+      const sourceLabel = t.source === 'startgg' ? 'start.gg' : t.source === 'challonge' ? 'Challonge' : t.source;
+      const externalUrl = t.fullUrl || t.url || (t.startggSlug ? `https://start.gg/${t.startggSlug}` : null);
+
+      let html = `
+        <div class="tm-detail-grid">
+          <div class="tm-detail-field"><span class="tm-detail-label">Source</span><span>${this.escapeHtml(sourceLabel)}</span></div>
+          <div class="tm-detail-field"><span class="tm-detail-label">Jeu</span><span>${this.escapeHtml(t.gameSlug || t.gameName || '-')}</span></div>
+          <div class="tm-detail-field"><span class="tm-detail-label">Participants</span><span>${t.participantsCount || (t.participants || []).length || '-'}</span></div>
+          <div class="tm-detail-field"><span class="tm-detail-label">Matchs</span><span>${t.matchCountTotal || '-'}</span></div>
+          <div class="tm-detail-field"><span class="tm-detail-label">Races liées</span><span>${t.linkedRaces || 0}</span></div>
+          <div class="tm-detail-field"><span class="tm-detail-label">État</span><span>${this.escapeHtml(t.state || '-')}</span></div>
+          <div class="tm-detail-field"><span class="tm-detail-label">Date début</span><span>${t.startDate ? new Date(t.startDate).toLocaleDateString('fr-FR') : '-'}</span></div>
+          <div class="tm-detail-field"><span class="tm-detail-label">Date fin</span><span>${t.endDate ? new Date(t.endDate).toLocaleDateString('fr-FR') : '-'}</span></div>
+          ${externalUrl ? `<div class="tm-detail-field"><span class="tm-detail-label">Lien externe</span><a href="${this.escapeHtml(externalUrl)}" target="_blank" rel="noopener">↗ Voir sur ${this.escapeHtml(sourceLabel)}</a></div>` : ''}
+          <div class="tm-detail-field"><span class="tm-detail-label">Importé le</span><span>${t.source?.importedAt ? new Date(t.source.importedAt).toLocaleDateString('fr-FR') : t.createdAt ? new Date(t.createdAt).toLocaleDateString('fr-FR') : '-'}</span></div>
+        </div>
+      `;
+
+      // Show phases if present
+      if (t.phases?.length) {
+        html += '<h4 style="margin-top:1rem;">Phases</h4><ul>';
+        t.phases.forEach(p => { html += `<li>${this.escapeHtml(p.name)} (${p.bracketType || '?'}) — ${p.numSeeds || '?'} seeds</li>`; });
+        html += '</ul>';
+      }
+
+      document.getElementById('tm-detail-title').textContent = t.name;
+      document.getElementById('tm-detail-content').innerHTML = html;
+
+    } catch (error) {
+      document.getElementById('tm-detail-content').innerHTML = '<p class="text-muted">❌ Erreur de chargement</p>';
+    }
+  },
+
+  tmCloseDetailModal() {
+    document.getElementById('tm-detail-modal').style.display = 'none';
+  },
+
+  // Edit game association
+  async tmShowEditGame(tournamentId, currentGameSlug) {
+    document.getElementById('tm-edit-game-modal').style.display = 'flex';
+    document.getElementById('tm-edit-game-tournament-id').value = tournamentId;
+
+    const select = document.getElementById('tm-edit-game-select');
+    select.innerHTML = '<option value="">Aucun jeu (dissocier)</option>';
+    const games = this.tmGamesCache || [];
+    games.forEach(g => {
+      const opt = document.createElement('option');
+      opt.value = g.id;
+      opt.textContent = `${g.randomizer?.shortName || g.name} (${g.id})`;
+      if (g.id === currentGameSlug) opt.selected = true;
+      select.appendChild(opt);
+    });
+  },
+
+  tmCloseEditGameModal() {
+    document.getElementById('tm-edit-game-modal').style.display = 'none';
+  },
+
+  async tmSaveGameAssociation() {
+    const tournamentId = document.getElementById('tm-edit-game-tournament-id').value;
+    const gameSlug = document.getElementById('tm-edit-game-select').value;
+
+    try {
+      const response = await fetch(`/api/admin/tournaments-mgmt/${tournamentId}/game`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${this.token}` },
+        body: JSON.stringify({ gameSlug })
+      });
+      if (!response.ok) throw new Error('Erreur lors de la sauvegarde');
+
+      this.tmCloseEditGameModal();
+      this.tmLoadTournaments();
+      this.showToast('Jeu modifié avec succès', 'success');
+    } catch (error) {
+      this.showToast(error.message, 'error');
+    }
+  },
+
+  // Delete
+  async tmDeleteTournament(id, name) {
+    if (!confirm(`Supprimer le tournoi "${name}" ?\n\nLes races liées seront dissociées mais pas supprimées.`)) return;
+
+    try {
+      const response = await fetch(`/api/admin/tournaments-mgmt/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${this.token}` }
+      });
+      if (!response.ok) throw new Error('Erreur lors de la suppression');
+
+      this.showToast(`Tournoi "${name}" supprimé`, 'success');
+      this.tmLoadTournaments();
+    } catch (error) {
+      this.showToast(error.message, 'error');
     }
   }
 };

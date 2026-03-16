@@ -58,6 +58,10 @@
           <span class="nav-icon">🔗</span>
           <span>Race ↔ Match</span>
         </button>
+        <button class="nav-item" data-section="tournaments-mgmt">
+          <span class="nav-icon">🏆</span>
+          <span>Tournois</span>
+        </button>
         <button class="nav-item" data-section="players">
           <span class="nav-icon">👥</span>
           <span>Joueurs</span>
@@ -619,6 +623,141 @@
           </div>
         </div>
       </section>
+
+      <!-- Tournaments Management Section -->
+      <section id="section-tournaments-mgmt" class="admin-section">
+        <div class="section-header">
+          <h1 class="section-title">Gestion des Tournois</h1>
+          <button class="btn btn-primary" onclick="admin.tmShowImportModal()">
+            ➕ Importer un tournoi
+          </button>
+        </div>
+
+        <div class="toolbar">
+          <div class="toolbar-search">
+            <input type="text" id="tm-search" class="form-input" placeholder="Rechercher un tournoi...">
+          </div>
+          <div class="toolbar-filters">
+            <select id="tm-source-filter" class="form-input form-select" onchange="admin.tmLoadTournaments(1)">
+              <option value="">Toutes les sources</option>
+              <option value="startgg">start.gg</option>
+              <option value="challonge">Challonge</option>
+            </select>
+            <select id="tm-game-filter" class="form-input form-select" onchange="admin.tmLoadTournaments(1)">
+              <option value="">Tous les jeux</option>
+            </select>
+            <select id="tm-limit" class="form-input form-select" onchange="admin.tmLoadTournaments(1)">
+              <option value="20">20 par page</option>
+              <option value="50">50 par page</option>
+              <option value="100">100 par page</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Source</th>
+                <th>Jeu</th>
+                <th>Participants</th>
+                <th>Matchs</th>
+                <th>État</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tm-table-body">
+              <tr>
+                <td colspan="8" class="text-center text-muted">Chargement...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="tm-pagination"></div>
+      </section>
+
+      <!-- Import Tournament Modal -->
+      <div id="tm-import-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>Importer un tournoi</h2>
+            <button class="modal-close" onclick="admin.tmCloseImportModal()">&times;</button>
+          </div>
+          <div class="modal-body">
+            <p class="text-muted" style="margin-bottom: 1rem;">
+              Collez l'URL d'un tournoi start.gg ou challonge.com pour l'importer et l'associer à un jeu.
+            </p>
+
+            <div class="form-group">
+              <label class="form-label" for="tm-import-url">URL du tournoi *</label>
+              <input type="url" id="tm-import-url" class="form-input" placeholder="https://start.gg/tournament/... ou https://challonge.com/..." required>
+              <small>Exemples : https://www.start.gg/tournament/mon-tournoi/event/bracket, https://challonge.com/fr/MonTournoi</small>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="tm-import-game">Jeu associé *</label>
+              <select id="tm-import-game" class="form-input form-select" required>
+                <option value="">Sélectionner un jeu...</option>
+              </select>
+            </div>
+
+            <div id="tm-import-preview" style="display: none;" class="card mt-4">
+              <h4 id="tm-import-preview-title"></h4>
+              <div id="tm-import-preview-content"></div>
+            </div>
+
+            <div id="tm-import-error" class="alert alert-danger mt-4" style="display: none;"></div>
+            <div id="tm-import-success" class="alert alert-success mt-4" style="display: none;"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline" onclick="admin.tmCloseImportModal()">Annuler</button>
+            <button type="button" class="btn btn-secondary" id="tm-import-preview-btn" onclick="admin.tmPreviewImport()">👁 Prévisualiser</button>
+            <button type="button" class="btn btn-primary" id="tm-import-confirm-btn" onclick="admin.tmConfirmImport()" disabled>📥 Importer</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tournament Detail Modal -->
+      <div id="tm-detail-modal" class="modal" style="display: none;">
+        <div class="modal-content modal-large">
+          <div class="modal-header">
+            <h2 id="tm-detail-title">Détails du tournoi</h2>
+            <button class="modal-close" onclick="admin.tmCloseDetailModal()">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div id="tm-detail-content"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline" onclick="admin.tmCloseDetailModal()">Fermer</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Tournament Game Modal -->
+      <div id="tm-edit-game-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>Modifier le jeu associé</h2>
+            <button class="modal-close" onclick="admin.tmCloseEditGameModal()">&times;</button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="tm-edit-game-tournament-id">
+            <div class="form-group">
+              <label class="form-label" for="tm-edit-game-select">Jeu associé</label>
+              <select id="tm-edit-game-select" class="form-input form-select">
+                <option value="">Aucun jeu (dissocier)</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline" onclick="admin.tmCloseEditGameModal()">Annuler</button>
+            <button type="button" class="btn btn-primary" onclick="admin.tmSaveGameAssociation()">Enregistrer</button>
+          </div>
+        </div>
+      </div>
 
       <!-- Monitoring Section -->
       <section id="section-monitoring" class="admin-section">

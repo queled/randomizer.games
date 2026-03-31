@@ -96,19 +96,28 @@ function verifyAdminToken(providedToken) {
  * Middleware to require admin authentication
  */
 function requireAdmin(req, res, next) {
-  // Check for session token in header or cookie
   const authHeader = req.headers.authorization;
   const cookieToken = req.cookies?.adminSession;
-  
+
   let sessionToken = null;
-  
+  let session = null;
+
   if (authHeader && authHeader.startsWith('Bearer ')) {
-    sessionToken = authHeader.slice(7);
-  } else if (cookieToken) {
-    sessionToken = cookieToken;
+    const bearerToken = authHeader.slice(7).trim();
+    if (bearerToken) {
+      session = validateSession(bearerToken);
+      if (session) {
+        sessionToken = bearerToken;
+      }
+    }
   }
-  
-  const session = validateSession(sessionToken);
+
+  if (!session && cookieToken) {
+    session = validateSession(cookieToken);
+    if (session) {
+      sessionToken = cookieToken;
+    }
+  }
   
   if (!session) {
     return res.status(401).json({ 
@@ -119,6 +128,7 @@ function requireAdmin(req, res, next) {
   
   // Attach session info to request
   req.adminSession = session;
+  req.adminSessionToken = sessionToken;
   next();
 }
 
@@ -128,16 +138,29 @@ function requireAdmin(req, res, next) {
 function optionalAdmin(req, res, next) {
   const authHeader = req.headers.authorization;
   const cookieToken = req.cookies?.adminSession;
-  
+
+  let session = null;
   let sessionToken = null;
-  
+
   if (authHeader && authHeader.startsWith('Bearer ')) {
-    sessionToken = authHeader.slice(7);
-  } else if (cookieToken) {
-    sessionToken = cookieToken;
+    const bearerToken = authHeader.slice(7).trim();
+    if (bearerToken) {
+      session = validateSession(bearerToken);
+      if (session) {
+        sessionToken = bearerToken;
+      }
+    }
   }
-  
-  req.adminSession = validateSession(sessionToken);
+
+  if (!session && cookieToken) {
+    session = validateSession(cookieToken);
+    if (session) {
+      sessionToken = cookieToken;
+    }
+  }
+
+  req.adminSession = session;
+  req.adminSessionToken = sessionToken;
   next();
 }
 

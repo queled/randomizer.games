@@ -7,8 +7,8 @@ const { webhookLimiter } = require('../middleware/security');
 function verifySignature(req) {
   const secret = process.env.GITHUB_WEBHOOK_SECRET;
   if (!secret) {
-    console.warn('⚠️  GITHUB_WEBHOOK_SECRET not configured - webhook is unprotected!');
-    return true; // no secret configured
+    console.error('❌ GITHUB_WEBHOOK_SECRET not configured - rejecting webhook');
+    return false;
   }
   const sig256 = req.headers['x-hub-signature-256'];
   const raw = req.rawBody || null;

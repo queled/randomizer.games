@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Game } = require('../models');
+const { requireAdmin } = require('../middleware/admin-auth');
 
 const GAMES_WITH_STATS_CACHE_TTL = 10 * 60 * 1000;
 let gamesWithStatsCache = null;
@@ -344,7 +345,7 @@ router.get('/:id/resources', async (req, res, next) => {
 });
 
 // Update game resources (admin)
-router.patch('/:id/resources', async (req, res, next) => {
+router.patch('/:id/resources', requireAdmin, async (req, res, next) => {
   try {
     const { officialSite, trackers, guides, other } = req.body;
     

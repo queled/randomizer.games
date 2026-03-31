@@ -2,14 +2,70 @@ const express = require('express');
 const axios = require('axios');
 const router = express.Router();
 
+const RACETIME_HOST = 'racetime.gg';
+
+function isAllowedRacetimeHost(hostname) {
+  const normalized = String(hostname || '').toLowerCase();
+  return normalized === RACETIME_HOST || normalized.endsWith('.' + RACETIME_HOST);
+}
+
+function normalizeAllowedRacetimeUrl(rawUrl, { requireUserPath = false } = {}) {
+  try {
+    const parsed = new URL(rawUrl);
+    if (!['http:', 'https:'].includes(parsed.protocol)) return null;
+    if (!isAllowedRacetimeHost(parsed.hostname)) return null;
+
+    const pathname = parsed.pathname.replace(/\/+$/, '');
+    if (requireUserPath && !/^\/user\/[^/]+$/i.test(pathname)) {
+      return null;
+    }
+
+    return `https://${RACETIME_HOST}${pathname}${parsed.search}`;
+  } catch (e) {
+    return null;
+  }
+}
+
+function normalizeRacetimeMediaUrl(urlOrPath) {
+  const raw = String(urlOrPath || '').trim().replace(/^['\"]|['\"]$/g, '');
+  if (!raw) return null;
+
+  if (raw.startsWith('//')) {
+    return normalizeAllowedRacetimeUrl('https:' + raw);
+  }
+
+  if (raw.startsWith('/')) {
+    return normalizeAllowedRacetimeUrl(`https://${RACETIME_HOST}${raw}`);
+  }
+
+  if (/^https?:\/\//i.test(raw)) {
+    return normalizeAllowedRacetimeUrl(raw);
+  }
+
+  return null;
+}
+
 function normalizeBase(urlOrId){
-  if(!urlOrId) return null;
-  try{
-    // If full URL provided, trim trailing slashes
-    if (/^https?:\/\//i.test(urlOrId)) return urlOrId.replace(/\/+$/, '');
-    // otherwise assume it's an id
-    return 'https://racetime.gg/user/' + encodeURIComponent(urlOrId);
-  }catch(e){ return null; }
+  const raw = String(urlOrId || '').trim();
+  if (!raw) return null;
+
+  if (/^https?:\/\//i.test(raw)) {
+    return normalizeAllowedRacetimeUrl(raw, { requireUserPath: true });
+  }
+
+  if (raw.startsWith('/user/')) {
+    return normalizeAllowedRacetimeUrl(`https://${RACETIME_HOST}${raw}`, { requireUserPath: true });
+  }
+
+  if (/^user\//i.test(raw)) {
+    return normalizeAllowedRacetimeUrl(`https://${RACETIME_HOST}/${raw}`, { requireUserPath: true });
+  }
+
+  if (!/^[A-Za-z0-9_-]+$/.test(raw)) {
+    return null;
+  }
+
+  return `https://${RACETIME_HOST}/user/${encodeURIComponent(raw)}`;
 }
 
 router.get('/avatar', async (req, res) => {
@@ -41,13 +97,6 @@ router.get('/avatar', async (req, res) => {
 
     // If a name param is provided, try to find the avatar closest to that name
     const queryName = (req.query.name || '').trim();
-    function normalizeCandidate(u){
-      let uc = u.trim().replace(/^['\"]|['\"]$/g, '');
-      if (uc.startsWith('//')) uc = 'https:' + uc;
-      if (uc.startsWith('/media/')) uc = 'https://racetime.gg' + uc;
-      return uc;
-    }
-
     if (queryName) {
       // Search for a user-pop block that contains the matching name and extract avatar only from that block
       const escaped = queryName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -62,7 +111,8 @@ router.get('/avatar', async (req, res) => {
           // found the block for this user; look for avatar inside it
           const bgMatch = block.match(/background-image\s*:\s*url\(([^)]+)\)/i);
           if (bgMatch && bgMatch[1]){
-            const urlcandidate = normalizeCandidate(bgMatch[1]);
+            const urlcandidate = normalizeRacetimeMediaUrl(bgMatch[1]);
+            if (!urlcandidate) return res.status(400).json({ error: 'invalid avatar source' });
             try{
               const streamRes = await axios.get(urlcandidate, { responseType: 'stream', timeout: 10000 });
               res.setHeader('Content-Type', streamRes.headers['content-type'] || 'image/*');
@@ -72,7 +122,8 @@ router.get('/avatar', async (req, res) => {
           }
           const mediaMatch = block.match(/https?:\/\/racetime\.gg\/media\/[^"'\)\s>]+/i) || block.match(/\/media\/[^"'\)\s>]+/i);
           if (mediaMatch && mediaMatch[0]){
-            const murl = normalizeCandidate(mediaMatch[0]);
+            const murl = normalizeRacetimeMediaUrl(mediaMatch[0]);
+            if (!murl) return res.status(400).json({ error: 'invalid avatar source' });
             try{
               const streamRes = await axios.get(murl, { responseType: 'stream', timeout: 10000 });
               res.setHeader('Content-Type', streamRes.headers['content-type'] || 'image/*');
@@ -100,7 +151,8 @@ router.get('/avatar', async (req, res) => {
     // Try background-image within profile slice
     const bgMatch = slice.match(/background-image\s*:\s*url\(([^)]+)\)/i);
     if (bgMatch && bgMatch[1]){
-      const urlcandidate = normalizeCandidate(bgMatch[1]);
+      const urlcandidate = normalizeRacetimeMediaUrl(bgMatch[1]);
+      if (!urlcandidate) return res.status(400).json({ error: 'invalid avatar source' });
       try{
         const streamRes = await axios.get(urlcandidate, { responseType: 'stream', timeout: 10000 });
         res.setHeader('Content-Type', streamRes.headers['content-type'] || 'image/*');
@@ -112,7 +164,8 @@ router.get('/avatar', async (req, res) => {
     // Try /media/ occurrences inside profile slice
     const mediaMatch = slice.match(/https?:\/\/racetime\.gg\/media\/[^"'\)\s>]+/i) || slice.match(/\/media\/[^"'\)\s>]+/i);
     if (mediaMatch && mediaMatch[0]){
-      const m = normalizeCandidate(mediaMatch[0]);
+      const m = normalizeRacetimeMediaUrl(mediaMatch[0]);
+      if (!m) return res.status(400).json({ error: 'invalid avatar source' });
       try{
         const streamRes = await axios.get(m, { responseType: 'stream', timeout: 10000 });
         res.setHeader('Content-Type', streamRes.headers['content-type'] || 'image/*');
@@ -195,13 +248,6 @@ router.get('/has-avatar', async (req, res) => {
     if (og && og[1]) return res.json({ has: true });
 
     const queryName = (name || '').trim();
-    function normalizeCandidate(u){
-      let uc = u.trim().replace(/^['"]|['"]$/g, '');
-      if (uc.startsWith('//')) uc = 'https:' + uc;
-      if (uc.startsWith('/media/')) uc = 'https://racetime.gg' + uc;
-      return uc;
-    }
-
     if (queryName) {
       const escaped = queryName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       const nameInnerRe = new RegExp('<span[^>]*class=["\\\']name["\\\'][^>]*>\\s*' + escaped + '\\s*<\\/span>', 'i');

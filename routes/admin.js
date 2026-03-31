@@ -13,6 +13,7 @@ const {
   destroySession, 
   requireAdmin 
 } = require('../middleware/admin-auth');
+const { adminLoginLimiter } = require('../middleware/security');
 const { Game, Tournament, Match, Race, Player } = require('../models');
 
 // ==================== AUTH ====================
@@ -21,7 +22,7 @@ const { Game, Tournament, Match, Race, Player } = require('../models');
  * POST /api/admin/login
  * Login with admin token
  */
-router.post('/login', (req, res) => {
+router.post('/login', adminLoginLimiter, (req, res) => {
   const { token } = req.body;
   
   if (!token) {
@@ -48,7 +49,6 @@ router.post('/login', (req, res) => {
   
   res.json({ 
     success: true, 
-    token: sessionToken,
     expiresIn: 24 * 60 * 60 // seconds
   });
 });
@@ -58,12 +58,15 @@ router.post('/login', (req, res) => {
  * Logout and destroy session
  */
 router.post('/logout', requireAdmin, (req, res) => {
-  const authHeader = req.headers.authorization;
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    destroySession(authHeader.slice(7));
+  if (req.adminSessionToken) {
+    destroySession(req.adminSessionToken);
   }
   
-  res.clearCookie('adminSession');
+  res.clearCookie('adminSession', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict'
+  });
   res.json({ success: true });
 });
 

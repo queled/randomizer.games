@@ -46,6 +46,13 @@ const searchLimiter = createRateLimiter(
   'Too many search requests'
 );
 
+// Stricter limiter for admin login attempts
+const adminLoginLimiter = createRateLimiter(
+  15 * 60 * 1000,
+  isDevelopment ? 50 : 10,
+  'Too many admin login attempts, please try again later'
+);
+
 // Validation middleware
 const validatePagination = (req, res, next) => {
   const { limit, page } = req.query;
@@ -169,6 +176,7 @@ module.exports = {
   strictLimiter,
   webhookLimiter,
   searchLimiter,
+  adminLoginLimiter,
   validatePagination,
   validateObjectId,
   sanitizeString,

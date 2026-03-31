@@ -5,7 +5,7 @@
  */
 
 const admin = {
-  token: null,
+  token: '',
   currentSection: 'dashboard',
   currentGame: null,
   games: [],
@@ -34,12 +34,8 @@ const admin = {
   // ==================== INITIALIZATION ====================
   
   init() {
-    // Check for existing session
-    this.token = localStorage.getItem('adminToken');
-    
-    if (this.token) {
-      this.checkSession();
-    }
+    // Restore the admin UI from the server-side cookie session if present.
+    this.checkSession();
     
     // Setup event listeners
     this.setupEventListeners();
@@ -131,6 +127,7 @@ const admin = {
       const response = await fetch('/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
         body: JSON.stringify({ token: tokenInput.value })
       });
       
@@ -139,9 +136,6 @@ const admin = {
       if (!response.ok) {
         throw new Error(data.error || 'Login failed');
       }
-      
-      this.token = data.token;
-      localStorage.setItem('adminToken', this.token);
       
       this.showApp();
       this.loadDashboard();
@@ -159,9 +153,7 @@ const admin = {
   
   async checkSession() {
     try {
-      const response = await fetch('/api/admin/session', {
-        headers: { 'Authorization': `Bearer ${this.token}` }
-      });
+      const response = await fetch('/api/admin/session', { credentials: 'same-origin' });
       
       if (response.ok) {
         this.showApp();
@@ -175,19 +167,18 @@ const admin = {
   },
   
   async logout(callApi = true) {
-    if (callApi && this.token) {
+    if (callApi) {
       try {
         await fetch('/api/admin/logout', {
           method: 'POST',
-          headers: { 'Authorization': `Bearer ${this.token}` }
+          credentials: 'same-origin'
         });
       } catch (e) {
         // Ignore
       }
     }
     
-    this.token = null;
-    localStorage.removeItem('adminToken');
+    this.token = '';
     
     document.getElementById('admin-app').style.display = 'none';
     document.getElementById('login-modal').style.display = 'flex';

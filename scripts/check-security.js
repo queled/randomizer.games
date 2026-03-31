@@ -10,11 +10,12 @@ const path = require('path');
 const REQUIRED_ENV_VARS = [
   'NODE_ENV',
   'PORT',
-  'MONGODB_URI'
+  'MONGODB_URI',
+  'ADMIN_TOKEN',
+  'GITHUB_WEBHOOK_SECRET'
 ];
 
 const RECOMMENDED_ENV_VARS = [
-  'GITHUB_WEBHOOK_SECRET',
   'TWITCH_CLIENT_ID',
   'TWITCH_CLIENT_SECRET'
 ];

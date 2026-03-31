@@ -7,8 +7,10 @@ const { Tournament, Match, Race, Player, Game } = require('../models');
 const findGameForTournament = require('../helpers/findGameForTournament');
 const { rankMatchesForRace, selectBestCandidate } = require('../helpers/race-match-linking');
 const { strictLimiter, validateObjectId } = require('../middleware/security');
+const { requireAdmin } = require('../middleware/admin-auth');
 
-// Apply strict rate limiting to all sync endpoints (write operations)
+// Sync endpoints mutate data and must stay admin-only.
+router.use(requireAdmin);
 router.use(strictLimiter);
 
 function normalizeRacetimeProfileUrl(urlOrId) {

@@ -283,6 +283,9 @@
   function cardStream(s) {
     // Use proxy for thumbnail URL
     const thumbUrl = s.thumbnailUrl ? `/api/proxy-image?url=${encodeURIComponent(s.thumbnailUrl)}` : '';
+    const streamLinkAttrs = buildExternalLinkAttrs(s.url);
+    const wrapperTag = streamLinkAttrs ? 'a' : 'div';
+    const wrapperAttrs = streamLinkAttrs ? `${streamLinkAttrs} class="stream-card"` : 'class="stream-card"';
     const escapeHtml = (str) => String(str).replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
     const formatViewers = (count) => {
       if (count >= 1000000) return (count / 1000000).toFixed(1) + 'M';
@@ -291,7 +294,7 @@
     };
     
     return `
-      <a href="${s.url}" target="_blank" rel="noopener" class="stream-card">
+      <${wrapperTag} ${wrapperAttrs}>
         <div class="stream-thumbnail">
           <img src="${thumbUrl}" 
                alt="${escapeHtml(s.title || '')}" 
@@ -305,7 +308,7 @@
           <div class="stream-channel">${escapeHtml(s.userName || s.userLogin || 'Unknown')}</div>
           ${s.gameName ? `<div class="stream-game">🎮 ${escapeHtml(s.gameName)}</div>` : ''}
         </div>
-      </a>
+      </${wrapperTag}>
     `;
   }
 
@@ -957,7 +960,8 @@
       
       if (siteEl) {
         const website = game.randomizer?.website || game.officialWebsite;
-        siteEl.innerHTML = website ? `<div><a href="${website}" target="_blank" style="color:#60a5fa;">${typeof i18n !== 'undefined' ? i18n.t('common.officialSite') : 'Official site'}</a></div>` : '';
+        const websiteLinkAttrs = buildExternalLinkAttrs(website);
+        siteEl.innerHTML = websiteLinkAttrs ? `<div><a ${websiteLinkAttrs} style="color:#60a5fa;">${typeof i18n !== 'undefined' ? i18n.t('common.officialSite') : 'Official site'}</a></div>` : '';
       }
 
       // Load and render resources (sites, trackers, guides)

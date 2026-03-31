@@ -1823,14 +1823,60 @@ const admin = {
     }
   },
 
-  renderExternalLink(url, label, className = 'resource-link') {
-    const safeUrl = this.sanitizeExternalUrl(url);
-    const safeLabel = this.escapeHtml(label || url || 'Link');
-    if (!safeUrl) {
-      return `<span class="${className}">${safeLabel}</span>`;
+  sanitizeRacetimeUrl(url) {
+    const raw = String(url || '').trim();
+    if (!raw) return '';
+
+    try {
+      const normalized = raw.includes('://')
+        ? new URL(raw)
+        : new URL(raw.startsWith('/') ? raw : `/${raw}`, 'https://racetime.gg');
+
+      if (normalized.protocol !== 'https:' || normalized.hostname.toLowerCase() !== 'racetime.gg') {
+        return '';
+      }
+
+      return normalized.href;
+    } catch {
+      return '';
+    }
+  },
+
+  sanitizeTwitchUrl(value) {
+    const raw = String(value || '').trim();
+    if (!raw) return '';
+
+    if (raw.includes('://')) {
+      try {
+        const normalized = new URL(raw);
+        const hostname = normalized.hostname.toLowerCase().replace(/^www\./, '');
+        if (normalized.protocol !== 'https:' || hostname !== 'twitch.tv') {
+          return '';
+        }
+        return normalized.href;
+      } catch {
+        return '';
+      }
     }
 
-    return `<a href="${this.escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer" class="${className}">${safeLabel}</a>`;
+    const handle = raw.replace(/^@/, '');
+    if (!/^[A-Za-z0-9_]{1,25}$/.test(handle)) {
+      return '';
+    }
+
+    return `https://twitch.tv/${handle}`;
+  },
+
+  renderExternalLink(url, label, className = 'resource-link', extraAttrs = '') {
+    const safeUrl = this.sanitizeExternalUrl(url);
+    const safeLabel = this.escapeHtml(label || url || 'Link');
+    const classAttr = className ? ` class="${className}"` : '';
+    const attrsSuffix = extraAttrs ? ` ${extraAttrs}` : '';
+    if (!safeUrl) {
+      return `<span${classAttr}${attrsSuffix}>${safeLabel}</span>`;
+    }
+
+    return `<a href="${this.escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer"${classAttr}${attrsSuffix}>${safeLabel}</a>`;
   },
   
   capitalize(str) {
@@ -1994,12 +2040,12 @@ const admin = {
         <td>${this.escapeHtml(player.name)}</td>
         <td>
           ${player.racetimeUrl 
-            ? `<a href="${player.racetimeUrl}" target="_blank" class="badge badge-success">✓ Lié</a>` 
+            ? this.renderExternalLink(this.sanitizeRacetimeUrl(player.racetimeUrl), '✓ Lié', 'badge badge-success') 
             : '<span class="badge badge-muted">-</span>'}
         </td>
         <td>
           ${player.twitch 
-            ? `<a href="https://twitch.tv/${player.twitch}" target="_blank" class="badge badge-success">${this.escapeHtml(player.twitch)}</a>` 
+            ? this.renderExternalLink(this.sanitizeTwitchUrl(player.twitch), player.twitch, 'badge badge-success') 
             : '<span class="badge badge-muted">-</span>'}
         </td>
         <td>${player.stats?.totalRaces || 0}</td>
@@ -2300,7 +2346,7 @@ const admin = {
                 ${raceUrls.map((url, idx) => `
                   <div class="rl-linked-race" draggable="${raceCount > 1 ? 'true' : 'false'}" data-race-url="${this.escapeHtml(url)}" data-match-id="${this.escapeHtml(matchId)}" data-index="${idx}">
                     ${raceCount > 1 ? `<span class="rl-race-order" title="Manche">⠿ ${idx + 1}</span>` : ''}
-                    <a href="https://racetime.gg${url}" target="_blank" class="rl-race-link">${this.escapeHtml(url)}</a>
+                    ${this.renderExternalLink(this.sanitizeRacetimeUrl(url), url, 'rl-race-link')}
                     <button class="btn btn-sm btn-ghost btn-danger" onclick="event.stopPropagation(); admin.rlUnlinkRace('${this.escapeHtml(url)}')" title="Délier">✕</button>
                   </div>
                 `).join('')}
@@ -2438,7 +2484,7 @@ const admin = {
       <div class="rl-race-item rl-race-qualifier">
         <div class="rl-race-main">
           <div class="rl-race-info">
-            <a href="https://racetime.gg${r.url}" target="_blank" class="rl-race-link">${this.escapeHtml(r.label || r.url)}</a>
+            ${this.renderExternalLink(this.sanitizeRacetimeUrl(r.url), r.label || r.url, 'rl-race-link')}
             <span class="text-muted">${r.entrantCount} entrant${r.entrantCount > 1 ? 's' : ''}</span>
             ${r.entrantNames.length ? `<span class="text-muted">· ${r.entrantNames.slice(0, 3).map(n => this.escapeHtml(n)).join(', ')}</span>` : ''}
           </div>
@@ -2485,7 +2531,7 @@ const admin = {
       <div class="rl-race-item rl-race-unlinked">
         <div class="rl-race-main">
           <div class="rl-race-info">
-            <a href="https://racetime.gg${r.url}" target="_blank" class="rl-race-link">${this.escapeHtml(r.label || r.url)}</a>
+            ${this.renderExternalLink(this.sanitizeRacetimeUrl(r.url), r.label || r.url, 'rl-race-link')}
             <span class="text-muted">${r.entrantCount} entrant${r.entrantCount > 1 ? 's' : ''}</span>
             ${r.entrantNames.length ? `<span class="text-muted">· ${r.entrantNames.slice(0, 2).map(n => this.escapeHtml(n)).join(' vs ')}</span>` : ''}
           </div>
@@ -2625,7 +2671,7 @@ const admin = {
                 <div class="rl-suggestion-details">
                   ${s.entrantNames.length ? `<span>${s.entrantNames.slice(0, 2).map(n => this.escapeHtml(n)).join(' vs ')}</span>` : ''}
                   ${s.startedAt ? `<span>· ${new Date(s.startedAt).toLocaleDateString('fr-FR')}</span>` : ''}
-                  <a href="https://racetime.gg${s.raceUrl}" target="_blank" class="rl-race-link" style="font-size:0.8rem;">${this.escapeHtml(s.raceUrl)}</a>
+                  ${this.renderExternalLink(this.sanitizeRacetimeUrl(s.raceUrl), s.raceUrl, 'rl-race-link', 'style="font-size:0.8rem;"')}
                 </div>
               </div>
               <button class="btn btn-sm btn-ghost btn-danger" onclick="event.stopPropagation(); admin.rlUnlinkRace('${this.escapeHtml(s.raceUrl)}')" title="Délier">✕</button>
@@ -3320,7 +3366,7 @@ const admin = {
       return `<tr>
         <td>
           <strong>${this.escapeHtml(t.name)}</strong>
-          ${externalUrl ? `<br><a href="${this.escapeHtml(externalUrl)}" target="_blank" rel="noopener" class="text-muted" style="font-size:0.75rem;">↗ Voir sur ${sourceName}</a>` : ''}
+          ${externalUrl ? `<br>${this.renderExternalLink(externalUrl, `↗ Voir sur ${sourceName}`, 'text-muted', 'style="font-size:0.75rem;"')}` : ''}
         </td>
         <td><span class="badge badge-${t.source === 'startgg' ? 'info' : 'warning'}">${sourceIcon} ${sourceName}</span></td>
         <td>${this.escapeHtml(gameName)}</td>
@@ -3506,7 +3552,7 @@ const admin = {
           <div class="tm-detail-field"><span class="tm-detail-label">État</span><span>${this.escapeHtml(t.state || '-')}</span></div>
           <div class="tm-detail-field"><span class="tm-detail-label">Date début</span><span>${t.startDate ? new Date(t.startDate).toLocaleDateString('fr-FR') : '-'}</span></div>
           <div class="tm-detail-field"><span class="tm-detail-label">Date fin</span><span>${t.endDate ? new Date(t.endDate).toLocaleDateString('fr-FR') : '-'}</span></div>
-          ${externalUrl ? `<div class="tm-detail-field"><span class="tm-detail-label">Lien externe</span><a href="${this.escapeHtml(externalUrl)}" target="_blank" rel="noopener">↗ Voir sur ${this.escapeHtml(sourceLabel)}</a></div>` : ''}
+          ${externalUrl ? `<div class="tm-detail-field"><span class="tm-detail-label">Lien externe</span>${this.renderExternalLink(externalUrl, `↗ Voir sur ${sourceLabel}`)}</div>` : ''}
           <div class="tm-detail-field"><span class="tm-detail-label">Importé le</span><span>${t.source?.importedAt ? new Date(t.source.importedAt).toLocaleDateString('fr-FR') : t.createdAt ? new Date(t.createdAt).toLocaleDateString('fr-FR') : '-'}</span></div>
         </div>
       `;

@@ -33,6 +33,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     return image;
   }
+
+  function sanitizeExternalUrl(url) {
+    const raw = String(url || '').trim();
+    if (!raw) return '';
+
+    try {
+      const parsed = new URL(raw, window.location.origin);
+      if (!/^https?:$/i.test(parsed.protocol)) return '';
+      return parsed.href;
+    } catch {
+      return '';
+    }
+  }
   
   function sortGames(games, sortBy) {
     const sorted = [...games];
@@ -101,7 +114,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Afficher le nom complet du jeu en sous-titre
       const gameName = game.official?.name || game.name;
       const stats = streamStats[game.id] || { streamers: 0, viewers: 0 };
-      const website = game.randomizer?.website || game.officialWebsite;
+      const website = sanitizeExternalUrl(game.randomizer?.website || game.officialWebsite);
       
       return `
         <div class="game-card" data-game-id="${encodeURIComponent(id)}" role="link" tabindex="0" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;overflow:hidden;">

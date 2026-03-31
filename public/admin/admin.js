@@ -785,9 +785,7 @@ const admin = {
       officialDisplay.innerHTML = `
         <div class="resource-item resource-item-primary">
           <span class="resource-icon">${this.getAdminSiteIcon(resources.officialSite)}</span>
-          <a href="${resources.officialSite.url}" target="_blank" class="resource-link">
-            ${this.escapeHtml(resources.officialSite.name || 'Site officiel')}
-          </a>
+          ${this.renderExternalLink(resources.officialSite.url, resources.officialSite.name || 'Site officiel')}
           <button class="btn btn-sm btn-ghost" onclick="admin.editOfficialSiteTitle()" title="Modifier le titre officiel">✏️</button>
           <button class="btn btn-sm btn-ghost btn-danger" onclick="admin.removeOfficialSite()">×</button>
         </div>
@@ -803,9 +801,7 @@ const admin = {
         <div class="resource-item ${site.isObsolete ? 'resource-item-obsolete' : ''}" data-resource-type="sites" data-resource-index="${i}">
           <span class="resource-icon">${this.getAdminSiteIcon(site)}</span>
           <div class="resource-details">
-            <a href="${site.url}" target="_blank" class="resource-link">
-              ${this.escapeHtml(site.name || site.url)}
-            </a>
+            ${this.renderExternalLink(site.url, site.name || site.url)}
             ${site.description ? `<span class="resource-desc">${this.escapeHtml(site.description)}</span>` : ''}
           </div>
           ${resources.officialSite?.url === site.url ? '<span class="resource-type">officiel</span>' : ''}
@@ -826,7 +822,7 @@ const admin = {
         <div class="resource-item" data-resource-type="trackers" data-resource-index="${i}">
           <span class="resource-icon">📍</span>
           <div class="resource-details">
-            <a href="${tracker.url}" target="_blank" class="resource-link">${this.escapeHtml(tracker.name)}</a>
+            ${this.renderExternalLink(tracker.url, tracker.name)}
             ${tracker.description ? `<span class="resource-desc">${this.escapeHtml(tracker.description)}</span>` : ''}
           </div>
           <span class="resource-source">${this.escapeHtml(tracker.source || 'manual')}</span>
@@ -847,7 +843,7 @@ const admin = {
         <div class="resource-item" data-resource-type="guides" data-resource-index="${i}">
           <span class="resource-icon">${typeIcons[guide.type] || '📖'}</span>
           <div class="resource-details">
-            <a href="${guide.url}" target="_blank" class="resource-link">${this.escapeHtml(guide.name)}</a>
+            ${this.renderExternalLink(guide.url, guide.name)}
             ${guide.description ? `<span class="resource-desc">${this.escapeHtml(guide.description)}</span>` : ''}
           </div>
           <span class="resource-source">${this.escapeHtml(guide.source || 'manual')}</span>
@@ -869,7 +865,7 @@ const admin = {
           <div class="resource-item" data-resource-type="other" data-resource-index="${i}">
             <span class="resource-icon">${this.getAdminOtherIcon(link)}</span>
             <div class="resource-details">
-              <a href="${link.url}" target="_blank" class="resource-link">${this.escapeHtml(link.name || link.url)}</a>
+              ${this.renderExternalLink(link.url, link.name || link.url)}
               ${link.description ? `<span class="resource-desc">${this.escapeHtml(link.description)}</span>` : ''}
             </div>
             <span class="resource-source">${this.escapeHtml(link.source || 'manual')}</span>
@@ -1812,6 +1808,29 @@ const admin = {
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#39;');
+  },
+
+  sanitizeExternalUrl(url) {
+    const raw = String(url || '').trim();
+    if (!raw) return '';
+
+    try {
+      const parsed = new URL(raw, window.location.origin);
+      if (!/^https?:$/i.test(parsed.protocol)) return '';
+      return parsed.href;
+    } catch {
+      return '';
+    }
+  },
+
+  renderExternalLink(url, label, className = 'resource-link') {
+    const safeUrl = this.sanitizeExternalUrl(url);
+    const safeLabel = this.escapeHtml(label || url || 'Link');
+    if (!safeUrl) {
+      return `<span class="${className}">${safeLabel}</span>`;
+    }
+
+    return `<a href="${this.escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer" class="${className}">${safeLabel}</a>`;
   },
   
   capitalize(str) {

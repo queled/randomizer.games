@@ -61,6 +61,19 @@
     return 'https://racetime.gg/user/' + encodeURIComponent(id);
   }
 
+  function sanitizeExternalUrl(url) {
+    const raw = String(url || '').trim();
+    if (!raw) return '';
+
+    try {
+      const parsed = new URL(raw, window.location.origin);
+      if (!/^https?:$/i.test(parsed.protocol)) return '';
+      return parsed.href;
+    } catch (e) {
+      return '';
+    }
+  }
+
   const id = qs('id');
   const nameParam = qs('name');
   const headerName = document.getElementById('player-name');
@@ -323,12 +336,14 @@
     
     // Racetime: prefer explicit URL, fallback to racetimeId
     let racetimeUrl = normalizeRacetimeProfileUrl(p.racetimeUrl, p.racetimeId);
-    if (racetimeUrl) {
-      links.push(`<a class="btn-racetime" href="${racetimeUrl}" target="_blank" rel="noopener noreferrer"><img src="/assets/racetime.svg" alt="Racetime">Racetime</a>`);
+    const safeRacetimeUrl = sanitizeExternalUrl(racetimeUrl);
+    if (safeRacetimeUrl) {
+      links.push(`<a class="btn-racetime" href="${safeRacetimeUrl}" target="_blank" rel="noopener noreferrer"><img src="/assets/racetime.svg" alt="Racetime">Racetime</a>`);
     }
     
-    if (p.challongeUrl) {
-      links.push(`<a href="${p.challongeUrl}" target="_blank" rel="noopener noreferrer">Challonge</a>`);
+    const safeChallongeUrl = sanitizeExternalUrl(p.challongeUrl);
+    if (safeChallongeUrl) {
+      links.push(`<a href="${safeChallongeUrl}" target="_blank" rel="noopener noreferrer">Challonge</a>`);
     }
     
     // Only set links if this player object provides any; otherwise preserve existing links
@@ -346,15 +361,16 @@
     updateGamesSummaryVisibility();
     
     // If we have a racetime URL, try to fetch Twitch from racetime (only if not already in DB)
-    if (racetimeUrl && !p.twitch) {
-      fetchTwitchFromRacetime(racetimeUrl).then(twitchUrl => {
-        if (twitchUrl) {
+    if (safeRacetimeUrl && !p.twitch) {
+      fetchTwitchFromRacetime(safeRacetimeUrl).then(twitchUrl => {
+        const safeTwitchUrl = sanitizeExternalUrl(twitchUrl);
+        if (safeTwitchUrl) {
           // Only add if not already present
           if (!playerLinks.querySelector('.btn-twitch')) {
-            const twitchUsername = twitchUrl.split('/').pop();
+            const twitchUsername = safeTwitchUrl.split('/').pop();
             const twitchBtn = document.createElement('a');
             twitchBtn.className = 'btn-twitch';
-            twitchBtn.href = twitchUrl;
+            twitchBtn.href = safeTwitchUrl;
             twitchBtn.target = '_blank';
             twitchBtn.rel = 'noopener noreferrer';
             twitchBtn.innerHTML = '<img src="/assets/twitch.svg" alt="Twitch">Twitch';

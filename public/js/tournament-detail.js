@@ -77,6 +77,44 @@ function initializeTabs(tournamentId) {
   } catch (e) { /* ignore restore errors */ }
 }
 
+function sanitizeExternalUrl(url, { allowRelative = false, allowMailto = false } = {}) {
+  const raw = String(url || '').trim();
+  if (!raw) return '';
+
+  if (allowRelative && raw.startsWith('/')) {
+    return raw;
+  }
+
+  try {
+    const parsed = new URL(raw, window.location.origin);
+    if (/^https?:$/i.test(parsed.protocol)) return parsed.href;
+    if (allowMailto && /^mailto:$/i.test(parsed.protocol)) return parsed.href;
+    return '';
+  } catch {
+    return '';
+  }
+}
+
+function hardenExternalAnchors(container) {
+  if (!container) return;
+
+  container.querySelectorAll('a[href]').forEach((anchor) => {
+    const safeHref = sanitizeExternalUrl(anchor.getAttribute('href'), { allowRelative: true, allowMailto: true });
+    if (!safeHref) {
+      anchor.removeAttribute('href');
+      anchor.removeAttribute('target');
+      anchor.removeAttribute('rel');
+      return;
+    }
+
+    anchor.setAttribute('href', safeHref);
+    if (/^https?:\/\//i.test(safeHref)) {
+      anchor.setAttribute('target', '_blank');
+      anchor.setAttribute('rel', 'noopener noreferrer');
+    }
+  });
+}
+
 async function loadTournamentDetails(tournamentId) {
   try {
     const response = await fetch(`/api/tournaments/${tournamentId}`);
@@ -209,7 +247,9 @@ function displayTournamentInfo(tournament) {
   if (tournament.description) {
     document.getElementById('description-container').style.display = 'block';
     // render as HTML (trusted source: Challonge description)
-    document.getElementById('tournament-description').innerHTML = tournament.description;
+    const descriptionEl = document.getElementById('tournament-description');
+    descriptionEl.innerHTML = tournament.description;
+    hardenExternalAnchors(descriptionEl);
   }
 
   // Make the entire participants card clickable to open the Participants tab

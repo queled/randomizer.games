@@ -1,4 +1,43 @@
 (function(){
+  function escapeHtml(str) {
+    return String(str || '').replace(/[&<>"']/g, (m) => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[m]));
+  }
+
+  function sanitizeExternalUrl(url) {
+    const raw = String(url || '').trim();
+    if (!raw) return '';
+
+    try {
+      const parsed = new URL(raw, window.location.origin);
+      if (!/^https?:$/i.test(parsed.protocol)) return '';
+      return parsed.href;
+    } catch {
+      return '';
+    }
+  }
+
+  function formatInfoHtml(text) {
+    return String(text || '')
+      .split('\n')
+      .map((line) => {
+        const escapedLine = escapeHtml(line);
+        return escapedLine.replace(/(https?:\/\/[^\s<]+)/g, (match) => {
+          const safeUrl = sanitizeExternalUrl(match);
+          const label = escapeHtml(match);
+          return safeUrl
+            ? `<a href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer" style="color:#60a5fa;word-break:break-word;">${label}</a>`
+            : label;
+        });
+      })
+      .join('<br>');
+  }
+
   function qs(name){
     const m = location.search.match(new RegExp('[?&]'+name+'=([^&]+)'));
     return m ? decodeURIComponent(m[1]) : null;
@@ -412,10 +451,7 @@
       
       // Info (seed info, etc.)
       if (race.info) {
-        infoEl.innerHTML = race.info.split('\n').map(line => {
-          // Convert URLs to links
-          return line.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener" style="color:#60a5fa;word-break:break-word;">$1</a>');
-        }).join('<br>');
+        infoEl.innerHTML = formatInfoHtml(race.info);
       }
       
       // Times
@@ -430,7 +466,10 @@
       const links = [];
       if (race.url) {
         const racetimeUrl = normalizeRacetimeRaceUrl(race.url, race.category);
-        links.push(`<a href="${racetimeUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.5rem;background-color:#1F2937;color:#E3E6E6;font-weight:600;padding:0.75rem 1.5rem;border-radius:0.5rem;border:2px solid #E3E6E6;text-decoration:none;transition:all 0.2s;font-size:1rem;" onmouseover="this.style.background='#374151'" onmouseout="this.style.background='#1F2937'"><img src="/assets/racetime.svg" alt="Racetime" style="width:24px;height:24px;">Voir sur Racetime</a>`);
+        const safeRacetimeUrl = sanitizeExternalUrl(racetimeUrl);
+        if (safeRacetimeUrl) {
+          links.push(`<a href="${escapeHtml(safeRacetimeUrl)}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.5rem;background-color:#1F2937;color:#E3E6E6;font-weight:600;padding:0.75rem 1.5rem;border-radius:0.5rem;border:2px solid #E3E6E6;text-decoration:none;transition:all 0.2s;font-size:1rem;" onmouseover="this.style.background='#374151'" onmouseout="this.style.background='#1F2937'"><img src="/assets/racetime.svg" alt="Racetime" style="width:24px;height:24px;">Voir sur Racetime</a>`);
+        }
       }
       linksEl.innerHTML = links.join('');
       

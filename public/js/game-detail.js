@@ -546,10 +546,12 @@
         <div style="display:flex;gap:1rem;flex-wrap:wrap;">`;
       
       data.externalLinks.forEach(link => {
+        const linkAttrs = buildExternalLinkAttrs(link.url);
+        const tagName = linkAttrs ? 'a' : 'div';
         html += `
-          <a href="${link.url}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.5rem;background:#374151;color:#60a5fa;padding:0.5rem 1rem;border-radius:0.5rem;text-decoration:none;transition:background 0.2s;" onmouseover="this.style.background='#4b5563'" onmouseout="this.style.background='#374151'">
-            🔗 ${link.name}
-          </a>
+          <${tagName}${linkAttrs ? ' ' + linkAttrs : ''} style="display:inline-flex;align-items:center;gap:0.5rem;background:#374151;color:#60a5fa;padding:0.5rem 1rem;border-radius:0.5rem;text-decoration:none;transition:background 0.2s;" onmouseover="this.style.background='#4b5563'" onmouseout="this.style.background='#374151'">
+            🔗 ${escapeHtml(link.name || link.url || 'Link')}
+          </${tagName}>
         `;
       });
       html += `</div></div>`;
@@ -575,6 +577,34 @@
       '"': '&quot;',
       "'": '&#39;'
     }[m]));
+  }
+
+  function sanitizeExternalUrl(url, { allowRelative = false } = {}) {
+    const raw = String(url || '').trim();
+    if (!raw) return '';
+
+    if (allowRelative && raw.startsWith('/')) {
+      return raw;
+    }
+
+    try {
+      const parsed = new URL(raw, window.location.origin);
+      if (!/^https?:$/i.test(parsed.protocol)) return '';
+      return parsed.href;
+    } catch {
+      return '';
+    }
+  }
+
+  function buildExternalLinkAttrs(url, { allowRelative = false } = {}) {
+    const safeUrl = sanitizeExternalUrl(url, { allowRelative });
+    if (!safeUrl) return '';
+
+    if (allowRelative && safeUrl.startsWith('/')) {
+      return `href="${escapeHtml(safeUrl)}"`;
+    }
+
+    return `href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer"`;
   }
 
   function getHostFromUrl(url) {
@@ -603,6 +633,8 @@
     const tr = link?.translations?.[lang] || null;
     const displayName = tr?.name || link.name || getHostFromUrl(link.url) || link.url;
     const displayDescription = tr?.description || link.description || '';
+    const linkAttrs = buildExternalLinkAttrs(link.url);
+    const tagName = linkAttrs ? 'a' : 'div';
 
     const name = escapeHtml(displayName);
     const desc = displayDescription ? `<div style="color:#9ca3af;font-size:0.8rem;margin-top:0.25rem;">${escapeHtml(displayDescription)}</div>` : '';
@@ -611,7 +643,7 @@
       : `<span>${icon}</span>`;
 
     return `
-      <a href="${link.url}" target="_blank" rel="noopener"
+      <${tagName}${linkAttrs ? ' ' + linkAttrs : ''}
          style="display:block;background:#1f2937;padding:0.875rem 1rem;border-radius:0.5rem;text-decoration:none;transition:background 0.2s;border:1px solid #374151;"
          onmouseover="this.style.background='#374151'"
          onmouseout="this.style.background='#1f2937'">
@@ -620,7 +652,7 @@
           <span>${name}</span>
         </div>
         ${desc}
-      </a>
+      </${tagName}>
     `;
   }
 
@@ -748,18 +780,20 @@
 
     if (officialSite?.url) {
       const siteName = escapeHtml(officialSite.name || t('common.officialSite', 'Official site'));
+      const officialLinkAttrs = buildExternalLinkAttrs(officialSite.url);
+      const officialTagName = officialLinkAttrs ? 'a' : 'div';
       html += `
         <div style="margin-bottom:1.5rem;">
           <h3 style="color:#fbbf24;margin-bottom:0.75rem;font-size:1.1rem;display:flex;align-items:center;gap:0.5rem;">
             <span>🌐</span> ${t('gameDetail.resourceOfficialSite', 'Official site')}
           </h3>
-          <a href="${officialSite.url}" target="_blank" rel="noopener"
+          <${officialTagName}${officialLinkAttrs ? ' ' + officialLinkAttrs : ''}
              style="display:inline-flex;align-items:center;gap:0.75rem;background:#374151;color:#f3f4f6;padding:0.875rem 1.25rem;border-radius:0.75rem;text-decoration:none;font-weight:600;transition:background 0.2s, transform 0.2s;border:1px solid #4b5563;"
              onmouseover="this.style.background='#4b5563';this.style.transform='translateY(-1px)'"
              onmouseout="this.style.background='#374151';this.style.transform='translateY(0)'">
             <span style="font-size:1.125rem;">↗</span>
             <span>${siteName}</span>
-          </a>
+          </${officialTagName}>
         </div>
       `;
     }

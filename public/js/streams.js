@@ -6,6 +6,19 @@ const GAME_MAP_CACHE_TTL = 24 * 60 * 60 * 1000; // 24h
 let gameMapMemory = null;
 let gameMapInFlight = null;
 
+function sanitizeExternalUrl(url) {
+    const raw = String(url || '').trim();
+    if (!raw) return '';
+
+    try {
+        const parsed = new URL(raw, window.location.origin);
+        if (!/^https?:$/i.test(parsed.protocol)) return '';
+        return parsed.href;
+    } catch {
+        return '';
+    }
+}
+
 async function loadStreams() {
     const grid = document.getElementById('streams-grid');
     const noStreams = document.getElementById('no-streams');
@@ -45,13 +58,18 @@ async function loadStreams() {
         
         grid.innerHTML = streams.map(stream => {
             const proxyUrl = stream.thumbnailUrl ? `/api/proxy-image?url=${encodeURIComponent(stream.thumbnailUrl)}` : '';
+            const safeStreamUrl = sanitizeExternalUrl(stream.url);
+            const cardTag = safeStreamUrl ? 'a' : 'div';
+            const cardAttrs = safeStreamUrl
+                ? `href="${escapeHtml(safeStreamUrl)}" target="_blank" rel="noopener noreferrer"`
+                : '';
             // Resolve game id using the gameMap fallbacking to slugified name
             const rawName = (stream.gameName || '').trim();
             const resolved = resolveGameIdFromName(rawName, gameMap);
             const gameSlug = resolved || '';
 
             return `
-            <a href="${stream.url}" target="_blank" rel="noopener" class="stream-card">
+            <${cardTag}${cardAttrs ? ' ' + cardAttrs : ''} class="stream-card">
                 <div class="stream-thumbnail">
                     <img src="${proxyUrl}" 
                          alt="${escapeHtml(stream.title || '')}" 
@@ -65,7 +83,7 @@ async function loadStreams() {
                     <div class="stream-channel">${escapeHtml(stream.userName || stream.userLogin || 'Unknown')}</div>
                     ${stream.gameName ? `<div class="stream-game">🎮 <span class="game-link" data-game-id="${encodeURIComponent(gameSlug)}" style="overflow: hidden; text-overflow: ellipsis; display:inline-block; cursor:pointer; text-decoration:underline; color:#60a5fa; transition: color 0.2s, text-decoration-color 0.2s;">${escapeHtml(stream.gameName)}</span></div>` : ''}
                 </div>
-            </a>
+            </${cardTag}>
         `;
         }).join('');
         

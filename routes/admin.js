@@ -16,6 +16,10 @@ const {
 const { adminLoginLimiter } = require('../middleware/security');
 const { Game, Tournament, Match, Race, Player } = require('../models');
 
+function escapeRegex(value) {
+  return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 // ==================== AUTH ====================
 
 /**
@@ -97,10 +101,11 @@ router.get('/games', requireAdmin, async (req, res, next) => {
     const query = {};
     
     if (search) {
+      const safeSearch = escapeRegex(String(search).trim().slice(0, 100));
       query.$or = [
-        { id: { $regex: search, $options: 'i' } },
-        { name: { $regex: search, $options: 'i' } },
-        { 'randomizer.shortName': { $regex: search, $options: 'i' } }
+        { id: { $regex: safeSearch, $options: 'i' } },
+        { name: { $regex: safeSearch, $options: 'i' } },
+        { 'randomizer.shortName': { $regex: safeSearch, $options: 'i' } }
       ];
     }
     
@@ -1336,9 +1341,10 @@ router.get('/tournaments', requireAdmin, async (req, res, next) => {
     const query = {};
 
     if (search) {
+      const safeSearch = escapeRegex(String(search).trim().slice(0, 100));
       query.$or = [
-        { name: { $regex: search, $options: 'i' } },
-        { gameName: { $regex: search, $options: 'i' } }
+        { name: { $regex: safeSearch, $options: 'i' } },
+        { gameName: { $regex: safeSearch, $options: 'i' } }
       ];
     }
 
@@ -1966,12 +1972,13 @@ router.get('/tournaments-mgmt', requireAdmin, async (req, res, next) => {
     const query = {};
 
     if (search) {
+      const safeSearch = escapeRegex(String(search).trim().slice(0, 100));
       query.$or = [
-        { name: { $regex: search, $options: 'i' } },
-        { gameSlug: { $regex: search, $options: 'i' } },
-        { gameName: { $regex: search, $options: 'i' } },
-        { startggSlug: { $regex: search, $options: 'i' } },
-        { url: { $regex: search, $options: 'i' } }
+        { name: { $regex: safeSearch, $options: 'i' } },
+        { gameSlug: { $regex: safeSearch, $options: 'i' } },
+        { gameName: { $regex: safeSearch, $options: 'i' } },
+        { startggSlug: { $regex: safeSearch, $options: 'i' } },
+        { url: { $regex: safeSearch, $options: 'i' } }
       ];
     }
 

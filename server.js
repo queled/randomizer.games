@@ -57,8 +57,9 @@ app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 // conservative Permissions-Policy to avoid unrecognized-feature warnings.
 app.use((req, res, next) => {
   try {
-    // Content Security Policy: keep default-src self but allow data: and blob: for images
-    const csp = "default-src 'self'; connect-src 'self'; img-src 'self' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';";
+    // Content Security Policy: keep inline scripts/styles for the current frontend,
+    // but remove unsafe-eval and tighten the remaining directives.
+    const csp = "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'; connect-src 'self'; img-src 'self' data: blob:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';";
     res.setHeader('Content-Security-Policy', csp);
 
     // Permissions-Policy: define a minimal, widely-supported set to avoid browser warnings

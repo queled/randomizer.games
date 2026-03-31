@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const { Game, Tournament, Race, Player } = require('../models');
 
+function escapeRegex(value) {
+  return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 // Normalize name for matching (lowercase, trim, remove accents)
 function normalizeName(name) {
   if (!name) return '';
@@ -36,8 +40,8 @@ router.get('/', async (req, res, next) => {
       });
     }
 
-    const searchTerm = q.trim();
-    const searchRegex = new RegExp(searchTerm, 'i');
+    const searchTerm = q.trim().slice(0, 100);
+    const searchRegex = new RegExp(escapeRegex(searchTerm), 'i');
     const normalizedSearch = normalizeName(searchTerm);
     const limitNum = Math.min(parseInt(limit) || 10, 50);
 

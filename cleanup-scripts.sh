@@ -64,22 +64,35 @@ rm -f scripts/verify-challonge-source.js
 echo "🗑️  Phase 5: Suppression script redondant"
 rm -f scripts/import-and-link-racetime.js
 
+# Phase 6: Supprimer migrations obsolètes
+echo "🔄 Phase 6: Suppression migrations one-time"
+rm -f scripts/migrations/bulk-convert-finishTimes.js
+rm -f scripts/migrations/convert-race-finishTime.js
+rm -f scripts/migrations/dry-run-convert-finishTimes.js
+rm -f scripts/migrations/fix-race-urls.js
+rm -f scripts/migrations/import-player-marco.js
+rm -f scripts/migrations/cleanup-auto-created-games.js
+rm -f scripts/migrations/migrate-add-game-ref.js
+rm -f scripts/migrations/migrate-shortName-to-randomizer.js
+rm -f scripts/migrations/update-tournament-gamenames.js
+
 echo ""
 echo "✅ Nettoyage terminé!"
 echo ""
 echo "📊 Résumé:"
-echo "  - Avant: 63 scripts"
-echo "  - Après: 23 scripts"
-echo "  - Supprimés: 40 scripts"
+echo "  - Avant: 63 scripts + 11 migrations"
+echo "  - Après: 23 scripts + 1 migration"
+echo "  - Supprimés: 40 scripts + 10 migrations"
 echo ""
-echo "📝 Scripts gardés:"
+echo "📝 Scripts/migrations gardés:"
 echo "   ✅ enrich-races.js → Maintenance enrichissement races"
 echo "   ✅ unlink-race.js → Utilitaire détachement race"
 echo "   ✅ enrich-twitch.js → Enrichissement optionnel Twitch"
 echo "   ✅ link-race-to-match.js → Liaison race-match (maintenance)"
+echo "   ✅ migrate-game-schema.js → Migration production"
 echo ""
 echo "🚀 Prochaines étapes:"
 echo "   1. git add -A"
-echo "   2. git commit -m '🧹 Cleanup: Supprimer 40 scripts non-utilisés'"
+echo "   2. git commit -m '🧹 Cleanup: Supprimer 40 scripts + 10 migrations'"
 echo "   3. npm run check-security (vérifier intégrité)"
 echo "   4. git push"

@@ -143,6 +143,83 @@
     return gameDisplayNames[lowerSlug] || slug;
   }
 
+  function getGameDocForCategory(category) {
+    const lowerSlug = String(category || '').toLowerCase().trim();
+    if (!lowerSlug) return null;
+
+    if (gamesBySlug[lowerSlug]) return gamesBySlug[lowerSlug];
+    if (gamesById[lowerSlug]) return gamesById[lowerSlug];
+
+    if (lowerSlug.endsWith('r')) {
+      const alias = lowerSlug.slice(0, -1);
+      if (gamesById[alias]) return gamesById[alias];
+    }
+
+    return gamesBySlug[lowerSlug.split('/')[0]] || gamesById[lowerSlug.split('/')[0]] || null;
+  }
+
+  function mapRaceStatusToEventStatus(status) {
+    switch (status) {
+      case 'open':
+      case 'invitational':
+        return 'https://schema.org/EventScheduled';
+      case 'in_progress':
+        return 'https://schema.org/EventInProgress';
+      case 'cancelled':
+        return 'https://schema.org/EventCancelled';
+      default:
+        return 'https://schema.org/EventCompleted';
+    }
+  }
+
+  function applyRaceSeo(race, gameDisplayName, tournament) {
+    if (!window.RandomizerSEO || typeof window.RandomizerSEO.updatePage !== 'function') {
+      return;
+    }
+
+    const entrantsCount = Array.isArray(race?.entrants) ? race.entrants.length : 0;
+    const status = getStatusText(race?.status || 'finished');
+    const goal = race?.goal || race?.name || 'Race';
+    const detailUrl = raceId
+      ? `/race-detail.html?id=${encodeURIComponent(raceId)}`
+      : `/race-detail.html?url=${encodeURIComponent(raceUrl)}`;
+    const descriptionParts = [
+      `${gameDisplayName} race on Randomizer.`,
+      `${goal}. ${entrantsCount} entrants.`,
+      `Status: ${status}.`
+    ];
+    if (tournament?.name) {
+      descriptionParts.push(`Linked tournament: ${tournament.name}.`);
+    }
+    const description = descriptionParts.join(' ');
+    const gameDoc = getGameDocForCategory(race?.category);
+    const image = gameDoc?.image || gameDoc?.logo || '/assets/favicon.png';
+    const breadcrumb = window.RandomizerSEO.buildBreadcrumbList([
+      { name: 'Home', url: '/' },
+      { name: 'Races', url: '/races.html' },
+      { name: gameDisplayName, url: detailUrl }
+    ]);
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'Event',
+      name: `${gameDisplayName} - ${goal}`,
+      url: window.RandomizerSEO.buildAbsoluteUrl(detailUrl),
+      startDate: race?.startedAt || undefined,
+      endDate: race?.endedAt || undefined,
+      eventStatus: mapRaceStatusToEventStatus(race?.status),
+      description,
+      image: window.RandomizerSEO.buildAbsoluteUrl(image) || window.RandomizerSEO.defaultImage
+    };
+
+    window.RandomizerSEO.updatePage({
+      title: `${goal} - ${gameDisplayName} Race - Randomizer`,
+      description,
+      canonicalParams: raceId ? { id: raceId } : { url: raceUrl },
+      image,
+      jsonLd: [breadcrumb, schema]
+    });
+  }
+
   async function loadGames() {
     try {
       const gamesData = await fetchJson('/api/games');
@@ -433,12 +510,14 @@
       }
 
       let gameDisplayName = getGameDisplayName(race.category);
-
-      // Update title with full name
-      document.title = `${gameDisplayName} - Race - Randomizer`;
+      const gameDoc = getGameDocForCategory(race.category);
 
       // Game name
-      gameEl.textContent = gameDisplayName;
+      if (gameDoc?.id) {
+        gameEl.innerHTML = `<a href="/game-detail.html?id=${encodeURIComponent(gameDoc.id)}" style="color:inherit;text-decoration:none;">${escapeHtml(gameDisplayName)}</a>`;
+      } else {
+        gameEl.textContent = gameDisplayName;
+      }
       
       // Goal
       goalEl.textContent = race.goal || race.name || '';
@@ -481,10 +560,15 @@
             tournamentNameEl.textContent = tournament.name;
             tournamentNameEl.href = '/tournament-detail.html?id=' + encodeURIComponent(race.tournamentId);
             tournamentLinkDiv.style.display = 'block';
+            applyRaceSeo(race, gameDisplayName, tournament);
           }
         } catch (e) {
           // Tournament not found, ignore
         }
+      }
+
+      if (!race.tournamentId) {
+        applyRaceSeo(race, gameDisplayName, null);
       }
       
       // Update title then participants

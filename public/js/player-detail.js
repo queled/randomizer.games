@@ -74,6 +74,58 @@
     }
   }
 
+  function applyPlayerSeo(player, tournaments = [], races = []) {
+    if (!window.RandomizerSEO || typeof window.RandomizerSEO.updatePage !== 'function') {
+      return;
+    }
+
+    const playerName = player?.name || player?.userId || headerName.textContent || 'Player';
+    if (!playerName) return;
+
+    const totalRaces = Array.isArray(races) && races.length
+      ? races.length
+      : Number(player?.stats?.totalRaces) || 0;
+    const totalTournaments = Array.isArray(tournaments) ? tournaments.length : 0;
+    const gamesCount = Array.isArray(races) && races.length
+      ? countGamesFromRaces(races)
+      : countGamesFromTournaments(tournaments || []);
+    const description = [
+      `${playerName} on Randomizer.`,
+      `${totalRaces} races, ${totalTournaments} tournaments and ${gamesCount} games tracked.`,
+      'View profile, recent results and linked activity.'
+    ].join(' ');
+
+    const sameAs = [
+      normalizeRacetimeProfileUrl(player?.racetimeUrl, player?.racetimeId),
+      player?.challongeUrl,
+      player?.twitch ? `https://twitch.tv/${encodeURIComponent(player.twitch)}` : ''
+    ].map((value) => sanitizeExternalUrl(value)).filter(Boolean);
+
+    const breadcrumbUrl = id
+      ? `/player-detail.html?id=${encodeURIComponent(id)}`
+      : `/player-detail.html?name=${encodeURIComponent(nameParam || playerName)}`;
+    const breadcrumb = window.RandomizerSEO.buildBreadcrumbList([
+      { name: 'Home', url: '/' },
+      { name: 'Players', url: '/players.html' },
+      { name: playerName, url: breadcrumbUrl }
+    ]);
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: playerName,
+      url: window.RandomizerSEO.buildAbsoluteUrl(breadcrumbUrl),
+      sameAs: sameAs.length ? sameAs : undefined,
+      description
+    };
+
+    window.RandomizerSEO.updatePage({
+      title: `${playerName} - Randomizer Player Profile`,
+      description,
+      canonicalParams: id ? { id } : { name: nameParam || playerName },
+      jsonLd: [breadcrumb, schema]
+    });
+  }
+
   const id = qs('id');
   const nameParam = qs('name');
   const headerName = document.getElementById('player-name');
@@ -427,6 +479,8 @@
       <div style="background:#374151;padding:1rem;border-radius:0.5rem;"><div style="color:#9ca3af;font-size:0.875rem;">${labelRaces}</div><div style="color:#fff;font-size:1.5rem;font-weight:bold;">${totalRaces == null ? '…' : totalRaces}</div></div>
       <div style="background:#374151;padding:1rem;border-radius:0.5rem;"><div style="color:#9ca3af;font-size:0.875rem;">${labelTournaments}</div><div style="color:#fff;font-size:1.5rem;font-weight:bold;">${totalTournaments}</div></div>
     `;
+
+    applyPlayerSeo(p, tournaments, races);
   }
   function getTournamentGameName(t) {
     if (!t) return '-';

@@ -610,6 +610,55 @@
     return `href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer"`;
   }
 
+  function applyGameSeo(game, stats) {
+    if (!window.RandomizerSEO || typeof window.RandomizerSEO.updatePage !== 'function') {
+      return;
+    }
+
+    const displayTitle = game.randomizer?.displayName || game.randomizer?.shortName || game.official?.name || game.name || 'Game';
+    const gameName = game.official?.name || game.name || displayTitle;
+    const totalRaces = Number(stats?.totalRaces) || 0;
+    const totalTournaments = Number(stats?.totalTournaments) || 0;
+    const description = [
+      `${displayTitle} on Randomizer.`,
+      `${totalRaces} races and ${totalTournaments} tournaments tracked.`,
+      'Explore recent activity, tournaments and community resources.'
+    ].join(' ');
+
+    const sameAs = [
+      game.randomizer?.website,
+      game.officialWebsite,
+      game.official?.website,
+      game.resources?.officialSite?.url
+    ].map((value) => sanitizeExternalUrl(value)).filter(Boolean);
+
+    const canonicalUrl = `/game-detail.html?id=${encodeURIComponent(id)}`;
+    const image = game.image || game.logo || '/assets/favicon.png';
+    const breadcrumb = window.RandomizerSEO.buildBreadcrumbList([
+      { name: 'Home', url: '/' },
+      { name: 'Games', url: '/games.html' },
+      { name: displayTitle, url: canonicalUrl }
+    ]);
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'VideoGame',
+      name: gameName,
+      alternateName: displayTitle !== gameName ? displayTitle : undefined,
+      url: window.RandomizerSEO.buildAbsoluteUrl(canonicalUrl),
+      image: window.RandomizerSEO.buildAbsoluteUrl(image) || window.RandomizerSEO.defaultImage,
+      description,
+      sameAs: sameAs.length ? sameAs : undefined
+    };
+
+    window.RandomizerSEO.updatePage({
+      title: `${displayTitle} - Randomizer`,
+      description,
+      canonicalParams: { id },
+      image,
+      jsonLd: [breadcrumb, schema]
+    });
+  }
+
   function getHostFromUrl(url) {
     try {
       return new URL(url).hostname;
@@ -969,6 +1018,7 @@
 
       // Load stats with recent data
       const stats = await fetchJson('/api/games/'+encodeURIComponent(id)+'/stats');
+      applyGameSeo(game, stats);
       
       const racesUrl = `/races.html?game=${encodeURIComponent(id)}`;
       const tournamentsUrl = `/tournaments.html?game=${encodeURIComponent(id)}`;

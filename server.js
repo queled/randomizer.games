@@ -5,6 +5,7 @@ const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const connectDB = require('./config/database');
+const { Game, Tournament, Player, Race } = require('./models');
 const { 
   apiLimiter, 
   searchLimiter,
@@ -16,6 +17,114 @@ require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const SITEMAP_CACHE_TTL = 30 * 60 * 1000;
+const SITE_URL = (process.env.SITE_URL || 'https://randomizer.games').replace(/\/+$/, '');
+let sitemapCache = { xml: null, expiresAt: 0, inFlight: null };
+
+function xmlEscape(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+function formatLastMod(value) {
+  if (!value) return '';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '';
+  return date.toISOString();
+}
+
+function buildSitemapEntry(loc, lastmod) {
+  const safeLoc = `${SITE_URL}${loc}`;
+  const lastmodTag = lastmod ? `<lastmod>${xmlEscape(lastmod)}</lastmod>` : '';
+  return `<url><loc>${xmlEscape(safeLoc)}</loc>${lastmodTag}</url>`;
+}
+
+async function generateSitemapXml() {
+  const staticEntries = [
+    ['/', null],
+    ['/games.html', null],
+    ['/races.html', null],
+    ['/tournaments.html', null],
+    ['/players.html', null],
+    ['/streams.html', null],
+    ['/resources.html', null],
+    ['/about.html', null],
+    ['/terms.html', null]
+  ];
+
+  const [games, tournaments, players, races] = await Promise.all([
+    Game.find({ enabled: { $ne: false } }).select('id updatedAt').sort({ updatedAt: -1 }).lean(),
+    Tournament.find({}).select('_id updatedAt').sort({ updatedAt: -1 }).lean(),
+    Player.find({ $or: [{ userId: { $exists: true, $ne: '' } }, { name: { $exists: true, $ne: '' } }] })
+      .select('userId name updatedAt')
+      .sort({ updatedAt: -1 })
+      .lean(),
+    Race.find({}).select('_id updatedAt startedAt').sort({ startedAt: -1, updatedAt: -1 }).limit(1000).lean()
+  ]);
+
+  const dynamicEntries = [];
+
+  games.forEach((game) => {
+    if (!game?.id) return;
+    dynamicEntries.push([`/game-detail.html?id=${encodeURIComponent(game.id)}`, formatLastMod(game.updatedAt)]);
+  });
+
+  tournaments.forEach((tournament) => {
+    if (!tournament?._id) return;
+    dynamicEntries.push([`/tournament-detail.html?id=${encodeURIComponent(String(tournament._id))}`, formatLastMod(tournament.updatedAt)]);
+  });
+
+  players.forEach((player) => {
+    const identifier = player?.userId
+      ? `id=${encodeURIComponent(player.userId)}`
+      : (player?.name ? `name=${encodeURIComponent(player.name)}` : '');
+    if (!identifier) return;
+    dynamicEntries.push([`/player-detail.html?${identifier}`, formatLastMod(player.updatedAt)]);
+  });
+
+  races.forEach((race) => {
+    if (!race?._id) return;
+    dynamicEntries.push([`/race-detail.html?id=${encodeURIComponent(String(race._id))}`, formatLastMod(race.updatedAt || race.startedAt)]);
+  });
+
+  const entries = [...staticEntries, ...dynamicEntries]
+    .map(([loc, lastmod]) => buildSitemapEntry(loc, lastmod))
+    .join('');
+
+  return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${entries}</urlset>`;
+}
+
+async function getSitemapXmlCached() {
+  if (sitemapCache.xml && sitemapCache.expiresAt > Date.now()) {
+    return sitemapCache.xml;
+  }
+
+  if (sitemapCache.inFlight) {
+    return sitemapCache.inFlight;
+  }
+
+  sitemapCache.inFlight = (async () => {
+    const xml = await generateSitemapXml();
+    sitemapCache = {
+      xml,
+      expiresAt: Date.now() + SITEMAP_CACHE_TTL,
+      inFlight: null
+    };
+    return xml;
+  })();
+
+  try {
+    return await sitemapCache.inFlight;
+  } finally {
+    if (sitemapCache.inFlight) {
+      sitemapCache.inFlight = null;
+    }
+  }
+}
 
 // Trust proxy (important for rate limiting behind reverse proxy)
 app.set('trust proxy', 1);
@@ -74,6 +183,16 @@ app.use((req, res, next) => {
 
 // Respond to favicon requests to avoid noisy 404s in browser console
 app.get('/favicon.ico', (req, res) => res.status(204).end());
+
+app.get('/sitemap.xml', async (req, res, next) => {
+  try {
+    const xml = await getSitemapXmlCached();
+    res.type('application/xml');
+    res.send(xml);
+  } catch (error) {
+    next(error);
+  }
+});
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));

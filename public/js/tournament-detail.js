@@ -115,6 +115,62 @@ function hardenExternalAnchors(container) {
   });
 }
 
+function mapTournamentStatusToEventStatus(status) {
+  switch (status) {
+    case 'à venir':
+      return 'https://schema.org/EventScheduled';
+    case 'en cours':
+      return 'https://schema.org/EventInProgress';
+    default:
+      return 'https://schema.org/EventCompleted';
+  }
+}
+
+function applyTournamentSeo(tournament) {
+  if (!window.RandomizerSEO || typeof window.RandomizerSEO.updatePage !== 'function' || !tournament) {
+    return;
+  }
+
+  const gameLabel = tournament.gameName
+    || tournament.game?.official?.name
+    || tournament.game?.name
+    || tournament.game?.randomizer?.shortName
+    || 'Randomizer game';
+  const status = getTournamentStatus(tournament);
+  const participantsCount = Number(tournament.participantsCount) || (Array.isArray(tournament.participants) ? tournament.participants.length : 0);
+  const description = [
+    `${tournament.name} on Randomizer.`,
+    `${status} ${gameLabel} tournament with ${participantsCount} participants.`,
+    'Explore bracket, participants and linked races.'
+  ].join(' ');
+  const detailUrl = `/tournament-detail.html?id=${encodeURIComponent(tournament._id || tournament.id)}`;
+  const breadcrumb = window.RandomizerSEO.buildBreadcrumbList([
+    { name: 'Home', url: '/' },
+    { name: 'Tournaments', url: '/tournaments.html' },
+    { name: tournament.name, url: detailUrl }
+  ]);
+  const image = tournament.game?.image || tournament.game?.logo || '/assets/favicon.png';
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    name: tournament.name,
+    url: window.RandomizerSEO.buildAbsoluteUrl(detailUrl),
+    startDate: tournament.startDate || undefined,
+    endDate: tournament.endDate || undefined,
+    eventStatus: mapTournamentStatusToEventStatus(status),
+    description,
+    image: window.RandomizerSEO.buildAbsoluteUrl(image) || window.RandomizerSEO.defaultImage
+  };
+
+  window.RandomizerSEO.updatePage({
+    title: `${tournament.name} - Tournament - Randomizer`,
+    description,
+    canonicalParams: { id: tournament._id || tournament.id },
+    image,
+    jsonLd: [breadcrumb, schema]
+  });
+}
+
 async function loadTournamentDetails(tournamentId) {
   try {
     const response = await fetch(`/api/tournaments/${tournamentId}`);
@@ -214,7 +270,14 @@ function displayTournamentInfo(tournament) {
   // Title and game
   document.getElementById('tournament-title').textContent = tournament.name;
   document.getElementById('page-title').textContent = `${tournament.name} - Randomizer`;
-  document.getElementById('tournament-game').textContent = tournament.gameName || 'Unknown game';
+  const tournamentGameEl = document.getElementById('tournament-game');
+  const tournamentGameLabel = tournament.gameName || 'Unknown game';
+  if (tournament.game?.id) {
+    tournamentGameEl.innerHTML = `<a href="/game-detail.html?id=${encodeURIComponent(tournament.game.id)}" style="color:inherit;text-decoration:none;">${tournamentGameLabel}</a>`;
+  } else {
+    tournamentGameEl.textContent = tournamentGameLabel;
+  }
+  applyTournamentSeo(tournament);
 
   // Status badge
   const status = getTournamentStatus(tournament);

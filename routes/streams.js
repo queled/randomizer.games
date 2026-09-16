@@ -17,9 +17,9 @@ function getCached(key) {
   return null;
 }
 
-function setCache(key, data) {
+function setCache(key, data, ttl = CACHE_TTL) {
   cache.data[key] = data;
-  cache.expires[key] = Date.now() + CACHE_TTL;
+  cache.expires[key] = Date.now() + ttl;
 }
 
 // Twitch API configuration
@@ -601,6 +601,184 @@ async function fetchTwitchStreams(gameName, includeAll = false) {
   }
 }
 
+// ============================================================================
+// Racetime.gg real-time augmentation
+//
+// Complementary source (never replaces the Twitch-category detection above):
+// races currently in progress on racetime.gg expose their entrants, each of
+// which can be flagged "stream_live" with a linked Twitch channel. We use this
+// to catch streamers whose Twitch title/tags don't mention the randomizer
+// (mistagged streams), by confirming with the Twitch API that they're
+// actually live. If anything here fails, we simply return no extra streams.
+// ============================================================================
+
+const RACETIME_HOST_URL = 'https://racetime.gg';
+const RACETIME_LIVE_CACHE_TTL = 90 * 1000; // races/entrants change fast
+
+function getRacetimeSlugsForGame(gameDoc) {
+  const slugs = new Set();
+  const rt = gameDoc?.integrations?.racetime;
+  if (rt?.gameSlug) slugs.add(String(rt.gameSlug).toLowerCase().trim());
+  if (Array.isArray(rt?.gameSlugs)) {
+    rt.gameSlugs.forEach(slug => {
+      if (slug) slugs.add(String(slug).toLowerCase().trim());
+    });
+  }
+  return Array.from(slugs).filter(Boolean);
+}
+
+function extractTwitchLoginFromChannelUrl(channelUrl) {
+  try {
+    const parsed = new URL(String(channelUrl || ''));
+    if (!/(^|\.)twitch\.tv$/i.test(parsed.hostname)) return null;
+    const login = parsed.pathname.split('/').filter(Boolean)[0];
+    return login ? login.toLowerCase() : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+// Fetch the list of currently in-progress races for a racetime category slug
+async function fetchRacetimeInProgressRaces(slug) {
+  const cacheKey = `racetime-live:category:${slug}`;
+  const cached = getCached(cacheKey);
+  if (cached) return cached;
+
+  let races = [];
+  try {
+    const response = await fetch(`${RACETIME_HOST_URL}/${encodeURIComponent(slug)}/data`, {
+      headers: { Accept: 'application/json' }
+    });
+    if (response.ok) {
+      const data = await response.json();
+      races = Array.isArray(data.current_races)
+        ? data.current_races.filter(r => r?.status?.value === 'in_progress' && r?.data_url)
+        : [];
+    }
+  } catch (error) {
+    console.warn(`Racetime live fetch failed for category ${slug}:`, error?.message || error);
+  }
+
+  setCache(cacheKey, races, RACETIME_LIVE_CACHE_TTL);
+  return races;
+}
+
+// Fetch entrants marked as live-streaming (with a Twitch channel) for a given race
+async function fetchRacetimeLiveEntrants(dataUrl) {
+  const cacheKey = `racetime-live:race:${dataUrl}`;
+  const cached = getCached(cacheKey);
+  if (cached) return cached;
+
+  let liveEntrants = [];
+  try {
+    const response = await fetch(`${RACETIME_HOST_URL}${dataUrl}`, {
+      headers: { Accept: 'application/json' }
+    });
+    if (response.ok) {
+      const data = await response.json();
+      const entrants = Array.isArray(data.entrants) ? data.entrants : [];
+      liveEntrants = entrants
+        .filter(e => e?.stream_live && e?.user?.twitch_channel)
+        .map(e => {
+          const login = (e.user.twitch_name || extractTwitchLoginFromChannelUrl(e.user.twitch_channel) || '').toLowerCase();
+          if (!login) return null;
+          return {
+            twitchLogin: login,
+            raceUrl: data.url ? `${RACETIME_HOST_URL}${data.url}` : null,
+            raceGoal: data.goal?.name || null
+          };
+        })
+        .filter(Boolean);
+    }
+  } catch (error) {
+    console.warn(`Racetime live entrants fetch failed for ${dataUrl}:`, error?.message || error);
+  }
+
+  setCache(cacheKey, liveEntrants, RACETIME_LIVE_CACHE_TTL);
+  return liveEntrants;
+}
+
+// Confirm live status/viewer count directly with Twitch for a batch of logins (no title/tag filtering)
+async function fetchTwitchStreamsByLogins(logins) {
+  const uniqueLogins = Array.from(new Set((logins || []).map(l => String(l || '').toLowerCase()).filter(Boolean))).slice(0, 100);
+  if (!uniqueLogins.length) return [];
+
+  const token = await getTwitchToken();
+  if (!token) return [];
+
+  try {
+    const params = uniqueLogins.map(login => `user_login=${encodeURIComponent(login)}`).join('&');
+    const response = await fetch(`https://api.twitch.tv/helix/streams?${params}&first=100`, {
+      headers: {
+        'Client-ID': TWITCH_CLIENT_ID,
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) return [];
+
+    const data = await response.json();
+    return (data.data || []).map(stream => ({
+      platform: 'twitch',
+      id: stream.id,
+      userName: stream.user_name,
+      userLogin: stream.user_login,
+      title: stream.title,
+      viewerCount: stream.viewer_count,
+      thumbnailUrl: stream.thumbnail_url?.replace('{width}', '320').replace('{height}', '180'),
+      gameName: stream.game_name,
+      tags: stream.tags || [],
+      url: `https://twitch.tv/${stream.user_login}`,
+      startedAt: stream.started_at
+    }));
+  } catch (error) {
+    console.warn('Error confirming racetime-detected streams with Twitch:', error?.message || error);
+    return [];
+  }
+}
+
+// Build extra stream entries for a game by cross-referencing racetime.gg live races with Twitch.
+// Purely additive: returns [] on any error or when the game has no racetime slug configured.
+async function fetchRacetimeLiveStreamsForGame(gameDoc, gameIdLower) {
+  try {
+    const slugs = getRacetimeSlugsForGame(gameDoc);
+    if (!slugs.length) return [];
+
+    const candidates = [];
+    for (const slug of slugs) {
+      const races = await fetchRacetimeInProgressRaces(slug);
+      const entrantLists = await mapWithConcurrency(races, 4, race => fetchRacetimeLiveEntrants(race.data_url));
+      for (const entrants of entrantLists) {
+        candidates.push(...entrants);
+      }
+    }
+    if (!candidates.length) return [];
+
+    const raceInfoByLogin = new Map();
+    for (const candidate of candidates) {
+      if (!raceInfoByLogin.has(candidate.twitchLogin)) {
+        raceInfoByLogin.set(candidate.twitchLogin, candidate);
+      }
+    }
+
+    const confirmedStreams = await fetchTwitchStreamsByLogins(Array.from(raceInfoByLogin.keys()));
+
+    return confirmedStreams.map(stream => {
+      const info = raceInfoByLogin.get(String(stream.userLogin || '').toLowerCase());
+      return {
+        ...stream,
+        gameId: gameIdLower,
+        source: 'racetime-live',
+        raceUrl: info?.raceUrl || null,
+        raceGoal: info?.raceGoal || null
+      };
+    });
+  } catch (error) {
+    console.warn(`Racetime live augmentation failed for ${gameIdLower}:`, error?.message || error);
+    return [];
+  }
+}
+
 async function buildGameStreamsResult(gameId) {
   const gameIdLower = String(gameId || '').toLowerCase();
   const cacheKey = `streams:${gameIdLower}`;
@@ -703,12 +881,29 @@ async function buildGameStreamsResult(gameId) {
     console.warn('Per-game stream filtering failed for', gameIdLower, e);
   }
 
-  const allStreams = twitchStreamsAll
+  let allStreams = twitchStreamsAll
     .map(stream => ({
       ...stream,
       gameId: gameIdLower
-    }))
-    .sort((a, b) => (b.viewerCount || 0) - (a.viewerCount || 0));
+    }));
+
+  // Additive augmentation: cross-reference racetime.gg live races to catch
+  // streams that Twitch's category/title/tag detection missed (mistagged streams).
+  // Never removes or alters anything found by the original method above.
+  try {
+    const knownIds = new Set(allStreams.map(s => s.id));
+    const racetimeStreams = await fetchRacetimeLiveStreamsForGame(gameDoc, gameIdLower);
+    for (const stream of racetimeStreams) {
+      if (!knownIds.has(stream.id)) {
+        knownIds.add(stream.id);
+        allStreams.push(stream);
+      }
+    }
+  } catch (e) {
+    console.warn('Racetime live augmentation skipped for', gameIdLower, e?.message || e);
+  }
+
+  allStreams = allStreams.sort((a, b) => (b.viewerCount || 0) - (a.viewerCount || 0));
 
   const result = {
     gameId,
@@ -951,6 +1146,26 @@ router.get('/', async (req, res, next) => {
       }
       
       allStreams.push(...streamMap.values());
+
+      // Additive augmentation: cross-reference racetime.gg live races per game
+      // to catch mistagged Twitch streams. Never removes anything found above.
+      try {
+        const gamesWithRacetimeSlug = games.filter(g => getRacetimeSlugsForGame(g).length > 0);
+        const racetimeResults = await mapWithConcurrency(gamesWithRacetimeSlug, 4, async (game) => {
+          const gameId = (game.id || '').toLowerCase();
+          return fetchRacetimeLiveStreamsForGame(game, gameId);
+        });
+        for (const streams of racetimeResults) {
+          for (const stream of (streams || [])) {
+            if (!streamMap.has(stream.id)) {
+              streamMap.set(stream.id, stream);
+              allStreams.push(stream);
+            }
+          }
+        }
+      } catch (error) {
+        console.warn('Racetime live augmentation skipped for aggregate streams:', error?.message || error);
+      }
     } catch (error) {
       console.error('Error fetching Twitch streams:', error);
     }

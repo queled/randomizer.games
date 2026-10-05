@@ -15,7 +15,7 @@
 const connectDB = require('../config/database');
 const mongoose = require('mongoose');
 const { Game, Race, Player } = require('../models');
-const { getCanonicalName, normalizePlayerName } = require('../config/player-aliases');
+const { loadAliasIndex, getCanonicalName, normalizePlayerName } = require('../helpers/player-aliases');
 
 const isDryRun = process.argv.includes('--dry-run');
 
@@ -68,7 +68,7 @@ async function getActiveRandomizerSlugs() {
   return slugs;
 }
 
-async function collectRacePlayers(allowedSlugs) {
+async function collectRacePlayers(allowedSlugs, aliasIndex) {
   const racePlayersByUserId = new Map();
   const raceCanonicalNames = new Set();
 
@@ -86,7 +86,7 @@ async function collectRacePlayers(allowedSlugs) {
     for (const entrant of race.entrants || []) {
       const userId = String(entrant?.userId || '').trim();
       const userName = String(entrant?.userName || '').trim();
-      const canonicalName = getCanonicalName(userName || userId);
+      const canonicalName = getCanonicalName(aliasIndex, userName || userId);
       const normalizedCanonical = normalizePlayerName(canonicalName);
 
       if (normalizedCanonical) raceCanonicalNames.add(normalizedCanonical);
@@ -136,7 +136,8 @@ async function main() {
       return;
     }
 
-    const { racePlayersByUserId, raceCanonicalNames } = await collectRacePlayers(allowedSlugs);
+    const aliasIndex = await loadAliasIndex(Player);
+    const { racePlayersByUserId, raceCanonicalNames } = await collectRacePlayers(allowedSlugs, aliasIndex);
     const existingPlayers = await Player.find({}).select('_id userId name tournaments twitch').lean();
 
     const existingByUserId = new Map();
@@ -181,7 +182,7 @@ async function main() {
     const deletableIds = [];
     for (const p of existingPlayers) {
       const userId = String(p?.userId || '').trim();
-      const normalizedName = normalizePlayerName(getCanonicalName(p?.name || ''));
+      const normalizedName = normalizePlayerName(getCanonicalName(aliasIndex, p?.name || ''));
       const hasRaceByUserId = !!(userId && raceUserIds.has(userId));
       const hasRaceByName = !!(normalizedName && raceCanonicalNames.has(normalizedName));
 

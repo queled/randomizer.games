@@ -337,6 +337,8 @@ const playerSchema = new mongoose.Schema({
   racetimeId: String,
   twitch: String,
   challongeUrl: String,
+  // Alternate names (e.g. Challonge/start.gg participant names) for this player
+  aliases: { type: [String], default: [] },
   tournaments: [{
     tournamentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Tournament' },
     finalRank: Number,

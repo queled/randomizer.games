@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Player, Tournament, Race, Game } = require('../models');
-const { getCanonicalName, normalizePlayerName } = require('../config/player-aliases');
+const { buildAliasIndex, loadAliasIndex, getCanonicalName, getAliases } = require('../helpers/player-aliases');
 
 const PLAYERS_CACHE_TTL = 5 * 60 * 1000;
 const playersCache = {
@@ -113,7 +113,7 @@ async function buildPlayersResponse(includeTournaments) {
   const { displayBySlug: gameDisplayBySlug, canonicalIdBySlug: canonicalGameIdBySlug } = await buildGameDisplayMaps();
 
   const [playerDocs, tournamentParticipants, raceCounts] = await Promise.all([
-    Player.find({}).select('name racetimeUrl racetimeId userId twitch').lean(),
+    Player.find({}).select('name aliases racetimeUrl racetimeId userId twitch').lean(),
     Tournament.aggregate([
       { $match: { participants: { $exists: true, $ne: [] } } },
       { $unwind: '$participants' },
@@ -151,6 +151,7 @@ async function buildPlayersResponse(includeTournaments) {
     ])
   ]);
 
+  const aliasIndex = buildAliasIndex(playerDocs);
   const playerDocsByName = new Map();
   playerDocs.forEach(p => {
     playerDocsByName.set(normalizeName(p.name), p);
@@ -162,7 +163,7 @@ async function buildPlayersResponse(includeTournaments) {
     const category = String(row?._id?.category || '').toLowerCase();
     if (!rawName || !category) continue;
 
-    const canonicalName = getCanonicalName(rawName);
+    const canonicalName = getCanonicalName(aliasIndex, rawName);
     const normalized = normalizeName(canonicalName);
     if (!raceCountsByPlayer.has(normalized)) {
       raceCountsByPlayer.set(normalized, new Map());
@@ -179,7 +180,7 @@ async function buildPlayersResponse(includeTournaments) {
     const rawName = row.participantName;
     if (!rawName) continue;
 
-    const canonicalName = getCanonicalName(rawName);
+    const canonicalName = getCanonicalName(aliasIndex, rawName);
     const normalized = normalizeName(canonicalName);
     if (!playersWithRaces.has(normalized)) continue;
 
@@ -217,7 +218,7 @@ async function buildPlayersResponse(includeTournaments) {
 
   // Include player documents that may have no tournament rows
   for (const p of playerDocs) {
-    const canonicalName = getCanonicalName(p.name);
+    const canonicalName = getCanonicalName(aliasIndex, p.name);
     const normalized = normalizeName(canonicalName);
     if (!playersWithRaces.has(normalized)) continue;
     if (!playersMap.has(normalized)) {
@@ -273,8 +274,9 @@ router.get('/compare', async (req, res, next) => {
       return res.status(400).json({ error: 'Both player1 and player2 query params are required' });
     }
 
-    const canonical1 = getCanonicalName(name1);
-    const canonical2 = getCanonicalName(name2);
+    const aliasIndex = await loadAliasIndex(Player);
+    const canonical1 = getCanonicalName(aliasIndex, name1);
+    const canonical2 = getCanonicalName(aliasIndex, name2);
     const norm1 = normalizeName(canonical1);
     const norm2 = normalizeName(canonical2);
 
@@ -283,9 +285,8 @@ router.get('/compare', async (req, res, next) => {
     }
 
     // Collect all name variants (canonical + aliases) for each player
-    const { getAliases } = require('../config/player-aliases');
-    const aliases1 = [canonical1, name1, ...getAliases(canonical1)];
-    const aliases2 = [canonical2, name2, ...getAliases(canonical2)];
+    const aliases1 = [canonical1, name1, ...getAliases(aliasIndex, canonical1)];
+    const aliases2 = [canonical2, name2, ...getAliases(aliasIndex, canonical2)];
 
     const nameSet1 = new Set(aliases1.map(n => normalizeName(n)));
     const nameSet2 = new Set(aliases2.map(n => normalizeName(n)));

@@ -416,6 +416,7 @@
                     <th>Nom</th>
                     <th>Racetime</th>
                     <th>Twitch</th>
+                    <th>Alias</th>
                     <th>Courses</th>
                     <th>Victoires</th>
                     <th>Actions</th>
@@ -423,7 +424,7 @@
                 </thead>
                 <tbody id="players-table-body">
                   <tr>
-                    <td colspan="6" class="text-center text-muted">Chargement...</td>
+                    <td colspan="7" class="text-center text-muted">Chargement...</td>
                   </tr>
                 </tbody>
               </table>
@@ -937,6 +938,12 @@
         <div class="form-group">
           <label for="player-twitch">Pseudo Twitch</label>
           <input type="text" id="player-twitch" class="form-input" placeholder="username">
+        </div>
+
+        <div class="form-group">
+          <label for="player-aliases">Alias (un par ligne)</label>
+          <textarea id="player-aliases" class="form-input" rows="3" placeholder="Nom utilisé dans Challonge / start.gg..."></textarea>
+          <small class="text-muted">Autres noms de ce joueur (tournois). Ils sont regroupés sous le nom du joueur.</small>
         </div>
         
         <div class="form-actions">

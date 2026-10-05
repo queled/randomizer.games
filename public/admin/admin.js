@@ -2029,7 +2029,7 @@ const admin = {
     if (players.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="6" class="text-center text-muted">Aucun joueur trouvé</td>
+          <td colspan="7" class="text-center text-muted">Aucun joueur trouvé</td>
         </tr>
       `;
       return;
@@ -2048,6 +2048,9 @@ const admin = {
             ? this.renderExternalLink(this.sanitizeTwitchUrl(player.twitch), player.twitch, 'badge badge-success') 
             : '<span class="badge badge-muted">-</span>'}
         </td>
+        <td>${(player.aliases || []).length
+          ? (player.aliases || []).map(a => `<span class="badge badge-muted">${this.escapeHtml(a)}</span>`).join(' ')
+          : '<span class="text-muted">-</span>'}</td>
         <td>${player.stats?.totalRaces || 0}</td>
         <td>${player.stats?.totalWins || 0}</td>
         <td>
@@ -2074,6 +2077,7 @@ const admin = {
       document.getElementById('player-name').value = player.name || '';
       document.getElementById('player-racetime-url').value = player.racetimeUrl || '';
       document.getElementById('player-twitch').value = player.twitch || '';
+      document.getElementById('player-aliases').value = (player.aliases || []).join('\n');
       
       document.getElementById('player-modal').style.display = 'flex';
       
@@ -2092,7 +2096,8 @@ const admin = {
     const data = {
       name: document.getElementById('player-name').value,
       racetimeUrl: document.getElementById('player-racetime-url').value,
-      twitch: document.getElementById('player-twitch').value
+      twitch: document.getElementById('player-twitch').value,
+      aliases: document.getElementById('player-aliases').value.split('\n').map(a => a.trim()).filter(Boolean)
     };
     
     try {
@@ -2105,7 +2110,11 @@ const admin = {
         body: JSON.stringify(data)
       });
       
-      if (!response.ok) throw new Error('Failed to save player');
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        this.showToast(err.error || 'Erreur lors de la sauvegarde', 'error');
+        return;
+      }
       
       this.showToast('Joueur mis à jour', 'success');
       this.closePlayerModal();

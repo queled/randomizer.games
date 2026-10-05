@@ -244,7 +244,7 @@ async function buildPlayersResponse(includeTournaments) {
         gameName: gameDisplayBySlug.get(String(slug || '').toLowerCase()) || slug,
         count
       }))
-      .sort((a, b) => b.count - a.count)
+      .sort((a, b) => b.count - a.count || String(a.gameSlug).localeCompare(String(b.gameSlug)))
       .slice(0, 3);
 
     return {

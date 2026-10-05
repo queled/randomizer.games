@@ -15,6 +15,7 @@ const {
 } = require('../middleware/admin-auth');
 const { adminLoginLimiter } = require('../middleware/security');
 const { Game, Tournament, Match, Race, Player } = require('../models');
+const { normalizePlayerName } = require('../helpers/player-aliases');
 
 function escapeRegex(value) {
   return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -960,6 +961,7 @@ router.get('/players', requireAdmin, async (req, res, next) => {
               name: playerDoc?.name || userName,
               racetimeUrl: playerDoc?.racetimeUrl || `https://racetime.gg/user/${userId}`,
               twitch: playerDoc?.twitch || null,
+              aliases: playerDoc?.aliases || [],
               stats: {
                 totalRaces: 0,
                 totalWins: 0
@@ -1056,17 +1058,53 @@ router.get('/players/:id', requireAdmin, async (req, res, next) => {
 router.put('/players/:id', requireAdmin, async (req, res, next) => {
   try {
     const { name, racetimeUrl, twitch } = req.body;
-    
+    const update = { name, racetimeUrl, twitch };
+
+    if (req.body.aliases !== undefined) {
+      if (!Array.isArray(req.body.aliases)) {
+        return res.status(400).json({ error: 'aliases must be an array' });
+      }
+
+      const current = await Player.findOne({ userId: req.params.id }).select('name').lean();
+      if (!current) {
+        return res.status(404).json({ error: 'Player not found' });
+      }
+
+      const ownKey = normalizePlayerName(name || current.name);
+      const seen = new Set([ownKey]);
+      const aliases = [];
+      for (const raw of req.body.aliases) {
+        const alias = String(raw || '').trim().slice(0, 100);
+        const key = normalizePlayerName(alias);
+        if (!key || seen.has(key)) continue;
+        seen.add(key);
+        aliases.push(alias);
+      }
+      if (aliases.length > 20) {
+        return res.status(400).json({ error: 'Too many aliases (max 20)' });
+      }
+
+      // An alias must not already be another player's name or alias
+      const others = await Player.find({ userId: { $ne: req.params.id } }).select('name aliases').lean();
+      const taken = new Map();
+      others.forEach(o => {
+        taken.set(normalizePlayerName(o.name), o.name);
+        (o.aliases || []).forEach(a => taken.set(normalizePlayerName(a), o.name));
+      });
+      const conflict = aliases.find(a => taken.has(normalizePlayerName(a)));
+      if (conflict) {
+        return res.status(409).json({
+          error: `Alias "${conflict}" is already used by ${taken.get(normalizePlayerName(conflict))}`
+        });
+      }
+
+      update.aliases = aliases;
+    }
+
     // Players use userId (racetime ID) as primary identifier
     const player = await Player.findOneAndUpdate(
       { userId: req.params.id },
-      { 
-        $set: { 
-          name,
-          racetimeUrl,
-          twitch
-        } 
-      },
+      { $set: update },
       { new: true }
     );
     

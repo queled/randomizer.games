@@ -14,6 +14,7 @@
  *   node scripts/discover-tournaments.js --max-pages 5        # Limit pagination
  *   node scripts/discover-tournaments.js --since 2024-01-01   # Only tournaments after date
  *   node scripts/discover-tournaments.js --game ootr          # Only search for a specific game
+ *   node scripts/discover-tournaments.js --source startgg --game oot --startgg-slug tournament/example
  */
 
 const path = require('path');
@@ -31,6 +32,7 @@ const sanitizeHtml = require('sanitize-html');
 
 const RATE_LIMIT_MS = 1500; // ms between API calls
 const DEFAULT_MAX_PAGES = null;
+const STARTGG_RESULTS_PER_PAGE = 50;
 
 // Keywords that strongly indicate an actual randomizer / multiworld tournament
 const RANDOMIZER_SIGNAL_KEYWORDS = [
@@ -56,7 +58,8 @@ function parseArgs() {
     keywords: [],
     maxPages: DEFAULT_MAX_PAGES,
     since: null,         // ISO date
-    game: null           // specific game slug to search for
+    game: null,          // specific game slug to search for
+    startggSlugs: []     // explicit slugs/URLs bypass global search indexing
   };
 
   for (let i = 0; i < args.length; i++) {
@@ -82,6 +85,9 @@ function parseArgs() {
         break;
       case '--game':
         opts.game = args[++i] || null;
+        break;
+      case '--startgg-slug':
+        if (args[i + 1]) opts.startggSlugs.push(args[++i]);
         break;
       default:
         if (!args[i].startsWith('--')) {
@@ -210,6 +216,17 @@ function formatMaxPages(maxPages) {
   return maxPages == null ? '∞' : String(maxPages);
 }
 
+function normalizeStartGGSlug(value) {
+  const input = String(value || '').trim();
+  const extracted = StartGGAPI.extractSlugFromUrl(input);
+  const slug = (extracted || input
+    .replace(/^https?:\/\/(?:www\.)?start\.gg\//i, '')
+    .replace(/\/(?:events?)\/?$/i, '')
+    .replace(/^\/+|\/+$/g, ''))
+    .split('/event/')[0];
+  return slug.startsWith('tournament/') ? slug : `tournament/${slug}`;
+}
+
 function findMatchingGame(tournament, games = []) {
   const text = buildTournamentSearchText(tournament);
   const eventGameIds = new Set(
@@ -323,7 +340,7 @@ function cleanDescription(description) {
 
 // ─── Start.gg Discovery ─────────────────────────────────────────────────────
 
-async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun, games }) {
+async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun, games, tournamentSlugs = [] }) {
   if (!process.env.STARTGG_API_TOKEN) {
     console.warn('⚠️  STARTGG_API_TOKEN not set – skipping start.gg discovery');
     return { found: 0, imported: 0, skipped: 0, errors: 0 };
@@ -334,10 +351,86 @@ async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun,
 
   const seenSlugs = new Set();
   // Check which startgg tournaments already exist
-  const existingStartgg = await Tournament.find({ startggId: { $exists: true, $ne: null } }).select('startggId startggSlug').lean();
-  const existingStartggIds = new Set(existingStartgg.map(t => t.startggId));
+  const existingStartgg = await Tournament.find({
+    $or: [
+      { startggId: { $exists: true, $ne: null } },
+      { startggTournamentId: { $exists: true, $ne: null } }
+    ]
+  }).select('startggId startggTournamentId startggSlug').lean();
+  const existingStartggIds = new Set(existingStartgg
+    .filter(tournament => tournament.startggId != null)
+    .map(tournament => String(tournament.startggId)));
+  const existingStartggTournamentIds = new Set(existingStartgg
+    .filter(tournament => tournament.startggTournamentId != null)
+    .map(tournament => String(tournament.startggTournamentId)));
+  const existingStartggSlugs = new Set(existingStartgg
+    .map(tournament => String(tournament.startggSlug || '').split('/event/')[0])
+    .filter(Boolean));
 
   console.log(`\n🔍 Start.gg: Searching ${games.length} game(s)...`);
+
+  const isAlreadyImported = tournament => (
+    existingStartggTournamentIds.has(String(tournament.id)) ||
+    existingStartggSlugs.has(String(tournament.slug || '').split('/event/')[0]) ||
+    (tournament.events || []).some(event => existingStartggIds.has(String(event.id)))
+  );
+
+  const inspectTournament = async (tournament, game) => {
+    if (!tournament?.slug || seenSlugs.has(tournament.slug)) return;
+    seenSlugs.add(tournament.slug);
+    stats.found++;
+
+    if (!isRandomizerTournament(tournament, [game])) return;
+
+    if (isAlreadyImported(tournament)) {
+      console.log(`         ↪ Already imported: ${tournament.name} (${tournament.slug})`);
+      stats.skipped++;
+      return;
+    }
+
+    if (dryRun) {
+      console.log(`         📋 [DRY-RUN] Would import: ${tournament.name} (${tournament.slug}) → ${game.id}`);
+      tournament.events?.forEach(event => {
+        console.log(`            └── Event: ${event.name} (${event.numEntrants || '?'} entrants) – Game: ${event.game?.name || 'N/A'}`);
+      });
+      stats.imported++;
+      return;
+    }
+
+    try {
+      await importStartGGTournament(api, tournament);
+      stats.imported++;
+    } catch (err) {
+      console.error(`         ❌ Error importing ${tournament.slug}: ${err.message}`);
+      stats.errors++;
+    }
+  };
+
+  for (const rawSlug of tournamentSlugs) {
+    const slug = normalizeStartGGSlug(rawSlug);
+    try {
+      await sleep(RATE_LIMIT_MS);
+      const tournament = await api.getTournament(slug);
+      if (!tournament) {
+        console.warn(`   ⚠️  Start.gg tournament not found: ${slug}`);
+        continue;
+      }
+
+      const match = findMatchingGame(tournament, games);
+      if (!match || !hasRandomizerSignal(tournament, [match.game])) {
+        console.log(`   ↪ No matching randomizer game for explicit tournament: ${tournament.name} (${tournament.slug})`);
+        continue;
+      }
+
+      console.log(`   🎯 Explicit Start.gg slug: ${tournament.slug}`);
+      await inspectTournament(tournament, match.game);
+    } catch (err) {
+      console.error(`   ❌ Error fetching ${slug}: ${err.message}`);
+      stats.errors++;
+    }
+  }
+
+  if (tournamentSlugs.length) return stats;
 
   for (const game of games) {
     const searchQueries = buildStartGGSearchQueries(game, keywords);
@@ -352,7 +445,7 @@ async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun,
         try {
           await sleep(RATE_LIMIT_MS);
 
-          const searchOpts = { perPage: 25, page };
+          const searchOpts = { perPage: STARTGG_RESULTS_PER_PAGE, page };
           if (since) searchOpts.afterDate = since;
 
           const result = await api.searchTournaments(searchQuery, searchOpts);
@@ -362,35 +455,7 @@ async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun,
           console.log(`         Page ${page}/${result.totalPages} – ${result.tournaments.length} results (total: ${result.total})`);
 
           for (const tournament of result.tournaments) {
-            if (seenSlugs.has(tournament.slug)) continue;
-            seenSlugs.add(tournament.slug);
-            stats.found++;
-
-            const isRandomizer = isRandomizerTournament(tournament, [game]);
-            if (!isRandomizer) continue;
-
-            const alreadyExists = tournament.events?.some(e => existingStartggIds.has(e.id));
-            if (alreadyExists) {
-              stats.skipped++;
-              continue;
-            }
-
-            if (dryRun) {
-              console.log(`         📋 [DRY-RUN] Would import: ${tournament.name} (${tournament.slug}) → ${game.id}`);
-              tournament.events?.forEach(e => {
-                console.log(`            └── Event: ${e.name} (${e.numEntrants || '?'} entrants) – Game: ${e.game?.name || 'N/A'}`);
-              });
-              stats.imported++;
-              continue;
-            }
-
-            try {
-              await importStartGGTournament(api, tournament);
-              stats.imported++;
-            } catch (err) {
-              console.error(`         ❌ Error importing ${tournament.slug}: ${err.message}`);
-              stats.errors++;
-            }
+            await inspectTournament(tournament, game);
           }
 
           if (page >= result.totalPages) break;
@@ -770,7 +835,8 @@ async function main() {
       maxPages: opts.maxPages,
       since: opts.since,
       dryRun: opts.dryRun,
-      games
+      games,
+      tournamentSlugs: opts.startggSlugs
     });
   }
 

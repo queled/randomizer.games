@@ -15,9 +15,13 @@
  *   node scripts/discover-tournaments.js --since 2024-01-01   # Only tournaments after date
  *   node scripts/discover-tournaments.js --game ootr          # Only search for a specific game
  *   node scripts/discover-tournaments.js --source startgg --game oot --startgg-slug tournament/example
+ *   node scripts/discover-tournaments.js --source speedgaming --dry-run   # Brackets listed on speedgaming.org/events
+ *   node scripts/discover-tournaments.js --source midos --dry-run         # OoT brackets linked from midos.house
+ *   node scripts/discover-tournaments.js --source speedgaming --challonge-url https://challonge.com/xyz
  */
 
 const path = require('path');
+const axios = require('axios');
 const mongoose = require('mongoose');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
@@ -33,6 +37,9 @@ const sanitizeHtml = require('sanitize-html');
 const RATE_LIMIT_MS = 1500; // ms between API calls
 const DEFAULT_MAX_PAGES = null;
 const STARTGG_RESULTS_PER_PAGE = 50;
+const SPEEDGAMING_EVENTS_URL = 'https://speedgaming.org/events/';
+const MIDOS_BASE_URL = 'https://midos.house';
+const MIDOS_DELAY_MS = 300;
 
 // Keywords that strongly indicate an actual randomizer / multiworld tournament
 const RANDOMIZER_SIGNAL_KEYWORDS = [
@@ -53,13 +60,14 @@ const QUERY_SUFFIX_KEYWORDS = [
 function parseArgs() {
   const args = process.argv.slice(2);
   const opts = {
-    source: 'all',       // 'all', 'startgg', 'challonge'
+    source: 'all',       // 'all', 'startgg', 'challonge', 'speedgaming', 'midos'
     dryRun: false,
     keywords: [],
     maxPages: DEFAULT_MAX_PAGES,
     since: null,         // ISO date
     game: null,          // specific game slug to search for
-    startggSlugs: []     // explicit slugs/URLs bypass global search indexing
+    startggSlugs: [],    // explicit slugs/URLs bypass global search indexing
+    challongeUrls: []    // explicit Challonge URLs checked alongside speedgaming.org
   };
 
   for (let i = 0; i < args.length; i++) {
@@ -88,6 +96,9 @@ function parseArgs() {
         break;
       case '--startgg-slug':
         if (args[i + 1]) opts.startggSlugs.push(args[++i]);
+        break;
+      case '--challonge-url':
+        if (args[i + 1]) opts.challongeUrls.push(args[++i]);
         break;
       default:
         if (!args[i].startsWith('--')) {
@@ -340,7 +351,7 @@ function cleanDescription(description) {
 
 // ─── Start.gg Discovery ─────────────────────────────────────────────────────
 
-async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun, games, tournamentSlugs = [] }) {
+async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun, games, tournamentSlugs = [], discoveredVia = null, trustSource = false }) {
   if (!process.env.STARTGG_API_TOKEN) {
     console.warn('⚠️  STARTGG_API_TOKEN not set – skipping start.gg discovery');
     return { found: 0, imported: 0, skipped: 0, errors: 0 };
@@ -380,7 +391,9 @@ async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun,
     seenSlugs.add(tournament.slug);
     stats.found++;
 
-    if (!isRandomizerTournament(tournament, [game])) return;
+    // A curated source (Mido's House) already guarantees the game: names rarely say "randomizer"
+    const accepted = trustSource ? Boolean(findMatchingGame(tournament, [game])) : isRandomizerTournament(tournament, [game]);
+    if (!accepted) return;
 
     if (isAlreadyImported(tournament)) {
       console.log(`         ↪ Already imported: ${tournament.name} (${tournament.slug})`);
@@ -398,7 +411,7 @@ async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun,
     }
 
     try {
-      await importStartGGTournament(api, tournament);
+      await importStartGGTournament(api, tournament, { game, discoveredVia });
       stats.imported++;
     } catch (err) {
       console.error(`         ❌ Error importing ${tournament.slug}: ${err.message}`);
@@ -410,14 +423,14 @@ async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun,
     const slug = normalizeStartGGSlug(rawSlug);
     try {
       await sleep(RATE_LIMIT_MS);
-      const tournament = await api.getTournament(slug);
+      const tournament = await api.getTournament(slug, { details: false });
       if (!tournament) {
         console.warn(`   ⚠️  Start.gg tournament not found: ${slug}`);
         continue;
       }
 
       const match = findMatchingGame(tournament, games);
-      if (!match || !hasRandomizerSignal(tournament, [match.game])) {
+      if (!match || (!trustSource && !hasRandomizerSignal(tournament, [match.game]))) {
         console.log(`   ↪ No matching randomizer game for explicit tournament: ${tournament.name} (${tournament.slug})`);
         continue;
       }
@@ -495,7 +508,7 @@ function isRandomizerTournament(tournament, searchTerms) {
 /**
  * Import a full tournament from start.gg (fetches detailed data then saves)
  */
-async function importStartGGTournament(api, tournamentPreview) {
+async function importStartGGTournament(api, tournamentPreview, { game = null, discoveredVia = null } = {}) {
   const slug = tournamentPreview.slug.startsWith('tournament/') ? tournamentPreview.slug : `tournament/${tournamentPreview.slug}`;
 
   console.log(`      ⬇️  Importing: ${tournamentPreview.name}`);
@@ -508,10 +521,16 @@ async function importStartGGTournament(api, tournamentPreview) {
     return;
   }
 
-  for (const event of tournamentData.events) {
+  // Skip sibling events tagged with another videogame (e.g. a non-randomizer side event)
+  const videogameId = Number(game?.integrations?.startgg?.videogameId);
+  const events = Number.isFinite(videogameId)
+    ? tournamentData.events.filter(event => Number(event.game?.id) === videogameId)
+    : tournamentData.events;
+
+  for (const event of events) {
     // Try to match to a game in our DB
     const matchForGame = await findGameForTournament({
-      providedGameSlug: null,
+      providedGameSlug: game ? game.id : null,
       providedGameId: event.game?.id,
       tournamentName: `${tournamentData.name} - ${event.name}`,
       tournamentDescription: event.game?.name || ''
@@ -629,6 +648,7 @@ async function importStartGGTournament(api, tournamentPreview) {
         externalId: String(event.id),
         tournamentId: String(tournamentData.id),
         url: eventUrl,
+        discoveredVia,
         importedAt: new Date()
       }
     };
@@ -648,6 +668,206 @@ async function importStartGGTournament(api, tournamentPreview) {
     const preservedLinks = existingLinkMap.size;
     console.log(`         ✅ ${tournamentPayload.name} – ${participants.length} participants, ${matches.length} matches${matchForGame ? ` → ${matchForGame.gameSlug}` : ''}${preservedLinks ? ` (${preservedLinks} liens préservés)` : ''}`);
   }
+}
+
+// ─── SpeedGaming Discovery (speedgaming.org/events → Challonge brackets) ─────
+
+function decodeEntities(value) {
+  return String(value || '')
+    .replace(/&amp;/g, '&').replace(/&#0?39;|&apos;/g, "'").replace(/&quot;/g, '"')
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+}
+
+/** Challonge URL → API identifier (`subdomain-slug` for organisation brackets). */
+function parseChallongeRef(value) {
+  let url;
+  try { url = new URL(String(value).trim()); } catch { return null; }
+  if (!/(^|\.)challonge\.com$/i.test(url.hostname)) return null;
+
+  const subdomain = url.hostname.split('.').slice(0, -2).filter(part => part !== 'www')[0] || null;
+  const parts = url.pathname.split('/').filter(Boolean);
+  if (parts.length > 1 && /^[a-z]{2}(-[A-Za-z]{2})?$/.test(parts[0])) parts.shift();
+  // /tournaments/signup/<token> pages carry no resolvable slug
+  if (!parts.length || parts[0] === 'tournaments') return null;
+
+  const slug = parts[0];
+  return {
+    apiId: subdomain ? `${subdomain}-${slug}` : slug,
+    url: `https://${subdomain ? `${subdomain}.` : ''}challonge.com/${slug}`
+  };
+}
+
+async function fetchSpeedGamingBrackets() {
+  const { data: html } = await axios.get(SPEEDGAMING_EVENTS_URL, {
+    timeout: 20000,
+    headers: { 'User-Agent': 'RandomizerHub-discovery/1.0 (+tournament index)' }
+  });
+
+  const entries = [];
+  for (const block of String(html).matchAll(/<p>([\s\S]*?)<\/p>/gi)) {
+    const title = decodeEntities((block[1].match(/<a[^>]*>([\s\S]*?)<\/a>/i) || [])[1] || '').replace(/<[^>]+>/g, '').trim();
+    for (const anchor of block[1].matchAll(/<a[^>]+href="([^"]*)"[^>]*>\s*Bracket\/standings\s*<\/a>/gi)) {
+      // One href can hold several brackets ("Upper: <url> - Middle: <url>"): they share the event title as group
+      const links = [...decodeEntities(anchor[1]).matchAll(/(?:([A-Za-z][A-Za-z ]*?):\s*)?(https?:\/\/[^\s"'<>]+)/g)];
+      for (const [, label, link] of links) {
+        entries.push({ title, link, group: links.length > 1 ? title : null, label: label ? label.trim() : null });
+      }
+    }
+  }
+  return entries;
+}
+
+/** Prefer Challonge's own game name, then the longest game alias found in the titles. */
+function matchChallongeGame(tournament, title, games) {
+  const gameName = normalizeText(tournament.gameName);
+  if (gameName) {
+    const exact = games.find(game => [game.name, game.official?.name].some(name => normalizeText(name) === gameName));
+    if (exact) return { game: exact, reason: 'challongeGameName' };
+  }
+
+  const text = normalizeText(`${title} ${tournament.name} ${tournament.gameName || ''}`);
+  let best = null;
+  for (const game of games) {
+    for (const alias of getGameAliases(game)) {
+      if (textContainsAlias(text, alias) && (!best || alias.length > best.alias.length)) {
+        best = { game, alias, reason: 'alias' };
+      }
+    }
+  }
+  return best;
+}
+
+async function discoverSpeedGaming({ games, dryRun, challongeUrls = [] }) {
+  if (!process.env.CHALLONGE_API_KEY) {
+    console.warn('⚠️  CHALLONGE_API_KEY not set – skipping speedgaming discovery');
+    return { found: 0, imported: 0, skipped: 0, errors: 0 };
+  }
+
+  const stats = { found: 0, imported: 0, skipped: 0, errors: 0 };
+  console.log('\n🔍 SpeedGaming: reading bracket links...');
+
+  let entries = challongeUrls.map(link => ({ title: '', link }));
+  if (!entries.length) {
+    try {
+      entries = await fetchSpeedGamingBrackets();
+    } catch (err) {
+      console.error(`   ❌ Could not read ${SPEEDGAMING_EVENTS_URL}: ${err.message}`);
+      stats.errors++;
+    }
+  }
+
+  const existing = await Tournament.find({ challongeId: { $exists: true, $ne: null } }).select('challongeId').lean();
+  const existingIds = new Set(existing.map(t => String(t.challongeId)));
+  const seen = new Set();
+
+  for (const { title, link, group = null, label = null } of entries) {
+    const ref = parseChallongeRef(link);
+    if (!ref) {
+      if (/challonge\.com/i.test(link)) console.log(`   ↪ Unresolvable Challonge link: ${link}`);
+      continue; // start.gg and other hosts are handled by their own sources
+    }
+    if (seen.has(ref.apiId.toLowerCase())) continue;
+    seen.add(ref.apiId.toLowerCase());
+    stats.found++;
+
+    try {
+      await sleep(RATE_LIMIT_MS);
+      let tournament;
+      try {
+        tournament = await challongeAPI.getTournament(ref.apiId).catch(async err => {
+          if (err.response) throw err; // HTTP answers (404...) are final; only network errors are retried
+          await sleep(RATE_LIMIT_MS * 2);
+          return challongeAPI.getTournament(ref.apiId);
+        });
+      } catch (err) {
+        // Private, deleted or not exposed by the API: keep it visible for manual review
+        console.log(`   ⚠️  Unresolved (${err.response?.status || err.message}): ${link}${title ? ` — ${title}` : ''}`);
+        stats.skipped++;
+        continue;
+      }
+
+      if (existingIds.has(String(tournament.id))) {
+        console.log(`   ↪ Already imported: ${tournament.name} (${ref.url})`);
+        stats.skipped++;
+        continue;
+      }
+
+      const match = matchChallongeGame(tournament, title, games);
+      // Short game aliases (e.g. "sms") are too ambiguous here: require an explicit randomizer keyword
+      const signalText = normalizeText(`${title} ${tournament.name}`);
+      if (!match || !RANDOMIZER_SIGNAL_KEYWORDS.some(keyword => signalText.includes(keyword))) {
+        console.log(`   ↪ Not a tracked randomizer: ${tournament.name} [${tournament.gameName || 'no game'}] (${ref.url})`);
+        stats.skipped++;
+        continue;
+      }
+
+      if (dryRun) {
+        console.log(`   📋 [DRY-RUN] Would import: ${tournament.name} (${ref.url}) → ${match.game.id} (${match.reason}${match.alias ? `: ${match.alias}` : ''}) – ${tournament.participantsCount} participants, ${tournament.state}${group ? ` – bracket${label ? ` "${label}"` : ''} of "${group}"` : ''}`);
+        stats.imported++;
+        continue;
+      }
+
+      await importChallongeTournament({ name: tournament.name, url: ref.apiId }, match.game.id, { group, discoveredVia: 'speedgaming.org' });
+      existingIds.add(String(tournament.id));
+      stats.imported++;
+    } catch (err) {
+      console.error(`   ❌ Error processing ${link}: ${err.message}`);
+      stats.errors++;
+    }
+  }
+
+  return stats;
+}
+
+// ─── Mido's House Discovery (OoT events → start.gg brackets) ───────────────────────
+
+// Event pages only: brackets are read from public links, never copied from Mido's own data
+async function fetchMidosStartGGSlugs() {
+  const http = { timeout: 20000, headers: { 'User-Agent': 'RandomizerHub-discovery/1.0 (+tournament index)' } };
+  const eventPaths = new Set();
+
+  for (const page of ['/', '/archive']) {
+    const { data } = await axios.get(`${MIDOS_BASE_URL}${page}`, http);
+    for (const match of String(data).matchAll(/href="(\/event\/[^"\/#?]+\/[^"\/#?]+)"/g)) eventPaths.add(match[1]);
+  }
+
+  const slugs = new Map();
+  for (const eventPath of eventPaths) {
+    await sleep(MIDOS_DELAY_MS);
+    try {
+      const { data } = await axios.get(`${MIDOS_BASE_URL}${eventPath}`, http);
+      for (const match of String(data).matchAll(/href="(https?:\/\/(?:www\.)?start\.gg\/tournament\/[^"#?\s]+)"/gi)) {
+        const slug = StartGGAPI.extractSlugFromUrl(decodeEntities(match[1]));
+        if (slug && !slugs.has(slug)) slugs.set(slug, eventPath);
+      }
+    } catch (err) {
+      console.log(`   ⚠️  Could not read ${eventPath}: ${err.message}`);
+    }
+  }
+  return { slugs, eventCount: eventPaths.size };
+}
+
+async function discoverMidos({ games, dryRun }) {
+  const oot = games.find(game => game.id === 'oot');
+  if (!oot) {
+    console.warn("⚠️  Game 'oot' not selected/found – skipping Mido's House discovery");
+    return { found: 0, imported: 0, skipped: 0, errors: 0 };
+  }
+
+  console.log("\n🔍 Mido's House: reading OoT event pages...");
+  let result;
+  try {
+    result = await fetchMidosStartGGSlugs();
+  } catch (err) {
+    console.error(`   ❌ Could not read ${MIDOS_BASE_URL}: ${err.message}`);
+    return { found: 0, imported: 0, skipped: 0, errors: 1 };
+  }
+
+  console.log(`   ${result.eventCount} event pages, ${result.slugs.size} distinct start.gg tournaments`);
+  // An empty list must not fall through to discoverStartGG's global search
+  if (!result.slugs.size) return { found: 0, imported: 0, skipped: 0, errors: 0 };
+
+  return discoverStartGG({ games: [oot], dryRun, tournamentSlugs: [...result.slugs.keys()], discoveredVia: 'midos.house', trustSource: true });
 }
 
 // ─── Challonge Discovery ────────────────────────────────────────────────────
@@ -716,7 +936,7 @@ async function discoverChallonge({ searchTerms, games, keywords, since, dryRun }
 /**
  * Import a single Challonge tournament (fetches full data including participants/matches)
  */
-async function importChallongeTournament(tournamentPreview) {
+async function importChallongeTournament(tournamentPreview, gameSlug = null, { group = null, discoveredVia = null } = {}) {
   const challongeId = tournamentPreview.url || tournamentPreview.id;
 
   console.log(`   ⬇️  Importing: ${tournamentPreview.name}`);
@@ -732,7 +952,7 @@ async function importChallongeTournament(tournamentPreview) {
 
   // Determine game
   const matchForGame = await findGameForTournament({
-    providedGameSlug: null,
+    providedGameSlug: gameSlug,
     providedGameId: tournamentData.gameId,
     tournamentName: tournamentData.name,
     tournamentDescription: tournamentData.description
@@ -755,6 +975,8 @@ async function importChallongeTournament(tournamentPreview) {
       type: 'challonge',
       externalId: String(tournamentData.id),
       url: tournamentData.fullUrl || tournamentData.url || null,
+      group,
+      discoveredVia,
       importedAt: new Date()
     }
   };
@@ -837,6 +1059,18 @@ async function main() {
       dryRun: opts.dryRun,
       games,
       tournamentSlugs: opts.startggSlugs
+    });
+  }
+
+  if (opts.source === 'all' || opts.source === 'midos') {
+    results.midos = await discoverMidos({ games, dryRun: opts.dryRun });
+  }
+
+  if (opts.source === 'all' || opts.source === 'speedgaming') {
+    results.speedgaming = await discoverSpeedGaming({
+      games,
+      dryRun: opts.dryRun,
+      challongeUrls: opts.challongeUrls
     });
   }
 

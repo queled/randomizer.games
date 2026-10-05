@@ -212,6 +212,9 @@ const tournamentSchema = new mongoose.Schema({
     externalId: String,
     tournamentId: String,
     url: String,
+    // Several brackets of one tournament share the same group name
+    group: String,
+    discoveredVia: String,
     importedAt: Date
   }
 }, { timestamps: true });

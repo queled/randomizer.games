@@ -1,5 +1,17 @@
 const axios = require('axios');
 
+// 50 keeps team entrants and nested set slots well under start.gg's 1000-object request limit.
+const EVENT_PAGE_SIZE = 50;
+
+const PARTICIPANT_FIELDS = 'gamerTag prefix user { id name slug }';
+const ENTRANT_FIELDS = `id name initialSeedNum participants { ${PARTICIPANT_FIELDS} }`;
+const STANDING_FIELDS = `placement entrant { id name participants { ${PARTICIPANT_FIELDS} } }`;
+const SET_FIELDS = `
+  id round displayScore winnerId completedAt state
+  phaseGroup { id displayIdentifier phase { id name } }
+  slots { entrant { id name } }
+`;
+
 class StartGGAPI {
   constructor() {
     this.apiToken = process.env.STARTGG_API_TOKEN;
@@ -21,7 +33,8 @@ class StartGGAPI {
           headers: {
             'Authorization': `Bearer ${this.apiToken}`,
             'Content-Type': 'application/json'
-          }
+          },
+          timeout: 30000
         }
       );
 
@@ -41,7 +54,7 @@ class StartGGAPI {
    * Get tournament by slug
    * Example slug: "tournament/ocarina-of-time-randomizer-standard-tournament-season-9"
    */
-  async getTournament(slug) {
+  async getTournament(slug, { details = true } = {}) {
     const query = `
       query TournamentQuery($slug: String!) {
         tournament(slug: $slug) {
@@ -74,153 +87,49 @@ class StartGGAPI {
               state
               groupCount
             }
-            entrants(query: { perPage: 100 }) {
-              nodes {
-                id
-                name
-                initialSeedNum
-                participants {
-                  gamerTag
-                  prefix
-                  user {
-                    id
-                    name
-                    slug
-                  }
-                }
-              }
-            }
-            standings(query: {
-              perPage: 100
-            }) {
-              nodes {
-                placement
-                entrant {
-                  id
-                  name
-                  participants {
-                    gamerTag
-                    prefix
-                    user {
-                      id
-                      name
-                      slug
-                    }
-                  }
-                }
-              }
-            }
-            sets(page: 1, perPage: 100, sortType: STANDARD) {
-              pageInfo {
-                total
-                totalPages
-              }
-              nodes {
-                id
-                round
-                displayScore
-                winnerId
-                completedAt
-                state
-                phaseGroup {
-                  id
-                  displayIdentifier
-                  phase {
-                    id
-                    name
-                  }
-                }
-                slots {
-                  entrant {
-                    id
-                    name
-                  }
-                }
-              }
-            }
           }
         }
       }
     `;
 
     const data = await this.query(query, { slug });
-    const tournament = this.formatTournament(data.tournament);
-    
-    // Fetch additional pages of sets if needed
-    if (tournament && tournament.events) {
-      for (let i = 0; i < tournament.events.length; i++) {
-        const event = tournament.events[i];
-        if (event.setsTotalPages > 1) {
-          const allSets = [...event.sets];
-          for (let page = 2; page <= event.setsTotalPages; page++) {
-            const additionalSets = await this.getEventSetsPage(data.tournament.events[i].id, page);
-            allSets.push(...additionalSets);
-          }
-          event.sets = allSets;
-          event.setsTotal = allSets.length;
-        }
-      }
+    if (!data.tournament) return null;
+
+    // Heavy connections are fetched per event in small pages: one big query exceeds the 1000-object limit.
+    for (const event of details ? data.tournament.events || [] : []) {
+      event.entrants = { nodes: await this.fetchEventPages(event.id, 'entrants', ENTRANT_FIELDS) };
+      event.standings = { nodes: await this.fetchEventPages(event.id, 'standings', STANDING_FIELDS) };
+      const sets = await this.fetchEventPages(event.id, 'sets', SET_FIELDS, 'sortType: STANDARD');
+      event.sets = { nodes: sets, pageInfo: { total: sets.length, totalPages: Math.ceil(sets.length / EVENT_PAGE_SIZE) } };
     }
-    
-    return tournament;
+
+    return this.formatTournament(data.tournament);
   }
 
   /**
-   * Get a specific page of sets for an event
+   * Fetch every page of an event connection (entrants, standings or sets).
    */
-  async getEventSetsPage(eventId, page) {
+  async fetchEventPages(eventId, connection, nodeFields, extraArgs = '') {
     const query = `
-      query EventSetsPage($eventId: ID!, $page: Int!) {
+      query EventPage($eventId: ID!, $page: Int!, $perPage: Int!) {
         event(id: $eventId) {
-          sets(page: $page, perPage: 100, sortType: STANDARD) {
-            nodes {
-              id
-              round
-              displayScore
-              winnerId
-              completedAt
-              state
-              phaseGroup {
-                id
-                displayIdentifier
-                phase {
-                  id
-                  name
-                }
-              }
-              slots {
-                entrant {
-                  id
-                  name
-                }
-              }
-            }
+          ${connection}(${connection === 'sets' ? 'page: $page, perPage: $perPage' : 'query: { page: $page, perPage: $perPage }'}${extraArgs ? `, ${extraArgs}` : ''}) {
+            pageInfo { totalPages }
+            nodes { ${nodeFields} }
           }
         }
       }
     `;
 
-    const data = await this.query(query, { eventId, page });
-    return data.event?.sets?.nodes?.map(s => ({
-      id: s.id,
-      completedAt: s.completedAt ? new Date(s.completedAt * 1000) : null,
-      round: s.round,
-      displayScore: s.displayScore,
-      winnerId: s.winnerId,
-      state: s.state,
-      phase: s.phaseGroup?.phase ? {
-        id: s.phaseGroup.phase.id,
-        name: s.phaseGroup.phase.name
-      } : null,
-      phaseGroup: s.phaseGroup ? {
-        id: s.phaseGroup.id,
-        displayIdentifier: s.phaseGroup.displayIdentifier
-      } : null,
-      entrants: s.slots?.map(slot => ({
-        id: slot.entrant?.id,
-        name: slot.entrant?.name
-      })) || []
-    })) || [];
+    const nodes = [];
+    let totalPages = 1;
+    for (let page = 1; page <= totalPages; page++) {
+      const data = await this.query(query, { eventId, page, perPage: EVENT_PAGE_SIZE });
+      const result = data.event?.[connection];
+      totalPages = result?.pageInfo?.totalPages || 1;
+      nodes.push(...(result?.nodes || []));
+    }
+    return nodes;
   }
 
   /**

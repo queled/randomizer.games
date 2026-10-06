@@ -1041,7 +1041,8 @@ function displayMatches(matches, tournament, races = []) {
 
   // Detect Start.gg multi-phase tournament (Main Bracket + Preliminary Bracket etc.)
   const phases = [...new Set(matches.filter(m => m && m.phase).map(m => m.phase))];
-  const hasStartggPhases = phases.length > 1;
+  // A lone Swiss / round robin phase also needs per-phase rendering: its rounds are not "Finale", "Demi-finales"...
+  const hasStartggPhases = phases.length > 1 || (phases.length === 1 && isStandingsPhase(tournament, phases[0]));
 
   // Detect Challonge group stage matches using `groupId` when available.
   const groupStageMatches = matches.filter(m => m && (m.groupId !== null && m.groupId !== undefined));
@@ -1105,8 +1106,12 @@ function displayMatches(matches, tournament, races = []) {
       const winnerRounds = Object.keys(winnerByRound).map(r => parseInt(r)).sort((a, b) => b - a);
       const totalWinnerRounds = winnerRounds.length;
 
+      const phaseIsStandings = isStandingsPhase(tournament, phaseName);
+
       winnerRounds.forEach((round, index) => {
-        const roundName = getRoundNameForBracket(round, 'winner', totalWinnerRounds, totalWinnerRounds - index - 1, phaseIsDE);
+        const roundName = phaseIsStandings
+          ? `${i18n.t('tournamentDetail.roundNumber') || 'Tour'} ${round}`
+          : getRoundNameForBracket(round, 'winner', totalWinnerRounds, totalWinnerRounds - index - 1, phaseIsDE);
         const roundHeader = document.createElement('h4');
         roundHeader.style.cssText = 'font-size: 1.1rem; font-weight: bold; margin-top: 1.25rem; margin-bottom: 0.75rem;';
         roundHeader.textContent = roundName;
@@ -2749,8 +2754,13 @@ function displayBracket(matches, tournament) {
   const tournamentType = (tournament.tournamentType || '').toLowerCase().replace(/[\s_]+/g, '');
   const isDoubleElimination = tournamentType === 'doubleelimination';
   
-  // Check for Start.gg phases (Main Bracket vs Preliminary Bracket, etc.)
-  const phases = [...new Set(matches.filter(m => m.phase).map(m => m.phase))];
+  // Check for Start.gg phases (Main Bracket vs Preliminary Bracket, etc.).
+  // Phases without sets yet (e.g. final brackets after groups) are listed too, as "not started".
+  const matchPhases = [...new Set(matches.filter(m => m.phase).map(m => m.phase))];
+  const declaredPhases = matchPhases.length && Array.isArray(tournament.phases)
+    ? tournament.phases.slice().sort((a, b) => (a.phaseOrder || 0) - (b.phaseOrder || 0)).map(p => p.name).filter(Boolean)
+    : [];
+  const phases = [...new Set([...declaredPhases, ...matchPhases])];
   const hasMultiplePhases = phases.length > 1;
   
   // Check if Start.gg tournament with phase groups (pools)

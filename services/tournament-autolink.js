@@ -79,6 +79,41 @@ function getTournamentWindow(tournament, matches = []) {
   };
 }
 
+// Stage family of a start.gg phase: 'swiss', 'groups' (pools / round robin) or 'bracket'
+function getPhaseFamily(phase) {
+  const type = String(phase?.bracketType || '').toUpperCase();
+  const name = String(phase?.name || '').toLowerCase();
+  if (type === 'SWISS' || /\bswiss\b/.test(name)) return 'swiss';
+  if (type === 'ROUND_ROBIN' || Number(phase?.groupCount) > 1 || /\b(groups?|groupe|pools?|poules?|div|preliminary)\b/.test(name)) return 'groups';
+  return 'bracket';
+}
+
+// Stage family announced by a race label ("Swiss Round 5: A vs B", "Group E: ...", "Top 8 Final: ...")
+function getRaceLabelStage(race) {
+  const label = getRaceLabel(race).split(':')[0].toLowerCase();
+  if (/\b(groups?|groupe|pools?|poules?|div|preliminary)\b/.test(label)) return { family: 'groups' };
+  const swiss = /\bswiss\b(?:.*?\bround\s+(\d+))?/.exec(label);
+  if (swiss) return { family: 'swiss', round: swiss[1] ? Number(swiss[1]) : null };
+  if (/\b(brackets?|top\s+\d+|finals?|semi-?finals?|quarter-?finals?|playoffs?)\b/.test(label)) return { family: 'bracket' };
+  return null;
+}
+
+// Restrict start.gg candidates to the phase the race label names; null when the
+// label names a stage this tournament does not have (the race belongs to another event)
+function filterMatchesByRaceStage(race, matches, tournament) {
+  const phases = Array.isArray(tournament?.phases) ? tournament.phases : [];
+  const stage = getRaceLabelStage(race);
+  if (!stage || !phases.length) return matches;
+
+  const phaseNames = new Set(phases.filter((phase) => getPhaseFamily(phase) === stage.family).map((phase) => phase.name));
+  if (!phaseNames.size) return null;
+
+  return matches.filter((match) => (
+    phaseNames.has(match.phase) &&
+    (stage.round == null || Number(match.round) === stage.round)
+  ));
+}
+
 function isLinkableStartggState(state) {
   if (state === undefined || state === null || state === '') return true;
   const numericState = Number(state);
@@ -204,6 +239,54 @@ async function loadCandidateRaces({ tournament, Race, matches = [], extraRaceUrl
   });
 }
 
+const GOAL_STOPWORDS = new Set([
+  'tournament', 'tourney', 'season', 'saison', 'standard', 'ruleset', 'the', 'of', 'and', 'vs',
+  'game', 'beat', 'randomizer', 'rando', 'oot', 'ootr', 'race', 'round', 'any', 'normal', 'top',
+  'bracket', 'brackets', 'group', 'groups', 'pool', 'pools', 'main'
+]);
+
+function goalTokens(value) {
+  return String(value || '')
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter((token) => token.length >= 2 && !GOAL_STOPWORDS.has(token));
+}
+
+function goalsLookAlike(a, b) {
+  const left = String(a || '').toLowerCase().trim();
+  const right = String(b || '').toLowerCase().trim();
+  if (!left || !right) return false;
+  if (left.includes(right) || right.includes(left)) return true;
+  const rightTokens = new Set(goalTokens(right));
+  return goalTokens(left).some((token) => rightTokens.has(token));
+}
+
+/**
+ * Racetime goals are usually per event ("Random settings league", "SGL 2025"...): drop
+ * proposals whose goal neither matches the tournament's dominant goal nor its name,
+ * they come from another event the same players met in.
+ */
+function filterProposalsByGoal(tournament, proposals, races) {
+  const goalByUrl = new Map(races.map((race) => [race.url, race.goal || '']));
+  const stageByUrl = new Map(races.map((race) => [race.url, getRaceLabel(race).split(':')[0]]));
+  const counts = new Map();
+  for (const proposal of proposals) {
+    const goal = goalByUrl.get(proposal.raceUrl);
+    if (goal) counts.set(goal, (counts.get(goal) || 0) + 1);
+  }
+
+  const [dominantGoal, dominantCount] = [...counts.entries()].sort((a, b) => b[1] - a[1])[0] || [null, 0];
+  const dominant = dominantCount >= 5 && dominantCount / proposals.length >= 0.6 ? dominantGoal : null;
+
+  return proposals.filter((proposal) => {
+    const goal = goalByUrl.get(proposal.raceUrl);
+    if (!goal) return true;
+    return (dominant && goalsLookAlike(goal, dominant)) ||
+      goalsLookAlike(goal, tournament?.name) ||
+      goalsLookAlike(stageByUrl.get(proposal.raceUrl), tournament?.name);
+  });
+}
+
 async function buildAutoLinkPreview({
   tournament,
   Match,
@@ -245,13 +328,21 @@ async function buildAutoLinkPreview({
       continue;
     }
 
+    const stageMatches = isTournamentStartgg(tournament)
+      ? filterMatchesByRaceStage(race, liveMatches, tournament)
+      : liveMatches;
+    if (!stageMatches || !stageMatches.length) {
+      skipped++;
+      continue;
+    }
+
     const candidateMatches = isTournamentStartgg(tournament)
-      ? liveMatches.filter((match) => hasAvailableStartggSlot(match, race.url))
-      : liveMatches.filter((match) => !match.raceUrl || match.raceUrl === race.url);
+      ? stageMatches.filter((match) => hasAvailableStartggSlot(match, race.url))
+      : stageMatches.filter((match) => !match.raceUrl || match.raceUrl === race.url);
 
     const scored = rankMatchesForRace(
       race,
-      candidateMatches.length ? candidateMatches : liveMatches,
+      candidateMatches.length ? candidateMatches : stageMatches,
       {
         requireDirect: true,
         allowOccupiedMatchReassign: false,
@@ -302,8 +393,11 @@ async function buildAutoLinkPreview({
     }
   }
 
-  proposals.sort((a, b) => b.score - a.score);
-  return { proposals, skipped, total: races.length, matches, races };
+  const coherent = filterProposalsByGoal(tournament, proposals, races);
+  skipped += proposals.length - coherent.length;
+
+  coherent.sort((a, b) => b.score - a.score);
+  return { proposals: coherent, skipped, total: races.length, matches, races };
 }
 
 function getRaceSortTimestamp(race) {

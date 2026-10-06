@@ -108,10 +108,8 @@ async function main() {
     errors: 0
   };
 
+  const previews = [];
   for (const tournamentData of tournaments) {
-    const sourceLabel = getTournamentSourceLabel(tournamentData);
-    console.log(`\n🏁 ${tournamentData.name} [${sourceLabel}]`);
-
     const preview = await buildAutoLinkPreview({
       tournament: tournamentData,
       Match,
@@ -119,6 +117,35 @@ async function main() {
       threshold: opts.threshold,
       minGap: opts.minGap
     });
+    previews.push({ tournamentData, preview });
+  }
+
+  // A race proposed to several tournaments (players in concurrent events) goes to the
+  // clearly best one, or to none
+  const bestByRace = new Map();
+  for (const { tournamentData, preview } of previews) {
+    for (const proposal of preview.proposals) {
+      const entry = bestByRace.get(proposal.raceUrl) || { scores: [] };
+      entry.scores.push({ tournamentId: String(tournamentData._id), score: proposal.score });
+      bestByRace.set(proposal.raceUrl, entry);
+    }
+  }
+  const isWinningProposal = (tournamentId, proposal) => {
+    const scores = bestByRace.get(proposal.raceUrl).scores.slice().sort((a, b) => b.score - a.score);
+    if (scores.length === 1) return true;
+    return scores[0].tournamentId === tournamentId && scores[0].score - scores[1].score >= opts.minGap;
+  };
+
+  for (const { tournamentData, preview } of previews) {
+    const sourceLabel = getTournamentSourceLabel(tournamentData);
+    console.log(`\n🏁 ${tournamentData.name} [${sourceLabel}]`);
+
+    const contested = preview.proposals.filter((proposal) => !isWinningProposal(String(tournamentData._id), proposal));
+    contested.forEach((proposal) => {
+      console.log(`   ⚖️  ${proposal.raceUrl} -> ${proposal.matchPlayers} score=${proposal.score} ignorée (proposée à un autre tournoi)`);
+    });
+    preview.proposals = preview.proposals.filter((proposal) => !contested.includes(proposal));
+    preview.skipped += contested.length;
 
     console.log(`   proposals=${preview.proposals.length} skipped=${preview.skipped} totalRaces=${preview.total}`);
 

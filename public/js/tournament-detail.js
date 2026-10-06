@@ -2762,6 +2762,8 @@ function displayBracket(matches, tournament) {
   if (hasMultiplePhases) {
     // Multi-phase Start.gg tournament (e.g., Main Bracket + Preliminary Bracket)
     displayMultiPhaseBracket(matches, container, isDoubleElimination, phases, tournament);
+  } else if (phases.length === 1 && isStandingsPhase(tournament, phases[0])) {
+    displayStandingsPhase(matches, container, getPhaseKind(tournament, phases[0]) === 'swiss');
   } else if (hasPhaseGroups) {
     // Start.gg pools - display each pool as a separate bracket
     displayPoolsBracket(matches, container, isDoubleElimination, phaseGroups);
@@ -2833,6 +2835,9 @@ function displayMultiPhaseBracket(matches, container, isDoubleElimination, phase
     if (phaseMatches.length === 0) {
       // No matches yet (e.g., Main Bracket not started)
       bracketContainer.innerHTML = `<p style="color: #9ca3af; text-align: center; font-style: italic;">${i18n.t('tournamentDetail.bracketNotStarted') || 'Bracket not started yet'}</p>`;
+    } else if (isStandingsPhase(tournament, phaseName)) {
+      // Swiss / round robin: elimination trees make no sense, show standings and rounds
+      displayStandingsPhase(phaseMatches, bracketContainer, getPhaseKind(tournament, phaseName) === 'swiss');
     } else if (hasPhaseGroups) {
       // This phase has pools
       displayPoolsBracket(phaseMatches, bracketContainer, phaseIsDE, phaseGroups);
@@ -2845,6 +2850,102 @@ function displayMultiPhaseBracket(matches, container, isDoubleElimination, phase
     phaseSection.appendChild(bracketContainer);
     container.appendChild(phaseSection);
   });
+}
+
+// Normalized start.gg bracketType of a phase ('swiss', 'roundrobin', 'doubleelimination'...)
+function getPhaseKind(tournament, phaseName) {
+  const phase = (tournament && Array.isArray(tournament.phases) ? tournament.phases : []).find(p => p.name === phaseName);
+  return phase ? String(phase.bracketType || '').toLowerCase().replace(/[\s_]+/g, '') : '';
+}
+
+function isStandingsPhase(tournament, phaseName) {
+  const kind = getPhaseKind(tournament, phaseName);
+  return kind === 'swiss' || kind === 'roundrobin';
+}
+
+// Swiss / round robin phase: one standings table per pool, with its matches (by round for Swiss)
+function displayStandingsPhase(phaseMatches, container, isSwiss) {
+  const groups = new Map();
+  phaseMatches.forEach(m => {
+    const key = m.phaseGroup || '';
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(m);
+  });
+
+  const getTime = (m) => {
+    const t = new Date(m && (m.completedAt || m.startedAt || 0)).getTime();
+    return Number.isFinite(t) ? t : 0;
+  };
+
+  const grid = document.createElement('div');
+  grid.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 1.5rem;';
+
+  [...groups.keys()].sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true })).forEach((key, idx) => {
+    const matches = groups.get(key);
+    const box = document.createElement('div');
+    box.style.cssText = 'background-color: #1f2937; padding: 1rem; border-radius: 0.5rem; border: 1px solid #374151;';
+
+    if (!isSwiss) {
+      const title = document.createElement('h4');
+      title.style.cssText = 'font-size: 1.1rem; font-weight: bold; margin-bottom: 0.75rem; color: #fbbf24; text-align: center;';
+      title.textContent = `${i18n.t('tournamentDetail.group') || 'Group'} ${key || String.fromCharCode(65 + (idx % 26))}`;
+      box.appendChild(title);
+    }
+
+    const standings = new Map();
+    const entry = (name) => {
+      if (!standings.has(name)) standings.set(name, { name, wins: 0, losses: 0 });
+      return standings.get(name);
+    };
+    matches.forEach(m => {
+      const n1 = m.player1Name, n2 = m.player2Name;
+      if (!n1 || !n2 || n1 === 'TBD' || n2 === 'TBD') return;
+      entry(n1); entry(n2);
+      if (m.winnerId && m.winnerId === m.player1Id) { entry(n1).wins++; entry(n2).losses++; }
+      else if (m.winnerId && m.winnerId === m.player2Id) { entry(n2).wins++; entry(n1).losses++; }
+    });
+
+    [...standings.values()]
+      .sort((a, b) => b.wins - a.wins || a.losses - b.losses || a.name.localeCompare(b.name))
+      .forEach((s, pos) => {
+        const row = document.createElement('div');
+        row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background-color: #111827; border-radius: 0.25rem; margin-bottom: 0.25rem;';
+        const link = document.createElement('a');
+        link.href = '/player-detail.html?name=' + encodeURIComponent(sanitizeDisplayName(s.name));
+        link.style.cssText = 'color: #e5e7eb; text-decoration: none;';
+        link.textContent = `${pos + 1}. ${sanitizeDisplayName(s.name)}`;
+        const record = document.createElement('span');
+        record.style.cssText = 'color: #9ca3af; font-size: 0.875rem;';
+        record.textContent = `${s.wins}V - ${s.losses}D`;
+        row.appendChild(link);
+        row.appendChild(record);
+        box.appendChild(row);
+      });
+
+    const list = document.createElement('div');
+    list.style.cssText = 'display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;';
+    if (isSwiss) {
+      const byRound = new Map();
+      matches.forEach(m => {
+        const round = m.round || 0;
+        if (!byRound.has(round)) byRound.set(round, []);
+        byRound.get(round).push(m);
+      });
+      [...byRound.keys()].sort((a, b) => a - b).forEach(round => {
+        const header = document.createElement('div');
+        header.style.cssText = 'color: #fbbf24; font-weight: bold; font-size: 0.9rem; margin-top: 0.5rem;';
+        header.textContent = `Round ${round}`;
+        list.appendChild(header);
+        byRound.get(round).sort((a, b) => getTime(a) - getTime(b)).forEach(m => list.appendChild(createCompactMatchCard(m, currentRaces)));
+      });
+    } else {
+      matches.slice().sort((a, b) => getTime(a) - getTime(b)).forEach(m => list.appendChild(createCompactMatchCard(m, currentRaces)));
+    }
+    box.appendChild(list);
+    grid.appendChild(box);
+  });
+
+  container.appendChild(grid);
 }
 
 // Display groups in spoiler mode - only player names, alphabetically sorted, no results

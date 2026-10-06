@@ -114,6 +114,33 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+const playerKey = value => String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+/**
+ * The same event can exist on two platforms (e.g. a Challonge bracket and its start.gg twin):
+ * flag an existing tournament starting within 45 days with (almost) the same players.
+ */
+async function findProbableDuplicate(playerNames, startDate, startggEventId) {
+  const wanted = new Set(playerNames.map(playerKey).filter(Boolean));
+  if (wanted.size < 4) return null;
+
+  const query = { startggId: { $ne: startggEventId } };
+  if (startDate) {
+    const time = new Date(startDate).getTime();
+    const windowMs = 45 * 24 * 60 * 60 * 1000;
+    query.startDate = { $gte: new Date(time - windowMs), $lte: new Date(time + windowMs) };
+  }
+
+  for (const existing of await Tournament.find(query).select('name participants.name').lean()) {
+    const known = new Set((existing.participants || []).map(p => playerKey(p.name)).filter(Boolean));
+    const smaller = Math.min(known.size, wanted.size);
+    if (smaller < 4 || smaller / Math.max(known.size, wanted.size) < 0.7) continue;
+    const shared = [...known].filter(name => wanted.has(name)).length;
+    if (shared / smaller >= 0.8) return existing.name;
+  }
+  return null;
+}
+
 function normalizeText(value) {
   return String(value || '')
     .normalize('NFD')
@@ -557,6 +584,12 @@ async function importStartGGTournament(api, tournamentPreview, { game = null, di
           participants.push(playerMap.get(gamerTag));
         }
       }
+    }
+
+    const duplicateOf = await findProbableDuplicate(participants.map(p => p.name), event.startDate || tournamentData.startDate, event.id);
+    if (duplicateOf) {
+      console.log(`         ⏭️  Skipped "${tournamentData.name} - ${event.name}": same players and dates as existing "${duplicateOf}"`);
+      continue;
     }
 
     // Bracket type

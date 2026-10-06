@@ -1039,8 +1039,12 @@ function displayMatches(matches, tournament, races = []) {
     return;
   }
 
-  // Detect Start.gg multi-phase tournament (Main Bracket + Preliminary Bracket etc.)
-  const phases = [...new Set(matches.filter(m => m && m.phase).map(m => m.phase))];
+  // Detect Start.gg multi-phase tournament (Main Bracket + Preliminary Bracket etc.), in declared phase order
+  const declaredOrder = (tournament && Array.isArray(tournament.phases) ? tournament.phases : [])
+    .slice().sort((a, b) => (a.phaseOrder || 0) - (b.phaseOrder || 0)).map(p => p.name);
+  const phaseRank = name => (declaredOrder.indexOf(name) + 1) || Infinity;
+  const phases = [...new Set(matches.filter(m => m && m.phase).map(m => m.phase))]
+    .sort((a, b) => phaseRank(a) - phaseRank(b));
   // A lone Swiss / round robin phase also needs per-phase rendering: its rounds are not "Finale", "Demi-finales"...
   const hasStartggPhases = phases.length > 1 || (phases.length === 1 && isStandingsPhase(tournament, phases[0]));
 
@@ -2286,7 +2290,8 @@ function formatTournamentTypeForDisplay(tournament) {
       const pools = p.groupCount > 1 ? ` (${p.groupCount} pools)` : '';
       return `${name} (${bt}${pools})`;
     });
-    return parts.join(' → ');
+    // Grouped Challonge brackets run side by side, start.gg phases follow each other
+    return parts.join(tournament.challongeBrackets?.length ? ' / ' : ' → ');
   }
   
   return formatTournamentType(tournament.tournamentType);

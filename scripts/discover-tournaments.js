@@ -26,11 +26,12 @@ const mongoose = require('mongoose');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
 const connectDB = require('../config/database');
-const { Game, Tournament, Match } = require('../models');
+const { Game, Tournament, Match, Race } = require('../models');
 const StartGGAPI = require('../services/startgg');
 const challongeAPI = require('../services/challonge');
 const findGameForTournament = require('../helpers/findGameForTournament');
 const sanitizeHtml = require('sanitize-html');
+const { saveGroupedChallongeBracket } = require('../services/challonge-bracket-groups');
 
 // ─── Configuration ───────────────────────────────────────────────────────────
 
@@ -789,8 +790,7 @@ async function discoverSpeedGaming({ games, dryRun, challongeUrls = [] }) {
     }
   }
 
-  const existing = await Tournament.find({ challongeId: { $exists: true, $ne: null } }).select('challongeId').lean();
-  const existingIds = new Set(existing.map(t => String(t.challongeId)));
+  const existingIds = new Set((await getKnownChallongeIds()).map(String));
   const seen = new Set();
 
   for (const { title, link, group = null, label = null } of entries) {
@@ -840,7 +840,7 @@ async function discoverSpeedGaming({ games, dryRun, challongeUrls = [] }) {
         continue;
       }
 
-      await importChallongeTournament({ name: tournament.name, url: ref.apiId }, match.game.id, { group, discoveredVia: 'speedgaming.org' });
+      await importChallongeTournament({ name: tournament.name, url: ref.apiId }, match.game.id, { group, label, discoveredVia: 'speedgaming.org' });
       existingIds.add(String(tournament.id));
       stats.imported++;
     } catch (err) {
@@ -926,8 +926,7 @@ async function discoverChallonge({ searchTerms, games, keywords, since, dryRun }
     console.log(`   Found ${tournaments.length} matching tournaments`);
 
     // Check existing
-    const existingChallonge = await Tournament.find({ challongeId: { $exists: true, $ne: null } }).select('challongeId').lean();
-    const existingChallongeIds = new Set(existingChallonge.map(t => t.challongeId));
+    const existingChallongeIds = new Set(await getKnownChallongeIds());
 
     for (const tournament of tournaments) {
       if (existingChallongeIds.has(tournament.id)) {
@@ -969,7 +968,15 @@ async function discoverChallonge({ searchTerms, games, keywords, since, dryRun }
 /**
  * Import a single Challonge tournament (fetches full data including participants/matches)
  */
-async function importChallongeTournament(tournamentPreview, gameSlug = null, { group = null, discoveredVia = null } = {}) {
+// Challonge ids already stored, standalone or as one bracket of a grouped tournament
+async function getKnownChallongeIds() {
+  const tournaments = await Tournament.find({
+    $or: [{ challongeId: { $exists: true, $ne: null } }, { 'challongeBrackets.0': { $exists: true } }]
+  }).select('challongeId challongeBrackets.challongeId').lean();
+  return tournaments.flatMap(t => [t.challongeId, ...(t.challongeBrackets || []).map(b => b.challongeId)]).filter(id => id != null).map(Number);
+}
+
+async function importChallongeTournament(tournamentPreview, gameSlug = null, { group = null, label = null, discoveredVia = null } = {}) {
   const challongeId = tournamentPreview.url || tournamentPreview.id;
 
   console.log(`   ⬇️  Importing: ${tournamentPreview.name}`);
@@ -1019,6 +1026,16 @@ async function importChallongeTournament(tournamentPreview, gameSlug = null, { g
     tournamentPayload.gameSlug = matchForGame.gameSlug;
   } else if (tournamentData.gameId) {
     tournamentPayload.gameId = tournamentData.gameId;
+  }
+
+  // One bracket among several of the same event: stored as a phase of the event's tournament
+  if (group) {
+    const { tournament, phaseName } = await saveGroupedChallongeBracket(
+      { Tournament, Match, Race },
+      { group, label, tournamentData, participants, matches, payload: tournamentPayload }
+    );
+    console.log(`      ✅ ${tournamentData.name} → "${tournament.name}" / ${phaseName} – ${participants.length} participants, ${matches.length} matches`);
+    return;
   }
 
   const tournament = await Tournament.findOneAndUpdate(

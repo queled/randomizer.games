@@ -21,11 +21,12 @@ const mongoose = require('mongoose');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
 const connectDB = require('../config/database');
-const { Game, Tournament, Match } = require('../models');
+const { Game, Tournament, Match, Race } = require('../models');
 const StartGGAPI = require('../services/startgg');
 const challongeAPI = require('../services/challonge');
 const findGameForTournament = require('../helpers/findGameForTournament');
 const sanitizeHtml = require('sanitize-html');
+const { saveGroupedChallongeBracket } = require('../services/challonge-bracket-groups');
 
 const RATE_LIMIT_MS = 1500;
 
@@ -175,6 +176,33 @@ async function updateActiveTournaments({ dryRun }) {
         });
 
         console.log(`   ✅ Updated: ${tournament.name} (${matches.length} matches, state: ${event.state})`);
+        stats.updated++;
+
+      } else if (tournament.challongeBrackets?.length) {
+        // Several Challonge brackets stored as one tournament: refresh each of them
+        if (!process.env.CHALLONGE_API_KEY) { stats.skipped++; continue; }
+
+        if (dryRun) {
+          console.log(`   📋 [DRY-RUN] Would update ${tournament.challongeBrackets.length} challonge brackets: ${tournament.name}`);
+          stats.updated++;
+          continue;
+        }
+
+        for (const bracket of tournament.challongeBrackets) {
+          await sleep(RATE_LIMIT_MS);
+          const challongeId = bracket.url || String(bracket.challongeId);
+          const tournamentData = await challongeAPI.getTournament(challongeId);
+          if (!tournamentData) continue;
+
+          const participants = await challongeAPI.getParticipants(challongeId);
+          const matches = await challongeAPI.getMatches(challongeId);
+          await saveGroupedChallongeBracket(
+            { Tournament, Match, Race },
+            { group: tournament.source?.group || tournament.name, label: bracket.label, tournamentData, participants, matches }
+          );
+        }
+
+        console.log(`   ✅ Updated: ${tournament.name} (${tournament.challongeBrackets.length} brackets)`);
         stats.updated++;
 
       } else if (tournament.challongeId) {

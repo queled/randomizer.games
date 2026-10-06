@@ -167,7 +167,21 @@ const tournamentSchema = new mongoose.Schema({
     name: String,
     seed: Number,
     finalRank: Number,
-    displayName: String
+    displayName: String,
+    // Bracket the participant entered, for tournaments made of several Challonge brackets
+    bracketChallongeId: Number
+  }],
+  // Challonge brackets of one tournament stored together (each one is a phase)
+  challongeBrackets: [{
+    challongeId: Number,
+    url: String,
+    fullUrl: String,
+    name: String,
+    label: String,
+    tournamentType: String,
+    state: String,
+    startDate: Date,
+    endDate: Date
   }],
   // Matches embedded for start.gg tournaments
   matches: [{
@@ -225,6 +239,8 @@ const matchSchema = new mongoose.Schema({
   tournamentChallongeId: Number,
   state: String,
   groupId: Number,
+  // Bracket name when the tournament groups several Challonge brackets
+  phase: String,
   identifier: String,
   player1Id: Number,
   player2Id: Number,

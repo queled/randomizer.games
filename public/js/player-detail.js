@@ -137,6 +137,8 @@
   const toursEl = document.getElementById('player-tournaments-list');
   const racesEl = document.getElementById('player-races-list');
   let gameDisplayMap = null;
+  let gameDisplayMapPromise = null;
+  let latestRenderedRaces = null;
 
   if (id || nameParam) {
     headerName.textContent = 'Loading...';
@@ -546,8 +548,13 @@
     return name;
   }
 
-  async function ensureGameDisplayMap() {
-    if (gameDisplayMap) return gameDisplayMap;
+  function ensureGameDisplayMap() {
+    if (gameDisplayMap) return Promise.resolve(gameDisplayMap);
+    if (!gameDisplayMapPromise) gameDisplayMapPromise = loadGameDisplayMap();
+    return gameDisplayMapPromise;
+  }
+
+  async function loadGameDisplayMap() {
 
     const map = new Map();
     const put = (slug, id, label) => {
@@ -560,7 +567,7 @@
       const data = await fetchJson('/api/games');
       const games = data.games || [];
       games.forEach(g => {
-        const label = g?.randomizer?.shortName || g?.randomizer?.displayName || g?.official?.name || g?.name;
+        const label = g?.randomizer?.displayName || g?.randomizer?.shortName || g?.official?.name || g?.name;
         const id = String(g?.id || '').toLowerCase();
         const rt = g?.integrations?.racetime || {};
         put(id, id, label);
@@ -591,10 +598,9 @@
   function countGamesFromRaces(races){
     const uniqueGames = new Set();
     for (const race of races || []) {
-      const category = String(race?.category || race?.game || race?.gameSlug || '').toLowerCase().trim();
-      const slug = category.split('/')[0];
-      if (slug) {
-        uniqueGames.add(slug);
+      const meta = getGameMetaFromCategory(race?.category || race?.game || race?.gameSlug);
+      if (meta.slug) {
+        uniqueGames.add(meta.gameId);
       }
     }
     return uniqueGames.size;
@@ -623,7 +629,7 @@
     const canonicalSlug = slugAliases[slug] || slug;
     const mapped = gameDisplayMap && (gameDisplayMap.get(slug) || gameDisplayMap.get(canonicalSlug));
     const gameId = mapped?.id || canonicalSlug;
-    const gameName = mapped?.label || normalizeGameName(slug) || normalizeGameName(canonicalSlug) || 'Jeu inconnu';
+    const gameName = mapped?.label || normalizeGameName(slug) || normalizeGameName(canonicalSlug) || null;
     return { slug, gameId, name: gameName };
   }
 
@@ -637,10 +643,11 @@
       const meta = getGameMetaFromCategory(category);
       if (!meta.slug) continue;
 
-      if (!map.has(meta.slug)) {
-        map.set(meta.slug, { slug: meta.slug, gameId: meta.gameId, name: meta.name, count: 0 });
+      // Group by canonical game so racetime categories of the same game (e.g. alttpr + alttpr-ladder) merge
+      if (!map.has(meta.gameId)) {
+        map.set(meta.gameId, { slug: meta.slug, gameId: meta.gameId, name: meta.name || 'Jeu inconnu', count: 0 });
       }
-      map.get(meta.slug).count += 1;
+      map.get(meta.gameId).count += 1;
     }
 
     return Array.from(map.values())
@@ -1005,7 +1012,12 @@
   }
 
   function renderRaces(races){
-    renderGamesSummary(races || []);
+    latestRenderedRaces = races;
+    const mapWasLoaded = !!gameDisplayMap;
+    renderGamesSummary(races || []).then(() => {
+      // Race titles depend on the games map; re-render once it is available
+      if (!mapWasLoaded && gameDisplayMap && races === latestRenderedRaces && races && races.length) renderRaces(races);
+    });
 
     if(!races || !races.length){ racesEl.innerHTML = '<p style="color:#9ca3af;">No races found.</p>'; return; }
     // Sort by startedAt (or createdAt) descending (most recent first)
@@ -1064,29 +1076,8 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
 
   // Map game slugs to display names
   function getGameDisplayName(slug) {
-    const gameNames = {
-      'oot': 'Ocarina of Time Randomizer',
-      'ootr': 'Ocarina of Time Randomizer',
-      'alttp': 'A Link to the Past Randomizer',
-      'alttpr': 'A Link to the Past Randomizer',
-      'mm': 'Majora\'s Mask Randomizer',
-      'mmr': 'Majora\'s Mask Randomizer',
-      'sm': 'Super Metroid Randomizer',
-      'smr': 'Super Metroid Randomizer',
-      'sm64': 'Super Mario 64 Randomizer',
-      'dk64': 'Donkey Kong 64 Randomizer',
-      'dk64r': 'Donkey Kong 64 Randomizer',
-      'tww': 'The Wind Waker Randomizer',
-      'tp': 'Twilight Princess Randomizer',
-      'kh2fm': 'Kingdom Hearts 2 FM Randomizer',
-      'kh2r': 'Kingdom Hearts 2 FM Randomizer',
-      'kh2fmr': 'Kingdom Hearts 2 FM Randomizer',
-      'sotn': 'Symphony of the Night Randomizer',
-      'smz3': 'SMZ3 Combo Randomizer',
-      'ootmm': 'OoT+MM Combo Randomizer'
-    };
-    const lowerSlug = (slug || '').toLowerCase().split('/')[0];
-    return gameNames[lowerSlug] || slug || 'Race';
+    const meta = getGameMetaFromCategory(slug);
+    return meta.name || meta.slug || 'Race';
   }
 
   async function loadById(pid){

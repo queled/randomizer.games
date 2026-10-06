@@ -45,8 +45,8 @@ function filterPlayersByName(payload, rawName) {
 }
 
 function resolveGameDisplayNameFromDoc(game) {
-  return game?.randomizer?.shortName
-    || game?.randomizer?.displayName
+  return game?.randomizer?.displayName
+    || game?.randomizer?.shortName
     || game?.official?.name
     || game?.name
     || game?.id
@@ -237,13 +237,25 @@ async function buildPlayersResponse(includeTournaments) {
   const players = Array.from(playersMap.entries()).map(([normalized, player]) => {
     const playerRaceCounts = raceCountsByPlayer.get(normalized) || new Map();
 
-    const racesByGame = Array.from(playerRaceCounts.entries())
-      .map(([slug, count]) => ({
-        gameId: canonicalGameIdBySlug.get(String(slug || '').toLowerCase()) || String(slug || '').toLowerCase(),
+    // Merge racetime categories that belong to the same game (e.g. alttpr + alttpr-ladder)
+    const racesByGameId = new Map();
+    for (const [slug, count] of playerRaceCounts.entries()) {
+      const lowerSlug = String(slug || '').toLowerCase();
+      const gameId = canonicalGameIdBySlug.get(lowerSlug) || lowerSlug;
+      const existing = racesByGameId.get(gameId);
+      if (existing) {
+        existing.count += count;
+        continue;
+      }
+      racesByGameId.set(gameId, {
+        gameId,
         gameSlug: slug,
-        gameName: gameDisplayBySlug.get(String(slug || '').toLowerCase()) || slug,
+        gameName: gameDisplayBySlug.get(lowerSlug) || slug,
         count
-      }))
+      });
+    }
+
+    const racesByGame = Array.from(racesByGameId.values())
       .sort((a, b) => b.count - a.count || String(a.gameSlug).localeCompare(String(b.gameSlug)))
       .slice(0, 3);
 

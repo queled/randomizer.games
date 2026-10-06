@@ -16,7 +16,7 @@ function normalizeAllowedRacetimeUrl(rawUrl, { requireUserPath = false } = {}) {
     if (!isAllowedRacetimeHost(parsed.hostname)) return null;
 
     const pathname = parsed.pathname.replace(/\/+$/, '');
-    if (requireUserPath && !/^\/user\/[^/]+$/i.test(pathname)) {
+    if (requireUserPath && !/^\/user\/[^/]+(?:\/[^/]+)?$/i.test(pathname)) {
       return null;
     }
 

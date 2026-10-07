@@ -263,8 +263,6 @@ const pt = {
             qualifiers: "Classificatórias",
             mainBracket: "Bracket principal",
             preliminaryBracket: "Bracket preliminar",
-            upper: "Superior",
-            lower: "Inferior",
         },
         roundOf16: "Oitavas de Final",
         roundOf32: "16 avos de Final",

@@ -364,8 +364,27 @@ function displayTournamentInfo(tournament) {
       document.getElementById('startgg-link-container').style.display = 'block';
       document.getElementById('startgg-link').href = tournament.fullUrl;
     } else {
-      document.getElementById('challonge-link-container').style.display = 'block';
-      document.getElementById('challonge-link').href = tournament.fullUrl;
+      const container = document.getElementById('challonge-link-container');
+      const link = document.getElementById('challonge-link');
+      container.style.display = 'block';
+      link.href = tournament.fullUrl;
+      // Grouped Challonge brackets (Upper / Middle / Lower): one button per bracket, in phase order
+      const brackets = (tournament.challongeBrackets || []).filter(b => b.fullUrl);
+      if (brackets.length > 1) {
+        container.style.cssText = 'display: flex; flex-wrap: wrap; gap: 0.5rem;';
+        const phaseNames = (tournament.phases || []).map(p => p.name);
+        brackets.forEach((b, i) => {
+          const button = i === 0 ? link : link.cloneNode(true);
+          if (i > 0) { button.removeAttribute('id'); container.appendChild(button); }
+          button.href = b.fullUrl;
+          const label = b.label || phaseNames[i] || b.name;
+          if (label) {
+            const span = button.querySelector('span');
+            span.removeAttribute('data-i18n');
+            span.textContent = `${i18n.t('tournamentDetail.viewOnChallonge') || 'Voir sur Challonge'} (${label})`;
+          }
+        });
+      }
     }
   }
 }
@@ -1049,7 +1068,11 @@ function getPhaseSpans(matches = []) {
   return spans;
 }
 
-function sortPhasesChronologically(phases, matches = []) {
+function sortPhasesChronologically(phases, matches = [], tournament = null) {
+  // Grouped Challonge brackets (Upper / Middle / Lower) run side by side: keep their declared order
+  if (tournament && tournament.challongeBrackets?.length) {
+    return phases.slice().sort((a, b) => (a.phaseOrder || 0) - (b.phaseOrder || 0));
+  }
   const spans = getPhaseSpans(matches);
   return phases.slice().sort((a, b) => {
     const sa = spans[a.name], sb = spans[b.name];
@@ -1064,7 +1087,7 @@ function sortPhasesChronologically(phases, matches = []) {
 // one first, then in phaseOrder.
 function sortPhasesNewestFirst(phaseNames, tournament, matches = []) {
   const declared = tournament && Array.isArray(tournament.phases) ? tournament.phases : [];
-  const chronological = sortPhasesChronologically(declared, matches).map(p => p.name);
+  const chronological = sortPhasesChronologically(declared, matches, tournament).map(p => p.name);
   const position = name => { const i = chronological.indexOf(name); return i === -1 ? chronological.length : i; };
   const phaseOrder = name => { const p = declared.find(ph => ph.name === name); return p && p.phaseOrder ? p.phaseOrder : 0; };
   const spans = getPhaseSpans(matches);
@@ -1107,7 +1130,7 @@ function displayMatches(matches, tournament, races = []) {
   }
 
   // Detect Start.gg multi-phase tournament (Main Bracket + Preliminary Bracket etc.), in declared phase order
-  const declaredOrder = sortPhasesChronologically(tournament && Array.isArray(tournament.phases) ? tournament.phases : [], matches)
+  const declaredOrder = sortPhasesChronologically(tournament && Array.isArray(tournament.phases) ? tournament.phases : [], matches, tournament)
     .map(p => p.name);
   const phaseRank = name => (declaredOrder.indexOf(name) + 1) || Infinity;
   const phases = [...new Set(matches.filter(m => m && m.phase).map(m => m.phase))]
@@ -2360,7 +2383,7 @@ function formatTournamentTypeForDisplay(tournament) {
       return map[bt] || (bt || '').replace(/_/g, ' ');
     };
     
-    const sorted = sortPhasesChronologically(tournament.phases, tournament.matches || []);
+    const sorted = sortPhasesChronologically(tournament.phases, tournament.matches || [], tournament);
     const parts = sorted.map(p => {
       const name = translatePhaseName(p.name) || 'Phase';
       const bt = bracketTypeLabel(p.bracketType);
@@ -2840,7 +2863,7 @@ function displayBracket(matches, tournament) {
   // Phases without sets yet (e.g. final brackets after groups) are listed too, as "not started".
   const matchPhases = [...new Set(matches.filter(m => m.phase).map(m => m.phase))];
   const declaredPhases = matchPhases.length && Array.isArray(tournament.phases)
-    ? sortPhasesChronologically(tournament.phases, matches).map(p => p.name).filter(Boolean)
+    ? sortPhasesChronologically(tournament.phases, matches, tournament).map(p => p.name).filter(Boolean)
     : [];
   const phases = [...new Set([...declaredPhases, ...matchPhases])];
   const hasMultiplePhases = phases.length > 1;
@@ -3782,8 +3805,7 @@ function getBracketRoundLabels(matches, isDoubleElimination) {
 const PHASE_NAME_TERMS = [
   ['Preliminary Bracket', 'preliminaryBracket'], ['Main Bracket', 'mainBracket'], ['Group Stage', 'groupStage'],
   ['Swiss Rounds', 'swissRounds'], ['Round Robin', 'roundRobin'], ['Qualifiers', 'qualifiers'],
-  ['Groups', 'groups'], ['Group', 'group'], ['Finals', 'finals'], ['Final', 'final'], ['Swiss', 'swiss'],
-  ['Upper', 'upper'], ['Lower', 'lower']
+  ['Groups', 'groups'], ['Group', 'group'], ['Finals', 'finals'], ['Final', 'final'], ['Swiss', 'swiss']
 ];
 const PHASE_NAME_PATTERN = new RegExp(`\\b(${PHASE_NAME_TERMS.map(([term]) => term).join('|')})\\b`, 'gi');
 

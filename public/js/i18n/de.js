@@ -221,8 +221,6 @@ const de = {
             qualifiers: "Qualifikation",
             mainBracket: "Haupt-Bracket",
             preliminaryBracket: "Vorrunden-Bracket",
-            upper: "Oben",
-            lower: "Unten",
         },
 roundOf16: "Achtelfinale",
         roundOf32: "Sechzehntelfinale",

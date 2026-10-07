@@ -239,8 +239,6 @@ const en = {
             qualifiers: "Qualifiers",
             mainBracket: "Main Bracket",
             preliminaryBracket: "Preliminary Bracket",
-            upper: "Upper",
-            lower: "Lower",
         },
         roundOf16: "Round of 16",
         roundOf32: "Round of 32",

@@ -219,8 +219,6 @@ const es = {
             qualifiers: "Clasificatorias",
             mainBracket: "Bracket principal",
             preliminaryBracket: "Bracket preliminar",
-            upper: "Superior",
-            lower: "Inferior",
         },
 roundOf16: "Octavos de final",
         roundOf32: "Dieciseisavos de final",

@@ -253,7 +253,7 @@ async function loadRecentRaces() {
   } catch (error) {
     console.error('Error loading races:', error);
     const errText = (typeof i18n !== 'undefined' && typeof i18n.t === 'function') ? i18n.t('common.error') : 'Loading error';
-    document.getElementById('recent-races').innerHTML = `<p style="color:#ef4444;text-align:center;">${errText}</p>`;
+    document.getElementById('recent-races').innerHTML = `<p style="color:#ef4444;text-align:center;">${escHtml(errText)}</p>`;
   }
 }
 
@@ -302,7 +302,7 @@ async function loadRecentTournaments() {
   } catch (error) {
     console.error('Error loading tournaments:', error);
     const errText = (typeof i18n !== 'undefined' && typeof i18n.t === 'function') ? i18n.t('common.error') : 'Loading error';
-    document.getElementById('recent-tournaments').innerHTML = `<p style="color:#ef4444;text-align:center;">${errText}</p>`;
+    document.getElementById('recent-tournaments').innerHTML = `<p style="color:#ef4444;text-align:center;">${escHtml(errText)}</p>`;
   }
 }
 
@@ -347,10 +347,10 @@ function createRaceCard(race) {
   card.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:0.5rem;">
       <div style="flex:1;">
-        <div style="color:#fbbf24;font-weight:600;font-size:0.95rem;margin-bottom:0.25rem;">${friendlyGameName}</div>
-        <div style="color:#d1d5db;font-size:0.85rem;">${race.goal || race.name || 'Sans objectif'}</div>
+        <div style="color:#fbbf24;font-weight:600;font-size:0.95rem;margin-bottom:0.25rem;">${escHtml(friendlyGameName)}</div>
+        <div style="color:#d1d5db;font-size:0.85rem;">${escHtml(race.goal || race.name || 'Sans objectif')}</div>
       </div>
-      <span style="background:${statusColor};color:white;padding:0.25rem 0.5rem;border-radius:0.25rem;font-size:0.75rem;white-space:nowrap;">${statusText}</span>
+      <span style="background:${statusColor};color:white;padding:0.25rem 0.5rem;border-radius:0.25rem;font-size:0.75rem;white-space:nowrap;">${escHtml(statusText)}</span>
     </div>
     <div style="flex:1;"></div>
     <div style="display:flex;justify-content:space-between;align-items:flex-end;font-size:0.75rem;color:#6b7280;margin-top:0.5rem;">
@@ -452,10 +452,10 @@ function createTournamentCard(tournament) {
 
   card.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:0.5rem;">
-      <h3 style="color:#fbbf24;font-weight:600;font-size:0.95rem;flex:1;">${tournament.name}</h3>
-      <span style="background:${statusColor};color:white;padding:0.25rem 0.5rem;border-radius:0.25rem;font-size:0.75rem;margin-left:0.5rem;white-space:nowrap;">${statusText}</span>
+      <h3 style="color:#fbbf24;font-weight:600;font-size:0.95rem;flex:1;">${escHtml(tournament.name)}</h3>
+      <span style="background:${statusColor};color:white;padding:0.25rem 0.5rem;border-radius:0.25rem;font-size:0.75rem;margin-left:0.5rem;white-space:nowrap;">${escHtml(statusText)}</span>
     </div>
-    <p style="color:#9ca3af;font-size:0.85rem;margin-bottom:0.5rem;">${friendlyGameName}</p>
+    <p style="color:#9ca3af;font-size:0.85rem;margin-bottom:0.5rem;">${escHtml(friendlyGameName)}</p>
     <div style="flex:1;"></div>
     <div style="display:flex;justify-content:space-between;align-items:flex-end;font-size:0.75rem;color:#6b7280;">
       <div>

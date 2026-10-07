@@ -156,27 +156,27 @@
     }
     
     if (!winner && t._computedWinner) {
-      winnerText = `<div class="spoiler-block" style="color:#9ca3af;font-size:0.8rem;margin-top:0.5rem;">🏆 ${t._computedWinner}</div>`;
+      winnerText = `<div class="spoiler-block" style="color:#9ca3af;font-size:0.8rem;margin-top:0.5rem;">🏆 ${escHtml(t._computedWinner)}</div>`;
     } else if (winner) {
-      winnerText = `<div class="spoiler-block" style="color:#9ca3af;font-size:0.8rem;margin-top:0.5rem;">🏆 ${winner.displayName || winner.name || 'Gagnant'}</div>`;
+      winnerText = `<div class="spoiler-block" style="color:#9ca3af;font-size:0.8rem;margin-top:0.5rem;">🏆 ${escHtml(winner.displayName || winner.name || 'Gagnant')}</div>`;
     }
 
     const url = `/tournament-detail.html?id=${encodeURIComponent(t._id || t.id)}`;
 
     return `
       <a href="${url}" style="text-decoration:none;color:inherit;display:block;">
-        <div style="background:#1f2937;padding:1.25rem;border-radius:0.5rem;cursor:pointer;transition:all 0.2s;height:100%;display:flex;flex-direction:column;" onmouseover="this.style.background='#374151';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#1f2937';this.style.transform='translateY(0)'">
+        <div style="background:#1f2937;padding:1.25rem;border-radius:0.5rem;cursor:pointer;transition:all 0.2s;height:100%;display:flex;flex-direction:column;" data-hover-style="background:#374151;transform:translateY(-2px)" data-rest-style="background:#1f2937;transform:translateY(0)">
           <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:0.5rem;">
             <div style="flex:1;min-width:0;">
-              <div style="color:#fbbf24;font-weight:600;font-size:0.95rem;margin-bottom:0.25rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${t.name || 'Tournoi'}</div>
-              <div style="color:#d1d5db;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${gameName || 'Unknown game'}</div>
+              <div style="color:#fbbf24;font-weight:600;font-size:0.95rem;margin-bottom:0.25rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${escHtml(t.name || 'Tournoi')}</div>
+              <div style="color:#d1d5db;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(gameName || 'Unknown game')}</div>
             </div>
-            <span style="background:${statusColor};color:white;padding:0.25rem 0.5rem;border-radius:0.25rem;font-size:0.7rem;white-space:nowrap;margin-left:0.5rem;flex-shrink:0;">${statusText}</span>
+            <span style="background:${statusColor};color:white;padding:0.25rem 0.5rem;border-radius:0.25rem;font-size:0.7rem;white-space:nowrap;margin-left:0.5rem;flex-shrink:0;">${escHtml(statusText)}</span>
           </div>
           ${winnerText}
           <div style="flex:1;"></div>
           <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:#6b7280;margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid #374151;">
-            <span>📅 ${date}</span>
+            <span>📅 ${escHtml(date)}</span>
             <span>👥 ${participantsCount} ${typeof i18n !== 'undefined' ? i18n.t('home.participants') : 'participants'}</span>
           </div>
         </div>
@@ -245,7 +245,7 @@
       renderPagination(pages, total);
     }catch(e){
       const errText = (typeof i18n !== 'undefined' && typeof i18n.t === 'function') ? i18n.t('common.error') : 'Loading error';
-      listEl.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#ef4444;">${errText}</div>`;
+      listEl.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#ef4444;">${escHtml(errText)}</div>`;
       console.error(e);
     }
   }
@@ -262,13 +262,13 @@
     let html = '';
     
     if (page > 1) {
-      html += `<button onclick="goToPage(${page - 1})" style="padding:0.5rem 1rem;border-radius:0.375rem;border:none;background:#374151;color:white;cursor:pointer;font-size:0.875rem;">← Previous</button>`;
+      html += `<button data-page="${page - 1}" style="padding:0.5rem 1rem;border-radius:0.375rem;border:none;background:#374151;color:white;cursor:pointer;font-size:0.875rem;">← Previous</button>`;
     }
     
     html += `<span style="color:#9ca3af;font-size:0.875rem;">Page ${page} / ${totalPages} (${total} ${tournamentWord})</span>`;
     
     if (page < totalPages) {
-      html += `<button onclick="goToPage(${page + 1})" style="padding:0.5rem 1rem;border-radius:0.375rem;border:none;background:#374151;color:white;cursor:pointer;font-size:0.875rem;">Suivant →</button>`;
+      html += `<button data-page="${page + 1}" style="padding:0.5rem 1rem;border-radius:0.375rem;border:none;background:#374151;color:white;cursor:pointer;font-size:0.875rem;">Suivant →</button>`;
     }
     
     pagination.innerHTML = html;
@@ -364,7 +364,7 @@ async function loadTournaments() {
   }catch (error) {
     console.error('Error loading tournaments:', error);
     const errText = (typeof i18n !== 'undefined' && typeof i18n.t === 'function') ? i18n.t('common.error') : 'Loading error';
-    document.getElementById('tournaments-grid').innerHTML = `<p class="col-span-full text-center text-red-400">${errText}</p>`;
+    document.getElementById('tournaments-grid').innerHTML = `<p class="col-span-full text-center text-red-400">${escHtml(errText)}</p>`;
   }
 }
 
@@ -392,10 +392,10 @@ function displayTournaments(tournaments) {
     card.innerHTML = `
       <div class="p-6">
         <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.5rem;">
-          <h3 class="text-xl font-bold text-yellow-400" style="margin: 0; flex: 1;">${tournament.name}</h3>
-          <span class="inline-status-badge" style="background-color: ${statusColor}; color: white; padding: 0.4rem 0.75rem; border-radius: 0.5rem; font-size: 0.9rem; font-weight: 600; white-space: nowrap; margin-left: 1rem;">${statusLabel}</span>
+          <h3 class="text-xl font-bold text-yellow-400" style="margin: 0; flex: 1;">${escHtml(tournament.name)}</h3>
+          <span class="inline-status-badge" style="background-color: ${statusColor}; color: white; padding: 0.4rem 0.75rem; border-radius: 0.5rem; font-size: 0.9rem; font-weight: 600; white-space: nowrap; margin-left: 1rem;">${escHtml(statusLabel)}</span>
         </div>
-        <p class="tournament-game text-gray-400 mb-4">${tournament.gameName || 'Unknown game'}</p>
+        <p class="tournament-game text-gray-400 mb-4">${escHtml(tournament.gameName || 'Unknown game')}</p>
         <div class="grid grid-cols-2 gap-2 text-sm text-gray-400">
           <div>📅 ${formatDate(tournament.startDate)}</div>
           <div>👥 ${tournament.participantsCount || 0} participant${(tournament.participantsCount||0) > 1 ? 's' : ''}</div>

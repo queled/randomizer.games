@@ -174,7 +174,7 @@
         const players = await loadPlayersList();
         const matches = players.filter(n => n.toLowerCase().includes(val)).slice(0, 8);
         if (!matches.length) { list.style.display = 'none'; list.innerHTML = ''; return; }
-        list.innerHTML = matches.map(n => `<li data-name="${n}">${n}</li>`).join('');
+        list.innerHTML = matches.map(n => `<li data-name="${escHtml(n)}">${escHtml(n)}</li>`).join('');
         list.style.display = 'block';
       }, 150);
     });
@@ -324,7 +324,7 @@
       const pct2 = gTotal ? Math.round((g.p2Wins / gTotal) * 100) : 0;
       return `
         <div class="compare-game-card">
-          <div class="compare-game-name">${g.gameName}</div>
+          <div class="compare-game-name">${escHtml(g.gameName)}</div>
           <div class="compare-game-stats">
             <span class="p1-color">${g.p1Wins}</span>
             <span class="compare-game-count">${gTotal} ${t('comparePlayers.races', 'races')}</span>
@@ -355,10 +355,10 @@
       return `
         <a href="${raceLink}" class="compare-race-card ${winnerClass}">
           <div class="compare-race-header">
-            <span class="compare-race-game">${r.gameName || r.category || ''}</span>
+            <span class="compare-race-game">${escHtml(r.gameName || r.category || '')}</span>
             <span class="compare-race-date">${formatDate(r.startedAt)}</span>
           </div>
-          <div class="compare-race-goal">${r.goal || r.raceName || ''}</div>
+          <div class="compare-race-goal">${escHtml(r.goal || r.raceName || '')}</div>
           <div class="compare-race-results">
             <div class="compare-race-player left ${r.h2hWinner === 1 ? 'winner' : ''}">
               ${placeBadge(r.player1.place, r.player1.status)}
@@ -398,7 +398,7 @@
     } catch (err) {
       loading.style.display = 'none';
       results.style.display = 'block';
-      results.innerHTML = `<div class="loading" style="color:#f87171">${err.message}</div>`;
+      results.innerHTML = `<div class="loading" style="color:#f87171">${escHtml(err.message)}</div>`;
     }
   }
 

@@ -34,10 +34,19 @@
   }
 
   // Highlight search term in text
+  // Returns HTML: every piece of the text is escaped, only the highlight
+  // markup itself is trusted.
   function highlightText(text, query) {
-    if (!text || !query) return text || '';
-    const regex = new RegExp(`(${escapeRegex(query)})`, 'gi');
-    return text.replace(regex, '<span class="highlight">$1</span>');
+    if (!text) return '';
+    const raw = String(text);
+    if (!query) return escHtml(raw);
+    const regex = new RegExp(`(${escapeRegex(String(query))})`, 'gi');
+    return raw
+      .split(regex)
+      .map((part, index) => (index % 2 === 1
+        ? `<span class="highlight">${escHtml(part)}</span>`
+        : escHtml(part)))
+      .join('');
   }
 
   function escapeRegex(str) {
@@ -93,7 +102,7 @@
     return `
       <a href="/game-detail.html?id=${encodeURIComponent(game.id)}" class="result-card">
         <div class="title">${highlightText(game.officialName || game.name, searchQuery)}</div>
-        <div class="subtitle">${game.id}</div>
+        <div class="subtitle">${escHtml(game.id)}</div>
       </a>
     `;
   }
@@ -124,8 +133,8 @@
       <a href="/race-detail.html?id=${encodeURIComponent(race._id)}" class="result-card">
         <div class="title">${highlightText(race.goal || race.name, searchQuery)}</div>
         <div class="subtitle">
-          <span class="badge game">${getGameDisplayName(race.category)}</span>
-          <span class="badge ${statusClass}">${statusText}</span>
+          <span class="badge game">${escHtml(getGameDisplayName(race.category))}</span>
+          <span class="badge ${statusClass}">${escHtml(statusText)}</span>
         </div>
         <div class="meta">
           <span>📅 ${formatDate(race.startedAt)}</span>
@@ -139,14 +148,14 @@
   function renderPlayerCard(player) {
     const gamesHtml = player.games && player.games.length > 0 
       ? `<div class="player-games">${player.games.slice(0, 4).map(g => 
-          `<span class="game-tag">${getGameDisplayName(g)}</span>`
+          `<span class="game-tag">${escHtml(getGameDisplayName(g))}</span>`
         ).join('')}${player.games.length > 4 ? `<span class="game-tag">+${player.games.length - 4}</span>` : ''}</div>`
       : '';
     
     return `
       <a href="/player-detail.html?name=${encodeURIComponent(player.name)}" class="result-card">
         <div class="title">${highlightText(player.name, searchQuery)}</div>
-        ${player.racetimeId ? `<div class="subtitle">Racetime: ${player.racetimeId}</div>` : ''}
+        ${player.racetimeId ? `<div class="subtitle">Racetime: ${escHtml(player.racetimeId)}</div>` : ''}
         ${gamesHtml}
       </a>
     `;
@@ -184,7 +193,7 @@
       container.innerHTML = `
         <div class="no-results">
           <div class="no-results-icon">🔍</div>
-          <div>No results found for "<strong>${searchQuery}</strong>"</div>
+          <div>No results found for "<strong>${escHtml(searchQuery)}</strong>"</div>
           <div style="margin-top: 0.5rem; font-size: 0.9rem;">Essayez avec d'autres termes de recherche</div>
         </div>
       `;

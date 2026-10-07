@@ -28,7 +28,26 @@ function getPlayersCache(key) {
   return null;
 }
 
+// Upper bound on cached entries: lookups by arbitrary names must not let the
+// cache grow without limit (memory exhaustion).
+const PLAYERS_CACHE_MAX_ENTRIES = 1000;
+
 function setPlayersCache(key, value) {
+  if (!playersCache.data.has(key) && playersCache.data.size >= PLAYERS_CACHE_MAX_ENTRIES) {
+    const now = Date.now();
+    for (const [cachedKey, exp] of playersCache.expires) {
+      if (exp <= now) {
+        playersCache.expires.delete(cachedKey);
+        playersCache.data.delete(cachedKey);
+      }
+    }
+    // Still full: drop the oldest entries (Maps keep insertion order).
+    while (playersCache.data.size >= PLAYERS_CACHE_MAX_ENTRIES) {
+      const oldestKey = playersCache.data.keys().next().value;
+      playersCache.data.delete(oldestKey);
+      playersCache.expires.delete(oldestKey);
+    }
+  }
   playersCache.data.set(key, value);
   playersCache.expires.set(key, Date.now() + PLAYERS_CACHE_TTL);
 }

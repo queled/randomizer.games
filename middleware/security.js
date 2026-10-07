@@ -97,56 +97,80 @@ const sanitizeString = (str, maxLength = 500) => {
 };
 
 // Validate URL for proxy (whitelist approach)
+// Whitelist allowed domains for image proxy
+const PROXY_ALLOWED_DOMAINS = [
+  'racetime.gg',
+  'www.racetime.gg',
+  'challonge.com',
+  'www.challonge.com',
+  'cdn.cloudflare.steamstatic.com',
+  'steamcdn-a.akamaihd.net',
+  'static-cdn.jtvnw.net', // Twitch
+  'avatars.githubusercontent.com',
+  'i.imgur.com'
+];
+
+const isPrivateHost = (host) => {
+  return /^(0\.|10\.|172\.(1[6-9]|2\d|3[01])\.|192\.168\.|127\.|169\.254\.|\[|::1|localhost)/i.test(host);
+};
+
+/**
+ * Check one URL against the image proxy rules. Used for the requested URL and
+ * again for every redirect hop. Returns { ok: true, url } or { ok: false, status, error }.
+ */
+const checkProxyUrl = (rawUrl) => {
+  if (typeof rawUrl !== 'string' || !rawUrl || rawUrl.length > 2048) {
+    return { ok: false, status: 400, error: 'Invalid URL format' };
+  }
+  if (!validator.isURL(rawUrl, { protocols: ['http', 'https'], require_protocol: true })) {
+    return { ok: false, status: 400, error: 'Invalid URL format' };
+  }
+
+  let parsedUrl;
+  try {
+    parsedUrl = new URL(rawUrl);
+  } catch (error) {
+    return { ok: false, status: 400, error: 'Invalid URL' };
+  }
+
+  if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
+    return { ok: false, status: 400, error: 'Invalid URL format' };
+  }
+
+  // No embedded credentials and no custom port (only standard web ports).
+  if (parsedUrl.username || parsedUrl.password || parsedUrl.port) {
+    return { ok: false, status: 403, error: 'Domain not allowed for proxying' };
+  }
+
+  const hostname = parsedUrl.hostname.toLowerCase();
+  const isAllowed = PROXY_ALLOWED_DOMAINS.some(domain =>
+    hostname === domain || hostname.endsWith('.' + domain)
+  );
+  if (!isAllowed) {
+    return { ok: false, status: 403, error: 'Domain not allowed for proxying' };
+  }
+
+  // Prevent SSRF to internal networks
+  if (isPrivateHost(hostname)) {
+    return { ok: false, status: 403, error: 'Cannot proxy internal addresses' };
+  }
+
+  return { ok: true, url: parsedUrl.toString() };
+};
+
+// Validate URL for proxy (whitelist approach)
 const validateProxyUrl = (req, res, next) => {
   const { url } = req.query;
   
   if (!url) {
     return res.status(400).json({ error: 'Missing url parameter' });
   }
-  
-  // Validate URL format
-  if (!validator.isURL(url, { protocols: ['http', 'https'], require_protocol: true })) {
-    return res.status(400).json({ error: 'Invalid URL format' });
+
+  const result = checkProxyUrl(url);
+  if (!result.ok) {
+    return res.status(result.status).json({ error: result.error });
   }
-  
-  try {
-    const parsedUrl = new URL(url);
-    
-    // Whitelist allowed domains for image proxy
-    const allowedDomains = [
-      'racetime.gg',
-      'www.racetime.gg',
-      'challonge.com',
-      'www.challonge.com',
-      'cdn.cloudflare.steamstatic.com',
-      'steamcdn-a.akamaihd.net',
-      'static-cdn.jtvnw.net', // Twitch
-      'avatars.githubusercontent.com',
-      'i.imgur.com'
-    ];
-    
-    const hostname = parsedUrl.hostname.toLowerCase();
-    const isAllowed = allowedDomains.some(domain => 
-      hostname === domain || hostname.endsWith('.' + domain)
-    );
-    
-    if (!isAllowed) {
-      return res.status(403).json({ error: 'Domain not allowed for proxying' });
-    }
-    
-    // Prevent SSRF to internal networks
-    const isPrivateIP = (host) => {
-      return /^(10\.|172\.(1[6-9]|2\d|3[01])\.|192\.168\.|127\.|169\.254\.|::1|localhost)/i.test(host);
-    };
-    
-    if (isPrivateIP(hostname)) {
-      return res.status(403).json({ error: 'Cannot proxy internal addresses' });
-    }
-    
-    next();
-  } catch (error) {
-    return res.status(400).json({ error: 'Invalid URL' });
-  }
+  next();
 };
 
 // Secure error handler (don't leak stack traces in production)
@@ -159,16 +183,46 @@ const errorHandler = (err, req, res, next) => {
     ip: req.ip
   });
   
-  // Don't expose internal errors in production
-  const isProduction = process.env.NODE_ENV === 'production';
+  // Only expose error details when explicitly running in development, so a
+  // server started without NODE_ENV never leaks stack traces.
+  const showDetails = process.env.NODE_ENV === 'development';
+  const status = Number.isInteger(err.status) && err.status >= 400 && err.status < 600 ? err.status : 500;
   
-  res.status(err.status || 500).json({
+  res.status(status).json({
     error: {
-      message: isProduction ? 'An error occurred' : err.message,
-      status: err.status || 500,
-      ...(isProduction ? {} : { stack: err.stack })
+      message: showDetails ? err.message : 'An error occurred',
+      status,
+      ...(showDetails ? { stack: err.stack } : {})
     }
   });
+};
+
+// Image types we accept to relay from third-party hosts. SVG is excluded on
+// purpose: it can carry scripts and would run them on our own origin.
+const SAFE_IMAGE_TYPES = new Set([
+  'image/png',
+  'image/jpeg',
+  'image/jpg',
+  'image/pjpeg',
+  'image/gif',
+  'image/webp',
+  'image/avif',
+  'image/x-icon',
+  'image/vnd.microsoft.icon',
+  'image/bmp'
+]);
+
+const isSafeImageContentType = (contentType) => {
+  const mime = String(contentType || '').split(';')[0].trim().toLowerCase();
+  return SAFE_IMAGE_TYPES.has(mime);
+};
+
+// Headers for responses that relay third-party bytes: the browser must not
+// sniff them into another type, nor run anything if the URL is opened directly.
+const setRelayedImageHeaders = (res) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Content-Security-Policy', "default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; sandbox");
+  res.setHeader('Cross-Origin-Resource-Policy', 'same-origin');
 };
 
 module.exports = {
@@ -181,6 +235,9 @@ module.exports = {
   validateObjectId,
   sanitizeString,
   validateProxyUrl,
+  checkProxyUrl,
+  isSafeImageContentType,
+  setRelayedImageHeaders,
   errorHandler,
   mongoSanitize: mongoSanitize()
 };

@@ -150,8 +150,8 @@
       winnerHtml = `
         <div class="spoiler-block" style="color:#fbbf24;font-size:0.8rem;margin-top:0.5rem;display:flex;align-items:center;gap:0.5rem;">
           <span>🏆</span>
-          <span style="color:#d1d5db;">${winnerName || (i18n.t('common.unknown') || 'Unknown')}</span>
-          <span style="color:#10b981;font-weight:600;">${timeStr}</span>
+          <span style="color:#d1d5db;">${escHtml(winnerName || (i18n.t('common.unknown') || 'Unknown'))}</span>
+          <span style="color:#10b981;font-weight:600;">${escHtml(timeStr)}</span>
         </div>
       `;
     }
@@ -160,13 +160,13 @@
 
     return `
       <a href="${url}" style="text-decoration:none;color:inherit;display:block;">
-        <div style="background:#1f2937;padding:1.25rem;border-radius:0.5rem;cursor:pointer;transition:all 0.2s;height:100%;display:flex;flex-direction:column;" onmouseover="this.style.background='#374151';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#1f2937';this.style.transform='translateY(0)'">
+        <div style="background:#1f2937;padding:1.25rem;border-radius:0.5rem;cursor:pointer;transition:all 0.2s;height:100%;display:flex;flex-direction:column;" data-hover-style="background:#374151;transform:translateY(-2px)" data-rest-style="background:#1f2937;transform:translateY(0)">
           <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:0.5rem;">
             <div style="flex:1;min-width:0;">
-              <div style="color:#fbbf24;font-weight:600;font-size:0.95rem;margin-bottom:0.25rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${gameName}</div>
-              <div style="color:#d1d5db;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${r.goal || r.name || 'Standard'}</div>
+              <div style="color:#fbbf24;font-weight:600;font-size:0.95rem;margin-bottom:0.25rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(gameName)}</div>
+              <div style="color:#d1d5db;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(r.goal || r.name || 'Standard')}</div>
             </div>
-            <span style="background:${statusColor};color:white;padding:0.25rem 0.5rem;border-radius:0.25rem;font-size:0.7rem;white-space:nowrap;margin-left:0.5rem;flex-shrink:0;">${statusText}</span>
+            <span style="background:${statusColor};color:white;padding:0.25rem 0.5rem;border-radius:0.25rem;font-size:0.7rem;white-space:nowrap;margin-left:0.5rem;flex-shrink:0;">${escHtml(statusText)}</span>
           </div>
           ${winnerHtml}
           <div style="flex:1;"></div>
@@ -243,7 +243,7 @@
       renderPagination(pages, total);
     }catch(e){
       const errText = (typeof i18n !== 'undefined' && typeof i18n.t === 'function') ? i18n.t('common.error') : 'Loading error';
-      listEl.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#ef4444;">${errText}</div>`;
+      listEl.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#ef4444;">${escHtml(errText)}</div>`;
       console.error(e);
     }
   }
@@ -261,7 +261,7 @@
     
     // Previous button
     if (page > 1) {
-      html += `<button onclick="goToPage(${page - 1})" style="padding:0.5rem 1rem;border-radius:0.375rem;border:none;background:#374151;color:white;cursor:pointer;font-size:0.875rem;">← Précédent</button>`;
+      html += `<button data-page="${page - 1}" style="padding:0.5rem 1rem;border-radius:0.375rem;border:none;background:#374151;color:white;cursor:pointer;font-size:0.875rem;">← Précédent</button>`;
     }
     
     // Page info
@@ -269,7 +269,7 @@
     
     // Next button
     if (page < totalPages) {
-      html += `<button onclick="goToPage(${page + 1})" style="padding:0.5rem 1rem;border-radius:0.375rem;border:none;background:#374151;color:white;cursor:pointer;font-size:0.875rem;">Suivant →</button>`;
+      html += `<button data-page="${page + 1}" style="padding:0.5rem 1rem;border-radius:0.375rem;border:none;background:#374151;color:white;cursor:pointer;font-size:0.875rem;">Suivant →</button>`;
     }
     
     pagination.innerHTML = html;

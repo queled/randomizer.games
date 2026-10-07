@@ -39,6 +39,75 @@ const admin = {
     
     // Setup event listeners
     this.setupEventListeners();
+    this.setupDelegatedActions();
+  },
+
+  /**
+   * Serialize handler arguments for a data-args attribute (JSON, HTML-escaped).
+   * Values never go through JavaScript source code, so a tournament or player
+   * name cannot break out of the handler, whatever characters it contains.
+   */
+  attrArgs(args) {
+    return this.escapeHtml(JSON.stringify(args));
+  },
+
+  /**
+   * Event delegation replacing inline handlers (blocked by the CSP).
+   * Markup declares data-click / data-change / data-input / data-submit with
+   * the admin method name, optional data-args (JSON array, where "$value" and
+   * "$checked" stand for the element's value / checked state), optional
+   * data-stop (stop propagation) and data-debounce (milliseconds).
+   */
+  setupDelegatedActions() {
+    const debounced = new WeakMap();
+    const resolveArgs = (el) => {
+      const raw = el.getAttribute('data-args');
+      if (!raw) return [];
+      let args;
+      try {
+        args = JSON.parse(raw);
+      } catch (e) {
+        console.error('Invalid data-args', raw);
+        return null;
+      }
+      if (!Array.isArray(args)) return null;
+      return args.map(arg => {
+        if (arg === '$value') return el.value;
+        if (arg === '$checked') return el.checked;
+        return arg;
+      });
+    };
+
+    ['click', 'change', 'input', 'submit'].forEach(type => {
+      document.addEventListener(type, (event) => {
+        const target = event.target;
+        if (!target || !target.closest) return;
+        const el = target.closest(`[data-${type}]`);
+        if (!el) return;
+
+        if (type === 'submit') event.preventDefault();
+        if (el.hasAttribute('data-stop')) event.stopPropagation();
+
+        const method = el.getAttribute(`data-${type}`);
+        if (!method || !Object.prototype.hasOwnProperty.call(this, method) || typeof this[method] !== 'function') {
+          console.error('Unknown admin action', method);
+          return;
+        }
+        const args = resolveArgs(el);
+        if (!args) return;
+
+        const delay = parseInt(el.getAttribute('data-debounce'), 10);
+        if (Number.isFinite(delay) && delay > 0) {
+          if (!debounced.has(el)) {
+            debounced.set(el, this.debounce((callArgs) => this[method](...callArgs), delay));
+          }
+          debounced.get(el)(args);
+          return;
+        }
+
+        this[method](...args);
+      });
+    });
   },
   
   setupEventListeners() {
@@ -266,7 +335,7 @@ const admin = {
           <div class="alert alert-warning">
             <span class="alert-icon">⚠️</span>
             <span class="alert-text">${stats.games.needingResources} jeu(x) sans site officiel configuré</span>
-            <button class="btn btn-sm btn-outline" onclick="admin.navigateToResourcesWithFilter('no-official-site')">Configurer</button>
+            <button class="btn btn-sm btn-outline" data-click="navigateToResourcesWithFilter" data-args="${admin.attrArgs(["no-official-site"])}">Configurer</button>
           </div>
         `;
       }
@@ -276,7 +345,7 @@ const admin = {
           <div class="alert alert-info">
             <span class="alert-icon">ℹ️</span>
             <span class="alert-text">${stats.games.needingOfficialSite} jeu(x) avec plusieurs sites (site officiel à définir)</span>
-            <button class="btn btn-sm btn-outline" onclick="admin.navigateToResourcesWithFilter('multiple-sites')">Voir</button>
+            <button class="btn btn-sm btn-outline" data-click="navigateToResourcesWithFilter" data-args="${admin.attrArgs(["multiple-sites"])}">Voir</button>
           </div>
         `;
       }
@@ -347,12 +416,12 @@ const admin = {
       
       return `
         <tr>
-          <td><code>${game.id}</code></td>
+          <td><code>${this.escapeHtml(game.id)}</code></td>
           <td>${this.escapeHtml(game.name)}</td>
           <td>${this.escapeHtml(game.randomizer?.shortName || game.name)}</td>
           <td>
             ${hasRacetime 
-              ? `<span class="badge badge-success" title="${racetimeSlug}">✓ ${racetimeSlug}</span>` 
+              ? `<span class="badge badge-success" title="${this.escapeHtml(racetimeSlug)}">✓ ${this.escapeHtml(racetimeSlug)}</span>` 
               : '<span class="badge badge-muted">-</span>'}
           </td>
           <td>
@@ -366,21 +435,21 @@ const admin = {
               : '<span class="badge badge-danger">Désactivé</span>'}
           </td>
           <td>
-            <button class="btn btn-sm btn-ghost" onclick="admin.editGame('${game.id}')" title="Modifier">
+            <button class="btn btn-sm btn-ghost" data-click="editGame" data-args="${admin.attrArgs([String(game.id)])}" title="Modifier">
               ✏️
             </button>
-            <button class="btn btn-sm btn-ghost" onclick="admin.viewGameResources('${game.id}')" title="Ressources">
+            <button class="btn btn-sm btn-ghost" data-click="viewGameResources" data-args="${admin.attrArgs([String(game.id)])}" title="Ressources">
               📚
             </button>
             ${hasRacetime 
-              ? `<button class="btn btn-sm btn-ghost" onclick="admin.triggerFullResync('${game.id}', '${racetimeSlug}')" title="Resync complète des races (racetime)">
+              ? `<button class="btn btn-sm btn-ghost" data-click="triggerFullResync" data-args="${admin.attrArgs([String(game.id), String(racetimeSlug)])}" title="Resync complète des races (racetime)">
               🔄
             </button>` 
               : ''}
-            <button class="btn btn-sm btn-ghost" onclick="admin.showMergeGameModal('${game.id}')" title="Fusionner avec un autre jeu">
+            <button class="btn btn-sm btn-ghost" data-click="showMergeGameModal" data-args="${admin.attrArgs([String(game.id)])}" title="Fusionner avec un autre jeu">
               🔀
             </button>
-            <button class="btn btn-sm btn-ghost btn-danger" onclick="admin.deleteGame('${game.id}')" title="Supprimer">
+            <button class="btn btn-sm btn-ghost btn-danger" data-click="deleteGame" data-args="${admin.attrArgs([String(game.id)])}" title="Supprimer">
               🗑️
             </button>
           </td>
@@ -400,13 +469,13 @@ const admin = {
     let html = '<div class="pagination-buttons">';
     
     if (pagination.page > 1) {
-      html += `<button class="btn btn-sm btn-outline" onclick="admin.load${this.capitalize(type)}(${pagination.page - 1})">←</button>`;
+      html += `<button class="btn btn-sm btn-outline" data-click="load${this.capitalize(type)}" data-args="${admin.attrArgs([pagination.page - 1])}">←</button>`;
     }
     
     html += `<span class="pagination-info">Page ${pagination.page} / ${pagination.pages} (${pagination.total} résultats)</span>`;
     
     if (pagination.page < pagination.pages) {
-      html += `<button class="btn btn-sm btn-outline" onclick="admin.load${this.capitalize(type)}(${pagination.page + 1})">→</button>`;
+      html += `<button class="btn btn-sm btn-outline" data-click="load${this.capitalize(type)}" data-args="${admin.attrArgs([pagination.page + 1])}">→</button>`;
     }
     
     html += '</div>';
@@ -612,7 +681,7 @@ const admin = {
             const hasSite = g.resources?.officialSite?.url;
             const sitesCount = g.resources?.sites?.length || 0;
             let status = hasSite ? '✓' : (sitesCount > 1 ? `⚠️ ${sitesCount} sites` : '✗');
-            return `<option value="${g.id}">${g.name} [${status}]</option>`;
+            return `<option value="${this.escapeHtml(g.id)}">${this.escapeHtml(g.name)} [${status}]</option>`;
           })
           .join('');
       
@@ -786,8 +855,8 @@ const admin = {
         <div class="resource-item resource-item-primary">
           <span class="resource-icon">${this.getAdminSiteIcon(resources.officialSite)}</span>
           ${this.renderExternalLink(resources.officialSite.url, resources.officialSite.name || 'Site officiel')}
-          <button class="btn btn-sm btn-ghost" onclick="admin.editOfficialSiteTitle()" title="Modifier le titre officiel">✏️</button>
-          <button class="btn btn-sm btn-ghost btn-danger" onclick="admin.removeOfficialSite()">×</button>
+          <button class="btn btn-sm btn-ghost" data-click="editOfficialSiteTitle" title="Modifier le titre officiel">✏️</button>
+          <button class="btn btn-sm btn-ghost btn-danger" data-click="removeOfficialSite">×</button>
         </div>
       `;
     } else {
@@ -806,8 +875,8 @@ const admin = {
           </div>
           ${resources.officialSite?.url === site.url ? '<span class="resource-type">officiel</span>' : ''}
           <span class="resource-source">${this.escapeHtml(site.source || 'manual')}</span>
-          <button class="btn btn-sm btn-ghost" onclick="admin.openResourceModal('site', ${i})" title="Modifier">✏️</button>
-          <button class="btn btn-sm btn-ghost btn-danger" onclick="admin.removeSite(${i})" title="Supprimer">×</button>
+          <button class="btn btn-sm btn-ghost" data-click="openResourceModal" data-args="${admin.attrArgs(["site", i])}" title="Modifier">✏️</button>
+          <button class="btn btn-sm btn-ghost btn-danger" data-click="removeSite" data-args="${admin.attrArgs([i])}" title="Supprimer">×</button>
         </div>
       `).join('');
       this.attachResourceDnD('sites-list', 'sites');
@@ -826,8 +895,8 @@ const admin = {
             ${tracker.description ? `<span class="resource-desc">${this.escapeHtml(tracker.description)}</span>` : ''}
           </div>
           <span class="resource-source">${this.escapeHtml(tracker.source || 'manual')}</span>
-          <button class="btn btn-sm btn-ghost" onclick="admin.openResourceModal('tracker', ${i})" title="Modifier">✏️</button>
-          <button class="btn btn-sm btn-ghost btn-danger" onclick="admin.removeTracker(${i})">×</button>
+          <button class="btn btn-sm btn-ghost" data-click="openResourceModal" data-args="${admin.attrArgs(["tracker", i])}" title="Modifier">✏️</button>
+          <button class="btn btn-sm btn-ghost btn-danger" data-click="removeTracker" data-args="${admin.attrArgs([i])}">×</button>
         </div>
       `).join('');
       this.attachResourceDnD('trackers-list', 'trackers');
@@ -848,8 +917,8 @@ const admin = {
           </div>
           <span class="resource-source">${this.escapeHtml(guide.source || 'manual')}</span>
           <span class="resource-type">${guide.type}</span>
-          <button class="btn btn-sm btn-ghost" onclick="admin.openResourceModal('guide', ${i})" title="Modifier">✏️</button>
-          <button class="btn btn-sm btn-ghost btn-danger" onclick="admin.removeGuide(${i})">×</button>
+          <button class="btn btn-sm btn-ghost" data-click="openResourceModal" data-args="${admin.attrArgs(["guide", i])}" title="Modifier">✏️</button>
+          <button class="btn btn-sm btn-ghost btn-danger" data-click="removeGuide" data-args="${admin.attrArgs([i])}">×</button>
         </div>
       `).join('');
       this.attachResourceDnD('guides-list', 'guides');
@@ -870,8 +939,8 @@ const admin = {
             </div>
             <span class="resource-source">${this.escapeHtml(link.source || 'manual')}</span>
             <span class="resource-type">${this.escapeHtml(link.type || 'resource')}</span>
-            <button class="btn btn-sm btn-ghost" onclick="admin.openResourceModal('other', ${i})" title="Modifier">✏️</button>
-            <button class="btn btn-sm btn-ghost btn-danger" onclick="admin.removeOtherLink(${i})">×</button>
+            <button class="btn btn-sm btn-ghost" data-click="openResourceModal" data-args="${admin.attrArgs(["other", i])}" title="Modifier">✏️</button>
+            <button class="btn btn-sm btn-ghost btn-danger" data-click="removeOtherLink" data-args="${admin.attrArgs([i])}">×</button>
           </div>
         `).join('');
         this.attachResourceDnD('other-links-list', 'other');
@@ -1568,8 +1637,8 @@ const admin = {
       preview.innerHTML = `
         <div class="card mt-3">
           <h4 class="card-title">📋 Aperçu de la fusion</h4>
-          <p><strong>Source :</strong> ${this.escapeHtml(source.name)} (<code>${sourceId}</code>)</p>
-          <p><strong>Cible :</strong> ${this.escapeHtml(target.name)} (<code>${targetId}</code>)</p>
+          <p><strong>Source :</strong> ${this.escapeHtml(source.name)} (<code>${this.escapeHtml(sourceId)}</code>)</p>
+          <p><strong>Cible :</strong> ${this.escapeHtml(target.name)} (<code>${this.escapeHtml(targetId)}</code>)</p>
           <hr style="border-color: var(--admin-border); margin: 0.75rem 0;">
           <p class="text-muted" style="font-size: 0.875rem;">Ressources qui seront fusionnées :</p>
           <ul style="margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.875rem;">
@@ -1671,7 +1740,7 @@ const admin = {
       select.innerHTML = '<option value="">Tous les jeux</option>' +
         data.games
           .filter(g => g.enabled !== false && g.integrations?.racetime?.enabled)
-          .map(g => `<option value="${g.integrations.racetime.gameSlug}">${g.name}</option>`)
+          .map(g => `<option value="${this.escapeHtml(g.integrations.racetime.gameSlug)}">${this.escapeHtml(g.name)}</option>`)
           .join('');
       
     } catch (error) {
@@ -1768,7 +1837,7 @@ const admin = {
     logEntry.className = 'log-entry';
     logEntry.innerHTML = `
       <span class="log-time">${timestamp}</span>
-      <span class="log-message" style="color: ${typeColors[type]}">${message}</span>
+      <span class="log-message" style="color: ${typeColors[type] || typeColors.info}">${this.escapeHtml(message)}</span>
     `;
     
     // Remove placeholder if present
@@ -2054,7 +2123,7 @@ const admin = {
         <td>${player.stats?.totalRaces || 0}</td>
         <td>${player.stats?.totalWins || 0}</td>
         <td>
-          <button class="btn btn-sm btn-ghost" onclick="admin.editPlayer('${this.escapeHtml(player.userId)}')" title="Modifier">
+          <button class="btn btn-sm btn-ghost" data-click="editPlayer" data-args="${admin.attrArgs([String(player.userId)])}" title="Modifier">
             ✏️
           </button>
         </td>
@@ -2183,7 +2252,7 @@ const admin = {
                 <td>${t.participantsCount || 0}</td>
                 <td>${t.startDate ? new Date(t.startDate).toLocaleDateString('fr-FR') : '-'}</td>
                 <td>
-                  <button class="btn btn-sm btn-primary" onclick="admin.rlSelectTournament('${t._id}')">
+                  <button class="btn btn-sm btn-primary" data-click="rlSelectTournament" data-args="${admin.attrArgs([String(t._id)])}">
                     🔗 Gérer
                   </button>
                 </td>
@@ -2198,9 +2267,9 @@ const admin = {
     const pagEl = document.getElementById('rl-tournament-pagination');
     if (pagination.pages > 1) {
       let html = '<div class="pagination-buttons">';
-      if (pagination.page > 1) html += `<button class="btn btn-sm btn-outline" onclick="admin.rlLoadTournaments(${pagination.page - 1})">←</button>`;
+      if (pagination.page > 1) html += `<button class="btn btn-sm btn-outline" data-click="rlLoadTournaments" data-args="${admin.attrArgs([pagination.page - 1])}">←</button>`;
       html += `<span class="pagination-info">Page ${pagination.page} / ${pagination.pages} (${pagination.total})</span>`;
-      if (pagination.page < pagination.pages) html += `<button class="btn btn-sm btn-outline" onclick="admin.rlLoadTournaments(${pagination.page + 1})">→</button>`;
+      if (pagination.page < pagination.pages) html += `<button class="btn btn-sm btn-outline" data-click="rlLoadTournaments" data-args="${admin.attrArgs([pagination.page + 1])}">→</button>`;
       html += '</div>';
       pagEl.innerHTML = html;
     } else {
@@ -2337,7 +2406,7 @@ const admin = {
 
         return `
           <div class="rl-match-item ${hasRace ? 'rl-match-linked' : 'rl-match-unlinked'}" data-match-id="${this.escapeHtml(matchId)}">
-            <div class="rl-match-main" onclick="admin.rlShowSuggestions('${this.escapeHtml(matchId)}')">
+            <div class="rl-match-main" data-click="rlShowSuggestions" data-args="${admin.attrArgs([String(matchId)])}">
               <div class="rl-match-players">
                 <span class="rl-match-label">${matchLabel ? `<code>${this.escapeHtml(matchLabel)}</code>` : ''}</span>
                 <strong>${this.escapeHtml(m.player1Name)}</strong> vs <strong>${this.escapeHtml(m.player2Name)}</strong>
@@ -2356,7 +2425,7 @@ const admin = {
                   <div class="rl-linked-race" draggable="${raceCount > 1 ? 'true' : 'false'}" data-race-url="${this.escapeHtml(url)}" data-match-id="${this.escapeHtml(matchId)}" data-index="${idx}">
                     ${raceCount > 1 ? `<span class="rl-race-order" title="Manche">⠿ ${idx + 1}</span>` : ''}
                     ${this.renderExternalLink(this.sanitizeRacetimeUrl(url), url, 'rl-race-link')}
-                    <button class="btn btn-sm btn-ghost btn-danger" onclick="event.stopPropagation(); admin.rlUnlinkRace('${this.escapeHtml(url)}')" title="Délier">✕</button>
+                    <button class="btn btn-sm btn-ghost btn-danger" data-click="rlUnlinkRace" data-args="${admin.attrArgs([String(url)])}" data-stop title="Délier">✕</button>
                   </div>
                 `).join('')}
               </div>
@@ -2503,7 +2572,7 @@ const admin = {
           </div>
         </div>
         <div class="rl-race-actions">
-          <button class="btn btn-sm btn-ghost btn-danger" onclick="admin.rlUnlinkRace('${this.escapeHtml(r.url)}')" title="Retirer des qualifications">✕</button>
+          <button class="btn btn-sm btn-ghost btn-danger" data-click="rlUnlinkRace" data-args="${admin.attrArgs([String(r.url)])}" title="Retirer des qualifications">✕</button>
         </div>
       </div>
     `).join('');
@@ -2551,7 +2620,7 @@ const admin = {
           </div>
         </div>
         <div class="rl-race-actions">
-          <button class="btn btn-sm btn-ghost" onclick="admin.rlMarkAsQualifier('${this.escapeHtml(r.url)}')" title="Marquer comme qualification">🏅</button>
+          <button class="btn btn-sm btn-ghost" data-click="rlMarkAsQualifier" data-args="${admin.attrArgs([String(r.url)])}" title="Marquer comme qualification">🏅</button>
         </div>
       </div>
     `}).join('');
@@ -2582,7 +2651,7 @@ const admin = {
       list.innerHTML = '<p class="text-muted">Toutes les races sont déjà associées.</p>';
     } else {
       list.innerHTML = unlinked.map(r => `
-        <div class="rl-qualifier-pick" onclick="admin.rlPickQualifier('${this.escapeHtml(r.url)}')">
+        <div class="rl-qualifier-pick" data-click="rlPickQualifier" data-args="${admin.attrArgs([String(r.url)])}">
           <span>${this.escapeHtml(r.label || r.url)}</span>
           <span class="text-muted">${r.entrantCount} entrant${r.entrantCount > 1 ? 's' : ''} ${r.startedAt ? '· ' + new Date(r.startedAt).toLocaleDateString('fr-FR') : ''}</span>
         </div>
@@ -2683,7 +2752,7 @@ const admin = {
                   ${this.renderExternalLink(this.sanitizeRacetimeUrl(s.raceUrl), s.raceUrl, 'rl-race-link', 'style="font-size:0.8rem;"')}
                 </div>
               </div>
-              <button class="btn btn-sm btn-ghost btn-danger" onclick="event.stopPropagation(); admin.rlUnlinkRace('${this.escapeHtml(s.raceUrl)}')" title="Délier">✕</button>
+              <button class="btn btn-sm btn-ghost btn-danger" data-click="rlUnlinkRace" data-args="${admin.attrArgs([String(s.raceUrl)])}" data-stop title="Délier">✕</button>
             </div>
           `).join('')}
         </div>
@@ -2715,7 +2784,7 @@ const admin = {
               <span class="rl-score-value ${scoreClass}">${s.score}</span>
             </div>
             <div class="rl-suggestion-actions">
-              <button class="btn btn-sm btn-primary" onclick="admin.rlLinkRace('${this.escapeHtml(s.raceUrl)}', '${this.escapeHtml(String(this.rlCurrentMatchId))}')">
+              <button class="btn btn-sm btn-primary" data-click="rlLinkRace" data-args="${admin.attrArgs([String(s.raceUrl), String(String(this.rlCurrentMatchId))])}">
                 Lier
               </button>
             </div>
@@ -2887,7 +2956,7 @@ const admin = {
         return `
           <div class="rl-autolink-item" data-index="${i}">
             <label class="rl-autolink-check">
-              <input type="checkbox" class="form-checkbox rl-autolink-cb" data-index="${i}" checked onchange="admin.rlAutoLinkUpdateCount()">
+              <input type="checkbox" class="form-checkbox rl-autolink-cb" data-index="${i}" checked data-change="rlAutoLinkUpdateCount">
             </label>
             <div class="rl-autolink-info">
               <div class="rl-autolink-race">
@@ -3238,7 +3307,7 @@ const admin = {
       
       <!-- Refresh Button -->
       <div class="mt-4">
-        <button class="btn btn-outline" onclick="admin.loadMonitoring()">
+        <button class="btn btn-outline" data-click="loadMonitoring">
           🔄 Rafraîchir
         </button>
       </div>
@@ -3377,16 +3446,16 @@ const admin = {
           <strong>${this.escapeHtml(t.name)}</strong>
           ${externalUrl ? `<br>${this.renderExternalLink(externalUrl, `↗ Voir sur ${sourceName}`, 'text-muted', 'style="font-size:0.75rem;"')}` : ''}
         </td>
-        <td><span class="badge badge-${t.source === 'startgg' ? 'info' : 'warning'}">${sourceIcon} ${sourceName}</span></td>
+        <td><span class="badge badge-${t.source === 'startgg' ? 'info' : 'warning'}">${sourceIcon} ${this.escapeHtml(sourceName)}</span></td>
         <td>${this.escapeHtml(gameName)}</td>
         <td>${t.participantsCount || '-'}</td>
         <td>${t.matchCount || '-'}</td>
         <td><span class="badge badge-${stateClass}">${this.escapeHtml(stateLabel)}</span></td>
         <td>${date}</td>
         <td class="table-actions">
-          <button class="btn btn-sm btn-outline" onclick="admin.tmShowDetail('${t._id}')" title="Détails">👁</button>
-          <button class="btn btn-sm btn-outline" onclick="admin.tmShowEditGame('${t._id}', '${this.escapeHtml(t.gameSlug || '')}')" title="Modifier le jeu">🎮</button>
-          <button class="btn btn-sm btn-danger" onclick="admin.tmDeleteTournament('${t._id}', '${this.escapeHtml(t.name).replace(/'/g, "\\'")}')" title="Supprimer">🗑️</button>
+          <button class="btn btn-sm btn-outline" data-click="tmShowDetail" data-args="${admin.attrArgs([String(t._id)])}" title="Détails">👁</button>
+          <button class="btn btn-sm btn-outline" data-click="tmShowEditGame" data-args="${admin.attrArgs([String(t._id), String(t.gameSlug || '')])}" title="Modifier le jeu">🎮</button>
+          <button class="btn btn-sm btn-danger" data-click="tmDeleteTournament" data-args="${admin.attrArgs([String(t._id), String(t.name)])}" title="Supprimer">🗑️</button>
         </td>
       </tr>`;
     }).join('');
@@ -3397,9 +3466,9 @@ const admin = {
     if (totalPages <= 1) { container.innerHTML = ''; return; }
 
     let html = '<div class="pagination">';
-    if (page > 1) html += `<button class="btn btn-sm btn-outline" onclick="admin.tmLoadTournaments(${page - 1})">← Précédent</button>`;
+    if (page > 1) html += `<button class="btn btn-sm btn-outline" data-click="tmLoadTournaments" data-args="${admin.attrArgs([page - 1])}">← Précédent</button>`;
     html += `<span class="pagination-info">Page ${page} / ${totalPages} (${total} tournois)</span>`;
-    if (page < totalPages) html += `<button class="btn btn-sm btn-outline" onclick="admin.tmLoadTournaments(${page + 1})">Suivant →</button>`;
+    if (page < totalPages) html += `<button class="btn btn-sm btn-outline" data-click="tmLoadTournaments" data-args="${admin.attrArgs([page + 1])}">Suivant →</button>`;
     html += '</div>';
     container.innerHTML = html;
   },
@@ -3476,7 +3545,7 @@ const admin = {
       } else {
         const p = data.preview;
         previewHtml += `<p><strong>${this.escapeHtml(p.name)}</strong></p>`;
-        previewHtml += `<p class="text-muted">Type: ${p.tournamentType || '?'} — État: ${p.state || '?'} — 👥 ${p.participantsCount || '?'} participants</p>`;
+        previewHtml += `<p class="text-muted">Type: ${this.escapeHtml(p.tournamentType || '?')} — État: ${this.escapeHtml(p.state || '?')} — 👥 ${this.escapeHtml(p.participantsCount || '?')} participants</p>`;
         if (p.gameName) previewHtml += `<p class="text-muted">🎮 ${this.escapeHtml(p.gameName)}</p>`;
       }
 

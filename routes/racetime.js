@@ -1,6 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const router = express.Router();
+const { isSafeImageContentType, setRelayedImageHeaders } = require('../middleware/security');
 
 const RACETIME_HOST = 'racetime.gg';
 
@@ -68,6 +69,59 @@ function normalizeBase(urlOrId){
   return `https://${RACETIME_HOST}/user/${encodeURIComponent(raw)}`;
 }
 
+const MAX_AVATAR_BYTES = 5 * 1024 * 1024;
+
+/**
+ * Stream an image hosted on racetime.gg to the client.
+ * The URL must stay on racetime.gg (redirects included) and the upstream
+ * answer must be a raster image: HTML or SVG are never relayed on our origin.
+ * Returns true when the response was sent, false so the caller can try
+ * another candidate.
+ */
+async function relayRacetimeImage(rawUrl, res) {
+  const safeUrl = normalizeRacetimeMediaUrl(rawUrl);
+  if (!safeUrl) return false;
+
+  let upstream;
+  try {
+    upstream = await axios.get(safeUrl, {
+      responseType: 'stream',
+      timeout: 10000,
+      maxRedirects: 3,
+      beforeRedirect: (options) => {
+        if (!isAllowedRacetimeHost(options.hostname)) {
+          throw new Error('Redirect outside racetime.gg');
+        }
+      }
+    });
+  } catch (e) {
+    return false;
+  }
+
+  const contentType = upstream.headers['content-type'];
+  const declaredLength = Number(upstream.headers['content-length']);
+  if (!isSafeImageContentType(contentType) || (Number.isFinite(declaredLength) && declaredLength > MAX_AVATAR_BYTES)) {
+    upstream.data.destroy();
+    return false;
+  }
+
+  setRelayedImageHeaders(res);
+  res.setHeader('Content-Type', String(contentType).split(';')[0].trim());
+  if (upstream.headers['cache-control']) res.setHeader('Cache-Control', upstream.headers['cache-control']);
+
+  let received = 0;
+  upstream.data.on('data', (chunk) => {
+    received += chunk.length;
+    if (received > MAX_AVATAR_BYTES) {
+      upstream.data.destroy();
+      res.destroy();
+    }
+  });
+  upstream.data.on('error', () => res.destroy());
+  upstream.data.pipe(res);
+  return true;
+}
+
 router.get('/avatar', async (req, res) => {
   const { url, id } = req.query;
   const base = normalizeBase(url || id);
@@ -86,12 +140,9 @@ router.get('/avatar', async (req, res) => {
     // Try og:image first (site may provide a canonical profile image)
     const og = text.match(/<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']+)["'][^>]*>/i);
     if (og && og[1]){
-      const imgUrl = og[1];
-      try{
-        const streamRes = await axios.get(imgUrl, { responseType: 'stream', timeout: 10000 });
-        res.setHeader('Content-Type', streamRes.headers['content-type'] || 'image/*');
-        if (streamRes.headers['cache-control']) res.setHeader('Cache-Control', streamRes.headers['cache-control']);
-        return streamRes.data.pipe(res);
+      const imgUrl = normalizeRacetimeMediaUrl(og[1]);
+      if (imgUrl) try{
+        if (await relayRacetimeImage(imgUrl, res)) return;
       }catch(e){ /* fallthrough */ }
     }
 
@@ -114,10 +165,7 @@ router.get('/avatar', async (req, res) => {
             const urlcandidate = normalizeRacetimeMediaUrl(bgMatch[1]);
             if (!urlcandidate) return res.status(400).json({ error: 'invalid avatar source' });
             try{
-              const streamRes = await axios.get(urlcandidate, { responseType: 'stream', timeout: 10000 });
-              res.setHeader('Content-Type', streamRes.headers['content-type'] || 'image/*');
-              if (streamRes.headers['cache-control']) res.setHeader('Cache-Control', streamRes.headers['cache-control']);
-              return streamRes.data.pipe(res);
+              if (await relayRacetimeImage(urlcandidate, res)) return;
             }catch(e){ /* fallthrough */ }
           }
           const mediaMatch = block.match(/https?:\/\/racetime\.gg\/media\/[^"'\)\s>]+/i) || block.match(/\/media\/[^"'\)\s>]+/i);
@@ -125,10 +173,7 @@ router.get('/avatar', async (req, res) => {
             const murl = normalizeRacetimeMediaUrl(mediaMatch[0]);
             if (!murl) return res.status(400).json({ error: 'invalid avatar source' });
             try{
-              const streamRes = await axios.get(murl, { responseType: 'stream', timeout: 10000 });
-              res.setHeader('Content-Type', streamRes.headers['content-type'] || 'image/*');
-              if (streamRes.headers['cache-control']) res.setHeader('Cache-Control', streamRes.headers['cache-control']);
-              return streamRes.data.pipe(res);
+              if (await relayRacetimeImage(murl, res)) return;
             }catch(e){ /* fallthrough */ }
           }
           break; // don't search other user-pop blocks
@@ -154,10 +199,7 @@ router.get('/avatar', async (req, res) => {
       const urlcandidate = normalizeRacetimeMediaUrl(bgMatch[1]);
       if (!urlcandidate) return res.status(400).json({ error: 'invalid avatar source' });
       try{
-        const streamRes = await axios.get(urlcandidate, { responseType: 'stream', timeout: 10000 });
-        res.setHeader('Content-Type', streamRes.headers['content-type'] || 'image/*');
-        if (streamRes.headers['cache-control']) res.setHeader('Cache-Control', streamRes.headers['cache-control']);
-        return streamRes.data.pipe(res);
+        if (await relayRacetimeImage(urlcandidate, res)) return;
       }catch(e){ /* fallthrough */ }
     }
 
@@ -167,10 +209,7 @@ router.get('/avatar', async (req, res) => {
       const m = normalizeRacetimeMediaUrl(mediaMatch[0]);
       if (!m) return res.status(400).json({ error: 'invalid avatar source' });
       try{
-        const streamRes = await axios.get(m, { responseType: 'stream', timeout: 10000 });
-        res.setHeader('Content-Type', streamRes.headers['content-type'] || 'image/*');
-        if (streamRes.headers['cache-control']) res.setHeader('Cache-Control', streamRes.headers['cache-control']);
-        return streamRes.data.pipe(res);
+        if (await relayRacetimeImage(m, res)) return;
       }catch(e){ /* fallthrough */ }
     }
   } catch (e) {

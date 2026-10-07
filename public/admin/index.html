@@ -100,7 +100,7 @@
         </div>
         
         <div class="stats-grid">
-          <div class="stat-card stat-card-clickable" onclick="admin.navigateTo('games')">
+          <div class="stat-card stat-card-clickable" data-click="navigateTo" data-args='["games"]'>
             <div class="stat-icon">🎮</div>
             <div>
               <div class="stat-value" id="stat-games">-</div>
@@ -114,14 +114,14 @@
               <div class="stat-label">Courses</div>
             </div>
           </div>
-          <div class="stat-card stat-card-clickable" onclick="admin.navigateTo('tournaments-mgmt')">
+          <div class="stat-card stat-card-clickable" data-click="navigateTo" data-args='["tournaments-mgmt"]'>
             <div class="stat-icon">🏆</div>
             <div>
               <div class="stat-value" id="stat-tournaments">-</div>
               <div class="stat-label">Tournois</div>
             </div>
           </div>
-          <div class="stat-card stat-card-clickable" onclick="admin.navigateTo('players')">
+          <div class="stat-card stat-card-clickable" data-click="navigateTo" data-args='["players"]'>
             <div class="stat-icon">👥</div>
             <div>
               <div class="stat-value" id="stat-players">-</div>
@@ -139,7 +139,7 @@
       <section id="section-games" class="admin-section">
         <div class="section-header">
           <h1 class="section-title">Gestion des Jeux</h1>
-          <button class="btn btn-primary" onclick="admin.showNewGameModal()">
+          <button class="btn btn-primary" data-click="showNewGameModal">
             ➕ Nouveau jeu
           </button>
         </div>
@@ -199,7 +199,7 @@
             </select>
           </div>
           <div class="form-group" style="margin-bottom: 0;">
-            <select id="resources-filter" class="form-input form-select" onchange="admin.applyResourcesFilter(this.value)">
+            <select id="resources-filter" class="form-input form-select" data-change="applyResourcesFilter" data-args='["$value"]'>
               <option value="">Tous les jeux</option>
               <option value="no-official-site">Sans site officiel</option>
               <option value="multiple-sites">Plusieurs sites (à définir)</option>
@@ -225,7 +225,7 @@
           
           <!-- Sites from rando-list -->
           <div class="resource-section">
-            <h3 class="resource-section-title">🔗 Sites <button class="btn btn-primary btn-sm" type="button" onclick="admin.openResourceModal('site')">➕ Ajouter</button></h3>
+            <h3 class="resource-section-title">🔗 Sites <button class="btn btn-primary btn-sm" type="button" data-click="openResourceModal" data-args='["site"]'>➕ Ajouter</button></h3>
             <div id="sites-list" class="resource-list">
               <!-- Will be populated -->
             </div>
@@ -250,7 +250,7 @@
                   <input type="text" id="tracker-desc" class="form-input" placeholder="Description (optionnel)">
                 </div>
               </div>
-              <button class="btn btn-primary btn-sm" onclick="admin.addTracker()">
+              <button class="btn btn-primary btn-sm" data-click="addTracker">
                 ➕ Ajouter
               </button>
             </div>
@@ -283,7 +283,7 @@
               <div class="form-group">
                 <input type="text" id="guide-desc" class="form-input" placeholder="Description (optionnel)">
               </div>
-              <button class="btn btn-primary btn-sm" onclick="admin.addGuide()">
+              <button class="btn btn-primary btn-sm" data-click="addGuide">
                 ➕ Ajouter
               </button>
             </div>
@@ -316,7 +316,7 @@
               <div class="form-group">
                 <input type="text" id="other-link-desc" class="form-input" placeholder="Description (optionnel)">
               </div>
-              <button class="btn btn-primary btn-sm" onclick="admin.addOtherLink()">
+              <button class="btn btn-primary btn-sm" data-click="addOtherLink">
                 ➕ Ajouter
               </button>
             </div>
@@ -345,10 +345,10 @@
                   Exécuté automatiquement chaque jour à 6h00 UTC.
                 </p>
                 <div class="sync-options">
-                  <button class="btn btn-primary" onclick="admin.triggerSync('rando-list')">
+                  <button class="btn btn-primary" data-click="triggerSync" data-args='["rando-list"]'>
                     🔄 Lancer maintenant
                   </button>
-                  <button class="btn btn-outline" onclick="admin.triggerSync('rando-list', true)">
+                  <button class="btn btn-outline" data-click="triggerSync" data-args='["rando-list", true]'>
                     🔗 + Lier les jeux
                   </button>
                 </div>
@@ -369,7 +369,7 @@
                       <option value="">Tous les jeux</option>
                     </select>
                   </div>
-                  <button class="btn btn-primary" onclick="admin.triggerRacetimeSync()">
+                  <button class="btn btn-primary" data-click="triggerRacetimeSync">
                     🔄 Lancer maintenant
                   </button>
                 </div>
@@ -405,7 +405,7 @@
           <div class="section-main">
             <div class="toolbar">
               <div class="toolbar-search">
-                <input type="text" id="players-search" class="form-input" placeholder="Rechercher un joueur..." oninput="admin.debounce(() => admin.loadPlayers(), 300)()">
+                <input type="text" id="players-search" class="form-input" placeholder="Rechercher un joueur..." data-input="loadPlayers" data-debounce="300">
               </div>
             </div>
             
@@ -481,8 +481,8 @@
               <span id="rl-tournament-meta" class="text-muted"></span>
             </div>
             <div class="rl-detail-actions">
-              <button class="btn btn-primary btn-sm" onclick="admin.rlAutoLinkPreview()">⚡ Auto-link</button>
-              <button class="btn btn-outline btn-sm" onclick="admin.rlCloseDetail()">✕ Fermer</button>
+              <button class="btn btn-primary btn-sm" data-click="rlAutoLinkPreview">⚡ Auto-link</button>
+              <button class="btn btn-outline btn-sm" data-click="rlCloseDetail">✕ Fermer</button>
             </div>
           </div>
 
@@ -491,10 +491,10 @@
 
           <!-- Filters -->
           <div id="rl-filters" class="toolbar" style="display: none;">
-            <select id="rl-phase-select" class="form-input form-select" style="max-width: 300px;" onchange="admin.rlFilterByPhase()">
+            <select id="rl-phase-select" class="form-input form-select" style="max-width: 300px;" data-change="rlFilterByPhase">
               <option value="">Toutes les phases</option>
             </select>
-            <select id="rl-link-filter" class="form-input form-select" style="max-width: 200px;" onchange="admin.rlFilterByLinkStatus()">
+            <select id="rl-link-filter" class="form-input form-select" style="max-width: 200px;" data-change="rlFilterByLinkStatus">
               <option value="">Tous les matchs</option>
               <option value="linked">Liés</option>
               <option value="unlinked">Non liés</option>
@@ -513,9 +513,9 @@
 
           <!-- Qualifier races section (collapsible) -->
           <div id="rl-qualifiers-section" class="rl-panel mt-4" style="display: none;">
-            <div class="rl-panel-header rl-collapsible-header" onclick="admin.rlToggleSection('rl-qualifiers-section')">
+            <div class="rl-panel-header rl-collapsible-header" data-click="rlToggleSection" data-args='["rl-qualifiers-section"]'>
               <h3><span class="rl-collapse-icon">▶</span> 🏅 Races de qualification <span id="rl-qualifiers-count" class="badge badge-muted"></span></h3>
-              <button class="btn btn-sm btn-outline" onclick="event.stopPropagation(); admin.rlShowAddQualifier()">➕ Ajouter</button>
+              <button class="btn btn-sm btn-outline" data-click="rlShowAddQualifier" data-stop>➕ Ajouter</button>
             </div>
             <p class="text-muted rl-section-desc" style="padding: 0.5rem 1rem; font-size: 0.85rem; display: none;">
               Races associées au tournoi en tant que qualifications (sans match spécifique).
@@ -527,7 +527,7 @@
 
           <!-- Unlinked races section (collapsible) -->
           <div id="rl-unlinked-section" class="rl-panel mt-4" style="display: none;">
-            <div class="rl-panel-header rl-collapsible-header" onclick="admin.rlToggleSection('rl-unlinked-section')">
+            <div class="rl-panel-header rl-collapsible-header" data-click="rlToggleSection" data-args='["rl-unlinked-section"]'>
               <h3><span class="rl-collapse-icon">▶</span> 📋 Races non associées <span id="rl-unlinked-count" class="badge badge-warning"></span></h3>
             </div>
             <p class="text-muted rl-section-desc" style="padding: 0.5rem 1rem; font-size: 0.85rem; display: none;">
@@ -543,7 +543,7 @@
           <div class="modal-content modal-large">
             <div class="modal-header">
               <h2 id="rl-suggestion-title">Suggestions de races</h2>
-              <button class="modal-close" onclick="admin.rlCloseSuggestions()">&times;</button>
+              <button class="modal-close" data-click="rlCloseSuggestions">&times;</button>
             </div>
             <div class="modal-body">
               <div id="rl-suggestion-match-info" class="rl-suggestion-match-info"></div>
@@ -557,7 +557,7 @@
                   <div class="form-group">
                     <input type="text" id="rl-manual-race-url" class="form-input" placeholder="/categorie/room-name-1234">
                   </div>
-                  <button type="button" class="btn btn-primary" onclick="admin.rlManualLink()">Lier</button>
+                  <button type="button" class="btn btn-primary" data-click="rlManualLink">Lier</button>
                 </div>
               </div>
             </div>
@@ -569,7 +569,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <h2>Ajouter une race de qualification</h2>
-              <button class="modal-close" onclick="admin.rlCloseQualifierModal()">&times;</button>
+              <button class="modal-close" data-click="rlCloseQualifierModal">&times;</button>
             </div>
             <div class="modal-body">
               <p class="text-muted" style="font-size: 0.85rem; margin-bottom: 1rem;">
@@ -585,8 +585,8 @@
               <div id="rl-qualifier-unlinked-list" class="rl-qualifier-pick-list"></div>
             </div>
             <div class="modal-footer">
-              <button class="btn btn-outline" onclick="admin.rlCloseQualifierModal()">Annuler</button>
-              <button class="btn btn-primary" onclick="admin.rlConfirmAddQualifier()">🏅 Marquer comme qualification</button>
+              <button class="btn btn-outline" data-click="rlCloseQualifierModal">Annuler</button>
+              <button class="btn btn-primary" data-click="rlConfirmAddQualifier">🏅 Marquer comme qualification</button>
             </div>
           </div>
         </div>
@@ -596,7 +596,7 @@
           <div class="modal-content modal-large">
             <div class="modal-header">
               <h2>⚡ Prévisualisation Auto-link</h2>
-              <button class="modal-close" onclick="admin.rlCloseAutoLinkModal()">&times;</button>
+              <button class="modal-close" data-click="rlCloseAutoLinkModal">&times;</button>
             </div>
             <div class="modal-body">
               <p class="text-muted" style="margin-bottom: 1rem;">
@@ -604,7 +604,7 @@
               </p>
               <div class="rl-autolink-controls">
                 <label class="form-checkbox-group">
-                  <input type="checkbox" id="rl-autolink-select-all" class="form-checkbox" onchange="admin.rlAutoLinkToggleAll(this.checked)">
+                  <input type="checkbox" id="rl-autolink-select-all" class="form-checkbox" data-change="rlAutoLinkToggleAll" data-args='["$checked"]'>
                   <span>Tout sélectionner</span>
                 </label>
                 <div>
@@ -616,8 +616,8 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button class="btn btn-outline" onclick="admin.rlCloseAutoLinkModal()">Annuler</button>
-              <button class="btn btn-primary" id="rl-autolink-confirm" onclick="admin.rlConfirmAutoLink()" disabled>
+              <button class="btn btn-outline" data-click="rlCloseAutoLinkModal">Annuler</button>
+              <button class="btn btn-primary" id="rl-autolink-confirm" data-click="rlConfirmAutoLink" disabled>
                 ✅ Valider les associations sélectionnées
               </button>
             </div>
@@ -629,7 +629,7 @@
       <section id="section-tournaments-mgmt" class="admin-section">
         <div class="section-header">
           <h1 class="section-title">Gestion des Tournois</h1>
-          <button class="btn btn-primary" onclick="admin.tmShowImportModal()">
+          <button class="btn btn-primary" data-click="tmShowImportModal">
             ➕ Importer un tournoi
           </button>
         </div>
@@ -639,15 +639,15 @@
             <input type="text" id="tm-search" class="form-input" placeholder="Rechercher un tournoi...">
           </div>
           <div class="toolbar-filters">
-            <select id="tm-source-filter" class="form-input form-select" onchange="admin.tmLoadTournaments(1)">
+            <select id="tm-source-filter" class="form-input form-select" data-change="tmLoadTournaments" data-args='[1]'>
               <option value="">Toutes les sources</option>
               <option value="startgg">start.gg</option>
               <option value="challonge">Challonge</option>
             </select>
-            <select id="tm-game-filter" class="form-input form-select" onchange="admin.tmLoadTournaments(1)">
+            <select id="tm-game-filter" class="form-input form-select" data-change="tmLoadTournaments" data-args='[1]'>
               <option value="">Tous les jeux</option>
             </select>
-            <select id="tm-limit" class="form-input form-select" onchange="admin.tmLoadTournaments(1)">
+            <select id="tm-limit" class="form-input form-select" data-change="tmLoadTournaments" data-args='[1]'>
               <option value="20">20 par page</option>
               <option value="50">50 par page</option>
               <option value="100">100 par page</option>
@@ -685,7 +685,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h2>Importer un tournoi</h2>
-            <button class="modal-close" onclick="admin.tmCloseImportModal()">&times;</button>
+            <button class="modal-close" data-click="tmCloseImportModal">&times;</button>
           </div>
           <div class="modal-body">
             <p class="text-muted" style="margin-bottom: 1rem;">
@@ -714,9 +714,9 @@
             <div id="tm-import-success" class="alert alert-success mt-4" style="display: none;"></div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-outline" onclick="admin.tmCloseImportModal()">Annuler</button>
-            <button type="button" class="btn btn-secondary" id="tm-import-preview-btn" onclick="admin.tmPreviewImport()">👁 Prévisualiser</button>
-            <button type="button" class="btn btn-primary" id="tm-import-confirm-btn" onclick="admin.tmConfirmImport()" disabled>📥 Importer</button>
+            <button type="button" class="btn btn-outline" data-click="tmCloseImportModal">Annuler</button>
+            <button type="button" class="btn btn-secondary" id="tm-import-preview-btn" data-click="tmPreviewImport">👁 Prévisualiser</button>
+            <button type="button" class="btn btn-primary" id="tm-import-confirm-btn" data-click="tmConfirmImport" disabled>📥 Importer</button>
           </div>
         </div>
       </div>
@@ -726,13 +726,13 @@
         <div class="modal-content modal-large">
           <div class="modal-header">
             <h2 id="tm-detail-title">Détails du tournoi</h2>
-            <button class="modal-close" onclick="admin.tmCloseDetailModal()">&times;</button>
+            <button class="modal-close" data-click="tmCloseDetailModal">&times;</button>
           </div>
           <div class="modal-body">
             <div id="tm-detail-content"></div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-outline" onclick="admin.tmCloseDetailModal()">Fermer</button>
+            <button type="button" class="btn btn-outline" data-click="tmCloseDetailModal">Fermer</button>
           </div>
         </div>
       </div>
@@ -742,7 +742,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h2>Modifier le jeu associé</h2>
-            <button class="modal-close" onclick="admin.tmCloseEditGameModal()">&times;</button>
+            <button class="modal-close" data-click="tmCloseEditGameModal">&times;</button>
           </div>
           <div class="modal-body">
             <input type="hidden" id="tm-edit-game-tournament-id">
@@ -754,8 +754,8 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-outline" onclick="admin.tmCloseEditGameModal()">Annuler</button>
-            <button type="button" class="btn btn-primary" onclick="admin.tmSaveGameAssociation()">Enregistrer</button>
+            <button type="button" class="btn btn-outline" data-click="tmCloseEditGameModal">Annuler</button>
+            <button type="button" class="btn btn-primary" data-click="tmSaveGameAssociation">Enregistrer</button>
           </div>
         </div>
       </div>
@@ -779,7 +779,7 @@
     <div class="modal-content modal-large">
       <div class="modal-header">
         <h2 id="game-modal-title">Modifier le jeu</h2>
-        <button class="modal-close" onclick="admin.closeGameModal()">&times;</button>
+        <button class="modal-close" data-click="closeGameModal">&times;</button>
       </div>
       <form id="game-form" class="game-form">
         <div class="form-tabs">
@@ -908,7 +908,7 @@
         </div>
         
         <div class="form-actions">
-          <button type="button" class="btn btn-outline" onclick="admin.closeGameModal()">Annuler</button>
+          <button type="button" class="btn btn-outline" data-click="closeGameModal">Annuler</button>
           <button type="submit" class="btn btn-primary">Enregistrer</button>
         </div>
       </form>
@@ -920,9 +920,9 @@
     <div class="modal-content">
       <div class="modal-header">
         <h2 id="player-modal-title">Modifier le joueur</h2>
-        <button class="modal-close" onclick="admin.closePlayerModal()">&times;</button>
+        <button class="modal-close" data-click="closePlayerModal">&times;</button>
       </div>
-      <form id="player-form" onsubmit="event.preventDefault(); admin.savePlayer();">
+      <form id="player-form" data-submit="savePlayer">
         <input type="hidden" id="player-id">
         
         <div class="form-group">
@@ -947,7 +947,7 @@
         </div>
         
         <div class="form-actions">
-          <button type="button" class="btn btn-outline" onclick="admin.closePlayerModal()">Annuler</button>
+          <button type="button" class="btn btn-outline" data-click="closePlayerModal">Annuler</button>
           <button type="submit" class="btn btn-primary">Enregistrer</button>
         </div>
       </form>
@@ -959,7 +959,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h2 class="modal-title">🔀 Fusionner des jeux</h2>
-        <button class="modal-close" onclick="admin.closeMergeModal()">&times;</button>
+        <button class="modal-close" data-click="closeMergeModal">&times;</button>
       </div>
       <div class="modal-body">
         <p class="mb-3">Fusionner un jeu <strong>source</strong> dans le jeu <strong>cible</strong>. Les ressources (sites, trackers, guides) seront combinées. Le jeu source sera supprimé.</p>
@@ -976,15 +976,15 @@
             <div class="form-group">
               <input type="text" id="merge-source-id" class="form-input" placeholder="ex: alttp-duplicate" pattern="[a-z0-9-]+">
             </div>
-            <button type="button" class="btn btn-secondary" onclick="admin.previewMerge()">Prévisualiser</button>
+            <button type="button" class="btn btn-secondary" data-click="previewMerge">Prévisualiser</button>
           </div>
         </div>
         
         <div id="merge-preview" style="display: none;"></div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline" onclick="admin.closeMergeModal()">Annuler</button>
-        <button type="button" id="merge-confirm-btn" class="btn btn-primary" onclick="admin.confirmMerge()" disabled>Fusionner</button>
+        <button type="button" class="btn btn-outline" data-click="closeMergeModal">Annuler</button>
+        <button type="button" id="merge-confirm-btn" class="btn btn-primary" data-click="confirmMerge" disabled>Fusionner</button>
       </div>
     </div>
   </div>
@@ -994,9 +994,9 @@
     <div class="modal-content">
       <div class="modal-header">
         <h2 id="resource-modal-title">Modifier une ressource</h2>
-        <button class="modal-close" onclick="admin.closeResourceModal()">&times;</button>
+        <button class="modal-close" data-click="closeResourceModal">&times;</button>
       </div>
-      <form id="resource-modal-form" onsubmit="event.preventDefault(); admin.saveResourceModal();">
+      <form id="resource-modal-form" data-submit="saveResourceModal">
         <div class="form-group">
           <label for="resource-modal-url">URL *</label>
           <input type="url" id="resource-modal-url" class="form-input" required>
@@ -1059,7 +1059,7 @@
           <p class="resource-form-title">Traductions</p>
           <div class="form-group">
             <label for="resource-modal-lang">Langue</label>
-            <select id="resource-modal-lang" class="form-input form-select" onchange="admin.onResourceModalLanguageChange()">
+            <select id="resource-modal-lang" class="form-input form-select" data-change="onResourceModalLanguageChange">
               <option value="en">English</option>
               <option value="fr">Français</option>
               <option value="es">Español</option>
@@ -1079,8 +1079,8 @@
         </div>
 
         <div class="form-actions">
-          <button type="button" id="resource-modal-delete" class="btn btn-danger" style="display: none;" onclick="admin.deleteResourceModal()">Supprimer</button>
-          <button type="button" class="btn btn-outline" onclick="admin.closeResourceModal()">Annuler</button>
+          <button type="button" id="resource-modal-delete" class="btn btn-danger" style="display: none;" data-click="deleteResourceModal">Supprimer</button>
+          <button type="button" class="btn btn-outline" data-click="closeResourceModal">Annuler</button>
           <button type="submit" class="btn btn-primary">Enregistrer</button>
         </div>
       </form>

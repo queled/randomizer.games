@@ -77,19 +77,16 @@ function cleanupExpiredSessions() {
  * Middleware to verify admin token for login
  */
 function verifyAdminToken(providedToken) {
-  // Use timing-safe comparison to prevent timing attacks
-  if (!providedToken || providedToken.length !== ADMIN_TOKEN.length) {
+  // Only plain strings are accepted (a JSON body could send arrays or objects).
+  if (typeof providedToken !== 'string' || !providedToken) {
     return false;
   }
-  
-  try {
-    return crypto.timingSafeEqual(
-      Buffer.from(providedToken),
-      Buffer.from(ADMIN_TOKEN)
-    );
-  } catch {
-    return false;
-  }
+
+  // Compare fixed-length digests so neither the content nor the length of the
+  // real token leaks through response timing.
+  const provided = crypto.createHash('sha256').update(providedToken, 'utf8').digest();
+  const expected = crypto.createHash('sha256').update(ADMIN_TOKEN, 'utf8').digest();
+  return crypto.timingSafeEqual(provided, expected);
 }
 
 /**
@@ -177,6 +174,5 @@ module.exports = {
   validateSession,
   destroySession,
   requireAdmin,
-  optionalAdmin,
-  ADMIN_TOKEN
+  optionalAdmin
 };

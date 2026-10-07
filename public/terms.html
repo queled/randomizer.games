@@ -13,31 +13,8 @@
         body { opacity: 0; transition: opacity 0.1s ease-in; }
         body.i18n-ready { opacity: 1; }
     </style>
-    <script>
-        (function() {
-            try {
-                // Get saved language or detect from browser
-                let lang = localStorage.getItem('preferred-language');
-                if (!lang) {
-                    const browserLang = (navigator.language || navigator.userLanguage || 'en').split('-')[0].toLowerCase();
-                    const supported = ['en', 'fr', 'es', 'de', 'it', 'pt'];
-                    lang = supported.includes(browserLang) ? browserLang : 'en';
-                }
-                // Apply language immediately to prevent flicker
-                document.documentElement.lang = lang;
-                
-                // Fallback: show page after 200ms if i18n hasn't marked it ready yet
-                window.__i18nShowTimeout = setTimeout(() => {
-                    if (document.body && !document.body.classList.contains('i18n-ready')) {
-                        document.body.classList.add('i18n-ready');
-                    }
-                }, 50);
-            } catch (e) {
-                document.documentElement.lang = 'en';
-                if (document.body) document.body.classList.add('i18n-ready');
-            }
-        })();
-    </script>
+    <script src="/js/i18n-boot.js"></script>
+    <script src="/js/ui-events.js"></script>
     
     <!-- Load translations early in head (async to not block parsing) -->
     <script async src="/js/i18n/en.js"></script>
@@ -52,7 +29,7 @@
 
     <header>
         <a href="/"><img src="/assets/favicon.png" alt="Randomizer" class="site-logo">Randomizer</a>
-        <button class="mobile-menu-toggle" aria-label="Menu" onclick="this.classList.toggle('open');document.querySelector('nav').classList.toggle('open');">
+        <button class="mobile-menu-toggle" aria-label="Menu" data-menu-toggle>
             <span></span><span></span><span></span>
         </button>
         <nav>

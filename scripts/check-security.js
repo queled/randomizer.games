@@ -117,6 +117,45 @@ if (!fs.existsSync('middleware/security.js')) {
   console.log('✅ Middleware de sécurité présent');
 }
 
+// 7b. Vérifier l'absence de JavaScript inline dans le frontend.
+// La CSP (script-src 'self'; script-src-attr 'none') bloque les <script> inline
+// et les attributs onclick=/onerror=...: s'il en reste, la fonctionnalité casse.
+console.log('\n🧱 Vérification du JavaScript inline (compatibilité CSP)...');
+{
+  const publicDir = path.join(__dirname, '..', 'public');
+  const inlineHandlerRe = /\son[a-z]+\s*=\s*["'`]/i;
+  const inlineScriptRe = /<script(?![^>]*\bsrc=)(?![^>]*type=["']application\/(ld\+)?json["'])[^>]*>/i;
+  const offenders = [];
+  const walk = (dir) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        if (entry.name !== 'assets') walk(full);
+        continue;
+      }
+      if (!/\.(html|js)$/.test(entry.name)) continue;
+      const lines = fs.readFileSync(full, 'utf8').split('\n');
+      lines.forEach((line, idx) => {
+        if (inlineHandlerRe.test(line) && /<[a-z]/i.test(line)) {
+          offenders.push(`${path.relative(process.cwd(), full)}:${idx + 1} gestionnaire inline`);
+        }
+        if (entry.name.endsWith('.html') && inlineScriptRe.test(line)) {
+          offenders.push(`${path.relative(process.cwd(), full)}:${idx + 1} <script> inline`);
+        }
+      });
+    }
+  };
+  walk(publicDir);
+  if (offenders.length) {
+    console.error(`❌ ERREUR: ${offenders.length} usage(s) de JavaScript inline bloqué(s) par la CSP`);
+    offenders.slice(0, 20).forEach(o => console.error('   ' + o));
+    console.log('   Utilisez data-* + public/js/ui-events.js (ou data-click côté admin)');
+    errors++;
+  } else {
+    console.log('✅ Aucun JavaScript inline dans public/');
+  }
+}
+
 // 8. Vérifier que node_modules/.bin/pm2 existe (si PM2 est requis)
 console.log('\n🚀 Vérification PM2 (optionnel)...');
 if (fs.existsSync('node_modules/.bin/pm2')) {

@@ -203,7 +203,7 @@
     
     return `
       <a href="/tournament-detail.html?id=${encodeURIComponent(tid)}" style="text-decoration:none;color:inherit;display:block;">
-        <div style="background:#374151;padding:1rem;border-radius:0.5rem;margin-bottom:0.75rem;transition:background 0.2s;cursor:pointer;" onmouseover="this.style.background='#4b5563'" onmouseout="this.style.background='#374151'">
+        <div style="background:#374151;padding:1rem;border-radius:0.5rem;margin-bottom:0.75rem;transition:background 0.2s;cursor:pointer;" data-hover-style="background:#4b5563" data-rest-style="background:#374151">
           <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:0.25rem;">
             <h4 style="color:#fbbf24;font-size:0.95rem;flex:1;">${t.name || 'Tournoi'}</h4>
             <span style="background:${statusColor};color:white;padding:0.125rem 0.5rem;border-radius:0.25rem;font-size:0.7rem;margin-left:0.5rem;">${statusText}</span>
@@ -268,7 +268,7 @@
     
     return `
       <a href="${raceUrl}" style="text-decoration:none;color:inherit;display:block;">
-        <div style="background:#374151;padding:1rem;border-radius:0.5rem;margin-bottom:0.75rem;transition:background 0.2s;cursor:pointer;" onmouseover="this.style.background='#4b5563'" onmouseout="this.style.background='#374151'">
+        <div style="background:#374151;padding:1rem;border-radius:0.5rem;margin-bottom:0.75rem;transition:background 0.2s;cursor:pointer;" data-hover-style="background:#4b5563" data-rest-style="background:#374151">
           <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:0.25rem;">
             <h4 style="color:#60a5fa;font-size:0.95rem;flex:1;">${r.goal || 'Standard'}</h4>
             <span style="background:${statusColor};color:white;padding:0.125rem 0.5rem;border-radius:0.25rem;font-size:0.7rem;margin-left:0.5rem;">${statusText}</span>
@@ -299,7 +299,7 @@
           <img src="${thumbUrl}" 
                alt="${escapeHtml(s.title || '')}" 
                loading="lazy"
-               onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27320%27 height=%27180%27%3E%3Crect fill=%27%23374151%27 width=%27320%27 height=%27180%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 font-size=%2740%27 fill=%27%236b7280%27 text-anchor=%27middle%27 dy=%27.3em%27%3E📺%3C/text%3E%3C/svg%3E';">
+               data-fallback-src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27320%27 height=%27180%27%3E%3Crect fill=%27%23374151%27 width=%27320%27 height=%27180%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 font-size=%2740%27 fill=%27%236b7280%27 text-anchor=%27middle%27 dy=%27.3em%27%3E📺%3C/text%3E%3C/svg%3E">
           <span class="stream-live-badge">${typeof i18n !== 'undefined' ? i18n.t('streams.live') : 'EN DIRECT'}</span>
           ${s.viewerCount ? `<span class="stream-viewers">👁 ${formatViewers(s.viewerCount)}</span>` : ''}
         </div>
@@ -552,7 +552,7 @@
         const linkAttrs = buildExternalLinkAttrs(link.url);
         const tagName = linkAttrs ? 'a' : 'div';
         html += `
-          <${tagName}${linkAttrs ? ' ' + linkAttrs : ''} style="display:inline-flex;align-items:center;gap:0.5rem;background:#374151;color:#60a5fa;padding:0.5rem 1rem;border-radius:0.5rem;text-decoration:none;transition:background 0.2s;" onmouseover="this.style.background='#4b5563'" onmouseout="this.style.background='#374151'">
+          <${tagName}${linkAttrs ? ' ' + linkAttrs : ''} style="display:inline-flex;align-items:center;gap:0.5rem;background:#374151;color:#60a5fa;padding:0.5rem 1rem;border-radius:0.5rem;text-decoration:none;transition:background 0.2s;" data-hover-style="background:#4b5563" data-rest-style="background:#374151">
             🔗 ${escapeHtml(link.name || link.url || 'Link')}
           </${tagName}>
         `;
@@ -697,8 +697,8 @@
     return `
       <${tagName}${linkAttrs ? ' ' + linkAttrs : ''}
          style="display:block;background:#1f2937;padding:0.875rem 1rem;border-radius:0.5rem;text-decoration:none;transition:background 0.2s;border:1px solid #374151;"
-         onmouseover="this.style.background='#374151'"
-         onmouseout="this.style.background='#1f2937'">
+         data-hover-style="background:#374151"
+         data-rest-style="background:#1f2937">
         <div style="display:flex;align-items:center;gap:0.5rem;color:#60a5fa;font-weight:500;">
           ${iconMarkup}
           <span>${name}</span>
@@ -841,8 +841,8 @@
           </h3>
           <${officialTagName}${officialLinkAttrs ? ' ' + officialLinkAttrs : ''}
              style="display:inline-flex;align-items:center;gap:0.75rem;background:#374151;color:#f3f4f6;padding:0.875rem 1.25rem;border-radius:0.75rem;text-decoration:none;font-weight:600;transition:background 0.2s, transform 0.2s;border:1px solid #4b5563;"
-             onmouseover="this.style.background='#4b5563';this.style.transform='translateY(-1px)'"
-             onmouseout="this.style.background='#374151';this.style.transform='translateY(0)'">
+             data-hover-style="background:#4b5563;transform:translateY(-1px)"
+             data-rest-style="background:#374151;transform:translateY(0)">
             <span style="font-size:1.125rem;">↗</span>
             <span>${siteName}</span>
           </${officialTagName}>
@@ -1027,13 +1027,13 @@
       statsEl.innerHTML = `
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem;">
           <a href="${racesUrl}" style="text-decoration:none;">
-            <div style="background:#374151;padding:1.25rem;border-radius:0.5rem;text-align:center;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='#4b5563'" onmouseout="this.style.background='#374151'">
+            <div style="background:#374151;padding:1.25rem;border-radius:0.5rem;text-align:center;cursor:pointer;transition:background 0.2s;" data-hover-style="background:#4b5563" data-rest-style="background:#374151">
               <div style="color:#60a5fa;font-size:2rem;font-weight:bold;">${stats.totalRaces}</div>
               <div style="color:#9ca3af;font-size:0.875rem;">${racesLabel}</div>
             </div>
           </a>
           <a href="${tournamentsUrl}" style="text-decoration:none;">
-            <div style="background:#374151;padding:1.25rem;border-radius:0.5rem;text-align:center;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='#4b5563'" onmouseout="this.style.background='#374151'">
+            <div style="background:#374151;padding:1.25rem;border-radius:0.5rem;text-align:center;cursor:pointer;transition:background 0.2s;" data-hover-style="background:#4b5563" data-rest-style="background:#374151">
               <div style="color:#fbbf24;font-size:2rem;font-weight:bold;">${stats.totalTournaments}</div>
               <div style="color:#9ca3af;font-size:0.875rem;">${tournamentsLabel}</div>
             </div>

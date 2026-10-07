@@ -455,7 +455,7 @@
       if (spoilerMode) {
         // Spoiler mode: simple list, no rank, no time, alphabetical
         return `
-          <div style="display:flex;align-items:center;padding:1rem;background:#2d3748;margin-bottom:0.5rem;border-radius:0.375rem;transition:background 0.2s;" onmouseover="this.style.background='#4a5568'" onmouseout="this.style.background='#2d3748'">
+          <div style="display:flex;align-items:center;padding:1rem;background:#2d3748;margin-bottom:0.5rem;border-radius:0.375rem;transition:background 0.2s;" data-hover-style="background:#4a5568" data-rest-style="background:#2d3748">
             <a href="${playerLink}" style="flex:1;color:#fff;text-decoration:none;">
               ${name}
             </a>
@@ -477,7 +477,7 @@
         const timeColor = isWinner ? '#10b981' : isDnf ? '#ef4444' : isDq ? '#f59e0b' : '#10b981';
         
         return `
-          <div class="spoiler-block" style="display:flex;align-items:center;gap:0.375rem;padding:1rem;background:${bgColor};border-left:3px solid ${borderColor};margin-bottom:0.5rem;border-radius:0.375rem;transition:background 0.2s;" onmouseover="this.style.background='#4a5568'" onmouseout="this.style.background='${bgColor}'">
+          <div class="spoiler-block" style="display:flex;align-items:center;gap:0.375rem;padding:1rem;background:${bgColor};border-left:3px solid ${borderColor};margin-bottom:0.5rem;border-radius:0.375rem;transition:background 0.2s;" data-hover-style="background:#4a5568" data-rest-style="background:${bgColor}">
             <div style="width:60px;min-width:60px;text-align:center;font-size:1.25rem;color:#fbbf24;">${rank}</div>
             <a href="${playerLink}" style="flex:1;padding-left:0.2rem;color:${nameColor};font-weight:${isWinner ? '600' : '400'};text-decoration:none;">
               ${name}
@@ -547,7 +547,7 @@
         const racetimeUrl = normalizeRacetimeRaceUrl(race.url, race.category);
         const safeRacetimeUrl = sanitizeExternalUrl(racetimeUrl);
         if (safeRacetimeUrl) {
-          links.push(`<a href="${escapeHtml(safeRacetimeUrl)}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.5rem;background-color:#1F2937;color:#E3E6E6;font-weight:600;padding:0.75rem 1.5rem;border-radius:0.5rem;border:2px solid #E3E6E6;text-decoration:none;transition:all 0.2s;font-size:1rem;" onmouseover="this.style.background='#374151'" onmouseout="this.style.background='#1F2937'"><img src="/assets/racetime.svg" alt="Racetime" style="width:24px;height:24px;">Voir sur Racetime</a>`);
+          links.push(`<a href="${escapeHtml(safeRacetimeUrl)}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.5rem;background-color:#1F2937;color:#E3E6E6;font-weight:600;padding:0.75rem 1.5rem;border-radius:0.5rem;border:2px solid #E3E6E6;text-decoration:none;transition:all 0.2s;font-size:1rem;" data-hover-style="background:#374151" data-rest-style="background:#1F2937"><img src="/assets/racetime.svg" alt="Racetime" style="width:24px;height:24px;">Voir sur Racetime</a>`);
         }
       }
       linksEl.innerHTML = links.join('');

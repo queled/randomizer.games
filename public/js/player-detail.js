@@ -673,7 +673,7 @@
     playerGamesSummary.innerHTML = `
       ${gamesSummary.map(g => `
         <div class="player-games-summary-row">
-          <a href="/game-detail.html?id=${encodeURIComponent(g.gameId)}">${g.name}</a>
+          <a href="/game-detail.html?id=${encodeURIComponent(g.gameId)}">${escHtml(g.name)}</a>
           <span class="count">(${g.count})</span>
         </div>
       `).join('')}
@@ -712,8 +712,8 @@
       return `
       <a href="/tournament-detail.html?id=${encodeURIComponent(tid)}" style="text-decoration:none;color:inherit;display:block;">
         <div class="tournament-card tournament-hover-card" data-tid="${encodeURIComponent(tid)}" style="background:#1f2937;padding:1rem;border-radius:0.5rem;margin-bottom:1rem;">
-          <h3 style="color:#fbbf24;font-size:1rem;margin-bottom:0.5rem;">${t.tournamentName || t.name || 'Tournoi'}</h3>
-          <div class="tournament-game" style="color:#d1d5db;font-size:0.875rem;margin-bottom:0.25rem;">${gameDisplay}</div>
+          <h3 style="color:#fbbf24;font-size:1rem;margin-bottom:0.5rem;">${escHtml(t.tournamentName || t.name || 'Tournoi')}</h3>
+          <div class="tournament-game" style="color:#d1d5db;font-size:0.875rem;margin-bottom:0.25rem;">${escHtml(gameDisplay)}</div>
           <div class="spoiler-block" style="color:#9ca3af;font-size:0.875rem;">${labelRanking}: <strong style="color:#fbbf24;">${t.finalRank ? formatRank(t.finalRank) : '-'}</strong></div>
         </div>
       </a>
@@ -768,8 +768,8 @@
           return `
           <a href="/tournament-detail.html?id=${encodeURIComponent(tid)}" style="text-decoration:none;color:inherit;display:block;">
             <div class="tournament-card tournament-hover-card" data-tid="${encodeURIComponent(tid)}" style="background:#1f2937;padding:1rem;border-radius:0.5rem;margin-bottom:1rem;">
-              <h3 style="color:#fbbf24;font-size:1rem;margin-bottom:0.25rem;">${t.tournamentName || t.name || 'Tournoi'}</h3>
-              <div class="tournament-game" style="color:#d1d5db;font-size:0.875rem;margin-bottom:0.25rem;">${gameDisplay}</div>
+              <h3 style="color:#fbbf24;font-size:1rem;margin-bottom:0.25rem;">${escHtml(t.tournamentName || t.name || 'Tournoi')}</h3>
+              <div class="tournament-game" style="color:#d1d5db;font-size:0.875rem;margin-bottom:0.25rem;">${escHtml(gameDisplay)}</div>
               <div class="spoiler-block" style="color:#9ca3af;font-size:0.875rem;">${labelRanking}: <strong style="color:#fbbf24;">${t.finalRank ? formatRank(t.finalRank) : '-'}</strong></div>
             </div>
           </a>
@@ -1061,13 +1061,13 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
       
       return `
       <a href="${raceUrl}" style="text-decoration:none;color:inherit;display:block;">
-        <div style="background:#1f2937;padding:0.75rem;border-radius:0.5rem;margin-bottom:1rem;transition:background 0.2s;max-height:105px;overflow:hidden;" onmouseover="this.style.background='#374151'" onmouseout="this.style.background='#1f2937'">
+        <div style="background:#1f2937;padding:0.75rem;border-radius:0.5rem;margin-bottom:1rem;transition:background 0.2s;max-height:105px;overflow:hidden;" data-hover-style="background:#374151" data-rest-style="background:#1f2937">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.25rem;">
-            <h3 style="color:#fbbf24;font-size:0.95rem;flex:1;margin-right:0.75rem;">${gameName}</h3>
+            <h3 style="color:#fbbf24;font-size:0.95rem;flex:1;margin-right:0.75rem;">${escHtml(gameName)}</h3>
             <span class="spoiler-block" style="color:#10b981;font-weight:bold;font-size:0.875rem;">${place && place !== '-' ? formatRank(place) : '-'}</span>
           </div>
-          <div style="color:#d1d5db;font-size:0.8rem;margin-bottom:0.25rem;overflow:hidden;text-overflow:ellipsis;">${goalDisplay}</div>
-          <div style="color:#9ca3af;font-size:0.75rem;">${raceDate} • ${r.status || '-'}</div>
+          <div style="color:#d1d5db;font-size:0.8rem;margin-bottom:0.25rem;overflow:hidden;text-overflow:ellipsis;">${escHtml(goalDisplay)}</div>
+          <div style="color:#9ca3af;font-size:0.75rem;">${raceDate} • ${escHtml(r.status || '-')}</div>
         </div>
       </a>
       `;

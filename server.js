@@ -138,7 +138,8 @@ const corsOptions = {
     ? [
         'https://randomizer.games',
         'https://www.randomizer.games',
-        /\.randomizer\.games$/
+        // HTTPS subdomains only, anchored on both ends
+        /^https:\/\/([a-z0-9-]+\.)+randomizer\.games$/
       ]
     : '*',
   credentials: true,
@@ -166,9 +167,13 @@ app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 // conservative Permissions-Policy to avoid unrecognized-feature warnings.
 app.use((req, res, next) => {
   try {
-    // Content Security Policy: keep inline scripts/styles for the current frontend,
-    // but remove unsafe-eval and tighten the remaining directives.
-    const csp = "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'; connect-src 'self'; img-src 'self' data: blob:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';";
+    // Content Security Policy: scripts only from our own files. Inline
+    // scripts and inline event handlers (onclick=, onerror=...) are refused,
+    // so markup injected through third-party data (race goals, tournament or
+    // player names) cannot run code. Pages use data-* attributes instead
+    // (see public/js/ui-events.js and the admin dispatcher).
+    // Inline styles stay allowed: the templates rely on style="" attributes.
+    const csp = "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'; connect-src 'self'; img-src 'self' data: blob:; script-src 'self'; script-src-attr 'none'; style-src 'self' 'unsafe-inline';";
     res.setHeader('Content-Security-Policy', csp);
 
     // Permissions-Policy: define a minimal, widely-supported set to avoid browser warnings

@@ -12,6 +12,89 @@ const SET_FIELDS = `
   slots { entrant { id name } }
 `;
 
+/**
+ * start.gg ranks whoever reached a later phase first. With parallel final brackets
+ * (e.g. Swiss → Gold + Silver), the Silver players are therefore placed above the Gold ones
+ * when Silver comes later in phaseOrder. Re-rank such brackets by strength: the bracket whose
+ * players won more in the stage feeding it comes first. Ties inside a bracket are kept.
+ */
+function rankParallelBrackets(standings, phases, sets) {
+  if (!standings.length || phases.length < 3 || !sets.length) return standings;
+
+  const orderOf = new Map(phases.map(p => [String(p.id), p.phaseOrder || 0]));
+  const playersOf = new Map(phases.map(p => [String(p.id), new Set()]));
+  const winsIn = new Map(); // `${phaseId}|${entrantId}` → wins
+  for (const set of sets) {
+    const phaseId = set.phaseGroup?.phase?.id != null ? String(set.phaseGroup.phase.id) : null;
+    if (!playersOf.has(phaseId)) continue;
+    for (const slot of set.slots || []) {
+      const entrantId = slot.entrant?.id != null ? String(slot.entrant.id) : null;
+      if (!entrantId) continue;
+      playersOf.get(phaseId).add(entrantId);
+      if (String(set.winnerId) === entrantId) {
+        const key = `${phaseId}|${entrantId}`;
+        winsIn.set(key, (winsIn.get(key) || 0) + 1);
+      }
+    }
+  }
+
+  // Each later phase is fed by the earlier phase sharing the most players with it
+  const overlap = (a, b) => [...playersOf.get(a)].filter(id => playersOf.get(b).has(id)).length;
+  const children = new Map();
+  for (const phaseId of playersOf.keys()) {
+    let parent = null;
+    let best = 0;
+    for (const earlier of playersOf.keys()) {
+      if (orderOf.get(earlier) >= orderOf.get(phaseId)) continue;
+      const shared = overlap(phaseId, earlier);
+      if (shared > best) { best = shared; parent = earlier; }
+    }
+    if (parent) children.set(parent, [...(children.get(parent) || []), phaseId]);
+  }
+
+  // phaseId → { level, tier } for brackets played side by side by disjoint players
+  const placeOf = new Map();
+  for (const [parent, siblings] of children) {
+    if (siblings.length < 2) continue;
+    const disjoint = siblings.every(a => siblings.every(b => a === b || !overlap(a, b)));
+    if (!disjoint) continue;
+    const strength = phaseId => {
+      const players = [...playersOf.get(phaseId)];
+      return players.reduce((sum, id) => sum + (winsIn.get(`${parent}|${id}`) || 0), 0) / (players.length || 1);
+    };
+    const level = Math.min(...siblings.map(id => orderOf.get(id)));
+    [...siblings]
+      .sort((a, b) => strength(b) - strength(a) || orderOf.get(a) - orderOf.get(b))
+      .forEach((phaseId, tier) => placeOf.set(phaseId, { level, tier }));
+  }
+  if (!placeOf.size) return standings;
+
+  // Bucket = the last stage an entrant played; buckets keep start.gg's order inside them
+  const bucketOf = standing => {
+    const entrantId = String(standing.entrant?.id);
+    let last = null;
+    for (const phaseId of playersOf.keys()) {
+      if (playersOf.get(phaseId).has(entrantId) && (!last || orderOf.get(phaseId) > orderOf.get(last))) last = phaseId;
+    }
+    if (!last) return { level: -1, tier: 0 };
+    return placeOf.get(last) || { level: orderOf.get(last), tier: 0 };
+  };
+  const ranked = standings
+    .map(standing => ({ standing, bucket: bucketOf(standing) }))
+    .sort((a, b) => b.bucket.level - a.bucket.level || a.bucket.tier - b.bucket.tier
+      || (a.standing.placement || 0) - (b.standing.placement || 0));
+
+  let offset = 0;
+  return ranked.map(({ standing, bucket }, index) => {
+    const prev = ranked[index - 1];
+    const sameBucket = prev && prev.bucket.level === bucket.level && prev.bucket.tier === bucket.tier;
+    if (!sameBucket) offset = index;
+    const firstTied = ranked.findIndex((entry, i) => i >= offset && entry.bucket.level === bucket.level
+      && entry.bucket.tier === bucket.tier && entry.standing.placement === standing.placement);
+    return { ...standing, placement: firstTied + 1 };
+  });
+}
+
 class StartGGAPI {
   constructor() {
     this.apiToken = process.env.STARTGG_API_TOKEN;
@@ -250,7 +333,7 @@ class StartGGAPI {
           userSlug: p.user?.slug
         })) || []
       })) || [],
-      standings: event.standings?.nodes?.map(s => ({
+      standings: rankParallelBrackets(event.standings?.nodes || [], event.phases || [], event.sets?.nodes || []).map(s => ({
         placement: s.placement,
         entrantId: s.entrant.id,
         entrantName: s.entrant.name,

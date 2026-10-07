@@ -2968,6 +2968,7 @@ const admin = {
                 <strong>${this.escapeHtml(p.matchPlayers)}</strong>
                 ${p.matchPhase ? `<span class="text-muted">${this.escapeHtml(p.matchPhase)}</span>` : ''}
                 ${p.matchRound ? `<code>${p.matchRound > 0 ? 'R' + p.matchRound : 'L' + Math.abs(p.matchRound)}</code>` : ''}
+                ${p.replacesRaceUrl ? `<span class="text-muted">remplace ${this.escapeHtml(p.replacesRaceUrl)}</span>` : ''}
               </div>
             </div>
             <div class="rl-autolink-score">

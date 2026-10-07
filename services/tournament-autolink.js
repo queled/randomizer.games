@@ -1,8 +1,10 @@
 const {
   rankMatchesForRace,
   selectBestCandidate,
+  learnPlayerAliases,
   getMatchPlayers,
   getRaceLabel,
+  scoreNameMatch,
   parseRaceStageInfo,
   parseStartggDisplayScore
 } = require('../helpers/race-match-linking');
@@ -124,7 +126,34 @@ function getRaceLabelBracketSide(race) {
   return null;
 }
 
+function getMatchTimestamp(match) {
+  const timestamp = new Date(match?.completedAt || match?.startedAt || 0).getTime();
+  return Number.isNaN(timestamp) ? 0 : timestamp;
+}
+
+// A grand final often opposes the winners finalists again: only the winners side
+// rounds completed after the losers final (deepest negative round) of their phase
+function filterGrandFinalMatches(matches) {
+  const losersFinals = new Map();
+  for (const match of matches) {
+    const round = Number(match.round);
+    if (!(round < 0)) continue;
+    const current = losersFinals.get(match.phase);
+    if (!current || round < current.round) losersFinals.set(match.phase, { round, at: getMatchTimestamp(match) });
+    else if (round === current.round) current.at = Math.max(current.at, getMatchTimestamp(match));
+  }
+  if (!losersFinals.size) return matches;
+
+  return matches.filter((match) => {
+    if (!(Number(match.round) > 0)) return false;
+    const losersFinal = losersFinals.get(match.phase);
+    return !losersFinal?.at || getMatchTimestamp(match) >= losersFinal.at;
+  });
+}
+
 function filterMatchesByBracketSide(race, matches) {
+  if (/\bgrand\s*finals?\b/i.test(getRaceLabel(race))) return filterGrandFinalMatches(matches);
+
   const side = getRaceLabelBracketSide(race);
   if (!side || !matches.some((match) => Number(match.round) < 0)) return matches;
   return matches.filter((match) => (side === 'losers' ? Number(match.round) < 0 : Number(match.round) > 0));
@@ -333,6 +362,30 @@ function namesOtherEventSeries(label, tournamentName) {
   return !!series && !new RegExp(`\\b${series[1]}\\b`, 'i').test(String(tournamentName || ''));
 }
 
+const STAGE_WORDS = new Set([
+  'swiss', 'stage', 'week', 'top', 'winners', 'winner', 'losers', 'loser', 'upper', 'lower', 'grand',
+  'final', 'finals', 'semi', 'semis', 'semifinal', 'semifinals', 'quarter', 'quarters', 'quarterfinal',
+  'quarterfinals', 'elimination', 'playoff', 'playoffs', 'match', 'set', 'async', 'live'
+]);
+
+// "CT7 - Ragnoth vs Megaslim": words before the players that are neither a stage, a
+// round number nor a player, and share nothing with the tournament name
+function namesOtherEvent(label, matchPlayers, tournamentName) {
+  const parts = String(label || '').split(/\s+(?:vs\.?|v\.?)\s+/i);
+  if (parts.length < 2) return false;
+
+  const playerTokens = goalTokens(matchPlayers);
+  const eventTokens = goalTokens(parts[0]).filter((token) => (
+    !STAGE_WORDS.has(token) &&
+    !/^[a-z]?\d+$/.test(token) &&
+    !playerTokens.some((player) => player.startsWith(token) || token.startsWith(player))
+  ));
+  if (!eventTokens.length) return false;
+
+  const tournamentTokens = new Set(goalTokens(tournamentName));
+  return !eventTokens.some((token) => tournamentTokens.has(token));
+}
+
 /**
  * Racetime goals are usually per event ("Random settings league", "SGL 2025"...): drop
  * proposals whose goal neither matches the tournament's dominant goal nor its name,
@@ -355,12 +408,49 @@ function filterProposalsByGoal(tournament, proposals, races) {
     // Players read from the label rather than the room entrants: only trust labels that
     // name this event ("League 2025 - ..."), not another one the same players met in ("CT7 - ...")
     if (proposal.fromLabel && !goalsLookAlike(proposal.raceLabel, tournament?.name)) return false;
+    // Players recognised through an alias or a nickname: reject rooms naming another event
+    if (proposal.inferred && namesOtherEvent(proposal.raceLabel, proposal.matchPlayers, tournament?.name)) return false;
     const goal = goalByUrl.get(proposal.raceUrl);
     if (!goal) return true;
     return (dominant && goalsLookAlike(goal, dominant)) ||
       goalsLookAlike(goal, tournament?.name) ||
       goalsLookAlike(stageByUrl.get(proposal.raceUrl), tournament?.name);
   });
+}
+
+// Manual links are stored with this confidence and never replaced
+const MANUAL_LINK_CONFIDENCE = 999;
+const REPLACE_MIN_SCORE = 700;
+const REPLACE_MIN_GAP = 300;
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+// A room whose label names both players of the match is a real game of it, even far in time
+function labelNamesMatchPlayers(race, match) {
+  const labelPlayers = parseRaceStageInfo(race).players;
+  if (!labelPlayers) return false;
+  const { player1, player2 } = getMatchPlayers(match);
+  return [player1, player2].every((player) => labelPlayers.some((labelPlayer) => scoreNameMatch(labelPlayer.name, player) > 0));
+}
+
+function getRaceDistanceToMatch(race, match) {
+  const raceAt = new Date(race?.endedAt || race?.startedAt || 0).getTime();
+  const matchAt = getMatchTimestamp(match);
+  if (!raceAt || !matchAt || Number.isNaN(raceAt)) return null;
+  return Math.abs(raceAt - matchAt);
+}
+const ALIAS_MIN_CONFIDENCE = 500;
+
+// Racetime accounts seen under another bracket name in confident links of the same games
+async function loadPlayerAliases({ Race, races }) {
+  const categories = [...new Set(races.map((race) => race.category).filter(Boolean))];
+  if (!categories.length) return new Map();
+
+  const linkedRaces = await Race.find({
+    category: { $in: categories },
+    matchPlayers: { $nin: [null, ''] },
+    matchConfidence: { $gte: ALIAS_MIN_CONFIDENCE }
+  }).select('entrants.userName matchPlayers').lean();
+  return learnPlayerAliases(linkedRaces);
 }
 
 async function buildAutoLinkPreview({
@@ -374,6 +464,13 @@ async function buildAutoLinkPreview({
   const matches = await loadNormalizedMatches({ tournament, Match, Race });
   const races = await loadCandidateRaces({ tournament, Race, matches, extraRaceUrls });
   const raceByUrl = new Map(races.map((race) => [race.url, race]));
+  const aliases = await loadPlayerAliases({ Race, races });
+  const scoreOptions = {
+    requireDirect: true,
+    allowOccupiedMatchReassign: false,
+    skipOccupiedPenalty: true,
+    aliases
+  };
   const liveMatches = matches.map((match) => {
     const raceUrls = Array.isArray(match.raceUrls) ? [...match.raceUrls] : [];
     return {
@@ -411,34 +508,55 @@ async function buildAutoLinkPreview({
 
     // Series (BO3, BO5...) take one race per game played
     const gameNumber = getRaceGameNumber(race);
-    const pickMatch = (stageOptions) => {
+    const getStageMatches = (stageOptions) => {
       const phaseMatches = isTournamentStartgg(tournament)
         ? filterMatchesByRaceStage(race, liveMatches, tournament, stageOptions)
         : liveMatches;
-      const stageMatches = phaseMatches && filterMatchesByBracketSide(race, phaseMatches);
-      const candidateMatches = (stageMatches || []).filter((match) => hasAvailableStartggSlot(match, race.url, gameNumber));
-      if (!candidateMatches.length) return null;
+      return (phaseMatches && filterMatchesByBracketSide(race, phaseMatches)) || [];
+    };
+    const selectMatch = (matchesToRank) => (matchesToRank.length
+      ? selectBestCandidate(rankMatchesForRace(race, matchesToRank, scoreOptions), { threshold, minGap, raceUrl: race.url })
+      : null);
+    const pickMatch = (stageOptions) => selectMatch(
+      getStageMatches(stageOptions).filter((match) => hasAvailableStartggSlot(match, race.url, gameNumber))
+    );
 
-      const scored = rankMatchesForRace(
-        race,
-        candidateMatches,
-        {
-          requireDirect: true,
-          allowOccupiedMatchReassign: false,
-          skipOccupiedPenalty: true
-        }
+    // A full start.gg match may hold a weak automatic link (a practice room days away
+    // from the set) that this race, played the same day, clearly beats: take its place
+    const pickReplacement = (stageOptions) => {
+      if (!isTournamentStartgg(tournament)) return null;
+      const candidate = selectMatch(
+        getStageMatches(stageOptions).filter((match) => !hasAvailableStartggSlot(match, race.url, gameNumber))
       );
+      if (!candidate || candidate.score < REPLACE_MIN_SCORE) return null;
+      const candidateDistance = getRaceDistanceToMatch(race, candidate.match);
+      if (candidateDistance == null || candidateDistance > DAY_MS) return null;
 
-      return selectBestCandidate(scored, {
-        threshold,
-        minGap,
-        raceUrl: race.url
-      });
+      const weakest = candidate.match.raceUrls
+        .map((url) => raceByUrl.get(url))
+        .filter((linkedRace) => (
+          linkedRace &&
+          Number(linkedRace.matchConfidence) < MANUAL_LINK_CONFIDENCE &&
+          !labelNamesMatchPlayers(linkedRace, candidate.match) &&
+          getRaceDistanceToMatch(linkedRace, candidate.match) > 3 * DAY_MS
+        ))
+        .map((linkedRace) => ({
+          url: linkedRace.url,
+          score: rankMatchesForRace(linkedRace, [candidate.match], scoreOptions)[0]?.score || 0
+        }))
+        .sort((a, b) => a.score - b.score)[0];
+      if (!weakest || candidate.score - weakest.score < REPLACE_MIN_GAP) return null;
+
+      return { ...candidate, replacesRaceUrl: weakest.url };
     };
 
     // Organizers sometimes number Swiss rounds off by one ("Swiss Round 2" played in
     // start.gg round 3): fall back to the whole stage when the named round has no match
-    const chosen = pickMatch() || (getRaceLabelStage(race)?.round != null ? pickMatch({ ignoreRound: true }) : null);
+    const hasLabelRound = getRaceLabelStage(race)?.round != null;
+    const chosen = pickMatch() ||
+      (hasLabelRound ? pickMatch({ ignoreRound: true }) : null) ||
+      pickReplacement() ||
+      (hasLabelRound ? pickReplacement({ ignoreRound: true }) : null);
 
     if (!chosen) {
       skipped++;
@@ -457,12 +575,18 @@ async function buildAutoLinkPreview({
       matchRound: chosen.match.round || null,
       score: chosen.score,
       fromLabel: chosen.extracted?.source === 'label',
+      inferred: !!chosen.inferred,
+      replacesRaceUrl: chosen.replacesRaceUrl || null,
       isStartgg: isTournamentStartgg(tournament)
     });
 
     const liveIndex = liveMatches.findIndex((match) => String(match.startggSetId || match._id) === String(chosen.match.startggSetId || chosen.match._id));
     if (liveIndex >= 0) {
       const liveMatch = liveMatches[liveIndex];
+      if (chosen.replacesRaceUrl) {
+        liveMatch.raceUrls = liveMatch.raceUrls.filter((url) => url !== chosen.replacesRaceUrl);
+        if (liveMatch.raceUrl === chosen.replacesRaceUrl) liveMatch.raceUrl = liveMatch.raceUrls[0] || null;
+      }
       if (!liveMatch.raceUrl) liveMatch.raceUrl = race.url;
       if (!liveMatch.raceUrls.includes(race.url)) liveMatch.raceUrls.push(race.url);
       liveMatch.maxGameNumber = Math.max(liveMatch.maxGameNumber || 0, gameNumber || 0);
@@ -545,6 +669,25 @@ async function applyAutoLinkProposals({ tournament, proposals, Race, Match }) {
         if (!embeddedMatch) {
           errors.push(`Match ${proposal.matchId} not found`);
           continue;
+        }
+
+        if (proposal.replacesRaceUrl) {
+          const replaced = await Race.findOne({ url: proposal.replacesRaceUrl });
+          if (!replaced || String(replaced.startggSetId || '') !== String(embeddedMatch.startggSetId) || !(Number(replaced.matchConfidence) < MANUAL_LINK_CONFIDENCE)) {
+            errors.push(`Race ${proposal.replacesRaceUrl} can no longer be replaced on match ${proposal.matchId}`);
+            continue;
+          }
+
+          embeddedMatch.raceUrls = (embeddedMatch.raceUrls || []).filter((url) => url !== replaced.url);
+          if (embeddedMatch.raceUrl === replaced.url) embeddedMatch.raceUrl = embeddedMatch.raceUrls[0] || null;
+          replaced.startggSetId = undefined;
+          replaced.matchConfidence = undefined;
+          replaced.matchPlayers = undefined;
+          replaced.tournamentPhase = undefined;
+          replaced.tournamentPool = undefined;
+          replaced.tournamentRound = undefined;
+          await replaced.save();
+          tournamentDirty = true;
         }
 
         const linkedRaces = await Race.find({ url: { $in: embeddedMatch.raceUrls || [] } }).select('info').lean();

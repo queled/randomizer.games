@@ -279,11 +279,14 @@ function scoreNameMatch(entrantName, target) {
   if (entrantTokens.includes(target)) return 200;
   if (targetTokens.length && targetTokens.every((t) => entrantTokens.includes(t))) return 180;
 
+  // "Flow" for Flowleyd: a nickname prefix, weaker than a near-identical token
+  let nickname = false;
   for (const et of entrantTokens) {
     for (const tt of targetTokens) {
       if (et.startsWith(tt) || tt.startsWith(et)) {
         const diff = Math.abs(et.length - tt.length);
         if (diff <= 3) return 220;
+        if (Math.min(et.length, tt.length) >= 4) nickname = true;
       }
     }
   }
@@ -296,12 +299,50 @@ function scoreNameMatch(entrantName, target) {
     // ignore invalid regex constructions
   }
 
+  if (nickname) return 120;
+
   const lev = levenshtein(entrantName, target);
   const maxLen = Math.max(entrantName.length, target.length) || 1;
   const similarity = 1 - (lev / maxLen);
   if (similarity > 0.85) return 140;
   if (similarity > 0.7) return 80;
   return 0;
+}
+
+// Racetime account → bracket names it played under, learned from linked races
+function scorePlayerName(entrantName, target, aliases = null) {
+  if (aliases?.get(entrantName)?.has(target)) return 300;
+  return scoreNameMatch(entrantName, target);
+}
+
+/**
+ * Learn racetime account aliases from confident links: when one entrant clearly is one
+ * bracket player and the other entrant matches nobody ("Scarlet Blackflame" in a room
+ * linked to "josh5146 vs iba allday"), the other entrant played as the other player.
+ * Accounts seen under several bracket names are dropped.
+ */
+function learnPlayerAliases(linkedRaces) {
+  const seen = new Map();
+
+  for (const race of linkedRaces) {
+    const players = String(race?.matchPlayers || '').split(/\s+vs\s+/i).map(normalizeName);
+    const entrants = (race?.entrants || []).map((e) => normalizeName(e?.userName || e?.name || ''));
+    if (players.length !== 2 || entrants.length !== 2 || players.some((p) => !p) || entrants.some((e) => !e)) continue;
+
+    for (const [known, other] of [[0, 1], [1, 0]]) {
+      for (const [player, otherPlayer] of [[0, 1], [1, 0]]) {
+        const isClear = scoreNameMatch(entrants[known], players[player]) >= 200 &&
+          scoreNameMatch(entrants[known], players[otherPlayer]) === 0 &&
+          scoreNameMatch(entrants[other], players[player]) === 0 &&
+          scoreNameMatch(entrants[other], players[otherPlayer]) === 0;
+        if (!isClear) continue;
+        if (!seen.has(entrants[other])) seen.set(entrants[other], new Set());
+        seen.get(entrants[other]).add(players[otherPlayer]);
+      }
+    }
+  }
+
+  return new Map([...seen].filter(([, targets]) => targets.size === 1));
 }
 
 function getMatchPlayers(match) {
@@ -367,10 +408,10 @@ function scoreExtractedAgainstMatch(race, match, extracted, options = {}) {
   let best2 = { score: 0, entrant: null };
 
   for (const entrant of extracted.entrants) {
-    const s1 = scoreNameMatch(entrant.name, player1);
+    const s1 = scorePlayerName(entrant.name, player1, options.aliases);
     if (s1 > best1.score) best1 = { score: s1, entrant };
 
-    const s2 = scoreNameMatch(entrant.name, player2);
+    const s2 = scorePlayerName(entrant.name, player2, options.aliases);
     if (s2 > best2.score) best2 = { score: s2, entrant };
   }
 
@@ -381,7 +422,7 @@ function scoreExtractedAgainstMatch(race, match, extracted, options = {}) {
     let secondBest2 = { score: 0, entrant: null };
     for (const entrant of extracted.entrants) {
       if (entrant === best1.entrant) continue;
-      const s = scoreNameMatch(entrant.name, player2);
+      const s = scorePlayerName(entrant.name, player2, options.aliases);
       if (s > secondBest2.score) secondBest2 = { score: s, entrant };
     }
 
@@ -389,7 +430,7 @@ function scoreExtractedAgainstMatch(race, match, extracted, options = {}) {
     let secondBest1 = { score: 0, entrant: null };
     for (const entrant of extracted.entrants) {
       if (entrant === best2.entrant) continue;
-      const s = scoreNameMatch(entrant.name, player1);
+      const s = scorePlayerName(entrant.name, player1, options.aliases);
       if (s > secondBest1.score) secondBest1 = { score: s, entrant };
     }
 
@@ -489,11 +530,17 @@ function scoreExtractedAgainstMatch(race, match, extracted, options = {}) {
   const roundWeight = getRoundWeight(match);
   if (roundWeight > 0) total += Math.min(80, roundWeight * 6);
 
+  // Players recognised through an alias or a nickname rather than their own name
+  const inferred = [[best1, player1], [best2, player2]].some(([best, player]) => (
+    !!options.aliases?.get(best.entrant.name)?.has(player) || best.score < 140
+  ));
+
   return {
     score: total,
     extracted,
     best1,
     best2,
+    inferred,
     reason: 'ok'
   };
 }
@@ -540,6 +587,7 @@ module.exports = {
   parseRaceStageInfo,
   parseStartggDisplayScore,
   extractRaceEntrants,
+  learnPlayerAliases,
   scoreNameMatch,
   scoreRaceAgainstMatch,
   rankMatchesForRace,

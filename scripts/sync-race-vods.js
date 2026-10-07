@@ -27,6 +27,7 @@ const twitchVods = require('../services/twitch-vods');
 
 const RACETIME_DELAY_MS = 500;
 const RETRY_AFTER_END_MS = 12 * 3600 * 1000;
+const BATCH_SIZE = 50;
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -68,52 +69,61 @@ async function findRaceVods({ dryRun, days }, stats) {
   if (!races.length) return;
   console.log(`\n🏁 ${races.length} race(s) à chercher`);
 
-  // Each race's entrants with a Twitch channel and no VOD yet
-  const pending = [];
-  for (const race of races) {
-    await sleep(RACETIME_DELAY_MS);
-    try {
-      const done = new Set((race.vods || []).filter(v => v.vodUrl).map(v => v.userId));
-      const channels = (await getEntrantChannels(race.url)).filter(c => !done.has(c.userId));
-      pending.push({ race, channels });
-    } catch (error) {
-      console.log(`   ❌ ${race.url} : ${error.message}`);
-      stats.errors++;
-    }
-  }
-
-  const logins = pending.flatMap(p => p.channels.map(c => c.twitchName));
-  const userIds = logins.length ? await twitchVods.getUserIds(logins) : new Map();
+  // A channel's past broadcasts serve all its races of the run
+  const userIds = new Map();
   const archivesByLogin = new Map();
   const getArchives = async login => {
     if (!archivesByLogin.has(login)) {
-      archivesByLogin.set(login, userIds.has(login) ? await twitchVods.getArchives(userIds.get(login)) : []);
+      archivesByLogin.set(login, userIds.get(login) ? await twitchVods.getArchives(userIds.get(login)) : []);
     }
     return archivesByLogin.get(login);
   };
 
-  for (const { race, channels } of pending) {
-    const vods = (race.vods || []).slice();
-    let found = 0;
-    for (const channel of channels) {
-      const vodUrl = twitchVods.findVod(await getArchives(channel.twitchName), race.startedAt);
-      const existing = vods.find(v => v.userId === channel.userId);
-      const entry = existing || { userId: channel.userId };
-      entry.userName = channel.userName;
-      entry.twitchName = channel.twitchName;
-      if (vodUrl) {
-        entry.vodUrl = vodUrl;
-        delete entry.vodGoneAt;
-        found++;
+  // By batches, each one saved before the next: an interrupted backfill resumes where it stopped
+  for (let i = 0; i < races.length; i += BATCH_SIZE) {
+    // Each race's entrants with a Twitch channel and no VOD yet
+    const pending = [];
+    for (const race of races.slice(i, i + BATCH_SIZE)) {
+      await sleep(RACETIME_DELAY_MS);
+      try {
+        const done = new Set((race.vods || []).filter(v => v.vodUrl).map(v => v.userId));
+        const channels = (await getEntrantChannels(race.url)).filter(c => !done.has(c.userId));
+        pending.push({ race, channels });
+      } catch (error) {
+        console.log(`   ❌ ${race.url} : ${error.message}`);
+        stats.errors++;
       }
-      if (!existing) vods.push(entry);
     }
-    stats.races++;
-    stats.vods += found;
-    if (found) console.log(`   🎬 ${race.url} : ${found} VOD`);
-    if (!dryRun) {
-      await Race.updateOne({ _id: race._id }, { $set: { vods, vodSearchedAt: new Date() } });
+
+    const unknown = [...new Set(pending.flatMap(p => p.channels.map(c => c.twitchName)))].filter(l => !userIds.has(l));
+    if (unknown.length) {
+      const found = await twitchVods.getUserIds(unknown);
+      unknown.forEach(login => userIds.set(login, found.get(login) || null));
     }
+
+    for (const { race, channels } of pending) {
+      const vods = (race.vods || []).slice();
+      let found = 0;
+      for (const channel of channels) {
+        const vodUrl = twitchVods.findVod(await getArchives(channel.twitchName), race.startedAt);
+        const existing = vods.find(v => v.userId === channel.userId);
+        const entry = existing || { userId: channel.userId };
+        entry.userName = channel.userName;
+        entry.twitchName = channel.twitchName;
+        if (vodUrl) {
+          entry.vodUrl = vodUrl;
+          delete entry.vodGoneAt;
+          found++;
+        }
+        if (!existing) vods.push(entry);
+      }
+      stats.races++;
+      stats.vods += found;
+      if (!dryRun) {
+        await Race.updateOne({ _id: race._id }, { $set: { vods, vodSearchedAt: new Date() } });
+      }
+    }
+    console.log(`   ${Math.min(i + BATCH_SIZE, races.length)}/${races.length} races, ${stats.vods} VOD`);
   }
 }
 

@@ -1111,7 +1111,7 @@ function sortPhasesChronologically(phases, matches = [], tournament = null) {
 
 // Match list order: latest phase on top (finals first, opening Swiss rounds last). Brackets played
 // side by side by different players (Gold + Silver, Groups A-H + Group I) stay together, the main
-// one first, then in phaseOrder.
+// one first, then the latest declared (Group I before Groups A-H).
 function sortPhasesNewestFirst(phaseNames, tournament, matches = []) {
   const declared = tournament && Array.isArray(tournament.phases) ? tournament.phases : [];
   // Grouped Challonge brackets (Upper / Middle / Lower) run side by side: keep their declared order
@@ -1150,7 +1150,7 @@ function sortPhasesNewestFirst(phaseNames, tournament, matches = []) {
   return clusters
     .map((cluster, index) => ({ cluster, index }))
     .sort((a, b) => b.index - a.index)
-    .flatMap(({ cluster }) => cluster.sort((a, b) => (tier(a) - tier(b)) || (phaseOrder(a) - phaseOrder(b))));
+    .flatMap(({ cluster }) => cluster.sort((a, b) => (tier(a) - tier(b)) || (phaseOrder(b) - phaseOrder(a))));
 }
 
 function displayMatches(matches, tournament, races = []) {

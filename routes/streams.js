@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Game } = require('../models');
+const { titleNamesRace } = require('../helpers/restream-titles');
 
 // Cache for stream results (5 minutes TTL)
 const cache = {
@@ -780,13 +781,14 @@ async function fetchRacetimeInProgressRaces(slug) {
   return races;
 }
 
-// Fetch entrants marked as live-streaming (with a Twitch channel) for a given race
+// Entrants of a race: those live-streaming (with a Twitch channel), and the
+// names every entrant goes by, to recognize the race in a restream's title
 async function fetchRacetimeLiveEntrants(dataUrl) {
   const cacheKey = `racetime-live:race:${dataUrl}`;
   const cached = getCached(cacheKey);
   if (cached) return cached;
 
-  let liveEntrants = [];
+  let result = { liveEntrants: [], players: [] };
   try {
     const response = await fetch(`${RACETIME_HOST_URL}${dataUrl}`, {
       headers: { Accept: 'application/json' }
@@ -794,25 +796,31 @@ async function fetchRacetimeLiveEntrants(dataUrl) {
     if (response.ok) {
       const data = await response.json();
       const entrants = Array.isArray(data.entrants) ? data.entrants : [];
-      liveEntrants = entrants
+      const raceUrl = data.url ? `${RACETIME_HOST_URL}${data.url}` : null;
+      const raceGoal = data.goal?.name || null;
+      result.liveEntrants = entrants
         .filter(e => e?.stream_live && e?.user?.twitch_channel)
         .map(e => {
           const login = (e.user.twitch_name || extractTwitchLoginFromChannelUrl(e.user.twitch_channel) || '').toLowerCase();
           if (!login) return null;
-          return {
-            twitchLogin: login,
-            raceUrl: data.url ? `${RACETIME_HOST_URL}${data.url}` : null,
-            raceGoal: data.goal?.name || null
-          };
+          return { twitchLogin: login, raceUrl, raceGoal };
         })
         .filter(Boolean);
+      result.players = entrants
+        .filter(e => e?.user)
+        .map(e => ({
+          names: [e.user.name, e.user.twitch_name, extractTwitchLoginFromChannelUrl(e.user.twitch_channel)].filter(Boolean),
+          twitchLogin: (e.user.twitch_name || extractTwitchLoginFromChannelUrl(e.user.twitch_channel) || '').toLowerCase()
+        }));
+      result.raceUrl = raceUrl;
+      result.raceGoal = raceGoal;
     }
   } catch (error) {
     console.warn(`Racetime live entrants fetch failed for ${dataUrl}:`, error?.message || error);
   }
 
-  setCache(cacheKey, liveEntrants, RACETIME_LIVE_CACHE_TTL);
-  return liveEntrants;
+  setCache(cacheKey, result, RACETIME_LIVE_CACHE_TTL);
+  return result;
 }
 
 // Confirm live status/viewer count directly with Twitch for a batch of logins (no title/tag filtering)
@@ -841,12 +849,49 @@ async function fetchTwitchStreamsByLogins(logins) {
       gameName: stream.game_name,
       tags: stream.tags || [],
       url: `https://twitch.tv/${stream.user_login}`,
-      startedAt: stream.started_at
+      startedAt: stream.started_at,
+      twitchCategoryId: stream.game_id
     }));
   } catch (error) {
     console.warn('Error confirming racetime-detected streams with Twitch:', error?.message || error);
     return [];
   }
+}
+
+// Restreams of racetime.gg races in progress: broadcasts of the races' Twitch
+// categories, on another channel than a player's, whose title names the race's
+// players (a tournament restream's title rarely says "rando").
+async function findRestreamsOfRaces(races, categoryIds) {
+  if (!races.length || !categoryIds.length) return [];
+  const token = await getTwitchToken();
+  if (!token) return [];
+
+  const playerLogins = new Set(races.flatMap(race => race.players.map(p => p.twitchLogin)).filter(Boolean));
+  const rawLists = await Promise.all(categoryIds.map(id => fetchCategoryRawStreams(id, token).catch(() => null)));
+  const restreams = [];
+  for (const stream of rawLists.flatMap(list => list || [])) {
+    const login = String(stream.user_login || '').toLowerCase();
+    if (!login || playerLogins.has(login)) continue;
+    const race = races.find(r => titleNamesRace(stream.title, r.players.map(p => p.names)));
+    if (!race) continue;
+    restreams.push({
+      platform: 'twitch',
+      id: stream.id,
+      userName: stream.user_name,
+      userLogin: login,
+      title: stream.title,
+      viewerCount: stream.viewer_count,
+      thumbnailUrl: stream.thumbnail_url?.replace('{width}', '320').replace('{height}', '180'),
+      gameName: stream.game_name,
+      tags: stream.tags || [],
+      url: `https://twitch.tv/${stream.user_login}`,
+      startedAt: stream.started_at,
+      source: 'racetime-restream',
+      raceUrl: race.raceUrl || null,
+      raceGoal: race.raceGoal || null
+    });
+  }
+  return restreams;
 }
 
 // Build extra stream entries for a game by cross-referencing racetime.gg live races with Twitch.
@@ -857,11 +902,13 @@ async function fetchRacetimeLiveStreamsForGame(gameDoc, gameIdLower) {
     if (!slugs.length) return [];
 
     const candidates = [];
+    const racesWithPlayers = [];
     for (const slug of slugs) {
       const races = await fetchRacetimeInProgressRaces(slug);
-      const entrantLists = await mapWithConcurrency(races, 4, race => fetchRacetimeLiveEntrants(race.data_url));
-      for (const entrants of entrantLists) {
-        candidates.push(...entrants);
+      const raceEntrants = await mapWithConcurrency(races, 4, race => fetchRacetimeLiveEntrants(race.data_url));
+      for (const race of raceEntrants) {
+        candidates.push(...race.liveEntrants);
+        if (race.players.length >= 2) racesWithPlayers.push(race);
       }
     }
     if (!candidates.length) return [];
@@ -875,7 +922,7 @@ async function fetchRacetimeLiveStreamsForGame(gameDoc, gameIdLower) {
 
     const confirmedStreams = await fetchTwitchStreamsByLogins(Array.from(raceInfoByLogin.keys()));
 
-    return confirmedStreams.map(stream => {
+    const streams = confirmedStreams.map(({ twitchCategoryId, ...stream }) => {
       const info = raceInfoByLogin.get(String(stream.userLogin || '').toLowerCase());
       return {
         ...stream,
@@ -885,6 +932,16 @@ async function fetchRacetimeLiveStreamsForGame(gameDoc, gameIdLower) {
         raceGoal: info?.raceGoal || null
       };
     });
+
+    const categoryIds = Array.from(new Set(confirmedStreams.map(s => s.twitchCategoryId).filter(Boolean)));
+    const restreams = await findRestreamsOfRaces(racesWithPlayers, categoryIds);
+    const knownLogins = new Set(streams.map(s => String(s.userLogin || '').toLowerCase()));
+    for (const restream of restreams) {
+      if (knownLogins.has(restream.userLogin)) continue;
+      knownLogins.add(restream.userLogin);
+      streams.push({ ...restream, gameId: gameIdLower });
+    }
+    return streams;
   } catch (error) {
     console.warn(`Racetime live augmentation failed for ${gameIdLower}:`, error?.message || error);
     return [];

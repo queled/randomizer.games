@@ -1230,6 +1230,11 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
         else racesEl.innerHTML = '<p style="color:#9ca3af;">No races found for this player.</p>';
         return;
       }
+      // The name is an alias (former name, Challonge name...): show the canonical profile
+      if (player && player.name && player.name.toLowerCase() !== name.toLowerCase()) {
+        window.location.replace('/player-detail.html?name=' + encodeURIComponent(player.name));
+        return;
+      }
       // Normalize tournaments to the shape expected by renderTournaments
       const tournaments = (player.tournaments || []).map(t => {
         const tour = t.tournamentId || {};

@@ -519,10 +519,10 @@ router.get('/by-name/:name', async (req, res, next) => {
       return res.json(cached);
     }
 
-    // Case-insensitive search
-    const player = await Player.findOne({ 
-      name: { $regex: new RegExp('^' + req.params.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$', 'i') }
-    }).populate('tournaments.tournamentId');
+    // Case-insensitive search, by name then by alias (the page redirects aliases to the canonical name)
+    const nameRegex = exactNameRegex(req.params.name);
+    const player = await Player.findOne({ name: nameRegex }).populate('tournaments.tournamentId')
+      || await Player.findOne({ aliases: nameRegex }).populate('tournaments.tournamentId');
 
     if (!player) {
       setPlayersCache(cacheKey, { __noContent: true });
@@ -542,6 +542,39 @@ const COMPACT_RACE_FIELDS = 'name category goal info status startedAt endedAt cr
 
 function isCompactRequest(req) {
   return req.query.compact === '1' || req.query.compact === 'true';
+}
+
+const escapeRegex = s => String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const exactNameRegex = name => new RegExp('^' + escapeRegex(name) + '$', 'i');
+
+/**
+ * Race filter for a player: their racetime userId (stable across renames), their
+ * current name, and their aliases. Aliases only match entrants without a userId
+ * (SpeedRunsLive history, manual imports), so they never capture someone else's
+ * racetime account.
+ */
+function buildPlayerRacesFilter({ userId, names = [], aliases = [] }) {
+  const or = [];
+  const nameRegexes = names.filter(Boolean).map(exactNameRegex);
+  const aliasRegexes = aliases.filter(Boolean).map(exactNameRegex);
+  if (userId) or.push({ 'entrants.userId': userId });
+  if (nameRegexes.length) or.push({ 'entrants.userName': { $in: nameRegexes } });
+  if (aliasRegexes.length) {
+    or.push({ entrants: { $elemMatch: { userName: { $in: aliasRegexes }, userId: { $in: [null, ''] } } } });
+  }
+
+  const isPlayerEntrant = e => (userId && e.userId === userId)
+    || nameRegexes.some(re => re.test(e.userName || ''))
+    || (!e.userId && aliasRegexes.some(re => re.test(e.userName || '')));
+
+  return { filter: or.length ? { $or: or } : { _id: null }, isPlayerEntrant };
+}
+
+/** Player document whose name, or one of whose aliases, is `name` (case-insensitive). */
+async function findPlayerByNameOrAlias(name) {
+  const regex = exactNameRegex(name);
+  return await Player.findOne({ name: regex }).select('userId name aliases').lean()
+    || await Player.findOne({ aliases: regex }).select('userId name aliases').lean();
 }
 
 function compactRaces(races, isPlayerEntrant) {
@@ -569,12 +602,17 @@ router.get('/by-name/:name/races', async (req, res, next) => {
       return res.json(cached);
     }
     
-    // Search races where entrants.userName matches (case-insensitive)
-    const nameRegex = new RegExp('^' + name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$', 'i');
-    const query = Race.find({ 'entrants.userName': { $regex: nameRegex } }).sort({ startedAt: -1 });
+    // The name itself, plus the player's userId and aliases when it belongs to a known player
+    const player = await findPlayerByNameOrAlias(name);
+    const { filter, isPlayerEntrant } = buildPlayerRacesFilter({
+      userId: player?.userId,
+      names: [name, player?.name],
+      aliases: player?.aliases
+    });
+    const query = Race.find(filter).sort({ startedAt: -1 });
 
     const result = compact
-      ? { races: compactRaces(await query.select(COMPACT_RACE_FIELDS).lean(), e => nameRegex.test(e.userName || '')) }
+      ? { races: compactRaces(await query.select(COMPACT_RACE_FIELDS).lean(), isPlayerEntrant) }
       : { races: await query };
     setPlayersCache(cacheKey, result);
     res.json(result);
@@ -588,7 +626,9 @@ router.get('/:id/races', async (req, res, next) => {
   try {
     const { Race } = require('../models');
     const userId = req.params.id;
-    const query = Race.find({ 'entrants.userId': userId })
+    const player = await Player.findOne({ userId }).select('aliases').lean();
+    const { filter, isPlayerEntrant } = buildPlayerRacesFilter({ userId, aliases: player?.aliases });
+    const query = Race.find(filter)
       .sort({ startedAt: -1 });
 
     if (isCompactRequest(req)) {
@@ -598,7 +638,7 @@ router.get('/:id/races', async (req, res, next) => {
         return res.json(cached);
       }
       const races = await query.select(COMPACT_RACE_FIELDS).lean();
-      const result = { races: compactRaces(races, e => e.userId === userId) };
+      const result = { races: compactRaces(races, isPlayerEntrant) };
       setPlayersCache(cacheKey, result);
       return res.json(result);
     }

@@ -28,7 +28,8 @@ const ALIASES_BY_PLAYER = {
   meanmido: ['Meanmido (invitation pending)'],
   r0bd0g: ['r0bd0g (invitation pending)'],
   Riley: ['Riley2w69t'],
-  TrenteR: ['TrenteR_TR']
+  TrenteR: ['TrenteR_TR'],
+  WTHH: ['Whatthehellshappened'] // SpeedRunsLive name (2015-2020), Challonge OoTR S3
 };
 
 const escapeRegex = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

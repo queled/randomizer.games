@@ -1,106 +1,68 @@
-# 🎮 Randomizer.Games
+# 🎲 Randomizer.Games
 
-Plateforme centralisée pour agréger et exposer des données de tournois/courses randomizer (Racetime, Challonge, Speedrun.com, Twitch).
+**[randomizer.games](https://randomizer.games)** gathers the history of the randomizer community in one place: games, races, tournaments and players.
 
-## Prérequis
+A *randomizer* is a mod that shuffles where items, abilities or other game elements are found, so a game you know by heart turns into a new puzzle every time. Races and tournaments on these games are scattered across racetime.gg, start.gg, Challonge and many Discord servers; this site collects them so they are easy to browse and stay archived.
 
-- Node.js 18+
-- MongoDB 4.4+
+## What you can do on the site
 
-## Installation
+- 🎮 **Browse randomizer games**: the full catalog of randomizers, with links to each randomizer, its trackers, guides and community
+- 🥇 **Look up races**: results, times and rankings, from racetime.gg and the older SpeedRunsLive history
+- 🏆 **Follow tournaments**: brackets, matches and qualifiers, with the races played for each match
+- 👤 **Explore player profiles**: race and tournament history across every game, and side-by-side comparison
+- 📺 **Watch live streams** of randomizer games on Twitch
+- 🙈 **Anti-spoiler mode**: hide results to watch a VOD without knowing who won
+- 🌍 Available in English, French, Spanish, German, Italian and Portuguese
+
+## Where the data comes from
+
+Everything shown is public data, refreshed automatically:
+
+| Source | Used for |
+|--------|----------|
+| [racetime.gg](https://racetime.gg) | Races, every few minutes |
+| [SpeedRunsLive](https://www.speedrunslive.com) | Races from before racetime.gg |
+| [start.gg](https://start.gg) and [Challonge](https://challonge.com) | Tournaments, brackets and matches |
+| [rando-list](https://github.com/video-game-randomizers/rando-list) | The list of games and randomizers |
+| [speedrun.com](https://www.speedrun.com) | Game details (platforms, release year) |
+| [Twitch](https://twitch.tv) | Live streams |
+
+Something missing or wrong, like a tournament, a player under two names, or a race linked to the wrong match? [Open an issue](https://github.com/queled/randomizer.games/issues).
+
+## Running it locally
+
+You need **Node.js 20+** and a **MongoDB** database (local or [Atlas](https://www.mongodb.com/atlas)).
 
 ```bash
 git clone https://github.com/queled/randomizer.games.git
 cd randomizer.games
 npm install
-cp .env.example .env
+cp .env.example .env    # set MONGODB_URI; NODE_ENV=development is enough to start
+npm run dev
 ```
 
-Renseigner au minimum dans `.env` :
+The site runs on <http://localhost:3000> and the admin panel on `/admin`.
 
-- `MONGODB_URI`
-- `ADMIN_TOKEN` (obligatoire en production)
-
-## Lancement
+An empty database gives an empty site. To get some content, seed a few games, then pull their recent races from racetime.gg:
 
 ```bash
-npm start
-```
-
-Application disponible sur `http://localhost:3000`.
-
-## Scripts utiles
-
-```bash
-# Sync principal (Racetime + Rando-list)
+npm run import-games -- data/games-template.csv --full
 npm run sync
-
-# Sync Racetime
-npm run sync:racetime
-
-# Historique SpeedRunsLive (courses randomizer d'avant racetime.gg)
-npm run sync:speedrunslive
-
-# Sync Rando-list
-npm run sync-rando-list
-npm run sync-rando-list:detect
-npm run sync-rando-list:link
-
-# Import/enrichissement
-npm run import-games
-npm run enrich-games
-
-# Vérifications sécurité pré-déploiement
-npm run check-security
 ```
 
-## Sécurité
+Go further:
 
-Le backend applique notamment :
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): data sources, automated syncs, data model and every script
+- [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md): putting the site in production
 
-- `helmet`
-- `cors` (restreint en production)
-- `express-rate-limit`
-- `express-mongo-sanitize`
-- validation stricte pagination et URLs proxifiées
+Built with Node.js, Express and MongoDB; the front end is plain HTML, CSS and JavaScript.
 
-Le proxy image applique une allowlist de domaines et des limites de taille/timeout.
+## Contributing
 
-## Documentation
+Bug reports, data fixes, translations and code are all welcome: see [CONTRIBUTING.md](CONTRIBUTING.md). To report a security issue, follow [SECURITY.md](SECURITY.md) instead of opening an issue.
 
-- `docs/AUTOMATION.md`
-- `docs/GAME_SYNC_ARCHITECTURE.md`
-- `docs/DEPLOYMENT.md`
-- `docs/STARTGG_API.md`
+## License
 
-Pour signaler une faille de sécurité, voir `SECURITY.md`.
+The code is released under the [MIT License](LICENSE).
 
-## Structure
-
-- `server.js` : entrée Express
-- `routes/` : endpoints API
-- `middleware/` : sécurité + auth admin
-- `models/` : schémas MongoDB
-- `scripts/` : imports, sync, maintenance
-- `public/` : pages statiques + panneau admin
-
-## API namespaces (sans versioning)
-
-L'API reste **hybride** (REST + endpoints opérationnels) avec des namespaces canoniques :
-
-- `GET/CRUD` ressources : `/api/games`, `/api/tournaments`, `/api/runs`, `/api/players`, `/api/streams`
-- `commands` (opérations déclenchées) : `/api/commands/sync/*`
-- `services` (intégrations externes/proxy) : `/api/services/racetime/*`, `/api/services/proxy-image`
-- `queries` (recherche/agrégations) : `/api/queries/search`
-
-Les anciens endpoints (`/api/sync`, `/api/racetime`, `/api/proxy-image`, `/api/search`) restent supportés pour éviter toute casse des scripts/workflows existants.
-
-## Contribution
-
-Voir `CONTRIBUTING.md`.
-
-## Licence
-
-Le code est sous licence MIT — voir `LICENSE`.
-
-Les logos, jaquettes et noms de jeux présents dans `public/assets/` restent la propriété de leurs ayants droit respectifs ; ils ne sont pas couverts par la licence MIT. Les données de courses et de tournois proviennent de racetime.gg, Challonge, start.gg, SpeedRunsLive et speedrun.com.
+Game names, logos and box art in `public/assets/` belong to their respective owners and are not covered by the MIT License. Race and tournament data come from racetime.gg, SpeedRunsLive, start.gg, Challonge and speedrun.com.

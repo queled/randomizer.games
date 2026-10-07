@@ -352,6 +352,67 @@ function getMatchPlayers(match) {
   };
 }
 
+function getMatchMembers(match) {
+  const members = (side) => (match?.[`${side}Members`] || match?.[side]?.members || []).map(normalizeName).filter(Boolean);
+  return { player1: members('player1'), player2: members('player2') };
+}
+
+// How surely a racetime account is a team player: 2 same name, 1 one inside the other
+// ("Painapple" = "ThePainapple"), 0 not them
+function teamMemberMatch(entrantName, member) {
+  const a = entrantName.replace(/ /g, '');
+  const b = member.replace(/ /g, '');
+  if (a === b) return 2;
+  const [shorter, longer] = a.length <= b.length ? [a, b] : [b, a];
+  return shorter.length >= 3 && longer.includes(shorter) ? 1 : 0;
+}
+
+/**
+ * Co-op matches: the racetime room holds the players of both teams. When each team has
+ * a player in the room, read the room as "team A vs team B" (finishing when its last
+ * member finishes).
+ */
+function extractTeamEntrants(race, match) {
+  const teams = getMatchMembers(match);
+  if (!teams.player1.length || !teams.player2.length) return null;
+  const { player1, player2 } = getMatchPlayers(match);
+  const roomPlayers = (race?.entrants || []).map((e) => ({
+    name: normalizeName(e?.userName || e?.name || ''),
+    finishedAt: e?.finishedAt || null
+  })).filter((e) => e.name);
+  if (roomPlayers.length < 3) return null;
+
+  // Each room player joins the team it matches best ("Alpha" over "ALPHAMARIOX")
+  const best = (e, members) => Math.max(0, ...members.map((m) => teamMemberMatch(e.name, m)));
+  const team1Players = [];
+  const team2Players = [];
+  for (const e of roomPlayers) {
+    const s1 = best(e, teams.player1);
+    const s2 = best(e, teams.player2);
+    if (s1 > s2) team1Players.push(e);
+    else if (s2 > s1) team2Players.push(e);
+  }
+  // The room holds these two teams (one renamed account at most), not a practice
+  // room or a solo race where players of both teams happen to meet
+  if (!team1Players.length || !team2Players.length) return null;
+  if (team1Players.length + team2Players.length < roomPlayers.length - 1) return null;
+
+  const side = (present, teamName) => {
+    const finishes = present.map((e) => e.finishedAt && new Date(e.finishedAt).getTime()).filter(Boolean);
+    return {
+      name: teamName,
+      finishedAt: finishes.length === present.length ? new Date(Math.max(...finishes)) : null
+    };
+  };
+  return {
+    entrants: [side(team1Players, player1), side(team2Players, player2)],
+    source: 'team-members',
+    entrantCount: roomPlayers.length,
+    direct: true,
+    stageInfo: parseRaceStageInfo(race)
+  };
+}
+
 function getMatchCompletedAt(match) {
   return match?.completedAt || match?.startedAt || null;
 }
@@ -371,6 +432,21 @@ function getMatchRaceUrl(match) {
 }
 
 function scoreRaceAgainstMatch(race, match, options = {}) {
+  const teamEntrants = extractTeamEntrants(race, match);
+  if (teamEntrants) {
+    const fromTeams = scoreExtractedAgainstMatch(race, match, teamEntrants, options);
+    if (fromTeams.score > 0) return fromTeams;
+  } else if (getMatchMembers(match).player1.length && (race?.entrants || []).length > 2) {
+    // A team room without both teams' players is another match, whatever its label says
+    return {
+      score: 0,
+      extracted: { entrants: [], source: 'team-members', entrantCount: race.entrants.length, direct: false },
+      best1: null,
+      best2: null,
+      reason: 'team-members-missing'
+    };
+  }
+
   const extracted = extractRaceEntrants(race, { requireDirect: options.requireDirect });
   const fromEntrants = scoreExtractedAgainstMatch(race, match, extracted, options);
   const labelPlayers = extracted.source === 'entrants' ? extracted.stageInfo?.players : null;
@@ -593,6 +669,7 @@ module.exports = {
   rankMatchesForRace,
   selectBestCandidate,
   getMatchPlayers,
+  getMatchMembers,
   getMatchCompletedAt,
   getMatchRaceUrl,
   isCompletedMatch

@@ -1590,7 +1590,9 @@ router.get('/tournaments/:id/suggestions/:matchId', requireAdmin, async (req, re
         match = {
           ...embedded,
           player1Name: embedded.player1?.name,
-          player2Name: embedded.player2?.name
+          player2Name: embedded.player2?.name,
+          player1Members: embedded.player1?.members || [],
+          player2Members: embedded.player2?.members || []
         };
       }
     } else {
@@ -2240,13 +2242,11 @@ router.post('/tournaments-mgmt/import', requireAdmin, async (req, res, next) => 
           state: s.state,
           phase: s.phase?.name,
           phaseGroup: s.phaseGroup?.displayIdentifier,
-          player1: { startggEntrantId: String(s.entrants?.[0]?.id || ''), name: s.entrants?.[0]?.name || '' },
-          player2: { startggEntrantId: String(s.entrants?.[1]?.id || ''), name: s.entrants?.[1]?.name || '' },
+          player1: { ...StartGGAPI.setPlayer(s.entrants?.[0]), startggEntrantId: String(s.entrants?.[0]?.id || ''), name: s.entrants?.[0]?.name || '' },
+          player2: { ...StartGGAPI.setPlayer(s.entrants?.[1]), startggEntrantId: String(s.entrants?.[1]?.id || ''), name: s.entrants?.[1]?.name || '' },
           winnerId: s.winnerId
         })) || [];
-        tournamentPayload.participants = event.standings?.length
-          ? event.standings.map(s => ({ name: s.entrantName, finalRank: s.placement, displayName: s.entrantName }))
-          : event.entrants?.map(e => ({ name: e.name, seed: e.seed, displayName: e.name })) || [];
+        tournamentPayload.participants = StartGGAPI.buildParticipants(event);
       }
 
       const tournament = await Tournament.findOneAndUpdate(

@@ -168,6 +168,9 @@ const tournamentSchema = new mongoose.Schema({
     seed: Number,
     finalRank: Number,
     displayName: String,
+    // Team (start.gg entrant of several players, e.g. co-op) this player raced in
+    team: String,
+    startggEntrantId: String,
     // Bracket the participant entered, for tournaments made of several Challonge brackets
     bracketChallongeId: Number
   }],
@@ -197,11 +200,14 @@ const tournamentSchema = new mongoose.Schema({
     linkScore: Number,
     player1: {
       startggEntrantId: String,
-      name: String
+      name: String,
+      // Players of a team entrant
+      members: { type: [String], default: undefined }
     },
     player2: {
       startggEntrantId: String,
-      name: String
+      name: String,
+      members: { type: [String], default: undefined }
     },
     winnerId: Number
   }],

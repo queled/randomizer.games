@@ -118,8 +118,8 @@ async function updateActiveTournaments({ dryRun }) {
           state: set.state,
           phase: set.phase?.name || null,
           phaseGroup: set.phaseGroup?.displayIdentifier || null,
-          player1: { startggEntrantId: set.entrants?.[0]?.id, name: set.entrants?.[0]?.name || 'TBD' },
-          player2: { startggEntrantId: set.entrants?.[1]?.id, name: set.entrants?.[1]?.name || 'TBD' },
+          player1: StartGGAPI.setPlayer(set.entrants?.[0]),
+          player2: StartGGAPI.setPlayer(set.entrants?.[1]),
           winnerId: set.winnerId
         }));
 
@@ -145,22 +145,7 @@ async function updateActiveTournaments({ dryRun }) {
           return m;
         });
 
-        // Build participants from standings or entrants
-        const participants = [];
-        const playerMap = new Map();
-        const sources = event.standings?.length ? event.standings : event.entrants || [];
-        for (const entry of sources) {
-          for (const p of (entry.participants || [])) {
-            const tag = p.gamerTag || p.userName || 'Unknown';
-            if (!playerMap.has(tag)) {
-              playerMap.set(tag, {
-                name: tag, seed: entry.seed || null, finalRank: entry.placement || null,
-                startggUserId: p.userId, startggUserSlug: p.userSlug, prefix: p.prefix
-              });
-              participants.push(playerMap.get(tag));
-            }
-          }
-        }
+        const participants = StartGGAPI.buildParticipants(event);
 
         await Tournament.findByIdAndUpdate(tournament._id, {
           $set: {

@@ -271,6 +271,8 @@ router.get('/:id/matches', validateObjectId('id'), async (req, res, next) => {
           round: m.round,
           player1Name,
           player2Name,
+          player1Members: m.player1?.members || [],
+          player2Members: m.player2?.members || [],
           player1Id,
           player2Id,
           scoresCsv,

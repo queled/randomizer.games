@@ -192,6 +192,8 @@ function normalizeStartggMatches(tournament) {
       phaseGroup: match.phaseGroup || null,
       player1Name: match.player1?.name || 'TBD',
       player2Name: match.player2?.name || 'TBD',
+      player1Members: match.player1?.members || [],
+      player2Members: match.player2?.members || [],
       displayScore: match.displayScore || null,
       state: match.state,
       startedAt: match.startedAt || null,
@@ -333,6 +335,9 @@ async function loadCandidateRaces({ tournament, Race, matches = [], extraRaceUrl
   const attachedRaces = await Race.find({ tournamentId: tournament._id }).lean();
   const categories = collectCandidateCategories(tournament, attachedRaces);
   const { minDate, maxDate } = getTournamentWindow(tournament, matches);
+  // Team rooms (co-op) hold the players of both teams
+  const teamSize = Math.max(0, ...matches.flatMap((match) => [match.player1Members?.length || 0, match.player2Members?.length || 0]));
+  const roomSize = { $size: { $ifNull: ['$entrants', []] } };
 
   let nearbyRaces = [];
   if (categories.length) {
@@ -344,7 +349,8 @@ async function loadCandidateRaces({ tournament, Race, matches = [], extraRaceUrl
         { matchPlayers: { $exists: true, $ne: null } },
         { startggSetId: { $exists: true, $ne: null } },
         { matchId: { $exists: true, $ne: null } },
-        { $expr: { $eq: [{ $size: { $ifNull: ['$entrants', []] } }, 2] } }
+        { $expr: { $eq: [roomSize, 2] } },
+        ...(teamSize > 1 ? [{ $expr: { $and: [{ $gte: [roomSize, 3] }, { $lte: [roomSize, teamSize * 2] }] } }] : [])
       ]
     };
 

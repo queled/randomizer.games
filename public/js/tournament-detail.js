@@ -408,6 +408,7 @@ function displayParticipants(participants, matches = [], options = {}) {
 
   const opt = (options && typeof options === 'object' && !Array.isArray(options)) ? options : {};
   const rankOnly = !!opt.rankOnly;
+  participants = groupTeamParticipants(participants);
 
   // Best-effort ranking when Challonge doesn't provide finalRank yet (e.g. awaiting_review).
   // Only used when rankOnly=true (Groups→SE).
@@ -686,11 +687,15 @@ function displayParticipants(participants, matches = [], options = {}) {
       return `<span class="match-badge" data-match-id="${escapeHtml(mid)}" style="${baseStyle} background-color: #ef4444; color: white;">D</span>`;
     }).filter(h => h !== null).join('');
 
+    const nameHtml = participant.members
+      ? `<div style="font-weight: bold; color: white; margin-bottom: 0.125rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escHtml(participant.name)}</div>${renderTeamMembers(participant.members, 'font-size: 0.875rem;')}`
+      : `<a href="/player-detail.html?name=${encodeURIComponent(participant.displayName || participant.name)}" style="font-weight: bold; color: white; margin-bottom: 0.125rem; cursor: pointer; text-decoration: none; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escHtml(participant.displayName || participant.name)}</a>
+        ${participant.name !== participant.displayName && participant.displayName ? `<div style=\"color: #9ca3af; font-size: 0.875rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;\">${escHtml(participant.name)}</div>` : ''}`;
+
     row.innerHTML = `
       <span class="spoiler-block">${rankBadge}</span>
       <div style="flex: 1; min-width: 0; overflow: hidden;">
-        <a href="/player-detail.html?name=${encodeURIComponent(participant.displayName || participant.name)}" style="font-weight: bold; color: white; margin-bottom: 0.125rem; cursor: pointer; text-decoration: none; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escHtml(participant.displayName || participant.name)}</a>
-        ${participant.name !== participant.displayName && participant.displayName ? `<div style=\"color: #9ca3af; font-size: 0.875rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;\">${escHtml(participant.name)}</div>` : ''}
+        ${nameHtml}
       </div>
       <div class="spoiler-block" style="display: flex; align-items: center; gap: 0.25rem; margin-left: 0.5rem; flex-shrink: 0;">
         ${matchHistory}
@@ -761,10 +766,12 @@ function enrichMatchesWithParticipantNames(matches, participants) {
     if (match.player1 && typeof match.player1 === 'object' && match.player1.name) {
       match.player1Name = match.player1.name;
       match.player1Id = match.player1.startggEntrantId || match.player1Id;
+      if (match.player1.members) match.player1Members = match.player1.members;
     }
     if (match.player2 && typeof match.player2 === 'object' && match.player2.name) {
       match.player2Name = match.player2.name;
       match.player2Id = match.player2.startggEntrantId || match.player2Id;
+      if (match.player2.members) match.player2Members = match.player2.members;
     }
     
     // For Challonge matches: add names from participant map if missing
@@ -775,6 +782,70 @@ function enrichMatchesWithParticipantNames(matches, participants) {
       match.player2Name = participantMap.get(match.player2Id) || null;
     }
   });
+}
+
+// Co-op tournaments list each player with the team they raced in: show one row per team
+function groupTeamParticipants(participants) {
+  const teams = new Map();
+  const grouped = [];
+  (participants || []).forEach(p => {
+    if (!p || !p.team) { grouped.push(p); return; }
+    if (!teams.has(p.team)) {
+      const team = { name: p.team, displayName: p.team, finalRank: p.finalRank, seed: p.seed, members: [] };
+      teams.set(p.team, team);
+      grouped.push(team);
+    }
+    teams.get(p.team).members.push(p.displayName || p.name);
+  });
+  return grouped;
+}
+
+// Players of a team, each linking to their page
+function renderTeamMembers(members, style = '') {
+  if (!members || !members.length) return '';
+  const links = members.map(m => `<a href="/player-detail.html?name=${encodeURIComponent(m)}" data-stop-propagation style="color: inherit; text-decoration: none;">${escHtml(m)}</a>`).join(' / ');
+  return `<div class="team-members" style="color: #9ca3af; font-size: 0.75rem; font-weight: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; ${style}">${links}</div>`;
+}
+
+function teamTitle(name, members) {
+  return members && members.length ? `${name} (${members.join(' / ')})` : name;
+}
+
+// Racetime account of a team player: same name, else one inside the other ("Painapple" = "ThePainapple")
+function findMemberEntrant(race, member) {
+  const compact = s => normalizeName(s).replace(/ /g, '');
+  const target = compact(member);
+  const entrants = (race.entrants || []).map(e => ({ e, name: compact(e.userName || (e.user && e.user.name) || e.name || '') }));
+  const exact = entrants.find(x => x.name && x.name === target);
+  if (exact) return exact.e;
+  const partial = entrants.find(x => {
+    const [shorter, longer] = x.name.length <= target.length ? [x.name, target] : [target, x.name];
+    return shorter.length >= 3 && longer.includes(shorter);
+  });
+  return partial ? partial.e : null;
+}
+
+// A team finishes when its last player finishes: its time in ms, 'DNF' or null when unknown
+function teamFinishMs(race, members) {
+  const entrants = (members || []).map(m => findMemberEntrant(race, m)).filter(Boolean);
+  if (!entrants.length) return null;
+  const times = entrants.map(e => Number(e.finishTimeMs)).filter(ms => ms > 0);
+  if (times.length === entrants.length) return Math.max(...times);
+  return entrants.some(e => /dnf|dq|forfeit|disqual/i.test(String(e.status || ''))) ? 'DNF' : null;
+}
+
+function teamTimeFromRace(race, members) {
+  const ms = teamFinishMs(race, members);
+  return typeof ms === 'number' ? formatMs(ms) : ms;
+}
+
+// 1 or 2 for the team that finished first, null when unknown
+function teamRaceWinner(race, members1, members2) {
+  const t1 = teamFinishMs(race, members1);
+  const t2 = teamFinishMs(race, members2);
+  if (typeof t1 === 'number' && (t2 === 'DNF' || (typeof t2 === 'number' && t1 < t2))) return 1;
+  if (typeof t2 === 'number' && (t1 === 'DNF' || (typeof t1 === 'number' && t2 < t1))) return 2;
+  return null;
 }
 
 async function loadMatches(tournamentId) {
@@ -1963,9 +2034,13 @@ function createMatchCard(match, races = []) {
   };
 
   // Helper to extract times from a race for this match
+  const isTeamMatch = !!(match.player1Members && match.player1Members.length && match.player2Members && match.player2Members.length);
   const getTimesFromRace = (race) => {
     let t1 = null, t2 = null;
     if (!race) return { time1: t1, time2: t2 };
+    if (isTeamMatch) {
+      return { time1: teamTimeFromRace(race, match.player1Members), time2: teamTimeFromRace(race, match.player2Members) };
+    }
     
     // Prefer a pairwise mapping so the two players cannot resolve to the same entrant.
     try {
@@ -2042,7 +2117,9 @@ function createMatchCard(match, races = []) {
       try {
         const entrants = race.entrants || [];
         const winnerEntr = entrants.find(e => e && (e.place === 1 || e.place === '1'));
-        if (winnerEntr) {
+        if (isTeamMatch) {
+          mancheWinner = teamRaceWinner(race, match.player1Members, match.player2Members);
+        } else if (winnerEntr) {
           const winnerName = winnerEntr.userName || (winnerEntr.user && winnerEntr.user.name) || '';
           const norm = s => (s || '').toLowerCase().trim();
           if (norm(winnerName) === norm(match.player1Name) || norm(winnerName).includes(norm(match.player1Name)) || norm(match.player1Name).includes(norm(winnerName))) {
@@ -2110,7 +2187,7 @@ function createMatchCard(match, races = []) {
     <div style="display: flex; justify-content: space-between; align-items: center;">
       <div style="flex: 1;">
         <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
-          ${match.player1Name ? `<a href="/player-detail.html?name=${encodeURIComponent(sanitizeDisplayName(match.player1Name))}" class="match-player-name ${player1Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'}; flex: 1; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player1Name))}</a>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
+          ${match.player1Members && match.player1Members.length ? `<div style="flex: 1; min-width: 0;"><span class="match-player-name ${player1Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'};">${escHtml(sanitizeDisplayName(match.player1Name))}</span>${renderTeamMembers(match.player1Members)}</div>` : match.player1Name ? `<a href="/player-detail.html?name=${encodeURIComponent(sanitizeDisplayName(match.player1Name))}" class="match-player-name ${player1Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'}; flex: 1; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player1Name))}</a>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
           ${displayScore1 !== null && displayScore2 !== null ? `
             <span class="spoiler-block" style="color: #9ca3af; margin-left: 8rem; display:flex; align-items:center; gap:4rem;">
               ${!isMultiRaceSeries ? `<span>${time1 !== null && time1 !== undefined ? time1 : '-'}</span>` : ''}
@@ -2119,7 +2196,7 @@ function createMatchCard(match, races = []) {
           ` : ''}
         </div>
         <div style="display: flex; align-items: center;">
-          ${match.player2Name ? `<a href="/player-detail.html?name=${encodeURIComponent(sanitizeDisplayName(match.player2Name))}" class="match-player-name ${player2Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'}; flex: 1; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player2Name))}</a>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
+          ${match.player2Members && match.player2Members.length ? `<div style="flex: 1; min-width: 0;"><span class="match-player-name ${player2Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'};">${escHtml(sanitizeDisplayName(match.player2Name))}</span>${renderTeamMembers(match.player2Members)}</div>` : match.player2Name ? `<a href="/player-detail.html?name=${encodeURIComponent(sanitizeDisplayName(match.player2Name))}" class="match-player-name ${player2Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'}; flex: 1; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player2Name))}</a>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
           ${displayScore2 !== null && displayScore1 !== null ? `
             <span class="spoiler-block" style="color: #9ca3af; margin-left: 8rem; display:flex; align-items:center; gap:4rem;">
               ${!isMultiRaceSeries ? `<span>${time2 !== null && time2 !== undefined ? time2 : '-'}</span>` : ''}
@@ -2897,11 +2974,11 @@ function createCompactMatchCard(match, races = []) {
     <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.875rem;">
       <div style="flex: 1;">
         <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
-          ${match.player1Name ? `<a href="/player-detail.html?name=${encodeURIComponent(sanitizeDisplayName(match.player1Name))}" style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'}; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player1Name))}</a>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
+          ${match.player1Members && match.player1Members.length ? `<span style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'};" title="${escHtml(teamTitle(match.player1Name, match.player1Members))}">${escHtml(sanitizeDisplayName(match.player1Name))}</span>` : match.player1Name ? `<a href="/player-detail.html?name=${encodeURIComponent(sanitizeDisplayName(match.player1Name))}" style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'}; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player1Name))}</a>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
           ${displayScore1 !== null ? `<span style="color: #9ca3af; font-family: monospace;">${displayScore1}</span>` : ''}
         </div>
         <div style="display: flex; align-items: center; gap: 0.5rem;">
-          ${match.player2Name ? `<a href="/player-detail.html?name=${encodeURIComponent(sanitizeDisplayName(match.player2Name))}" style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'}; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player2Name))}</a>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
+          ${match.player2Members && match.player2Members.length ? `<span style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'};" title="${escHtml(teamTitle(match.player2Name, match.player2Members))}">${escHtml(sanitizeDisplayName(match.player2Name))}</span>` : match.player2Name ? `<a href="/player-detail.html?name=${encodeURIComponent(sanitizeDisplayName(match.player2Name))}" style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'}; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player2Name))}</a>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
           ${displayScore2 !== null ? `<span style="color: #9ca3af; font-family: monospace;">${displayScore2}</span>` : ''}
         </div>
       </div>
@@ -3950,14 +4027,14 @@ function createBracketMatchCard(match, isFinal = false) {
   
   card.innerHTML = `
     <div class="bracket-player ${player1Winner ? 'bracket-winner spoiler-bracket-winner' : ''}" style="${player1Style}">
-      <span class="${player1Winner ? 'spoiler-winner' : ''}" style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : '#d1d5db'}; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escHtml(match.player1Name || (i18n.t('tournamentDetail.tbd') || 'TBD'))}">
-        ${match.player1Name ? `<span style="color: inherit; display: inline; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escHtml(match.player1Name)}">${escHtml(truncateName(sanitizeDisplayName(match.player1Name)))}</span>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
+      <span class="${player1Winner ? 'spoiler-winner' : ''}" style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : '#d1d5db'}; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escHtml(match.player1Name ? teamTitle(match.player1Name, match.player1Members) : (i18n.t('tournamentDetail.tbd') || 'TBD'))}">
+        ${match.player1Name ? `<span style="color: inherit; display: inline; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escHtml(teamTitle(match.player1Name, match.player1Members))}">${escHtml(truncateName(sanitizeDisplayName(match.player1Name)))}</span>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
       </span>
       ${match.scoresCsv ? `<span class="spoiler-block" style="color: #9ca3af; font-weight: bold; margin-left: 0.5rem; flex-shrink: 0;">${getScore(0)}</span>` : ''}
     </div>
     <div class="bracket-player ${player2Winner ? 'bracket-winner spoiler-bracket-winner' : ''}" style="${player2Style}">
-      <span class="${player2Winner ? 'spoiler-winner' : ''}" style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : '#d1d5db'}; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escHtml(match.player2Name || (i18n.t('tournamentDetail.tbd') || 'TBD'))}">
-        ${match.player2Name ? `<span style="color: inherit; display: inline; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escHtml(match.player2Name)}">${escHtml(truncateName(sanitizeDisplayName(match.player2Name)))}</span>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
+      <span class="${player2Winner ? 'spoiler-winner' : ''}" style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : '#d1d5db'}; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escHtml(match.player2Name ? teamTitle(match.player2Name, match.player2Members) : (i18n.t('tournamentDetail.tbd') || 'TBD'))}">
+        ${match.player2Name ? `<span style="color: inherit; display: inline; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escHtml(teamTitle(match.player2Name, match.player2Members))}">${escHtml(truncateName(sanitizeDisplayName(match.player2Name)))}</span>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
       </span>
       ${match.scoresCsv ? `<span class="spoiler-block" style="color: #9ca3af; font-weight: bold; margin-left: 0.5rem; flex-shrink: 0;">${getScore(1)}</span>` : ''}
     </div>

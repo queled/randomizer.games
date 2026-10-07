@@ -643,28 +643,7 @@ async function importStartGGTournament(api, tournamentPreview, { game = null, di
       tournamentDescription: event.game?.name || ''
     });
 
-    // Build participants
-    const participants = [];
-    const playerMap = new Map();
-
-    const sources = event.standings?.length ? event.standings : event.entrants || [];
-    for (const entry of sources) {
-      const pList = entry.participants || [];
-      for (const participant of pList) {
-        const gamerTag = participant.gamerTag || participant.userName || 'Unknown';
-        if (!playerMap.has(gamerTag)) {
-          playerMap.set(gamerTag, {
-            name: gamerTag,
-            seed: entry.seed || null,
-            finalRank: entry.placement || null,
-            startggUserId: participant.userId,
-            startggUserSlug: participant.userSlug,
-            prefix: participant.prefix
-          });
-          participants.push(playerMap.get(gamerTag));
-        }
-      }
-    }
+    const participants = StartGGAPI.buildParticipants(event);
 
     const duplicateOf = await findProbableDuplicate(participants.map(p => p.name), event.startDate || tournamentData.startDate, event.id, tournamentData.id);
     if (duplicateOf) {
@@ -693,14 +672,8 @@ async function importStartGGTournament(api, tournamentPreview, { game = null, di
       state: set.state,
       phase: set.phase?.name || null,
       phaseGroup: set.phaseGroup?.displayIdentifier || null,
-      player1: {
-        startggEntrantId: set.entrants?.[0]?.id,
-        name: set.entrants?.[0]?.name || 'TBD'
-      },
-      player2: {
-        startggEntrantId: set.entrants?.[1]?.id,
-        name: set.entrants?.[1]?.name || 'TBD'
-      },
+      player1: StartGGAPI.setPlayer(set.entrants?.[0]),
+      player2: StartGGAPI.setPlayer(set.entrants?.[1]),
       winnerId: set.winnerId
     }));
 

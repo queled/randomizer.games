@@ -90,49 +90,7 @@ async function main() {
         tournamentDescription: event.game?.name || ''
       });
 
-      // Build participants list from standings (if available) or entrants (for active tournaments)
-      const participants = [];
-      const playerMap = new Map(); // Track players to avoid duplicates
-      
-      // Use standings if available (completed tournaments)
-      if (event.standings && event.standings.length > 0) {
-        for (const standing of event.standings) {
-          for (const participant of standing.participants) {
-            const gamerTag = participant.gamerTag || participant.userName || 'Unknown';
-            
-            if (!playerMap.has(gamerTag)) {
-              playerMap.set(gamerTag, {
-                name: gamerTag,
-                finalRank: standing.placement,
-                startggUserId: participant.userId,
-                startggUserSlug: participant.userSlug,
-                prefix: participant.prefix
-              });
-              participants.push(playerMap.get(gamerTag));
-            }
-          }
-        }
-      }
-      // Fallback to entrants list (for active/in-progress tournaments)
-      else if (event.entrants && event.entrants.length > 0) {
-        for (const entrant of event.entrants) {
-          for (const participant of entrant.participants) {
-            const gamerTag = participant.gamerTag || participant.userName || 'Unknown';
-            
-            if (!playerMap.has(gamerTag)) {
-              playerMap.set(gamerTag, {
-                name: gamerTag,
-                seed: entrant.seed,
-                finalRank: null, // Not yet determined
-                startggUserId: participant.userId,
-                startggUserSlug: participant.userSlug,
-                prefix: participant.prefix
-              });
-              participants.push(playerMap.get(gamerTag));
-            }
-          }
-        }
-      }
+      const participants = StartGGAPI.buildParticipants(event);
 
       console.log(`   Found ${participants.length} unique participants`);
 
@@ -160,14 +118,8 @@ async function main() {
             state: set.state,
             phase: set.phase?.name || null,
             phaseGroup: set.phaseGroup?.displayIdentifier || null,
-            player1: {
-              startggEntrantId: set.entrants?.[0]?.id,
-              name: set.entrants?.[0]?.name || 'TBD'
-            },
-            player2: {
-              startggEntrantId: set.entrants?.[1]?.id,
-              name: set.entrants?.[1]?.name || 'TBD'
-            },
+            player1: StartGGAPI.setPlayer(set.entrants?.[0]),
+            player2: StartGGAPI.setPlayer(set.entrants?.[1]),
             winnerId: set.winnerId
           };
           newMatches.push(match);

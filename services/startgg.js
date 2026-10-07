@@ -216,6 +216,13 @@ class StartGGAPI {
   }
 
   /**
+   * Entrants of one event, with their players.
+   */
+  async getEventEntrants(eventId) {
+    return this.fetchEventPages(eventId, 'entrants', ENTRANT_FIELDS);
+  }
+
+  /**
    * Get event with bracket details
    */
   async getEvent(eventId) {
@@ -309,7 +316,7 @@ class StartGGAPI {
   formatEvent(event) {
     if (!event) return null;
 
-    return {
+    const formatted = {
       id: event.id,
       name: event.name,
       slug: event.slug,
@@ -379,6 +386,69 @@ class StartGGAPI {
       })) || [],
       setsTotal: event.sets?.pageInfo?.total || 0,
       setsTotalPages: event.sets?.pageInfo?.totalPages || 0
+    };
+
+    const teams = StartGGAPI.teamMembersByEntrant(formatted);
+    for (const set of formatted.sets) {
+      for (const entrant of set.entrants) {
+        if (teams.has(String(entrant.id))) entrant.members = teams.get(String(entrant.id));
+      }
+    }
+    return formatted;
+  }
+
+  /**
+   * Team entrants (co-op events): entrant id → gamer tags of its players.
+   * Solo entrants are left out.
+   */
+  static teamMembersByEntrant(event) {
+    const teams = new Map();
+    for (const entry of [...(event?.entrants || []), ...(event?.standings || [])]) {
+      const entrantId = String(entry.id ?? entry.entrantId ?? '');
+      const members = (entry.participants || []).map(p => p.gamerTag || p.userName).filter(Boolean);
+      if (entrantId && members.length > 1 && !teams.has(entrantId)) teams.set(entrantId, members);
+    }
+    return teams;
+  }
+
+  /**
+   * One participant per player, from the standings (or the entrants before standings exist).
+   * Players of a team entrant carry the team name.
+   */
+  static buildParticipants(event) {
+    const teams = StartGGAPI.teamMembersByEntrant(event);
+    const participants = [];
+    const seen = new Set();
+    const sources = event?.standings?.length ? event.standings : event?.entrants || [];
+    for (const entry of sources) {
+      const entrantId = String(entry.entrantId ?? entry.id ?? '');
+      const team = teams.has(entrantId) ? (entry.entrantName || entry.name) : null;
+      for (const p of entry.participants || []) {
+        const name = p.gamerTag || p.userName || 'Unknown';
+        if (seen.has(name)) continue;
+        seen.add(name);
+        participants.push({
+          name,
+          seed: entry.seed || null,
+          finalRank: entry.placement || null,
+          startggUserId: p.userId,
+          startggUserSlug: p.userSlug,
+          prefix: p.prefix,
+          ...(team ? { team, startggEntrantId: entrantId } : {})
+        });
+      }
+    }
+    return participants;
+  }
+
+  /**
+   * Match side stored for a set slot (members only for team entrants).
+   */
+  static setPlayer(entrant) {
+    return {
+      startggEntrantId: entrant?.id,
+      name: entrant?.name || 'TBD',
+      ...(entrant?.members ? { members: entrant.members } : {})
     };
   }
 

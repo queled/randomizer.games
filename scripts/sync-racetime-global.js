@@ -221,6 +221,8 @@ async function finalizeCompletedRaces(activeUrls) {
         await Race.updateOne({ url: race.url }, {
           $set: {
             status: newStatus,
+            // Races imported while still open have no start date yet
+            startedAt: raceDetail.started_at || raceDetail.startedAt || race.startedAt || null,
             endedAt: raceDetail.ended_at || raceDetail.endedAt,
             entrants: entrantsData
           }

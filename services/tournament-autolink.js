@@ -114,6 +114,22 @@ function filterMatchesByRaceStage(race, matches, tournament) {
   ));
 }
 
+// Double elimination side named by a race label: losers rounds are negative on both
+// Challonge and start.gg ("Lower Bracket Round 4" must not land on the winners match
+// of the same two players)
+function getRaceLabelBracketSide(race) {
+  const label = getRaceLabel(race).toLowerCase();
+  if (/\b(lower|losers?)\s*(brackets?|round|finals?|semi)/.test(label)) return 'losers';
+  if (/\b(upper|winners?)\s*(brackets?|round|finals?|semi)/.test(label)) return 'winners';
+  return null;
+}
+
+function filterMatchesByBracketSide(race, matches) {
+  const side = getRaceLabelBracketSide(race);
+  if (!side || !matches.some((match) => Number(match.round) < 0)) return matches;
+  return matches.filter((match) => (side === 'losers' ? Number(match.round) < 0 : Number(match.round) > 0));
+}
+
 function isLinkableStartggState(state) {
   if (state === undefined || state === null || state === '') return true;
   const numericState = Number(state);
@@ -157,7 +173,7 @@ function normalizeStartggMatches(tournament) {
     }));
 }
 
-function normalizeChallongeMatches(matches) {
+function normalizeChallongeMatches(matches, raceUrlsByMatch = new Map()) {
   return (Array.isArray(matches) ? matches : [])
     .filter((match) => {
       const p1 = match?.player1Name || '';
@@ -179,29 +195,62 @@ function normalizeChallongeMatches(matches) {
       startedAt: match.startedAt || null,
       completedAt: match.completedAt,
       raceUrl: match.raceUrl || null,
-      raceUrls: match.raceUrl ? [match.raceUrl] : [],
+      raceUrls: raceUrlsByMatch.get(String(match._id)) || (match.raceUrl ? [match.raceUrl] : []),
       linkScore: null,
       isEmbedded: false
     }));
 }
 
-async function loadNormalizedMatches({ tournament, Match }) {
+async function loadNormalizedMatches({ tournament, Match, Race = null }) {
   if (isTournamentStartgg(tournament)) {
     return normalizeStartggMatches(tournament);
   }
 
   const challongeMatches = await Match.find({ tournamentId: tournament._id }).lean();
-  return normalizeChallongeMatches(challongeMatches);
+
+  // A Challonge match stores one raceUrl; the other games of a series only carry matchId
+  const raceUrlsByMatch = new Map();
+  if (Race) {
+    const linkedRaces = await Race.find({ tournamentId: tournament._id, matchId: { $ne: null } })
+      .select('url matchId startedAt endedAt')
+      .lean();
+    linkedRaces.sort((a, b) => getRaceSortTimestamp(a) - getRaceSortTimestamp(b));
+    for (const race of linkedRaces) {
+      const key = String(race.matchId);
+      if (!raceUrlsByMatch.has(key)) raceUrlsByMatch.set(key, []);
+      raceUrlsByMatch.get(key).push(race.url);
+    }
+  }
+
+  return normalizeChallongeMatches(challongeMatches, raceUrlsByMatch);
+}
+
+// Games played in a Challonge series: one set per game ("1-0,0-1,0-0" = 2 games, the
+// unplayed 0-0 set excluded), or a single series score ("2-1" = 3 games)
+function getChallongeGamesPlayed(scoresCsv) {
+  const sets = String(scoresCsv || '')
+    .split(',')
+    .map((set) => /^\s*(\d+)\s*-\s*(\d+)\s*$/.exec(set))
+    .filter(Boolean)
+    .map((set) => [Number(set[1]), Number(set[2])]);
+  if (!sets.length) return 0;
+
+  const isPerGame = sets.every(([a, b]) => a + b <= 1);
+  if (isPerGame) return sets.filter(([a, b]) => a + b === 1).length;
+  if (sets.length === 1) return sets[0][0] + sets[0][1];
+  return sets.length;
 }
 
 function getExpectedStartggRaceCount(match) {
-  const parsed = parseStartggDisplayScore(match?.displayScore);
-  return Math.max(parsed?.gamesPlayed || 1, 1);
+  const gamesPlayed = match?.displayScore
+    ? parseStartggDisplayScore(match.displayScore)?.gamesPlayed
+    : getChallongeGamesPlayed(match?.scoresCsv);
+  return Math.max(gamesPlayed || 1, 1);
 }
 
 function hasAvailableStartggSlot(match, raceUrl = null) {
   const raceUrls = Array.isArray(match?.raceUrls) ? match.raceUrls : [];
-  if (raceUrl && raceUrls.includes(raceUrl)) return true;
+  if (raceUrl && (raceUrls.includes(raceUrl) || match?.raceUrl === raceUrl)) return true;
   const currentCount = raceUrls.length || (match?.raceUrl ? 1 : 0);
   return currentCount < getExpectedStartggRaceCount(match);
 }
@@ -261,6 +310,15 @@ function goalsLookAlike(a, b) {
   return goalTokens(left).some((token) => rightTokens.has(token));
 }
 
+// "League S6 Division 2 ...", "Step Ladder Series ...", "Weekly ...": a recurring series
+// the tournament is not part of, even when the same two players meet
+const EVENT_SERIES_RE = /\b(league|ladder|weekly)\b/i;
+
+function namesOtherEventSeries(label, tournamentName) {
+  const series = EVENT_SERIES_RE.exec(String(label || ''));
+  return !!series && !new RegExp(`\\b${series[1]}\\b`, 'i').test(String(tournamentName || ''));
+}
+
 /**
  * Racetime goals are usually per event ("Random settings league", "SGL 2025"...): drop
  * proposals whose goal neither matches the tournament's dominant goal nor its name,
@@ -279,6 +337,7 @@ function filterProposalsByGoal(tournament, proposals, races) {
   const dominant = dominantCount >= 5 && dominantCount / proposals.length >= 0.6 ? dominantGoal : null;
 
   return proposals.filter((proposal) => {
+    if (namesOtherEventSeries(stageByUrl.get(proposal.raceUrl), tournament?.name)) return false;
     const goal = goalByUrl.get(proposal.raceUrl);
     if (!goal) return true;
     return (dominant && goalsLookAlike(goal, dominant)) ||
@@ -295,7 +354,7 @@ async function buildAutoLinkPreview({
   minGap = 50,
   extraRaceUrls = []
 }) {
-  const matches = await loadNormalizedMatches({ tournament, Match });
+  const matches = await loadNormalizedMatches({ tournament, Match, Race });
   const races = await loadCandidateRaces({ tournament, Race, matches, extraRaceUrls });
   const liveMatches = matches.map((match) => ({
     ...match,
@@ -328,17 +387,17 @@ async function buildAutoLinkPreview({
       continue;
     }
 
-    const stageMatches = isTournamentStartgg(tournament)
+    const phaseMatches = isTournamentStartgg(tournament)
       ? filterMatchesByRaceStage(race, liveMatches, tournament)
       : liveMatches;
+    const stageMatches = phaseMatches && filterMatchesByBracketSide(race, phaseMatches);
     if (!stageMatches || !stageMatches.length) {
       skipped++;
       continue;
     }
 
-    const candidateMatches = isTournamentStartgg(tournament)
-      ? stageMatches.filter((match) => hasAvailableStartggSlot(match, race.url))
-      : stageMatches.filter((match) => !match.raceUrl || match.raceUrl === race.url);
+    // Series (BO3, BO5...) take one race per game played
+    const candidateMatches = stageMatches.filter((match) => hasAvailableStartggSlot(match, race.url));
 
     const scored = rankMatchesForRace(
       race,
@@ -346,7 +405,7 @@ async function buildAutoLinkPreview({
       {
         requireDirect: true,
         allowOccupiedMatchReassign: false,
-        skipOccupiedPenalty: isTournamentStartgg(tournament)
+        skipOccupiedPenalty: true
       }
     );
 
@@ -376,20 +435,9 @@ async function buildAutoLinkPreview({
 
     const liveIndex = liveMatches.findIndex((match) => String(match.startggSetId || match._id) === String(chosen.match.startggSetId || chosen.match._id));
     if (liveIndex >= 0) {
-      if (isTournamentStartgg(tournament)) {
-        if (!liveMatches[liveIndex].raceUrl) {
-          liveMatches[liveIndex].raceUrl = race.url;
-        }
-        if (!Array.isArray(liveMatches[liveIndex].raceUrls)) {
-          liveMatches[liveIndex].raceUrls = [];
-        }
-        if (!liveMatches[liveIndex].raceUrls.includes(race.url)) {
-          liveMatches[liveIndex].raceUrls.push(race.url);
-        }
-      } else {
-        liveMatches[liveIndex].raceUrl = race.url;
-        liveMatches[liveIndex].raceUrls = [race.url];
-      }
+      const liveMatch = liveMatches[liveIndex];
+      if (!liveMatch.raceUrl) liveMatch.raceUrl = race.url;
+      if (!liveMatch.raceUrls.includes(race.url)) liveMatch.raceUrls.push(race.url);
     }
   }
 
@@ -507,8 +555,14 @@ async function applyAutoLinkProposals({ tournament, proposals, Race, Match }) {
           continue;
         }
 
-        if (matchDoc.raceUrl && matchDoc.raceUrl !== proposal.raceUrl) {
-          errors.push(`Match ${proposal.matchId} is already linked`);
+        const linkedUrls = (await Race.find({ tournamentId: tournament._id, matchId: matchDoc._id }).select('url').lean())
+          .map((linkedRace) => linkedRace.url);
+        if (!hasAvailableStartggSlot({
+          raceUrl: matchDoc.raceUrl,
+          raceUrls: linkedUrls,
+          scoresCsv: matchDoc.scoresCsv
+        }, proposal.raceUrl)) {
+          errors.push(`Match ${proposal.matchId} is already full`);
           continue;
         }
 
@@ -522,9 +576,11 @@ async function applyAutoLinkProposals({ tournament, proposals, Race, Match }) {
         race.tournamentRound = undefined;
         await race.save();
 
-        matchDoc.raceUrl = proposal.raceUrl;
-        matchDoc.completedAt = race.endedAt || matchDoc.completedAt;
-        await matchDoc.save();
+        if (!matchDoc.raceUrl) {
+          matchDoc.raceUrl = proposal.raceUrl;
+          matchDoc.completedAt = matchDoc.completedAt || race.endedAt;
+          await matchDoc.save();
+        }
       }
 
       linked++;
@@ -549,5 +605,6 @@ module.exports = {
   buildAutoLinkPreview,
   applyAutoLinkProposals,
   getExpectedStartggRaceCount,
-  hasAvailableStartggSlot
+  hasAvailableStartggSlot,
+  getRaceLabelBracketSide
 };

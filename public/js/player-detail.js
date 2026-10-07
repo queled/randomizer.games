@@ -1057,11 +1057,13 @@
     };
 
     racesEl.innerHTML = sorted.map(r => {
-      // Find the entrant data for this player
-      const entrant = (r.entrants && r.entrants.length) ? r.entrants.find(e => 
-        e.userId === id || 
+      // Find the entrant data for this player. The compact API only returns this player's
+      // entrants (matched by userId, name or alias), so fall back to the first one: it covers
+      // races recorded under an alias (SpeedRunsLive history).
+      const entrant = (r.entrants && r.entrants.length) ? (r.entrants.find(e =>
+        e.userId === id ||
         (nameParam && (e.userName === nameParam || e.userName?.toLowerCase() === nameParam.toLowerCase()))
-      ) : null;
+      ) || r.entrants[0]) : null;
       const place = entrant ? (entrant.place || '-') : '-';
       
       // Get game name from race - racetime.gg stores it in 'name' field usually like "oot/weekly-XXX"

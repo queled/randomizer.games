@@ -457,8 +457,9 @@ async function renderPage(pathname, query, siteUrl) {
   // The rendered head carries its own robots tag.
   let html = readTemplate(file).replace(/\n[ \t]*<meta name="robots"[^>]*>/i, '');
   html = html.replace(/<title([^>]*)>[\s\S]*?<\/title>/i, (match, attrs) => (
-    // An entity title must not be reset to the generic translated one by i18n.js.
-    renderHead(meta, siteUrl, specific ? '' : attrs)
+    // An entity title must not be reset to the generic translated one by i18n.js,
+    // but other attributes (the id the page scripts look up) are kept.
+    renderHead(meta, siteUrl, specific ? attrs.replace(/\s+data-i18n-page-title="[^"]*"/i, '') : attrs)
   ));
   if (specific) {
     // Tells seo.js the head already describes this entity.

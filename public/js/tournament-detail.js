@@ -269,7 +269,7 @@ function updateEndDateFromMatches(matches, races = []) {
 function displayTournamentInfo(tournament) {
   // Title and game
   document.getElementById('tournament-title').textContent = tournament.name;
-  document.getElementById('page-title').textContent = `${tournament.name} - Randomizer`;
+  document.title = `${tournament.name} - Randomizer`;
   const tournamentGameEl = document.getElementById('tournament-game');
   const tournamentGameLabel = tournament.gameName || 'Unknown game';
   if (tournament.game?.id) {

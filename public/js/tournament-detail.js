@@ -95,6 +95,12 @@ function sanitizeExternalUrl(url, { allowRelative = false, allowMailto = false }
   }
 }
 
+// Races imported from SpeedRunsLive are stored as /srl/<raceId>
+function getSpeedRunsLiveRaceUrl(rawUrl) {
+  const match = /^\/?srl\/(\d+)$/i.exec(String(rawUrl || '').trim());
+  return match ? 'https://www.speedrunslive.com/races/result/' + match[1] : null;
+}
+
 function hardenExternalAnchors(container) {
   if (!container) return;
 
@@ -709,6 +715,34 @@ function displayParticipants(participants, matches = [], options = {}) {
   } catch (e) { /* ignore listener attach errors */ }
 }
 
+// Challonge creates the bracket reset up front with both finalists; it is only played when the
+// losers-side finalist wins the grand final. Drop it once it can no longer happen.
+function removeUnplayedBracketResets(matches, tournamentComplete) {
+  const isPlayed = m => m.state === 'complete' || m.winnerId || m.winnerName || (m.scoresCsv && m.scoresCsv.trim());
+  const pairKey = m => [m.player1Id || m.player1Name, m.player2Id || m.player2Name].map(String).sort().join('|');
+  const brackets = new Map();
+  matches.forEach(m => {
+    if ((m.round || 0) <= 0) return;
+    const key = `${m.groupId ?? ''}|${m.phase ?? ''}|${m.phaseGroup ?? ''}`;
+    if (!brackets.has(key)) brackets.set(key, []);
+    brackets.get(key).push(m);
+  });
+
+  const unplayed = new Set();
+  brackets.forEach(list => {
+    const lastRound = Math.max(...list.map(m => m.round));
+    list.filter(m => m.round === lastRound && !isPlayed(m)).forEach(reset => {
+      const grandFinal = list.find(m => m !== reset && m.round === lastRound && isPlayed(m) && pairKey(m) === pairKey(reset));
+      if (!grandFinal) return;
+      const winnersSideWon = grandFinal.winnerId
+        ? String(grandFinal.winnerId) === String(grandFinal.player1Id)
+        : grandFinal.winnerName && grandFinal.winnerName === grandFinal.player1Name;
+      if (tournamentComplete || winnersSideWon) unplayed.add(reset);
+    });
+  });
+  return unplayed.size ? matches.filter(m => !unplayed.has(m)) : matches;
+}
+
 // Enrich matches with participant names when player1Name/player2Name are missing
 function enrichMatchesWithParticipantNames(matches, participants) {
   if (!matches || !participants || participants.length === 0) return;
@@ -766,7 +800,9 @@ async function loadMatches(tournamentId) {
       // ignore race loading errors
     }
 
-    const allMatches = data.matches || [];
+    const tournamentComplete = ['complete', 'completed', 'ended', 'awaiting_review'].includes(String(currentTournament?.state || '').toLowerCase())
+      || String(currentTournament?.status || '').toLowerCase() === 'terminé';
+    const allMatches = removeUnplayedBracketResets(data.matches || [], tournamentComplete);
     
     // Store for re-rendering on spoiler mode change
     currentMatches = allMatches;
@@ -925,14 +961,17 @@ function createQualificationRaceCard(race) {
     path = '/' + String(path || '').replace(/^\/+/, '');
     const parts = path.split('/').filter(Boolean);
     if (parts.length >= 3 && parts[0] === parts[1]) parts.splice(1, 1);
-    const href = 'https://racetime.gg/' + parts.join('/');
+    const srlUrl = getSpeedRunsLiveRaceUrl(race.url);
+    const href = srlUrl || 'https://racetime.gg/' + parts.join('/');
     
     const link = document.createElement('a');
     link.href = href;
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
     link.style.cssText = 'display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.65rem; border-radius: 0.25rem; font-size: 0.8rem; color: #C2CECF; background: #222222; border: 1px solid #C2CECF; text-decoration: none;';
-    link.innerHTML = '<img src="assets/racetime.svg" alt="Racetime" style="width: 16px; height: 16px;">Racetime';
+    link.innerHTML = srlUrl
+      ? '<img src="assets/speedrunslive.svg" alt="SpeedRunsLive" style="width: 16px; height: 16px;">SpeedRunsLive'
+      : '<img src="assets/racetime.svg" alt="Racetime" style="width: 16px; height: 16px;">Racetime';
     linkDiv.appendChild(link);
     header.appendChild(linkDiv);
   }
@@ -1526,10 +1565,10 @@ document.addEventListener('click', function(e) {
     let el = e.target;
     while (el && el !== container) {
       if (el.dataset && el.dataset.raceId) {
-        // ignore clicks on internal links (racetime button)
+        // ignore clicks on internal links (racetime / SpeedRunsLive button)
         try {
           const a = e.target.closest && e.target.closest('a');
-          if (a && a.getAttribute && a.getAttribute('href') && a.getAttribute('href').indexOf('racetime.gg') !== -1) return;
+          if (a && a.getAttribute && /racetime\.gg|speedrunslive\.com/.test(a.getAttribute('href') || '')) return;
         } catch (err) {}
         const id = el.dataset.raceId;
         if (id) {
@@ -1912,8 +1951,12 @@ function createMatchCard(match, races = []) {
     path = '/' + String(path || '').replace(/^\/+/, '');
     const parts = path.split('/').filter(Boolean);
     if (parts.length >= 3 && parts[0] === parts[1]) parts.splice(1, 1);
-    const href = 'https://racetime.gg/' + parts.join('/');
-    return `<a href="${href}" target="_blank" rel="noopener noreferrer" data-stop-propagation style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.2rem 0.4rem; border-radius:0.25rem; font-size:0.7rem; color:#C2CECF; background:#222222; border:1px solid #C2CECF; text-decoration:none;"><img src="assets/racetime.svg" alt="Racetime" style="width:14px;height:14px;">Racetime</a>`;
+    const srlUrl = getSpeedRunsLiveRaceUrl(race.url);
+    const href = srlUrl || 'https://racetime.gg/' + parts.join('/');
+    const logo = srlUrl
+      ? '<img src="assets/speedrunslive.svg" alt="SpeedRunsLive" style="width:14px;height:14px;">SpeedRunsLive'
+      : '<img src="assets/racetime.svg" alt="Racetime" style="width:14px;height:14px;">Racetime';
+    return `<a href="${href}" target="_blank" rel="noopener noreferrer" data-stop-propagation style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.2rem 0.4rem; border-radius:0.25rem; font-size:0.7rem; color:#C2CECF; background:#222222; border:1px solid #C2CECF; text-decoration:none;">${logo}</a>`;
   };
 
   // Helper to extract times from a race for this match

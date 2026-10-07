@@ -296,6 +296,13 @@ async function playerMeta(query, siteUrl) {
   };
 }
 
+// Races imported from SpeedRunsLive keep their SRL page in source.url
+function getRaceExternalUrl(race) {
+  if (race?.source?.type === 'speedrunslive' && race.source.url) return race.source.url;
+  if (!race?.url) return null;
+  return `https://racetime.gg${race.url.startsWith('/') ? '' : '/'}${race.url}`;
+}
+
 async function raceMeta(query, siteUrl) {
   const id = String(query.id || '').trim();
   const url = String(query.url || '').trim();
@@ -343,7 +350,7 @@ async function raceMeta(query, siteUrl) {
         startDate: race.startedAt ? new Date(race.startedAt).toISOString() : undefined,
         endDate: race.endedAt ? new Date(race.endedAt).toISOString() : undefined,
         eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
-        location: { '@type': 'VirtualLocation', url: race.url ? `https://racetime.gg${race.url.startsWith('/') ? '' : '/'}${race.url}` : absoluteUrl(siteUrl, canonicalPath) },
+        location: { '@type': 'VirtualLocation', url: getRaceExternalUrl(race) || absoluteUrl(siteUrl, canonicalPath) },
         image: absoluteUrl(siteUrl, image) || undefined,
         description
       })

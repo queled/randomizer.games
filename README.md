@@ -38,6 +38,9 @@ npm run sync
 # Sync Racetime
 npm run sync:racetime
 
+# Historique SpeedRunsLive (courses randomizer d'avant racetime.gg)
+npm run sync:speedrunslive
+
 # Sync Rando-list
 npm run sync-rando-list
 npm run sync-rando-list:detect

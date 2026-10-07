@@ -158,6 +158,7 @@ scripts/
 ├── sync-racetime-incremental.js # Sync races (5 min)
 ├── sync-racetime-all.js         # Sync complet des races
 ├── sync-racetime-game.js        # Sync races pour un jeu
+├── sync-speedrunslive.js        # Historique des races randomizer SpeedRunsLive
 ├── discover-tournaments.js      # Découverte de tournois (start.gg + challonge)
 ├── sync-tournaments.js          # Sync automatique des tournois (cron)
 ├── import-startgg.js            # Import d'un tournoi start.gg spécifique

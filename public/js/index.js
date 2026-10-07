@@ -367,6 +367,10 @@ function createRaceCard(race) {
   card.addEventListener('click', () => {
     if (race._id) {
       window.location.href = `/race-detail.html?id=${encodeURIComponent(race._id)}`;
+    } else if (/^\/?srl\/\d+$/i.test(String(race.url || '').trim())) {
+      // Races imported from SpeedRunsLive are stored as /srl/<raceId>
+      const raceId = String(race.url).trim().split('/').pop();
+      window.open('https://www.speedrunslive.com/races/result/' + raceId, '_blank');
     } else if (race.url) {
       let path = String(race.url || '').trim();
       if (/^https?:\/\//i.test(path)) {

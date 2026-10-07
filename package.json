@@ -8,6 +8,7 @@
     "dev": "nodemon server.js",
     "sync": "npm run sync:racetime && npm run sync:players && npm run sync-rando-list",
     "sync:racetime": "node scripts/sync-racetime-global.js",
+    "sync:speedrunslive": "node scripts/sync-speedrunslive.js --all",
     "sync:players": "node scripts/sync-players-from-races.js",
     "sync:players:dry": "node scripts/sync-players-from-races.js --dry-run",
     "sync:tournaments": "node scripts/sync-tournaments.js",

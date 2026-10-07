@@ -364,6 +364,12 @@
     return statusTexts[status] || status;
   }
 
+  // Races imported from SpeedRunsLive are stored as /srl/<raceId>
+  function getSpeedRunsLiveRaceUrl(rawUrl) {
+    const match = /^\/?srl\/(\d+)$/i.exec(String(rawUrl || '').trim());
+    return match ? 'https://www.speedrunslive.com/races/result/' + match[1] : null;
+  }
+
   function normalizeRacetimeRaceUrl(rawUrl, categoryHint) {
     let raw = String(rawUrl || '').trim();
     if (!raw) return null;
@@ -543,7 +549,10 @@
       
       // Links
       const links = [];
-      if (race.url) {
+      const srlUrl = getSpeedRunsLiveRaceUrl(race.url);
+      if (srlUrl) {
+        links.push(`<a href="${escapeHtml(srlUrl)}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.5rem;background-color:#1F2937;color:#E3E6E6;font-weight:600;padding:0.75rem 1.5rem;border-radius:0.5rem;border:2px solid #E3E6E6;text-decoration:none;transition:all 0.2s;font-size:1rem;" data-hover-style="background:#374151" data-rest-style="background:#1F2937"><img src="/assets/speedrunslive.svg" alt="SpeedRunsLive" style="width:24px;height:24px;">Voir sur SpeedRunsLive</a>`);
+      } else if (race.url) {
         const racetimeUrl = normalizeRacetimeRaceUrl(race.url, race.category);
         const safeRacetimeUrl = sanitizeExternalUrl(racetimeUrl);
         if (safeRacetimeUrl) {

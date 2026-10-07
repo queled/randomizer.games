@@ -368,16 +368,19 @@ function displayTournamentInfo(tournament) {
       const link = document.getElementById('challonge-link');
       container.style.display = 'block';
       link.href = tournament.fullUrl;
-      // Grouped Challonge brackets (Upper / Middle / Lower): one button per bracket, in phase order
-      const brackets = (tournament.challongeBrackets || []).filter(b => b.fullUrl);
+      // Grouped Challonge brackets (Upper / Middle / Lower): one button per bracket, strongest first
+      const phaseNames = (tournament.phases || []).map(p => p.name);
+      const brackets = (tournament.challongeBrackets || [])
+        .map((b, i) => ({ ...b, label: b.label || phaseNames[i] || b.name, index: i }))
+        .filter(b => b.fullUrl)
+        .sort((a, b) => (bracketLevel(a.label) - bracketLevel(b.label)) || (a.index - b.index));
       if (brackets.length > 1) {
         container.style.cssText = 'display: flex; flex-wrap: wrap; gap: 0.5rem;';
-        const phaseNames = (tournament.phases || []).map(p => p.name);
         brackets.forEach((b, i) => {
           const button = i === 0 ? link : link.cloneNode(true);
           if (i > 0) { button.removeAttribute('id'); container.appendChild(button); }
           button.href = b.fullUrl;
-          const label = b.label || phaseNames[i] || b.name;
+          const label = b.label;
           if (label) {
             const span = button.querySelector('span');
             span.removeAttribute('data-i18n');
@@ -572,15 +575,19 @@ function displayParticipants(participants, matches = [], options = {}) {
     });
   }
 
-  // Grouped Challonge brackets (Upper / Middle / Lower): one section per bracket, in phase order
+  // Grouped Challonge brackets (Upper / Middle / Lower): one section per bracket, strongest first
   const brackets = (currentTournament && currentTournament.challongeBrackets) || [];
+  const phaseNames = ((currentTournament && currentTournament.phases) || []).map(p => p.name);
   const bracketIndex = p => brackets.findIndex(b => p && p.bracketChallongeId != null && Number(b.challongeId) === Number(p.bracketChallongeId));
   const groupByBracket = brackets.length > 1 && sorted.some(p => bracketIndex(p) >= 0);
   if (groupByBracket) {
-    const rankOf = p => { const i = bracketIndex(p); return i === -1 ? brackets.length : i; };
+    const rankOf = p => {
+      const i = bracketIndex(p);
+      if (i === -1) return Infinity;
+      return bracketLevel(brackets[i].label || phaseNames[i] || brackets[i].name) * 1000 + i;
+    };
     sorted = sorted.slice().sort((a, b) => rankOf(a) - rankOf(b));
   }
-  const phaseNames = ((currentTournament && currentTournament.phases) || []).map(p => p.name);
   let currentBracket = null;
   let bracketStart = 0;
 
@@ -1095,10 +1102,21 @@ function getPhaseSpans(matches = []) {
   return spans;
 }
 
+// Grouped Challonge brackets run side by side: the strongest one first (Upper / Hard / Gold),
+// then the declared order
+const BRACKET_LEVELS = [
+  /\b(upper|gold|hard|expert|advanced)\b/i,
+  /\b(middle|silver|medium|normal|intermediate)\b/i,
+  /\b(lower|bronze|easy|beginner|novice)\b/i
+];
+function bracketLevel(name) {
+  const level = BRACKET_LEVELS.findIndex(re => re.test(name || ''));
+  return level === -1 ? 1 : level;
+}
+
 function sortPhasesChronologically(phases, matches = [], tournament = null) {
-  // Grouped Challonge brackets (Upper / Middle / Lower) run side by side: keep their declared order
   if (tournament && tournament.challongeBrackets?.length) {
-    return phases.slice().sort((a, b) => (a.phaseOrder || 0) - (b.phaseOrder || 0));
+    return phases.slice().sort((a, b) => (bracketLevel(a.name) - bracketLevel(b.name)) || ((a.phaseOrder || 0) - (b.phaseOrder || 0)));
   }
   const spans = getPhaseSpans(matches);
   return phases.slice().sort((a, b) => {
@@ -1114,10 +1132,10 @@ function sortPhasesChronologically(phases, matches = [], tournament = null) {
 // one first, then the latest declared (Group I before Groups A-H).
 function sortPhasesNewestFirst(phaseNames, tournament, matches = []) {
   const declared = tournament && Array.isArray(tournament.phases) ? tournament.phases : [];
-  // Grouped Challonge brackets (Upper / Middle / Lower) run side by side: keep their declared order
+  // Grouped Challonge brackets (Upper / Middle / Lower, Hard / Medium): strongest first
   if (tournament && tournament.challongeBrackets?.length) {
     const rank = name => { const p = declared.find(ph => ph.name === name); return p && p.phaseOrder ? p.phaseOrder : Infinity; };
-    return phaseNames.slice().sort((a, b) => rank(a) - rank(b));
+    return phaseNames.slice().sort((a, b) => (bracketLevel(a) - bracketLevel(b)) || (rank(a) - rank(b)));
   }
   const chronological = sortPhasesChronologically(declared, matches, tournament).map(p => p.name);
   const position = name => { const i = chronological.indexOf(name); return i === -1 ? chronological.length : i; };

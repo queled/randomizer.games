@@ -120,12 +120,16 @@ const playerKey = value => String(value || '').toLowerCase().replace(/[^a-z0-9]/
 /**
  * The same event can exist on two platforms (e.g. a Challonge bracket and its start.gg twin):
  * flag an existing tournament starting within 45 days with (almost) the same players.
+ * Two different start.gg tournaments are never twins (weekly series share their players).
  */
-async function findProbableDuplicate(playerNames, startDate, startggEventId) {
+async function findProbableDuplicate(playerNames, startDate, startggEventId, startggTournamentId) {
   const wanted = new Set(playerNames.map(playerKey).filter(Boolean));
   if (wanted.size < 4) return null;
 
-  const query = { startggId: { $ne: startggEventId } };
+  const query = {
+    startggId: { $ne: startggEventId },
+    $or: [{ startggId: null }, { startggTournamentId }]
+  };
   if (startDate) {
     const time = new Date(startDate).getTime();
     const windowMs = 45 * 24 * 60 * 60 * 1000;
@@ -379,7 +383,7 @@ function cleanDescription(description) {
 
 // ─── Start.gg Discovery ─────────────────────────────────────────────────────
 
-async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun, games, tournamentSlugs = [], discoveredVia = null, trustSource = false }) {
+async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun, games, tournamentSlugs = [], discoveredVia = null, trustSource = false, forceGame = false }) {
   if (!process.env.STARTGG_API_TOKEN) {
     console.warn('⚠️  STARTGG_API_TOKEN not set – skipping start.gg discovery');
     return { found: 0, imported: 0, skipped: 0, errors: 0 };
@@ -420,7 +424,7 @@ async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun,
     stats.found++;
 
     // A curated source (Mido's House) already guarantees the game: names rarely say "randomizer"
-    const accepted = trustSource ? Boolean(findMatchingGame(tournament, [game])) : isRandomizerTournament(tournament, [game]);
+    const accepted = forceGame || (trustSource ? Boolean(findMatchingGame(tournament, [game])) : isRandomizerTournament(tournament, [game]));
     if (!accepted) return;
 
     if (isAlreadyImported(tournament)) {
@@ -457,8 +461,9 @@ async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun,
         continue;
       }
 
-      const match = findMatchingGame(tournament, games);
-      if (!match || (!trustSource && !hasRandomizerSignal(tournament, [match.game]))) {
+      // `--game` with explicit slugs: the operator already chose the game, aliases are not required
+      const match = forceGame ? { game: games[0] } : findMatchingGame(tournament, games);
+      if (!match || (!trustSource && !forceGame && !hasRandomizerSignal(tournament, [match.game]))) {
         console.log(`   ↪ No matching randomizer game for explicit tournament: ${tournament.name} (${tournament.slug})`);
         continue;
       }
@@ -555,7 +560,33 @@ async function importStartGGTournament(api, tournamentPreview, { game = null, di
     ? tournamentData.events.filter(event => Number(event.game?.id) === videogameId)
     : tournamentData.events;
 
-  for (const event of events) {
+  // Some organisers mirror a bracket in a second event (e.g. registrations full of DQs + a
+  // "Results Data" copy with the real scores, often under shortened tags): keep the copy with results
+  const eventPlayers = event => new Set((event.standings?.length ? event.standings : event.entrants || [])
+    .flatMap(entry => (entry.participants || []).map(p => playerKey(p.gamerTag || p.userName))).filter(Boolean));
+  const playedSets = event => (event.sets || []).filter(set => set.displayScore && !/\bDQ\b/i.test(set.displayScore)).length;
+  const keptEvents = [];
+  for (const event of [...events].sort((a, b) => playedSets(b) - playedSets(a))) {
+    const players = eventPlayers(event);
+    if (!players.size) {
+      console.log(`         ⏭️  Skipped "${event.name}": no entrants`);
+      continue;
+    }
+    const twin = keptEvents.find(kept => {
+      const keptPlayers = eventPlayers(kept);
+      if (keptPlayers.size !== players.size) return false;
+      const shared = [...players].filter(name => keptPlayers.has(name)).length;
+      const sameShape = (kept.sets || []).length === (event.sets || []).length && !playedSets(event);
+      return sameShape || shared / players.size >= 0.7;
+    });
+    if (twin) {
+      console.log(`         ⏭️  Skipped "${event.name}": copy of event "${twin.name}"`);
+      continue;
+    }
+    keptEvents.push(event);
+  }
+
+  for (const event of keptEvents) {
     // Try to match to a game in our DB
     const matchForGame = await findGameForTournament({
       providedGameSlug: game ? game.id : null,
@@ -587,7 +618,7 @@ async function importStartGGTournament(api, tournamentPreview, { game = null, di
       }
     }
 
-    const duplicateOf = await findProbableDuplicate(participants.map(p => p.name), event.startDate || tournamentData.startDate, event.id);
+    const duplicateOf = await findProbableDuplicate(participants.map(p => p.name), event.startDate || tournamentData.startDate, event.id, tournamentData.id);
     if (duplicateOf) {
       console.log(`         ⏭️  Skipped "${tournamentData.name} - ${event.name}": same players and dates as existing "${duplicateOf}"`);
       continue;
@@ -1108,7 +1139,8 @@ async function main() {
       since: opts.since,
       dryRun: opts.dryRun,
       games,
-      tournamentSlugs: opts.startggSlugs
+      tournamentSlugs: opts.startggSlugs,
+      forceGame: Boolean(opts.game && opts.startggSlugs.length && games?.length === 1)
     });
   }
 

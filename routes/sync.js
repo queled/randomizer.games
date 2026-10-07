@@ -168,6 +168,7 @@ router.post('/races/:tournamentId', validateObjectId('tournamentId'), async (req
 
       // Update player stats
       for (const entrant of raceData.entrants) {
+        if (!entrant.user?.id) continue;
         await Player.findOneAndUpdate(
           { userId: entrant.user.id },
           { $set: {

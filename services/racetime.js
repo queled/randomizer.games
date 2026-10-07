@@ -45,14 +45,16 @@ class RacetimeAPI {
    * Get past races for a category
    * @param {string} category - Game category
    * @param {number} page - Page number
+   * @param {object} [options]
+   * @param {boolean} [options.showEntrants=true] - false for a lighter listing
    */
-  async getPastRaces(category, page = 1) {
+  async getPastRaces(category, page = 1, { showEntrants = true } = {}) {
     try {
       const response = await axios.get(
         `${this.baseURL}/${category}/races/data`,
         {
           params: {
-            show_entrants: true,
+            show_entrants: showEntrants,
             page: page
           }
         }
@@ -73,7 +75,8 @@ class RacetimeAPI {
       }
       return {
         races: data.races.map(r => this.formatRace(r)).filter(r => r !== null),
-        hasNext: data.races.length > 0
+        hasNext: data.races.length > 0,
+        numPages: data.num_pages || null
       };
     } catch (error) {
       console.error(`❌ Error fetching races for ${category} page ${page}:`, error.message);
@@ -128,6 +131,7 @@ class RacetimeAPI {
         category: race.category?.slug || race.slug || 'unknown',
         goal: race.goal?.name || null,
         info: race.info || '',
+        openedAt: race.opened_at,
         startedAt: race.started_at,
         endedAt: race.ended_at,
         recordable: race.recordable || false,
@@ -164,13 +168,14 @@ class RacetimeAPI {
     })();
 
     return {
-      user: {
+      // Deleted racetime accounts come back without a user
+      user: entrant.user ? {
         id: entrant.user.id,
         name: entrant.user.name,
         discriminator: entrant.user.discriminator,
         url: entrant.user.url
-      },
-      status: entrant.status.value,
+      } : null,
+      status: entrant.status?.value,
       finishTime: finishTime,
       finishTimeMs: finishTimeMs,
       finishedAt: entrant.finished_at,
@@ -180,6 +185,25 @@ class RacetimeAPI {
       scoreChange: entrant.score_change,
       comment: entrant.comment
     };
+  }
+
+  /**
+   * Entrants of formatRace() as stored on a Race document
+   */
+  toStoredEntrants(entrants = []) {
+    return entrants.map(entrant => ({
+      userId: entrant.user?.id,
+      userName: entrant.user?.name,
+      userDiscriminator: entrant.user?.discriminator,
+      userUrl: entrant.user?.url,
+      status: entrant.status,
+      finishTime: entrant.finishTime,
+      finishTimeMs: entrant.finishTimeMs,
+      finishedAt: entrant.finishedAt,
+      place: entrant.place,
+      placeOrdinal: entrant.placeOrdinal,
+      comment: entrant.comment
+    }));
   }
 
   /**

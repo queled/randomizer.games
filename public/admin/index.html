@@ -515,7 +515,10 @@
           <div id="rl-qualifiers-section" class="rl-panel mt-4" style="display: none;">
             <div class="rl-panel-header rl-collapsible-header" data-click="rlToggleSection" data-args='["rl-qualifiers-section"]'>
               <h3><span class="rl-collapse-icon">▶</span> 🏅 Races de qualification <span id="rl-qualifiers-count" class="badge badge-muted"></span></h3>
-              <button class="btn btn-sm btn-outline" data-click="rlShowAddQualifier" data-stop>➕ Ajouter</button>
+              <div class="rl-detail-actions">
+                <button class="btn btn-sm btn-outline" data-click="rlShowDetectQualifiers" data-stop>🔎 Détecter</button>
+                <button class="btn btn-sm btn-outline" data-click="rlShowAddQualifier" data-stop>➕ Ajouter</button>
+              </div>
             </div>
             <p class="text-muted rl-section-desc" style="padding: 0.5rem 1rem; font-size: 0.85rem; display: none;">
               Races associées au tournoi en tant que qualifications (sans match spécifique).
@@ -587,6 +590,44 @@
             <div class="modal-footer">
               <button class="btn btn-outline" data-click="rlCloseQualifierModal">Annuler</button>
               <button class="btn btn-primary" data-click="rlConfirmAddQualifier">🏅 Marquer comme qualification</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Qualifier detection modal -->
+        <div id="rl-qualifier-detect-modal" class="modal" style="display: none;">
+          <div class="modal-content modal-large">
+            <div class="modal-header">
+              <h2>🔎 Détecter les qualifications</h2>
+              <button class="modal-close" data-click="rlCloseDetectQualifiers">&times;</button>
+            </div>
+            <div class="modal-body">
+              <p class="text-muted" style="margin-bottom: 1rem;">
+                Races de qualification jouées dans les 120 jours avant le début du tournoi, dont le titre nomme ce tournoi (« Season 7: Qualifier #13 ») ou est un simple « Qualifier 3 ».
+              </p>
+              <div class="rl-autolink-controls">
+                <label class="form-checkbox-group">
+                  <input type="checkbox" id="rl-qualifier-detect-racetime" class="form-checkbox">
+                  <span>Chercher aussi sur racetime.gg les races absentes de la base (environ 1 min)</span>
+                </label>
+                <button class="btn btn-sm btn-outline" data-click="rlDetectQualifiers">Relancer</button>
+              </div>
+              <div class="rl-autolink-controls">
+                <label class="form-checkbox-group">
+                  <input type="checkbox" id="rl-qualifier-detect-select-all" class="form-checkbox" data-change="rlDetectQualifiersToggleAll" data-args='["$checked"]'>
+                  <span>Tout sélectionner</span>
+                </label>
+                <span class="text-muted" id="rl-qualifier-detect-summary"></span>
+              </div>
+              <div id="rl-qualifier-detect-list" class="rl-autolink-list">
+                <p class="text-muted">Recherche en cours...</p>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-outline" data-click="rlCloseDetectQualifiers">Annuler</button>
+              <button class="btn btn-primary" id="rl-qualifier-detect-confirm" data-click="rlConfirmDetectQualifiers" disabled>
+                🏅 Ajouter les qualifications sélectionnées
+              </button>
             </div>
           </div>
         </div>

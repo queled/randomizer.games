@@ -14,10 +14,12 @@ function extractRaceSlug(race) {
   return parts.length >= 2 ? parts[1] : null;
 }
 
+// Races imported without their entrant names; a few nameless entrants are
+// deleted racetime accounts, which a reload would not bring back
 function raceNeedsEntrantHydration(race) {
   const entrants = Array.isArray(race?.entrants) ? race.entrants : [];
   if (!entrants.length) return false;
-  return entrants.some((entrant) => {
+  return entrants.every((entrant) => {
     const name = entrant?.userName || entrant?.user?.name || entrant?.name || entrant?.displayName || null;
     return !name;
   });
@@ -49,7 +51,7 @@ async function hydrateMissingRaceEntrants(races, Race) {
         { _id: race._id },
         {
           $set: {
-            entrants: freshRace.entrants,
+            entrants: racetimeAPI.toStoredEntrants(freshRace.entrants),
             goal: freshRace.goal || race.goal,
             info: freshRace.info || race.info,
             status: freshRace.status || race.status,
@@ -60,7 +62,7 @@ async function hydrateMissingRaceEntrants(races, Race) {
         }
       );
 
-      hydrated.push({ ...race, ...freshRace, _id: race._id, tournamentId: race.tournamentId, startggSetId: race.startggSetId, matchPlayers: race.matchPlayers, matchConfidence: race.matchConfidence, tournamentPhase: race.tournamentPhase, tournamentPool: race.tournamentPool, tournamentRound: race.tournamentRound, source: race.source });
+      hydrated.push({ ...race, ...freshRace, entrants: racetimeAPI.toStoredEntrants(freshRace.entrants), _id: race._id, tournamentId: race.tournamentId, startggSetId: race.startggSetId, matchPlayers: race.matchPlayers, matchConfidence: race.matchConfidence, tournamentPhase: race.tournamentPhase, tournamentPool: race.tournamentPool, tournamentRound: race.tournamentRound, source: race.source });
     } catch (error) {
       console.warn(`Unable to hydrate race entrants for ${race.category}/${raceSlug}:`, error.message);
       hydrated.push(race);

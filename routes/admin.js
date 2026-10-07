@@ -1348,13 +1348,18 @@ const {
   getRaceLabel,
   parseRaceStageInfo
 } = require('../helpers/race-match-linking');
-const racetimeAPI = require('../services/racetime');
 const {
   loadNormalizedMatches,
   loadCandidateRaces,
   buildAutoLinkPreview,
-  applyAutoLinkProposals
+  applyAutoLinkProposals,
+  QUALIFIER_PHASE
 } = require('../services/tournament-autolink');
+const {
+  buildQualifierPreview,
+  applyQualifiers,
+  importRacetimeRace
+} = require('../services/tournament-qualifiers');
 
 /**
  * Parse a racetime URL to extract category and raceId.
@@ -1506,6 +1511,8 @@ router.get('/tournaments/:id/linking', requireAdmin, async (req, res, next) => {
     const racesFormatted = races.map(r => {
       const stageInfo = parseRaceStageInfo(r);
       const extracted = extractRaceEntrants(r, { requireDirect: false });
+      const isAttached = !!r.tournamentId && String(r.tournamentId) === tournamentIdStr;
+      const isLinked = !!(r.matchId || r.startggSetId);
       return {
         _id: r._id.toString(),
         url: r.url,
@@ -1522,9 +1529,10 @@ router.get('/tournaments/:id/linking', requireAdmin, async (req, res, next) => {
         matchPlayers: r.matchPlayers || null,
         status: r.status || null,
         stageType: stageInfo.type,
-        isQualifier: stageInfo.type === 'qualifier',
-        isLinked: !!(r.matchId || r.startggSetId),
-        isAttached: !!r.tournamentId && String(r.tournamentId) === tournamentIdStr
+        // Qualifiers of this tournament: attached without a match
+        isQualifier: isAttached && !isLinked && (r.tournamentPhase === QUALIFIER_PHASE || stageInfo.type === 'qualifier'),
+        isLinked,
+        isAttached
       };
     });
 
@@ -1681,27 +1689,7 @@ router.post('/tournaments/:id/link-race', requireAdmin, async (req, res, next) =
     if (!race) {
       if (!parsed) return res.status(404).json({ error: 'Race not found and URL cannot be parsed for import' });
       try {
-        const raceData = await racetimeAPI.getRace(parsed.category, parsed.raceId);
-        if (!raceData) return res.status(404).json({ error: 'Race not found on racetime.gg' });
-        race = await Race.findOneAndUpdate(
-          { url: raceData.url || parsed.normalizedUrl },
-          { $set: {
-            ...raceData,
-            url: raceData.url || parsed.normalizedUrl,
-            tournamentId: tournament._id,
-            source: { type: 'racetime', externalId: parsed.raceId, url: raceData.url || parsed.normalizedUrl, importedAt: new Date() }
-          } },
-          { upsert: true, new: true }
-        );
-        for (const entrant of (raceData.entrants || [])) {
-          if (entrant.user?.id) {
-            await Player.findOneAndUpdate(
-              { userId: entrant.user.id },
-              { $set: { name: entrant.user.name, discriminator: entrant.user.discriminator, racetimeUrl: entrant.user.url || entrant.user.id } },
-              { upsert: true }
-            );
-          }
-        }
+        race = await importRacetimeRace({ raceUrl: parsed.normalizedUrl, Race, Player });
       } catch (importErr) {
         console.error('Failed to import race from racetime:', importErr.message);
         return res.status(404).json({ error: `Race not found in DB and import failed: ${importErr.message}` });
@@ -1717,11 +1705,16 @@ router.post('/tournaments/:id/link-race', requireAdmin, async (req, res, next) =
       race.startggSetId = undefined;
       race.matchConfidence = undefined;
       race.matchPlayers = undefined;
+      race.tournamentPhase = QUALIFIER_PHASE;
+      race.tournamentPool = undefined;
+      race.tournamentRound = undefined;
       await race.save();
       return res.json({ success: true, message: 'Race linked as qualifier' });
     }
 
     if (!matchId) return res.status(400).json({ error: 'matchId is required for non-qualifier linking' });
+    // A qualifier linked to a match is no longer a qualifier
+    if (race.tournamentPhase === QUALIFIER_PHASE) race.tournamentPhase = undefined;
 
     if (isStartgg) {
       const embeddedMatch = tournament.matches?.find(m =>
@@ -1787,6 +1780,8 @@ router.post('/tournaments/:id/unlink-race', requireAdmin, async (req, res, next)
     if (!race) return res.status(404).json({ error: 'Race not found' });
 
     const isStartgg = !!tournament.startggId;
+    // A qualifier has no match: removing it detaches it from the tournament
+    const wasQualifier = !(race.matchId || race.startggSetId) && String(race.tournamentId) === String(tournament._id);
 
     if (isStartgg) {
       // Find and clear embedded match (use save() to avoid type-mismatch with arrayFilters)
@@ -1826,6 +1821,7 @@ router.post('/tournaments/:id/unlink-race', requireAdmin, async (req, res, next)
     race.tournamentPhase = undefined;
     race.tournamentPool = undefined;
     race.tournamentRound = undefined;
+    if (wasQualifier) race.tournamentId = undefined;
     await race.save();
 
     res.json({ success: true, message: 'Race unlinked' });
@@ -1885,6 +1881,50 @@ router.post('/tournaments/:id/auto-link-confirm', requireAdmin, async (req, res,
       Match
     });
 
+    res.json({ success: true, ...result });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET /api/admin/tournaments/:id/qualifiers-preview?racetime=1
+ * Qualifier rooms the tournament can take; with racetime=1 also looks on racetime.gg
+ * for the ones missing from the database (takes about a minute)
+ */
+router.get('/tournaments/:id/qualifiers-preview', requireAdmin, async (req, res, next) => {
+  try {
+    const tournament = await Tournament.findById(req.params.id)
+      .populate('game')
+      .lean();
+    if (!tournament) return res.status(404).json({ error: 'Tournament not found' });
+
+    const preview = await buildQualifierPreview({
+      tournament,
+      Race,
+      racetime: req.query.racetime === '1'
+    });
+    res.json(preview);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * POST /api/admin/tournaments/:id/qualifiers-confirm
+ * Attach the selected rooms as qualifiers, importing the missing ones from racetime.gg
+ */
+router.post('/tournaments/:id/qualifiers-confirm', requireAdmin, async (req, res, next) => {
+  try {
+    const { raceUrls } = req.body;
+    if (!Array.isArray(raceUrls) || !raceUrls.length || !raceUrls.every((url) => typeof url === 'string')) {
+      return res.status(400).json({ error: 'raceUrls array is required' });
+    }
+
+    const tournament = await Tournament.findById(req.params.id);
+    if (!tournament) return res.status(404).json({ error: 'Tournament not found' });
+
+    const result = await applyQualifiers({ tournament, raceUrls, Race, Player });
     res.json({ success: true, ...result });
   } catch (error) {
     next(error);

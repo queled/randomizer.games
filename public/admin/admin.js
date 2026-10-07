@@ -2917,6 +2917,131 @@ const admin = {
     document.getElementById('rl-manual-race-url').value = '';
   },
 
+  // ==================== QUALIFIER DETECTION ====================
+
+  rlShowDetectQualifiers() {
+    if (!this.rlCurrentTournament) return;
+    document.getElementById('rl-qualifier-detect-modal').style.display = 'flex';
+    document.getElementById('rl-qualifier-detect-racetime').checked = false;
+    this.rlDetectQualifiers();
+  },
+
+  async rlDetectQualifiers() {
+    if (!this.rlCurrentTournament) return;
+
+    const list = document.getElementById('rl-qualifier-detect-list');
+    const summary = document.getElementById('rl-qualifier-detect-summary');
+    const confirmBtn = document.getElementById('rl-qualifier-detect-confirm');
+    const selectAll = document.getElementById('rl-qualifier-detect-select-all');
+    const racetime = document.getElementById('rl-qualifier-detect-racetime').checked;
+
+    list.innerHTML = `<p class="text-muted">${racetime ? 'Recherche dans la base et sur racetime.gg (environ 1 min)...' : 'Recherche en cours...'}</p>`;
+    confirmBtn.disabled = true;
+    selectAll.checked = false;
+    summary.textContent = '';
+    this.rlQualifierProposals = null;
+
+    try {
+      const response = await fetch(`/api/admin/tournaments/${this.rlCurrentTournament._id}/qualifiers-preview${racetime ? '?racetime=1' : ''}`, {
+        headers: { 'Authorization': `Bearer ${this.token}` }
+      });
+      if (!response.ok) throw new Error('Failed');
+
+      const data = await response.json();
+      this.rlQualifierProposals = data.proposals;
+      const alreadyText = data.alreadyAttached ? `, ${data.alreadyAttached} déjà ajoutée(s)` : '';
+
+      if (!data.proposals.length) {
+        list.innerHTML = '<p class="text-muted">Aucune nouvelle race de qualification trouvée.</p>';
+        summary.textContent = alreadyText.replace(/^, /, '');
+        return;
+      }
+
+      const missing = data.proposals.filter(p => !p.inDatabase).length;
+      summary.textContent = `${data.proposals.length} race(s) trouvée(s)${missing ? ` dont ${missing} à importer` : ''}${alreadyText}`;
+
+      list.innerHTML = data.proposals.map((p, i) => `
+        <div class="rl-autolink-item">
+          <label class="rl-autolink-check">
+            <input type="checkbox" class="form-checkbox rl-qualifier-detect-cb" data-index="${i}" checked data-change="rlDetectQualifiersUpdateCount">
+          </label>
+          <div class="rl-autolink-info">
+            <div class="rl-autolink-race">
+              ${this.renderExternalLink(this.sanitizeRacetimeUrl(p.raceUrl), p.raceLabel || p.raceUrl, 'rl-race-link')}
+              ${p.raceEntrants != null ? `<span class="text-muted">${p.raceEntrants} entrant${p.raceEntrants > 1 ? 's' : ''}</span>` : ''}
+            </div>
+            <div class="rl-autolink-match">
+              ${p.startedAt ? `<span class="text-muted">${new Date(p.startedAt).toLocaleDateString('fr-FR')}</span>` : ''}
+              ${p.goal ? `<span class="text-muted">${this.escapeHtml(p.goal)}</span>` : ''}
+              <span class="badge ${p.matchType === 'named' ? 'badge-success' : 'badge-muted'}" title="${p.matchType === 'named' ? 'Le titre nomme ce tournoi' : 'Titre générique, joué avant le tournoi'}">${p.matchType === 'named' ? 'Nommée' : 'Générique'}</span>
+              ${!p.inDatabase ? '<span class="badge badge-warning">À importer</span>' : ''}
+              ${p.attached ? '<span class="badge badge-muted">Déjà rattachée</span>' : ''}
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      selectAll.checked = true;
+      this.rlDetectQualifiersUpdateCount();
+    } catch (error) {
+      console.error('Error detecting qualifiers:', error);
+      list.innerHTML = '<p class="text-muted">Erreur lors de la recherche</p>';
+    }
+  },
+
+  rlDetectQualifiersUpdateCount() {
+    const checked = document.querySelectorAll('.rl-qualifier-detect-cb:checked').length;
+    const confirmBtn = document.getElementById('rl-qualifier-detect-confirm');
+    confirmBtn.disabled = checked === 0;
+    confirmBtn.textContent = `🏅 Ajouter ${checked} qualification${checked > 1 ? 's' : ''}`;
+  },
+
+  rlDetectQualifiersToggleAll(checked) {
+    document.querySelectorAll('.rl-qualifier-detect-cb').forEach(cb => { cb.checked = checked; });
+    this.rlDetectQualifiersUpdateCount();
+  },
+
+  rlCloseDetectQualifiers() {
+    document.getElementById('rl-qualifier-detect-modal').style.display = 'none';
+    this.rlQualifierProposals = null;
+  },
+
+  async rlConfirmDetectQualifiers() {
+    if (!this.rlCurrentTournament || !this.rlQualifierProposals) return;
+
+    const raceUrls = [...document.querySelectorAll('.rl-qualifier-detect-cb:checked')]
+      .map(cb => this.rlQualifierProposals[parseInt(cb.dataset.index)]?.raceUrl)
+      .filter(Boolean);
+    if (!raceUrls.length) return;
+
+    const confirmBtn = document.getElementById('rl-qualifier-detect-confirm');
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = '⏳ Ajout en cours...';
+
+    try {
+      const response = await fetch(`/api/admin/tournaments/${this.rlCurrentTournament._id}/qualifiers-confirm`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.token}`
+        },
+        body: JSON.stringify({ raceUrls })
+      });
+      if (!response.ok) throw new Error('Failed');
+
+      const data = await response.json();
+      const importedText = data.imported ? ` (${data.imported} importée(s) depuis racetime.gg)` : '';
+      this.showToast(`${data.attached} qualification(s) ajoutée(s)${importedText}`, data.errors.length ? 'error' : 'success');
+      if (data.errors.length) console.warn('Qualifier errors:', data.errors);
+      this.rlCloseDetectQualifiers();
+      await this.rlSelectTournament(this.rlCurrentTournament._id);
+    } catch (error) {
+      console.error('Error adding qualifiers:', error);
+      this.showToast('Erreur lors de l\'ajout', 'error');
+      this.rlDetectQualifiersUpdateCount();
+    }
+  },
+
   // ==================== AUTO-LINK PREVIEW ====================
 
   async rlAutoLinkPreview() {

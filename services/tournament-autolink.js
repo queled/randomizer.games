@@ -10,6 +10,9 @@ const {
   parseStartggDisplayScore
 } = require('../helpers/race-match-linking');
 
+// tournamentPhase of the races attached to a tournament as qualifiers
+const QUALIFIER_PHASE = 'Qualifications';
+
 function uniqueByUrl(races) {
   const seen = new Set();
   const result = [];
@@ -557,7 +560,7 @@ async function buildAutoLinkPreview({
     }
 
     const stageInfo = parseRaceStageInfo(race);
-    if (stageInfo.type === 'qualifier') {
+    if (stageInfo.type === 'qualifier' || race.tournamentPhase === QUALIFIER_PHASE) {
       skipped++;
       continue;
     }
@@ -830,6 +833,9 @@ async function applyAutoLinkProposals({ tournament, proposals, Race, Match }) {
 }
 
 module.exports = {
+  QUALIFIER_PHASE,
+  goalTokens,
+  collectCandidateCategories,
   loadNormalizedMatches,
   loadCandidateRaces,
   buildAutoLinkPreview,

@@ -1468,10 +1468,18 @@ document.addEventListener('click', function(e) {
   } catch (err) { /* ignore */ }
 });
 
+// Some Challonge tournaments store race times in seconds (e.g. "33208-33614") instead of a score.
+function isRaceTimeScore(scoresCsv) {
+  const m = /^\s*(-?\d+)\s*-\s*(-?\d+)\s*$/.exec(String(scoresCsv || ''));
+  return !!m && (parseInt(m[1], 10) > 1000 || parseInt(m[2], 10) > 1000);
+}
+
 function parseChallongeScores(scoresCsv, matchState = '') {
   if (!scoresCsv) return null;
   const raw = String(scoresCsv).trim();
   if (!raw) return null;
+  // Race times are not a series score: synthesizing one game per "win" would build tens of thousands of games.
+  if (isRaceTimeScore(raw)) return null;
 
   const parsePair = (pair) => {
     const m = /^\s*(-?\d+)\s*-\s*(-?\d+)\s*$/.exec(String(pair || ''));
@@ -3818,7 +3826,10 @@ function createBracketMatchCard(match, isFinal = false) {
   const player1Style = playerStyle(player1Winner && match.player1Name && match.player2Name, true);
   const player2Style = playerStyle(player2Winner && match.player1Name && match.player2Name, false);
   
-  const parsedScores = parseChallongeScores(match.scoresCsv, match.state);
+  // Race times: show a 1-0 from the winner instead of the raw seconds.
+  const parsedScores = isRaceTimeScore(match.scoresCsv)
+    ? { seriesP1: player1Winner ? 1 : 0, seriesP2: player2Winner ? 1 : 0, games: [] }
+    : parseChallongeScores(match.scoresCsv, match.state);
   const getScore = (index) => {
     if (!parsedScores) return '';
     return index === 0 ? String(parsedScores.seriesP1) : String(parsedScores.seriesP2);

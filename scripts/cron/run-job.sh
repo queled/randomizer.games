@@ -7,7 +7,7 @@
 #   racetime              nouvelles courses racetime.gg            (toutes les 5 min)
 #   tournaments-update    tournois actifs + rattachement des courses (toutes les 15 min)
 #   midos-house           horaires, restreams et VOD des races OoTR (toutes les 15 min)
-#   race-vods             VOD Twitch des joueurs des races       (toutes les 30 min)
+#   race-vods             VOD Twitch des joueurs, restreams trouvés sur Twitch (toutes les 30 min)
 #   tournaments-discover  nouveaux tournois des 2 derniers jours    (tous les jours)
 #   rando-list            cache rando-list, si le dépôt a changé    (tous les jours)
 #   backup                mongodump avec rotation                   (toutes les nuits)
@@ -40,7 +40,10 @@ run_midos_house() {
 }
 
 run_race_vods() {
-  timeout 10m node scripts/sync-race-vods.js
+  local status=0
+  timeout 10m node scripts/sync-race-vods.js || status=$?
+  timeout 10m node scripts/sync-race-restreams.js || status=$?
+  return "$status"
 }
 
 run_tournaments_discover() {

@@ -234,6 +234,17 @@ function playerVodsHtml(race) {
     .join('');
 }
 
+// Restreams of a match on Mido's House, then those found from Twitch titles on its races, one per channel
+function mergeRestreams(restreams, races) {
+  const seen = new Set();
+  return (restreams || []).concat(...(races || []).map(r => r.restreams || [])).filter(stream => {
+    const key = restreamChannelName(stream.url || stream.vodUrl || '').toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 // Link to a restream: its VOD when Twitch still has it, else the channel
 function restreamLinkHtml(stream) {
   const vod = sanitizeExternalUrl(stream.vodUrl);
@@ -2321,7 +2332,7 @@ function createMatchCard(match, races = []) {
         ${match.completedAt ? formatDateTime(match.completedAt) : match.startedAt ? formatDateTime(match.startedAt) : match.scheduledAt ? escHtml(formatScheduledAt(match.scheduledAt)) : 'Not scheduled'}${match.groupId !== null && match.groupId !== undefined && match.round ? ` • Round ${match.round}` : ''}
       </div>
       <div style="display: flex; align-items: center; gap: 0.5rem;">
-        ${(match.restreams || []).filter(s => s.vodUrl).map(restreamLinkHtml).join('')}
+        ${mergeRestreams(match.restreams, matchRaces).filter(s => s.vodUrl).map(restreamLinkHtml).join('')}
         ${!isMultiRaceSeries ? singleRaceLinkHtml : ''}
         ${stateBadge}
       </div>
@@ -3397,9 +3408,13 @@ function tiebreakRaces(races = []) {
 }
 
 function createTiebreakCard(race) {
-  const card = document.createElement('a');
-  card.href = '/race-detail.html?id=' + encodeURIComponent(race._id);
-  card.style.cssText = 'display: block; background-color: #111827; padding: 0.5rem; border-radius: 0.25rem; border-left: 3px solid #fbbf24; text-decoration: none; color: inherit;';
+  const card = document.createElement('div');
+  card.style.cssText = 'background-color: #111827; padding: 0.5rem; border-radius: 0.25rem; border-left: 3px solid #fbbf24; cursor: pointer;';
+  // The whole card opens the race, its VOD links aside
+  card.addEventListener('click', (e) => {
+    if (e.target.closest('a')) return;
+    window.location.href = '/race-detail.html?id=' + encodeURIComponent(race._id);
+  });
 
   const live = ['open', 'invitational', 'in_progress'].includes(race.status);
   const entrants = (race.entrants || []).slice().sort((a, b) => {
@@ -3418,6 +3433,7 @@ function createTiebreakCard(race) {
   const liveBadge = live
     ? `<span style="display: inline-flex; align-items: center; gap: 0.3rem; color: #fca5a5; font-size: 0.7rem;"><span style="width: 6px; height: 6px; background: #dc2626; border-radius: 50%; animation: pulse 2s cubic-bezier(0.4,0,0.6,1) infinite;"></span>${escHtml(i18n.t('raceDetail.inProgress') || 'In progress')}</span>`
     : (race.startedAt ? `<span style="color: #6b7280; font-size: 0.7rem;">${escHtml(formatDateTime(race.startedAt))}</span>` : '');
+  const restreams = live ? '' : mergeRestreams([], [race]).filter(s => s.vodUrl).map(restreamLinkHtml).join('');
   const vods = live ? '' : playerVodsHtml(race);
 
   card.innerHTML = `
@@ -3426,7 +3442,7 @@ function createTiebreakCard(race) {
       ${liveBadge}
     </div>
     <div style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.875rem;">${rows}</div>
-    ${vods ? `<div style="display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.4rem;">${vods}</div>` : ''}
+    ${restreams || vods ? `<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin-top: 0.4rem;">${restreams}${vods}</div>` : ''}
   `;
   return card;
 }

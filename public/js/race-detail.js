@@ -471,8 +471,19 @@
     return String(url || '').replace(/^https?:\/\/(?:www\.)?racetime\.gg/i, '').replace(/\/+$/, '').toLowerCase();
   }
 
-  // Restreams of this race on Mido's House: by its racetime.gg room, else the race of its start.gg set starting at the same time
+  // Restreams of this race: Mido's House's, then those found from Twitch titles (sync-race-restreams.js), one per channel
   function findRestreams(race, tournament) {
+    const seen = new Set();
+    return findMidosHouseRestreams(race, tournament).concat(race.restreams || []).filter(stream => {
+      const key = restreamChannelName(stream.url || stream.vodUrl || '').toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }
+
+  // Restreams of this race on Mido's House: by its racetime.gg room, else the race of its start.gg set starting at the same time
+  function findMidosHouseRestreams(race, tournament) {
     const mh = tournament?.midosHouse;
     if (!mh) return [];
     const entries = (mh.pastRestreams || []).concat(mh.schedule || []).filter(r => Array.isArray(r.restreams) && r.restreams.length);

@@ -19,6 +19,8 @@
     "sync:midos-house:dry": "node scripts/sync-midos-house.js --dry-run",
     "sync:race-vods": "node scripts/sync-race-vods.js",
     "sync:race-vods:dry": "node scripts/sync-race-vods.js --dry-run",
+    "sync:race-restreams": "node scripts/sync-race-restreams.js",
+    "sync:race-restreams:dry": "node scripts/sync-race-restreams.js --dry-run",
     "discover:tournaments": "node scripts/discover-tournaments.js",
     "discover:tournaments:dry": "node scripts/discover-tournaments.js --dry-run",
     "discover:tournaments:startgg": "node scripts/discover-tournaments.js --source startgg",

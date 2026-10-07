@@ -30,6 +30,7 @@ const connectDB = require('../config/database');
 const { Tournament, Race } = require('../models');
 const midosHouse = require('../services/midos-house');
 const twitchVods = require('../services/twitch-vods');
+const { normalizeName, titleFitsEvent } = require('../helpers/restream-titles');
 
 const REQUEST_DELAY_MS = 1000;
 // Twitch keeps past broadcasts at most 60 days
@@ -276,44 +277,10 @@ async function resolveVideoLinks({ dryRun }, stats) {
   }
 }
 
-function normalizeName(str) {
-  return String(str || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]/g, '');
-}
-
 // "Game 2", "G3", "Manche 2", "(finale 1/3)"
 function titleGame(title) {
   const m = String(title).match(/\b(?:game|g|manche|partie|race)\s*#?(\d)\b/i) || String(title).match(/\b(\d)\s*\/\s*[35]\)/);
   return m ? Number(m[1]) : null;
-}
-
-// Mido's House series a video title points to, to tell apart the same players met in another tournament
-const SERIES_KEYWORDS = {
-  fr: /tournoi ?fr|hexagone/,
-  tot: /\btot\b|tournament of truth/,
-  s: /challenge cup|\bcc\b|standard/,
-  pot: /pots? ?of ?time|\bpot\b/,
-  rsl: /\brsl\b/,
-  mp: /mix(?:ed)? ?pools?/,
-  sl: /spoiler ?log/,
-  mw: /multiworld|\bmw\b/,
-  coop: /co-?op\b/,
-  tfb: /triforce blitz|\btfb\b/,
-  rot: /rupees of time|\brot\b/,
-  efk: /escape from kak|\befk\b/,
-  sgl: /speedgaming|\bsgl\b|\bsgss\b/,
-  mentor: /mentor/,
-  league: /league/,
-  scrubs: /scrubs/
-};
-
-function titleFitsEvent(title, series, event) {
-  const lower = String(title).toLowerCase();
-  const named = Object.keys(SERIES_KEYWORDS).filter(key => SERIES_KEYWORDS[key].test(lower));
-  if (named.length && !named.includes(series)) return false;
-  // "S6" in the title against season 2 of the event
-  const season = lower.match(/\b(?:s|season|saison) ?(\d{1,2})\b/);
-  const eventSeason = String(event || '').match(/^(\d{1,2})(?!\d)/);
-  return !(season && eventSeason && season[1] !== eventSeason[1]);
 }
 
 // Names each side of a race can go by: Mido's House entrants, plus the start.gg names of the match

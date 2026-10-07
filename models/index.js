@@ -335,6 +335,19 @@ const raceSchema = new mongoose.Schema({
     vodGoneAt: Date
   }],
   vodSearchedAt: Date,
+  // Restreams found on Twitch (sync-race-restreams.js), for races Mido's House doesn't list:
+  // a broadcast of a restreamer whose title names the players
+  restreams: [{
+    _id: false,
+    language: String,
+    // The channel
+    url: String,
+    // Twitch past broadcast at the race start, or a highlight
+    vodUrl: String,
+    title: String,
+    vodGoneAt: Date
+  }],
+  restreamSearchedAt: Date,
   previousMatchCompletedAt: Date,
   entrants: [{
     userId: String,

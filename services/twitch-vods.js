@@ -137,19 +137,38 @@ function formatOffset(ms) {
 }
 
 /**
- * The broadcast running when the race started, as a link to that moment.
+ * The broadcast running when the race started, with a link to that moment.
  */
-function findVod(archives, startAt) {
+function findArchive(archives, startAt) {
   const start = new Date(startAt).getTime();
   const candidates = archives.filter(v => {
     const created = new Date(v.created_at).getTime();
     return created <= start + LATE_START_MS && created + parseDuration(v.duration) > start;
   });
   // Prefer the broadcast already live at the scheduled time
-  const vod = candidates.find(v => new Date(v.created_at).getTime() <= start) || candidates[0];
-  if (!vod) return null;
-  const offset = start - new Date(vod.created_at).getTime();
-  return `https://www.twitch.tv/videos/${vod.id}?t=${formatOffset(offset)}`;
+  const video = candidates.find(v => new Date(v.created_at).getTime() <= start) || candidates[0];
+  if (!video) return null;
+  const offset = start - new Date(video.created_at).getTime();
+  return { video, url: `https://www.twitch.tv/videos/${video.id}?t=${formatOffset(offset)}` };
 }
 
-module.exports = { twitchLogin, isYoutubeVideo, videoId, getUserIds, getArchives, getVideos, getExistingVideoIds, getKeptVideos, findVod };
+function findVod(archives, startAt) {
+  const found = findArchive(archives, startAt);
+  return found ? found.url : null;
+}
+
+/** Channels live right now among `logins` (login → stream), 100 per request */
+async function getLiveStreams(logins) {
+  const streams = new Map();
+  const unique = [...new Set(logins)];
+  for (let i = 0; i < unique.length; i += 100) {
+    const params = new URLSearchParams();
+    unique.slice(i, i + 100).forEach(login => params.append('user_login', login));
+    params.append('first', '100');
+    const { data } = await helix('/streams', params);
+    (data || []).forEach(s => streams.set(s.user_login.toLowerCase(), s));
+  }
+  return streams;
+}
+
+module.exports = { twitchLogin, isYoutubeVideo, videoId, getUserIds, getArchives, getVideos, getExistingVideoIds, getKeptVideos, findArchive, findVod, getLiveStreams };

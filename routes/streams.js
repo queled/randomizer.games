@@ -598,9 +598,13 @@ function isRandomizerStream(stream, gameName) {
   const title = (stream.title || '').toLowerCase();
   const tags = (stream.tags || []).map(t => t.toLowerCase());
 
-  // Extra global rule: accept streams with explicit multiworld/archipelago mention in title.
-  // The game category constraint is already enforced upstream via Twitch game_id filtering.
+  // Extra global rule: accept streams with explicit multiworld/archipelago mention in title or tags.
+  // The game category constraint is already enforced upstream via Twitch game_id filtering
+  // (the Twitch "Multiworld" category itself is an unrelated game and is never queried).
   if (title.includes('multiworld') || title.includes('archipelago')) {
+    return true;
+  }
+  if (tags.some(t => t.includes('multiworld') || t.includes('archipelago'))) {
     return true;
   }
   

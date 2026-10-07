@@ -224,7 +224,19 @@ function restreamChannelName(url) {
   }
 }
 
-// Restream tab: upcoming races of a tournament scheduled on Mido's House, with their restreams
+// Link to a restream: its VOD when Twitch still has it, else the channel
+function restreamLinkHtml(stream) {
+  const vod = sanitizeExternalUrl(stream.vodUrl);
+  const href = vod || sanitizeExternalUrl(stream.url);
+  if (!href) return '';
+  const label = vod ? `▶ ${i18n.t('tournamentDetail.watchVod') || 'VOD'}` : restreamChannelName(href);
+  return `<a href="${escHtml(href)}" target="_blank" rel="noopener noreferrer" data-stop-propagation title="${escHtml(restreamChannelName(stream.url))}" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.6rem; border-radius: 0.25rem; font-size: 0.8rem; color: #e9d5ff; background: #3b0764; border: 1px solid #9146ff; text-decoration: none;">
+    <span style="color: #c4b5fd;">${escHtml(restreamLanguageLabel(stream.language))}</span>
+    <span>${escHtml(label)}</span>
+  </a>`;
+}
+
+// Restream tab: races of a tournament restreamed according to Mido's House, upcoming then played
 function displayRestreams(tournament) {
   const mh = tournament && tournament.midosHouse;
   const tabBtn = document.getElementById('tab-restream');
@@ -241,18 +253,40 @@ function displayRestreams(tournament) {
     if (m && m.startggSetId) playersBySet.set(String(m.startggSetId), [m.player1 && m.player1.name, m.player2 && m.player2.name]);
   });
 
+  const withStreams = r => r && r.startAt && Array.isArray(r.restreams) && r.restreams.length;
+  // A race moves to the past list at the next sync once played; hide it meanwhile after a few hours
   const now = Date.now();
-  const races = (mh.schedule || [])
-    .filter(r => r && r.startAt && Array.isArray(r.restreams) && r.restreams.length)
-    // A race leaves the list at the next sync once played; hide it meanwhile after a few hours
-    .filter(r => new Date(r.startAt).getTime() > now - 6 * 3600 * 1000)
+  const upcoming = (mh.schedule || [])
+    .filter(r => withStreams(r) && new Date(r.startAt).getTime() > now - 6 * 3600 * 1000)
     .sort((a, b) => new Date(a.startAt) - new Date(b.startAt));
+  const past = (mh.pastRestreams || [])
+    .filter(withStreams)
+    .sort((a, b) => new Date(b.startAt) - new Date(a.startAt));
 
-  const languages = [...new Set(races.flatMap(r => r.restreams.map(s => s.language)))].sort();
+  const languages = [...new Set(upcoming.concat(past).flatMap(r => r.restreams.map(s => s.language)))].sort();
   if (restreamLanguageFilter && !languages.includes(restreamLanguageFilter)) restreamLanguageFilter = null;
+  const inLanguage = s => !restreamLanguageFilter || s.language === restreamLanguageFilter;
 
   const sourceLink = `<a href="${escHtml(sanitizeExternalUrl(mh.url) || 'https://midos.house')}" target="_blank" rel="noopener noreferrer" style="color: #93c5fd;">Mido's House</a>`;
   const sourceText = (i18n.t('tournamentDetail.restreamSource') || 'Schedules and restreams from {source}').replace('{source}', sourceLink);
+
+  const raceCard = r => {
+    const names = playersBySet.get(String(r.startggSetId)) || [];
+    const p1 = sanitizeDisplayName(names[0] || (r.entrants || [])[0] || '') || (i18n.t('tournamentDetail.tbd') || 'TBD');
+    const p2 = sanitizeDisplayName(names[1] || (r.entrants || [])[1] || '') || (i18n.t('tournamentDetail.tbd') || 'TBD');
+    return `<div style="background-color: #1f2937; padding: 1rem; border-radius: 0.5rem; margin-bottom: 0.75rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem;">
+      <div style="min-width: 0;">
+        <div style="font-size: 0.875rem; color: #9ca3af; margin-bottom: 0.35rem;">${escHtml(formatDateTime(r.startAt))}${r.round ? ` • ${escHtml(r.round)}` : ''}</div>
+        <div style="color: white; font-weight: 600;">${escHtml(p1)} <span style="color: #6b7280; font-weight: normal;">vs</span> ${escHtml(p2)}</div>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">${r.restreams.filter(inLanguage).map(restreamLinkHtml).join('')}</div>
+    </div>`;
+  };
+  const section = (title, races) => {
+    const shown = races.filter(r => r.restreams.some(inLanguage));
+    if (!shown.length) return '';
+    return `<h3 style="color: #d1d5db; font-size: 1rem; margin: 1.25rem 0 0.75rem;">${escHtml(title)}</h3>${shown.map(raceCard).join('')}`;
+  };
 
   let html = '';
   if (languages.length > 1) {
@@ -260,36 +294,12 @@ function displayRestreams(tournament) {
       const active = (restreamLanguageFilter || null) === value;
       return `<button type="button" data-restream-language="${escHtml(value || '')}" style="padding: 0.3rem 0.75rem; border-radius: 999px; font-size: 0.8rem; cursor: pointer; border: 1px solid ${active ? '#fbbf24' : '#374151'}; background: ${active ? '#fbbf24' : '#1f2937'}; color: ${active ? '#111827' : '#d1d5db'};">${escHtml(label)}</button>`;
     };
-    html += `<div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">${chip(null, i18n.t('tournamentDetail.allLanguages') || 'All')}${languages.map(l => chip(l, restreamLanguageLabel(l))).join('')}</div>`;
+    html += `<div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">${chip(null, i18n.t('tournamentDetail.allLanguages') || 'All')}${languages.map(l => chip(l, restreamLanguageLabel(l))).join('')}</div>`;
   }
 
-  const shown = races.filter(r => !restreamLanguageFilter || r.restreams.some(s => s.language === restreamLanguageFilter));
-  if (!shown.length) {
-    html += `<p style="color: #9ca3af;">${escHtml(i18n.t('tournamentDetail.noRestreams') || 'No restream scheduled yet.')}</p>`;
-  } else {
-    html += shown.map(r => {
-      const names = playersBySet.get(String(r.startggSetId)) || [];
-      const p1 = sanitizeDisplayName(names[0] || (r.entrants || [])[0] || '') || (i18n.t('tournamentDetail.tbd') || 'TBD');
-      const p2 = sanitizeDisplayName(names[1] || (r.entrants || [])[1] || '') || (i18n.t('tournamentDetail.tbd') || 'TBD');
-      const streams = r.restreams
-        .filter(s => !restreamLanguageFilter || s.language === restreamLanguageFilter)
-        .map(s => {
-          const href = sanitizeExternalUrl(s.url);
-          if (!href) return '';
-          return `<a href="${escHtml(href)}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.6rem; border-radius: 0.25rem; font-size: 0.8rem; color: #e9d5ff; background: #3b0764; border: 1px solid #9146ff; text-decoration: none;">
-            <span style="color: #c4b5fd;">${escHtml(restreamLanguageLabel(s.language))}</span>
-            <span>${escHtml(restreamChannelName(href))}</span>
-          </a>`;
-        }).join('');
-      return `<div style="background-color: #1f2937; padding: 1rem; border-radius: 0.5rem; margin-bottom: 0.75rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem;">
-        <div style="min-width: 0;">
-          <div style="font-size: 0.875rem; color: #9ca3af; margin-bottom: 0.35rem;">${escHtml(formatDateTime(r.startAt))}${r.round ? ` • ${escHtml(r.round)}` : ''}</div>
-          <div style="color: white; font-weight: 600;">${escHtml(p1)} <span style="color: #6b7280; font-weight: normal;">vs</span> ${escHtml(p2)}</div>
-        </div>
-        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">${streams}</div>
-      </div>`;
-    }).join('');
-  }
+  const sections = section(i18n.t('tournamentDetail.upcomingRestreams') || 'Upcoming', upcoming)
+    + section(i18n.t('tournamentDetail.pastRestreams') || 'Played', past);
+  html += sections || `<p style="color: #9ca3af;">${escHtml(i18n.t('tournamentDetail.noRestreams') || 'No restream scheduled yet.')}</p>`;
   html += `<p style="color: #6b7280; font-size: 0.75rem; margin-top: 1rem;">${sourceText}</p>`;
 
   container.innerHTML = html;
@@ -2297,6 +2307,7 @@ function createMatchCard(match, races = []) {
         ${match.completedAt ? formatDateTime(match.completedAt) : match.startedAt ? formatDateTime(match.startedAt) : match.scheduledAt ? escHtml(formatScheduledAt(match.scheduledAt)) : 'Not scheduled'}${match.groupId !== null && match.groupId !== undefined && match.round ? ` • Round ${match.round}` : ''}
       </div>
       <div style="display: flex; align-items: center; gap: 0.5rem;">
+        ${(match.restreams || []).filter(s => s.vodUrl).map(restreamLinkHtml).join('')}
         ${!isMultiRaceSeries ? singleRaceLinkHtml : ''}
         ${stateBadge}
       </div>

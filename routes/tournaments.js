@@ -183,6 +183,13 @@ router.get('/:id/matches', validateObjectId('id'), async (req, res, next) => {
         const current = nextRaceBySet.get(entry.startggSetId);
         if (!current || new Date(entry.startAt) < new Date(current.startAt)) nextRaceBySet.set(entry.startggSetId, entry);
       }
+      // Restreams (and their VODs) of the races already played, in race order
+      const pastStreamsBySet = new Map();
+      for (const entry of (tournament.midosHouse?.pastRestreams || []).slice().sort((a, b) => new Date(a.startAt) - new Date(b.startAt))) {
+        if (!entry.startggSetId) continue;
+        if (!pastStreamsBySet.has(entry.startggSetId)) pastStreamsBySet.set(entry.startggSetId, []);
+        pastStreamsBySet.get(entry.startggSetId).push(...(entry.restreams || []));
+      }
 
       // Start.gg tournament - return embedded matches formatted like Challonge matches
       const formattedMatches = tournament.matches.map(m => {
@@ -296,7 +303,9 @@ router.get('/:id/matches', validateObjectId('id'), async (req, res, next) => {
           raceUrls: Array.isArray(m.raceUrls) ? m.raceUrls : (m.raceUrl ? [m.raceUrl] : []),
           identifier: m.phaseGroup ? `${m.phaseGroup}-R${m.round}` : `R${m.round}`,
           scheduledAt: (!m.completedAt && nextRaceBySet.get(String(m.startggSetId))?.startAt) || null,
-          restreams: (!m.completedAt && nextRaceBySet.get(String(m.startggSetId))?.restreams) || []
+          restreams: (m.completedAt
+            ? pastStreamsBySet.get(String(m.startggSetId))
+            : nextRaceBySet.get(String(m.startggSetId))?.restreams) || []
         };
       });
       

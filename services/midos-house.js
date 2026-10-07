@@ -14,9 +14,22 @@ const BASE_URL = 'https://midos.house';
 
 const http = axios.create({
   baseURL: BASE_URL,
-  timeout: 20000,
+  timeout: 60000,
   headers: { 'User-Agent': 'RandomizerWebsite/1.0' }
 });
+
+// A race still listed as upcoming this long after its start time counts as played
+const PLAYED_AFTER_MS = 12 * 3600 * 1000;
+
+// Mido's House can be slow to build big race pages: one retry
+async function getPage(url) {
+  try {
+    return (await http.get(url)).data;
+  } catch (error) {
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    return (await http.get(url)).data;
+  }
+}
 
 const START_GG_SET_RE = /https:\/\/(?:www\.)?start\.gg\/(tournament\/[^/"]+\/event\/[^/"]+)\/set\/(\d+)/;
 
@@ -33,19 +46,29 @@ function stripTags(html) {
   return decodeEntities(String(html || '').replace(/<[^>]*>/g, '')).trim();
 }
 
-/**
- * Events listed on the home page (ongoing and upcoming), as "series/event" paths.
- */
-async function listCurrentEvents() {
-  const { data } = await http.get('/');
+function eventLinks(html) {
   const paths = new Set();
-  for (const m of data.matchAll(/href="\/event\/([^/"]+)\/([^/"]+)"/g)) {
+  for (const m of html.matchAll(/href="\/event\/([^/"]+)\/([^/"]+)"/g)) {
     paths.add(`${m[1]}/${m[2]}`);
   }
   return [...paths].map(p => {
     const [series, event] = p.split('/');
     return { series, event, url: `${BASE_URL}/event/${series}/${event}` };
   });
+}
+
+/**
+ * Events listed on the home page (ongoing and upcoming), as "series/event" paths.
+ */
+async function listCurrentEvents() {
+  return eventLinks(await getPage('/'));
+}
+
+/**
+ * Finished events, for a one-off backfill of past restreams.
+ */
+async function listArchivedEvents() {
+  return eventLinks(await getPage('/archive'));
 }
 
 /**
@@ -90,15 +113,9 @@ function parseRaceRow(rowHtml) {
   };
 }
 
-/**
- * Races not played yet of one event (the table above "Past races").
- */
-async function getUpcomingRaces(series, event) {
-  const { data } = await http.get(`/event/${encodeURIComponent(series)}/${encodeURIComponent(event)}/races`);
-  const pastIdx = data.indexOf('<h2>Past races</h2>');
-  const upcomingHtml = pastIdx >= 0 ? data.slice(0, pastIdx) : data;
+function parseTable(html) {
   const races = [];
-  for (const tbody of upcomingHtml.matchAll(/<tbody>([\s\S]*?)<\/tbody>/g)) {
+  for (const tbody of html.matchAll(/<tbody>([\s\S]*?)<\/tbody>/g)) {
     for (const row of tbody[1].matchAll(/<tr>([\s\S]*?)<\/tr>/g)) {
       const race = parseRaceRow(row[1]);
       if (race) races.push(race);
@@ -107,4 +124,21 @@ async function getUpcomingRaces(series, event) {
   return races;
 }
 
-module.exports = { BASE_URL, listCurrentEvents, getUpcomingRaces, parseRaceRow };
+/**
+ * Races of one event: { upcoming, past }. The page splits them with a "Past races"
+ * heading, but a finished event has a single table without it.
+ */
+async function getEventRaces(series, event) {
+  const data = await getPage(`/event/${encodeURIComponent(series)}/${encodeURIComponent(event)}/races`);
+  const pastIdx = data.indexOf('<h2>Past races</h2>');
+  const upcoming = [];
+  const past = pastIdx >= 0 ? parseTable(data.slice(pastIdx)) : [];
+  const playedBefore = Date.now() - PLAYED_AFTER_MS;
+  for (const race of parseTable(pastIdx >= 0 ? data.slice(0, pastIdx) : data)) {
+    if (race.startAt && race.startAt.getTime() < playedBefore) past.push(race);
+    else upcoming.push(race);
+  }
+  return { upcoming, past };
+}
+
+module.exports = { BASE_URL, listCurrentEvents, listArchivedEvents, getEventRaces, parseRaceRow };

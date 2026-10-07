@@ -225,6 +225,8 @@ PATH=/usr/local/bin:/usr/bin:/bin
 
 Tester chaque tâche une fois à la main, par exemple `scripts/cron/run-job.sh racetime && tail ~/logs/racetime.log`.
 
+À la mise en place de la tâche `midos-house`, reprendre une fois les restreams des événements terminés : `node scripts/sync-midos-house.js --archive`.
+
 La resynchronisation complète d'un jeu (ancien workflow manuel `sync-racetime-game-full.yml`) se lance en SSH :
 
 ```bash

@@ -144,6 +144,21 @@ const gameSchema = new mongoose.Schema({
   enabled: { type: Boolean, default: true }
 }, { timestamps: true });
 
+const midosHouseRaceSchema = new mongoose.Schema({
+  startggSetId: String,
+  startAt: Date,
+  round: String,
+  entrants: [String],
+  roomUrl: String,
+  restreams: [{
+    _id: false,
+    language: String,
+    url: String,
+    // Twitch past broadcast, at the moment the race starts
+    vodUrl: String
+  }]
+}, { _id: false });
+
 const tournamentSchema = new mongoose.Schema({
   challongeId: { type: Number, unique: true, sparse: true },
   name: { type: String, required: true },
@@ -226,23 +241,17 @@ const tournamentSchema = new mongoose.Schema({
   startggId: Number,
   startggTournamentId: Number,
   startggSlug: String,
-  // Upcoming races scheduled on Mido's House (OoTR), linked to matches by start.gg set.
-  // Kept apart from `matches`, which the start.gg sync rebuilds; replaced on each sync,
-  // so a race leaves this list once it is played.
+  // Races scheduled on Mido's House (OoTR), linked to matches by start.gg set.
+  // Kept apart from `matches`, which the start.gg sync rebuilds.
   midosHouse: {
     series: String,
     event: String,
     url: String,
     lastSync: Date,
-    schedule: [{
-      _id: false,
-      startggSetId: String,
-      startAt: Date,
-      round: String,
-      entrants: [String],
-      roomUrl: String,
-      restreams: [{ _id: false, language: String, url: String }]
-    }]
+    // Upcoming races, replaced on each sync: a race leaves it once played
+    schedule: [midosHouseRaceSchema],
+    // Played races that were restreamed, kept once the event is over
+    pastRestreams: [midosHouseRaceSchema]
   },
   // optional source metadata for import tracing
   source: {

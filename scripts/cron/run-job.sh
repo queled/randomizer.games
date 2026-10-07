@@ -6,7 +6,7 @@
 # Usage : scripts/cron/run-job.sh <tâche>
 #   racetime              nouvelles courses racetime.gg            (toutes les 5 min)
 #   tournaments-update    tournois actifs + rattachement des courses (toutes les 15 min)
-#   midos-house           horaires et restreams des races OoTR      (toutes les 15 min)
+#   midos-house           horaires, restreams et VOD des races OoTR (toutes les 15 min)
 #   tournaments-discover  nouveaux tournois des 2 derniers jours    (tous les jours)
 #   rando-list            cache rando-list, si le dépôt a changé    (tous les jours)
 #   backup                mongodump avec rotation                   (toutes les nuits)

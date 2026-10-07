@@ -331,6 +331,17 @@ function getMatchRaceUrl(match) {
 
 function scoreRaceAgainstMatch(race, match, options = {}) {
   const extracted = extractRaceEntrants(race, { requireDirect: options.requireDirect });
+  const fromEntrants = scoreExtractedAgainstMatch(race, match, extracted, options);
+  const labelPlayers = extracted.source === 'entrants' ? extracted.stageInfo?.players : null;
+  if (!labelPlayers) return fromEntrants;
+
+  // Racetime accounts often differ from bracket names (Slimba = MegaSlim): the room
+  // label's "A vs B" names the bracket players, keep whichever reading matches best
+  const fromLabel = scoreExtractedAgainstMatch(race, match, { ...extracted, entrants: labelPlayers, source: 'label' }, options);
+  return fromLabel.score > fromEntrants.score ? fromLabel : fromEntrants;
+}
+
+function scoreExtractedAgainstMatch(race, match, extracted, options = {}) {
   if (!extracted.entrants.length) {
     return {
       score: 0,

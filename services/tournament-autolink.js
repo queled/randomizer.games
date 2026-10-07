@@ -100,7 +100,7 @@ function getRaceLabelStage(race) {
 
 // Restrict start.gg candidates to the phase the race label names; null when the
 // label names a stage this tournament does not have (the race belongs to another event)
-function filterMatchesByRaceStage(race, matches, tournament) {
+function filterMatchesByRaceStage(race, matches, tournament, { ignoreRound = false } = {}) {
   const phases = Array.isArray(tournament?.phases) ? tournament.phases : [];
   const stage = getRaceLabelStage(race);
   if (!stage || !phases.length) return matches;
@@ -110,7 +110,7 @@ function filterMatchesByRaceStage(race, matches, tournament) {
 
   return matches.filter((match) => (
     phaseNames.has(match.phase) &&
-    (stage.round == null || Number(match.round) === stage.round)
+    (ignoreRound || stage.round == null || Number(match.round) === stage.round)
   ));
 }
 
@@ -352,6 +352,9 @@ function filterProposalsByGoal(tournament, proposals, races) {
 
   return proposals.filter((proposal) => {
     if (namesOtherEventSeries(stageByUrl.get(proposal.raceUrl), tournament?.name)) return false;
+    // Players read from the label rather than the room entrants: only trust labels that
+    // name this event ("League 2025 - ..."), not another one the same players met in ("CT7 - ...")
+    if (proposal.fromLabel && !goalsLookAlike(proposal.raceLabel, tournament?.name)) return false;
     const goal = goalByUrl.get(proposal.raceUrl);
     if (!goal) return true;
     return (dominant && goalsLookAlike(goal, dominant)) ||
@@ -406,38 +409,36 @@ async function buildAutoLinkPreview({
       continue;
     }
 
-    const phaseMatches = isTournamentStartgg(tournament)
-      ? filterMatchesByRaceStage(race, liveMatches, tournament)
-      : liveMatches;
-    const stageMatches = phaseMatches && filterMatchesByBracketSide(race, phaseMatches);
-    if (!stageMatches || !stageMatches.length) {
-      skipped++;
-      continue;
-    }
-
     // Series (BO3, BO5...) take one race per game played
     const gameNumber = getRaceGameNumber(race);
-    const candidateMatches = stageMatches.filter((match) => hasAvailableStartggSlot(match, race.url, gameNumber));
-    if (!candidateMatches.length) {
-      skipped++;
-      continue;
-    }
+    const pickMatch = (stageOptions) => {
+      const phaseMatches = isTournamentStartgg(tournament)
+        ? filterMatchesByRaceStage(race, liveMatches, tournament, stageOptions)
+        : liveMatches;
+      const stageMatches = phaseMatches && filterMatchesByBracketSide(race, phaseMatches);
+      const candidateMatches = (stageMatches || []).filter((match) => hasAvailableStartggSlot(match, race.url, gameNumber));
+      if (!candidateMatches.length) return null;
 
-    const scored = rankMatchesForRace(
-      race,
-      candidateMatches,
-      {
-        requireDirect: true,
-        allowOccupiedMatchReassign: false,
-        skipOccupiedPenalty: true
-      }
-    );
+      const scored = rankMatchesForRace(
+        race,
+        candidateMatches,
+        {
+          requireDirect: true,
+          allowOccupiedMatchReassign: false,
+          skipOccupiedPenalty: true
+        }
+      );
 
-    const chosen = selectBestCandidate(scored, {
-      threshold,
-      minGap,
-      raceUrl: race.url
-    });
+      return selectBestCandidate(scored, {
+        threshold,
+        minGap,
+        raceUrl: race.url
+      });
+    };
+
+    // Organizers sometimes number Swiss rounds off by one ("Swiss Round 2" played in
+    // start.gg round 3): fall back to the whole stage when the named round has no match
+    const chosen = pickMatch() || (getRaceLabelStage(race)?.round != null ? pickMatch({ ignoreRound: true }) : null);
 
     if (!chosen) {
       skipped++;
@@ -455,6 +456,7 @@ async function buildAutoLinkPreview({
       matchPhase: chosen.match.phase || null,
       matchRound: chosen.match.round || null,
       score: chosen.score,
+      fromLabel: chosen.extracted?.source === 'label',
       isStartgg: isTournamentStartgg(tournament)
     });
 

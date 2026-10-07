@@ -114,6 +114,9 @@
                 <button id="tab-participants" class="tab-btn" data-tab="participants" data-i18n="tournamentDetail.tabParticipants">
                     👥 Participants
                 </button>
+                <button id="tab-restream" class="tab-btn" data-tab="restream" data-i18n="tournamentDetail.tabRestream" style="display: none;">
+                    📺 Restream
+                </button>
             </div>
         </div>
 
@@ -150,6 +153,11 @@
             <div id="participants-list" class="participants-list">
                 <p class="text-muted" data-i18n="common.loadingParticipants">Loading participants...</p>
             </div>
+        </div>
+
+        <div id="tab-content-restream" class="tab-content" style="display: none;">
+            <h2 class="tab-content-title" data-i18n="tournamentDetail.restreams">Restreams</h2>
+            <div id="restream-list"></div>
         </div>
     </main>
 

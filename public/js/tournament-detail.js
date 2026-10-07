@@ -186,6 +186,7 @@ async function loadTournamentDetails(tournamentId) {
 
     currentTournament = await response.json();
     displayTournamentInfo(currentTournament);
+    displayRestreams(currentTournament);
     displayParticipants(currentTournament.participants || []); // Display without match history first
     
     // Load matches if available
@@ -195,6 +196,109 @@ async function loadTournamentDetails(tournamentId) {
     alert('Error loading tournament');
     window.location.href = '/tournaments.html';
   }
+}
+
+// Mido's House names restream languages in English
+const RESTREAM_LANGUAGE_CODES = { English: 'en', French: 'fr', German: 'de', Spanish: 'es', Italian: 'it', Portuguese: 'pt', Japanese: 'ja' };
+let restreamLanguageFilter = null;
+
+function restreamLanguageLabel(language) {
+  const code = RESTREAM_LANGUAGE_CODES[language];
+  if (!code) return language;
+  try {
+    const uiLang = (typeof i18n !== 'undefined' && typeof i18n.getLanguage === 'function') ? i18n.getLanguage() : 'en';
+    const name = new Intl.DisplayNames([uiLang], { type: 'language' }).of(code);
+    return name ? name.charAt(0).toUpperCase() + name.slice(1) : language;
+  } catch (e) {
+    return language;
+  }
+}
+
+function restreamChannelName(url) {
+  try {
+    const u = new URL(url);
+    const channel = u.pathname.split('/').filter(Boolean)[0];
+    return channel ? `${u.hostname.replace(/^www\./, '')}/${channel}` : u.hostname;
+  } catch (e) {
+    return url;
+  }
+}
+
+// Restream tab: upcoming races of a tournament scheduled on Mido's House, with their restreams
+function displayRestreams(tournament) {
+  const mh = tournament && tournament.midosHouse;
+  const tabBtn = document.getElementById('tab-restream');
+  const container = document.getElementById('restream-list');
+  if (!tabBtn || !container) return;
+  if (!mh || !mh.url) {
+    tabBtn.style.display = 'none';
+    return;
+  }
+  tabBtn.style.display = '';
+
+  const playersBySet = new Map();
+  (tournament.matches || []).forEach(m => {
+    if (m && m.startggSetId) playersBySet.set(String(m.startggSetId), [m.player1 && m.player1.name, m.player2 && m.player2.name]);
+  });
+
+  const now = Date.now();
+  const races = (mh.schedule || [])
+    .filter(r => r && r.startAt && Array.isArray(r.restreams) && r.restreams.length)
+    // A race leaves the list at the next sync once played; hide it meanwhile after a few hours
+    .filter(r => new Date(r.startAt).getTime() > now - 6 * 3600 * 1000)
+    .sort((a, b) => new Date(a.startAt) - new Date(b.startAt));
+
+  const languages = [...new Set(races.flatMap(r => r.restreams.map(s => s.language)))].sort();
+  if (restreamLanguageFilter && !languages.includes(restreamLanguageFilter)) restreamLanguageFilter = null;
+
+  const sourceLink = `<a href="${escHtml(sanitizeExternalUrl(mh.url) || 'https://midos.house')}" target="_blank" rel="noopener noreferrer" style="color: #93c5fd;">Mido's House</a>`;
+  const sourceText = (i18n.t('tournamentDetail.restreamSource') || 'Schedules and restreams from {source}').replace('{source}', sourceLink);
+
+  let html = '';
+  if (languages.length > 1) {
+    const chip = (value, label) => {
+      const active = (restreamLanguageFilter || null) === value;
+      return `<button type="button" data-restream-language="${escHtml(value || '')}" style="padding: 0.3rem 0.75rem; border-radius: 999px; font-size: 0.8rem; cursor: pointer; border: 1px solid ${active ? '#fbbf24' : '#374151'}; background: ${active ? '#fbbf24' : '#1f2937'}; color: ${active ? '#111827' : '#d1d5db'};">${escHtml(label)}</button>`;
+    };
+    html += `<div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">${chip(null, i18n.t('tournamentDetail.allLanguages') || 'All')}${languages.map(l => chip(l, restreamLanguageLabel(l))).join('')}</div>`;
+  }
+
+  const shown = races.filter(r => !restreamLanguageFilter || r.restreams.some(s => s.language === restreamLanguageFilter));
+  if (!shown.length) {
+    html += `<p style="color: #9ca3af;">${escHtml(i18n.t('tournamentDetail.noRestreams') || 'No restream scheduled yet.')}</p>`;
+  } else {
+    html += shown.map(r => {
+      const names = playersBySet.get(String(r.startggSetId)) || [];
+      const p1 = sanitizeDisplayName(names[0] || (r.entrants || [])[0] || '') || (i18n.t('tournamentDetail.tbd') || 'TBD');
+      const p2 = sanitizeDisplayName(names[1] || (r.entrants || [])[1] || '') || (i18n.t('tournamentDetail.tbd') || 'TBD');
+      const streams = r.restreams
+        .filter(s => !restreamLanguageFilter || s.language === restreamLanguageFilter)
+        .map(s => {
+          const href = sanitizeExternalUrl(s.url);
+          if (!href) return '';
+          return `<a href="${escHtml(href)}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.6rem; border-radius: 0.25rem; font-size: 0.8rem; color: #e9d5ff; background: #3b0764; border: 1px solid #9146ff; text-decoration: none;">
+            <span style="color: #c4b5fd;">${escHtml(restreamLanguageLabel(s.language))}</span>
+            <span>${escHtml(restreamChannelName(href))}</span>
+          </a>`;
+        }).join('');
+      return `<div style="background-color: #1f2937; padding: 1rem; border-radius: 0.5rem; margin-bottom: 0.75rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem;">
+        <div style="min-width: 0;">
+          <div style="font-size: 0.875rem; color: #9ca3af; margin-bottom: 0.35rem;">${escHtml(formatDateTime(r.startAt))}${r.round ? ` • ${escHtml(r.round)}` : ''}</div>
+          <div style="color: white; font-weight: 600;">${escHtml(p1)} <span style="color: #6b7280; font-weight: normal;">vs</span> ${escHtml(p2)}</div>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">${streams}</div>
+      </div>`;
+    }).join('');
+  }
+  html += `<p style="color: #6b7280; font-size: 0.75rem; margin-top: 1rem;">${sourceText}</p>`;
+
+  container.innerHTML = html;
+  container.querySelectorAll('[data-restream-language]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      restreamLanguageFilter = btn.getAttribute('data-restream-language') || null;
+      displayRestreams(tournament);
+    });
+  });
 }
 
 function updateEndDateFromMatches(matches, races = []) {

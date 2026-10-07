@@ -1,427 +1,214 @@
-# 🚀 Guide de Déploiement Production - randomizer.games
+# Déploiement en production
 
-Ce guide vous accompagne pour déployer votre application sur un VPS (DigitalOcean ou Hetzner Cloud) avec **randomizer.games**.
+Mise en ligne de randomizer.games sur un VPS Hetzner Cloud (Ubuntu 24.04), derrière Nginx et HTTPS.
 
----
+## Avant de commencer : où vit la base ?
 
-## 📊 Ressources Recommandées
+Les workflows GitHub Actions (voir [ARCHITECTURE.md](ARCHITECTURE.md)) écrivent **directement dans la base** depuis les serveurs de GitHub, avec le secret `MONGODB_URI`. La base doit donc être joignable depuis Internet.
 
-### Option 1: Hetzner Cloud (Recommandé - Meilleur rapport qualité/prix)
-- **CPX11**: 2 vCPU, 2GB RAM, 40GB SSD - ~4.5€/mois
-- **CPX21**: 3 vCPU, 4GB RAM, 80GB SSD - ~9€/mois (recommandé)
-- **CPX31**: 4 vCPU, 8GB RAM, 160GB SSD - ~17€/mois
+- **Recommandé : MongoDB Atlas.** Le VPS ne fait tourner que l'application, et les workflows continuent de fonctionner sans changement. Dans Atlas, autoriser l'IP du VPS (*Network Access*). Les workflows, eux, ont besoin d'un accès depuis `0.0.0.0/0`, car les IP de GitHub changent : utiliser un utilisateur dédié avec un mot de passe long.
+- **MongoDB sur le VPS** : n'exposez pas le port 27017 publiquement. Dans ce cas, les workflows ne peuvent plus joindre la base, et il faut lancer les scripts de synchronisation par `cron` sur le VPS (mêmes commandes que dans les workflows).
 
-### Option 2: DigitalOcean
-- **Basic Droplet**: 1 vCPU, 1GB RAM - $6/mois (minimum)
-- **Basic Droplet**: 2 vCPU, 2GB RAM - $12/mois (recommandé)
-- **Basic Droplet**: 2 vCPU, 4GB RAM - $24/mois
+La suite part sur Atlas.
 
-**💡 Recommandation**: Hetzner CPX21 (3 vCPU, 4GB RAM) pour commencer.
+## Dimensionnement
 
----
+L'application tient sur une petite instance : **2 vCPU, 4 Go de RAM** suffisent largement (gamme CX ou CPX chez Hetzner). Choisir un datacenter européen proche des utilisateurs.
 
-## 🛠️ Installation sur VPS
+## 1. Préparer le serveur
 
-### 1. Prérequis sur le serveur
+Connecté en `root` la première fois :
 
 ```bash
-# Mettre à jour le système
-sudo apt update && sudo apt upgrade -y
+apt update && apt upgrade -y
 
-# Installer Node.js 20.x LTS
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt install -y nodejs
+# Utilisateur dédié
+adduser randomizer
+usermod -aG sudo randomizer
+rsync --archive --chown=randomizer:randomizer ~/.ssh /home/randomizer
 
-# Installer MongoDB
-wget -qO - https://www.mongodb.org/static/pgp/server-7.0.asc | sudo apt-key add -
-echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
-sudo apt update
-sudo apt install -y mongodb-org
+# Pare-feu
+ufw allow OpenSSH
+ufw allow 'Nginx Full'
+ufw enable
+```
 
-# Démarrer MongoDB
-sudo systemctl start mongod
-sudo systemctl enable mongod
+Puis, en tant que `randomizer` :
 
-# Installer Nginx (reverse proxy)
-sudo apt install -y nginx
+```bash
+# Node.js LTS (22.x)
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+sudo apt install -y nodejs nginx git
 
-# Installer PM2 (process manager)
+# PM2 (gestionnaire de processus)
 sudo npm install -g pm2
-
-# Installer Git
-sudo apt install -y git
 ```
 
-### 2. Configuration du firewall
+## 2. Installer l'application
 
 ```bash
-# UFW (Ubuntu Firewall)
-sudo ufw allow OpenSSH
-sudo ufw allow 'Nginx Full'
-sudo ufw enable
-sudo ufw status
-```
-
-### 3. Cloner et configurer l'application
-
-```bash
-# Créer un utilisateur dédié (recommandé)
-sudo adduser randomizer
-sudo usermod -aG sudo randomizer
-su - randomizer
-
-# Cloner le projet
 cd ~
-git clone <votre-repo-git> randomizer-app
+git clone https://github.com/queled/randomizer.games.git randomizer-app
 cd randomizer-app
-
-# Installer les dépendances
-npm install --production
-
-# Copier et configurer les variables d'environnement
+npm ci --omit=dev
 cp .env.example .env
 nano .env
 ```
 
-### 4. Configuration `.env` Production
+### `.env` de production
 
 ```bash
 NODE_ENV=production
 PORT=3000
-MONGODB_URI=mongodb://localhost:27017/randomizer
+SITE_URL=https://randomizer.games
 
-# Twitch (si streams activés)
-TWITCH_CLIENT_ID=votre_client_id
-TWITCH_CLIENT_SECRET=votre_secret
+# Obligatoire : le serveur refuse de démarrer sans
+ADMIN_TOKEN=            # openssl rand -hex 32
 
+MONGODB_URI=mongodb+srv://<user>:<password>@<cluster>/randomizer
+
+# Tournois (import depuis l'admin)
+CHALLONGE_API_KEY=
+CHALLONGE_USERNAME=
+STARTGG_API_TOKEN=
+
+# Page streams
+TWITCH_CLIENT_ID=
+TWITCH_CLIENT_SECRET=
+
+# Facultatif : état des workflows dans l'admin
+GITHUB_TOKEN=
+GITHUB_REPO=queled/randomizer.games
 ```
-
-### 5. Configuration Nginx
 
 ```bash
-sudo nano /etc/nginx/sites-available/randomizer.games
+chmod 600 .env
+npm run check-security
 ```
 
-Contenu:
+`check-security` vérifie les variables obligatoires et quelques règles du code. Corriger toute erreur avant de continuer.
+
+## 3. Démarrer avec PM2
+
+**Une seule instance** : les sessions admin et les compteurs de rate limiting sont gardés en mémoire. Avec plusieurs processus (`-i max`, mode cluster), une connexion admin ouverte sur l'un ne serait pas reconnue par les autres.
+
+```bash
+pm2 start server.js --name randomizer --max-memory-restart 1G
+pm2 save
+pm2 startup        # puis exécuter la commande qu'il affiche
+```
+
+Vérifier : `curl http://localhost:3000/api/health`.
+
+## 4. Nginx
+
+`/etc/nginx/sites-available/randomizer.games` :
 
 ```nginx
 server {
     listen 80;
     server_name randomizer.games www.randomizer.games;
 
-    # Limite de taille des uploads
     client_max_body_size 2M;
 
-    # Sécurité
-    add_header X-Frame-Options "SAMEORIGIN" always;
-    add_header X-Content-Type-Options "nosniff" always;
-    add_header X-XSS-Protection "1; mode=block" always;
-    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
-
     location / {
-        proxy_pass http://localhost:3000;
+        proxy_pass http://127.0.0.1:3000;
         proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_cache_bypass $http_upgrade;
-        
-        # Timeouts
-        proxy_connect_timeout 60s;
-        proxy_send_timeout 60s;
         proxy_read_timeout 60s;
-    }
-
-    # Cache pour les assets statiques
-    location ~* \.(jpg|jpeg|png|gif|ico|css|js|svg|woff|woff2|ttf)$ {
-        proxy_pass http://localhost:3000;
-        expires 1y;
-        add_header Cache-Control "public, immutable";
     }
 }
 ```
 
-Activer le site:
+Les en-têtes de sécurité (via `helmet`) et la mise en cache des fichiers statiques sont déjà gérés par l'application : inutile de les redéfinir ici. L'application fait confiance au premier proxy (`trust proxy`), ce qui lui permet de voir la vraie IP des visiteurs pour le rate limiting.
 
 ```bash
 sudo ln -s /etc/nginx/sites-available/randomizer.games /etc/nginx/sites-enabled/
-sudo nginx -t
-sudo systemctl restart nginx
+sudo rm /etc/nginx/sites-enabled/default
+sudo nginx -t && sudo systemctl reload nginx
 ```
 
-### 6. Configurer SSL avec Let's Encrypt (HTTPS)
+## 5. DNS et HTTPS
+
+Chez le registrar, deux enregistrements **A** (et **AAAA** pour l'IPv6 fournie par Hetzner) :
+
+| Nom | Valeur |
+|-----|--------|
+| `@` | IP du VPS |
+| `www` | IP du VPS |
+
+Une fois le DNS propagé (`dig randomizer.games`) :
 
 ```bash
 sudo apt install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d randomizer.games -d www.randomizer.games
 ```
 
-Certbot va automatiquement:
-- Obtenir le certificat SSL
-- Configurer Nginx pour HTTPS
-- Mettre en place le renouvellement automatique
+Certbot ajoute la configuration HTTPS et programme le renouvellement automatique. Le cookie de session admin n'est envoyé qu'en HTTPS en production : l'admin ne fonctionne qu'une fois le certificat en place.
 
-### 7. Démarrer l'application avec PM2
+## 6. Durcir le serveur
 
 ```bash
-cd ~/randomizer-app
+# SSH par clé uniquement
+sudo nano /etc/ssh/sshd_config.d/hardening.conf
+#   PasswordAuthentication no
+#   PermitRootLogin no
+sudo systemctl restart ssh
 
-# Démarrer l'app
-pm2 start server.js --name randomizer-api -i max
-
-# Sauvegarder la configuration PM2
-pm2 save
-pm2 startup
-
-# Copier/coller la commande affichée par PM2
-```
-
-Configuration PM2 avancée (optionnel):
-
-```bash
-# Créer ecosystem.config.js
-nano ecosystem.config.js
-```
-
-```javascript
-module.exports = {
-  apps: [{
-    name: 'randomizer-api',
-    script: './server.js',
-    instances: 'max',
-    exec_mode: 'cluster',
-    env: {
-      NODE_ENV: 'production',
-      PORT: 3000
-    },
-    error_file: './logs/err.log',
-    out_file: './logs/out.log',
-    log_date_format: 'YYYY-MM-DD HH:mm:ss Z',
-    merge_logs: true,
-    max_memory_restart: '1G'
-  }]
-};
-```
-
-Puis:
-
-```bash
-mkdir logs
-pm2 start ecosystem.config.js
-```
-
----
-
-## 🌐 Configuration DNS
-
-Dans votre registrar de domaine (où vous avez acheté randomizer.games):
-
-### Records A
-```
-Type: A
-Name: @
-Value: <IP_DE_VOTRE_VPS>
-TTL: 3600
-
-Type: A
-Name: www
-Value: <IP_DE_VOTRE_VPS>
-TTL: 3600
-```
-
-**⏰ Temps de propagation**: 1-48 heures (généralement < 2 heures)
-
----
-
-## 🔔 Sync rando-list
-
-Le sync de la liste des randomizers tourne via le workflow GitHub Actions `sync-rando-list.yml`
-(quotidien) ou depuis le panneau admin. Aucun webhook n'est à configurer.
-
----
-
-## 📊 Monitoring et Maintenance
-
-### Logs en temps réel
-
-```bash
-# Logs application
-pm2 logs randomizer-api
-
-# Logs Nginx
-sudo tail -f /var/log/nginx/access.log
-sudo tail -f /var/log/nginx/error.log
-
-# Logs MongoDB
-sudo tail -f /var/log/mongodb/mongod.log
-```
-
-### Commandes PM2 utiles
-
-```bash
-pm2 status                # Statut des apps
-pm2 restart randomizer-api # Redémarrer
-pm2 stop randomizer-api    # Arrêter
-pm2 delete randomizer-api  # Supprimer
-pm2 monit                  # Monitoring interactif
-```
-
-### Mettre à jour l'application
-
-```bash
-cd ~/randomizer-app
-git pull
-npm install --production
-pm2 restart randomizer-api
-```
-
-### Backup MongoDB
-
-```bash
-# Créer un script de backup
-nano ~/backup-mongo.sh
-```
-
-```bash
-#!/bin/bash
-DATE=$(date +%Y%m%d_%H%M%S)
-BACKUP_DIR="/home/randomizer/backups/mongodb"
-mkdir -p $BACKUP_DIR
-
-mongodump --out=$BACKUP_DIR/backup_$DATE
-tar -czf $BACKUP_DIR/backup_$DATE.tar.gz $BACKUP_DIR/backup_$DATE
-rm -rf $BACKUP_DIR/backup_$DATE
-
-# Garder seulement les 7 derniers backups
-ls -t $BACKUP_DIR/*.tar.gz | tail -n +8 | xargs rm -f
-```
-
-```bash
-chmod +x ~/backup-mongo.sh
-
-# Ajouter au cron (tous les jours à 3h du matin)
-crontab -e
-# Ajouter: 0 3 * * * /home/randomizer/backup-mongo.sh
-```
-
----
-
-## 🔒 Sécurité Post-Déploiement
-
-### 1. Désactiver l'accès SSH par mot de passe
-
-```bash
-sudo nano /etc/ssh/sshd_config
-```
-
-Modifier:
-```
-PasswordAuthentication no
-PermitRootLogin no
-```
-
-```bash
-sudo systemctl restart sshd
-```
-
-### 2. Fail2ban (protection brute force)
-
-```bash
+# Bannissement des tentatives de connexion répétées
 sudo apt install -y fail2ban
-sudo systemctl enable fail2ban
-sudo systemctl start fail2ban
-```
+sudo systemctl enable --now fail2ban
 
-### 3. Mises à jour automatiques de sécurité
-
-```bash
+# Mises à jour de sécurité automatiques
 sudo apt install -y unattended-upgrades
 sudo dpkg-reconfigure --priority=low unattended-upgrades
 ```
 
-### 4. Monitoring avec PM2 Plus (optionnel)
+Activer aussi le **pare-feu Hetzner** (console Cloud) avec les seuls ports 22, 80 et 443, et les **backups** du serveur si besoin.
+
+## 7. Sauvegardes
+
+Atlas propose des sauvegardes selon l'offre choisie. En complément, un export quotidien sur le VPS :
 
 ```bash
-pm2 register
-# Suivre les instructions
-pm2 link <public_key> <private_key>
+crontab -e
+# 0 3 * * * cd ~/randomizer-app && /usr/bin/npm run db:backup >> ~/backup.log 2>&1
 ```
 
----
+`db:backup` écrit un export JSON de chaque collection dans `backups/`. Penser à purger les anciens dossiers et à en garder une copie hors du serveur.
 
-## 🚨 Checklist de Déploiement
-
-- [ ] VPS créé et SSH configuré
-- [ ] Node.js, MongoDB, Nginx installés
-- [ ] Firewall (UFW) configuré
-- [ ] Application clonée et dépendances installées
-- [ ] `.env` configuré avec valeurs production
-- [ ] Nginx configuré et actif
-- [ ] SSL/HTTPS activé avec Let's Encrypt
-- [ ] DNS A records configurés (@ et www)
-- [ ] PM2 démarré et configuré en auto-start
-- [ ] Webhook GitHub configuré (si nécessaire)
-- [ ] Backups MongoDB automatisés
-- [ ] Monitoring actif (PM2 logs)
-- [ ] Fail2ban installé
-- [ ] Tester tous les endpoints: https://randomizer.games/api/health
-
----
-
-## 📞 Troubleshooting
-
-### L'application ne démarre pas
+## Mettre à jour
 
 ```bash
-# Vérifier les logs
-pm2 logs randomizer-api --lines 50
-
-# Vérifier MongoDB
-sudo systemctl status mongod
-
-# Tester manuellement
 cd ~/randomizer-app
-NODE_ENV=production node server.js
+git pull
+npm ci --omit=dev
+npm run check-security
+pm2 restart randomizer
 ```
 
-### Erreur 502 Bad Gateway
+## Checklist
 
-```bash
-# Vérifier que l'app tourne
-pm2 status
+- [ ] Base Atlas créée ; IP du VPS autorisée ; utilisateur dédié
+- [ ] Secrets GitHub Actions à jour (`MONGODB_URI`, `STARTGG_API_TOKEN`, `CHALLONGE_API_KEY`)
+- [ ] VPS : utilisateur non-root, SSH par clé, UFW et pare-feu Hetzner
+- [ ] `.env` complet, `ADMIN_TOKEN` fort, `chmod 600 .env`
+- [ ] `npm run check-security` sans erreur
+- [ ] PM2 lancé en une seule instance, `pm2 startup` configuré
+- [ ] Nginx actif, DNS (A/AAAA) propagé, HTTPS via Certbot
+- [ ] `https://randomizer.games/api/health` répond
+- [ ] Connexion au panneau admin OK
+- [ ] fail2ban et mises à jour automatiques actifs
+- [ ] Sauvegardes en place
 
-# Vérifier Nginx
-sudo nginx -t
-sudo systemctl status nginx
+## Dépannage
 
-# Logs Nginx
-sudo tail -f /var/log/nginx/error.log
-```
-
-### DNS ne résout pas
-
-```bash
-# Vérifier la propagation
-dig randomizer.games
-nslookup randomizer.games
-
-# Attendre jusqu'à 48h pour propagation complète
-```
-
----
-
-## 📈 Optimisations Futures
-
-1. **CDN**: CloudFlare (gratuit) pour assets statiques
-2. **MongoDB Atlas**: Base de données managée (backup auto, scaling)
-3. **Redis**: Cache pour améliorer performances
-4. **Monitoring**: Grafana + Prometheus
-5. **Load Balancer**: Si traffic important
-6. **Docker**: Containerisation pour déploiements simplifiés
-
----
-
-**✅ Votre application est maintenant sécurisée et prête pour la production !**
+| Symptôme | Où regarder |
+|----------|-------------|
+| L'app ne démarre pas | `pm2 logs randomizer --lines 50` ; souvent `ADMIN_TOKEN` absent ou `MONGODB_URI` incorrect |
+| 502 Bad Gateway | `pm2 status`, puis `sudo nginx -t` et `/var/log/nginx/error.log` |
+| Connexion admin refusée | HTTPS actif ? une seule instance PM2 ? |
+| Pas de nouvelles courses | Onglet **Actions** de GitHub : le workflow échoue-t-il à joindre la base ? |

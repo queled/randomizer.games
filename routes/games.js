@@ -14,19 +14,77 @@ const {
   buildTournamentQuery
 } = require('../helpers/game-matching');
 
+// Max simultaneous count queries: leaves database connections free for visitors
+const STATS_QUERY_CONCURRENCY = 8;
+const TOURNAMENT_FACET_BATCH = 100;
+
+async function mapWithConcurrency(items, limit, fn) {
+  const results = new Array(items.length);
+  let next = 0;
+  async function worker() {
+    while (next < items.length) {
+      const i = next++;
+      results[i] = await fn(items[i], i);
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+  return results;
+}
+
+// Category list of a { category: 'x' } or { category: { $in: [...] } } query, or null
+function categoriesOf(categoryQuery) {
+  const keys = Object.keys(categoryQuery || {});
+  if (keys.length !== 1 || keys[0] !== 'category') return null;
+  const value = categoryQuery.category;
+  if (typeof value === 'string') return [value];
+  if (value && Object.keys(value).length === 1 && Array.isArray(value.$in) && value.$in.every(c => typeof c === 'string')) {
+    return value.$in;
+  }
+  return null;
+}
+
 async function computeGamesWithStats() {
   const { Tournament, Race } = require('../models');
   const games = await Game.find().sort({ name: 1 });
   const resolutionContext = buildCategoryResolutionContext(games);
 
-  const gamesWithStats = await Promise.all(games.map(async (game) => {
+  // One grouped count over all races instead of one count query per game
+  // (hundreds of simultaneous queries used to saturate the connection pool)
+  const raceCountRows = await Race.aggregate([{ $group: { _id: '$category', count: { $sum: 1 } } }]);
+  const raceCountByCategory = new Map(raceCountRows.map(row => [row._id, row.count]));
+
+  // Tournament counts, many games per query: one $facet branch per game runs
+  // that game's usual filter, so the counts are those of countDocuments
+  const tournamentQueries = games.map(game => buildTournamentQuery(game, game.id.toLowerCase()));
+  let tournamentCounts = null;
+  try {
+    const batches = [];
+    for (let start = 0; start < games.length; start += TOURNAMENT_FACET_BATCH) {
+      batches.push(start);
+    }
+    const batchCounts = await mapWithConcurrency(batches, 2, async (start) => {
+      const facets = {};
+      tournamentQueries.slice(start, start + TOURNAMENT_FACET_BATCH).forEach((query, i) => {
+        facets[`g${i}`] = [{ $match: query }, { $count: 'n' }];
+      });
+      const [row] = await Tournament.aggregate([{ $facet: facets }]);
+      return Object.keys(facets).map(key => (row && row[key] && row[key][0] ? row[key][0].n : 0));
+    });
+    tournamentCounts = batchCounts.flat();
+  } catch (error) {
+    console.warn('Grouped tournament counts failed, counting per game:', error?.message || error);
+  }
+
+  const gamesWithStats = await mapWithConcurrency(games, STATS_QUERY_CONCURRENCY, async (game, index) => {
     const gameIdLower = game.id.toLowerCase();
     const categoryQuery = buildCategoryQuery(game, gameIdLower, resolutionContext);
-    const tournamentQuery = buildTournamentQuery(game, gameIdLower);
 
+    const categories = categoriesOf(categoryQuery);
     const [totalRaces, totalTournaments] = await Promise.all([
-      Race.countDocuments(categoryQuery),
-      Tournament.countDocuments(tournamentQuery)
+      categories
+        ? categories.reduce((sum, category) => sum + (raceCountByCategory.get(category) || 0), 0)
+        : Race.countDocuments(categoryQuery),
+      tournamentCounts ? tournamentCounts[index] : Tournament.countDocuments(tournamentQueries[index])
     ]);
 
     return {
@@ -34,7 +92,7 @@ async function computeGamesWithStats() {
       totalRaces,
       totalTournaments
     };
-  }));
+  });
 
   return { games: gamesWithStats };
 }

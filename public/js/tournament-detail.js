@@ -742,6 +742,10 @@ async function loadMatches(tournamentId) {
       } catch (e) {
         // ignore label errors
       }
+    } else if (currentTournament.phases && currentTournament.phases.length > 1) {
+      // Phase order depends on match dates, now that they are all loaded
+      document.getElementById('tournament-type').textContent =
+        formatTournamentTypeForDisplay({ ...currentTournament, matches: allMatches });
     }
 
     displayMatches(allMatches, currentTournament, races);
@@ -1030,6 +1034,26 @@ function computeGroupsThenFinalLabel(groupStageMatches, finalStageMatches) {
   return i18n.t('tournamentTypes.groupsThenSE') || 'Groups then Single Elimination';
 }
 
+// Order start.gg phases as they were played. start.gg's phaseOrder follows creation order, so a
+// phase added late (e.g. an extra group running alongside the others) can land after the finals:
+// a phase whose sets all finished before another phase started goes first, otherwise phaseOrder decides.
+function sortPhasesChronologically(phases, matches = []) {
+  const spans = {};
+  matches.forEach(m => {
+    const t = m && m.phase && m.completedAt ? new Date(m.completedAt).getTime() : NaN;
+    if (!Number.isFinite(t)) return;
+    const span = spans[m.phase] || (spans[m.phase] = { first: t, last: t });
+    span.first = Math.min(span.first, t);
+    span.last = Math.max(span.last, t);
+  });
+  return phases.slice().sort((a, b) => {
+    const sa = spans[a.name], sb = spans[b.name];
+    if (sa && sb && sa.last < sb.first) return -1;
+    if (sa && sb && sb.last < sa.first) return 1;
+    return (a.phaseOrder || 0) - (b.phaseOrder || 0);
+  });
+}
+
 function displayMatches(matches, tournament, races = []) {
   const container = document.getElementById('matches-list');
   
@@ -1040,8 +1064,8 @@ function displayMatches(matches, tournament, races = []) {
   }
 
   // Detect Start.gg multi-phase tournament (Main Bracket + Preliminary Bracket etc.), in declared phase order
-  const declaredOrder = (tournament && Array.isArray(tournament.phases) ? tournament.phases : [])
-    .slice().sort((a, b) => (a.phaseOrder || 0) - (b.phaseOrder || 0)).map(p => p.name);
+  const declaredOrder = sortPhasesChronologically(tournament && Array.isArray(tournament.phases) ? tournament.phases : [], matches)
+    .map(p => p.name);
   const phaseRank = name => (declaredOrder.indexOf(name) + 1) || Infinity;
   const phases = [...new Set(matches.filter(m => m && m.phase).map(m => m.phase))]
     .sort((a, b) => phaseRank(a) - phaseRank(b));
@@ -1088,63 +1112,80 @@ function displayMatches(matches, tournament, races = []) {
       phaseHeader.classList.add('text-gold');
       container.appendChild(phaseHeader);
 
-      // Separate winner and loser bracket matches within this phase
-      const winnerMatches = phaseMatches.filter(m => (m.round || 0) > 0);
-      const loserMatches = phaseMatches.filter(m => (m.round || 0) < 0);
+      // Separate winner and loser bracket matches (isPool: one pool of a multi-pool phase, named like start.gg pools)
+      const renderRounds = (list, isPool) => {
+        const winnerMatches = list.filter(m => (m.round || 0) > 0);
+        const loserMatches = list.filter(m => (m.round || 0) < 0);
 
-      const groupByRound = (matchList) => {
-        const byRound = {};
-        matchList.forEach(match => {
-          const round = match.round || 0;
-          if (!byRound[round]) byRound[round] = [];
-          byRound[round].push(match);
-        });
-        return byRound;
-      };
+        const groupByRound = (matchList) => {
+          const byRound = {};
+          matchList.forEach(match => {
+            const round = match.round || 0;
+            if (!byRound[round]) byRound[round] = [];
+            byRound[round].push(match);
+          });
+          return byRound;
+        };
 
-      const winnerByRound = groupByRound(winnerMatches);
-      const loserByRound = groupByRound(loserMatches);
-      const phaseIsDE = Object.keys(loserByRound).length > 0;
+        const winnerByRound = groupByRound(winnerMatches);
+        const loserByRound = groupByRound(loserMatches);
+        const phaseIsDE = Object.keys(loserByRound).length > 0;
 
-      // Winner bracket rounds (from Grand Finals to Round 1)
-      const winnerRounds = Object.keys(winnerByRound).map(r => parseInt(r)).sort((a, b) => b - a);
-      const totalWinnerRounds = winnerRounds.length;
+        // Winner bracket rounds (from Grand Finals to Round 1)
+        const winnerRounds = Object.keys(winnerByRound).map(r => parseInt(r)).sort((a, b) => b - a);
+        const totalWinnerRounds = winnerRounds.length;
 
-      const phaseIsStandings = isStandingsPhase(tournament, phaseName);
+        const phaseIsStandings = isStandingsPhase(tournament, phaseName);
 
-      winnerRounds.forEach((round, index) => {
-        const roundName = phaseIsStandings
-          ? `${i18n.t('tournamentDetail.roundNumber') || 'Tour'} ${round}`
-          : getRoundNameForBracket(round, 'winner', totalWinnerRounds, totalWinnerRounds - index - 1, phaseIsDE);
-        const roundHeader = document.createElement('h4');
-        roundHeader.style.cssText = 'font-size: 1.1rem; font-weight: bold; margin-top: 1.25rem; margin-bottom: 0.75rem;';
-        roundHeader.textContent = roundName;
-        roundHeader.classList.add('text-gold');
-        container.appendChild(roundHeader);
-
-        winnerByRound[round]
-          .slice()
-          .sort((a, b) => getMatchTime(b) - getMatchTime(a))
-          .forEach(m => container.appendChild(createMatchCard(m, races)));
-      });
-
-      // Loser bracket rounds
-      if (phaseIsDE) {
-        const loserRounds = Object.keys(loserByRound).map(r => parseInt(r)).sort((a, b) => a - b);
-        const totalLoserRounds = loserRounds.length;
-
-        loserRounds.forEach((round, index) => {
-          const roundName = getRoundNameForBracket(round, 'loser', totalLoserRounds, totalLoserRounds - index - 1, true);
+        winnerRounds.forEach((round, index) => {
+          const roundName = phaseIsStandings
+            ? `${i18n.t('tournamentDetail.roundNumber') || 'Tour'} ${round}`
+            : getRoundNameForBracket(round, 'winner', totalWinnerRounds, totalWinnerRounds - index - 1, phaseIsDE, isPool);
           const roundHeader = document.createElement('h4');
-          roundHeader.style.cssText = 'font-size: 1.1rem; font-weight: bold; margin-top: 1.25rem; margin-bottom: 0.75rem; color: #a78bfa;';
+          roundHeader.style.cssText = 'font-size: 1.1rem; font-weight: bold; margin-top: 1.25rem; margin-bottom: 0.75rem;';
           roundHeader.textContent = roundName;
+          roundHeader.classList.add('text-gold');
           container.appendChild(roundHeader);
 
-          loserByRound[round]
+          winnerByRound[round]
             .slice()
             .sort((a, b) => getMatchTime(b) - getMatchTime(a))
             .forEach(m => container.appendChild(createMatchCard(m, races)));
         });
+
+        // Loser bracket rounds
+        if (phaseIsDE) {
+          const loserRounds = Object.keys(loserByRound).map(r => parseInt(r)).sort((a, b) => a - b);
+          const totalLoserRounds = loserRounds.length;
+
+          loserRounds.forEach((round, index) => {
+            const roundName = getRoundNameForBracket(round, 'loser', totalLoserRounds, totalLoserRounds - index - 1, true, isPool);
+            const roundHeader = document.createElement('h4');
+            roundHeader.style.cssText = 'font-size: 1.1rem; font-weight: bold; margin-top: 1.25rem; margin-bottom: 0.75rem; color: #a78bfa;';
+            roundHeader.textContent = roundName;
+            container.appendChild(roundHeader);
+
+            loserByRound[round]
+              .slice()
+              .sort((a, b) => getMatchTime(b) - getMatchTime(a))
+              .forEach(m => container.appendChild(createMatchCard(m, races)));
+          });
+        }
+      };
+
+      // A phase split into pools (start.gg phase groups) lists each pool on its own, like start.gg
+      const pools = [...new Set(phaseMatches.map(m => m.phaseGroup).filter(Boolean))]
+        .sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0) || String(a).localeCompare(String(b)));
+      if (pools.length > 1 && !isStandingsPhase(tournament, phaseName)) {
+        pools.forEach((poolId, poolIdx) => {
+          const poolHeader = document.createElement('h4');
+          poolHeader.style.cssText = 'font-size: 1.15rem; font-weight: bold; margin-top: 1.75rem; margin-bottom: 0.25rem; color: #60a5fa;';
+          poolHeader.textContent = `Pool ${String.fromCharCode('A'.charCodeAt(0) + poolIdx)}`;
+          container.appendChild(poolHeader);
+          renderRounds(phaseMatches.filter(m => m.phaseGroup === poolId), true);
+        });
+      } else {
+        renderRounds(phaseMatches, false);
       }
     });
 
@@ -2282,8 +2323,7 @@ function formatTournamentTypeForDisplay(tournament) {
       return map[bt] || (bt || '').replace(/_/g, ' ');
     };
     
-    // Sort phases by phaseOrder
-    const sorted = [...tournament.phases].sort((a, b) => (a.phaseOrder || 0) - (b.phaseOrder || 0));
+    const sorted = sortPhasesChronologically(tournament.phases, tournament.matches || []);
     const parts = sorted.map(p => {
       const name = p.name || 'Phase';
       const bt = bracketTypeLabel(p.bracketType);
@@ -2763,7 +2803,7 @@ function displayBracket(matches, tournament) {
   // Phases without sets yet (e.g. final brackets after groups) are listed too, as "not started".
   const matchPhases = [...new Set(matches.filter(m => m.phase).map(m => m.phase))];
   const declaredPhases = matchPhases.length && Array.isArray(tournament.phases)
-    ? tournament.phases.slice().sort((a, b) => (a.phaseOrder || 0) - (b.phaseOrder || 0)).map(p => p.name).filter(Boolean)
+    ? sortPhasesChronologically(tournament.phases, matches).map(p => p.name).filter(Boolean)
     : [];
   const phases = [...new Set([...declaredPhases, ...matchPhases])];
   const hasMultiplePhases = phases.length > 1;

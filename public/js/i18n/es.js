@@ -169,6 +169,8 @@ const es = {
     
     // Tournament detail page
     tournamentDetail: {
+        tiebreak: "Desempate",
+        tiebreaks: "Desempates",
         pageTitle: "Torneo - Randomizer",
         tabBracket: "📊 Bracket",
         tabMatches: "⚔️ Partidas",

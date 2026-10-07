@@ -23,6 +23,7 @@ const {
   buildAutoLinkPreview,
   applyAutoLinkProposals
 } = require('../services/tournament-autolink');
+const { findTiebreakRaces, applyTiebreakRaces } = require('../services/tournament-tiebreaks');
 
 const ACTIVE_TOURNAMENT_STATES = [
   'pending',
@@ -160,6 +161,17 @@ async function main() {
         `   ✅ ${proposal.raceUrl} -> ${proposal.matchId} (${proposal.matchPlayers}) score=${proposal.score}${matchContext ? ` [${matchContext}]` : ''}${opts.dryRun ? ' [DRY-RUN]' : ''}`
       );
     });
+
+    // Tie-break rooms of a group, opened by hand outside the start.gg sets
+    const tiebreaks = await findTiebreakRaces({ tournament: tournamentData, Race });
+    tiebreaks.forEach((proposal) => {
+      console.log(`   🎯 ${proposal.raceUrl} -> tie-break ${proposal.phase}${proposal.pool ? ` / ${proposal.pool}` : ''} (${proposal.players})${opts.dryRun ? ' [DRY-RUN]' : ''}`);
+    });
+    if (tiebreaks.length && !opts.dryRun) {
+      const linkedTiebreaks = await applyTiebreakRaces({ tournament: tournamentData, proposals: tiebreaks, Race });
+      totals.linked += linkedTiebreaks;
+      console.log(`   🔁 tie-breaks linked=${linkedTiebreaks}/${tiebreaks.length}`);
+    }
 
     if (!preview.proposals.length || opts.dryRun) {
       continue;

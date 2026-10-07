@@ -188,6 +188,8 @@ const en = {
     
     // Tournament detail page
     tournamentDetail: {
+        tiebreak: "Tie-break",
+        tiebreaks: "Tie-breaks",
         pageTitle: "Tournament - Randomizer",
         tabBracket: "🏆 Bracket",
         tabMatches: "⚔️ Matches",

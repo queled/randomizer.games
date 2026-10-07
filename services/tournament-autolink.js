@@ -365,7 +365,7 @@ async function loadCandidateRaces({ tournament, Race, matches = [], extraRaceUrl
     : [];
 
   return uniqueByUrl([...attachedRaces, ...nearbyRaces, ...extraRaces]).filter((race) => {
-    if (!race?.url) return false;
+    if (!race?.url || race.tiebreak) return false;
     if (!race.tournamentId) return true;
     return String(race.tournamentId) === String(tournament._id) || !(race.matchId || race.startggSetId);
   });

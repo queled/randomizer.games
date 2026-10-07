@@ -1821,6 +1821,7 @@ router.post('/tournaments/:id/unlink-race', requireAdmin, async (req, res, next)
     race.tournamentPhase = undefined;
     race.tournamentPool = undefined;
     race.tournamentRound = undefined;
+    race.tiebreak = undefined;
     if (wasQualifier) race.tournamentId = undefined;
     await race.save();
 
@@ -2401,7 +2402,7 @@ router.delete('/tournaments-mgmt/:id', requireAdmin, async (req, res, next) => {
     // Unlink races that were associated to this tournament
     await Race.updateMany(
       { tournamentId: tournament._id },
-      { $unset: { tournamentId: 1, matchId: 1, startggSetId: 1, matchPlayers: 1, matchConfidence: 1, tournamentPhase: 1, tournamentPool: 1, tournamentRound: 1 } }
+      { $unset: { tournamentId: 1, matchId: 1, startggSetId: 1, matchPlayers: 1, matchConfidence: 1, tournamentPhase: 1, tournamentPool: 1, tournamentRound: 1, tiebreak: 1 } }
     );
 
     // Delete challonge matches if any

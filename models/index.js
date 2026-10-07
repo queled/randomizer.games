@@ -319,6 +319,8 @@ const raceSchema = new mongoose.Schema({
   tournamentPool: String,   // e.g., "1", "2", "A", "B"
   tournamentRound: Number,  // e.g., 1, 2, -1 (negative for losers bracket)
   matchPlayers: String,     // e.g., "PlayerA vs PlayerB"
+  // Tie-break room of a group (scripts/auto-link-tournaments.js), no start.gg set
+  tiebreak: Boolean,
   startggSetId: String,
   matchConfidence: Number,
   // Twitch VOD of each entrant's own stream (sync-race-vods.js). Kept apart from

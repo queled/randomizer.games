@@ -176,6 +176,8 @@ const fr = {
     
     // Tournament detail page
     tournamentDetail: {
+        tiebreak: "Tie-break",
+        tiebreaks: "Tie-breaks",
         pageTitle: "Tournoi - Randomizer",
         tabBracket: "🏆 Bracket",
         tabMatches: "⚔️ Matchs",

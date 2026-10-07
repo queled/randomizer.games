@@ -37,7 +37,7 @@ En production, la base MongoDB tourne sur le même serveur que le site et n'éco
 | Tâche | Fréquence (UTC) | Ce qu'elle fait |
 |-------|-----------------|-----------------|
 | `racetime` | toutes les 5 min | `sync-racetime-global.js` : nouvelles courses, finalisation des courses bloquées « en cours » depuis plus de 24 h, rattrapage des courses terminées entre deux exécutions |
-| `tournaments-update` | toutes les 15 min | `sync-tournaments.js --update-only` met à jour les tournois actifs, puis `auto-link-tournaments.js` rattache les courses aux matchs |
+| `tournaments-update` | toutes les 15 min | `sync-tournaments.js --update-only` met à jour les tournois actifs, puis `auto-link-tournaments.js` rattache les courses aux matchs, et les tie-breaks de poule (room « tie-break » entre joueurs d'une même poule) à leur poule |
 | `race-vods` | toutes les 30 min | `sync-race-vods.js` : VOD Twitch des joueurs de chaque race (voir plus bas) |
 | `midos-house` | toutes les 15 min | `sync-midos-house.js` : horaires et restreams des races des tournois OoTR, VOD Twitch des restreams (voir plus bas) |
 | `rando-list` | tous les jours à 6h | met à jour la copie locale de rando-list ; si `check-rando-list-changes.js` signale un nouveau commit, `sync-rando-list.js --detect-new` met à jour le cache et les ressources, puis signale les nouveaux jeux, à créer depuis le panneau admin |
@@ -141,7 +141,7 @@ Les scripts qui écrivent en base proposent un mode `--dry-run` (ou n'écrivent 
 | `check-rando-list-changes.js` | — | Indique à la tâche `rando-list` si rando-list a changé |
 | `discover-tournaments.js` | `discover:tournaments` (+ `:dry`, `:startgg`, `:challonge`) | Découverte de tournois |
 | `sync-tournaments.js` | `sync:tournaments` (+ `:dry`, `:update`) | Mise à jour des tournois actifs |
-| `auto-link-tournaments.js` | `link:tournaments:active` | Rattache les courses aux matchs |
+| `auto-link-tournaments.js` | `link:tournaments:active` | Rattache les courses aux matchs, et les tie-breaks à leur poule |
 | `sync-players-from-races.js` | `sync:players` (+ `:dry`) | Recalcule la collection des joueurs |
 | `sync-race-vods.js` | `sync:race-vods` (+ `:dry`) | VOD Twitch des joueurs de chaque race (tâche `race-vods`) |
 | `sync-midos-house.js` | `sync:midos-house` (+ `:dry`) | Horaires, restreams et VOD Mido's House (tâche `midos-house`) |

@@ -3194,12 +3194,13 @@ function displayBracket(matches, tournament) {
   const hasPhaseGroups = phaseGroups.length > 1;
   
   container.innerHTML = '';
+  renderedTiebreaks = new Set();
   
   if (hasMultiplePhases) {
     // Multi-phase Start.gg tournament (e.g., Main Bracket + Preliminary Bracket)
     displayMultiPhaseBracket(matches, container, isDoubleElimination, phases, tournament);
   } else if (phases.length === 1 && isStandingsPhase(tournament, phases[0])) {
-    displayStandingsPhase(matches, container, getPhaseKind(tournament, phases[0]) === 'swiss');
+    displayStandingsPhase(matches, container, getPhaseKind(tournament, phases[0]) === 'swiss', phases[0]);
   } else if (hasPhaseGroups) {
     // Start.gg pools - display each pool as a separate bracket
     displayPoolsBracket(matches, container, isDoubleElimination, phaseGroups);
@@ -3208,6 +3209,7 @@ function displayBracket(matches, tournament) {
   } else {
     displaySingleEliminationBracket(matches, container);
   }
+  appendRemainingTiebreaks(container);
 }
 
 // Display multi-phase tournament (start.gg phases, grouped Challonge brackets)
@@ -3262,7 +3264,7 @@ function displayMultiPhaseBracket(matches, container, isDoubleElimination, phase
       bracketContainer.innerHTML = `<p style="color: #9ca3af; text-align: center; font-style: italic;">${i18n.t('tournamentDetail.bracketNotStarted') || 'Bracket not started yet'}</p>`;
     } else if (isStandingsPhase(tournament, phaseName)) {
       // Swiss / round robin: elimination trees make no sense, show standings and rounds
-      displayStandingsPhase(phaseMatches, bracketContainer, getPhaseKind(tournament, phaseName) === 'swiss');
+      displayStandingsPhase(phaseMatches, bracketContainer, getPhaseKind(tournament, phaseName) === 'swiss', phaseName);
     } else if (hasPhaseGroups) {
       // This phase has pools
       displayPoolsBracket(phaseMatches, bracketContainer, phaseIsDE, phaseGroups);
@@ -3289,7 +3291,7 @@ function isStandingsPhase(tournament, phaseName) {
 }
 
 // Swiss / round robin phase: one standings table per pool, with its matches (by round for Swiss)
-function displayStandingsPhase(phaseMatches, container, isSwiss) {
+function displayStandingsPhase(phaseMatches, container, isSwiss, phaseName = null) {
   const groups = new Map();
   phaseMatches.forEach(m => {
     const key = m.phaseGroup || '';
@@ -3367,10 +3369,95 @@ function displayStandingsPhase(phaseMatches, container, isSwiss) {
       matches.slice().sort((a, b) => getTime(a) - getTime(b)).forEach(m => list.appendChild(createCompactMatchCard(m, currentRaces)));
     }
     box.appendChild(list);
+
+    // Tie-breaks of the group, after its matches
+    const tiebreaks = tiebreakRaces(currentRaces).filter(r => (!phaseName || r.tournamentPhase === phaseName) && String(r.tournamentPool || '') === String(key));
+    if (tiebreaks.length) {
+      const tiebreakList = document.createElement('div');
+      tiebreakList.style.cssText = 'display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;';
+      tiebreaks.forEach(r => {
+        renderedTiebreaks.add(String(r._id));
+        tiebreakList.appendChild(createTiebreakCard(r));
+      });
+      box.appendChild(tiebreakList);
+    }
+
     grid.appendChild(box);
   });
 
   container.appendChild(grid);
+}
+
+// Tie-break rooms of a group (opened outside the start.gg sets), by start
+let renderedTiebreaks = new Set();
+
+function tiebreakRaces(races = []) {
+  return (races || []).filter(r => r && r.tiebreak)
+    .sort((a, b) => new Date(a.startedAt || 0) - new Date(b.startedAt || 0));
+}
+
+function createTiebreakCard(race) {
+  const card = document.createElement('a');
+  card.href = '/race-detail.html?id=' + encodeURIComponent(race._id);
+  card.style.cssText = 'display: block; background-color: #111827; padding: 0.5rem; border-radius: 0.25rem; border-left: 3px solid #fbbf24; text-decoration: none; color: inherit;';
+
+  const live = ['open', 'invitational', 'in_progress'].includes(race.status);
+  const entrants = (race.entrants || []).slice().sort((a, b) => {
+    const rank = e => e.status === 'done' && e.place ? e.place : 999;
+    return rank(a) - rank(b) || String(a.userName || '').localeCompare(String(b.userName || ''));
+  });
+  const rows = entrants.map(e => {
+    const winner = !live && e.place === 1;
+    const ms = e.finishTimeMs || (e.finishTime ? parseDurationToMs(e.finishTime) : null);
+    const result = live ? '' : e.status === 'dnf' ? 'DNF' : e.status === 'dq' ? 'DQ' : (ms ? formatMs(ms) : '');
+    return `<div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;">
+      <span style="font-weight: ${winner ? 'bold' : 'normal'}; color: ${winner ? '#fbbf24' : 'white'};">${escHtml(sanitizeDisplayName(e.userName || ''))}</span>
+      ${result ? `<span style="color: ${e.status === 'done' ? '#9ca3af' : '#ef4444'}; font-family: monospace;">${escHtml(result)}</span>` : ''}
+    </div>`;
+  }).join('');
+  const liveBadge = live
+    ? `<span style="display: inline-flex; align-items: center; gap: 0.3rem; color: #fca5a5; font-size: 0.7rem;"><span style="width: 6px; height: 6px; background: #dc2626; border-radius: 50%; animation: pulse 2s cubic-bezier(0.4,0,0.6,1) infinite;"></span>${escHtml(i18n.t('raceDetail.inProgress') || 'In progress')}</span>`
+    : (race.startedAt ? `<span style="color: #6b7280; font-size: 0.7rem;">${escHtml(formatDateTime(race.startedAt))}</span>` : '');
+  const vods = live ? '' : playerVodsHtml(race);
+
+  card.innerHTML = `
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
+      <span style="color: #fbbf24; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.03em;">⚖️ ${escHtml(i18n.t('tournamentDetail.tiebreak') || 'Tie-break')}</span>
+      ${liveBadge}
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.875rem;">${rows}</div>
+    ${vods ? `<div style="display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.4rem;">${vods}</div>` : ''}
+  `;
+  return card;
+}
+
+// "P0DT03H16M58.077S" → ms
+function parseDurationToMs(value) {
+  const m = String(value || '').match(/P(?:(\d+)D)?T?(?:(\d+)H)?(?:(\d+)M)?(?:([\d.]+)S)?/);
+  if (!m) return null;
+  const ms = (((Number(m[1] || 0) * 24 + Number(m[2] || 0)) * 60 + Number(m[3] || 0)) * 60 + Number(m[4] || 0)) * 1000;
+  return ms || null;
+}
+
+// Tie-breaks whose group is not drawn as a standings table: at the end of the bracket tab
+function appendRemainingTiebreaks(container) {
+  const remaining = tiebreakRaces(currentRaces).filter(r => !renderedTiebreaks.has(String(r._id)));
+  if (!remaining.length) return;
+  const section = document.createElement('div');
+  section.className = 'phase-section';
+  section.style.cssText = 'margin-top: 3rem; border-top: 2px solid #374151; padding-top: 2rem;';
+  section.innerHTML = `<h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1.5rem; text-align: center; color: #fbbf24;">${escHtml(i18n.t('tournamentDetail.tiebreaks') || 'Tie-breaks')}</h3>`;
+  const grid = document.createElement('div');
+  grid.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;';
+  remaining.forEach(r => {
+    const cell = document.createElement('div');
+    const where = [translatePhaseName(r.tournamentPhase || ''), r.tournamentPool ? `${i18n.t('tournamentDetail.group') || 'Group'} ${r.tournamentPool}` : ''].filter(Boolean).join(' · ');
+    if (where) cell.innerHTML = `<div style="color: #9ca3af; font-size: 0.8rem; margin-bottom: 0.35rem;">${escHtml(where)}</div>`;
+    cell.appendChild(createTiebreakCard(r));
+    grid.appendChild(cell);
+  });
+  section.appendChild(grid);
+  container.appendChild(section);
 }
 
 // Display groups in spoiler mode - only player names, alphabetically sorted, no results

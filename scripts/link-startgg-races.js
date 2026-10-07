@@ -126,7 +126,8 @@ async function loadCandidateRaces(Race, tournament, extraRaceUrls = []) {
   // Extra races provided via --race-url
   const extraRaces = extraRaceUrls.length ? await Race.find({ url: { $in: extraRaceUrls } }).lean() : [];
 
-  return uniqueByUrl([...attachedRaces, ...nearbyRaces, ...extraRaces]);
+  // Tie-break rooms of a group belong to no set
+  return uniqueByUrl([...attachedRaces, ...nearbyRaces, ...extraRaces]).filter((race) => !race.tiebreak);
 }
 
 async function processTournament(tournament, { Race }, options) {

@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 const connectDB = require('./config/database');
 const { Game, Tournament, Player, Race } = require('./models');
+const seoPages = require('./services/seo-pages');
 const { 
   apiLimiter, 
   searchLimiter,
@@ -184,8 +185,31 @@ app.use((req, res, next) => {
   next();
 });
 
-// Respond to favicon requests to avoid noisy 404s in browser console
-app.get('/favicon.ico', (req, res) => res.status(204).end());
+// Search engines show the favicon next to results: serve the real icon (a PNG).
+app.get('/favicon.ico', (req, res) => {
+  res.type('image/png');
+  res.sendFile(path.join(__dirname, 'public', 'assets', 'favicon.png'), { maxAge: '7d' });
+});
+
+// One URL per page: /index.html duplicates the home page.
+app.get('/index.html', (req, res) => {
+  const query = req.originalUrl.includes('?') ? req.originalUrl.slice(req.originalUrl.indexOf('?')) : '';
+  res.redirect(301, `/${query}`);
+});
+
+// Public pages get their title, description, canonical, social and JSON-LD
+// tags rendered on the server so crawlers that skip JavaScript see them.
+app.get(['/', '/:page.html'], async (req, res, next) => {
+  try {
+    const page = await seoPages.renderPage(req.path, req.query, SITE_URL);
+    if (!page) return next();
+    res.status(page.status);
+    res.set('Cache-Control', 'no-cache');
+    res.type('html').send(page.html);
+  } catch (error) {
+    next(error);
+  }
+});
 
 app.get('/sitemap.xml', async (req, res, next) => {
   try {

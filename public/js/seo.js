@@ -229,7 +229,8 @@
     const image = buildAbsoluteUrl(options.image) || DEFAULT_SOCIAL_IMAGE;
     const robots = options.robots || ((path === '/search.html' || path === '/compare-players.html') ? 'noindex,follow' : 'index,follow');
     const ogType = options.ogType || 'website';
-    const twitterCard = options.twitterCard || 'summary_large_image';
+    // Images are small square artwork or the logo: a large card would crop them.
+    const twitterCard = options.twitterCard || 'summary';
 
     document.title = title;
 
@@ -258,6 +259,11 @@
   }
 
   function applySeo() {
+    // The server already rendered the head tags for this page (see
+    // services/seo-pages.js); resetting them to generic values would hide
+    // the entity-specific ones until the page scripts load their data.
+    if (document.querySelector('link[rel="canonical"]')) return;
+
     const path = window.location.pathname || '/';
     const config = pageMeta[path] || pageMeta['/'];
 

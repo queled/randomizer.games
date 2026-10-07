@@ -19,9 +19,11 @@ async function initI18n() {
     // Get saved language or detect from browser
     currentLanguage = getSavedLanguage() || detectBrowserLanguage() || DEFAULT_LANGUAGE;
     
-    // Load all translations
+    // Load all translations. The language files are async scripts, so this
+    // file can run before they do: wait briefly for the ones we need.
     await loadAllTranslations();
-    
+    await waitForTranslations([currentLanguage, DEFAULT_LANGUAGE]);
+
     // Apply translations to the page
     applyTranslations();
     
@@ -62,6 +64,17 @@ async function loadAllTranslations() {
         it: typeof it !== 'undefined' ? it : {},
         pt: typeof pt !== 'undefined' ? pt : {}
     };
+}
+
+/**
+ * Wait until the given languages are loaded (polls, gives up after ~5s)
+ */
+async function waitForTranslations(langs) {
+    const isLoaded = () => langs.every(lang => Object.keys(translations[lang] || {}).length > 0);
+    for (let elapsed = 0; !isLoaded() && elapsed < 5000; elapsed += 25) {
+        await new Promise(resolve => setTimeout(resolve, 25));
+        await loadAllTranslations();
+    }
 }
 
 /**

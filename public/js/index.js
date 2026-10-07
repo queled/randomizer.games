@@ -53,23 +53,19 @@ function formatMs(ms) {
 // Get last match completion date from tournament (prefer race end times)
 async function getLastMatchDate(tournamentId) {
   try {
+    // Load matches and races together rather than one after the other
+    const racesPromise = fetch(`/api/tournaments/${tournamentId}/races`)
+      .then(res => (res.ok ? res.json() : {}))
+      .then(json => json.races || [])
+      .catch(() => []);
+
     const matchesResponse = await fetch(`/api/tournaments/${tournamentId}/matches`);
     if (!matchesResponse.ok) return null;
     const matchesData = await matchesResponse.json();
     const matches = matchesData.matches || [];
     if (matches.length === 0) return null;
-    
-    // Load races for this tournament
-    let races = [];
-    try {
-      const racesRes = await fetch(`/api/tournaments/${tournamentId}/races`);
-      if (racesRes.ok) {
-        const racesJson = await racesRes.json();
-        races = racesJson.races || [];
-      }
-    } catch (e) {
-      // ignore
-    }
+
+    const races = await racesPromise;
     
     // Build quick lookup for races
     const byMatchId = new Map();
@@ -197,6 +193,12 @@ function resolveGameForTournament(tournament) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+  // Start every request now; cards are rendered once the games list is in
+  const racesRequest = API.getRaces({ limit: 10 });
+  const tournamentsRequest = API.getTournaments({ limit: 10 });
+  racesRequest.catch(() => {});
+  tournamentsRequest.catch(() => {});
+
   try {
     const gamesResp = await API.getGames();
     const games = gamesResp.games || [];
@@ -230,14 +232,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   await Promise.all([
-    loadRecentRaces(),
-    loadRecentTournaments()
+    loadRecentRaces(racesRequest),
+    loadRecentTournaments(tournamentsRequest)
   ]);
 });
 
-async function loadRecentRaces() {
+async function loadRecentRaces(request) {
   try {
-    const data = await API.getRaces({ limit: 10 });
+    const data = await request;
     const container = document.getElementById('recent-races');
     container.innerHTML = '';
 
@@ -257,9 +259,9 @@ async function loadRecentRaces() {
   }
 }
 
-async function loadRecentTournaments() {
+async function loadRecentTournaments(request) {
   try {
-    const data = await API.getTournaments({ limit: 10 });
+    const data = await request;
     const container = document.getElementById('recent-tournaments');
     container.innerHTML = '';
 
@@ -270,15 +272,15 @@ async function loadRecentTournaments() {
 
     // Enrich tournaments with winners and last match date
     const enrichedTournaments = await Promise.all(data.tournaments.map(async (t) => {
-      if ((!t.participants || t.participants.every(p => p.finalRank == null)) && !t.winner) {
-        t._computedWinner = await findTournamentWinner(t._id || t.id, t);
-      }
+      const needsWinner = (!t.participants || t.participants.every(p => p.finalRank == null)) && !t.winner;
       // Fetch last match date for finished tournaments
-      const status = getTournamentStatusFromState(t);
-      if (status === 'terminé') {
-        const lastMatchDate = await getLastMatchDate(t._id || t.id);
-        if (lastMatchDate) t._lastMatchDate = lastMatchDate;
-      }
+      const isFinished = getTournamentStatusFromState(t) === 'terminé';
+      const [winner, lastMatchDate] = await Promise.all([
+        needsWinner ? findTournamentWinner(t._id || t.id, t) : null,
+        isFinished ? getLastMatchDate(t._id || t.id) : null
+      ]);
+      if (needsWinner) t._computedWinner = winner;
+      if (lastMatchDate) t._lastMatchDate = lastMatchDate;
       return t;
     }));
 

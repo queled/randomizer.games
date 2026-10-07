@@ -221,7 +221,10 @@ app.get('/sitemap.xml', async (req, res, next) => {
   }
 });
 
-// Serve static files
+// Serve static files. Images rarely change, so browsers may reuse them for a
+// day instead of revalidating each one on every page view. JS/CSS keep the
+// default (always revalidated) because their URLs are not versioned.
+app.use('/assets', express.static(path.join(__dirname, 'public', 'assets'), { maxAge: '1d' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Apply rate limiting to all API routes

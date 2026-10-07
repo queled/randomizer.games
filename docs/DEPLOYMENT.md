@@ -133,8 +133,6 @@ MONGODB_URI=mongodb://localhost:27017/randomizer
 TWITCH_CLIENT_ID=votre_client_id
 TWITCH_CLIENT_SECRET=votre_secret
 
-# Webhook GitHub (générer avec: openssl rand -hex 32)
-GITHUB_WEBHOOK_SECRET=votre_secret_webhook
 ```
 
 ### 5. Configuration Nginx
@@ -277,35 +275,10 @@ TTL: 3600
 
 ---
 
-## 🔔 Configuration Webhook GitHub
+## 🔔 Sync rando-list
 
-### Sur votre serveur
-
-1. Générer un secret:
-```bash
-openssl rand -hex 32
-```
-
-2. Ajouter à `.env`:
-```bash
-GITHUB_WEBHOOK_SECRET=le_secret_genere
-```
-
-3. Redémarrer:
-```bash
-pm2 restart randomizer-api
-```
-
-### Sur GitHub (rando-list repository)
-
-1. Aller sur https://github.com/video-game-randomizers/rando-list/settings/hooks
-2. Cliquer "Add webhook"
-3. Configurer:
-   - **Payload URL**: `https://randomizer.games/api/sync-rando-list/webhook`
-   - **Content type**: `application/json`
-   - **Secret**: (le secret généré plus haut)
-   - **Events**: Sélectionner "Just the push event"
-   - **Active**: ✅ coché
+Le sync de la liste des randomizers tourne via le workflow GitHub Actions `sync-rando-list.yml`
+(quotidien) ou depuis le panneau admin. Aucun webhook n'est à configurer.
 
 ---
 

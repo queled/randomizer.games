@@ -86,11 +86,10 @@ L'API reste **hybride** (REST + endpoints opérationnels) avec des namespaces ca
 
 - `GET/CRUD` ressources : `/api/games`, `/api/tournaments`, `/api/runs`, `/api/players`, `/api/streams`
 - `commands` (opérations déclenchées) : `/api/commands/sync/*`
-- `hooks` (webhooks entrants) : `/api/hooks/rando-list/*`
 - `services` (intégrations externes/proxy) : `/api/services/racetime/*`, `/api/services/proxy-image`
 - `queries` (recherche/agrégations) : `/api/queries/search`
 
-Les anciens endpoints (`/api/sync`, `/api/sync-rando-list`, `/api/racetime`, `/api/proxy-image`, `/api/search`) restent supportés pour éviter toute casse des scripts/workflows existants.
+Les anciens endpoints (`/api/sync`, `/api/racetime`, `/api/proxy-image`, `/api/search`) restent supportés pour éviter toute casse des scripts/workflows existants.
 
 ## Contribution
 

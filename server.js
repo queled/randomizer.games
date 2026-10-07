@@ -155,9 +155,7 @@ app.use(mongoSanitize);
 // Cookie parser for admin sessions
 app.use(cookieParser());
 
-// capture raw body for webhook signature verification in specific routes
 app.use(express.json({ 
-  verify: (req, res, buf) => { req.rawBody = buf; },
   limit: '1mb' // Prevent payload attacks
 }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
@@ -227,7 +225,6 @@ app.use('/api/tournaments', require('./routes/tournaments'));
 app.use('/api/runs', require('./routes/runs'));
 app.use('/api/players', require('./routes/players'));
 app.use('/api/sync', markLegacyNamespace('/api/commands/sync'), require('./routes/sync'));
-app.use('/api/sync-rando-list', markLegacyNamespace('/api/hooks/rando-list'), require('./routes/sync-rando-list'));
 app.use('/api/racetime', markLegacyNamespace('/api/services/racetime'), require('./routes/racetime'));
 app.use('/api/streams', require('./routes/streams'));
 app.use('/api/search', markLegacyNamespace('/api/queries/search'), require('./routes/search'));
@@ -235,7 +232,6 @@ app.use('/api/proxy-image', markLegacyNamespace('/api/services/proxy-image'), re
 
 // Canonical namespaces (hybrid REST + command/service/query separation)
 app.use('/api/commands/sync', require('./routes/sync'));
-app.use('/api/hooks/rando-list', require('./routes/sync-rando-list'));
 app.use('/api/services/racetime', require('./routes/racetime'));
 app.use('/api/services/proxy-image', require('./routes/proxy-image'));
 app.use('/api/queries/search', require('./routes/search'));

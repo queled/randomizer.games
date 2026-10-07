@@ -32,13 +32,6 @@ const strictLimiter = createRateLimiter(
   'Too many requests to this endpoint, please try again later'
 );
 
-// Very strict for webhooks - More lenient in development (100 per minute vs 5 in prod)
-const webhookLimiter = createRateLimiter(
-  60 * 1000,
-  isDevelopment ? 100 : 10,
-  'Webhook rate limit exceeded'
-);
-
 // Search rate limiter - More lenient in development (500 req/min vs 30 in prod)
 const searchLimiter = createRateLimiter(
   60 * 1000,
@@ -228,7 +221,6 @@ const setRelayedImageHeaders = (res) => {
 module.exports = {
   apiLimiter,
   strictLimiter,
-  webhookLimiter,
   searchLimiter,
   adminLoginLimiter,
   validatePagination,

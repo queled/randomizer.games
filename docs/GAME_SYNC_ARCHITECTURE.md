@@ -142,13 +142,11 @@ alttp,alttp,alttpr,ALTTPR,ALttP Randomizer,A Link to the Past Randomizer,A Link 
 oot,oot,ootr,OOTR,OOT Randomizer,Ocarina of Time Randomizer,Ocarina of Time,The Legend of Zelda: Ocarina of Time,Ocarina of Time Randomizer,1998,Zelda Series,"N64, GCN, 3DS, Switch"
 ```
 
-## Automatisation (GitHub Webhook)
+## Automatisation
 
-Le webhook sur `/sync-rando-list/webhook` est déjà configuré pour déclencher le sync à chaque push sur rando-list.
-
-Pour l'activer:
-1. Configurer `GITHUB_WEBHOOK_SECRET` dans `.env`
-2. Ajouter le webhook sur le repo rando-list (si tu as accès) ou utiliser un cron
+Le sync rando-list tourne chaque jour via le workflow GitHub Actions `sync-rando-list.yml`.
+Il peut aussi être lancé à la main depuis le panneau admin (onglet Sync).
+L'ancien webhook `/api/sync-rando-list/webhook` a été supprimé : il lançait un script obsolète.
 
 ### Cron recommandé
 

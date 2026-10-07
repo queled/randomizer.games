@@ -11,8 +11,7 @@ const REQUIRED_ENV_VARS = [
   'NODE_ENV',
   'PORT',
   'MONGODB_URI',
-  'ADMIN_TOKEN',
-  'GITHUB_WEBHOOK_SECRET'
+  'ADMIN_TOKEN'
 ];
 
 const RECOMMENDED_ENV_VARS = [
@@ -61,17 +60,6 @@ if (!fs.existsSync('.env')) {
   if (process.env.NODE_ENV !== 'production') {
     console.warn('⚠️  ATTENTION: NODE_ENV n\'est pas "production"');
     warnings++;
-  }
-  
-  // 4. Vérifier le secret webhook si configuré
-  if (process.env.GITHUB_WEBHOOK_SECRET) {
-    if (process.env.GITHUB_WEBHOOK_SECRET.length < 32) {
-      console.error('❌ ERREUR: GITHUB_WEBHOOK_SECRET trop court (min 32 caractères)');
-      console.log('   Générez-en un avec: openssl rand -hex 32');
-      errors++;
-    } else {
-      console.log('✅ GITHUB_WEBHOOK_SECRET sécurisé');
-    }
   }
 }
 

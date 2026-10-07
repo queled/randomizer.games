@@ -292,7 +292,6 @@ SINON SI randomizer.website EXISTE (legacy):
 | Nom | Description |
 |-----|-------------|
 | `MONGODB_URI` | URI de connexion MongoDB Atlas |
-| `GITHUB_WEBHOOK_SECRET` | (Optionnel) Pour le webhook rando-list |
 | `DISCORD_WEBHOOK_URL` | (Optionnel) Notifications d'erreurs |
 
 ### Variables GitHub (Settings → Variables → Actions)

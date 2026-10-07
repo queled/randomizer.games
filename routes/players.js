@@ -536,24 +536,46 @@ router.get('/by-name/:name', async (req, res, next) => {
   }
 });
 
+// ?compact=1 (player page): only the fields the page displays, and only the
+// player's own entrant, instead of every entrant of every race (~10x smaller).
+const COMPACT_RACE_FIELDS = 'name category goal info status startedAt endedAt createdAt updatedAt entrants.userId entrants.userName entrants.place';
+
+function isCompactRequest(req) {
+  return req.query.compact === '1' || req.query.compact === 'true';
+}
+
+function compactRaces(races, isPlayerEntrant) {
+  return races.map(race => {
+    // info is only shown (cut to 80 characters) when there is no goal
+    const info = race.goal ? undefined : (race.info ? String(race.info).slice(0, 120) : race.info);
+    return {
+      ...race,
+      info,
+      entrants: (race.entrants || []).filter(isPlayerEntrant)
+    };
+  });
+}
+
 // Get races by player name (searches by userName in entrants)
 router.get('/by-name/:name/races', async (req, res, next) => {
   try {
     const { Race } = require('../models');
     const name = req.params.name;
     const normalizedName = normalizeName(name);
-    const cacheKey = `players:by-name-races:${normalizedName}`;
+    const compact = isCompactRequest(req);
+    const cacheKey = `players:by-name-races${compact ? '-compact' : ''}:${normalizedName}`;
     const cached = getPlayersCache(cacheKey);
     if (cached) {
       return res.json(cached);
     }
     
     // Search races where entrants.userName matches (case-insensitive)
-    const races = await Race.find({ 
-      'entrants.userName': { $regex: new RegExp('^' + name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$', 'i') }
-    }).sort({ startedAt: -1 });
+    const nameRegex = new RegExp('^' + name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$', 'i');
+    const query = Race.find({ 'entrants.userName': { $regex: nameRegex } }).sort({ startedAt: -1 });
 
-    const result = { races };
+    const result = compact
+      ? { races: compactRaces(await query.select(COMPACT_RACE_FIELDS).lean(), e => nameRegex.test(e.userName || '')) }
+      : { races: await query };
     setPlayersCache(cacheKey, result);
     res.json(result);
   } catch (error) {
@@ -565,10 +587,23 @@ router.get('/by-name/:name/races', async (req, res, next) => {
 router.get('/:id/races', async (req, res, next) => {
   try {
     const { Race } = require('../models');
-    const races = await Race.find({ 'entrants.userId': req.params.id })
+    const userId = req.params.id;
+    const query = Race.find({ 'entrants.userId': userId })
       .sort({ startedAt: -1 });
 
-    res.json({ races });
+    if (isCompactRequest(req)) {
+      const cacheKey = `players:id-races-compact:${userId}`;
+      const cached = getPlayersCache(cacheKey);
+      if (cached) {
+        return res.json(cached);
+      }
+      const races = await query.select(COMPACT_RACE_FIELDS).lean();
+      const result = { races: compactRaces(races, e => e.userId === userId) };
+      setPlayersCache(cacheKey, result);
+      return res.json(result);
+    }
+
+    res.json({ races: await query });
   } catch (error) {
     next(error);
   }

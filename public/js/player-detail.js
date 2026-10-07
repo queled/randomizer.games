@@ -139,6 +139,7 @@
   let gameDisplayMap = null;
   let gameDisplayMapPromise = null;
   let latestRenderedRaces = null;
+  let avatarLoadedFor = null;
 
   if (id || nameParam) {
     headerName.textContent = 'Loading...';
@@ -157,18 +158,30 @@
     return res.json();
   }
 
-  // Fetch Twitch URL from Racetime profile
-  async function fetchTwitchFromRacetime(racetimeUrl) {
-    try {
-      const profileUrl = normalizeRacetimeProfileUrl(racetimeUrl);
-      if (!profileUrl) return null;
-      const res = await fetch('/api/racetime/twitch?url=' + encodeURIComponent(profileUrl));
-      if (!res.ok) return null;
-      const data = await res.json();
-      return data.twitch || null;
-    } catch (e) {
-      return null;
+  // Fetch Twitch URL from Racetime profile (one request per profile per page view)
+  const twitchLookups = new Map();
+  function fetchTwitchFromRacetime(racetimeUrl) {
+    const profileUrl = normalizeRacetimeProfileUrl(racetimeUrl);
+    if (!profileUrl) return Promise.resolve(null);
+    if (!twitchLookups.has(profileUrl)) {
+      twitchLookups.set(profileUrl, fetch('/api/racetime/twitch?url=' + encodeURIComponent(profileUrl))
+        .then(res => (res.ok ? res.json() : null))
+        .then(data => (data && data.twitch) || null)
+        .catch(() => null));
     }
+    return twitchLookups.get(profileUrl);
+  }
+
+  // Live streams list, fetched once per page view
+  let liveStreamsPromise = null;
+  function getLiveStreams() {
+    if (!liveStreamsPromise) {
+      liveStreamsPromise = fetch('/api/streams')
+        .then(res => (res.ok ? res.json() : {}))
+        .then(data => data.streams || [])
+        .catch(() => []);
+    }
+    return liveStreamsPromise;
   }
 
   // Check if a Twitch user is currently live
@@ -176,10 +189,7 @@
     if (!twitchUsername || !twitchBtn) return;
     
     try {
-      const res = await fetch('/api/streams');
-      if (!res.ok) return;
-      const data = await res.json();
-      const streams = data.streams || [];
+      const streams = await getLiveStreams();
       
       // Find if this user is streaming
       const isLive = streams.some(stream => {
@@ -384,7 +394,12 @@
     headerName.textContent = p.name || p.userId || 'Joueur inconnu';
 
     // Kick off avatar loading asynchronously so the rest of the profile renders fast
-    loadAvatar(p).catch(() => {});
+    // (once per player: the profile is rendered again when the races arrive)
+    const avatarKey = p.name || p.userId || 'unknown';
+    if (avatarLoadedFor !== avatarKey) {
+      avatarLoadedFor = avatarKey;
+      loadAvatar(p).catch(() => {});
+    }
 
     const links = [];
     
@@ -422,6 +437,8 @@
           // Only add if not already present
           if (!playerLinks.querySelector('.btn-twitch')) {
             const twitchUsername = safeTwitchUrl.split('/').pop();
+            // Later renders of this profile reuse it instead of looking it up again
+            p.twitch = p.twitch || twitchUsername;
             const twitchBtn = document.createElement('a');
             twitchBtn.className = 'btn-twitch';
             twitchBtn.href = safeTwitchUrl;
@@ -443,7 +460,7 @@
           }
         }
       }).catch(() => {});
-    } else if (p.twitch) {
+    } else if (p.twitch && !playerLinks.querySelector('.btn-twitch')) {
       // Add Twitch button if we have it directly in the DB
       const twitchBtn = document.createElement('a');
       twitchBtn.className = 'btn-twitch';
@@ -1081,11 +1098,21 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
   }
 
   async function loadById(pid){
-    const player = await fetchJson('/players/'+encodeURIComponent(pid));
-    const tournaments = player.tournaments || [];
+    const racesRequest = fetchJson('/api/players/'+encodeURIComponent(pid)+'/races?compact=1');
+    racesRequest.catch(() => {});
+    const player = await fetchJson('/api/players/'+encodeURIComponent(pid));
+    let tournaments = player.tournaments || [];
+    // Tournament participations are often only in the aggregated list (as on ?name= pages)
+    if (!tournaments.length && player.name) {
+      try {
+        const all = await fetchJson('/api/players?includeTournaments=1&name=' + encodeURIComponent(player.name));
+        const aggregated = (all.players || []).find(p => (p.name || '').toLowerCase() === player.name.toLowerCase());
+        if (aggregated && aggregated.tournaments) tournaments = aggregated.tournaments;
+      } catch (e) { /* keep the player's own (empty) list */ }
+    }
     renderProfile(player, tournaments, [], { deferCounts: true });
     renderTournaments(tournaments, player.name || player.userId || headerName.textContent);
-    const jr = await fetchJson('/players/'+encodeURIComponent(pid)+'/races');
+    const jr = await racesRequest;
     const races = jr.races || [];
     player.stats = player.stats || {};
     player.stats.totalRaces = races.length;
@@ -1095,6 +1122,16 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
 
   async function loadByName(name){
     headerName.textContent = name;
+
+    // Races are the heaviest request: start it now, in parallel with the profile
+    const racesByNameRequest = fetch('/api/players/by-name/' + encodeURIComponent(name) + '/races?compact=1');
+    racesByNameRequest.catch(() => {});
+    let racesByNameResponse = null;
+    const fetchRacesByName = () => {
+      if (!racesByNameResponse) racesByNameResponse = racesByNameRequest;
+      else racesByNameResponse = fetch('/api/players/by-name/' + encodeURIComponent(name) + '/races?compact=1');
+      return racesByNameResponse;
+    };
 
     // First try the aggregated players list to get tournament data and basic info
     try {
@@ -1126,22 +1163,15 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
           } catch (e) { /* ignore */ }
         }
 
-        // Try to resolve Twitch before first render so Racetime+Twitch buttons can appear together
-        if (!playerData.twitch && playerData.racetimeUrl) {
-          try {
-            const twitchUrl = await fetchTwitchFromRacetime(playerData.racetimeUrl);
-            if (twitchUrl) {
-              playerData.twitch = twitchUrl.split('/').pop();
-            }
-          } catch (e) { /* ignore */ }
-        }
+        // The Twitch button is added by renderProfile once the lookup answers,
+        // so the profile does not wait for racetime.gg before showing up
         
         renderProfile(playerData, tournaments, [], { deferCounts: true });
         renderTournaments(tournaments, aggregated.name || name);
         
         // Try to load races by player name
         try {
-          const racesRes = await fetch('/api/players/by-name/' + encodeURIComponent(name) + '/races');
+          const racesRes = await fetchRacesByName();
           if (racesRes.ok) {
             const racesData = await racesRes.json();
             const races = racesData.races || [];
@@ -1170,7 +1200,7 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
         // Fallback: Player document not found — try to build a minimal profile from races and racetime lookup
         let races = [];
         try {
-          const racesRes = await fetch('/api/players/by-name/' + encodeURIComponent(name) + '/races');
+          const racesRes = await fetchRacesByName();
           if (racesRes.ok) {
             const jr = await racesRes.json();
             races = jr.races || [];
@@ -1221,7 +1251,7 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
       let displayTournaments = tournaments || [];
       if ((!displayTournaments || displayTournaments.length === 0) && player.userId) {
         try {
-          const full = await fetchJson('/players/' + encodeURIComponent(player.userId));
+          const full = await fetchJson('/api/players/' + encodeURIComponent(player.userId));
           const fullT = full.tournaments || [];
           displayTournaments = fullT.map(t => {
             const tour = t.tournamentId || {};
@@ -1246,7 +1276,7 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
 
       // Load races by userId or by name
       if (player.userId) {
-        const jr = await fetchJson('/api/players/'+encodeURIComponent(player.userId)+'/races');
+        const jr = await fetchJson('/api/players/'+encodeURIComponent(player.userId)+'/races?compact=1');
         const races = jr.races || [];
         player.stats = player.stats || {};
         player.stats.totalRaces = races.length;
@@ -1255,7 +1285,7 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
       } else {
         // Try by name
         try {
-          const racesRes = await fetch('/api/players/by-name/' + encodeURIComponent(name) + '/races');
+          const racesRes = await fetchRacesByName();
           if (racesRes.ok) {
             const racesData = await racesRes.json();
             const races = racesData.races || [];
@@ -1290,7 +1320,7 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
       
       // Try to load races
       try {
-        const racesRes = await fetch('/api/players/by-name/' + encodeURIComponent(name) + '/races');
+        const racesRes = await fetchRacesByName();
         if (racesRes.ok) {
           const racesData = await racesRes.json();
           const races = racesData.races || [];

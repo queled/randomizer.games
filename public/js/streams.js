@@ -19,12 +19,16 @@ function sanitizeExternalUrl(url) {
     }
 }
 
+let streamsShown = false; // a list is on screen: refreshes update it in place
+let lastStreamsLoad = 0;
+
 async function loadStreams() {
     const grid = document.getElementById('streams-grid');
     const noStreams = document.getElementById('no-streams');
     const countEl = document.getElementById('stream-count');
-    // show loading state
-    try {
+    lastStreamsLoad = Date.now();
+    // show loading state (first load only, so auto-refresh does not blank the page)
+    if (!streamsShown) try {
         grid.style.display = 'none';
         noStreams.style.display = 'block';
         noStreams.innerHTML = `<p style="color:#9ca3af;">${typeof i18n !== 'undefined' ? i18n.t('streams.loadingStreams') : 'Loading streams...'}</p>`;
@@ -48,9 +52,17 @@ async function loadStreams() {
         const gameMap = getCachedGameMap();
         
         if (!streams || streams.length === 0) {
+            grid.innerHTML = '';
             grid.style.display = 'none';
             noStreams.style.display = 'block';
+            const tr = (key, fallback) => (typeof i18n !== 'undefined' && i18n.t(key)) || fallback;
+            noStreams.innerHTML = `
+                <p class="no-streams-emoji">😴</p>
+                <p class="no-streams-title">${escapeHtml(tr('streams.noStreams', 'No live streams at the moment'))}</p>
+                <p class="no-streams-subtitle">${escapeHtml(tr('streams.checkRaces', 'Come back later or check the'))} <a href="/races.html">${escapeHtml(tr('streams.currentRaces', 'ongoing races'))}</a></p>
+            `;
             countEl.textContent = formatStreamsCount(0);
+            streamsShown = false;
             return;
         }
         
@@ -89,8 +101,9 @@ async function loadStreams() {
         
         grid.style.display = 'grid';
         noStreams.style.display = 'none';
+        streamsShown = true;
         
-        // Populate game filter
+        // Populate game filter (keeps the selected game across refreshes)
         populateGameFilter(streams);
 
         // Attach click + hover handlers to game links inside stream cards
@@ -121,6 +134,8 @@ async function loadStreams() {
         
     } catch (error) {
         console.error('Error loading streams:', error);
+        // A failed auto-refresh keeps the streams already on screen
+        if (streamsShown) return;
         grid.innerHTML = '';
         noStreams.innerHTML = `
             <p style="font-size: 1.5rem; margin-bottom: 0.5rem;">⚠️</p>
@@ -162,6 +177,7 @@ function populateGameFilter(streams) {
     const filter = document.getElementById('filter-game');
     if (!filter) return;
 
+    const selected = filter.value;
     const defaultOption = filter.querySelector('option[value=""]');
     filter.innerHTML = '';
     if (defaultOption) {
@@ -178,6 +194,11 @@ function populateGameFilter(streams) {
     });
     
     filter.onchange = () => filterStreams(filter.value);
+
+    if (selected && games.includes(selected)) {
+        filter.value = selected;
+        filterStreams(selected);
+    }
 }
 
 function getCachedGameMap() {
@@ -308,23 +329,36 @@ function filterStreams(game) {
     });
 }
 
-// Auto-refresh streams every 2 minutes
+// Auto-refresh streams every 2 minutes, only while the tab is visible
+const REFRESH_INTERVAL = 120000;
 let refreshInterval;
 
 function startAutoRefresh() {
-    refreshInterval = setInterval(loadStreams, 120000);
+    stopAutoRefresh();
+    refreshInterval = setInterval(loadStreams, REFRESH_INTERVAL);
 }
 
 function stopAutoRefresh() {
     if (refreshInterval) {
         clearInterval(refreshInterval);
+        refreshInterval = null;
     }
 }
+
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        stopAutoRefresh();
+        return;
+    }
+    // Back on the tab: refresh now if the list is out of date
+    if (Date.now() - lastStreamsLoad >= REFRESH_INTERVAL) loadStreams();
+    startAutoRefresh();
+});
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     loadStreams();
-    startAutoRefresh();
+    if (!document.hidden) startAutoRefresh();
 });
 
 // Clean up on page unload

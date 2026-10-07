@@ -12,6 +12,7 @@
  *   node scripts/sync-racetime-global.js                    # Mode normal (< 5 min)
  *   node scripts/sync-racetime-global.js --game <slug>      # Sync complète d'un jeu
  *   node scripts/sync-racetime-global.js --max-pages 100    # Limiter les pages (avec --game)
+ *   node scripts/sync-racetime-global.js --catch-up-since 2026-09-01  # Rattraper les races manquées
  */
 
 const path = require('path');
@@ -26,6 +27,9 @@ const racetimeAPI = require('../services/racetime');
 // Configuration
 const RATE_LIMIT_MS = parseInt(process.env.RACETIME_RATE_LIMIT_MS) || 1500;
 const MAX_FINALIZE_PER_RUN = 50; // Max races à finaliser par run (pour rester < 5 min)
+const CATCH_UP_SLUGS_PER_RUN = 24; // Catégories relues par run (rotation complète en ~4 runs)
+const CATCH_UP_SLICE_MS = 5 * 60 * 1000; // Une tranche par créneau de 5 minutes
+const CATCH_UP_MAX_PAGES = 5;
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -35,10 +39,7 @@ function sleep(ms) {
  * ÉTAPE 1: Récupérer TOUTES les races actives depuis l'API globale
  * L'API /races/data retourne toutes les races open/in_progress en 1 appel
  */
-async function syncActiveRaces() {
-  console.log('\n📡 Récupération des races actives...');
-  
-  // Récupérer les slugs des jeux actifs
+async function getActiveSlugs() {
   const activeGames = await Game.find({
     'integrations.racetime.enabled': true,
     enabled: { $ne: false }
@@ -51,7 +52,13 @@ async function syncActiveRaces() {
     const additional = game.integrations?.racetime?.gameSlugs || [];
     for (const slug of additional) activeSlugs.add(slug);
   }
+  return activeSlugs;
+}
+
+async function syncActiveRaces() {
+  console.log('\n📡 Récupération des races actives...');
   
+  const activeSlugs = await getActiveSlugs();
   console.log(`  ${activeSlugs.size} catégories actives`);
   
   const stats = { newRaces: 0, updatedRaces: 0, errors: 0, activeUrls: new Set() };
@@ -239,6 +246,127 @@ async function finalizeCompletedRaces(activeUrls) {
 }
 
 /**
+ * Insère ou met à jour une race terminée renvoyée par /<categorie>/races/data
+ */
+async function upsertPastRace(raceData, gameSlug, stats) {
+  const raceUrl = raceData.url;
+  
+  try {
+    const existingRace = await Race.findOne({ url: raceUrl });
+
+    const entrantsData = (raceData.entrants || []).map(e => ({
+      userId: e.user?.id || e.userId,
+      userName: e.user?.name || e.userName,
+      userDiscriminator: e.user?.discriminator || e.userDiscriminator,
+      userUrl: e.user?.url || e.userUrl,
+      status: e.status?.value || e.status,
+      finishTime: e.finish_time || e.finishTime,
+      finishTimeMs: e.finishTimeMs,
+      finishedAt: e.finished_at || e.finishedAt,
+      place: e.place,
+      placeOrdinal: e.place_ordinal || e.placeOrdinal,
+      comment: e.comment
+    }));
+
+    if (existingRace) {
+      await Race.updateOne({ url: raceUrl }, {
+        $set: {
+          status: raceData.status,
+          startedAt: raceData.startedAt,
+          endedAt: raceData.endedAt,
+          entrants: entrantsData
+        }
+      });
+      stats.updatedRaces++;
+    } else {
+      const newRace = new Race({
+        name: raceData.name,
+        category: gameSlug,
+        url: raceUrl,
+        status: raceData.status,
+        goal: raceData.goal,
+        info: raceData.info,
+        startedAt: raceData.startedAt,
+        endedAt: raceData.endedAt,
+        recordable: raceData.recordable,
+        entrants: entrantsData,
+        source: {
+          type: 'racetime',
+          externalId: raceData.name,
+          url: `https://racetime.gg${raceUrl}`,
+          importedAt: new Date()
+        }
+      });
+      await newRace.save();
+      stats.newRaces++;
+    }
+  } catch (err) {
+    if (err.code !== 11000) stats.errors++;
+  }
+}
+
+/**
+ * ÉTAPE 3: Rattraper les races terminées jamais vues comme actives
+ * Une race ouverte puis terminée entre deux runs du cron n'apparaît jamais dans
+ * /races/data. Chaque run relit les dernières races terminées d'une partie des
+ * catégories (rotation), jusqu'à retomber sur une race déjà connue.
+ */
+async function catchUpFinishedRaces(options = {}) {
+  const { since = null } = options;
+  console.log('\n🧹 Rattrapage des races terminées...');
+  
+  const slugs = [...await getActiveSlugs()].sort();
+  let slice = slugs;
+  if (since) {
+    console.log(`  ${slugs.length} catégories, depuis ${since.toISOString().slice(0, 10)}`);
+  } else {
+    const sliceCount = Math.max(1, Math.ceil(slugs.length / CATCH_UP_SLUGS_PER_RUN));
+    const sliceIndex = Math.floor(Date.now() / CATCH_UP_SLICE_MS) % sliceCount;
+    slice = slugs.slice(sliceIndex * CATCH_UP_SLUGS_PER_RUN, (sliceIndex + 1) * CATCH_UP_SLUGS_PER_RUN);
+    console.log(`  Tranche ${sliceIndex + 1}/${sliceCount}: ${slice.length} catégories`);
+  }
+  
+  const stats = { newRaces: 0, updatedRaces: 0, errors: 0 };
+  
+  for (const slug of slice) {
+    for (let page = 1; since || page <= CATCH_UP_MAX_PAGES; page++) {
+      try {
+        await sleep(RATE_LIMIT_MS);
+        const result = await racetimeAPI.getPastRaces(slug, page);
+        if (!result.races?.length) break;
+        
+        const urls = result.races.map(r => r.url);
+        const known = new Set((await Race.find({
+          url: { $in: urls },
+          status: { $in: ['finished', 'cancelled'] },
+          startedAt: { $ne: null }
+        }).select('url').lean()).map(r => r.url));
+        
+        for (const raceData of result.races) {
+          if (!known.has(raceData.url)) await upsertPastRace(raceData, slug, stats);
+        }
+        
+        if (since) {
+          // Mode manuel: remonter jusqu'à la date demandée, même au-delà des races connues
+          const oldest = result.races[result.races.length - 1];
+          const oldestTs = new Date(oldest.startedAt || oldest.endedAt || 0).getTime();
+          if (oldestTs < since.getTime() || !result.hasNext) break;
+        } else if (known.size) {
+          // Les pages suivantes sont plus anciennes: déjà importées
+          break;
+        }
+      } catch (err) {
+        stats.errors++;
+        break;
+      }
+    }
+  }
+  
+  console.log(`  ✓ ${stats.newRaces} nouvelles, ${stats.updatedRaces} màj`);
+  return stats;
+}
+
+/**
  * Sync complète d'un jeu spécifique (pour usage manuel)
  */
 async function syncGameComplete(gameSlug, options = {}) {
@@ -261,60 +389,7 @@ async function syncGameComplete(gameSlug, options = {}) {
       console.log(`  Page ${page}: ${result.races.length} races`);
       
       for (const raceData of result.races) {
-        const raceUrl = raceData.url;
-        
-        try {
-          const existingRace = await Race.findOne({ url: raceUrl });
-          
-          const entrantsData = (raceData.entrants || []).map(e => ({
-            userId: e.user?.id || e.userId,
-            userName: e.user?.name || e.userName,
-            userDiscriminator: e.user?.discriminator || e.userDiscriminator,
-            userUrl: e.user?.url || e.userUrl,
-            status: e.status?.value || e.status,
-            finishTime: e.finish_time || e.finishTime,
-            finishTimeMs: e.finishTimeMs,
-            finishedAt: e.finished_at || e.finishedAt,
-            place: e.place,
-            placeOrdinal: e.place_ordinal || e.placeOrdinal,
-            comment: e.comment
-          }));
-          
-          if (existingRace) {
-            await Race.updateOne({ url: raceUrl }, {
-              $set: {
-                status: raceData.status,
-                startedAt: raceData.startedAt,
-                endedAt: raceData.endedAt,
-                entrants: entrantsData
-              }
-            });
-            stats.updatedRaces++;
-          } else {
-            const newRace = new Race({
-              name: raceData.name,
-              category: gameSlug,
-              url: raceUrl,
-              status: raceData.status,
-              goal: raceData.goal,
-              info: raceData.info,
-              startedAt: raceData.startedAt,
-              endedAt: raceData.endedAt,
-              recordable: raceData.recordable,
-              entrants: entrantsData,
-              source: {
-                type: 'racetime',
-                externalId: raceData.name,
-                url: `https://racetime.gg${raceUrl}`,
-                importedAt: new Date()
-              }
-            });
-            await newRace.save();
-            stats.newRaces++;
-          }
-        } catch (err) {
-          if (err.code !== 11000) stats.errors++;
-        }
+        await upsertPastRace(raceData, gameSlug, stats);
       }
       
       if (!result.hasNext) break;
@@ -334,6 +409,9 @@ async function main() {
   const args = process.argv.slice(2);
   
   const gameArg = args.includes('--game') ? args[args.indexOf('--game') + 1] : null;
+  const catchUpSinceArg = args.includes('--catch-up-since')
+    ? new Date(args[args.indexOf('--catch-up-since') + 1])
+    : null;
   const maxPagesArg = args.includes('--max-pages') 
     ? parseInt(args[args.indexOf('--max-pages') + 1]) 
     : null;
@@ -343,7 +421,10 @@ async function main() {
   try {
     await connectDB();
     
-    if (gameArg) {
+    if (catchUpSinceArg && !Number.isNaN(catchUpSinceArg.getTime())) {
+      // Mode manuel: rattrapage de toutes les catégories depuis une date
+      await catchUpFinishedRaces({ since: catchUpSinceArg });
+    } else if (gameArg) {
       // Mode manuel: sync complète d'un jeu
       const game = await Game.findOne({ id: gameArg }).select('integrations.racetime').lean();
       
@@ -371,13 +452,16 @@ async function main() {
       // Étape 2: Finaliser les races qui ne sont plus actives
       const finalizeStats = await finalizeCompletedRaces(activeStats.activeUrls);
       
+      // Étape 3: Rattraper les races terminées entre deux runs
+      const catchUpStats = await catchUpFinishedRaces();
+      
       console.log('\n════════════════════════════════════');
       console.log('📊 RÉSUMÉ');
       console.log('════════════════════════════════════');
-      console.log(`Nouvelles races: ${activeStats.newRaces}`);
+      console.log(`Nouvelles races: ${activeStats.newRaces + catchUpStats.newRaces}`);
       console.log(`Mises à jour: ${activeStats.updatedRaces}`);
       console.log(`Finalisées: ${finalizeStats.finalized}`);
-      console.log(`Erreurs: ${activeStats.errors + finalizeStats.errors}`);
+      console.log(`Erreurs: ${activeStats.errors + finalizeStats.errors + catchUpStats.errors}`);
       console.log('════════════════════════════════════');
     }
     

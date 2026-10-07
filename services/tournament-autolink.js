@@ -248,11 +248,25 @@ function getExpectedStartggRaceCount(match) {
   return Math.max(gamesPlayed || 1, 1);
 }
 
-function hasAvailableStartggSlot(match, raceUrl = null) {
+// "Game 3", "(G2)", "game 1": the game of the series a race label announces
+function getRaceGameNumber(race) {
+  const game = /\b(?:game|g)\s*(\d{1,2})\b/i.exec(String(race?.info || '').split('\n')[0]);
+  return game ? Number(game[1]) : null;
+}
+
+function getMaxGameNumber(races) {
+  return Math.max(0, ...races.map((race) => getRaceGameNumber(race) || 0));
+}
+
+// Some organizers only record the series winner ("1-0" for a BO3), so a race
+// labelled "Game 3" (the candidate, or one already linked: maxGameNumber) proves
+// at least three games were played
+function hasAvailableStartggSlot(match, raceUrl = null, gameNumber = null) {
   const raceUrls = Array.isArray(match?.raceUrls) ? match.raceUrls : [];
   if (raceUrl && (raceUrls.includes(raceUrl) || match?.raceUrl === raceUrl)) return true;
   const currentCount = raceUrls.length || (match?.raceUrl ? 1 : 0);
-  return currentCount < getExpectedStartggRaceCount(match);
+  const expected = Math.max(getExpectedStartggRaceCount(match), gameNumber || 0, match?.maxGameNumber || 0);
+  return currentCount < expected;
 }
 
 async function loadCandidateRaces({ tournament, Race, matches = [], extraRaceUrls = [] }) {
@@ -356,10 +370,15 @@ async function buildAutoLinkPreview({
 }) {
   const matches = await loadNormalizedMatches({ tournament, Match, Race });
   const races = await loadCandidateRaces({ tournament, Race, matches, extraRaceUrls });
-  const liveMatches = matches.map((match) => ({
-    ...match,
-    raceUrls: Array.isArray(match.raceUrls) ? [...match.raceUrls] : []
-  }));
+  const raceByUrl = new Map(races.map((race) => [race.url, race]));
+  const liveMatches = matches.map((match) => {
+    const raceUrls = Array.isArray(match.raceUrls) ? [...match.raceUrls] : [];
+    return {
+      ...match,
+      raceUrls,
+      maxGameNumber: getMaxGameNumber(raceUrls.map((url) => raceByUrl.get(url)).filter(Boolean))
+    };
+  });
 
   const proposals = [];
   let skipped = 0;
@@ -397,11 +416,16 @@ async function buildAutoLinkPreview({
     }
 
     // Series (BO3, BO5...) take one race per game played
-    const candidateMatches = stageMatches.filter((match) => hasAvailableStartggSlot(match, race.url));
+    const gameNumber = getRaceGameNumber(race);
+    const candidateMatches = stageMatches.filter((match) => hasAvailableStartggSlot(match, race.url, gameNumber));
+    if (!candidateMatches.length) {
+      skipped++;
+      continue;
+    }
 
     const scored = rankMatchesForRace(
       race,
-      candidateMatches.length ? candidateMatches : stageMatches,
+      candidateMatches,
       {
         requireDirect: true,
         allowOccupiedMatchReassign: false,
@@ -425,6 +449,7 @@ async function buildAutoLinkPreview({
       raceUrl: race.url,
       raceLabel: getRaceLabel(race),
       raceEntrants: (race.entrants || []).length,
+      gameNumber,
       matchId: String(chosen.match.startggSetId || chosen.match._id),
       matchPlayers: `${players.player1} vs ${players.player2}`,
       matchPhase: chosen.match.phase || null,
@@ -438,6 +463,7 @@ async function buildAutoLinkPreview({
       const liveMatch = liveMatches[liveIndex];
       if (!liveMatch.raceUrl) liveMatch.raceUrl = race.url;
       if (!liveMatch.raceUrls.includes(race.url)) liveMatch.raceUrls.push(race.url);
+      liveMatch.maxGameNumber = Math.max(liveMatch.maxGameNumber || 0, gameNumber || 0);
     }
   }
 
@@ -519,11 +545,13 @@ async function applyAutoLinkProposals({ tournament, proposals, Race, Match }) {
           continue;
         }
 
+        const linkedRaces = await Race.find({ url: { $in: embeddedMatch.raceUrls || [] } }).select('info').lean();
         if (!hasAvailableStartggSlot({
           raceUrl: embeddedMatch.raceUrl,
           raceUrls: embeddedMatch.raceUrls,
-          displayScore: embeddedMatch.displayScore
-        }, proposal.raceUrl)) {
+          displayScore: embeddedMatch.displayScore,
+          maxGameNumber: getMaxGameNumber(linkedRaces)
+        }, proposal.raceUrl, proposal.gameNumber)) {
           errors.push(`Match ${proposal.matchId} is already full`);
           continue;
         }
@@ -555,13 +583,13 @@ async function applyAutoLinkProposals({ tournament, proposals, Race, Match }) {
           continue;
         }
 
-        const linkedUrls = (await Race.find({ tournamentId: tournament._id, matchId: matchDoc._id }).select('url').lean())
-          .map((linkedRace) => linkedRace.url);
+        const linkedRaces = await Race.find({ tournamentId: tournament._id, matchId: matchDoc._id }).select('url info').lean();
         if (!hasAvailableStartggSlot({
           raceUrl: matchDoc.raceUrl,
-          raceUrls: linkedUrls,
-          scoresCsv: matchDoc.scoresCsv
-        }, proposal.raceUrl)) {
+          raceUrls: linkedRaces.map((linkedRace) => linkedRace.url),
+          scoresCsv: matchDoc.scoresCsv,
+          maxGameNumber: getMaxGameNumber(linkedRaces)
+        }, proposal.raceUrl, proposal.gameNumber)) {
           errors.push(`Match ${proposal.matchId} is already full`);
           continue;
         }

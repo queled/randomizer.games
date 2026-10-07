@@ -7,6 +7,7 @@
 # Étapes:
 # 1. Récupère races globales récentes (2 pages)
 # 2. Finalise les courses stuck en in_progress depuis >24h
+# 3. Rattrape les courses terminées entre deux runs (1/4 des catégories par run)
 
 name: Sync Racetime Races
 

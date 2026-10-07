@@ -195,6 +195,7 @@ const en = {
         upcomingRestreams: "Upcoming",
         pastRestreams: "Played",
         watchVod: "VOD",
+        vodGone: "VOD no longer available",
         restreams: "Restreams",
         noRestreams: "No restream yet.",
         allLanguages: "All",

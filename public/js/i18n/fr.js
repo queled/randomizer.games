@@ -183,6 +183,7 @@ const fr = {
         upcomingRestreams: "À venir",
         pastRestreams: "Passées",
         watchVod: "VOD",
+        vodGone: "VOD plus disponible",
         restreams: "Restreams",
         noRestreams: "Aucun restream pour le moment.",
         allLanguages: "Toutes",

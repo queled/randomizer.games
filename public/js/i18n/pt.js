@@ -219,6 +219,7 @@ const pt = {
         upcomingRestreams: "Próximas",
         pastRestreams: "Jogadas",
         watchVod: "VOD",
+        vodGone: "VOD não está mais disponível",
         restreams: "Restreams",
         noRestreams: "Nenhum restream por enquanto.",
         allLanguages: "Todos",

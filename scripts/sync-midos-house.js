@@ -7,7 +7,8 @@
  * linked to matches by start.gg set ID:
  *   - `midosHouse.schedule`: upcoming races, replaced on each sync;
  *   - `midosHouse.pastRestreams`: played races that were restreamed, kept.
- * Then looks up the Twitch VOD of past restreams, while Twitch still has it.
+ * Then looks up the Twitch VOD of past restreams, while Twitch still has it,
+ * and drops the VODs Twitch has deleted since (keeping who restreamed).
  *
  * Events without start.gg sets (Challonge, league, manual brackets) are skipped.
  *
@@ -65,7 +66,7 @@ function toEntry(race) {
     round: race.round,
     entrants: race.entrants,
     roomUrl: race.roomUrl,
-    restreams: race.restreams.map(s => ({ language: s.language, url: s.url, vodUrl: s.vodUrl || undefined }))
+    restreams: race.restreams.map(s => ({ language: s.language, url: s.url, vodUrl: s.vodUrl || undefined, vodGoneAt: s.vodGoneAt || undefined }))
   };
 }
 
@@ -74,13 +75,17 @@ function mergePastRestreams(existing, fresh) {
   const vodByStream = new Map();
   for (const race of existing) {
     for (const s of race.restreams || []) {
-      if (s.vodUrl) vodByStream.set(`${raceKey(race)}|${s.url}`, s.vodUrl);
+      if (s.vodUrl || s.vodGoneAt) vodByStream.set(`${raceKey(race)}|${s.url}`, { vodUrl: s.vodUrl, vodGoneAt: s.vodGoneAt });
     }
   }
   const byKey = new Map(existing.map(race => [raceKey(race), toEntry(race)]));
   for (const race of fresh) {
     const entry = toEntry(race);
-    entry.restreams.forEach(s => { s.vodUrl = vodByStream.get(`${raceKey(race)}|${s.url}`) || undefined; });
+    entry.restreams.forEach(s => {
+      const vod = vodByStream.get(`${raceKey(race)}|${s.url}`) || {};
+      s.vodUrl = vod.vodUrl || undefined;
+      s.vodGoneAt = vod.vodGoneAt || undefined;
+    });
     byKey.set(raceKey(race), entry);
   }
   return [...byKey.values()].sort((a, b) => new Date(b.startAt) - new Date(a.startAt));
@@ -158,13 +163,42 @@ async function clearStaleSchedules({ dryRun }, stats, syncedIds, failedEvents) {
   }
 }
 
+// VODs Twitch has deleted since they were found: the link goes, the restreamer stays
+async function checkVods({ dryRun }, stats) {
+  const tournaments = await Tournament.find({ 'midosHouse.pastRestreams.restreams.vodUrl': { $type: 'string' } })
+    .select('_id name midosHouse.pastRestreams').lean();
+  const ids = tournaments.flatMap(t => t.midosHouse.pastRestreams.flatMap(r => r.restreams.map(s => twitchVods.videoId(s.vodUrl)).filter(Boolean)));
+  if (!ids.length) return;
+
+  const existing = await twitchVods.getExistingVideoIds(ids);
+  console.log(`\n🔎 VOD vérifiées : ${new Set(ids).size}, encore en ligne : ${existing.size}`);
+  for (const tournament of tournaments) {
+    let gone = 0;
+    for (const race of tournament.midosHouse.pastRestreams) {
+      for (const stream of race.restreams) {
+        const id = twitchVods.videoId(stream.vodUrl);
+        if (!id || existing.has(id)) continue;
+        delete stream.vodUrl;
+        stream.vodGoneAt = new Date();
+        gone++;
+      }
+    }
+    if (!gone) continue;
+    console.log(`   🗑️  ${tournament.name} : ${gone} VOD supprimée(s) par Twitch`);
+    stats.vodsGone += gone;
+    if (!dryRun) {
+      await Tournament.updateOne({ _id: tournament._id }, { $set: { 'midosHouse.pastRestreams': tournament.midosHouse.pastRestreams } });
+    }
+  }
+}
+
 // Twitch VODs of the restreams played in the last 60 days that have none yet
 async function findVods({ dryRun }, stats) {
   const now = Date.now();
   const needsVod = race => {
     const start = new Date(race.startAt).getTime();
     return start > now - VOD_MAX_AGE_MS && start < now
-      && race.restreams.some(s => !s.vodUrl && twitchVods.twitchLogin(s.url));
+      && race.restreams.some(s => !s.vodUrl && !s.vodGoneAt && twitchVods.twitchLogin(s.url));
   };
 
   const tournaments = (await Tournament.find({
@@ -200,7 +234,7 @@ async function findVods({ dryRun }, stats) {
       const start = startedAtByPath.get((race.roomUrl || '').replace(/^https:\/\/racetime\.gg/, '')) || race.startAt;
       for (const stream of race.restreams) {
         const login = twitchVods.twitchLogin(stream.url);
-        if (stream.vodUrl || !login) continue;
+        if (stream.vodUrl || stream.vodGoneAt || !login) continue;
         const vodUrl = twitchVods.findVod(await getArchives(login), start);
         if (vodUrl) {
           stream.vodUrl = vodUrl;
@@ -234,7 +268,7 @@ async function main() {
   }
   console.log(`\n🏠 ${events.length} événement(s) sur Mido's House`);
 
-  const stats = { linked: 0, scheduled: 0, pastRestreams: 0, vods: 0, cleared: 0, noStartgg: 0, notFound: 0, errors: 0 };
+  const stats = { linked: 0, scheduled: 0, pastRestreams: 0, vods: 0, vodsGone: 0, cleared: 0, noStartgg: 0, notFound: 0, errors: 0 };
   const syncedIds = [];
   const failedEvents = [];
 
@@ -253,6 +287,7 @@ async function main() {
 
   if (opts.vods) {
     try {
+      await checkVods(opts, stats);
       await findVods(opts, stats);
     } catch (error) {
       console.log(`   ❌ VOD Twitch : ${error.message}`);
@@ -265,6 +300,7 @@ async function main() {
   console.log(`Races planifiées : ${stats.scheduled}`);
   console.log(`Races passées restreamées : ${stats.pastRestreams}`);
   console.log(`VOD trouvées : ${stats.vods}`);
+  console.log(`VOD supprimées par Twitch : ${stats.vodsGone}`);
   console.log(`Tournois vidés : ${stats.cleared}`);
   console.log(`Événements sans start.gg : ${stats.noStartgg}`);
   console.log(`Tournois absents de la base : ${stats.notFound}`);

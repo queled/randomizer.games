@@ -155,7 +155,9 @@ const midosHouseRaceSchema = new mongoose.Schema({
     language: String,
     url: String,
     // Twitch past broadcast, at the moment the race starts
-    vodUrl: String
+    vodUrl: String,
+    // When Twitch deleted that VOD (the channel stays as who restreamed it)
+    vodGoneAt: Date
   }]
 }, { _id: false });
 

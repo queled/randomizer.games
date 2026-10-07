@@ -176,6 +176,7 @@ const es = {
         upcomingRestreams: "Próximas",
         pastRestreams: "Jugadas",
         watchVod: "VOD",
+        vodGone: "VOD ya no disponible",
         restreams: "Restreams",
         noRestreams: "Todavía no hay restreams.",
         allLanguages: "Todos",

@@ -230,7 +230,10 @@ function restreamLinkHtml(stream) {
   const href = vod || sanitizeExternalUrl(stream.url);
   if (!href) return '';
   const label = vod ? `▶ ${i18n.t('tournamentDetail.watchVod') || 'VOD'}` : restreamChannelName(href);
-  return `<a href="${escHtml(href)}" target="_blank" rel="noopener noreferrer" data-stop-propagation title="${escHtml(restreamChannelName(stream.url))}" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.6rem; border-radius: 0.25rem; font-size: 0.8rem; color: #e9d5ff; background: #3b0764; border: 1px solid #9146ff; text-decoration: none;">
+  const title = stream.vodGoneAt && !vod
+    ? `${restreamChannelName(stream.url)} — ${i18n.t('tournamentDetail.vodGone') || 'VOD no longer available'}`
+    : restreamChannelName(stream.url);
+  return `<a href="${escHtml(href)}" target="_blank" rel="noopener noreferrer" data-stop-propagation title="${escHtml(title)}" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.6rem; border-radius: 0.25rem; font-size: 0.8rem; color: #e9d5ff; background: #3b0764; border: 1px solid #9146ff; text-decoration: none;">
     <span style="color: #c4b5fd;">${escHtml(restreamLanguageLabel(stream.language))}</span>
     <span>${escHtml(label)}</span>
   </a>`;

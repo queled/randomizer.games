@@ -178,6 +178,7 @@ const de = {
         upcomingRestreams: "Demnächst",
         pastRestreams: "Gespielt",
         watchVod: "VOD",
+        vodGone: "VOD nicht mehr verfügbar",
         restreams: "Restreams",
         noRestreams: "Noch kein Restream.",
         allLanguages: "Alle",

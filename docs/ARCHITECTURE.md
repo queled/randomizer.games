@@ -72,7 +72,7 @@ Les joueurs des tournois OoTR fixent l'horaire de leurs races sur [Mido's House]
 
 Une race encore listée « à venir » 12 h après son heure compte comme jouée : la page d'un événement terminé n'a qu'un seul tableau, sans titre « Past races ».
 
-Le script cherche ensuite la VOD Twitch de chaque restream joué depuis moins de 60 jours (`services/twitch-vods.js`, avec `TWITCH_CLIENT_ID` et `TWITCH_CLIENT_SECRET`) : la diffusion en cours à l'heure de départ de la race racetime.gg, ou à l'heure prévue si la race n'est pas en base. Le lien pointe sur ce moment de la vidéo. Twitch efface les VOD au bout de 7 à 60 jours selon la chaîne : passé ce délai, seul le lien de la chaîne reste.
+Le script cherche ensuite la VOD Twitch de chaque restream joué depuis moins de 60 jours (`services/twitch-vods.js`, avec `TWITCH_CLIENT_ID` et `TWITCH_CLIENT_SECRET`) : la diffusion en cours à l'heure de départ de la race racetime.gg, ou à l'heure prévue si la race n'est pas en base. Le lien pointe sur ce moment de la vidéo. Twitch efface les VOD au bout de 7 à 60 jours selon la chaîne (ou plus tôt, si le streamer la supprime). À chaque exécution, le script vérifie que les VOD trouvées sont encore en ligne : une VOD disparue perd son lien (`vodUrl`) et reçoit `vodGoneAt`, mais le restream garde sa chaîne et sa langue, et la page renvoie alors vers la chaîne. Une VOD disparue n'est pas recherchée à nouveau.
 
 `GET /api/tournaments/:id/matches` ajoute `scheduledAt` et `restreams` (avec `vodUrl`) à chaque match. L'onglet Restream de la page d'un tournoi liste les races à venir et jouées qui ont un restream, filtrables par langue.
 

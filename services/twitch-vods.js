@@ -57,6 +57,25 @@ async function getUserIds(logins) {
   return ids;
 }
 
+/** "twitch.tv/videos/<id>?t=…" → id */
+function videoId(url) {
+  const m = String(url || '').match(/twitch\.tv\/videos\/(\d+)/);
+  return m ? m[1] : null;
+}
+
+/** The video ids among `ids` that Twitch still has, 100 per request */
+async function getExistingVideoIds(ids) {
+  const existing = new Set();
+  const unique = [...new Set(ids)];
+  for (let i = 0; i < unique.length; i += 100) {
+    const params = new URLSearchParams();
+    unique.slice(i, i + 100).forEach(id => params.append('id', id));
+    const { data } = await helix('/videos', params);
+    (data || []).forEach(v => existing.add(v.id));
+  }
+  return existing;
+}
+
 /** Past broadcasts still kept by Twitch, newest first */
 async function getArchives(userId) {
   const { data } = await helix('/videos', { user_id: userId, type: 'archive', first: 100 });
@@ -94,4 +113,4 @@ function findVod(archives, startAt) {
   return `https://www.twitch.tv/videos/${vod.id}?t=${formatOffset(offset)}`;
 }
 
-module.exports = { twitchLogin, getUserIds, getArchives, findVod };
+module.exports = { twitchLogin, videoId, getUserIds, getArchives, getExistingVideoIds, findVod };

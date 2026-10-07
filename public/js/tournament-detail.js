@@ -572,8 +572,35 @@ function displayParticipants(participants, matches = [], options = {}) {
     });
   }
 
+  // Grouped Challonge brackets (Upper / Middle / Lower): one section per bracket, in phase order
+  const brackets = (currentTournament && currentTournament.challongeBrackets) || [];
+  const bracketIndex = p => brackets.findIndex(b => p && p.bracketChallongeId != null && Number(b.challongeId) === Number(p.bracketChallongeId));
+  const groupByBracket = brackets.length > 1 && sorted.some(p => bracketIndex(p) >= 0);
+  if (groupByBracket) {
+    const rankOf = p => { const i = bracketIndex(p); return i === -1 ? brackets.length : i; };
+    sorted = sorted.slice().sort((a, b) => rankOf(a) - rankOf(b));
+  }
+  const phaseNames = ((currentTournament && currentTournament.phases) || []).map(p => p.name);
+  let currentBracket = null;
+  let bracketStart = 0;
+
   container.innerHTML = '';
-  sorted.forEach((participant, idx) => {
+  sorted.forEach((participant, sortedIdx) => {
+    let idx = sortedIdx;
+    if (groupByBracket) {
+      const bi = bracketIndex(participant);
+      if (bi !== currentBracket) {
+        currentBracket = bi;
+        bracketStart = sortedIdx;
+        const b = brackets[bi];
+        const header = document.createElement('h3');
+        header.className = 'text-gold';
+        header.style.cssText = `font-size: 1.25rem; font-weight: bold; margin: ${sortedIdx ? '1.5rem' : '0'} 0 0.5rem;`;
+        header.textContent = b ? (b.label || phaseNames[bi] || b.name) : '—';
+        container.appendChild(header);
+      }
+      idx = sortedIdx - bracketStart;
+    }
     const row = document.createElement('div');
     row.style.cssText = 'display: flex; align-items: center; padding: 0.75rem 1rem; background-color: #1f2937; border-radius: 0.5rem; transition: background-color 0.2s;';
     row.onmouseover = () => row.style.backgroundColor = '#374151';
@@ -1087,6 +1114,11 @@ function sortPhasesChronologically(phases, matches = [], tournament = null) {
 // one first, then in phaseOrder.
 function sortPhasesNewestFirst(phaseNames, tournament, matches = []) {
   const declared = tournament && Array.isArray(tournament.phases) ? tournament.phases : [];
+  // Grouped Challonge brackets (Upper / Middle / Lower) run side by side: keep their declared order
+  if (tournament && tournament.challongeBrackets?.length) {
+    const rank = name => { const p = declared.find(ph => ph.name === name); return p && p.phaseOrder ? p.phaseOrder : Infinity; };
+    return phaseNames.slice().sort((a, b) => rank(a) - rank(b));
+  }
   const chronological = sortPhasesChronologically(declared, matches, tournament).map(p => p.name);
   const position = name => { const i = chronological.indexOf(name); return i === -1 ? chronological.length : i; };
   const phaseOrder = name => { const p = declared.find(ph => ph.name === name); return p && p.phaseOrder ? p.phaseOrder : 0; };

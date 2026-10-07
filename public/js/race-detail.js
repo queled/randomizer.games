@@ -512,7 +512,9 @@
     const channel = restreamChannelName(stream.url || href);
     const language = restreamLanguageLabel(stream.language);
     const label = vod ? '▶ ' + t('raceDetail.watchRestream', 'Watch the restream') : t('raceDetail.restream', 'Restream');
-    return `<a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(channel)}" style="display:inline-flex;align-items:center;gap:0.6rem;background-color:#1F2937;color:#E9D5FF;font-weight:600;padding:0.75rem 1.5rem;border-radius:0.5rem;border:2px solid #9146FF;text-decoration:none;transition:all 0.2s;font-size:1rem;" data-hover-style="background:#3b0764" data-rest-style="background:#1F2937"><img src="/assets/twitch.svg" alt="Twitch" style="width:22px;height:22px;"><span>${escapeHtml(label)}</span><span style="color:#c4b5fd;font-weight:400;font-size:0.875rem;">${escapeHtml([language, channel].filter(Boolean).join(' · '))}</span></a>`;
+    // Race running: the restream is live, same blinking dot as the players' LIVE buttons
+    const liveBadge = '<span style="display:inline-flex;align-items:center;gap:0.35rem;color:#fca5a5;font-size:0.8rem;font-weight:700;letter-spacing:0.03em;"><span style="width:8px;height:8px;background:#dc2626;border-radius:50%;animation:pulse 2s cubic-bezier(0.4,0,0.6,1) infinite;"></span>LIVE</span>';
+    return `<a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(channel)}" style="display:inline-flex;align-items:center;gap:0.6rem;background-color:#1F2937;color:#E9D5FF;font-weight:600;padding:0.75rem 1.5rem;border-radius:0.5rem;border:2px solid #9146FF;text-decoration:none;transition:all 0.2s;font-size:1rem;" data-hover-style="background:#3b0764" data-rest-style="background:#1F2937"><img src="/assets/twitch.svg" alt="Twitch" style="width:22px;height:22px;"><span>${escapeHtml(label)}</span>${vod ? '' : liveBadge}<span style="color:#c4b5fd;font-weight:400;font-size:0.875rem;">${escapeHtml([language, channel].filter(Boolean).join(' · '))}</span></a>`;
   }
 
   async function loadLiveStreams(race) {

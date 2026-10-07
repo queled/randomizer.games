@@ -150,7 +150,9 @@ const fr = {
         forfeit: "Forfait",
         dnf: "DNF",
         dq: "DQ",
-        inProgress: "En cours"
+        inProgress: "En cours",
+        watchRestream: "Revoir le restream",
+        restream: "Restream"
     },
     
     // Tournaments page

@@ -162,7 +162,9 @@ const en = {
         forfeit: "Forfeit",
         dnf: "DNF",
         dq: "DQ",
-        inProgress: "In Progress"
+        inProgress: "In Progress",
+        watchRestream: "Watch the restream",
+        restream: "Restream"
     },
     
     // Tournaments page

@@ -186,7 +186,9 @@ const pt = {
         forfeit: "Desistência",
         dnf: "DNF",
         dq: "DQ",
-        inProgress: "Em Andamento"
+        inProgress: "Em Andamento",
+        watchRestream: "Ver o restream",
+        restream: "Restream"
     },
     
     // Tournaments page

@@ -143,7 +143,9 @@ const it = {
         forfeit: "Ritirato",
         dnf: "DNF",
         dq: "DQ",
-        inProgress: "In corso"
+        inProgress: "In corso",
+        watchRestream: "Guarda il restream",
+        restream: "Restream"
     },
     
     // Tournaments page

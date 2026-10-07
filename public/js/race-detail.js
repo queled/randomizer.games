@@ -441,6 +441,70 @@
     return `<a href="${escapeHtml(vod.vodUrl)}" target="_blank" rel="noopener noreferrer" class="btn-twitch" title="twitch.tv/${escapeHtml(vod.twitchName || '')}" style="margin:0 0 0 0.6rem;flex-shrink:0;"><img src="/assets/twitch.svg" alt="Twitch">▶ ${escapeHtml(label)}</a>`;
   }
 
+  // Mido's House names restream languages in English
+  const RESTREAM_LANGUAGE_CODES = { English: 'en', French: 'fr', German: 'de', Spanish: 'es', Italian: 'it', Portuguese: 'pt', Japanese: 'ja' };
+
+  function restreamLanguageLabel(language) {
+    const code = RESTREAM_LANGUAGE_CODES[language];
+    if (!code) return language || '';
+    try {
+      const uiLang = (typeof i18n !== 'undefined' && typeof i18n.getLanguage === 'function') ? i18n.getLanguage() : 'en';
+      const name = new Intl.DisplayNames([uiLang], { type: 'language' }).of(code);
+      return name ? name.charAt(0).toUpperCase() + name.slice(1) : language;
+    } catch (e) {
+      return language;
+    }
+  }
+
+  function restreamChannelName(url) {
+    try {
+      const u = new URL(url);
+      const channel = u.pathname.split('/').filter(Boolean)[0];
+      if (!channel || channel === 'videos' || channel === 'watch' || /youtu\.?be/.test(u.hostname)) return u.hostname.replace(/^www\./, '');
+      return channel;
+    } catch (e) {
+      return url;
+    }
+  }
+
+  function racetimeRoomPath(url) {
+    return String(url || '').replace(/^https?:\/\/(?:www\.)?racetime\.gg/i, '').replace(/\/+$/, '').toLowerCase();
+  }
+
+  // Restreams of this race on Mido's House: by its racetime.gg room, else the race of its start.gg set starting at the same time
+  function findRestreams(race, tournament) {
+    const mh = tournament?.midosHouse;
+    if (!mh) return [];
+    const entries = (mh.pastRestreams || []).concat(mh.schedule || []).filter(r => Array.isArray(r.restreams) && r.restreams.length);
+    const room = racetimeRoomPath(race.url);
+    const byRoom = entries.find(r => r.roomUrl && racetimeRoomPath(r.roomUrl) === room);
+    if (byRoom) return byRoom.restreams;
+
+    const match = (tournament.matches || []).find(m => (Array.isArray(m.raceUrls) && m.raceUrls.length ? m.raceUrls : [m.raceUrl])
+      .some(url => url && racetimeRoomPath(url) === room));
+    const start = new Date(race.startedAt || race.openedAt || 0).getTime();
+    if (!match?.startggSetId || !start) return [];
+    const bySet = entries
+      .filter(r => !r.roomUrl && String(r.startggSetId) === String(match.startggSetId) && r.startAt)
+      .map(r => ({ r, gap: Math.abs(new Date(r.startAt).getTime() - start) }))
+      .filter(x => x.gap < 60 * 60 * 1000)
+      .sort((a, b) => a.gap - b.gap)[0];
+    return bySet ? bySet.r.restreams : [];
+  }
+
+  // Restream button: the VOD at the race start while Twitch keeps it, else the channel
+  function renderRestreamLink(stream) {
+    const vod = /^https:\/\/www\.twitch\.tv\/videos\/\d+/.test(stream.vodUrl || '') ? sanitizeExternalUrl(stream.vodUrl) : '';
+    const href = vod || sanitizeExternalUrl(stream.url);
+    if (!href) return '';
+    const t = (key, fallback) => (typeof i18n !== 'undefined' && i18n.t(key)) || fallback;
+    const channel = restreamChannelName(stream.url || href);
+    const language = restreamLanguageLabel(stream.language);
+    const label = vod ? '▶ ' + t('raceDetail.watchRestream', 'Watch the restream') : t('raceDetail.restream', 'Restream');
+    const title = stream.vodGoneAt && !vod ? `${channel} — ${t('tournamentDetail.vodGone', 'VOD no longer available')}` : channel;
+    return `<a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(title)}" style="display:inline-flex;align-items:center;gap:0.6rem;background-color:#1F2937;color:#E9D5FF;font-weight:600;padding:0.75rem 1.5rem;border-radius:0.5rem;border:2px solid #9146FF;text-decoration:none;transition:all 0.2s;font-size:1rem;" data-hover-style="background:#3b0764" data-rest-style="background:#1F2937"><img src="/assets/twitch.svg" alt="Twitch" style="width:22px;height:22px;"><span>${escapeHtml(label)}</span><span style="color:#c4b5fd;font-weight:400;font-size:0.875rem;">${escapeHtml([language, channel].filter(Boolean).join(' · '))}</span></a>`;
+  }
+
   async function loadLiveStreams(race) {
     if (!race?._id || !LIVE_RACE_STATUSES.includes(race.status)) return;
     try {
@@ -615,6 +679,10 @@
             tournamentNameEl.href = '/tournament-detail.html?id=' + encodeURIComponent(race.tournamentId);
             tournamentLinkDiv.style.display = 'block';
             applyRaceSeo(race, gameDisplayName, tournament);
+          }
+          const restreamLinks = findRestreams(race, tournament || {}).map(renderRestreamLink).filter(Boolean);
+          if (restreamLinks.length) {
+            linksEl.insertAdjacentHTML('beforeend', restreamLinks.join(''));
           }
         } catch (e) {
           // Tournament not found, ignore

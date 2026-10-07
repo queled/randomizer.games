@@ -145,7 +145,9 @@ const de = {
         forfeit: "Aufgegeben",
         dnf: "DNF",
         dq: "DQ",
-        inProgress: "Laufend"
+        inProgress: "Laufend",
+        watchRestream: "Restream ansehen",
+        restream: "Restream"
     },
     
     // Tournaments page

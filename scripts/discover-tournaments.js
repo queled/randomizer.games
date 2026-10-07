@@ -11,7 +11,7 @@
  *   node scripts/discover-tournaments.js --source challonge   # Challonge only
  *   node scripts/discover-tournaments.js --dry-run            # Preview without importing
  *   node scripts/discover-tournaments.js --keywords "keyword1,keyword2"  # Extra keywords
- *   node scripts/discover-tournaments.js --max-pages 5        # Limit pagination
+ *   node scripts/discover-tournaments.js --max-pages 5        # Limit pagination (start.gg short-name queries: 5 max)
  *   node scripts/discover-tournaments.js --since 2024-01-01   # Only tournaments after date
  *   node scripts/discover-tournaments.js --game ootr          # Only search for a specific game
  *   node scripts/discover-tournaments.js --source startgg --game oot --startgg-slug tournament/example
@@ -49,12 +49,10 @@ const RANDOMIZER_SIGNAL_KEYWORDS = [
   'archipelago'
 ];
 
-// Extra suffixes used to build targeted search queries from known game aliases
-const QUERY_SUFFIX_KEYWORDS = [
-  'randomizer',
-  'multiworld',
-  'archipelago'
-];
+// Searched once for all games; distinctive randomizer short names are added per game
+const STARTGG_GENERIC_QUERIES = ['randomizer', 'randomiser', 'rando', 'multiworld', 'archipelago'];
+// Short-name queries ("sotn", "tpr"...) can match thousands of unrelated tournaments
+const STARTGG_ALIAS_MAX_PAGES = 5;
 
 // ─── CLI argument parsing ────────────────────────────────────────────────────
 
@@ -113,6 +111,20 @@ function parseArgs() {
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// start.gg allows ~80 requests/min, and one full tournament fetch costs several: wait out 429s
+async function withStartGGRetry(call, attempts = 3) {
+  for (let attempt = 1; ; attempt++) {
+    await sleep(RATE_LIMIT_MS);
+    try {
+      return await call();
+    } catch (err) {
+      if (err.response?.status !== 429 || attempt >= attempts) throw err;
+      console.log(`   ⏳ start.gg rate limit, retrying in 60s (${attempt}/${attempts - 1})`);
+      await sleep(60000);
+    }
+  }
 }
 
 const playerKey = value => String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -218,42 +230,59 @@ function buildTournamentSearchText(tournament) {
   return normalizeText(`${tournament.name || ''} ${eventText}`);
 }
 
-function buildStartGGSearchQueries(game, extraKeywords = []) {
-  const queries = new Set();
+const containsWord = (text, word) => new RegExp(`(^|[^a-z0-9])${escapeRegExp(word)}([^a-z0-9]|$)`).test(text);
 
-  if (!game) return [];
-
-  const aliases = getGameAliases(game);
-  const randomizerAliases = getRandomizerAliases(game);
-
-  for (const alias of randomizerAliases) {
-    queries.add(alias);
-  }
-
-  for (const alias of aliases.slice(0, 8)) {
-    if (
-      alias.includes('randomizer') ||
-      alias.includes('randomiser') ||
-      alias.includes('rando') ||
-      alias.includes('multiworld') ||
-      alias.includes('archipelago')
-    ) {
-      queries.add(alias);
-      continue;
-    }
-
-    for (const suffix of QUERY_SUFFIX_KEYWORDS) {
-      queries.add(`${alias} ${suffix}`);
-    }
-  }
-
-  for (const keyword of extraKeywords || []) {
-    const normalized = normalizeText(keyword);
-    if (normalized) queries.add(normalized);
-  }
-
-  return [...queries];
+// Short names that only mean the randomizer ("ootr", "alttpr", "smz3"...): searched on their own
+function getDistinctiveRandomizerAliases(game) {
+  return uniqueNormalized([
+    game.randomizer?.shortName,
+    game.randomizer?.tinyName,
+    ...(game.integrations?.startgg?.searchKeywords || [])
+  ]).filter(alias => alias.length >= 3
+    && alias !== normalizeText(game.id)
+    && !RANDOMIZER_SIGNAL_KEYWORDS.some(keyword => alias.includes(keyword)));
 }
+
+/**
+ * start.gg searches whole words in tournament names, so "zelda randomizer" adds nothing to
+ * "randomizer": one pass over the generic keywords + the distinctive short names covers every game.
+ */
+function buildStartGGSearchQueries(games, extraKeywords = []) {
+  return uniqueNormalized([
+    ...STARTGG_GENERIC_QUERIES,
+    ...games.flatMap(getDistinctiveRandomizerAliases),
+    ...(extraKeywords || [])
+  ]);
+}
+
+/**
+ * Strict game match for global search results, where loose aliases ("air", "adventure")
+ * hit hundreds of unrelated events: start.gg game, then names that only mean the randomizer.
+ */
+function matchStartGGGame(tournament, games) {
+  const text = buildTournamentSearchText(tournament);
+  const eventGames = (tournament.events || []).map(event => ({ id: Number(event.game?.id), name: normalizeText(event.game?.name) }));
+
+  const byGameId = games.find(game => eventGames.some(event => event.id === Number(game.integrations?.startgg?.videogameId)));
+  if (byGameId) return { game: byGameId, reason: 'startggGameId' };
+
+  const byGameName = games.find(game => {
+    const names = uniqueNormalized([game.name, game.official?.name]);
+    return eventGames.some(event => event.name && names.includes(event.name));
+  });
+  if (byGameName) return { game: byGameName, reason: 'startggGameName' };
+
+  for (const game of games) {
+    const alias = getDistinctiveRandomizerAliases(game).find(a => a.length >= 4 && !a.includes(' ') && containsWord(text, a))
+      || uniqueNormalized([game.randomizer?.displayName, game.randomizer?.name])
+        .find(a => /randomi[sz]er/.test(a) && a.length >= 8 && text.includes(a));
+    if (alias) return { game, reason: 'alias', alias };
+  }
+  return null;
+}
+
+// "rando" as a word, not "random": FGC "random select" brackets are not randomizers
+const RANDOMIZER_SIGNAL_PATTERN = /(^|[^a-z0-9])(randomi[sz]er|rando|multi-?world|archipelago)([^a-z0-9]|$)/;
 
 function formatMaxPages(maxPages) {
   return maxPages == null ? '∞' : String(maxPages);
@@ -418,13 +447,13 @@ async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun,
     (tournament.events || []).some(event => existingStartggIds.has(String(event.id)))
   );
 
-  const inspectTournament = async (tournament, game) => {
+  const inspectTournament = async (tournament, game, matched = false) => {
     if (!tournament?.slug || seenSlugs.has(tournament.slug)) return;
     seenSlugs.add(tournament.slug);
     stats.found++;
 
     // A curated source (Mido's House) already guarantees the game: names rarely say "randomizer"
-    const accepted = forceGame || (trustSource ? Boolean(findMatchingGame(tournament, [game])) : isRandomizerTournament(tournament, [game]));
+    const accepted = matched || forceGame || (trustSource ? Boolean(findMatchingGame(tournament, [game])) : isRandomizerTournament(tournament, [game]));
     if (!accepted) return;
 
     if (isAlreadyImported(tournament)) {
@@ -454,8 +483,7 @@ async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun,
   for (const rawSlug of tournamentSlugs) {
     const slug = normalizeStartGGSlug(rawSlug);
     try {
-      await sleep(RATE_LIMIT_MS);
-      const tournament = await api.getTournament(slug, { details: false });
+      const tournament = await withStartGGRetry(() => api.getTournament(slug, { details: false }));
       if (!tournament) {
         console.warn(`   ⚠️  Start.gg tournament not found: ${slug}`);
         continue;
@@ -478,40 +506,61 @@ async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun,
 
   if (tournamentSlugs.length) return stats;
 
-  for (const game of games) {
-    const searchQueries = buildStartGGSearchQueries(game, keywords);
-    console.log(`\n   🎮 Game: ${game.id} — ${game.name}`);
-    console.log(`      Queries: ${searchQueries.slice(0, 8).join(', ')}${searchQueries.length > 8 ? ` ... (+${searchQueries.length - 8} more)` : ''}`);
-    console.log(`      Max pages: ${formatMaxPages(maxPages)}`);
+  const searchQueries = buildStartGGSearchQueries(games, keywords);
+  const genericQueries = new Set(STARTGG_GENERIC_QUERIES);
+  console.log(`   ${searchQueries.length} queries (generic keywords + randomizer short names), alias queries capped at ${STARTGG_ALIAS_MAX_PAGES} pages`);
 
-    for (const searchQuery of searchQueries) {
-      console.log(`\n      🔎 Searching: "${searchQuery}"`);
+  const results = new Map(); // slug → tournament, a tournament often answers several queries
+  for (const [index, searchQuery] of searchQueries.entries()) {
+    const pageLimit = genericQueries.has(searchQuery)
+      ? maxPages
+      : Math.min(maxPages ?? STARTGG_ALIAS_MAX_PAGES, STARTGG_ALIAS_MAX_PAGES);
 
-      for (let page = 1; maxPages == null || page <= maxPages; page++) {
-        try {
-          await sleep(RATE_LIMIT_MS);
+    for (let page = 1; pageLimit == null || page <= pageLimit; page++) {
+      try {
+        const searchOpts = { perPage: STARTGG_RESULTS_PER_PAGE, page };
+        if (since) searchOpts.afterDate = since;
 
-          const searchOpts = { perPage: STARTGG_RESULTS_PER_PAGE, page };
-          if (since) searchOpts.afterDate = since;
+        const result = await withStartGGRetry(() => api.searchTournaments(searchQuery, searchOpts));
+        if (!result.tournaments.length) break;
 
-          const result = await api.searchTournaments(searchQuery, searchOpts);
-
-          if (!result.tournaments.length) break;
-
-          console.log(`         Page ${page}/${result.totalPages} – ${result.tournaments.length} results (total: ${result.total})`);
-
-          for (const tournament of result.tournaments) {
-            await inspectTournament(tournament, game);
-          }
-
-          if (page >= result.totalPages) break;
-
-        } catch (err) {
-          console.error(`         ❌ Search error page ${page}: ${err.message}`);
-          stats.errors++;
-          break;
+        for (const tournament of result.tournaments) {
+          if (tournament?.slug && !results.has(tournament.slug)) results.set(tournament.slug, tournament);
         }
+        if (page >= result.totalPages) break;
+      } catch (err) {
+        console.error(`   ❌ Search error "${searchQuery}" page ${page}: ${err.message}`);
+        stats.errors++;
+        break;
       }
+    }
+
+    if ((index + 1) % 50 === 0) console.log(`   … ${index + 1}/${searchQueries.length} queries, ${results.size} tournaments seen`);
+  }
+
+  console.log(`\n   ${results.size} tournaments seen, checking games...`);
+  const toReview = [];
+  for (const tournament of results.values()) {
+    const text = buildTournamentSearchText(tournament);
+    const match = matchStartGGGame(tournament, games);
+    const hasSignal = RANDOMIZER_SIGNAL_PATTERN.test(text) || match?.reason === 'alias';
+
+    if (!hasSignal) continue;
+    if (!match) {
+      if (!isAlreadyImported(tournament)) toReview.push(tournament);
+      continue;
+    }
+
+    console.log(`   ✓ ${tournament.name} → ${match.game.id} (${match.reason}${match.alias ? `: ${match.alias}` : ''})`);
+    await inspectTournament(tournament, match.game, true);
+  }
+
+  // Named like a randomizer but not tied to a tracked game: import by hand with --game + --startgg-slug
+  if (toReview.length) {
+    console.log(`\n   🔍 ${toReview.length} randomizer-like tournament(s) without a matching game (check, then --game <id> --startgg-slug <slug>):`);
+    for (const tournament of toReview) {
+      const eventGames = [...new Set((tournament.events || []).map(event => event.game?.name).filter(Boolean))].join(', ');
+      console.log(`      • ${tournament.name} [${eventGames || 'no game'}] – ${tournament.slug}`);
     }
   }
 
@@ -546,8 +595,7 @@ async function importStartGGTournament(api, tournamentPreview, { game = null, di
 
   console.log(`      ⬇️  Importing: ${tournamentPreview.name}`);
 
-  await sleep(RATE_LIMIT_MS);
-  const tournamentData = await api.getTournament(slug);
+  const tournamentData = await withStartGGRetry(() => api.getTournament(slug));
 
   if (!tournamentData || !tournamentData.events?.length) {
     console.log(`      ⚠️  No events found for ${tournamentPreview.name}`);

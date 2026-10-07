@@ -2,6 +2,7 @@ const {
   rankMatchesForRace,
   selectBestCandidate,
   learnPlayerAliases,
+  normalizeName,
   getMatchPlayers,
   getRaceLabel,
   scoreNameMatch,
@@ -484,7 +485,22 @@ async function loadPlayerAliases({ Race, races }) {
     matchPlayers: { $nin: [null, ''] },
     matchConfidence: { $gte: ALIAS_MIN_CONFIDENCE }
   }).select('entrants.userName matchPlayers').lean();
-  return learnPlayerAliases(linkedRaces);
+  const aliases = learnPlayerAliases(linkedRaces);
+
+  // Aliases set on player profiles (SRL account "anatomyz" = bracket name "atz")
+  const Player = Race.db.models.Player;
+  if (!Player) return aliases;
+  const players = await Player.find({ 'aliases.0': { $exists: true } }).select('name aliases').lean();
+  for (const player of players) {
+    const names = [...new Set([player.name, ...player.aliases].map(normalizeName).filter(Boolean))];
+    for (const name of names) {
+      if (!aliases.has(name)) aliases.set(name, new Set());
+      for (const other of names) {
+        if (other !== name) aliases.get(name).add(other);
+      }
+    }
+  }
+  return aliases;
 }
 
 async function buildAutoLinkPreview({

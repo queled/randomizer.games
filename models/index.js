@@ -148,12 +148,17 @@ const midosHouseRaceSchema = new mongoose.Schema({
   startggSetId: String,
   startAt: Date,
   round: String,
+  // Game number when the set is played over several races
+  game: Number,
   entrants: [String],
   roomUrl: String,
   restreams: [{
     _id: false,
     language: String,
+    // The channel; the video itself when Mido's House links to a video whose channel is unknown
     url: String,
+    // The link as Mido's House gives it (a channel, or a VOD for older events)
+    sourceUrl: String,
     // Twitch past broadcast, at the moment the race starts
     vodUrl: String,
     // When Twitch deleted that VOD (the channel stays as who restreamed it)

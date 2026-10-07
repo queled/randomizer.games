@@ -72,13 +72,19 @@ Les joueurs des tournois OoTR fixent l'horaire de leurs races sur [Mido's House]
 
 Une race encore listée « à venir » 12 h après son heure compte comme jouée : la page d'un événement terminé n'a qu'un seul tableau, sans titre « Past races ».
 
-Le script cherche ensuite la VOD Twitch de chaque restream joué depuis moins de 60 jours (`services/twitch-vods.js`, avec `TWITCH_CLIENT_ID` et `TWITCH_CLIENT_SECRET`) : la diffusion en cours à l'heure de départ de la race racetime.gg, ou à l'heure prévue si la race n'est pas en base. Le lien pointe sur ce moment de la vidéo. Twitch efface les VOD au bout de 7 à 60 jours selon la chaîne (ou plus tôt, si le streamer la supprime). À chaque exécution, le script vérifie que les VOD trouvées sont encore en ligne : une VOD disparue perd son lien (`vodUrl`) et reçoit `vodGoneAt`, mais le restream garde sa chaîne et sa langue, et la page renvoie alors vers la chaîne. Une VOD disparue n'est pas recherchée à nouveau.
+Le script cherche ensuite la VOD de chaque restream joué, de trois façons :
+
+1. **Lien de Mido's House** : pour les anciens événements, Mido's House donne souvent la vidéo elle-même (`twitch.tv/videos/…`, YouTube) au lieu de la chaîne. Elle devient la VOD, et la chaîne de la vidéo Twitch, demandée à Twitch, garde la trace de qui a restreamé. Le lien d'origine reste dans `sourceUrl`.
+2. **Rediffusion Twitch** (`services/twitch-vods.js`, avec `TWITCH_CLIENT_ID` et `TWITCH_CLIENT_SECRET`) : pour les restreams joués depuis moins de 60 jours, la diffusion en cours à l'heure de départ de la race racetime.gg (ou à l'heure prévue si la race n'est pas en base). Le lien pointe sur ce moment de la vidéo.
+3. **Temps forts et vidéos mises en ligne** : Twitch les garde sans limite de durée. Une vidéo de la chaîne convient si son titre contient le nom des deux joueurs (pseudo Mido's House ou start.gg), si elle a été créée après la race, et si le titre ne nomme ni un autre tournoi ni une autre saison. Pour une série en plusieurs races, le numéro de manche (`game`, calculé dans l'ordre des races du set) doit correspondre au « Game N » du titre. En routine, seules les races des 60 derniers jours sont cherchées ; `--archive` les cherche toutes.
+
+Twitch efface les rediffusions au bout de 7 à 60 jours selon la chaîne (ou plus tôt, si le streamer les supprime). À chaque exécution, le script vérifie que les VOD Twitch trouvées sont encore en ligne : une VOD disparue perd son lien (`vodUrl`) et reçoit `vodGoneAt`, mais le restream garde sa chaîne et sa langue, et la page renvoie alors vers la chaîne.
 
 `GET /api/tournaments/:id/matches` ajoute `scheduledAt` et `restreams` (avec `vodUrl`) à chaque match. L'onglet Restream de la page d'un tournoi liste les races à venir et jouées qui ont un restream, filtrables par langue.
 
 Pour reprendre les événements terminés (une seule fois) : `node scripts/sync-midos-house.js --archive`.
 
-Les événements sans sets start.gg (Challonge, league, brackets gérés sur Mido's House) sont ignorés.
+Un événement sans sets start.gg (Challonge, bracket géré sur Mido's House) est rattaché au tournoi auquel sont liées ses races racetime.gg, si au moins 5 d'entre elles (et un tiers de ses rooms) y mènent : c'est le cas des Standard S6 et S7 et des RSL S2 et S3. Les restreams y sont reliés aux matchs par leur room racetime.gg. Les autres événements (Tournoi Francophone, Scrubs, SpeedGaming, league…) n'ont pas de tournoi en base et sont ignorés.
 
 ## Modèle de données
 

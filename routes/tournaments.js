@@ -167,6 +167,21 @@ router.get('/:id', validateObjectId('id'), async (req, res, next) => {
   }
 });
 
+// "https://racetime.gg/ootr/room" or "/ootr/room" → "/ootr/room"
+function racetimeRoomPath(url) {
+  return String(url || '').replace(/^https?:\/\/(?:www\.)?racetime\.gg/i, '').replace(/\/+$/, '') || null;
+}
+
+// Restreams of the played races on Mido's House, by racetime.gg room
+function midosHouseStreamsByRoom(tournament) {
+  const byRoom = new Map();
+  for (const entry of tournament?.midosHouse?.pastRestreams || []) {
+    const room = racetimeRoomPath(entry.roomUrl);
+    if (room) byRoom.set(room, (byRoom.get(room) || []).concat(entry.restreams || []));
+  }
+  return byRoom;
+}
+
 // Get tournament matches
 router.get('/:id/matches', validateObjectId('id'), async (req, res, next) => {
   try {
@@ -190,6 +205,10 @@ router.get('/:id/matches', validateObjectId('id'), async (req, res, next) => {
         if (!pastStreamsBySet.has(entry.startggSetId)) pastStreamsBySet.set(entry.startggSetId, []);
         pastStreamsBySet.get(entry.startggSetId).push(...(entry.restreams || []));
       }
+      // Events without start.gg sets on Mido's House: by the match's racetime.gg rooms
+      const pastStreamsByRoom = midosHouseStreamsByRoom(tournament);
+      const streamsOfRooms = m => (Array.isArray(m.raceUrls) && m.raceUrls.length ? m.raceUrls : [m.raceUrl])
+        .flatMap(url => pastStreamsByRoom.get(racetimeRoomPath(url)) || []);
 
       // Start.gg tournament - return embedded matches formatted like Challonge matches
       const formattedMatches = tournament.matches.map(m => {
@@ -304,7 +323,7 @@ router.get('/:id/matches', validateObjectId('id'), async (req, res, next) => {
           identifier: m.phaseGroup ? `${m.phaseGroup}-R${m.round}` : `R${m.round}`,
           scheduledAt: (!m.completedAt && nextRaceBySet.get(String(m.startggSetId))?.startAt) || null,
           restreams: (m.completedAt
-            ? pastStreamsBySet.get(String(m.startggSetId))
+            ? pastStreamsBySet.get(String(m.startggSetId)) || streamsOfRooms(m)
             : nextRaceBySet.get(String(m.startggSetId))?.restreams) || []
         };
       });
@@ -314,7 +333,13 @@ router.get('/:id/matches', validateObjectId('id'), async (req, res, next) => {
     
     // Challonge tournament - fetch from Match collection
     const matches = await Match.find({ tournamentId: req.params.id })
-      .sort({ round: 1, completedAt: -1 });
+      .sort({ round: 1, completedAt: -1 })
+      .lean();
+
+    const pastStreamsByRoom = midosHouseStreamsByRoom(tournament);
+    if (pastStreamsByRoom.size) {
+      matches.forEach(m => { m.restreams = pastStreamsByRoom.get(racetimeRoomPath(m.raceUrl)) || []; });
+    }
 
     res.json({ matches });
   } catch (error) {

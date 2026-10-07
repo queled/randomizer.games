@@ -218,7 +218,9 @@ function restreamChannelName(url) {
   try {
     const u = new URL(url);
     const channel = u.pathname.split('/').filter(Boolean)[0];
-    return channel ? `${u.hostname.replace(/^www\./, '')}/${channel}` : u.hostname;
+    // A video link (channel unknown) or a YouTube video: just the site
+    if (!channel || channel === 'videos' || channel === 'watch' || /youtu\.?be/.test(u.hostname)) return u.hostname.replace(/^www\./, '');
+    return `${u.hostname.replace(/^www\./, '')}/${channel}`;
   } catch (e) {
     return url;
   }

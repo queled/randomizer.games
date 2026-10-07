@@ -38,10 +38,15 @@ async function helix(path, params) {
   return data;
 }
 
-/** "twitch.tv/<login>" → login, null for other sites */
+/** "twitch.tv/<login>" → login, null for videos and other sites */
 function twitchLogin(url) {
-  const m = String(url || '').match(/^https?:\/\/(?:www\.|m\.)?twitch\.tv\/([A-Za-z0-9_]+)\/?$/);
-  return m ? m[1].toLowerCase() : null;
+  const m = String(url || '').match(/^https?:\/\/(?:www\.|m\.)?twitch\.tv\/([A-Za-z0-9_]+)\/?(?:[?#].*)?$/);
+  return m && m[1].toLowerCase() !== 'videos' ? m[1].toLowerCase() : null;
+}
+
+/** YouTube video link */
+function isYoutubeVideo(url) {
+  return /^https?:\/\/(?:www\.|m\.)?(?:youtube\.com\/(?:watch|live\/)|youtu\.be\/)/.test(String(url || ''));
 }
 
 /** login → user id, 100 logins per request */
@@ -63,17 +68,41 @@ function videoId(url) {
   return m ? m[1] : null;
 }
 
-/** The video ids among `ids` that Twitch still has, 100 per request */
-async function getExistingVideoIds(ids) {
-  const existing = new Set();
+/** Videos Twitch still has among `ids` (id → video), 100 per request */
+async function getVideos(ids) {
+  const videos = new Map();
   const unique = [...new Set(ids)];
   for (let i = 0; i < unique.length; i += 100) {
     const params = new URLSearchParams();
     unique.slice(i, i + 100).forEach(id => params.append('id', id));
     const { data } = await helix('/videos', params);
-    (data || []).forEach(v => existing.add(v.id));
+    (data || []).forEach(v => videos.set(v.id, v));
   }
-  return existing;
+  return videos;
+}
+
+/** The video ids among `ids` that Twitch still has */
+async function getExistingVideoIds(ids) {
+  return new Set((await getVideos(ids)).keys());
+}
+
+/**
+ * Highlights and uploads of a channel: unlike past broadcasts, Twitch keeps them.
+ * At most `max` of each type, newest first.
+ */
+async function getKeptVideos(userId, max = 1000) {
+  const videos = [];
+  for (const type of ['highlight', 'upload']) {
+    let cursor;
+    let count = 0;
+    do {
+      const { data, pagination } = await helix('/videos', { user_id: userId, type, first: 100, after: cursor });
+      videos.push(...(data || []));
+      count += (data || []).length;
+      cursor = pagination && pagination.cursor;
+    } while (cursor && count < max);
+  }
+  return videos;
 }
 
 /** Past broadcasts still kept by Twitch, newest first */
@@ -113,4 +142,4 @@ function findVod(archives, startAt) {
   return `https://www.twitch.tv/videos/${vod.id}?t=${formatOffset(offset)}`;
 }
 
-module.exports = { twitchLogin, videoId, getUserIds, getArchives, getExistingVideoIds, findVod };
+module.exports = { twitchLogin, isYoutubeVideo, videoId, getUserIds, getArchives, getVideos, getExistingVideoIds, getKeptVideos, findVod };

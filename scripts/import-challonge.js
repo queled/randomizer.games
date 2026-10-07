@@ -3,12 +3,11 @@
 
 const mongoose = require('mongoose');
 const path = require('path');
-require('dotenv').config({ path: path.resolve(process.cwd(), '.env') });
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+const connectDB = require('../config/database');
 const sanitizeHtml = require('sanitize-html');
 const challonge = require('../services/challonge');
 const findGameForTournament = require('../helpers/findGameForTournament');
-
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/randomizer';
 
 function parseChallongeId(input){
   if(!input) return null;
@@ -34,7 +33,7 @@ async function main(){
   const challongeId = parseChallongeId(raw);
   if(!challongeId){ console.error('Unable to parse Challonge id'); process.exit(1); }
 
-  await mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+  await connectDB();
   const { Tournament, Match } = require('../models');
 
   console.log('Fetching tournament from Challonge:', challongeId);

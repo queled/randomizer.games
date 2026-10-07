@@ -14,12 +14,11 @@
 
 const mongoose = require('mongoose');
 const path = require('path');
-require('dotenv').config({ path: path.resolve(process.cwd(), '.env') });
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+const connectDB = require('../config/database');
 const sanitizeHtml = require('sanitize-html');
 const StartGGAPI = require('../services/startgg');
 const findGameForTournament = require('../helpers/findGameForTournament');
-
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/randomizer';
 
 function parseStartGGSlug(input) {
   if (!input) return null;
@@ -60,7 +59,7 @@ async function main() {
   console.log(`\n📊 Importing tournament from start.gg: ${slug}\n`);
 
   // Connect to MongoDB
-  await mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+  await connectDB();
   const { Tournament } = require('../models');
 
   const api = new StartGGAPI();

@@ -37,7 +37,7 @@ Tous les workflows tournent sur Node 20 et écrivent directement dans la base de
 |----------|-----------|---------------|
 | `sync-racetime.yml` | toutes les 5 min | `sync-racetime-global.js` : nouvelles courses, finalisation des courses bloquées « en cours » depuis plus de 24 h, rattrapage des courses terminées entre deux exécutions |
 | `sync-racetime-game-full.yml` | manuel | `sync-racetime-game.js` : resynchronisation complète d'un jeu (paramètres `game_slug`, `max_pages`) |
-| `sync-rando-list.yml` | tous les jours à 6h UTC | `check-rando-list-changes.js` vérifie si rando-list a changé ; si oui, `sync-rando-list-v3.js --detect-new` met à jour le cache et les ressources, puis signale les nouveaux jeux |
+| `sync-rando-list.yml` | tous les jours à 6h UTC | `check-rando-list-changes.js` vérifie si rando-list a changé ; si oui, `sync-rando-list.js --detect-new` met à jour le cache et les ressources, puis signale les nouveaux jeux, à créer depuis le panneau admin |
 | `sync-tournaments-discover.yml` | tous les jours à 7h UTC | `discover-tournaments.js` : cherche de nouveaux tournois sur start.gg et Challonge (paramètres `dry_run`, `source`, `days`) |
 | `sync-tournaments-update.yml` | toutes les 15 min | `sync-tournaments.js --update-only` met à jour les tournois actifs, puis `auto-link-tournaments.js` rattache les courses aux matchs |
 
@@ -110,7 +110,7 @@ Les scripts qui écrivent en base proposent un mode `--dry-run` (ou n'écrivent 
 |--------|--------------|------|
 | `sync-racetime-global.js` | `sync:racetime` | Nouvelles courses racetime.gg (workflow 5 min) |
 | `sync-racetime-game.js` | — | Toutes les courses d'un jeu (workflow manuel, admin) |
-| `sync-rando-list-v3.js` | `sync-rando-list`, `:detect`, `:link` | Cache rando-list, ressources, nouveaux jeux |
+| `sync-rando-list.js` | `sync-rando-list`, `:detect`, `:link` | Cache rando-list, ressources, nouveaux jeux |
 | `check-rando-list-changes.js` | — | Indique au workflow si rando-list a changé |
 | `discover-tournaments.js` | `discover:tournaments` (+ `:dry`, `:startgg`, `:challonge`) | Découverte de tournois |
 | `sync-tournaments.js` | `sync:tournaments` (+ `:dry`, `:update`) | Mise à jour des tournois actifs |
@@ -132,19 +132,13 @@ Les scripts qui écrivent en base proposent un mode `--dry-run` (ou n'écrivent 
 | `enrich-games.js` | `enrich-games` | Complète les jeux via speedrun.com et racetime.gg |
 | `enrich-twitch.js` | — | Associe les jeux à leurs catégories Twitch |
 | `import-games-csv.js` | `import-games <fichier.csv>` | Import de jeux depuis un CSV (modèle : [`data/games-template.csv`](../data/games-template.csv)) |
-| `import-new-games-from-report.js` | — | Crée les jeux listés par `sync-rando-list-v3.js --detect-new` |
 | `import-multiworld-manual.js` | `import:multiworld-manual` | Marque les jeux disponibles sur Archipelago / Multiworld |
-| `setup-alttp-community-resources.js` | `setup:alttp-resources` | Ressources communautaires d'ALttP |
 
 ### Maintenance
 
 | Script | Commande npm | Rôle |
 |--------|--------------|------|
 | `unlink-race.js` | — | Détache une course de son match (aussi depuis l'admin) |
-| `cleanup-race-duplicates.js` | `cleanup:race-duplicates` | Fusionne les courses en double |
-| `normalize-race-urls.js` | `normalize:race-urls` | Corrige les URLs de courses mal formées |
-| `merge-challonge-brackets.js` | — | Regroupe plusieurs brackets Challonge en un tournoi |
-| `backfill-startgg-teams.js` | — | Ajoute les équipes aux anciens tournois start.gg en co-op |
 | `migrations/*.js` | — | Migrations ponctuelles, idempotentes |
 | `backup-db.js` | `db:backup` | Export JSON de toutes les collections dans `backups/` |
 | `check-security.js` | `check-security` | Vérifications avant déploiement (lancé par `predeploy`) |

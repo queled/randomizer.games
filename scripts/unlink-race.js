@@ -3,9 +3,8 @@
 
 const mongoose = require('mongoose');
 const path = require('path');
-require('dotenv').config({ path: path.resolve(process.cwd(), '.env') });
-
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/randomizer';
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+const connectDB = require('../config/database');
 
 async function main(){
   const arg = process.argv[2];
@@ -15,8 +14,7 @@ async function main(){
   }
   const raceUrl = arg;
 
-  await mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-  console.log('Connected to DB');
+  await connectDB();
 
   const models = require('../models');
   const { Race, Match } = models;

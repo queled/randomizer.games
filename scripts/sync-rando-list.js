@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Sync Rando-List V3
+ * Sync Rando-List
  * 
  * Version améliorée du script de synchronisation avec rando-list.
  * Gère les ressources (sites, trackers) et la détection de nouveaux jeux.
@@ -13,10 +13,10 @@
  * 5. Détecte les nouveaux randomizers
  * 
  * Usage:
- *   node scripts/sync-rando-list-v3.js                    # Sync cache + ressources
- *   node scripts/sync-rando-list-v3.js --link-games       # Sync + liaison aux Games
- *   node scripts/sync-rando-list-v3.js --update-resources # Met à jour les ressources uniquement
- *   node scripts/sync-rando-list-v3.js --dry-run          # Affiche sans modifier
+ *   node scripts/sync-rando-list.js                    # Sync cache + ressources
+ *   node scripts/sync-rando-list.js --link-games       # Sync + liaison aux Games
+ *   node scripts/sync-rando-list.js --update-resources # Met à jour les ressources uniquement
+ *   node scripts/sync-rando-list.js --dry-run          # Affiche sans modifier
  */
 
 const fs = require('fs');
@@ -618,7 +618,7 @@ async function main() {
   
   if (args.includes('--help')) {
     console.log(`
-Usage: node sync-rando-list-v3.js [options]
+Usage: node sync-rando-list.js [options]
 
 Options:
   --link-games       Lier automatiquement les Games existants
@@ -629,9 +629,9 @@ Options:
   --help             Affiche cette aide
 
 Workflow recommandé:
-  1. node sync-rando-list-v3.js --detect-new     # Voir les nouveaux jeux
-  2. Éditer le rapport généré pour définir les IDs
-  3. Importer manuellement les jeux validés
+  1. node sync-rando-list.js --detect-new     # Voir les nouveaux jeux
+  2. Relire le rapport généré
+  3. Créer les jeux retenus depuis le panneau admin
 `);
     process.exit(0);
   }
@@ -647,7 +647,7 @@ Workflow recommandé:
     ? args[reportPathIndex + 1] 
     : path.join(__dirname, 'tmp', 'new-games-report.json');
   
-  console.log('🔄 Sync Rando-List V3\n');
+  console.log('🔄 Sync Rando-List\n');
   
   try {
     // 1. Sync repo

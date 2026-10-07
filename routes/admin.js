@@ -870,7 +870,7 @@ router.post('/sync/rando-list', requireAdmin, async (req, res, next) => {
     const { spawn } = require('child_process');
     const path = require('path');
     
-    const scriptPath = path.join(__dirname, '..', 'scripts', 'sync-rando-list-v3.js');
+    const scriptPath = path.join(__dirname, '..', 'scripts', 'sync-rando-list.js');
     const args = req.body.linkGames ? ['--link-games'] : [];
     
     const child = spawn('node', [scriptPath, ...args], {

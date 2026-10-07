@@ -1,19 +1,29 @@
 # Déploiement en production
 
-Mise en ligne de randomizer.games sur un VPS Hetzner Cloud (Ubuntu 24.04), derrière Nginx et HTTPS.
+Mise en ligne de randomizer.games sur un VPS Hetzner Cloud (Ubuntu 24.04) qui héberge tout : l'application derrière Nginx et HTTPS, la base MongoDB et les synchronisations planifiées.
 
-## Avant de commencer : où vit la base ?
+## Ce qui tourne sur le serveur
 
-Les workflows GitHub Actions (voir [ARCHITECTURE.md](ARCHITECTURE.md)) écrivent **directement dans la base** depuis les serveurs de GitHub, avec le secret `MONGODB_URI`. La base doit donc être joignable depuis Internet.
+| Composant | Rôle |
+|-----------|------|
+| MongoDB 8.0 | La base, joignable uniquement depuis le serveur lui-même (`127.0.0.1`) |
+| Node.js + PM2 | L'application (`server.js`), une seule instance |
+| Nginx + Certbot | HTTPS et proxy vers l'application |
+| crontab | Les synchronisations (racetime, tournois, rando-list) et les sauvegardes, via [`scripts/cron/run-job.sh`](../scripts/cron/run-job.sh) |
 
-- **Recommandé : MongoDB Atlas.** Le VPS ne fait tourner que l'application, et les workflows continuent de fonctionner sans changement. Dans Atlas, autoriser l'IP du VPS (*Network Access*). Les workflows, eux, ont besoin d'un accès depuis `0.0.0.0/0`, car les IP de GitHub changent : utiliser un utilisateur dédié avec un mot de passe long.
-- **MongoDB sur le VPS** : n'exposez pas le port 27017 publiquement. Dans ce cas, les workflows ne peuvent plus joindre la base, et il faut lancer les scripts de synchronisation par `cron` sur le VPS (mêmes commandes que dans les workflows).
-
-La suite part sur Atlas.
+La base n'étant pas exposée sur Internet, les workflows GitHub Actions ne peuvent pas l'atteindre, même lancés à la main : leur travail est repris par la crontab (voir [ARCHITECTURE.md](ARCHITECTURE.md#tâches-planifiées)).
 
 ## Dimensionnement
 
-L'application tient sur une petite instance : **2 vCPU, 4 Go de RAM** suffisent largement (gamme CX ou CPX chez Hetzner). Choisir un datacenter européen proche des utilisateurs.
+Un **CX23** (2 vCPU, 4 Go de RAM, 40 Go de disque) suffit :
+
+- la base fait environ 300 Mo de données (110 Mo sur disque une fois compressée), dont 180 000 courses ;
+- elle grossit d'environ 80 courses par jour, soit à peine 15 Mo sur disque par an ;
+- tout tient en mémoire avec un cache MongoDB limité à 1 Go, ce qui laisse la place à Node et aux synchronisations.
+
+Prévoir 2 Go de swap (étape 1) comme filet de sécurité. Passer à un CX33 seulement si `free -h` montre que le swap sert en permanence.
+
+À la création du serveur : Ubuntu 24.04, datacenter européen, clé SSH, IPv4 publique, et un **Firewall** Hetzner n'ouvrant que les ports 22, 80 et 443. Les **Backups** Hetzner (+20 %) sont un bon complément.
 
 ## 1. Préparer le serveur
 
@@ -31,6 +41,13 @@ rsync --archive --chown=randomizer:randomizer ~/.ssh /home/randomizer
 ufw allow OpenSSH
 ufw allow 'Nginx Full'
 ufw enable
+
+# Swap de 2 Go
+fallocate -l 2G /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+echo '/swapfile none swap sw 0 0' >> /etc/fstab
 ```
 
 Puis, en tant que `randomizer` :
@@ -44,7 +61,70 @@ sudo apt install -y nodejs nginx git
 sudo npm install -g pm2
 ```
 
-## 2. Installer l'application
+## 2. Installer MongoDB
+
+Dépôt officiel de MongoDB (le paquet `mongodb` d'Ubuntu est obsolète). `mongodb-org` installe aussi `mongosh` et `mongodump`/`mongorestore`.
+
+```bash
+sudo apt install -y gnupg curl
+curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc \
+  | sudo gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg --dearmor
+echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/8.0 multiverse" \
+  | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
+sudo apt update
+sudo apt install -y mongodb-org
+sudo systemctl enable --now mongod
+```
+
+### Créer les utilisateurs
+
+Tant que l'authentification n'est pas activée, `mongosh` se connecte sans mot de passe depuis le serveur. Générer deux mots de passe (`openssl rand -hex 24`, sans caractères à échapper dans une URI), puis :
+
+```bash
+mongosh
+```
+
+```js
+use admin
+db.createUser({ user: 'admin', pwd: '<mot de passe admin>', roles: ['root'] })
+
+use randomizer-hub
+db.createUser({ user: 'randomizer', pwd: '<mot de passe appli>', roles: [{ role: 'readWrite', db: 'randomizer-hub' }] })
+```
+
+`admin` ne sert qu'à la maintenance (restauration) ; l'application n'utilise que `randomizer`, limité à sa base.
+
+### Activer l'authentification et limiter la mémoire
+
+Dans `/etc/mongod.conf`, vérifier ou ajouter :
+
+```yaml
+net:
+  port: 27017
+  bindIp: 127.0.0.1
+
+security:
+  authorization: enabled
+
+storage:
+  wiredTiger:
+    engineConfig:
+      cacheSizeGB: 1
+```
+
+```bash
+sudo systemctl restart mongod
+mongosh "mongodb://randomizer:<mot de passe appli>@127.0.0.1:27017/randomizer-hub?authSource=randomizer-hub" --eval 'db.runCommand({ ping: 1 })'
+```
+
+Ne jamais ouvrir le port 27017, ni dans UFW ni dans le pare-feu Hetzner. Pour consulter la base depuis son poste (Compass, mongosh), passer par un tunnel SSH :
+
+```bash
+ssh -N -L 27018:127.0.0.1:27017 randomizer@<IP du VPS>
+# puis se connecter à mongodb://randomizer:<mot de passe>@localhost:27018/randomizer-hub?authSource=randomizer-hub
+```
+
+## 3. Installer l'application
 
 ```bash
 cd ~
@@ -65,9 +145,9 @@ SITE_URL=https://randomizer.games
 # Obligatoire : le serveur refuse de démarrer sans
 ADMIN_TOKEN=            # openssl rand -hex 32
 
-MONGODB_URI=mongodb+srv://<user>:<password>@<cluster>/randomizer
+MONGODB_URI=mongodb://randomizer:<mot de passe appli>@127.0.0.1:27017/randomizer-hub?authSource=randomizer-hub
 
-# Tournois (import depuis l'admin)
+# Tournois (import depuis l'admin et synchronisations)
 CHALLONGE_API_KEY=
 CHALLONGE_USERNAME=
 STARTGG_API_TOKEN=
@@ -75,11 +155,9 @@ STARTGG_API_TOKEN=
 # Page streams
 TWITCH_CLIENT_ID=
 TWITCH_CLIENT_SECRET=
-
-# Facultatif : état des workflows dans l'admin
-GITHUB_TOKEN=
-GITHUB_REPO=queled/randomizer.games
 ```
+
+`GITHUB_TOKEN` et `GITHUB_REPO` ne servent qu'à afficher l'état des workflows GitHub dans l'admin : inutiles ici, les laisser vides.
 
 ```bash
 chmod 600 .env
@@ -88,11 +166,39 @@ npm run check-security
 
 `check-security` vérifie les variables obligatoires et quelques règles du code. Corriger toute erreur avant de continuer.
 
-## 3. Démarrer avec PM2
+## 4. Migrer les données depuis Atlas
+
+Tant que le site tourne sur Atlas, les workflows GitHub Actions continuent d'y écrire. Pour ne rien perdre pendant la copie :
+
+1. **Désactiver les workflows planifiés** sur GitHub : onglet **Actions**, puis pour `Sync Racetime Races`, `Sync Tournaments (Update Active)`, `Sync Tournaments (Discover New)` et `Sync Rando-List` : **⋯ → Disable workflow**. Les fichiers restent dans le dépôt, la désactivation est réversible.
+2. Attendre que les exécutions en cours se terminent.
+3. Copier la base, depuis le VPS. Dans Atlas, l'IP du VPS doit être autorisée (*Network Access*) le temps de la copie.
+
+   ```bash
+   cd ~
+   mongodump --uri "mongodb+srv://<user>:<password>@<cluster>.mongodb.net" --db randomizer-hub \
+     --gzip --archive=atlas.archive.gz
+
+   mongorestore --uri "mongodb://admin:<mot de passe admin>@127.0.0.1:27017/?authSource=admin" \
+     --gzip --archive=atlas.archive.gz
+   ```
+
+4. Comparer le nombre de documents des deux côtés :
+
+   ```bash
+   mongosh "<URI Atlas>/randomizer-hub" --quiet --eval 'db.getCollectionNames().forEach(c => print(c, db[c].countDocuments()))'
+   mongosh "mongodb://randomizer:<mot de passe appli>@127.0.0.1:27017/randomizer-hub?authSource=randomizer-hub" --quiet \
+     --eval 'db.getCollectionNames().forEach(c => print(c, db[c].countDocuments()))'
+   ```
+
+Garder la base Atlas quelques semaines comme filet de sécurité avant de la supprimer.
+
+## 5. Démarrer avec PM2
 
 **Une seule instance** : les sessions admin et les compteurs de rate limiting sont gardés en mémoire. Avec plusieurs processus (`-i max`, mode cluster), une connexion admin ouverte sur l'un ne serait pas reconnue par les autres.
 
 ```bash
+cd ~/randomizer-app
 pm2 start server.js --name randomizer --max-memory-restart 1G
 pm2 save
 pm2 startup        # puis exécuter la commande qu'il affiche
@@ -100,13 +206,56 @@ pm2 startup        # puis exécuter la commande qu'il affiche
 
 Vérifier : `curl http://localhost:3000/api/health`.
 
-## 4. Nginx
+## 6. Tâches planifiées
+
+[`scripts/cron/run-job.sh`](../scripts/cron/run-job.sh) lance chaque tâche avec un verrou (une tâche encore en cours n'est pas relancée), une durée maximale et un journal dans `~/logs/<tâche>.log`.
+
+`crontab -e` (en tant que `randomizer`, le serveur étant à l'heure UTC) :
+
+```cron
+PATH=/usr/local/bin:/usr/bin:/bin
+
+*/5   * * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh racetime
+2-59/15 * * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh tournaments-update
+0     6 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh rando-list
+0     7 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh tournaments-discover
+30    3 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh backup
+```
+
+Tester chaque tâche une fois à la main, par exemple `scripts/cron/run-job.sh racetime && tail ~/logs/racetime.log`.
+
+La resynchronisation complète d'un jeu (ancien workflow manuel `sync-racetime-game-full.yml`) se lance en SSH :
+
+```bash
+cd ~/randomizer-app
+node scripts/sync-racetime-game.js --game ootr                  # toutes les courses du jeu
+node scripts/sync-racetime-game.js --game ootr --max-pages 100  # limité à 100 pages
+```
+
+### Rotation des journaux
+
+`/etc/logrotate.d/randomizer` :
+
+```text
+/home/randomizer/logs/*.log {
+    su randomizer randomizer
+    weekly
+    rotate 4
+    compress
+    missingok
+    notifempty
+    copytruncate
+}
+```
+
+## 7. Nginx
 
 `/etc/nginx/sites-available/randomizer.games` :
 
 ```nginx
 server {
     listen 80;
+    listen [::]:80;
     server_name randomizer.games www.randomizer.games;
 
     client_max_body_size 2M;
@@ -131,14 +280,16 @@ sudo rm /etc/nginx/sites-enabled/default
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
-## 5. DNS et HTTPS
+## 8. DNS et HTTPS
 
-Chez le registrar, deux enregistrements **A** (et **AAAA** pour l'IPv6 fournie par Hetzner) :
+Chez Namecheap : **Domain List → Manage → Advanced DNS**. Supprimer les enregistrements de parking par défaut, puis ajouter :
 
-| Nom | Valeur |
-|-----|--------|
-| `@` | IP du VPS |
-| `www` | IP du VPS |
+| Type | Host | Valeur |
+|------|------|--------|
+| A | `@` | IPv4 du VPS |
+| A | `www` | IPv4 du VPS |
+| AAAA | `@` | IPv6 du VPS |
+| AAAA | `www` | IPv6 du VPS |
 
 Une fois le DNS propagé (`dig randomizer.games`) :
 
@@ -149,7 +300,7 @@ sudo certbot --nginx -d randomizer.games -d www.randomizer.games
 
 Certbot ajoute la configuration HTTPS et programme le renouvellement automatique. Le cookie de session admin n'est envoyé qu'en HTTPS en production : l'admin ne fonctionne qu'une fois le certificat en place.
 
-## 6. Durcir le serveur
+## 9. Durcir le serveur
 
 ```bash
 # SSH par clé uniquement
@@ -167,18 +318,31 @@ sudo apt install -y unattended-upgrades
 sudo dpkg-reconfigure --priority=low unattended-upgrades
 ```
 
-Activer aussi le **pare-feu Hetzner** (console Cloud) avec les seuls ports 22, 80 et 443, et les **backups** du serveur si besoin.
+## 10. Sauvegardes
 
-## 7. Sauvegardes
+La base n'existe plus que sur ce serveur : les sauvegardes sont indispensables.
 
-Atlas propose des sauvegardes selon l'offre choisie. En complément, un export quotidien sur le VPS :
+La tâche `backup` (3h30 UTC) lance `npm run db:backup`, qui écrit une archive `mongodump` compressée dans `~/randomizer-app/backups/` et ne garde que les 7 plus récentes. `BACKUP_DIR` et `BACKUP_KEEP` dans `.env` changent le dossier et le nombre d'archives gardées.
+
+Une sauvegarde restée sur le serveur ne protège pas contre sa perte. En garder une copie ailleurs, par exemple en la rapatriant régulièrement sur son poste :
 
 ```bash
-crontab -e
-# 0 3 * * * cd ~/randomizer-app && /usr/bin/npm run db:backup >> ~/backup.log 2>&1
+rsync -av randomizer@<IP du VPS>:randomizer-app/backups/ ~/Backups/randomizer/
 ```
 
-`db:backup` écrit un export JSON de chaque collection dans `backups/`. Penser à purger les anciens dossiers et à en garder une copie hors du serveur.
+ou en la poussant vers une Storage Box Hetzner. Les Backups Hetzner (images du disque) sont un complément, pas un remplacement : une image prise pendant une écriture peut contenir une base incohérente.
+
+### Restaurer
+
+```bash
+cd ~/randomizer-app
+pm2 stop randomizer
+mongorestore --uri "mongodb://admin:<mot de passe admin>@127.0.0.1:27017/?authSource=admin" \
+  --gzip --archive=backups/<fichier>.archive.gz --drop
+pm2 start randomizer
+```
+
+`--drop` remplace chaque collection par celle de l'archive.
 
 ## Mettre à jour
 
@@ -190,19 +354,22 @@ npm run check-security
 pm2 restart randomizer
 ```
 
+Les tâches planifiées prennent le nouveau code à leur prochaine exécution.
+
 ## Checklist
 
-- [ ] Base Atlas créée ; IP du VPS autorisée ; utilisateur dédié
-- [ ] Secrets GitHub Actions à jour (`MONGODB_URI`, `STARTGG_API_TOKEN`, `CHALLONGE_API_KEY`)
-- [ ] VPS : utilisateur non-root, SSH par clé, UFW et pare-feu Hetzner
+- [ ] VPS : utilisateur non-root, SSH par clé, UFW et pare-feu Hetzner (22, 80, 443), swap
+- [ ] MongoDB : authentification activée, `bindIp: 127.0.0.1`, cache limité à 1 Go
 - [ ] `.env` complet, `ADMIN_TOKEN` fort, `chmod 600 .env`
 - [ ] `npm run check-security` sans erreur
+- [ ] Workflows GitHub désactivés, base copiée depuis Atlas, nombres de documents identiques
 - [ ] PM2 lancé en une seule instance, `pm2 startup` configuré
+- [ ] crontab en place, chaque tâche testée une fois, logrotate configuré
 - [ ] Nginx actif, DNS (A/AAAA) propagé, HTTPS via Certbot
 - [ ] `https://randomizer.games/api/health` répond
 - [ ] Connexion au panneau admin OK
 - [ ] fail2ban et mises à jour automatiques actifs
-- [ ] Sauvegardes en place
+- [ ] Première sauvegarde présente dans `backups/`, copie hors du serveur en place
 
 ## Dépannage
 
@@ -211,4 +378,6 @@ pm2 restart randomizer
 | L'app ne démarre pas | `pm2 logs randomizer --lines 50` ; souvent `ADMIN_TOKEN` absent ou `MONGODB_URI` incorrect |
 | 502 Bad Gateway | `pm2 status`, puis `sudo nginx -t` et `/var/log/nginx/error.log` |
 | Connexion admin refusée | HTTPS actif ? une seule instance PM2 ? |
-| Pas de nouvelles courses | Onglet **Actions** de GitHub : le workflow échoue-t-il à joindre la base ? |
+| Erreur de connexion à la base | `sudo systemctl status mongod`, `sudo journalctl -u mongod -n 50` ; mot de passe ou `authSource` de l'URI |
+| Pas de nouvelles courses | `tail ~/logs/racetime.log` ; `crontab -l` ; une exécution bloquée laisse « l'exécution précédente tourne encore » |
+| Serveur lent, swap très utilisé | `free -h`, `htop` ; réduire `cacheSizeGB` ou passer à un CX33 |

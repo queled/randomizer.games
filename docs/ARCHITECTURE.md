@@ -9,7 +9,7 @@ Comment les données arrivent dans le site, où elles sont stockées, et quels s
         │                   │              │            │           │            │           │
         ▼                   ▼              ▼            ▼           ▼            ▼           ▼
  ┌───────────────────────────────────────────────────────────────────────────────────────────────┐
- │  scripts/  —  lancés par GitHub Actions (cron), depuis le panneau admin, ou à la main          │
+ │  scripts/  —  lancés par la crontab du serveur, depuis le panneau admin, ou à la main          │
  └───────────────────────────────────────────────────────────────────────────────────────────────┘
                                               │
                                               ▼
@@ -29,30 +29,23 @@ Comment les données arrivent dans le site, où elles sont stockées, et quels s
 | speedrun.com | Plateformes, date de sortie, images des jeux |
 | Twitch | Streams en direct, identifiants des jeux |
 
-## Workflows GitHub Actions
+## Tâches planifiées
 
-Tous les workflows tournent sur Node 20 et écrivent directement dans la base de production via le secret `MONGODB_URI`. La base doit donc être joignable depuis Internet (MongoDB Atlas, par exemple).
+En production, la base MongoDB tourne sur le même serveur que le site et n'écoute que sur `127.0.0.1`. Les synchronisations sont lancées par la crontab du serveur via [`scripts/cron/run-job.sh`](../scripts/cron/run-job.sh), qui pose un verrou par tâche (une exécution encore en cours n'est pas doublée), limite leur durée et écrit dans `~/logs/<tâche>.log`. La crontab elle-même est dans [DEPLOYMENT.md](DEPLOYMENT.md#6-tâches-planifiées).
 
-| Workflow | Fréquence | Ce qu'il fait |
-|----------|-----------|---------------|
-| `sync-racetime.yml` | toutes les 5 min | `sync-racetime-global.js` : nouvelles courses, finalisation des courses bloquées « en cours » depuis plus de 24 h, rattrapage des courses terminées entre deux exécutions |
-| `sync-racetime-game-full.yml` | manuel | `sync-racetime-game.js` : resynchronisation complète d'un jeu (paramètres `game_slug`, `max_pages`) |
-| `sync-rando-list.yml` | tous les jours à 6h UTC | `check-rando-list-changes.js` vérifie si rando-list a changé ; si oui, `sync-rando-list.js --detect-new` met à jour le cache et les ressources, puis signale les nouveaux jeux, à créer depuis le panneau admin |
-| `sync-tournaments-discover.yml` | tous les jours à 7h UTC | `discover-tournaments.js` : cherche de nouveaux tournois sur start.gg et Challonge (paramètres `dry_run`, `source`, `days`) |
-| `sync-tournaments-update.yml` | toutes les 15 min | `sync-tournaments.js --update-only` met à jour les tournois actifs, puis `auto-link-tournaments.js` rattache les courses aux matchs |
+| Tâche | Fréquence (UTC) | Ce qu'elle fait |
+|-------|-----------------|-----------------|
+| `racetime` | toutes les 5 min | `sync-racetime-global.js` : nouvelles courses, finalisation des courses bloquées « en cours » depuis plus de 24 h, rattrapage des courses terminées entre deux exécutions |
+| `tournaments-update` | toutes les 15 min | `sync-tournaments.js --update-only` met à jour les tournois actifs, puis `auto-link-tournaments.js` rattache les courses aux matchs |
+| `rando-list` | tous les jours à 6h | met à jour la copie locale de rando-list ; si `check-rando-list-changes.js` signale un nouveau commit, `sync-rando-list.js --detect-new` met à jour le cache et les ressources, puis signale les nouveaux jeux, à créer depuis le panneau admin |
+| `tournaments-discover` | tous les jours à 7h | `discover-tournaments.js --since <il y a 2 jours> --max-pages 3` : nouveaux tournois sur start.gg et Challonge |
+| `backup` | tous les jours à 3h30 | `backup-db.js` : archive `mongodump` de la base, 7 gardées |
 
-Chaque workflow peut aussi être lancé à la main depuis l'onglet **Actions**. Le panneau admin affiche leur état si `GITHUB_TOKEN` et `GITHUB_REPO` sont renseignés.
+Chaque tâche se lance aussi à la main : `scripts/cron/run-job.sh <tâche>`. Pour resynchroniser entièrement un jeu : `node scripts/sync-racetime-game.js --game <slug> [--max-pages N]`.
 
-### Secrets et variables du dépôt
+### Anciens workflows GitHub Actions
 
-*Settings → Secrets and variables → Actions*
-
-| Nom | Type | Utilisé par |
-|-----|------|-------------|
-| `MONGODB_URI` | secret | tous les workflows |
-| `STARTGG_API_TOKEN` | secret | workflows tournois |
-| `CHALLONGE_API_KEY` | secret | workflows tournois |
-| `RACETIME_RATE_LIMIT_MS` | variable (facultative) | workflows racetime ; délai entre deux requêtes, 1500 ms par défaut |
+Les workflows de `.github/workflows/` faisaient le même travail depuis les serveurs de GitHub, à une époque où la base était hébergée sur MongoDB Atlas. Ils ne peuvent pas joindre une base fermée au réseau : ils sont désactivés depuis l'onglet **Actions** au passage sur le serveur, et gardés dans le dépôt le temps de la transition. Ils utilisent les secrets `MONGODB_URI`, `STARTGG_API_TOKEN` et `CHALLONGE_API_KEY` et la variable facultative `RACETIME_RATE_LIMIT_MS`. Le panneau admin affiche leur dernier état si `GITHUB_TOKEN` et `GITHUB_REPO` sont renseignés.
 
 ## Détection des tournois
 
@@ -108,10 +101,10 @@ Les scripts qui écrivent en base proposent un mode `--dry-run` (ou n'écrivent 
 
 | Script | Commande npm | Rôle |
 |--------|--------------|------|
-| `sync-racetime-global.js` | `sync:racetime` | Nouvelles courses racetime.gg (workflow 5 min) |
-| `sync-racetime-game.js` | — | Toutes les courses d'un jeu (workflow manuel, admin) |
+| `sync-racetime-global.js` | `sync:racetime` | Nouvelles courses racetime.gg (tâche `racetime`) |
+| `sync-racetime-game.js` | — | Toutes les courses d'un jeu (à la main, admin) |
 | `sync-rando-list.js` | `sync-rando-list`, `:detect`, `:link` | Cache rando-list, ressources, nouveaux jeux |
-| `check-rando-list-changes.js` | — | Indique au workflow si rando-list a changé |
+| `check-rando-list-changes.js` | — | Indique à la tâche `rando-list` si rando-list a changé |
 | `discover-tournaments.js` | `discover:tournaments` (+ `:dry`, `:startgg`, `:challonge`) | Découverte de tournois |
 | `sync-tournaments.js` | `sync:tournaments` (+ `:dry`, `:update`) | Mise à jour des tournois actifs |
 | `auto-link-tournaments.js` | `link:tournaments:active` | Rattache les courses aux matchs |
@@ -140,8 +133,9 @@ Les scripts qui écrivent en base proposent un mode `--dry-run` (ou n'écrivent 
 |--------|--------------|------|
 | `unlink-race.js` | — | Détache une course de son match (aussi depuis l'admin) |
 | `migrations/*.js` | — | Migrations ponctuelles, idempotentes |
-| `backup-db.js` | `db:backup` | Export JSON de toutes les collections dans `backups/` |
+| `backup-db.js` | `db:backup` | Archive `mongodump` de la base dans `backups/` (`BACKUP_DIR`), les `BACKUP_KEEP` plus récentes gardées (7 par défaut) |
 | `check-security.js` | `check-security` | Vérifications avant déploiement (lancé par `predeploy`) |
+| `cron/run-job.sh` | — | Lance une tâche planifiée avec verrou, durée maximale et journal |
 
 ### Format du CSV de jeux
 

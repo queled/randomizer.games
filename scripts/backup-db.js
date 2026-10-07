@@ -1,75 +1,86 @@
 #!/usr/bin/env node
 /**
- * Script de backup MongoDB
- * Crée une sauvegarde JSON de toutes les collections
+ * Sauvegarde MongoDB avec mongodump
+ *
+ * Écrit une archive compressée de toute la base dans backups/ (ou BACKUP_DIR)
+ * et ne garde que les BACKUP_KEEP plus récentes (7 par défaut).
+ * Nécessite mongodump (paquet mongodb-database-tools).
+ *
+ * Restaurer :
+ *   mongorestore --uri "$MONGODB_URI" --gzip --archive=backups/<fichier> --drop
  */
 
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
-require('dotenv').config();
-const mongoose = require('mongoose');
+const { spawn } = require('child_process');
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
-// Importer les modèles
-const models = require('../models');
+const BACKUP_DIR = path.resolve(process.env.BACKUP_DIR || path.join(__dirname, '..', 'backups'));
+const BACKUP_KEEP = Math.max(1, parseInt(process.env.BACKUP_KEEP, 10) || 7);
+const PREFIX = 'randomizer-';
+const SUFFIX = '.archive.gz';
 
-const backupDir = path.join(__dirname, '..', 'backups');
+function runMongodump(uri, archivePath) {
+  // L'URI (et donc le mot de passe) passe par un fichier de configuration
+  // lisible par nous seuls plutôt que par la ligne de commande, visible dans `ps`.
+  const configPath = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'mongodump-')), 'config.yml');
+  fs.writeFileSync(configPath, `uri: ${JSON.stringify(uri)}\n`, { mode: 0o600 });
 
-async function backup() {
-  try {
-    // Créer le dossier backups s'il n'existe pas
-    if (!fs.existsSync(backupDir)) {
-      fs.mkdirSync(backupDir, { recursive: true });
-    }
+  return new Promise((resolve, reject) => {
+    const child = spawn('mongodump', [`--config=${configPath}`, `--archive=${archivePath}`, '--gzip'], {
+      stdio: ['ignore', 'inherit', 'inherit']
+    });
+    child.on('error', (error) => {
+      reject(error.code === 'ENOENT' ? new Error('mongodump introuvable : installer mongodb-database-tools') : error);
+    });
+    child.on('close', (code) => {
+      fs.rmSync(path.dirname(configPath), { recursive: true, force: true });
+      code === 0 ? resolve() : reject(new Error(`mongodump a échoué (code ${code})`));
+    });
+  });
+}
 
-    // Créer un dossier avec timestamp
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').split('T')[0] + '_' + new Date().getTime();
-    const backupPath = path.join(backupDir, timestamp);
-    fs.mkdirSync(backupPath, { recursive: true });
+function rotateBackups() {
+  const archives = fs.readdirSync(BACKUP_DIR)
+    .filter(name => name.startsWith(PREFIX) && name.endsWith(SUFFIX))
+    .sort()
+    .reverse();
 
-    // Connexion à MongoDB
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/randomizer');
-    console.log('✅ Connecté à MongoDB');
-
-    // Collections à sauvegarder
-    const collections = ['games', 'races', 'players', 'tournaments', 'matches', 'runs'];
-    
-    let totalDocs = 0;
-
-    for (const collectionName of collections) {
-      try {
-        const collection = mongoose.connection.collection(collectionName);
-        const docs = await collection.find({}).toArray();
-        
-        const backupFile = path.join(backupPath, `${collectionName}.json`);
-        fs.writeFileSync(backupFile, JSON.stringify(docs, null, 2));
-        
-        console.log(`  ✅ ${collectionName}: ${docs.length} documents`);
-        totalDocs += docs.length;
-      } catch (error) {
-        console.warn(`  ⚠️ ${collectionName}: ${error.message}`);
-      }
-    }
-
-    console.log(`\n✅ Backup créé: ${backupPath}`);
-    console.log(`   Total: ${totalDocs} documents`);
-
-    // Créer un lien symbolic "latest"
-    const latestLink = path.join(backupDir, 'latest');
-    try {
-      if (fs.existsSync(latestLink)) fs.unlinkSync(latestLink);
-      fs.symlinkSync(backupPath, latestLink);
-      console.log(`   Lien 'latest' créé`);
-    } catch (error) {
-      console.warn(`   ⚠️ Impossible de créer le lien 'latest': ${error.message}`);
-    }
-
-    await mongoose.connection.close();
-    console.log('✅ Déconnecté de MongoDB\n');
-
-  } catch (error) {
-    console.error('❌ Erreur lors du backup:', error.message);
-    process.exit(1);
+  for (const name of archives.slice(BACKUP_KEEP)) {
+    fs.unlinkSync(path.join(BACKUP_DIR, name));
+    console.log(`🗑️  Supprimé : ${name}`);
   }
 }
 
-backup();
+async function backup() {
+  const uri = process.env.MONGODB_URI;
+  if (!uri) {
+    throw new Error('MONGODB_URI manquant');
+  }
+
+  fs.mkdirSync(BACKUP_DIR, { recursive: true });
+
+  // Horodatage UTC triable : randomizer-2026-10-07T03-00-00Z.archive.gz
+  const timestamp = new Date().toISOString().replace(/\.\d+Z$/, 'Z').replace(/:/g, '-');
+  const archivePath = path.join(BACKUP_DIR, `${PREFIX}${timestamp}${SUFFIX}`);
+  const partialPath = `${archivePath}.partial`;
+
+  try {
+    await runMongodump(uri, partialPath);
+  } catch (error) {
+    fs.rmSync(partialPath, { force: true });
+    throw error;
+  }
+  fs.renameSync(partialPath, archivePath);
+
+  const sizeMb = (fs.statSync(archivePath).size / 1e6).toFixed(1);
+  console.log(`✅ Sauvegarde : ${archivePath} (${sizeMb} Mo)`);
+
+  rotateBackups();
+}
+
+backup().catch((error) => {
+  console.error('❌ Erreur lors de la sauvegarde :', error.message);
+  process.exit(1);
+});

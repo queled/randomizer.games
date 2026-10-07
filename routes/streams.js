@@ -954,27 +954,49 @@ async function buildStreamsStatsByGame() {
   };
 }
 
+// Building these stats queries Twitch for every game and can take tens of
+// seconds: an expired result keeps being served (up to STATS_MAX_STALE)
+// while a single background refresh runs.
+const STATS_BY_GAME_KEY = 'streams:stats-by-game';
+const STATS_MAX_STALE = 30 * 60 * 1000;
+let statsByGameInFlight = null;
+
+function refreshStreamsStatsByGame() {
+  if (!statsByGameInFlight) {
+    statsByGameInFlight = buildStreamsStatsByGame()
+      .then(result => {
+        setCache(STATS_BY_GAME_KEY, result);
+        return result;
+      })
+      .finally(() => {
+        statsByGameInFlight = null;
+      });
+  }
+  return statsByGameInFlight;
+}
+
 setTimeout(() => {
-  buildStreamsStatsByGame()
-    .then(result => {
-      setCache('streams:stats-by-game', result);
-    })
-    .catch(err => {
-      console.warn('Warmup /api/streams/stats/by-game failed:', err?.message || err);
-    });
+  refreshStreamsStatsByGame().catch(err => {
+    console.warn('Warmup /api/streams/stats/by-game failed:', err?.message || err);
+  });
 }, 2500);
 
 router.get('/stats/by-game', async (req, res, next) => {
   try {
-    const cacheKey = 'streams:stats-by-game';
-    const cached = getCached(cacheKey);
+    const cached = getCached(STATS_BY_GAME_KEY);
     if (cached) {
       return res.json(cached);
     }
-    const result = await buildStreamsStatsByGame();
 
-    setCache(cacheKey, result);
-    res.json(result);
+    const stale = cache.data[STATS_BY_GAME_KEY];
+    if (stale && cache.expires[STATS_BY_GAME_KEY] + STATS_MAX_STALE > Date.now()) {
+      refreshStreamsStatsByGame().catch(err => {
+        console.warn('Refresh /api/streams/stats/by-game failed:', err?.message || err);
+      });
+      return res.json(stale);
+    }
+
+    res.json(await refreshStreamsStatsByGame());
   } catch (error) {
     next(error);
   }

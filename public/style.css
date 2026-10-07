@@ -254,6 +254,13 @@ h1 {
     background-color: #374151;
 }
 
+/* The players page renders thousands of cards: let the browser skip layout
+   and painting for the ones far off screen. */
+#players-list .player-card {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 300px;
+}
+
 .player-card h3 {
     color: #fbbf24;
     font-weight: bold;

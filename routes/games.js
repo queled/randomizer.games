@@ -39,27 +39,34 @@ async function computeGamesWithStats() {
   return { games: gamesWithStats };
 }
 
+function refreshGamesWithStats() {
+  if (!gamesWithStatsInFlight) {
+    gamesWithStatsInFlight = computeGamesWithStats()
+      .then((result) => {
+        gamesWithStatsCache = result;
+        gamesWithStatsCacheExpiresAt = Date.now() + GAMES_WITH_STATS_CACHE_TTL;
+        return result;
+      })
+      .finally(() => {
+        gamesWithStatsInFlight = null;
+      });
+  }
+  return gamesWithStatsInFlight;
+}
+
 async function getGamesWithStatsCached() {
-  if (gamesWithStatsCache && gamesWithStatsCacheExpiresAt > Date.now()) {
+  if (gamesWithStatsCache) {
+    // Computing the stats takes several seconds: once expired, keep serving
+    // the previous result and refresh it in the background.
+    if (gamesWithStatsCacheExpiresAt <= Date.now()) {
+      refreshGamesWithStats().catch(err => {
+        console.warn('Refresh /api/games/with-stats failed:', err?.message || err);
+      });
+    }
     return gamesWithStatsCache;
   }
 
-  if (gamesWithStatsInFlight) {
-    return gamesWithStatsInFlight;
-  }
-
-  gamesWithStatsInFlight = (async () => {
-    const result = await computeGamesWithStats();
-    gamesWithStatsCache = result;
-    gamesWithStatsCacheExpiresAt = Date.now() + GAMES_WITH_STATS_CACHE_TTL;
-    return result;
-  })();
-
-  try {
-    return await gamesWithStatsInFlight;
-  } finally {
-    gamesWithStatsInFlight = null;
-  }
+  return refreshGamesWithStats();
 }
 
 setTimeout(() => {

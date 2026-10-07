@@ -84,13 +84,20 @@ router.get('/', async (req, res, next) => {
       Object.assign(query, buildTournamentQuery(gameDoc, gameIdLower));
     }
     
-    const tournaments = await Tournament.find(query)
-      .populate('game', 'id name official randomizer')
-      .sort({ startDate: -1 })
-      .limit(parseInt(limit))
-      .skip((parseInt(page) - 1) * parseInt(limit));
+    const pageNum = parseInt(page);
+    const limitNum = parseInt(limit);
 
-    const total = await Tournament.countDocuments(query);
+    // The status is computed from the dates, so a status filter has to look at
+    // every tournament before paginating; otherwise paginate in the database.
+    let tournamentsQuery = Tournament.find(query)
+      .populate('game', 'id name official randomizer')
+      .sort({ startDate: -1 });
+    if (!status) {
+      tournamentsQuery = tournamentsQuery
+        .limit(limitNum)
+        .skip((pageNum - 1) * limitNum);
+    }
+    const tournaments = await tournamentsQuery;
 
     // Calculate status dynamically
     const tournamentsWithStatus = tournaments.map(t => {
@@ -110,19 +117,24 @@ router.get('/', async (req, res, next) => {
       return tournament;
     });
 
-    // Filter by status if requested
-    let filtered = tournamentsWithStatus;
+    // Filter by status if requested, then paginate the matching tournaments
+    let pageTournaments = tournamentsWithStatus;
+    let total;
     if (status) {
-      filtered = tournamentsWithStatus.filter(t => t.status === status);
+      const filtered = tournamentsWithStatus.filter(t => t.status === status);
+      total = filtered.length;
+      pageTournaments = filtered.slice((pageNum - 1) * limitNum, pageNum * limitNum);
+    } else {
+      total = await Tournament.countDocuments(query);
     }
 
     res.json({
-      tournaments: filtered,
+      tournaments: pageTournaments,
       pagination: {
         total,
-        page: parseInt(page),
-        limit: parseInt(limit),
-        pages: Math.ceil(total / parseInt(limit))
+        page: pageNum,
+        limit: limitNum,
+        pages: Math.ceil(total / limitNum)
       }
     });
   } catch (error) {

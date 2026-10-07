@@ -11,9 +11,14 @@ const {
 // Get all races
 router.get('/', async (req, res, next) => {
   try {
-    const { category, tournamentId, limit = 50, page = 1 } = req.query;
-    
+    const { category, tournamentId, status, limit = 50, page = 1 } = req.query;
+
     const query = {};
+
+    // Filter by status before paginating (values used by the races page)
+    if (['open', 'in_progress', 'finished'].includes(status)) {
+      query.status = status;
+    }
     
     // A game id resolves to all of its racetime categories, using the same rules as the game pages
     if (category) {

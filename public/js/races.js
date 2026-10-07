@@ -10,6 +10,8 @@
   let currentGame = '';
   let gamesById = {};
   let gamesBySlug = {};  // Index par slug racetime
+  let gamesReady = Promise.resolve(); // cards need the games list to resolve names
+  let loadId = 0; // ignores responses from a request a newer filter replaced
 
   // Game slug to display name mapping
   const gameDisplayNames = {
@@ -150,7 +152,7 @@
       winnerHtml = `
         <div class="spoiler-block" style="color:#fbbf24;font-size:0.8rem;margin-top:0.5rem;display:flex;align-items:center;gap:0.5rem;">
           <span>🏆</span>
-          <span style="color:#d1d5db;">${escHtml(winnerName || (i18n.t('common.unknown') || 'Unknown'))}</span>
+          <span style="color:#d1d5db;">${escHtml(winnerName || ((typeof i18n !== 'undefined' && i18n.t('common.unknown')) || 'Unknown'))}</span>
           <span style="color:#10b981;font-weight:600;">${escHtml(timeStr)}</span>
         </div>
       `;
@@ -226,17 +228,17 @@
     
     const q = new URLSearchParams({ limit, page });
     if (currentGame) q.set('category', currentGame);
+    // Filtered on the server so pagination counts only matching races
+    if (currentFilter !== 'all') q.set('status', currentFilter);
     
+    const thisLoad = ++loadId;
     try{
       const res = await fetch('/api/runs?' + q.toString());
       if(!res.ok) throw new Error('Fetch failed');
       const data = await res.json();
-      let races = data.races || [];
-      
-      // Apply status filter client-side
-      if (currentFilter !== 'all') {
-        races = races.filter(r => r.status === currentFilter);
-      }
+      const races = data.races || [];
+      await gamesReady;
+      if (thisLoad !== loadId) return;
       
       if(races.length === 0) {
         listEl.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#9ca3af;">No races found.</div>';
@@ -248,6 +250,7 @@
       const { total, pages } = data.pagination || { total: 0, pages: 1 };
       renderPagination(pages, total);
     }catch(e){
+      if (thisLoad !== loadId) return;
       const errText = (typeof i18n !== 'undefined' && typeof i18n.t === 'function') ? i18n.t('common.error') : 'Loading error';
       listEl.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#ef4444;">${escHtml(errText)}</div>`;
       console.error(e);
@@ -318,14 +321,15 @@
   }
 
   // Initialize
-  document.addEventListener('DOMContentLoaded', async () => {
-    await loadGames();
+  document.addEventListener('DOMContentLoaded', () => {
+    // Load the games list and the races at the same time
+    gamesReady = loadGames();
     
     // Pre-select game from URL parameter
     const gameParam = getUrlParam('game');
     if (gameParam) {
       currentGame = gameParam;
-      gameSelect.value = gameParam;
+      gamesReady.then(() => { gameSelect.value = gameParam; });
     }
     
     load();

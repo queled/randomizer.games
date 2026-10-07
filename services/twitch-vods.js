@@ -27,15 +27,25 @@ async function getAppToken() {
   return appToken.value;
 }
 
-async function helix(path, params) {
+async function helix(path, params, attempt = 0) {
   const token = await getAppToken();
   if (!token) throw new Error('TWITCH_CLIENT_ID / TWITCH_CLIENT_SECRET manquants');
-  const { data } = await axios.get(`${HELIX}${path}`, {
-    params,
-    headers: { 'Client-ID': process.env.TWITCH_CLIENT_ID, Authorization: `Bearer ${token}` },
-    timeout: 20000
-  });
-  return data;
+  try {
+    const { data } = await axios.get(`${HELIX}${path}`, {
+      params,
+      headers: { 'Client-ID': process.env.TWITCH_CLIENT_ID, Authorization: `Bearer ${token}` },
+      timeout: 20000
+    });
+    return data;
+  } catch (error) {
+    // Rate limited (800 requests a minute): wait for the bucket to refill, then retry
+    if (error.response && error.response.status === 429 && attempt < 3) {
+      const reset = Number(error.response.headers['ratelimit-reset']) * 1000;
+      await new Promise(resolve => setTimeout(resolve, Math.min(Math.max((reset || 0) - Date.now(), 1000), 60000)));
+      return helix(path, params, attempt + 1);
+    }
+    throw error;
+  }
 }
 
 /** "twitch.tv/<login>" → login, null for videos and other sites */

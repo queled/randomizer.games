@@ -2,16 +2,16 @@
 /**
  * Sync race VODs
  *
- * Tournament players stream their races: for each finished tournament race,
- * reads each entrant's Twitch channel on racetime.gg and finds the past
- * broadcast covering the race start, linked at that moment (`race.vods`).
+ * Racers stream their races: for each finished racetime.gg race, reads each
+ * entrant's Twitch channel on racetime.gg and finds the past broadcast
+ * covering the race start, linked at that moment (`race.vods`).
  * Then drops the VODs Twitch has deleted since, keeping the channel.
  *
  * A race is looked up until 12 h after its end (the VOD can show up late),
  * then left alone. Twitch keeps past broadcasts 7 to 60 days.
  *
  * Usage:
- *   node scripts/sync-race-vods.js               # tournament races of the last 2 days
+ *   node scripts/sync-race-vods.js               # races of the last 2 days
  *   node scripts/sync-race-vods.js --days 60     # backfill, as far as Twitch keeps VODs
  *   node scripts/sync-race-vods.js --dry-run
  */
@@ -61,13 +61,12 @@ async function findRaceVods({ dryRun, days }, stats) {
   const races = (await Race.find({
     status: 'finished',
     startedAt: { $gte: new Date(now - days * 24 * 3600 * 1000) },
-    $or: [{ tournamentId: { $ne: null } }, { startggSetId: { $ne: null } }],
     url: /^\/[^/]+\/[^/]+$/
   }).select('_id url name startedAt endedAt vods vodSearchedAt').lean())
     // Looked up until 12 h after the race end, then left alone
     .filter(r => !r.vodSearchedAt || new Date(r.vodSearchedAt).getTime() < new Date(r.endedAt || r.startedAt).getTime() + RETRY_AFTER_END_MS);
   if (!races.length) return;
-  console.log(`\n🏁 ${races.length} race(s) de tournoi à chercher`);
+  console.log(`\n🏁 ${races.length} race(s) à chercher`);
 
   // Each race's entrants with a Twitch channel and no VOD yet
   const pending = [];

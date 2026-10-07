@@ -28,12 +28,22 @@ const TWITCH_CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET;
 
 let twitchAccessToken = null;
 let twitchTokenExpires = 0;
+let twitchTokenInFlight = null;
 
-async function getTwitchToken() {
+// Concurrent callers share a single token request
+function getTwitchToken() {
   if (twitchAccessToken && twitchTokenExpires > Date.now()) {
-    return twitchAccessToken;
+    return Promise.resolve(twitchAccessToken);
   }
+  if (!twitchTokenInFlight) {
+    twitchTokenInFlight = requestTwitchToken().finally(() => {
+      twitchTokenInFlight = null;
+    });
+  }
+  return twitchTokenInFlight;
+}
 
+async function requestTwitchToken() {
   if (!TWITCH_CLIENT_ID || !TWITCH_CLIENT_SECRET) {
     return null;
   }
@@ -338,7 +348,121 @@ const RANDOMIZER_ACRONYMS = {
 
 // Cache for Twitch game IDs
 const gameIdCache = {};
+const gameIdNotFound = new Map(); // name -> expiry, unknown to the one-name lookup
+const GAME_ID_NOT_FOUND_TTL = 30 * 60 * 1000;
 const twitchStreamsInFlight = new Map();
+
+function twitchHeaders(token) {
+  return {
+    'Client-ID': TWITCH_CLIENT_ID,
+    'Authorization': `Bearer ${token}`
+  };
+}
+
+// Twitch allows a bucket of requests (800) refilled over a minute and answers
+// 429 beyond; refusals used to be treated as "no streams" and cached for 5
+// minutes. Requests now follow the remaining quota Twitch reports: once it
+// runs low they are spaced at the refill rate instead of being refused.
+const twitchBucket = { tokens: null, limit: 800, updatedAt: 0 };
+const TWITCH_MAX_RETRIES = 3;
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+async function takeTwitchRequestSlot() {
+  for (;;) {
+    if (twitchBucket.tokens === null) return; // quota unknown until the first answer
+    const now = Date.now();
+    const refilled = (now - twitchBucket.updatedAt) * twitchBucket.limit / 60000;
+    const tokens = Math.min(twitchBucket.limit, twitchBucket.tokens + refilled);
+    if (tokens >= 1) {
+      twitchBucket.tokens = tokens - 1;
+      twitchBucket.updatedAt = now;
+      return;
+    }
+    await sleep(Math.ceil((1 - tokens) * 60000 / twitchBucket.limit));
+  }
+}
+
+function recordTwitchQuota(response) {
+  const remaining = Number(response.headers.get('ratelimit-remaining'));
+  const limit = Number(response.headers.get('ratelimit-limit'));
+  if (Number.isFinite(limit) && limit > 0) twitchBucket.limit = limit;
+  if (!Number.isFinite(remaining)) return;
+  const now = Date.now();
+  const local = twitchBucket.tokens === null
+    ? Infinity
+    : twitchBucket.tokens + (now - twitchBucket.updatedAt) * twitchBucket.limit / 60000;
+  // Keep the more cautious of our estimate and Twitch's figure
+  twitchBucket.tokens = Math.min(local, remaining);
+  twitchBucket.updatedAt = now;
+}
+
+async function twitchFetch(url, token) {
+  let response;
+  for (let attempt = 0; attempt <= TWITCH_MAX_RETRIES; attempt++) {
+    await takeTwitchRequestSlot();
+    response = await fetch(url, { headers: twitchHeaders(token) });
+    recordTwitchQuota(response);
+    if (response.status !== 429 || attempt === TWITCH_MAX_RETRIES) return response;
+    twitchBucket.tokens = 0;
+    twitchBucket.updatedAt = Date.now();
+  }
+  return response;
+}
+
+// Resolve many Twitch category names at once (100 per request) into gameIdCache,
+// instead of one /helix/games request per name
+async function prefetchTwitchGameIds(names, token) {
+  const pending = Array.from(new Set(names.map(n => String(n || '').trim()).filter(Boolean)))
+    .filter(name => !gameIdCache[name] && !((gameIdNotFound.get(name) || 0) > Date.now()));
+
+  for (let start = 0; start < pending.length; start += 100) {
+    const chunk = pending.slice(start, start + 100);
+    try {
+      const params = chunk.map(name => `name=${encodeURIComponent(name)}`).join('&');
+      const response = await twitchFetch(`https://api.twitch.tv/helix/games?${params}`, token);
+      if (!response.ok) continue; // leave these to the one-by-one lookup
+      const data = await response.json();
+      const idByName = new Map((data.data || []).map(game => [String(game.name || '').toLowerCase(), game.id]));
+      for (const name of chunk) {
+        const id = idByName.get(name.toLowerCase());
+        // Names Twitch answers under another title (aliases) are left to the
+        // one-name lookup, which resolves them
+        if (id) gameIdCache[name] = id;
+      }
+    } catch (error) {
+      console.warn('Batched Twitch game lookup failed:', error?.message || error);
+    }
+  }
+}
+
+// Raw Twitch streams of one category (null when Twitch refuses). The same
+// category is often asked twice in a row (by id, then by name resolving to
+// that id): the identical request is shared for a minute.
+const RAW_CATEGORY_STREAMS_TTL = 60 * 1000;
+const rawCategoryStreams = new Map(); // categoryId -> { expiresAt, promise }
+
+function fetchCategoryRawStreams(categoryId, token) {
+  const key = String(categoryId);
+  const entry = rawCategoryStreams.get(key);
+  if (entry && entry.expiresAt > Date.now()) return entry.promise;
+
+  const promise = (async () => {
+    const response = await twitchFetch(`https://api.twitch.tv/helix/streams?game_id=${encodeURIComponent(key)}&first=100`, token);
+    if (!response.ok) return null;
+    const data = await response.json();
+    return data.data || [];
+  })();
+  rawCategoryStreams.set(key, { expiresAt: Date.now() + RAW_CATEGORY_STREAMS_TTL, promise });
+  // A refusal or error is not kept: the next caller asks Twitch again
+  promise.then(result => {
+    if (result === null) rawCategoryStreams.delete(key);
+  }, () => rawCategoryStreams.delete(key));
+  if (rawCategoryStreams.size > 2000) {
+    const now = Date.now();
+    for (const [k, v] of rawCategoryStreams) if (v.expiresAt <= now) rawCategoryStreams.delete(k);
+  }
+  return promise;
+}
 
 async function mapWithConcurrency(items, concurrency, mapper) {
   const list = Array.isArray(items) ? items : [];
@@ -363,14 +487,13 @@ async function getTwitchGameId(gameName, token) {
   if (gameIdCache[gameName]) {
     return gameIdCache[gameName];
   }
+  // Recently looked up and unknown to Twitch
+  if ((gameIdNotFound.get(gameName) || 0) > Date.now()) {
+    return null;
+  }
 
   try {
-    const response = await fetch(`https://api.twitch.tv/helix/games?name=${encodeURIComponent(gameName)}`, {
-      headers: {
-        'Client-ID': TWITCH_CLIENT_ID,
-        'Authorization': `Bearer ${token}`
-      }
-    });
+    const response = await twitchFetch(`https://api.twitch.tv/helix/games?name=${encodeURIComponent(gameName)}`, token);
 
     if (response.ok) {
       const data = await response.json();
@@ -378,6 +501,8 @@ async function getTwitchGameId(gameName, token) {
         gameIdCache[gameName] = data.data[0].id;
         return data.data[0].id;
       }
+      // Twitch answered that this name does not exist: don't ask again for a while
+      gameIdNotFound.set(gameName, Date.now() + GAME_ID_NOT_FOUND_TTL);
     }
   } catch (error) {
     console.error(`Error fetching Twitch game ID for ${gameName}:`, error);
@@ -412,16 +537,10 @@ async function fetchTwitchStreamsByCategoryId(categoryId, gameNameForFilter, inc
     const streams = [];
 
     try {
-      const response = await fetch(`https://api.twitch.tv/helix/streams?game_id=${encodeURIComponent(normalizedCategoryId)}&first=100`, {
-        headers: {
-          'Client-ID': TWITCH_CLIENT_ID,
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const rawStreams = await fetchCategoryRawStreams(normalizedCategoryId, token);
 
-      if (response.ok) {
-        const data = await response.json();
-        let candidateStreams = (data.data || []);
+      if (rawStreams) {
+        let candidateStreams = rawStreams;
 
         if (!includeAll) {
           candidateStreams = candidateStreams.filter(stream => isRandomizerStream(stream, gameNameForFilter || stream.game_name));
@@ -551,16 +670,10 @@ async function fetchTwitchStreams(gameName, includeAll = false) {
     const gameId = await getTwitchGameId(normalizedGameName, token);
     
     if (gameId) {
-      const response = await fetch(`https://api.twitch.tv/helix/streams?game_id=${gameId}&first=100`, {
-        headers: {
-          'Client-ID': TWITCH_CLIENT_ID,
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const rawStreams = await fetchCategoryRawStreams(gameId, token);
 
-      if (response.ok) {
-        const data = await response.json();
-        let candidateStreams = (data.data || []);
+      if (rawStreams) {
+        let candidateStreams = rawStreams;
 
         // By default, only include streams that mention randomizer/rando in title or tags,
         // OR that use game-specific acronyms (e.g., "OoTR", "SSR", "ALBWR").
@@ -708,12 +821,7 @@ async function fetchTwitchStreamsByLogins(logins) {
 
   try {
     const params = uniqueLogins.map(login => `user_login=${encodeURIComponent(login)}`).join('&');
-    const response = await fetch(`https://api.twitch.tv/helix/streams?${params}&first=100`, {
-      headers: {
-        'Client-ID': TWITCH_CLIENT_ID,
-        'Authorization': `Bearer ${token}`
-      }
-    });
+    const response = await twitchFetch(`https://api.twitch.tv/helix/streams?${params}&first=100`, token);
 
     if (!response.ok) return [];
 
@@ -779,7 +887,9 @@ async function fetchRacetimeLiveStreamsForGame(gameDoc, gameIdLower) {
   }
 }
 
-async function buildGameStreamsResult(gameId) {
+// preloadedDoc: the game document when the caller already has it (same
+// lookup as below: enabled game whose id is exactly gameIdLower), or null
+async function buildGameStreamsResult(gameId, preloadedDoc) {
   const gameIdLower = String(gameId || '').toLowerCase();
   const cacheKey = `streams:${gameIdLower}`;
 
@@ -788,7 +898,9 @@ async function buildGameStreamsResult(gameId) {
     return cached;
   }
 
-  const gameDoc = await Game.findOne({ id: gameIdLower, enabled: { $ne: false } });
+  const gameDoc = preloadedDoc !== undefined
+    ? preloadedDoc
+    : await Game.findOne({ id: gameIdLower, enabled: { $ne: false } });
   if (!gameDoc) {
     return {
       gameId,
@@ -916,11 +1028,43 @@ async function buildGameStreamsResult(gameId) {
   return result;
 }
 
+// Twitch category names a game's stream lookup may use (see buildGameStreamsResult)
+function twitchNamesForGame(gameDoc) {
+  const gameIdLower = String(gameDoc.id || '').toLowerCase();
+  if (COMBO_GAMES[gameIdLower]) return COMBO_GAMES[gameIdLower];
+  const name = gameDoc.integrations?.twitch?.categoryName
+    || TWITCH_GAME_NAMES[gameIdLower] || gameDoc.official?.name || gameDoc.name;
+  return Array.isArray(name) ? name : [name];
+}
+
+// Resolve every game's Twitch category names in a few batched requests
+// instead of one per game (which, with the stream requests, exceeded
+// Twitch's rate limit). Stream lists stay one request per category: a
+// multi-category request cannot tell whether it returned every stream.
+async function prefetchTwitchForGames(gameDocs) {
+  const token = await getTwitchToken();
+  if (!token) return;
+  try {
+    const names = gameDocs.flatMap(twitchNamesForGame).filter(n => typeof n === 'string');
+    await prefetchTwitchGameIds(names, token);
+  } catch (error) {
+    // The per-game lookups below still work without the prefetch
+    console.warn('Twitch prefetch failed:', error?.message || error);
+  }
+}
+
 async function buildStreamsStatsByGame() {
-  const games = await Game.find({ enabled: { $ne: false } }).select('id').lean();
-  const gameIds = games
+  const gameDocs = await Game.find({ enabled: { $ne: false } });
+  const gameIds = gameDocs
     .map(game => String(game.id || '').toLowerCase())
     .filter(Boolean);
+  // Same document buildGameStreamsResult would find: id stored exactly in lowercase
+  const docById = new Map();
+  for (const doc of gameDocs) {
+    if (doc.id && doc.id === doc.id.toLowerCase() && !docById.has(doc.id)) docById.set(doc.id, doc);
+  }
+
+  await prefetchTwitchForGames(Array.from(docById.values()));
 
   const stats = {};
   const concurrency = Math.min(8, gameIds.length);
@@ -933,7 +1077,7 @@ async function buildStreamsStatsByGame() {
       const gameId = gameIds[currentIndex];
 
       try {
-        const result = await buildGameStreamsResult(gameId);
+        const result = await buildGameStreamsResult(gameId, docById.get(gameId) || null);
         const streams = result?.streams || [];
         stats[gameId] = {
           streamers: streams.length,

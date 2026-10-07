@@ -203,13 +203,18 @@
             gamesBySlug[slug.toLowerCase()] = g;
           });
         }
-        
-        // Add option to select
-        const opt = document.createElement('option');
-        opt.value = g.id;
-        opt.textContent = resolveGameLabel(g) || g.id;
-        gameSelect.appendChild(opt);
       });
+
+      // Add options to select, sorted alphabetically by label
+      games
+        .map(g => ({ id: g.id, label: resolveGameLabel(g) || g.id }))
+        .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base', numeric: true }))
+        .forEach(({ id, label }) => {
+          const opt = document.createElement('option');
+          opt.value = id;
+          opt.textContent = label;
+          gameSelect.appendChild(opt);
+        });
     } catch (e) {
       console.error('Failed to load games:', e);
     }

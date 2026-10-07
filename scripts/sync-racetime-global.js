@@ -13,6 +13,7 @@
  *   node scripts/sync-racetime-global.js --game <slug>      # Sync complète d'un jeu
  *   node scripts/sync-racetime-global.js --max-pages 100    # Limiter les pages (avec --game)
  *   node scripts/sync-racetime-global.js --catch-up-since 2026-09-01  # Rattraper les races manquées
+ *   node scripts/sync-racetime-global.js --catch-up-since 2020-01-01 --categories alttpr,z1r
  */
 
 const path = require('path');
@@ -312,10 +313,10 @@ async function upsertPastRace(raceData, gameSlug, stats) {
  * catégories (rotation), jusqu'à retomber sur une race déjà connue.
  */
 async function catchUpFinishedRaces(options = {}) {
-  const { since = null } = options;
+  const { since = null, categories = null } = options;
   console.log('\n🧹 Rattrapage des races terminées...');
   
-  const slugs = [...await getActiveSlugs()].sort();
+  const slugs = (categories || [...await getActiveSlugs()]).sort();
   let slice = slugs;
   if (since) {
     console.log(`  ${slugs.length} catégories, depuis ${since.toISOString().slice(0, 10)}`);
@@ -332,14 +333,17 @@ async function catchUpFinishedRaces(options = {}) {
     for (let page = 1; since || page <= CATCH_UP_MAX_PAGES; page++) {
       try {
         await sleep(RATE_LIMIT_MS);
-        const result = await racetimeAPI.getPastRaces(slug, page);
+        const result = await getPastRacesWithRetry(slug, page);
         if (!result.races?.length) break;
         
         const urls = result.races.map(r => r.url);
+        // Une race annulée avant le départ n'a jamais de startedAt
         const known = new Set((await Race.find({
           url: { $in: urls },
-          status: { $in: ['finished', 'cancelled'] },
-          startedAt: { $ne: null }
+          $or: [
+            { status: 'finished', startedAt: { $ne: null } },
+            { status: 'cancelled' }
+          ]
         }).select('url').lean()).map(r => r.url));
         
         for (const raceData of result.races) {
@@ -348,9 +352,11 @@ async function catchUpFinishedRaces(options = {}) {
         
         if (since) {
           // Mode manuel: remonter jusqu'à la date demandée, même au-delà des races connues
-          const oldest = result.races[result.races.length - 1];
-          const oldestTs = new Date(oldest.startedAt || oldest.endedAt || 0).getTime();
-          if (oldestTs < since.getTime() || !result.hasNext) break;
+          // (une race annulée avant le départ n'a pas de date: on l'ignore)
+          const timestamps = result.races
+            .map(r => new Date(r.startedAt || r.endedAt || NaN).getTime())
+            .filter(ts => !Number.isNaN(ts));
+          if (!result.hasNext || (timestamps.length && Math.min(...timestamps) < since.getTime())) break;
         } else if (known.size) {
           // Les pages suivantes sont plus anciennes: déjà importées
           break;
@@ -362,8 +368,20 @@ async function catchUpFinishedRaces(options = {}) {
     }
   }
   
-  console.log(`  ✓ ${stats.newRaces} nouvelles, ${stats.updatedRaces} màj`);
+  console.log(`  ✓ ${stats.newRaces} nouvelles, ${stats.updatedRaces} màj, ${stats.errors} erreur(s)`);
   return stats;
+}
+
+// racetime.gg renvoie parfois 429/5xx sur les longues séries de pages
+async function getPastRacesWithRetry(slug, page, attempts = 3) {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await racetimeAPI.getPastRaces(slug, page);
+    } catch (err) {
+      if (attempt >= attempts) throw err;
+      await sleep(attempt * 10000);
+    }
+  }
 }
 
 /**
@@ -423,7 +441,10 @@ async function main() {
     
     if (catchUpSinceArg && !Number.isNaN(catchUpSinceArg.getTime())) {
       // Mode manuel: rattrapage de toutes les catégories depuis une date
-      await catchUpFinishedRaces({ since: catchUpSinceArg });
+      const categories = args.includes('--categories')
+        ? args[args.indexOf('--categories') + 1].split(',').filter(Boolean)
+        : null;
+      await catchUpFinishedRaces({ since: catchUpSinceArg, categories });
     } else if (gameArg) {
       // Mode manuel: sync complète d'un jeu
       const game = await Game.findOne({ id: gameArg }).select('integrations.racetime').lean();

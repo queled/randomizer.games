@@ -1108,12 +1108,12 @@ function displayMatches(matches, tournament, races = []) {
       // Phase header
       const phaseHeader = document.createElement('h3');
       phaseHeader.style.cssText = phaseIdx > 0 ? 'font-size: 1.25rem; font-weight: bold; margin-top: 2.5rem; margin-bottom: 1rem; padding-top: 1.5rem; border-top: 2px solid #374151;' : 'font-size: 1.25rem; font-weight: bold; margin-top: 0.5rem; margin-bottom: 1rem;';
-      phaseHeader.textContent = phaseName;
+      phaseHeader.textContent = translatePhaseName(phaseName);
       phaseHeader.classList.add('text-gold');
       container.appendChild(phaseHeader);
 
-      // Separate winner and loser bracket matches (isPool: one pool of a multi-pool phase, named like start.gg pools)
-      const renderRounds = (list, isPool) => {
+      // Separate winner and loser bracket matches
+      const renderRounds = (list) => {
         const winnerMatches = list.filter(m => (m.round || 0) > 0);
         const loserMatches = list.filter(m => (m.round || 0) < 0);
 
@@ -1130,17 +1130,17 @@ function displayMatches(matches, tournament, races = []) {
         const winnerByRound = groupByRound(winnerMatches);
         const loserByRound = groupByRound(loserMatches);
         const phaseIsDE = Object.keys(loserByRound).length > 0;
+        const roundLabels = getBracketRoundLabels(list, phaseIsDE);
 
         // Winner bracket rounds (from Grand Finals to Round 1)
         const winnerRounds = Object.keys(winnerByRound).map(r => parseInt(r)).sort((a, b) => b - a);
-        const totalWinnerRounds = winnerRounds.length;
 
         const phaseIsStandings = isStandingsPhase(tournament, phaseName);
 
-        winnerRounds.forEach((round, index) => {
+        winnerRounds.forEach(round => {
           const roundName = phaseIsStandings
             ? `${i18n.t('tournamentDetail.roundNumber') || 'Tour'} ${round}`
-            : getRoundNameForBracket(round, 'winner', totalWinnerRounds, totalWinnerRounds - index - 1, phaseIsDE, isPool);
+            : roundLabels.label(round);
           const roundHeader = document.createElement('h4');
           roundHeader.style.cssText = 'font-size: 1.1rem; font-weight: bold; margin-top: 1.25rem; margin-bottom: 0.75rem;';
           roundHeader.textContent = roundName;
@@ -1156,12 +1156,11 @@ function displayMatches(matches, tournament, races = []) {
         // Loser bracket rounds
         if (phaseIsDE) {
           const loserRounds = Object.keys(loserByRound).map(r => parseInt(r)).sort((a, b) => a - b);
-          const totalLoserRounds = loserRounds.length;
 
-          loserRounds.forEach((round, index) => {
-            const roundName = getRoundNameForBracket(round, 'loser', totalLoserRounds, totalLoserRounds - index - 1, true, isPool);
+          loserRounds.forEach(round => {
+            const roundName = roundLabels.label(round);
             const roundHeader = document.createElement('h4');
-            roundHeader.style.cssText = 'font-size: 1.1rem; font-weight: bold; margin-top: 1.25rem; margin-bottom: 0.75rem; color: #a78bfa;';
+            roundHeader.style.cssText = 'font-size: 1.1rem; font-weight: bold; margin-top: 1.25rem; margin-bottom: 0.75rem; color: #ef4444;';
             roundHeader.textContent = roundName;
             container.appendChild(roundHeader);
 
@@ -1180,12 +1179,12 @@ function displayMatches(matches, tournament, races = []) {
         pools.forEach((poolId, poolIdx) => {
           const poolHeader = document.createElement('h4');
           poolHeader.style.cssText = 'font-size: 1.15rem; font-weight: bold; margin-top: 1.75rem; margin-bottom: 0.25rem; color: #60a5fa;';
-          poolHeader.textContent = `Pool ${String.fromCharCode('A'.charCodeAt(0) + poolIdx)}`;
+          poolHeader.textContent = `${i18n.t('tournamentDetail.pool') || 'Pool'} ${String.fromCharCode('A'.charCodeAt(0) + poolIdx)}`;
           container.appendChild(poolHeader);
-          renderRounds(phaseMatches.filter(m => m.phaseGroup === poolId), true);
+          renderRounds(phaseMatches.filter(m => m.phaseGroup === poolId));
         });
       } else {
-        renderRounds(phaseMatches, false);
+        renderRounds(phaseMatches);
       }
     });
 
@@ -1210,12 +1209,12 @@ function displayMatches(matches, tournament, races = []) {
       byRound[r].push(m);
     });
     const rounds = Object.keys(byRound).map(r => parseInt(r)).sort((a, b) => b - a);
-    const totalRounds = rounds.length;
+    const finalRoundLabels = getBracketRoundLabels(winnerMatches, false);
 
-    rounds.forEach((round, idx) => {
+    rounds.forEach(round => {
       const roundTitle = document.createElement('h3');
       roundTitle.style.cssText = 'font-size: 1.1rem; font-weight: bold; margin-top: 1.25rem; margin-bottom: 0.75rem;';
-      roundTitle.textContent = getRoundNameForBracket(round, 'winner', totalRounds, totalRounds - idx - 1, false);
+      roundTitle.textContent = finalRoundLabels.label(round);
       roundTitle.classList.add('text-gold');
       container.appendChild(roundTitle);
 
@@ -1374,13 +1373,13 @@ function displayMatches(matches, tournament, races = []) {
   const loserByRound = groupByRound(loserMatches);
 
   const isDoubleElimination = Object.keys(loserByRound).length > 0;
+  const roundLabels = getBracketRoundLabels(matches, isDoubleElimination);
 
   // Display winner bracket (from Grand Finals to Round 1)
   const winnerRounds = Object.keys(winnerByRound).map(r => parseInt(r)).sort((a, b) => b - a);
-  const totalWinnerRounds = winnerRounds.length;
   
-  winnerRounds.forEach((round, index) => {
-    const roundName = getRoundNameForBracket(round, 'winner', totalWinnerRounds, totalWinnerRounds - index - 1, isDoubleElimination);
+  winnerRounds.forEach(round => {
+    const roundName = roundLabels.label(round);
     
     const roundHeader = document.createElement('h3');
     roundHeader.style.cssText = 'font-size: 1.25rem; font-weight: bold; margin-top: 1.5rem; margin-bottom: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;';
@@ -1397,13 +1396,12 @@ function displayMatches(matches, tournament, races = []) {
 
   // Display loser bracket (from LB Final to Round 1)
   const loserRounds = Object.keys(loserByRound).map(r => parseInt(r)).sort((a, b) => a - b);
-  const totalLoserRounds = loserRounds.length;
   
-  loserRounds.forEach((round, index) => {
-    const roundName = getRoundNameForBracket(round, 'loser', totalLoserRounds, totalLoserRounds - index - 1, true);
+  loserRounds.forEach(round => {
+    const roundName = roundLabels.label(round);
     
     const roundHeader = document.createElement('h3');
-    roundHeader.style.cssText = 'font-size: 1.25rem; font-weight: bold; margin-top: 1.5rem; margin-bottom: 1rem; color: #a78bfa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;';
+    roundHeader.style.cssText = 'font-size: 1.25rem; font-weight: bold; margin-top: 1.5rem; margin-bottom: 1rem; color: #ef4444; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;';
     roundHeader.textContent = roundName;
     roundHeader.title = roundName;
     container.appendChild(roundHeader);
@@ -2325,7 +2323,7 @@ function formatTournamentTypeForDisplay(tournament) {
     
     const sorted = sortPhasesChronologically(tournament.phases, tournament.matches || []);
     const parts = sorted.map(p => {
-      const name = p.name || 'Phase';
+      const name = translatePhaseName(p.name) || 'Phase';
       const bt = bracketTypeLabel(p.bracketType);
       const pools = p.groupCount > 1 ? ` (${p.groupCount} pools)` : '';
       return `${name} (${bt}${pools})`;
@@ -2877,7 +2875,7 @@ function displayMultiPhaseBracket(matches, container, isDoubleElimination, phase
     // Phase title
     const phaseTitle = document.createElement('h3');
     phaseTitle.style.cssText = 'font-size: 1.5rem; font-weight: bold; margin-bottom: 1.5rem; text-align: center; color: #fbbf24;';
-    phaseTitle.textContent = phaseName;
+    phaseTitle.textContent = translatePhaseName(phaseName);
     phaseSection.appendChild(phaseTitle);
     
     // Check if this phase has pools
@@ -3099,7 +3097,7 @@ function displayPoolsBracket(matches, container, isDoubleElimination, phaseGroup
       font-weight: 600;
       transition: all 0.2s;
     `;
-    tabBtn.textContent = `Pool ${letter}`;
+    tabBtn.textContent = `${i18n.t('tournamentDetail.pool') || 'Pool'} ${letter}`;
     tabBtn.dataset.pool = poolId;
     
     tabBtn.addEventListener('click', () => {
@@ -3160,35 +3158,7 @@ function displayPoolsBracket(matches, container, isDoubleElimination, phaseGroup
     if (poolMatches.length === 0) {
       poolDiv.innerHTML = '<p style="color: #9ca3af;">No matches in this pool</p>';
     } else if (isDoubleElimination) {
-      // Separate winner and loser bracket matches
-      const winnerMatches = poolMatches.filter(m => m.round > 0);
-      const loserMatches = poolMatches.filter(m => m.round < 0);
-      
-      if (winnerMatches.length > 0) {
-        const winnerTitle = document.createElement('h4');
-        winnerTitle.textContent = i18n.t('tournamentDetail.winnersBracket') || 'Winners Bracket';
-        winnerTitle.style.cssText = 'color: #10b981; margin-bottom: 1rem; font-size: 1.1rem;';
-        poolDiv.appendChild(winnerTitle);
-        
-        const winnerContainer = document.createElement('div');
-        winnerContainer.className = 'bracket-section winner-bracket-section';
-        displayBracketSection(winnerMatches, winnerContainer, 'winner', true, true);
-        poolDiv.appendChild(winnerContainer);
-      }
-      
-      if (loserMatches.length > 0) {
-        const loserTitle = document.createElement('h4');
-        loserTitle.textContent = i18n.t('tournamentDetail.losersBracket') || 'Losers Bracket';
-        loserTitle.style.cssText = 'color: #ef4444; margin: 1.5rem 0 1rem 0; font-size: 1.1rem;';
-        poolDiv.appendChild(loserTitle);
-        
-        const loserContainer = document.createElement('div');
-        loserContainer.className = 'bracket-section loser-bracket-section';
-        // Convert negative rounds to positive for display
-        const loserMatchesForDisplay = loserMatches.map(m => ({ ...m, round: Math.abs(m.round) }));
-        displayBracketSection(loserMatchesForDisplay, loserContainer, 'loser', true, true);
-        poolDiv.appendChild(loserContainer);
-      }
+      displayDoubleEliminationBracket(poolMatches, poolDiv, true);
     } else {
       // Single elimination pool
       displayBracketSection(poolMatches, poolDiv, 'winner', false, true);
@@ -3221,67 +3191,40 @@ function displaySingleEliminationBracket(matches, container) {
   displayBracketSection(finalStageMatches, container, 'winner', false);
 }
 
-function displayDoubleEliminationBracket(matches, container) {
-  // Separate Winner and Loser brackets
-  const winnerMatches = [];
-  const loserMatches = [];
-  
-  // Ensure matches is an array
+// Winners then losers bracket, with the same titles whether the bracket is a whole phase or one of its pools
+function displayDoubleEliminationBracket(matches, container, isPoolBracket = false) {
   if (!matches || !Array.isArray(matches)) {
     container.innerHTML = '<p style="color: #9ca3af;">Error: invalid match data</p>';
     return;
   }
-  
-  matches.forEach(match => {
-    if (!match) return;
-    const round = match.round || 0;
-    // Positive rounds = winner bracket, negative rounds = loser bracket
-    if (round > 0) {
-      winnerMatches.push(match);
-    } else if (round < 0) {
-      loserMatches.push(match);
-    }
-  });
-  
+  const bracketMatches = matches.filter(Boolean);
+
   container.innerHTML = '';
-  
-  // Winner Bracket (includes grand finals)
-  if (winnerMatches.length > 0) {
-    const winnerSection = document.createElement('div');
-    winnerSection.style.cssText = 'margin-bottom: 2rem;';
-    
-    const winnerTitle = document.createElement('h3');
-    winnerTitle.style.cssText = 'font-size: 1.25rem; font-weight: bold; margin-bottom: 1rem; text-align: center;';
-    winnerTitle.textContent = '🏆 ' + (typeof i18n !== 'undefined' ? i18n.t('tournamentDetail.winnersBracket') : 'Winners Bracket');
-    winnerTitle.classList.add('text-gold');
-    winnerSection.appendChild(winnerTitle);
-    
-    const winnerBracketDiv = document.createElement('div');
-    displayBracketSection(winnerMatches, winnerBracketDiv, 'winner', true);
-    winnerSection.appendChild(winnerBracketDiv);
-    
-    container.appendChild(winnerSection);
-  }
-  
-  // Loser Bracket
-  if (loserMatches.length > 0) {
-    const loserSection = document.createElement('div');
-    loserSection.style.cssText = 'margin-bottom: 2rem;';
-    
-    const loserTitle = document.createElement('h3');
-    loserTitle.style.cssText = 'font-size: 1.25rem; font-weight: bold; color: #ef4444; margin-bottom: 1rem; text-align: center;';
-    loserTitle.textContent = '💔 ' + (typeof i18n !== 'undefined' ? i18n.t('tournamentDetail.losersBracket') : 'Losers Bracket');
-    loserSection.appendChild(loserTitle);
-    
-    const loserBracketDiv = document.createElement('div');
-    displayBracketSection(loserMatches, loserBracketDiv, 'loser', true);
-    loserSection.appendChild(loserBracketDiv);
-    
-    container.appendChild(loserSection);
-  }
+  [
+    { side: 'winner', list: bracketMatches.filter(m => (m.round || 0) > 0), icon: '🏆', titleKey: 'winnersBracket', fallback: 'Winners Bracket' },
+    { side: 'loser', list: bracketMatches.filter(m => (m.round || 0) < 0), icon: '💔', titleKey: 'losersBracket', fallback: 'Losers Bracket' }
+  ].forEach(({ side, list, icon, titleKey, fallback }) => {
+    if (list.length === 0) return;
+    const section = document.createElement('div');
+    section.className = `bracket-section ${side}-bracket-section`;
+    section.style.cssText = 'margin-bottom: 2rem;';
+
+    const title = document.createElement('h3');
+    title.style.cssText = 'font-size: 1.25rem; font-weight: bold; margin-bottom: 1rem; text-align: center;';
+    title.textContent = `${icon} ${i18n.t(`tournamentDetail.${titleKey}`) || fallback}`;
+    if (side === 'winner') title.classList.add('text-gold');
+    else title.style.color = '#ef4444';
+    section.appendChild(title);
+
+    const bracketDiv = document.createElement('div');
+    displayBracketSection(list, bracketDiv, side, true, isPoolBracket, bracketMatches);
+    section.appendChild(bracketDiv);
+    container.appendChild(section);
+  });
 }
 
-function displayBracketSection(matches, container, bracketType = 'winner', isDoubleElimination = false, isPoolBracket = false) {
+function displayBracketSection(matches, container, bracketType = 'winner', isDoubleElimination = false, isPoolBracket = false, bracketMatches = matches) {
+  const roundLabels = getBracketRoundLabels(bracketMatches, isDoubleElimination);
   // Group matches by round
   const byRound = {};
   matches.forEach(match => {
@@ -3290,19 +3233,8 @@ function displayBracketSection(matches, container, bracketType = 'winner', isDou
     byRound[round].push(match);
   });
 
-  // Sort rounds
-  // Detect convention: Challonge uses -1 as first losers round (sort descending),
-  // Start.gg uses most-negative as first losers round (sort ascending)
-  const loserRoundNumbers = Object.keys(byRound).map(r => parseInt(r)).filter(r => r < 0);
-  const isChallongeConvention = loserRoundNumbers.includes(-1);
-  const sortedRounds = Object.keys(byRound).map(r => parseInt(r)).sort((a, b) => {
-    if (bracketType === 'loser') {
-      // Challonge: -1 first (descending). Start.gg: most negative first (ascending).
-      return isChallongeConvention ? (b - a) : (a - b);
-    } else {
-      return a - b;
-    }
-  });
+  // Bracket order: start.gg (-3, -4...) and Challonge (-1, -2...) losers rounds both grow in magnitude
+  const sortedRounds = Object.keys(byRound).map(r => parseInt(r)).sort((a, b) => Math.abs(a) - Math.abs(b));
   
   // Sort matches within each round by their ID to maintain logical order
   sortedRounds.forEach(round => {
@@ -3332,8 +3264,10 @@ function displayBracketSection(matches, container, bracketType = 'winner', isDou
   bracketHTML.className = 'bracket-container';
   
   sortedRounds.forEach((round, index) => {
-    const isGrandFinal = bracketType === 'winner' && index === sortedRounds.length - 1 && !isPoolBracket;
-    const roundColumn = createRoundColumn(byRound[round], round, columnWidth, bracketType, numRounds, index, isGrandFinal, isDoubleElimination, isPoolBracket);
+    // Highlight the grand final, or the final of a single elimination bracket
+    const isGrandFinal = roundLabels.grandFinalRounds.has(round)
+      || (!isDoubleElimination && !isPoolBracket && index === sortedRounds.length - 1);
+    const roundColumn = createRoundColumn(byRound[round], round, columnWidth, roundLabels.label(round), index, isGrandFinal);
     bracketHTML.appendChild(roundColumn);
   });
   
@@ -3351,7 +3285,7 @@ function displayBracketSection(matches, container, bracketType = 'winner', isDou
   setTimeout(() => drawBracketConnectors(bracketHTML, svg, sortedRounds.length, bracketType, byRound, sortedRounds, isPoolBracket), 50);
 }
 
-function createRoundColumn(matches, round, width, bracketType = 'winner', totalRounds = 0, roundIndex = 0, isGrandFinal = false, isDoubleElimination = false, isPoolBracket = false) {
+function createRoundColumn(matches, round, width, label, roundIndex = 0, isGrandFinal = false) {
   const roundColumn = document.createElement('div');
   roundColumn.style.cssText = `display: flex; flex-direction: column; width: ${width}; position: relative;`;
   roundColumn.setAttribute('data-round', round);
@@ -3361,7 +3295,7 @@ function createRoundColumn(matches, round, width, bracketType = 'winner', totalR
   const header = document.createElement('div');
   header.style.cssText = 'font-weight: bold; margin-bottom: 0.75rem; text-align: center; padding: 0.4rem; background-color: #374151; border-radius: 0.25rem; font-size: 0.75rem;';
   
-  header.textContent = getRoundNameForBracket(round, bracketType, totalRounds, roundIndex, isDoubleElimination, isPoolBracket);
+  header.textContent = label;
   header.classList.add('text-gold');
   
   roundColumn.appendChild(header);
@@ -3744,75 +3678,82 @@ function setupPathHighlighting(bracketContainer) {
   });
 }
 
-function getRoundNameForBracket(round, bracketType, totalRounds, roundIndex, isDoubleElimination = false, isPoolBracket = false) {
-  const roundsFromEnd = totalRounds - roundIndex - 1;
+// Round names as start.gg gives them, from the bracket size rather than from the rounds played so far:
+// a pool stopped at its top 4 ends on "Winners Semi-Final", a 4-player group on "Winners Final".
+function getBracketRoundLabels(matches, isDoubleElimination) {
+  const list = (matches || []).filter(Boolean);
+  const isDE = isDoubleElimination === undefined ? list.some(m => (m.round || 0) < 0) : !!isDoubleElimination;
+  const tr = (key, fallback, n) => i18n.t(`tournamentDetail.${key}`, { n }, '') || fallback.replace('{n}', n);
 
-  // Pool bracket naming for Start.gg (uses rounds from start, not from end)
-  if (isPoolBracket) {
-    if (bracketType === 'winner') {
-      // Winners bracket in pool - use roundIndex (0-based) to determine round name
-      // For a typical 4-player pool: Round 1 = Quarts, Round 2 = Semis (Winners Finals for pool)
-      if (roundsFromEnd === 0) {
-        // Last winners round in pool = Winners Semi-Finals (leads to pool finals)
-        return i18n.t('tournamentDetail.winnersSemiFinal') || 'Winners Semi-Final';
-      }
-      if (roundsFromEnd === 1) {
-        // Second to last = Winners Quarter-Finals
-        return i18n.t('tournamentDetail.winnersQuarterFinal') || 'Winners Quarter-Final';
-      }
-      return `${i18n.t('tournamentDetail.winnersRound') || 'Winners Round'} ${roundIndex + 1}`;
-    }
-    // Losers bracket in pool
-    if (roundIndex === 0) {
-      // First losers round = Losers Round 1
-      return `${i18n.t('tournamentDetail.losersRound') || 'Losers Round'} 1`;
-    }
-    if (roundsFromEnd === 0) {
-      // Last losers round = Losers Quarter-Final (leads to pool finals loser side)
-      return i18n.t('tournamentDetail.losersQuarterFinal') || 'Losers Quarter-Final';
-    }
-    return `${i18n.t('tournamentDetail.losersRound') || 'Losers Round'} ${roundIndex + 1}`;
-  }
+  const players = new Set();
+  list.forEach(m => {
+    [m.player1Id || m.player1Name, m.player2Id || m.player2Name]
+      .forEach(p => { if (p && p !== 'TBD') players.add(String(p)); });
+  });
+  const firstRoundSets = list.filter(m => m.round === 1).length;
+  const size = 2 ** Math.ceil(Math.log2(Math.max(players.size, firstRoundSets * 2, 2)));
+  const winnersFinalRound = Math.log2(size);
 
-  // Single elimination / finals bracket (i18n)
-  if (bracketType === 'winner' && !isDoubleElimination) {
-    if (roundsFromEnd === 0) return i18n.t('tournamentDetail.finals') || 'Finale';
-    if (roundsFromEnd === 1) return i18n.t('tournamentDetail.semiFinals') || 'Demi-finales';
-    if (roundsFromEnd === 2) return i18n.t('tournamentDetail.quarterFinals') || 'Quarts de finale';
-    if (roundsFromEnd === 3) return i18n.t('tournamentDetail.roundOf16') || 'Round of 16';
-    if (roundsFromEnd === 4) return i18n.t('tournamentDetail.roundOf32') || 'Round of 32';
-    if (roundsFromEnd === 5) return i18n.t('tournamentDetail.roundOf64') || 'Round of 64';
-    return `${i18n.t('tournamentDetail.roundNumber') || 'Tour'} ${roundIndex + 1}`;
-  }
-
-  // Double elimination naming (i18n)
-  if (bracketType === 'loser') {
-    // roundIndex is now correct (0 = first losers round) thanks to platform-aware sort
-    // Only use named rounds (Final, Semifinals, etc.) when there are enough rounds (>=4)
-    // For small brackets (preliminary phases with 2-3 rounds), use simple numbered rounds
-    if (totalRounds >= 4) {
-      if (roundsFromEnd === 0) return i18n.t('tournamentDetail.lbFinal') || 'LB Final';
-      if (roundsFromEnd === 1) return i18n.t('tournamentDetail.lbSemifinals') || 'LB Semifinals';
-      if (roundsFromEnd === 2) return i18n.t('tournamentDetail.lbQuarterfinals') || 'LB Quarterfinals';
+  const labels = {};
+  const grandFinalRounds = new Set();
+  let numbered = 0;
+  [...new Set(list.map(m => m.round || 0).filter(r => r > 0))].sort((a, b) => a - b).forEach(r => {
+    const left = size / 2 ** (r - 1); // players still on the winners side
+    if (isDE && r > winnersFinalRound) {
+      grandFinalRounds.add(r);
+      labels[r] = r === winnersFinalRound + 1
+        ? `👑 ${tr('grandFinals', 'Grand Final')}`
+        : tr('bracketReset', 'Bracket Reset');
+    } else if (isDE) {
+      labels[r] = left <= 2 ? tr('winnersFinal', 'Winners Final')
+        : left === 4 ? tr('winnersSemiFinal', 'Winners Semi-Final')
+        : left === 8 ? tr('winnersQuarterFinal', 'Winners Quarter-Final')
+        : tr('winnersRoundN', 'Winners Round {n}', ++numbered);
+    } else {
+      labels[r] = left <= 2 ? tr('finals', 'Final')
+        : left === 4 ? tr('semiFinals', 'Semi-Finals')
+        : left === 8 ? tr('quarterFinals', 'Quarter-Finals')
+        : left === 16 ? tr('roundOf16', 'Round of 16')
+        : left === 32 ? tr('roundOf32', 'Round of 32')
+        : left === 64 ? tr('roundOf64', 'Round of 64')
+        : tr('roundN', 'Round {n}', r);
     }
-    return `${i18n.t('tournamentDetail.losersRound') || 'LB Round'} ${roundIndex + 1}`;
-  }
+  });
 
-  // Winner bracket double elimination
-  if (bracketType === 'winner') {
-    // Only use named rounds (Grand Finals, WB Final, etc.) when there are enough rounds (>=4)
-    // For small brackets (preliminary phases with 2-3 rounds), use simple numbered rounds
-    if (totalRounds >= 4) {
-      if (roundsFromEnd === 0) return `👑 ${i18n.t('tournamentDetail.grandFinals') || 'Grand Finals'}`;
-      if (roundsFromEnd === 1) return i18n.t('tournamentDetail.wbFinal') || 'WB Final';
-      if (roundsFromEnd === 2) return i18n.t('tournamentDetail.semifinals') || 'Semifinals';
-      if (roundsFromEnd === 3) return i18n.t('tournamentDetail.quarterfinals') || 'Quarterfinals';
-    }
-    return `${i18n.t('tournamentDetail.wbRound') || 'Round'} ${roundIndex + 1}`;
-  }
+  // start.gg numbers losers rounds from -3, Challonge from -1; the bracket has 2 losers rounds per winners round after the first
+  const offset = list.some(m => m.startggSetId) ? 2 : 0;
+  const loserRounds = [...new Set(list.map(m => m.round || 0).filter(r => r < 0))].sort((a, b) => b - a);
+  const lastLoserRound = Math.max(2 * winnersFinalRound - 2, ...loserRounds.map(r => -r - offset));
+  numbered = 0;
+  loserRounds.forEach(r => {
+    const fromEnd = lastLoserRound - (-r - offset);
+    labels[r] = fromEnd === 0 ? tr('losersFinal', 'Losers Final')
+      : fromEnd === 1 ? tr('losersSemiFinal', 'Losers Semi-Final')
+      : fromEnd === 2 ? tr('losersQuarterFinal', 'Losers Quarter-Final')
+      : tr('losersRoundN', 'Losers Round {n}', ++numbered);
+  });
 
-  // Fallback
-  return `${i18n.t('tournamentDetail.losersRound') || 'LB Round'} ${roundIndex + 1}`;
+  return {
+    grandFinalRounds,
+    label: round => labels[round] || tr('roundN', 'Round {n}', round)
+  };
+}
+
+// start.gg phase names are English ("Groups A-H", "Finals"...): translate their usual words, keep the rest
+const PHASE_NAME_TERMS = [
+  ['Preliminary Bracket', 'preliminaryBracket'], ['Main Bracket', 'mainBracket'], ['Group Stage', 'groupStage'],
+  ['Swiss Rounds', 'swissRounds'], ['Round Robin', 'roundRobin'], ['Qualifiers', 'qualifiers'],
+  ['Groups', 'groups'], ['Group', 'group'], ['Finals', 'finals'], ['Final', 'final'], ['Swiss', 'swiss'],
+  ['Upper', 'upper'], ['Lower', 'lower']
+];
+const PHASE_NAME_PATTERN = new RegExp(`\\b(${PHASE_NAME_TERMS.map(([term]) => term).join('|')})\\b`, 'gi');
+
+function translatePhaseName(name) {
+  if (!name || typeof i18n === 'undefined') return name;
+  return name.replace(PHASE_NAME_PATTERN, word => {
+    const entry = PHASE_NAME_TERMS.find(([term]) => term.toLowerCase() === word.toLowerCase());
+    return i18n.t(`tournamentDetail.phaseNames.${entry[1]}`, {}, '') || word;
+  });
 }
 
 function createBracketMatchCard(match, isFinal = false) {

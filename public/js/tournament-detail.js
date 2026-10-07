@@ -1217,7 +1217,7 @@ function getPhaseSpans(matches = []) {
 // Grouped Challonge brackets run side by side: the strongest one first (Upper / Hard / Gold),
 // then the declared order
 const BRACKET_LEVELS = [
-  /\b(upper|gold|hard|expert|advanced)\b/i,
+  /\b(upper|gold(en)?|hard|expert|advanced)\b/i,
   /\b(middle|silver|medium|normal|intermediate)\b/i,
   /\b(lower|bronze|easy|beginner|novice)\b/i
 ];
@@ -1231,12 +1231,24 @@ function sortPhasesChronologically(phases, matches = [], tournament = null) {
     return phases.slice().sort((a, b) => (bracketLevel(a.name) - bracketLevel(b.name)) || ((a.phaseOrder || 0) - (b.phaseOrder || 0)));
   }
   const spans = getPhaseSpans(matches);
-  return phases.slice().sort((a, b) => {
+  const sorted = phases.slice().sort((a, b) => {
     const sa = spans[a.name], sb = spans[b.name];
     if (sa && sb && sa.last < sb.first) return -1;
     if (sa && sb && sb.last < sa.first) return 1;
     return (a.phaseOrder || 0) - (b.phaseOrder || 0);
   });
+  // Gold / Silver / Bronze brackets keep their slots, the top one last (Silver → Golden)
+  const tiered = sorted.filter(p => phaseTier(p.name) !== null)
+    .sort((a, b) => phaseTier(b.name) - phaseTier(a.name));
+  return sorted.map(p => phaseTier(p.name) !== null ? tiered.shift() : p);
+}
+
+// Level of a bracket played side by side with others: 0 Gold, 1 Silver, 2 Bronze, null otherwise
+function phaseTier(name) {
+  return /\bgold(en)?\b/i.test(name || '') ? 0
+    : /\bsilver\b/i.test(name || '') ? 1
+    : /\bbronze\b/i.test(name || '') ? 2
+    : null;
 }
 
 // Match list order: latest phase on top (finals first, opening Swiss rounds last). Brackets played
@@ -1262,6 +1274,7 @@ function sortPhasesNewestFirst(phaseNames, tournament, matches = []) {
       .forEach(n => { if (n) set.add(n); });
   });
   const parallel = (a, b) => {
+    if (phaseTier(a) !== null && phaseTier(b) !== null) return true;
     const sa = spans[a], sb = spans[b];
     if (!sa || !sb || sa.last < sb.first || sb.last < sa.first) return false;
     const pa = players[a] || new Set();
@@ -1276,7 +1289,7 @@ function sortPhasesNewestFirst(phaseNames, tournament, matches = []) {
     else clusters.push([name]);
   });
   // Main / Gold bracket first, then Silver, then Bronze
-  const tier = name => /\b(main|gold)\b/i.test(name || '') ? 0 : /\bsilver\b/i.test(name || '') ? 1 : /\bbronze\b/i.test(name || '') ? 2 : 1;
+  const tier = name => /\bmain\b/i.test(name || '') ? 0 : phaseTier(name) ?? 1;
   return clusters
     .map((cluster, index) => ({ cluster, index }))
     .sort((a, b) => b.index - a.index)

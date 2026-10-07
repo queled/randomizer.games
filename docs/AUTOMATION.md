@@ -155,16 +155,14 @@ CHALLONGE_USERNAME=xxx    # Username Challonge (pour listing)
 scripts/
 ├── sync-rando-list-v3.js        # Sync principal avec rando-list
 ├── check-rando-list-changes.js  # Détection des changements
-├── sync-racetime-incremental.js # Sync races (5 min)
-├── sync-racetime-all.js         # Sync complet des races
-├── sync-racetime-game.js        # Sync races pour un jeu
+├── sync-racetime-global.js      # Sync races (toutes les 5 min)
+├── sync-racetime-game.js        # Sync complet des races d'un jeu
 ├── sync-speedrunslive.js        # Historique des races randomizer SpeedRunsLive
 ├── discover-tournaments.js      # Découverte de tournois (start.gg + challonge)
-├── sync-tournaments.js          # Sync automatique des tournois (cron)
+├── sync-tournaments.js          # Mise à jour des tournois actifs (cron)
+├── auto-link-tournaments.js     # Liaison automatique races ↔ matchs
 ├── import-startgg.js            # Import d'un tournoi start.gg spécifique
-├── import-challonge.js          # Import d'un tournoi Challonge spécifique
-├── sync-racetime-game.js       # Sync races pour un jeu
-└── detect-new-racetime-categories.js # (à créer si besoin)
+└── import-challonge.js          # Import d'un tournoi Challonge spécifique
 ```
 
 ## 🗃️ Structure des données
@@ -364,11 +362,10 @@ db.rando_list_cache.findOne({ _id: '_metadata' })
 ### Forcer une resynchronisation complète
 
 ```bash
-# Via GitHub Actions
-# Cocher "Force full sync" dans le workflow_dispatch
+# Via GitHub Actions : workflow "Sync Racetime Game (Full Recovery)"
 
-# Ou en local
-node scripts/sync-racetime-all.js --all --max-pages 100
+# Ou en local, jeu par jeu
+node scripts/sync-racetime-game.js --game ootr --max-pages 100
 ```
 
 ### Ajouter un nouveau tracker manuellement

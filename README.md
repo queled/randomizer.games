@@ -71,8 +71,9 @@ Le proxy image applique une allowlist de domaines et des limites de taille/timeo
 - `docs/AUTOMATION.md`
 - `docs/GAME_SYNC_ARCHITECTURE.md`
 - `docs/DEPLOYMENT.md`
-- `docs/SECURITY_AUDIT.md`
-- `docs/SECURITY_FIXES.md`
+- `docs/STARTGG_API.md`
+
+Pour signaler une faille de sécurité, voir `SECURITY.md`.
 
 ## Structure
 
@@ -100,4 +101,6 @@ Voir `CONTRIBUTING.md`.
 
 ## Licence
 
-MIT — voir `LICENSE`.
+Le code est sous licence MIT — voir `LICENSE`.
+
+Les logos, jaquettes et noms de jeux présents dans `public/assets/` restent la propriété de leurs ayants droit respectifs ; ils ne sont pas couverts par la licence MIT. Les données de courses et de tournois proviennent de racetime.gg, Challonge, start.gg, SpeedRunsLive et speedrun.com.

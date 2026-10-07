@@ -50,6 +50,9 @@ on:
         default: ''
         type: string
 
+permissions:
+  contents: read
+
 env:
   NODE_VERSION: '20'
 
@@ -84,17 +87,22 @@ jobs:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           STARTGG_API_TOKEN: ${{ secrets.STARTGG_API_TOKEN }}
           CHALLONGE_API_KEY: ${{ secrets.CHALLONGE_API_KEY }}
+          IN_SOURCE: ${{ inputs.source }}
+          IN_DAYS: ${{ inputs.days }}
+          IN_MAX_PAGES: ${{ inputs.max_pages }}
+          IN_GAME: ${{ inputs.game }}
+          IN_DRY_RUN: ${{ inputs.dry_run }}
         run: |
           # Construire les arguments
           ARGS=""
 
           # Source
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            SOURCE="${{ inputs.source }}"
-            DAYS="${{ inputs.days }}"
-            MAX_PAGES="${{ inputs.max_pages }}"
-            GAME="${{ inputs.game }}"
-            DRY_RUN="${{ inputs.dry_run }}"
+            SOURCE="$IN_SOURCE"
+            DAYS="$IN_DAYS"
+            MAX_PAGES="$IN_MAX_PAGES"
+            GAME="$IN_GAME"
+            DRY_RUN="$IN_DRY_RUN"
           else
             # Scheduled run: valeurs par défaut pour le cron horaire
             SOURCE="all"

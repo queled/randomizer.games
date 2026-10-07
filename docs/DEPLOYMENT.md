@@ -20,45 +20,6 @@ Ce guide vous accompagne pour déployer votre application sur un VPS (DigitalOce
 
 ---
 
-## 🔐 Corrections de Sécurité Appliquées
-
-### ✅ Protections ajoutées:
-
-1. **Rate Limiting**
-   - 100 requêtes/15 min pour API générale
-   - 30 requêtes/min pour recherche
-   - 10 requêtes/heure pour opérations d'écriture
-   - 5 requêtes/min pour webhooks
-
-2. **Protection NoSQL Injection**
-   - Sanitization automatique avec `express-mongo-sanitize`
-   - Validation stricte des ObjectIds MongoDB
-
-3. **Protection SSRF (Server-Side Request Forgery)**
-   - Whitelist de domaines autorisés pour proxy d'images
-   - Blocage des IPs privées/internes
-   - Validation stricte des URLs
-
-4. **Gestion des erreurs sécurisée**
-   - Pas de stack traces en production
-   - Logging sécurisé des erreurs
-
-5. **Headers de sécurité**
-   - Helmet.js configuré
-   - CSP (Content Security Policy)
-   - CORS restreint en production
-
-6. **Validation des inputs**
-   - Validation `limit` et `page` (anti-DoS)
-   - Sanitization des strings
-   - Limite de taille des payloads (1MB)
-
-7. **Cache sécurisé**
-   - Limite de taille pour éviter memory leak
-   - Nettoyage automatique
-
----
-
 ## 🛠️ Installation sur VPS
 
 ### 1. Prérequis sur le serveur

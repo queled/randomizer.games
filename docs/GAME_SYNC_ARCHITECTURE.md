@@ -21,7 +21,7 @@
 │                         SCRIPTS                                 │
 ├─────────────────┬─────────────────┬─────────────────────────────┤
 │ sync-rando-list │  enrich-games   │     import-games-csv        │
-│    -v2.js       │      .js        │           .js               │
+│    -v3.js       │      .js        │           .js               │
 │                 │                 │                             │
 │ • Clone/pull    │ • Enrichit      │ • Import manuel             │
 │ • Parse YAML    │   depuis APIs   │ • Mapping IDs               │
@@ -73,17 +73,7 @@ Tous les scripts ont un mode `--dry-run` par défaut. Aucune modification sans a
 
 ## Workflow recommandé
 
-### Étape 1: Migrer les jeux existants
-
-```bash
-# Voir ce qui serait fait
-node scripts/migrations/migrate-game-schema.js --dry-run
-
-# Appliquer la migration
-node scripts/migrations/migrate-game-schema.js --apply
-```
-
-### Étape 2: Importer ton CSV de mapping
+### Étape 1: Importer ton CSV de mapping
 
 Ton CSV doit avoir les colonnes:
 - `my id` : Ton ID unique
@@ -102,7 +92,7 @@ node scripts/import-games-csv.js data/games.csv --link-only
 node scripts/import-games-csv.js data/games.csv --full
 ```
 
-### Étape 3: Sync rando-list
+### Étape 2: Sync rando-list
 
 ```bash
 # Sync le cache uniquement
@@ -115,7 +105,7 @@ node scripts/sync-rando-list-v3.js --link-games --dry-run
 node scripts/sync-rando-list-v3.js --link-games
 ```
 
-### Étape 4: Enrichir depuis les APIs
+### Étape 3: Enrichir depuis les APIs
 
 ```bash
 # Voir ce qui serait enrichi

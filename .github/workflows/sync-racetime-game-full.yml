@@ -14,6 +14,9 @@ on:
         default: ''
         type: string
 
+permissions:
+  contents: read
+
 env:
   NODE_VERSION: '20'
 
@@ -41,10 +44,12 @@ jobs:
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           RACETIME_RATE_LIMIT_MS: ${{ vars.RACETIME_RATE_LIMIT_MS || '' }}
+          GAME_SLUG: ${{ inputs.game_slug }}
+          MAX_PAGES: ${{ inputs.max_pages }}
         run: |
           # Déterminer le nombre de pages
-          if [[ -n "${{ inputs.max_pages }}" ]]; then
-            PAGES="${{ inputs.max_pages }}"
+          if [[ -n "$MAX_PAGES" ]]; then
+            PAGES="$MAX_PAGES"
             echo "Mode: Limité à $PAGES pages"
           else
             PAGES="99999"
@@ -52,9 +57,9 @@ jobs:
           fi
           
           # Appeler le script de sync
-          echo "🎮 Synchronisation du jeu: ${{ inputs.game_slug }} (max $PAGES pages)"
+          echo "🎮 Synchronisation du jeu: $GAME_SLUG (max $PAGES pages)"
           node scripts/sync-racetime-game.js \
-            --game "${{ inputs.game_slug }}" \
+            --game "$GAME_SLUG" \
             --max-pages "$PAGES" 2>&1 | tee /tmp/sync-output.log
           
           # Extraire les stats du résumé
@@ -66,10 +71,12 @@ jobs:
       
       - name: Résumé de la synchronisation
         if: always()
+        env:
+          GAME_SLUG: ${{ inputs.game_slug }}
         run: |
           echo "## ✅ Full Sync Racetime Game" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Game:** ${{ inputs.game_slug }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Game:** $GAME_SLUG" >> $GITHUB_STEP_SUMMARY
           echo "- 🆕 Nouvelles races: ${{ steps.sync.outputs.new_races }}" >> $GITHUB_STEP_SUMMARY
           echo "- 🔄 Mises à jour: ${{ steps.sync.outputs.updated }}" >> $GITHUB_STEP_SUMMARY
           echo "- ⏰ Date: $(date -u)" >> $GITHUB_STEP_SUMMARY

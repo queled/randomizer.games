@@ -14,22 +14,19 @@ Merci de vouloir contribuer ! 🎉
 
 ## Standards de code
 
-- **JavaScript** : Eslint config (voir `.eslintrc.json` si présent)
 - **Commits** : Format Conventional Commits (`feat:`, `fix:`, `docs:`, `refactor:`)
 - **Variables d'env** : Ne jamais commiter `.env` (toujours dans `.env.example`)
 - **Documentation** : Commenter le code complexe
 
-## Tests
+## Vérifier ses changements
 
-```bash
-npm run test
-npm run lint
-```
+Il n'y a pas encore de suite de tests automatisés : lance le serveur (`npm run dev`) et vérifie les pages concernées. Pour les scripts qui écrivent en base, utilise `--dry-run` quand il est disponible.
 
 ## Types de contribution
 
 ### 🐛 Bugs
-- Ouvrir un issue avec reproduction steps
+- Ouvrir une issue avec les étapes de reproduction
+- Une faille de sécurité ne se signale pas en issue publique : voir `SECURITY.md`
 - Inclure version Node.js et OS
 
 ### ✨ Features

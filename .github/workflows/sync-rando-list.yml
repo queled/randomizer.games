@@ -32,6 +32,9 @@ on:
   repository_dispatch:
     types: [rando-list-updated]
 
+permissions:
+  contents: read
+
 env:
   NODE_VERSION: '20'
 
@@ -164,6 +167,3 @@ jobs:
       - name: Notification d'erreur
         run: |
           echo "::error::La synchronisation a échoué. Vérifiez les logs."
-          # Optionnel: Ajouter ici une notification Discord/Slack/Email
-          # curl -X POST ${{ secrets.DISCORD_WEBHOOK_URL }} -H "Content-Type: application/json" \
-          #   -d '{"content": "⚠️ Sync rando-list échouée!"}'

@@ -19,6 +19,9 @@ on:
   # Déclenchement manuel (sans paramètres - utilisé pour forcer un sync global maintenant)
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 env:
   NODE_VERSION: '20'
 
@@ -78,29 +81,3 @@ jobs:
           echo "- 🔧 Finalisées: ${{ steps.sync.outputs.finalized }}" >> $GITHUB_STEP_SUMMARY
           echo "- ❌ Erreurs: ${{ steps.sync.outputs.errors }}" >> $GITHUB_STEP_SUMMARY
           echo "- ⏰ Date: $(date -u)" >> $GITHUB_STEP_SUMMARY
-
-  # Job optionnel pour détecter automatiquement de nouvelles catégories racetime
-  detect-new-categories:
-    name: Détecter nouvelles catégories
-    runs-on: ubuntu-latest
-    # N'exécute qu'une fois par heure (au cron minute 0)
-    if: github.event.schedule && contains(github.event.schedule, '0 * * * *')
-    
-    steps:
-      - name: Checkout du projet
-        uses: actions/checkout@v4
-      
-      - name: Configuration de Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-      
-      - name: Installation des dépendances
-        run: npm ci
-      
-      - name: Vérifier les nouvelles catégories
-        env:
-          MONGODB_URI: ${{ secrets.MONGODB_URI }}
-        run: |
-          node scripts/detect-new-racetime-categories.js || true

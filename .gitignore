@@ -9,11 +9,6 @@ node_modules/
 # Logs
 *.log
 logs/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
 # OS files
 .DS_Store
@@ -22,65 +17,44 @@ Thumbs.db
 *.swo
 *~
 
-# IDE
+# Editors / local AI tooling
 .vscode/
 .idea/
+.claude/
 *.sublime-workspace
 *.sublime-project
-
-# Build outputs
-dist/
-build/
-out/
-.next/
-
-# Testing
-coverage/
-.nyc_output/
 
 # Temporary files
 tmp/
 temp/
 *.tmp
 scripts/tmp/
-scripts/rando-list.csv
 
-# Backups
+# Local reports produced by scripts
+reports/
+
+# Backups and database dumps
 backups/
+dump/
 *.bak
 *.backup
-
-# MongoDB dumps
-dump/
+*.gz
+*.archive
 
 # PM2
 .pm2/
-ecosystem.config.js.backup
+ecosystem.config.js
 
-# SSL certificates (if storing locally - NOT RECOMMENDED)
+# Keys and certificates
 *.pem
 *.key
 *.crt
 *.cer
+*.p12
 
 # Sensitive data
 secrets/
 credentials/
 
-# Scripts de debug/développement local
-scripts/archived/
-scripts/debug/
-
-# Fichiers obsolètes
-scripts/seed-games.js
-scripts/seed-games-v2.js
-scripts/sync-rando-list.js
-
-# Données d'import locales
+# Local import data
 data/import_games_racetime.csv
-
-# Logs serveur
-server.log
-
-# Rapports locaux
-reports/*

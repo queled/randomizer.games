@@ -181,7 +181,7 @@
 
   async function loadGames() {
     try {
-      const res = await fetch('/api/games');
+      const res = await fetch('/api/games/with-stats');
       if (!res.ok) return;
       const data = await res.json();
       const games = data.games || [];
@@ -205,8 +205,9 @@
         }
       });
 
-      // Add options to select, sorted alphabetically by label
+      // Add options to select, sorted alphabetically by label; only games that have races
       games
+        .filter(g => g.totalRaces > 0)
         .map(g => ({ id: g.id, label: resolveGameLabel(g) || g.id }))
         .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base', numeric: true }))
         .forEach(({ id, label }) => {

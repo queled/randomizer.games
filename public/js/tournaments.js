@@ -186,13 +186,15 @@
 
   async function loadGames() {
     try {
-      const res = await fetch('/api/games');
+      const res = await fetch('/api/games/with-stats');
       if (!res.ok) return;
       const data = await res.json();
       const games = data.games || [];
       
       games.forEach(g => {
         gamesById[g.id] = g;
+        // Only list games that have tournaments
+        if (!(g.totalTournaments > 0)) return;
         const opt = document.createElement('option');
         opt.value = g.id;
         opt.textContent = g.officialName || g.name;

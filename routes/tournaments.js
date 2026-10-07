@@ -3,22 +3,7 @@ const router = express.Router();
 const { Tournament, Game } = require('../models');
 const { validateObjectId } = require('../middleware/security');
 const racetimeAPI = require('../services/racetime');
-
-// Game name patterns for tournament search (same as games.js)
-const GAME_NAME_PATTERNS = {
-  'oot': /ocarina\s*(of)?\s*time/i,
-  'alttp': /link\s*(to)?\s*(the)?\s*past/i,
-  'mm': /majora'?s?\s*mask/i,
-  'sm': /super\s*metroid/i,
-  'sm64': /super\s*mario\s*64/i,
-  'dk64': /donkey\s*kong\s*64/i,
-  'tww': /wind\s*waker/i,
-  'tp': /twilight\s*princess/i,
-  'kh2fm': /kingdom\s*hearts\s*(2|ii)/i,
-  'sotn': /symphony\s*(of)?\s*(the)?\s*night/i,
-  'smz3': /smz3|super\s*metroid.*link/i,
-  'ootmm': /ootmm|ocarina.*majora/i
-};
+const { buildTournamentQuery } = require('../helpers/game-matching');
 
 function extractRaceSlug(race) {
   const externalId = race?.source?.externalId;
@@ -92,31 +77,11 @@ router.get('/', async (req, res, next) => {
     
     const query = {};
     
-    // Filter by game using game reference and/or gameName patterns
+    // Filter by game, using the same rules as the game pages
     if (gameId) {
       const gameIdLower = String(gameId).toLowerCase();
-      const gamePattern = GAME_NAME_PATTERNS[gameIdLower];
       const gameDoc = await Game.findOne({ id: gameIdLower }).select('_id name official randomizer').lean();
-
-      const orConditions = [];
-      if (gameDoc?._id) {
-        orConditions.push({ game: gameDoc._id });
-      }
-      if (gamePattern) {
-        orConditions.push({ gameName: { $regex: gamePattern } });
-      }
-      if (gameDoc?.name) {
-        const escapedName = gameDoc.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        orConditions.push({ gameName: { $regex: new RegExp(escapedName, 'i') } });
-      }
-      if (gameDoc?.official?.name) {
-        const escapedOfficial = gameDoc.official.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        orConditions.push({ gameName: { $regex: new RegExp(escapedOfficial, 'i') } });
-      }
-
-      if (orConditions.length > 0) {
-        query.$or = orConditions;
-      }
+      Object.assign(query, buildTournamentQuery(gameDoc, gameIdLower));
     }
     
     const tournaments = await Tournament.find(query)

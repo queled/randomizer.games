@@ -1,27 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { Race } = require('../models');
+const { Race, Game } = require('../models');
 const { validateObjectId } = require('../middleware/security');
-
-function escapeRegex(text) {
-  return String(text || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-// Game ID aliases (maps game IDs to their racetime category slugs)
-const CATEGORY_ALIASES = {
-  'oot': ['oot', 'ootr'],
-  'alttp': ['alttp', 'alttpr', 'alttpr-ladder'],
-  'mm': ['mm', 'mmr'],
-  'sm': ['sm', 'smr'],
-  'sm64': ['sm64'],
-  'dk64': ['dk64','dk64r'],
-  'tww': ['tww'],
-  'tp': ['tp'],
-  'kh2fm': ['kh2fm', 'kh2r', 'kh2fmr'],
-  'sotn': ['sotn'],
-  'smz3': ['smz3'],
-  'ootmm': ['ootmm']
-};
+const {
+  escapeRegex,
+  buildCategoryResolutionContext,
+  buildCategoryQuery
+} = require('../helpers/game-matching');
 
 // Get all races
 router.get('/', async (req, res, next) => {
@@ -30,14 +15,13 @@ router.get('/', async (req, res, next) => {
     
     const query = {};
     
-    // Handle category with aliases
+    // A game id resolves to all of its racetime categories, using the same rules as the game pages
     if (category) {
-      const aliases = CATEGORY_ALIASES[category.toLowerCase()];
-      if (aliases && aliases.length > 1) {
-        // Use $in to match any of the aliases
-        query.category = { $in: aliases };
-      } else if (aliases) {
-        query.category = aliases[0];
+      const categoryLower = String(category).toLowerCase().trim();
+      const games = await Game.find().select('id integrations.racetime').lean();
+      const gameDoc = games.find(g => String(g.id || '').toLowerCase() === categoryLower);
+      if (gameDoc) {
+        Object.assign(query, buildCategoryQuery(gameDoc, categoryLower, buildCategoryResolutionContext(games)));
       } else {
         // Direct, case-insensitive exact match only (no prefix match)
         query.category = { $regex: new RegExp(`^${escapeRegex(category)}$`, 'i') };

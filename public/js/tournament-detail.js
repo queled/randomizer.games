@@ -226,6 +226,14 @@ function restreamChannelName(url) {
   }
 }
 
+// The players' own streams of a race (sync-race-vods.js)
+function playerVodsHtml(race) {
+  return ((race && race.vods) || [])
+    .filter(v => v.vodUrl && /^https:\/\/www\.twitch\.tv\/videos\/\d+/.test(v.vodUrl))
+    .map(v => `<a href="${escHtml(v.vodUrl)}" target="_blank" rel="noopener noreferrer" data-stop-propagation title="${escHtml((i18n.t('tournamentDetail.watchVod') || 'VOD') + ' · twitch.tv/' + (v.twitchName || ''))}" style="display:inline-flex; align-items:center; gap:0.3rem; padding:0.2rem 0.4rem; border-radius:0.25rem; font-size:0.7rem; color:#c4b5fd; background:#222222; border:1px solid #9344ff; text-decoration:none; white-space:nowrap;"><img src="assets/twitch.svg" alt="Twitch" style="width:12px;height:12px;">${escHtml(sanitizeDisplayName(v.userName || v.twitchName || ''))}</a>`)
+    .join('');
+}
+
 // Link to a restream: its VOD when Twitch still has it, else the channel
 function restreamLinkHtml(stream) {
   const vod = sanitizeExternalUrl(stream.vodUrl);
@@ -2269,6 +2277,7 @@ function createMatchCard(match, races = []) {
             <div class="spoiler-block" style="display: flex; align-items: center; gap: 1rem;">
               <span class="${mancheWinner === 1 ? 'spoiler-winner' : ''}" style="color: ${mancheWinner === 1 ? '#fbbf24' : '#d1d5db'}; min-width: 80px;">${escHtml(sanitizeDisplayName(match.player1Name) || 'P1')}: <span style="color: #10b981; font-family: monospace;">${times.time1 || '-'}</span></span>
               <span class="${mancheWinner === 2 ? 'spoiler-winner' : ''}" style="color: ${mancheWinner === 2 ? '#fbbf24' : '#d1d5db'}; min-width: 80px;">${escHtml(sanitizeDisplayName(match.player2Name) || 'P2')}: <span style="color: #10b981; font-family: monospace;">${times.time2 || '-'}</span></span>
+              ${playerVodsHtml(race)}
               ${raceLink}
             </div>
           </div>
@@ -2286,7 +2295,7 @@ function createMatchCard(match, races = []) {
   
   if (!isMultiRaceSeries && matchRaces.length === 1) {
     const race = matchRaces[0];
-    singleRaceLinkHtml = getRaceLinkHtml(race);
+    singleRaceLinkHtml = playerVodsHtml(race) + getRaceLinkHtml(race);
     const times = getTimesFromRace(race);
     time1 = times.time1;
     time2 = times.time2;

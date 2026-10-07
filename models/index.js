@@ -321,6 +321,18 @@ const raceSchema = new mongoose.Schema({
   matchPlayers: String,     // e.g., "PlayerA vs PlayerB"
   startggSetId: String,
   matchConfidence: Number,
+  // Twitch VOD of each entrant's own stream (sync-race-vods.js). Kept apart from
+  // `entrants`, which the racetime.gg sync rewrites.
+  vods: [{
+    _id: false,
+    userId: String,
+    userName: String,
+    twitchName: String,
+    vodUrl: String,
+    // When Twitch deleted that VOD (the channel stays)
+    vodGoneAt: Date
+  }],
+  vodSearchedAt: Date,
   previousMatchCompletedAt: Date,
   entrants: [{
     userId: String,
@@ -438,6 +450,7 @@ raceSchema.index({ tournamentId: 1 });
 raceSchema.index({ category: 1, startedAt: -1 });
 // Add composite index for live queries
 raceSchema.index({ status: 1, startedAt: -1 });
+raceSchema.index({ 'vods.vodUrl': 1 }, { sparse: true });
 playerSchema.index({ name: 1 });
 
 module.exports = {

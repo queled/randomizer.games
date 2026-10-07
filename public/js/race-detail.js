@@ -432,6 +432,15 @@
     return `<a href="https://www.twitch.tv/${encodeURIComponent(channel)}" target="_blank" rel="noopener noreferrer" class="btn-twitch" title="twitch.tv/${label}" style="margin:0 0 0 0.6rem;flex-shrink:0;"><img src="/assets/twitch.svg" alt="Twitch"><span style="width:8px;height:8px;background:#dc2626;border-radius:50%;animation:pulse 2s cubic-bezier(0.4,0,0.6,1) infinite;"></span>LIVE</a>`;
   }
 
+  // The entrant's own stream of the race, kept by Twitch (sync-race-vods.js)
+  function renderVodLink(entrant) {
+    if (getLiveChannel(entrant)) return '';
+    const vod = (currentRace?.vods || []).find(v => v.vodUrl && (v.userId === entrant.userId || (v.userName || '').toLowerCase() === (entrant.userName || '').toLowerCase()));
+    if (!vod || !/^https:\/\/www\.twitch\.tv\/videos\/\d+/.test(vod.vodUrl)) return '';
+    const label = (typeof i18n !== 'undefined' && i18n.t('tournamentDetail.watchVod')) || 'VOD';
+    return `<a href="${escapeHtml(vod.vodUrl)}" target="_blank" rel="noopener noreferrer" class="btn-twitch" title="twitch.tv/${escapeHtml(vod.twitchName || '')}" style="margin:0 0 0 0.6rem;flex-shrink:0;"><img src="/assets/twitch.svg" alt="Twitch">▶ ${escapeHtml(label)}</a>`;
+  }
+
   async function loadLiveStreams(race) {
     if (!race?._id || !LIVE_RACE_STATUSES.includes(race.status)) return;
     try {
@@ -498,7 +507,7 @@
           <div style="display:flex;align-items:center;padding:1rem;background:#2d3748;margin-bottom:0.5rem;border-radius:0.375rem;transition:background 0.2s;" data-hover-style="background:#4a5568" data-rest-style="background:#2d3748">
             <div style="flex:1;display:flex;align-items:center;min-width:0;">
               <a href="${playerLink}" style="color:#fff;text-decoration:none;">${name}</a>
-              ${renderTwitchLink(e)}
+              ${renderTwitchLink(e)}${renderVodLink(e)}
             </div>
           </div>
         `;
@@ -522,7 +531,7 @@
             <div style="width:60px;min-width:60px;text-align:center;font-size:1.25rem;color:#fbbf24;">${rank}</div>
             <div style="flex:1;display:flex;align-items:center;min-width:0;padding-left:0.2rem;">
               <a href="${playerLink}" style="color:${nameColor};font-weight:${isWinner ? '600' : '400'};text-decoration:none;">${name}</a>
-              ${renderTwitchLink(e)}
+              ${renderTwitchLink(e)}${renderVodLink(e)}
             </div>
             <div style="color:${timeColor};font-weight:600;font-family:monospace;font-size:1rem;">${timeStr}</div>
           </div>

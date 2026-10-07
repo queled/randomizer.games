@@ -218,6 +218,7 @@ PATH=/usr/local/bin:/usr/bin:/bin
 */5   * * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh racetime
 2-59/15 * * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh tournaments-update
 7-59/15 * * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh midos-house
+12-59/30 * * * * /home/randomizer/randomizer-app/scripts/cron/run-job.sh race-vods
 0     6 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh rando-list
 0     7 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh tournaments-discover
 30    3 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh backup
@@ -225,7 +226,7 @@ PATH=/usr/local/bin:/usr/bin:/bin
 
 Tester chaque tâche une fois à la main, par exemple `scripts/cron/run-job.sh racetime && tail ~/logs/racetime.log`.
 
-À la mise en place de la tâche `midos-house`, reprendre une fois les restreams des événements terminés : `node scripts/sync-midos-house.js --archive`.
+À la mise en place de la tâche `midos-house`, reprendre une fois les restreams des événements terminés : `node scripts/sync-midos-house.js --archive`. Pour `race-vods`, reprendre une fois les 60 derniers jours : `node scripts/sync-race-vods.js --days 60`.
 
 La resynchronisation complète d'un jeu (ancien workflow manuel `sync-racetime-game-full.yml`) se lance en SSH :
 

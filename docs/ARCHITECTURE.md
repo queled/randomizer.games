@@ -38,6 +38,7 @@ En production, la base MongoDB tourne sur le même serveur que le site et n'éco
 |-------|-----------------|-----------------|
 | `racetime` | toutes les 5 min | `sync-racetime-global.js` : nouvelles courses, finalisation des courses bloquées « en cours » depuis plus de 24 h, rattrapage des courses terminées entre deux exécutions |
 | `tournaments-update` | toutes les 15 min | `sync-tournaments.js --update-only` met à jour les tournois actifs, puis `auto-link-tournaments.js` rattache les courses aux matchs |
+| `race-vods` | toutes les 30 min | `sync-race-vods.js` : VOD Twitch des joueurs des races de tournoi (voir plus bas) |
 | `midos-house` | toutes les 15 min | `sync-midos-house.js` : horaires et restreams des races des tournois OoTR, VOD Twitch des restreams (voir plus bas) |
 | `rando-list` | tous les jours à 6h | met à jour la copie locale de rando-list ; si `check-rando-list-changes.js` signale un nouveau commit, `sync-rando-list.js --detect-new` met à jour le cache et les ressources, puis signale les nouveaux jeux, à créer depuis le panneau admin |
 | `tournaments-discover` | tous les jours à 7h | `discover-tournaments.js --since <il y a 2 jours> --max-pages 3` : nouveaux tournois sur start.gg et Challonge |
@@ -85,6 +86,12 @@ Twitch efface les rediffusions au bout de 7 à 60 jours selon la chaîne (ou plu
 Pour reprendre les événements terminés (une seule fois) : `node scripts/sync-midos-house.js --archive`.
 
 Un événement sans sets start.gg (Challonge, bracket géré sur Mido's House) est rattaché au tournoi auquel sont liées ses races racetime.gg, si au moins 5 d'entre elles (et un tiers de ses rooms) y mènent : c'est le cas des Standard S6 et S7 et des RSL S2 et S3. Les restreams y sont reliés aux matchs par leur room racetime.gg. Les autres événements (Tournoi Francophone, Scrubs, SpeedGaming, league…) n'ont pas de tournoi en base et sont ignorés.
+
+### VOD des joueurs
+
+Les joueurs de tournoi streament leurs races. `sync-race-vods.js` prend les races de tournoi terminées (liées à un tournoi ou à un set start.gg), lit sur racetime.gg la chaîne Twitch de chaque joueur (`/data` de la race) et cherche la rediffusion en cours au départ de la race, avec un lien sur ce moment de la vidéo. Le résultat est rangé dans `race.vods` (`userId`, `userName`, `twitchName`, `vodUrl`), à part de `entrants`, que la synchronisation racetime.gg réécrit. Une race est cherchée jusqu'à 12 h après sa fin (`vodSearchedAt`), puis laissée de côté.
+
+À chaque exécution, les VOD trouvées sont vérifiées : une VOD que Twitch a supprimée perd son lien et reçoit `vodGoneAt`, la chaîne reste. La page d'une race affiche un bouton VOD à côté de chaque joueur, et les cartes de match de la page d'un tournoi un bouton par joueur à côté du lien racetime.gg.
 
 ## Modèle de données
 
@@ -136,6 +143,7 @@ Les scripts qui écrivent en base proposent un mode `--dry-run` (ou n'écrivent 
 | `sync-tournaments.js` | `sync:tournaments` (+ `:dry`, `:update`) | Mise à jour des tournois actifs |
 | `auto-link-tournaments.js` | `link:tournaments:active` | Rattache les courses aux matchs |
 | `sync-players-from-races.js` | `sync:players` (+ `:dry`) | Recalcule la collection des joueurs |
+| `sync-race-vods.js` | `sync:race-vods` (+ `:dry`) | VOD Twitch des joueurs des races de tournoi (tâche `race-vods`) |
 | `sync-midos-house.js` | `sync:midos-house` (+ `:dry`) | Horaires, restreams et VOD Mido's House (tâche `midos-house`) |
 
 `npm run sync` enchaîne racetime, joueurs et rando-list.

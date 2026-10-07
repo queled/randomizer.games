@@ -7,6 +7,7 @@
 #   racetime              nouvelles courses racetime.gg            (toutes les 5 min)
 #   tournaments-update    tournois actifs + rattachement des courses (toutes les 15 min)
 #   midos-house           horaires, restreams et VOD des races OoTR (toutes les 15 min)
+#   race-vods             VOD Twitch des joueurs des races de tournoi (toutes les 30 min)
 #   tournaments-discover  nouveaux tournois des 2 derniers jours    (tous les jours)
 #   rando-list            cache rando-list, si le dépôt a changé    (tous les jours)
 #   backup                mongodump avec rotation                   (toutes les nuits)
@@ -36,6 +37,10 @@ run_tournaments_update() {
 
 run_midos_house() {
   timeout 5m node scripts/sync-midos-house.js
+}
+
+run_race_vods() {
+  timeout 10m node scripts/sync-race-vods.js
 }
 
 run_tournaments_discover() {
@@ -78,11 +83,12 @@ case "$JOB" in
   racetime)             fn=run_racetime ;;
   tournaments-update)   fn=run_tournaments_update ;;
   midos-house)          fn=run_midos_house ;;
+  race-vods)            fn=run_race_vods ;;
   tournaments-discover) fn=run_tournaments_discover ;;
   rando-list)           fn=run_rando_list ;;
   backup)               fn=run_backup ;;
   *)
-    echo "Usage: $0 <racetime|tournaments-update|midos-house|tournaments-discover|rando-list|backup>" >&2
+    echo "Usage: $0 <racetime|tournaments-update|midos-house|race-vods|tournaments-discover|rando-list|backup>" >&2
     exit 2
     ;;
 esac

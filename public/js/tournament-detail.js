@@ -1145,11 +1145,12 @@ function sortPhasesNewestFirst(phaseNames, tournament, matches = []) {
     if (cluster) cluster.push(name);
     else clusters.push([name]);
   });
-  const isMain = name => /\bmain\b/i.test(name || '');
+  // Main / Gold bracket first, then Silver, then Bronze
+  const tier = name => /\b(main|gold)\b/i.test(name || '') ? 0 : /\bsilver\b/i.test(name || '') ? 1 : /\bbronze\b/i.test(name || '') ? 2 : 1;
   return clusters
     .map((cluster, index) => ({ cluster, index }))
     .sort((a, b) => b.index - a.index)
-    .flatMap(({ cluster }) => cluster.sort((a, b) => (isMain(b) - isMain(a)) || (phaseOrder(a) - phaseOrder(b))));
+    .flatMap(({ cluster }) => cluster.sort((a, b) => (tier(a) - tier(b)) || (phaseOrder(a) - phaseOrder(b))));
 }
 
 function displayMatches(matches, tournament, races = []) {
@@ -2921,21 +2922,10 @@ function displayBracket(matches, tournament) {
   }
 }
 
-// Display multi-phase Start.gg tournament (Main Bracket + Preliminary Bracket)
+// Display multi-phase tournament (start.gg phases, grouped Challonge brackets)
 function displayMultiPhaseBracket(matches, container, isDoubleElimination, phases, tournament) {
-  // Sort phases: "Main Bracket" or "Bracket" first, then "Preliminary Bracket" or others
-  phases.sort((a, b) => {
-    const aLower = (a || '').toLowerCase();
-    const bLower = (b || '').toLowerCase();
-    
-    // Main Bracket / Bracket should come first
-    const aIsMain = aLower.includes('main') || (aLower === 'bracket' && !aLower.includes('preliminary'));
-    const bIsMain = bLower.includes('main') || (bLower === 'bracket' && !bLower.includes('preliminary'));
-    
-    if (aIsMain && !bIsMain) return -1;
-    if (!aIsMain && bIsMain) return 1;
-    return 0;
-  });
+  // Same order as the match list: final bracket on top, earlier phases (pools, Swiss...) below it
+  phases = sortPhasesNewestFirst(phases, tournament, matches);
 
   // Build a lookup for per-phase bracket type from tournament.phases data
   const phaseBracketTypeMap = {};

@@ -254,9 +254,39 @@ async function loadNormalizedMatches({ tournament, Match, Race = null }) {
   return normalizeChallongeMatches(challongeMatches, raceUrlsByMatch);
 }
 
+// Race tournaments often record each player's finish time as the Challonge score,
+// as h:mm:ss digits ("31532-31110" = 3:15:32 and 3:11:10, 0 for a forfeit)
+function parseChallongeRaceTimes(scoresCsv) {
+  const score = /^\s*(\d+)\s*-\s*(\d+)\s*$/.exec(String(scoresCsv || ''));
+  if (!score) return null;
+  const values = [Number(score[1]), Number(score[2])];
+  if (!values.some((value) => value >= 1000)) return null;
+
+  const seconds = values.filter((value) => value > 0).map((value) => {
+    const minutes = Math.floor(value / 100) % 100;
+    const secs = value % 100;
+    return minutes < 60 && secs < 60 ? Math.floor(value / 10000) * 3600 + minutes * 60 + secs : null;
+  });
+  return seconds.every((value) => value !== null) ? seconds : null;
+}
+
+// A race whose finish times match none of the times recorded on the match is
+// another race between the same players (practice, earlier meeting)
+function contradictsRecordedTimes(race, match) {
+  const recorded = parseChallongeRaceTimes(match?.scoresCsv);
+  if (!recorded) return false;
+  const finishes = (race?.entrants || [])
+    .map((entrant) => Number(entrant?.finishTimeMs) / 1000)
+    .filter((value) => value > 0);
+  if (!finishes.length) return false;
+  // Organizers sometimes note the time a few seconds off the room's
+  return !recorded.some((time) => finishes.some((finish) => Math.abs(finish - time) <= 5));
+}
+
 // Games played in a Challonge series: one set per game ("1-0,0-1,0-0" = 2 games, the
 // unplayed 0-0 set excluded), or a single series score ("2-1" = 3 games)
 function getChallongeGamesPlayed(scoresCsv) {
+  if (parseChallongeRaceTimes(scoresCsv)) return 1;
   const sets = String(scoresCsv || '')
     .split(',')
     .map((set) => /^\s*(\d+)\s*-\s*(\d+)\s*$/.exec(set))
@@ -340,6 +370,8 @@ const GOAL_STOPWORDS = new Set([
 function goalTokens(value) {
   return String(value || '')
     .toLowerCase()
+    // "Season 3" and "S3" name the same edition
+    .replace(/\b(?:season|saison)\s*(\d+)\b/g, 's$1')
     .split(/[^a-z0-9]+/)
     .filter((token) => token.length >= 2 && !GOAL_STOPWORDS.has(token));
 }
@@ -405,6 +437,8 @@ function filterProposalsByGoal(tournament, proposals, races) {
 
   return proposals.filter((proposal) => {
     if (namesOtherEventSeries(stageByUrl.get(proposal.raceUrl), tournament?.name)) return false;
+    // A room goal like "League Season 8" names another event even when the season matches
+    if (namesOtherEventSeries(goalByUrl.get(proposal.raceUrl), tournament?.name)) return false;
     // Players read from the label rather than the room entrants: only trust labels that
     // name this event ("League 2025 - ..."), not another one the same players met in ("CT7 - ...")
     if (proposal.fromLabel && !goalsLookAlike(proposal.raceLabel, tournament?.name)) return false;
@@ -512,7 +546,8 @@ async function buildAutoLinkPreview({
       const phaseMatches = isTournamentStartgg(tournament)
         ? filterMatchesByRaceStage(race, liveMatches, tournament, stageOptions)
         : liveMatches;
-      return (phaseMatches && filterMatchesByBracketSide(race, phaseMatches)) || [];
+      return ((phaseMatches && filterMatchesByBracketSide(race, phaseMatches)) || [])
+        .filter((match) => !contradictsRecordedTimes(race, match));
     };
     const selectMatch = (matchesToRank) => (matchesToRank.length
       ? selectBestCandidate(rankMatchesForRace(race, matchesToRank, scoreOptions), { threshold, minGap, raceUrl: race.url })

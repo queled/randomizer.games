@@ -492,17 +492,16 @@
     return bySet ? bySet.r.restreams : [];
   }
 
-  // Restream button: the VOD at the race start while Twitch keeps it, else the channel
-  function renderRestreamLink(stream) {
+  // Restream button, one per language: the VOD at the race start, or the channel while the race is not over yet
+  function renderRestreamLink(stream, live) {
     const vod = /^https:\/\/www\.twitch\.tv\/videos\/\d+/.test(stream.vodUrl || '') ? sanitizeExternalUrl(stream.vodUrl) : '';
-    const href = vod || sanitizeExternalUrl(stream.url);
+    const href = vod || (live ? sanitizeExternalUrl(stream.url) : '');
     if (!href) return '';
     const t = (key, fallback) => (typeof i18n !== 'undefined' && i18n.t(key)) || fallback;
     const channel = restreamChannelName(stream.url || href);
     const language = restreamLanguageLabel(stream.language);
     const label = vod ? '▶ ' + t('raceDetail.watchRestream', 'Watch the restream') : t('raceDetail.restream', 'Restream');
-    const title = stream.vodGoneAt && !vod ? `${channel} — ${t('tournamentDetail.vodGone', 'VOD no longer available')}` : channel;
-    return `<a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(title)}" style="display:inline-flex;align-items:center;gap:0.6rem;background-color:#1F2937;color:#E9D5FF;font-weight:600;padding:0.75rem 1.5rem;border-radius:0.5rem;border:2px solid #9146FF;text-decoration:none;transition:all 0.2s;font-size:1rem;" data-hover-style="background:#3b0764" data-rest-style="background:#1F2937"><img src="/assets/twitch.svg" alt="Twitch" style="width:22px;height:22px;"><span>${escapeHtml(label)}</span><span style="color:#c4b5fd;font-weight:400;font-size:0.875rem;">${escapeHtml([language, channel].filter(Boolean).join(' · '))}</span></a>`;
+    return `<a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(channel)}" style="display:inline-flex;align-items:center;gap:0.6rem;background-color:#1F2937;color:#E9D5FF;font-weight:600;padding:0.75rem 1.5rem;border-radius:0.5rem;border:2px solid #9146FF;text-decoration:none;transition:all 0.2s;font-size:1rem;" data-hover-style="background:#3b0764" data-rest-style="background:#1F2937"><img src="/assets/twitch.svg" alt="Twitch" style="width:22px;height:22px;"><span>${escapeHtml(label)}</span><span style="color:#c4b5fd;font-weight:400;font-size:0.875rem;">${escapeHtml([language, channel].filter(Boolean).join(' · '))}</span></a>`;
   }
 
   async function loadLiveStreams(race) {
@@ -680,7 +679,8 @@
             tournamentLinkDiv.style.display = 'block';
             applyRaceSeo(race, gameDisplayName, tournament);
           }
-          const restreamLinks = findRestreams(race, tournament || {}).map(renderRestreamLink).filter(Boolean);
+          const restreamLinks = findRestreams(race, tournament || {})
+            .map(stream => renderRestreamLink(stream, LIVE_RACE_STATUSES.includes(race.status))).filter(Boolean);
           if (restreamLinks.length) {
             linksEl.insertAdjacentHTML('beforeend', restreamLinks.join(''));
           }

@@ -1037,7 +1037,7 @@ function computeGroupsThenFinalLabel(groupStageMatches, finalStageMatches) {
 // Order start.gg phases as they were played. start.gg's phaseOrder follows creation order, so a
 // phase added late (e.g. an extra group running alongside the others) can land after the finals:
 // a phase whose sets all finished before another phase started goes first, otherwise phaseOrder decides.
-function sortPhasesChronologically(phases, matches = []) {
+function getPhaseSpans(matches = []) {
   const spans = {};
   matches.forEach(m => {
     const t = m && m.phase && m.completedAt ? new Date(m.completedAt).getTime() : NaN;
@@ -1046,12 +1046,55 @@ function sortPhasesChronologically(phases, matches = []) {
     span.first = Math.min(span.first, t);
     span.last = Math.max(span.last, t);
   });
+  return spans;
+}
+
+function sortPhasesChronologically(phases, matches = []) {
+  const spans = getPhaseSpans(matches);
   return phases.slice().sort((a, b) => {
     const sa = spans[a.name], sb = spans[b.name];
     if (sa && sb && sa.last < sb.first) return -1;
     if (sa && sb && sb.last < sa.first) return 1;
     return (a.phaseOrder || 0) - (b.phaseOrder || 0);
   });
+}
+
+// Match list order: latest phase on top (finals first, opening Swiss rounds last). Brackets played
+// side by side by different players (Gold + Silver, Groups A-H + Group I) stay together, the main
+// one first, then in phaseOrder.
+function sortPhasesNewestFirst(phaseNames, tournament, matches = []) {
+  const declared = tournament && Array.isArray(tournament.phases) ? tournament.phases : [];
+  const chronological = sortPhasesChronologically(declared, matches).map(p => p.name);
+  const position = name => { const i = chronological.indexOf(name); return i === -1 ? chronological.length : i; };
+  const phaseOrder = name => { const p = declared.find(ph => ph.name === name); return p && p.phaseOrder ? p.phaseOrder : 0; };
+  const spans = getPhaseSpans(matches);
+
+  const players = {};
+  matches.forEach(m => {
+    if (!m || !m.phase) return;
+    const set = players[m.phase] || (players[m.phase] = new Set());
+    [m.player1Name || (m.player1 && m.player1.name), m.player2Name || (m.player2 && m.player2.name)]
+      .forEach(n => { if (n) set.add(n); });
+  });
+  const parallel = (a, b) => {
+    const sa = spans[a], sb = spans[b];
+    if (!sa || !sb || sa.last < sb.first || sb.last < sa.first) return false;
+    const pa = players[a] || new Set();
+    return ![...(players[b] || [])].some(n => pa.has(n));
+  };
+
+  // Clusters of parallel phases, ordered from the latest played to the first one
+  const clusters = [];
+  phaseNames.slice().sort((a, b) => position(a) - position(b)).forEach(name => {
+    const cluster = clusters.find(c => c.some(other => parallel(name, other)));
+    if (cluster) cluster.push(name);
+    else clusters.push([name]);
+  });
+  const isMain = name => /\bmain\b/i.test(name || '');
+  return clusters
+    .map((cluster, index) => ({ cluster, index }))
+    .sort((a, b) => b.index - a.index)
+    .flatMap(({ cluster }) => cluster.sort((a, b) => (isMain(b) - isMain(a)) || (phaseOrder(a) - phaseOrder(b))));
 }
 
 function displayMatches(matches, tournament, races = []) {
@@ -1090,16 +1133,7 @@ function displayMatches(matches, tournament, races = []) {
 
   // Start.gg multi-phase tournament: render each phase as a separate section
   if (hasStartggPhases && !hasGroupsThenFinal) {
-    // Sort: Main Bracket first, then Preliminary Bracket, then others
-    const sortedPhases = phases.slice().sort((a, b) => {
-      const al = (a || '').toLowerCase();
-      const bl = (b || '').toLowerCase();
-      const aIsMain = al.includes('main') || (al === 'bracket' && !al.includes('preliminary'));
-      const bIsMain = bl.includes('main') || (bl === 'bracket' && !bl.includes('preliminary'));
-      if (aIsMain && !bIsMain) return -1;
-      if (!aIsMain && bIsMain) return 1;
-      return 0;
-    });
+    const sortedPhases = sortPhasesNewestFirst(phases, tournament, matches);
 
     sortedPhases.forEach((phaseName, phaseIdx) => {
       const phaseMatches = matches.filter(m => m.phase === phaseName);
@@ -1313,42 +1347,39 @@ function displayMatches(matches, tournament, races = []) {
     return;
   }
 
+  // Groups then a double-elimination final: final bracket on top, group stage below it
+  let renderGroupStage = null;
   if (hasGroupsThenFinal) {
-    // Group stage section
-    const gsHeader = document.createElement('h3');
-    gsHeader.style.cssText = 'font-size: 1.25rem; font-weight: bold; margin-top: 0.5rem; margin-bottom: 1rem;';
-    gsHeader.textContent = i18n.t('tournamentDetail.groupStage') || 'Group Stage';
-    gsHeader.classList.add('text-gold');
-    container.appendChild(gsHeader);
-
-    const groupIds = Array.from(new Set(groupStageMatches.map(m => m.groupId)))
-      .filter(v => v !== null && v !== undefined)
-      .sort((a, b) => (a - b));
-
-    groupIds.forEach((gid, idx) => {
-      const groupTitle = document.createElement('h4');
-      groupTitle.style.cssText = 'font-size: 1rem; font-weight: bold; margin-top: 1rem; margin-bottom: 0.75rem; color: #9ca3af;';
-      const letter = String.fromCharCode('A'.charCodeAt(0) + (idx % 26));
-      groupTitle.textContent = `${i18n.t('tournamentDetail.group') || 'Group'} ${letter}`;
-      container.appendChild(groupTitle);
-
-      const groupMatches = groupStageMatches
-        .filter(m => m.groupId === gid)
-        .slice()
-        .sort((a, b) => (a.challongeId || 0) - (b.challongeId || 0));
-
-      groupMatches.forEach(match => {
-        const matchCard = createMatchCard(match, races);
-        container.appendChild(matchCard);
-      });
-    });
-
-    // Final stage section
     const finalsHeader = document.createElement('h3');
-    finalsHeader.style.cssText = 'font-size: 1.25rem; font-weight: bold; margin-top: 2rem; margin-bottom: 1rem;';
+    finalsHeader.style.cssText = 'font-size: 1.25rem; font-weight: bold; margin-top: 0.5rem; margin-bottom: 1rem;';
     finalsHeader.textContent = i18n.t('tournamentDetail.finalStage') || 'Finals — Single Elimination';
     finalsHeader.classList.add('text-gold');
     container.appendChild(finalsHeader);
+
+    renderGroupStage = () => {
+      const gsHeader = document.createElement('h3');
+      gsHeader.style.cssText = 'font-size: 1.25rem; font-weight: bold; margin-top: 2rem; margin-bottom: 1rem;';
+      gsHeader.textContent = i18n.t('tournamentDetail.groupStage') || 'Group Stage';
+      gsHeader.classList.add('text-gold');
+      container.appendChild(gsHeader);
+
+      const groupIds = Array.from(new Set(groupStageMatches.map(m => m.groupId)))
+        .filter(v => v !== null && v !== undefined)
+        .sort((a, b) => (a - b));
+
+      groupIds.forEach((gid, idx) => {
+        const groupTitle = document.createElement('h4');
+        groupTitle.style.cssText = 'font-size: 1rem; font-weight: bold; margin-top: 1rem; margin-bottom: 0.75rem; color: #9ca3af;';
+        const letter = String.fromCharCode('A'.charCodeAt(0) + (idx % 26));
+        groupTitle.textContent = `${i18n.t('tournamentDetail.group') || 'Group'} ${letter}`;
+        container.appendChild(groupTitle);
+
+        groupStageMatches
+          .filter(m => m.groupId === gid)
+          .sort((a, b) => getMatchTime(b) - getMatchTime(a) || (b.challongeId || 0) - (a.challongeId || 0))
+          .forEach(match => container.appendChild(createMatchCard(match, races)));
+      });
+    };
 
     // Continue rendering final stage matches with the existing bracket logic below
     matches = finalStageMatches;
@@ -1388,10 +1419,9 @@ function displayMatches(matches, tournament, races = []) {
     roundHeader.classList.add('text-gold');
     container.appendChild(roundHeader);
 
-    winnerByRound[round].forEach(match => {
-      const matchCard = createMatchCard(match, races);
-      container.appendChild(matchCard);
-    });
+    winnerByRound[round]
+      .sort((a, b) => getMatchTime(b) - getMatchTime(a))
+      .forEach(match => container.appendChild(createMatchCard(match, races)));
   });
 
   // Display loser bracket (from LB Final to Round 1)
@@ -1406,11 +1436,12 @@ function displayMatches(matches, tournament, races = []) {
     roundHeader.title = roundName;
     container.appendChild(roundHeader);
 
-    loserByRound[round].forEach(match => {
-      const matchCard = createMatchCard(match, races);
-      container.appendChild(matchCard);
-    });
+    loserByRound[round]
+      .sort((a, b) => getMatchTime(b) - getMatchTime(a))
+      .forEach(match => container.appendChild(createMatchCard(match, races)));
   });
+
+  if (renderGroupStage) renderGroupStage();
 }
 
 // Delegated click handler: navigate to race-detail when clicking a manche card (except Racetime links)

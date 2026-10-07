@@ -329,6 +329,19 @@ h1 {
 }
 .btn-racetime img { width: 16px; height: 16px; }
 
+/* SpeedRunsLive wordmark, cropped from the 700x125 logo to its 514x75 lettering
+   (offset 94,27); set --srl-logo-height to size it */
+.srl-logo {
+    --srl-logo-height: 16px;
+    display: inline-block;
+    flex-shrink: 0;
+    height: var(--srl-logo-height);
+    width: calc(var(--srl-logo-height) * 514 / 75);
+    background: url('/assets/speedrunslive.png') no-repeat;
+    background-size: calc(var(--srl-logo-height) * 700 / 75) auto;
+    background-position: calc(var(--srl-logo-height) * -94 / 75) calc(var(--srl-logo-height) * -27 / 75);
+}
+
 .player-links a { margin-right: 0.5rem; }
 
 /* Twitch button (purple) */

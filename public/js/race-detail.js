@@ -551,7 +551,7 @@
       const links = [];
       const srlUrl = getSpeedRunsLiveRaceUrl(race.url);
       if (srlUrl) {
-        links.push(`<a href="${escapeHtml(srlUrl)}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.5rem;background-color:#1F2937;color:#E3E6E6;font-weight:600;padding:0.75rem 1.5rem;border-radius:0.5rem;border:2px solid #E3E6E6;text-decoration:none;transition:all 0.2s;font-size:1rem;" data-hover-style="background:#374151" data-rest-style="background:#1F2937"><img src="/assets/speedrunslive.svg" alt="SpeedRunsLive" style="width:24px;height:24px;">Voir sur SpeedRunsLive</a>`);
+        links.push(`<a href="${escapeHtml(srlUrl)}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.6rem;background-color:#1F2937;color:#F0C850;font-weight:600;padding:0.75rem 1.5rem;border-radius:0.5rem;border:2px solid #F0C850;text-decoration:none;transition:all 0.2s;font-size:1rem;" data-hover-style="background:#374151" data-rest-style="background:#1F2937">Voir sur<span class="srl-logo" role="img" aria-label="SpeedRunsLive" style="--srl-logo-height:22px;"></span></a>`);
       } else if (race.url) {
         const racetimeUrl = normalizeRacetimeRaceUrl(race.url, race.category);
         const safeRacetimeUrl = sanitizeExternalUrl(racetimeUrl);

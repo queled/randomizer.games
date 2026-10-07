@@ -968,9 +968,11 @@ function createQualificationRaceCard(race) {
     link.href = href;
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
-    link.style.cssText = 'display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.65rem; border-radius: 0.25rem; font-size: 0.8rem; color: #C2CECF; background: #222222; border: 1px solid #C2CECF; text-decoration: none;';
+    // SpeedRunsLive takes the gold of its logo, as Racetime takes its silver
+    const brandColor = srlUrl ? '#F0C850' : '#C2CECF';
+    link.style.cssText = `display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.65rem; border-radius: 0.25rem; font-size: 0.8rem; color: ${brandColor}; background: #222222; border: 1px solid ${brandColor}; text-decoration: none;`;
     link.innerHTML = srlUrl
-      ? '<img src="assets/speedrunslive.svg" alt="SpeedRunsLive" style="width: 16px; height: 16px;">SpeedRunsLive'
+      ? '<span class="srl-logo" role="img" aria-label="SpeedRunsLive"></span>'
       : '<img src="assets/racetime.svg" alt="Racetime" style="width: 16px; height: 16px;">Racetime';
     linkDiv.appendChild(link);
     header.appendChild(linkDiv);
@@ -1954,9 +1956,10 @@ function createMatchCard(match, races = []) {
     const srlUrl = getSpeedRunsLiveRaceUrl(race.url);
     const href = srlUrl || 'https://racetime.gg/' + parts.join('/');
     const logo = srlUrl
-      ? '<img src="assets/speedrunslive.svg" alt="SpeedRunsLive" style="width:14px;height:14px;">SpeedRunsLive'
+      ? '<span class="srl-logo" role="img" aria-label="SpeedRunsLive" style="--srl-logo-height:14px;"></span>'
       : '<img src="assets/racetime.svg" alt="Racetime" style="width:14px;height:14px;">Racetime';
-    return `<a href="${href}" target="_blank" rel="noopener noreferrer" data-stop-propagation style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.2rem 0.4rem; border-radius:0.25rem; font-size:0.7rem; color:#C2CECF; background:#222222; border:1px solid #C2CECF; text-decoration:none;">${logo}</a>`;
+    const brandColor = srlUrl ? '#F0C850' : '#C2CECF';
+    return `<a href="${href}" target="_blank" rel="noopener noreferrer" data-stop-propagation style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.2rem 0.4rem; border-radius:0.25rem; font-size:0.7rem; color:${brandColor}; background:#222222; border:1px solid ${brandColor}; text-decoration:none;">${logo}</a>`;
   };
 
   // Helper to extract times from a race for this match

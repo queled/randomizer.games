@@ -12,6 +12,9 @@
  *   node scripts/auto-link-tournaments.js <tournamentId> --dry-run
  *   node scripts/auto-link-tournaments.js --all
  *   node scripts/auto-link-tournaments.js --threshold 320 --min-gap 80
+ *   node scripts/auto-link-tournaments.js --all --tiebreaks-only --dry-run
+ *
+ *   --tiebreaks-only  only attach the tie-break rooms of the groups (backfill of past events)
  */
 
 const mongoose = require('mongoose');
@@ -48,6 +51,7 @@ function parseArgs() {
   return {
     dryRun: args.includes('--dry-run'),
     all: args.includes('--all'),
+    tiebreaksOnly: args.includes('--tiebreaks-only'),
     threshold: parseNumberFlag(args, '--threshold', 300),
     minGap: parseNumberFlag(args, '--min-gap', 50),
     tournamentId: args.find((arg) => !arg.startsWith('--')) || null
@@ -111,13 +115,15 @@ async function main() {
 
   const previews = [];
   for (const tournamentData of tournaments) {
-    const preview = await buildAutoLinkPreview({
-      tournament: tournamentData,
-      Match,
-      Race,
-      threshold: opts.threshold,
-      minGap: opts.minGap
-    });
+    const preview = opts.tiebreaksOnly
+      ? { proposals: [], skipped: 0, total: 0 }
+      : await buildAutoLinkPreview({
+          tournament: tournamentData,
+          Match,
+          Race,
+          threshold: opts.threshold,
+          minGap: opts.minGap
+        });
     previews.push({ tournamentData, preview });
   }
 

@@ -141,7 +141,7 @@ Les scripts qui écrivent en base proposent un mode `--dry-run` (ou n'écrivent 
 | `check-rando-list-changes.js` | — | Indique à la tâche `rando-list` si rando-list a changé |
 | `discover-tournaments.js` | `discover:tournaments` (+ `:dry`, `:startgg`, `:challonge`) | Découverte de tournois |
 | `sync-tournaments.js` | `sync:tournaments` (+ `:dry`, `:update`) | Mise à jour des tournois actifs |
-| `auto-link-tournaments.js` | `link:tournaments:active` | Rattache les courses aux matchs, et les tie-breaks à leur poule |
+| `auto-link-tournaments.js` | `link:tournaments:active` | Rattache les courses aux matchs, et les tie-breaks à leur poule (`--all --tiebreaks-only` pour le rattrapage des anciens tournois) |
 | `sync-players-from-races.js` | `sync:players` (+ `:dry`) | Recalcule la collection des joueurs |
 | `sync-race-vods.js` | `sync:race-vods` (+ `:dry`) | VOD Twitch des joueurs de chaque race (tâche `race-vods`) |
 | `sync-midos-house.js` | `sync:midos-house` (+ `:dry`) | Horaires, restreams et VOD Mido's House (tâche `midos-house`) |

@@ -3,6 +3,8 @@ const { collectCandidateCategories } = require('./tournament-autolink');
 // Tie-breaks are rooms opened by hand when players finish a group level: neither a
 // start.gg set nor a race scheduled on Mido's House. The room's info names them.
 const TIEBREAK_INFO = /tie[\s_-]?break/i;
+// "Group 7 Tiebreakers", "Tie Break Groupe 1", "Tie Breaker group 4"
+const INFO_GROUP = /\b(?:group|groupe|grupo|gruppe|gruppo|pool|poule)\s*#?\s*(\d+)/i;
 const PADDING_MS = 14 * 24 * 60 * 60 * 1000;
 
 function normalizeGoal(value) {
@@ -67,6 +69,9 @@ async function findTiebreakRaces({ tournament, Race }) {
     const pool = commonPool(entrantIds, poolsByUser);
     if (!pool) continue;
     const [phase, poolName] = JSON.parse(pool);
+    // The group the room names, if any, must be the players' one
+    const namedGroup = String(race.info || '').match(INFO_GROUP);
+    if (namedGroup && String(Number(namedGroup[1])) !== String(poolName).trim()) continue;
     proposals.push({
       raceId: race._id,
       raceUrl: race.url,

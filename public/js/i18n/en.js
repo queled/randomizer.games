@@ -250,6 +250,7 @@ const en = {
         pool: "Pool",
         match1: "Match 1",
         tbd: "TBD",
+        scheduledFor: "Scheduled for {date}",
         noMatches: "No matches available",
         noMatchesForBracket: "No matches available to display bracket",
         noFinalsMatches: "No finals matches available",

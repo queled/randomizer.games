@@ -2190,7 +2190,7 @@ function createMatchCard(match, races = []) {
   card.innerHTML = `
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
       <div style="font-size: 0.875rem; color: #9ca3af;">
-        ${match.completedAt ? formatDateTime(match.completedAt) : match.startedAt ? formatDateTime(match.startedAt) : 'Not scheduled'}${match.groupId !== null && match.groupId !== undefined && match.round ? ` • Round ${match.round}` : ''}
+        ${match.completedAt ? formatDateTime(match.completedAt) : match.startedAt ? formatDateTime(match.startedAt) : match.scheduledAt ? escHtml(formatScheduledAt(match.scheduledAt)) : 'Not scheduled'}${match.groupId !== null && match.groupId !== undefined && match.round ? ` • Round ${match.round}` : ''}
       </div>
       <div style="display: flex; align-items: center; gap: 0.5rem;">
         ${!isMultiRaceSeries ? singleRaceLinkHtml : ''}
@@ -2505,6 +2505,11 @@ function formatDate(dateString) {
   }
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   return date.toLocaleDateString(locale, options);
+}
+
+function formatScheduledAt(dateString) {
+  const template = (typeof i18n !== 'undefined' && i18n.t('tournamentDetail.scheduledFor')) || 'Scheduled for {date}';
+  return template.replace('{date}', formatDateTime(dateString));
 }
 
 function formatDateTime(dateString) {
@@ -4053,6 +4058,14 @@ function createBracketMatchCard(match, isFinal = false) {
     </div>
   `;
   
+  // Race scheduled on Mido's House: show when it starts
+  if (match.scheduledAt && match.state !== 'complete') {
+    const scheduleIndicator = document.createElement('div');
+    scheduleIndicator.style.cssText = 'padding: 0.2rem 0.5rem; text-align: center; background-color: #1e3a5f; font-size: 0.7rem; color: #bfdbfe; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;';
+    scheduleIndicator.textContent = formatScheduledAt(match.scheduledAt);
+    card.appendChild(scheduleIndicator);
+  }
+
   // Add match state indicator only for 'open' matches (ongoing)
   if (match.state === 'open') {
     const stateIndicator = document.createElement('div');

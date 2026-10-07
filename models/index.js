@@ -226,6 +226,24 @@ const tournamentSchema = new mongoose.Schema({
   startggId: Number,
   startggTournamentId: Number,
   startggSlug: String,
+  // Upcoming races scheduled on Mido's House (OoTR), linked to matches by start.gg set.
+  // Kept apart from `matches`, which the start.gg sync rebuilds; replaced on each sync,
+  // so a race leaves this list once it is played.
+  midosHouse: {
+    series: String,
+    event: String,
+    url: String,
+    lastSync: Date,
+    schedule: [{
+      _id: false,
+      startggSetId: String,
+      startAt: Date,
+      round: String,
+      entrants: [String],
+      roomUrl: String,
+      restreams: [{ _id: false, language: String, url: String }]
+    }]
+  },
   // optional source metadata for import tracing
   source: {
     type: { type: String },

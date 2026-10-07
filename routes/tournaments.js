@@ -176,6 +176,14 @@ router.get('/:id/matches', validateObjectId('id'), async (req, res, next) => {
     const tournament = await Tournament.findById(req.params.id).lean();
     
     if (tournament && tournament.matches && tournament.matches.length > 0) {
+      // Next race of each set scheduled on Mido's House (several for a best-of)
+      const nextRaceBySet = new Map();
+      for (const entry of tournament.midosHouse?.schedule || []) {
+        if (!entry.startggSetId || !entry.startAt) continue;
+        const current = nextRaceBySet.get(entry.startggSetId);
+        if (!current || new Date(entry.startAt) < new Date(current.startAt)) nextRaceBySet.set(entry.startggSetId, entry);
+      }
+
       // Start.gg tournament - return embedded matches formatted like Challonge matches
       const formattedMatches = tournament.matches.map(m => {
         const player1Name = m.player1?.name || 'TBD';
@@ -286,7 +294,9 @@ router.get('/:id/matches', validateObjectId('id'), async (req, res, next) => {
           phaseGroup: m.phaseGroup,
           raceUrl: m.raceUrl || null,
           raceUrls: Array.isArray(m.raceUrls) ? m.raceUrls : (m.raceUrl ? [m.raceUrl] : []),
-          identifier: m.phaseGroup ? `${m.phaseGroup}-R${m.round}` : `R${m.round}`
+          identifier: m.phaseGroup ? `${m.phaseGroup}-R${m.round}` : `R${m.round}`,
+          scheduledAt: (!m.completedAt && nextRaceBySet.get(String(m.startggSetId))?.startAt) || null,
+          restreams: (!m.completedAt && nextRaceBySet.get(String(m.startggSetId))?.restreams) || []
         };
       });
       

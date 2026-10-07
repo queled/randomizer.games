@@ -274,6 +274,7 @@ const pt = {
         pool: "Pool",
         match1: "Partida 1",
         tbd: "A Definir",
+        scheduledFor: "Agendado para {date}",
         noMatches: "Nenhuma partida disponível",
         noMatchesForBracket: "Nenhuma partida disponível para exibir o bracket",
         noFinalsMatches: "Nenhuma partida de final disponível",

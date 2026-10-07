@@ -6,6 +6,7 @@
 # Usage : scripts/cron/run-job.sh <tâche>
 #   racetime              nouvelles courses racetime.gg            (toutes les 5 min)
 #   tournaments-update    tournois actifs + rattachement des courses (toutes les 15 min)
+#   midos-house           horaires et restreams des races OoTR      (toutes les 15 min)
 #   tournaments-discover  nouveaux tournois des 2 derniers jours    (tous les jours)
 #   rando-list            cache rando-list, si le dépôt a changé    (tous les jours)
 #   backup                mongodump avec rotation                   (toutes les nuits)
@@ -31,6 +32,10 @@ run_tournaments_update() {
   timeout 10m node scripts/sync-tournaments.js --update-only || status=$?
   timeout 10m node scripts/auto-link-tournaments.js || status=$?
   return "$status"
+}
+
+run_midos_house() {
+  timeout 5m node scripts/sync-midos-house.js
 }
 
 run_tournaments_discover() {
@@ -72,11 +77,12 @@ run_backup() {
 case "$JOB" in
   racetime)             fn=run_racetime ;;
   tournaments-update)   fn=run_tournaments_update ;;
+  midos-house)          fn=run_midos_house ;;
   tournaments-discover) fn=run_tournaments_discover ;;
   rando-list)           fn=run_rando_list ;;
   backup)               fn=run_backup ;;
   *)
-    echo "Usage: $0 <racetime|tournaments-update|tournaments-discover|rando-list|backup>" >&2
+    echo "Usage: $0 <racetime|tournaments-update|midos-house|tournaments-discover|rando-list|backup>" >&2
     exit 2
     ;;
 esac

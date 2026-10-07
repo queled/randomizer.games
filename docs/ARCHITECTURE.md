@@ -26,6 +26,7 @@ Comment les données arrivent dans le site, où elles sont stockées, et quels s
 | racetime.gg | Courses (en continu) et catégories de jeux |
 | SpeedRunsLive | Historique des courses d'avant racetime.gg (import ponctuel) |
 | start.gg / Challonge | Tournois, participants, matchs |
+| [Mido's House](https://midos.house) | Horaires et restreams des races à venir des tournois OoTR |
 | speedrun.com | Plateformes, date de sortie, images des jeux |
 | Twitch | Streams en direct, identifiants des jeux |
 
@@ -37,6 +38,7 @@ En production, la base MongoDB tourne sur le même serveur que le site et n'éco
 |-------|-----------------|-----------------|
 | `racetime` | toutes les 5 min | `sync-racetime-global.js` : nouvelles courses, finalisation des courses bloquées « en cours » depuis plus de 24 h, rattrapage des courses terminées entre deux exécutions |
 | `tournaments-update` | toutes les 15 min | `sync-tournaments.js --update-only` met à jour les tournois actifs, puis `auto-link-tournaments.js` rattache les courses aux matchs |
+| `midos-house` | toutes les 15 min | `sync-midos-house.js` : horaires et restreams des races à venir des tournois OoTR (voir plus bas) |
 | `rando-list` | tous les jours à 6h | met à jour la copie locale de rando-list ; si `check-rando-list-changes.js` signale un nouveau commit, `sync-rando-list.js --detect-new` met à jour le cache et les ressources, puis signale les nouveaux jeux, à créer depuis le panneau admin |
 | `tournaments-discover` | tous les jours à 7h | `discover-tournaments.js --since <il y a 2 jours> --max-pages 3` : nouveaux tournois sur start.gg et Challonge |
 | `backup` | tous les jours à 3h30 | `backup-db.js` : archive `mongodump` de la base, 7 gardées |
@@ -59,6 +61,14 @@ Les workflows de `.github/workflows/` faisaient le même travail depuis les serv
 
 Les courses sont rattachées aux matchs par `services/tournament-autolink.js` (score de confiance) et aux qualifications par `services/tournament-qualifiers.js`. Le panneau admin permet de vérifier ou de corriger ces liens.
 
+### Horaires Mido's House
+
+Les joueurs des tournois OoTR fixent l'horaire de leurs races sur [Mido's House](https://midos.house) (commande `/schedule` du bot Discord, dans le serveur du tournoi) et les restreamers y ajoutent leur chaîne, par langue. Son API GraphQL ne donne ni les liens de restream ni les sets start.gg : `services/midos-house.js` lit donc la page `/event/<série>/<édition>/races` de chaque événement listé sur l'accueil, et y prend l'heure de départ, le lien du set start.gg et les liens « <Langue> restream ».
+
+`sync-midos-house.js` range ces races dans `tournament.midosHouse.schedule` du tournoi start.gg correspondant (trouvé par son `startggSlug`). Ce champ est à part de `matches`, que la synchronisation start.gg reconstruit à chaque passage. La liste est remplacée à chaque exécution : une race jouée en sort, et un événement qui quitte l'accueil de Mido's House voit sa liste vidée. `GET /api/tournaments/:id/matches` y ajoute `scheduledAt` et `restreams` pour chaque match pas encore terminé.
+
+Les événements sans sets start.gg (Challonge, league, brackets gérés sur Mido's House) sont ignorés.
+
 ## Modèle de données
 
 Les schémas sont dans [`models/index.js`](../models/index.js).
@@ -67,7 +77,7 @@ Les schémas sont dans [`models/index.js`](../models/index.js).
 |------------|---------|
 | `games` | Un jeu randomizer, ses ressources et ses intégrations externes |
 | `races` | Une course (racetime.gg ou SpeedRunsLive, URL `/srl/<id>`) |
-| `tournaments` | Un tournoi start.gg ou Challonge, ses phases et ses participants |
+| `tournaments` | Un tournoi start.gg ou Challonge, ses phases, ses participants et, pour OoTR, ses races planifiées sur Mido's House |
 | `matches` | Un match de tournoi et les courses qui y sont liées |
 | `players` | Un joueur, avec ses alias (pseudos utilisés ailleurs) |
 | `rando_list_cache` | Copie brute de rando-list et métadonnées de la dernière synchronisation |
@@ -109,6 +119,7 @@ Les scripts qui écrivent en base proposent un mode `--dry-run` (ou n'écrivent 
 | `sync-tournaments.js` | `sync:tournaments` (+ `:dry`, `:update`) | Mise à jour des tournois actifs |
 | `auto-link-tournaments.js` | `link:tournaments:active` | Rattache les courses aux matchs |
 | `sync-players-from-races.js` | `sync:players` (+ `:dry`) | Recalcule la collection des joueurs |
+| `sync-midos-house.js` | `sync:midos-house` (+ `:dry`) | Horaires et restreams Mido's House (tâche `midos-house`) |
 
 `npm run sync` enchaîne racetime, joueurs et rando-list.
 

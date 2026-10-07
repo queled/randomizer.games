@@ -238,6 +238,7 @@ const fr = {
         pool: "Pool",
         match1: "Match 1",
         tbd: "TBD",
+        scheduledFor: "Prévu le {date}",
         noMatches: "Aucun match disponible",
         noMatchesForBracket: "Aucun match disponible pour afficher le bracket",
         noFinalsMatches: "Aucun match de phase finale disponible",

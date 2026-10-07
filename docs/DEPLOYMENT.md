@@ -217,6 +217,7 @@ PATH=/usr/local/bin:/usr/bin:/bin
 
 */5   * * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh racetime
 2-59/15 * * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh tournaments-update
+7-59/15 * * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh midos-house
 0     6 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh rando-list
 0     7 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh tournaments-discover
 30    3 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh backup

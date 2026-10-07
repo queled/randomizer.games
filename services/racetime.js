@@ -23,6 +23,25 @@ class RacetimeAPI {
   }
 
   /**
+   * Get the entrants of a race currently streaming on Twitch
+   * @param {string} raceUrl - Race path ('/category/slug') or full racetime URL
+   * @returns {Promise<Array<{userId: string, userName: string, twitchChannel: string}>>}
+   */
+  async getLiveStreams(raceUrl) {
+    const path = String(raceUrl || '').replace(/^https?:\/\/(www\.)?racetime\.gg/i, '').replace(/\/+$/, '');
+    // Only a '/category/slug' path, so the request can't leave the race data endpoint
+    if (!/^\/[A-Za-z0-9_-]+\/[A-Za-z0-9_-]+$/.test(path)) return [];
+    const response = await axios.get(`${this.baseURL}${path}/data`, { timeout: 5000 });
+    return (response.data?.entrants || [])
+      .filter(e => e.stream_live && e.user?.twitch_name && /^[A-Za-z0-9_]{1,25}$/.test(e.user.twitch_name))
+      .map(e => ({
+        userId: e.user.id,
+        userName: e.user.name,
+        twitchChannel: e.user.twitch_name
+      }));
+  }
+
+  /**
    * Get past races for a category
    * @param {string} category - Game category
    * @param {number} page - Page number

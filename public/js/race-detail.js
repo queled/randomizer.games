@@ -65,6 +65,8 @@
   // Global variables for re-rendering on spoiler mode change
   let currentEntrants = [];
   let currentRace = null;
+  // Twitch channel of entrants streaming right now, keyed by racetime user id and lowercased name
+  let liveStreams = new Map();
   let gamesById = {};
   let gamesBySlug = {};
 
@@ -414,6 +416,38 @@
     return res.json();
   }
 
+  const LIVE_RACE_STATUSES = ['open', 'invitational', 'in_progress'];
+  const STREAMS_REFRESH_MS = 2 * 60 * 1000;
+
+  function getLiveChannel(entrant) {
+    return (entrant.userId && liveStreams.get('id:' + entrant.userId))
+      || (entrant.userName && liveStreams.get('name:' + entrant.userName.toLowerCase()))
+      || null;
+  }
+
+  function renderTwitchLink(entrant) {
+    const channel = getLiveChannel(entrant);
+    if (!channel) return '';
+    const label = escapeHtml(channel);
+    return `<a href="https://www.twitch.tv/${encodeURIComponent(channel)}" target="_blank" rel="noopener noreferrer" class="btn-twitch" title="twitch.tv/${label}" style="margin:0 0 0 0.6rem;flex-shrink:0;"><img src="/assets/twitch.svg" alt="Twitch"><span style="width:8px;height:8px;background:#dc2626;border-radius:50%;animation:pulse 2s cubic-bezier(0.4,0,0.6,1) infinite;"></span>LIVE</a>`;
+  }
+
+  async function loadLiveStreams(race) {
+    if (!race?._id || !LIVE_RACE_STATUSES.includes(race.status)) return;
+    try {
+      const data = await fetchJson('/api/runs/' + encodeURIComponent(race._id) + '/streams');
+      const next = new Map();
+      (data.streams || []).forEach(s => {
+        if (s.userId) next.set('id:' + s.userId, s.twitchChannel);
+        if (s.userName) next.set('name:' + s.userName.toLowerCase(), s.twitchChannel);
+      });
+      liveStreams = next;
+      renderParticipants(currentEntrants);
+    } catch (e) {
+      // Live streams are optional, keep the list as it is
+    }
+  }
+
   function renderParticipants(entrants) {
     if (!entrants || entrants.length === 0) {
       participantsEl.innerHTML = '<p style="color:#9ca3af;">No participants</p>';
@@ -462,9 +496,10 @@
         // Spoiler mode: simple list, no rank, no time, alphabetical
         return `
           <div style="display:flex;align-items:center;padding:1rem;background:#2d3748;margin-bottom:0.5rem;border-radius:0.375rem;transition:background 0.2s;" data-hover-style="background:#4a5568" data-rest-style="background:#2d3748">
-            <a href="${playerLink}" style="flex:1;color:#fff;text-decoration:none;">
-              ${name}
-            </a>
+            <div style="flex:1;display:flex;align-items:center;min-width:0;">
+              <a href="${playerLink}" style="color:#fff;text-decoration:none;">${name}</a>
+              ${renderTwitchLink(e)}
+            </div>
           </div>
         `;
       } else {
@@ -485,9 +520,10 @@
         return `
           <div class="spoiler-block" style="display:flex;align-items:center;gap:0.375rem;padding:1rem;background:${bgColor};border-left:3px solid ${borderColor};margin-bottom:0.5rem;border-radius:0.375rem;transition:background 0.2s;" data-hover-style="background:#4a5568" data-rest-style="background:${bgColor}">
             <div style="width:60px;min-width:60px;text-align:center;font-size:1.25rem;color:#fbbf24;">${rank}</div>
-            <a href="${playerLink}" style="flex:1;padding-left:0.2rem;color:${nameColor};font-weight:${isWinner ? '600' : '400'};text-decoration:none;">
-              ${name}
-            </a>
+            <div style="flex:1;display:flex;align-items:center;min-width:0;padding-left:0.2rem;">
+              <a href="${playerLink}" style="color:${nameColor};font-weight:${isWinner ? '600' : '400'};text-decoration:none;">${name}</a>
+              ${renderTwitchLink(e)}
+            </div>
             <div style="color:${timeColor};font-weight:600;font-family:monospace;font-size:1rem;">${timeStr}</div>
           </div>
         `;
@@ -583,6 +619,14 @@
       // Update title then participants
       updateParticipantsTitle();
       renderParticipants(race.entrants);
+
+      // Twitch links of entrants streaming the race, refreshed while the page stays open
+      if (LIVE_RACE_STATUSES.includes(race.status)) {
+        loadLiveStreams(race);
+        setInterval(() => {
+          if (!document.hidden) loadLiveStreams(race);
+        }, STREAMS_REFRESH_MS);
+      }
       
     } catch (e) {
       const errText = (typeof i18n !== 'undefined' && typeof i18n.t === 'function') ? i18n.t('common.error') : 'Loading error';

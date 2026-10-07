@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { Race, Game } = require('../models');
 const { validateObjectId } = require('../middleware/security');
+const racetime = require('../services/racetime');
 const {
   escapeRegex,
   buildCategoryResolutionContext,
@@ -82,6 +83,43 @@ router.get('/:id', validateObjectId('id'), async (req, res, next) => {
     }
 
     res.json(race);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Live Twitch streams of the entrants, read from racetime (open or ongoing races only)
+const LIVE_STATUSES = new Set(['open', 'invitational', 'in_progress']);
+const STREAMS_CACHE_TTL = 60 * 1000;
+const streamsCache = new Map();
+
+router.get('/:id/streams', validateObjectId('id'), async (req, res, next) => {
+  try {
+    const race = await Race.findById(req.params.id).select('status url').lean();
+    if (!race) {
+      return res.status(404).json({ error: 'Race not found' });
+    }
+    if (!LIVE_STATUSES.has(race.status) || !race.url) {
+      return res.json({ streams: [] });
+    }
+
+    const cached = streamsCache.get(race.url);
+    if (cached && cached.expires > Date.now()) {
+      return res.json({ streams: cached.streams });
+    }
+
+    let streams = [];
+    try {
+      streams = await racetime.getLiveStreams(race.url);
+    } catch (error) {
+      console.error(`Error fetching live streams for ${race.url}:`, error.message);
+    }
+    // Drop expired entries so the cache doesn't grow with old races
+    for (const [url, entry] of streamsCache) {
+      if (entry.expires <= Date.now()) streamsCache.delete(url);
+    }
+    streamsCache.set(race.url, { streams, expires: Date.now() + STREAMS_CACHE_TTL });
+    res.json({ streams });
   } catch (error) {
     next(error);
   }

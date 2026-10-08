@@ -832,8 +832,9 @@ function displayParticipants(participants, matches = [], options = {}) {
 
     const nameHtml = participant.members
       ? `<div style="font-weight: bold; color: white; margin-bottom: 0.125rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escHtml(participant.name)}</div>${renderTeamMembers(participant.members, 'font-size: 0.875rem;')}`
-      : `<a href="/player-detail.html?name=${encodeURIComponent(participant.displayName || participant.name)}" style="font-weight: bold; color: white; margin-bottom: 0.125rem; cursor: pointer; text-decoration: none; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escHtml(participant.displayName || participant.name)}</a>
-        ${participant.name !== participant.displayName && participant.displayName ? `<div style=\"color: #9ca3af; font-size: 0.875rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;\">${escHtml(participant.name)}</div>` : ''}`;
+      : `<a href="${playerPageHref(participant.displayName || participant.name)}" style="font-weight: bold; color: white; margin-bottom: 0.125rem; cursor: pointer; text-decoration: none; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escHtml(participant.displayName || participant.name)}</a>
+        ${participant.name !== participant.displayName && participant.displayName ? `<div style=\"color: #9ca3af; font-size: 0.875rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;\">${escHtml(participant.name)}</div>` : ''}
+        ${participant.racetimeName && normalizeName(participant.racetimeName) !== normalizeName(participant.displayName || participant.name) ? `<div title="racetime.gg" style="display: flex; align-items: center; gap: 0.25rem; color: #9ca3af; font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><img src="assets/racetime.svg" alt="Racetime" style="width: 12px; height: 12px;">${escHtml(participant.racetimeName)}</div>` : ''}`;
 
     row.innerHTML = `
       <span class="spoiler-block">${rankBadge}</span>
@@ -928,6 +929,15 @@ function enrichMatchesWithParticipantNames(matches, participants) {
 }
 
 // Co-op tournaments list each player with the team they raced in: show one row per team
+// Player page of a bracket name: the racetime account that raced it, when known
+// (organizers type any name in the bracket, racetime says who raced)
+function playerPageHref(name) {
+  const key = normalizeName(sanitizeDisplayName(name));
+  const participant = key && (currentTournament?.participants || []).find(p => p.racetimeName
+    && [p.displayName, p.name].some(n => n && normalizeName(sanitizeDisplayName(n)) === key));
+  return '/player-detail.html?name=' + encodeURIComponent(participant ? participant.racetimeName : name);
+}
+
 function groupTeamParticipants(participants) {
   const teams = new Map();
   const grouped = [];
@@ -2355,7 +2365,7 @@ function createMatchCard(match, races = []) {
     <div style="display: flex; justify-content: space-between; align-items: center;">
       <div style="flex: 1;">
         <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
-          ${match.player1Members && match.player1Members.length ? `<div style="flex: 1; min-width: 0;"><span class="match-player-name ${player1Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'};">${escHtml(sanitizeDisplayName(match.player1Name))}</span>${renderTeamMembers(match.player1Members)}</div>` : match.player1Name ? `<a href="/player-detail.html?name=${encodeURIComponent(sanitizeDisplayName(match.player1Name))}" class="match-player-name ${player1Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'}; flex: 1; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player1Name))}</a>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
+          ${match.player1Members && match.player1Members.length ? `<div style="flex: 1; min-width: 0;"><span class="match-player-name ${player1Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'};">${escHtml(sanitizeDisplayName(match.player1Name))}</span>${renderTeamMembers(match.player1Members)}</div>` : match.player1Name ? `<a href="${playerPageHref(sanitizeDisplayName(match.player1Name))}" class="match-player-name ${player1Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'}; flex: 1; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player1Name))}</a>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
           ${displayScore1 !== null && displayScore2 !== null ? `
             <span class="spoiler-block" style="color: #9ca3af; margin-left: 8rem; display:flex; align-items:center; gap:4rem;">
               ${!isMultiRaceSeries ? `<span>${time1 !== null && time1 !== undefined ? time1 : '-'}</span>` : ''}
@@ -2364,7 +2374,7 @@ function createMatchCard(match, races = []) {
           ` : ''}
         </div>
         <div style="display: flex; align-items: center;">
-          ${match.player2Members && match.player2Members.length ? `<div style="flex: 1; min-width: 0;"><span class="match-player-name ${player2Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'};">${escHtml(sanitizeDisplayName(match.player2Name))}</span>${renderTeamMembers(match.player2Members)}</div>` : match.player2Name ? `<a href="/player-detail.html?name=${encodeURIComponent(sanitizeDisplayName(match.player2Name))}" class="match-player-name ${player2Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'}; flex: 1; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player2Name))}</a>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
+          ${match.player2Members && match.player2Members.length ? `<div style="flex: 1; min-width: 0;"><span class="match-player-name ${player2Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'};">${escHtml(sanitizeDisplayName(match.player2Name))}</span>${renderTeamMembers(match.player2Members)}</div>` : match.player2Name ? `<a href="${playerPageHref(sanitizeDisplayName(match.player2Name))}" class="match-player-name ${player2Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'}; flex: 1; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player2Name))}</a>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
           ${displayScore2 !== null && displayScore1 !== null ? `
             <span class="spoiler-block" style="color: #9ca3af; margin-left: 8rem; display:flex; align-items:center; gap:4rem;">
               ${!isMultiRaceSeries ? `<span>${time2 !== null && time2 !== undefined ? time2 : '-'}</span>` : ''}
@@ -2997,7 +3007,7 @@ function displayGroupStages(groupMatches, participants, races = []) {
       sortedNames.forEach(name => {
         const row = document.createElement('div');
         row.style.cssText = 'padding: 0.5rem; background-color: #111827; border-radius: 0.25rem; color: #d1d5db;';
-        row.innerHTML = `<a href="/player-detail.html?name=${encodeURIComponent(sanitizeDisplayName(name))}" style="color: inherit; text-decoration: none;">${escHtml(sanitizeDisplayName(name))}</a>`;
+        row.innerHTML = `<a href="${playerPageHref(sanitizeDisplayName(name))}" style="color: inherit; text-decoration: none;">${escHtml(sanitizeDisplayName(name))}</a>`;
         namesList.appendChild(row);
       });
       
@@ -3057,7 +3067,7 @@ function displayGroupStages(groupMatches, participants, races = []) {
         const nameStyle = qualified ? 'color: #fbbf24; font-weight: bold;' : 'color: #9ca3af;';
         
         row.innerHTML = `
-          <a href="/player-detail.html?name=${encodeURIComponent(sanitizeDisplayName(standing.name))}" style="${nameStyle} text-decoration: none;">${pos + 1}. ${escHtml(sanitizeDisplayName(standing.name))}</a>
+          <a href="${playerPageHref(sanitizeDisplayName(standing.name))}" style="${nameStyle} text-decoration: none;">${pos + 1}. ${escHtml(sanitizeDisplayName(standing.name))}</a>
           <span style="color: #9ca3af; font-size: 0.875rem;">${standing.wins}V - ${standing.losses}D</span>
         `;
         standingsTable.appendChild(row);
@@ -3142,11 +3152,11 @@ function createCompactMatchCard(match, races = []) {
     <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.875rem;">
       <div style="flex: 1;">
         <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
-          ${match.player1Members && match.player1Members.length ? `<span style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'};" title="${escHtml(teamTitle(match.player1Name, match.player1Members))}">${escHtml(sanitizeDisplayName(match.player1Name))}</span>` : match.player1Name ? `<a href="/player-detail.html?name=${encodeURIComponent(sanitizeDisplayName(match.player1Name))}" style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'}; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player1Name))}</a>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
+          ${match.player1Members && match.player1Members.length ? `<span style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'};" title="${escHtml(teamTitle(match.player1Name, match.player1Members))}">${escHtml(sanitizeDisplayName(match.player1Name))}</span>` : match.player1Name ? `<a href="${playerPageHref(sanitizeDisplayName(match.player1Name))}" style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'}; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player1Name))}</a>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
           ${displayScore1 !== null ? `<span style="color: #9ca3af; font-family: monospace;">${displayScore1}</span>` : ''}
         </div>
         <div style="display: flex; align-items: center; gap: 0.5rem;">
-          ${match.player2Members && match.player2Members.length ? `<span style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'};" title="${escHtml(teamTitle(match.player2Name, match.player2Members))}">${escHtml(sanitizeDisplayName(match.player2Name))}</span>` : match.player2Name ? `<a href="/player-detail.html?name=${encodeURIComponent(sanitizeDisplayName(match.player2Name))}" style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'}; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player2Name))}</a>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
+          ${match.player2Members && match.player2Members.length ? `<span style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'};" title="${escHtml(teamTitle(match.player2Name, match.player2Members))}">${escHtml(sanitizeDisplayName(match.player2Name))}</span>` : match.player2Name ? `<a href="${playerPageHref(sanitizeDisplayName(match.player2Name))}" style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'}; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player2Name))}</a>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
           ${displayScore2 !== null ? `<span style="color: #9ca3af; font-family: monospace;">${displayScore2}</span>` : ''}
         </div>
       </div>
@@ -3359,7 +3369,7 @@ function displayStandingsPhase(phaseMatches, container, isSwiss, phaseName = nul
         const row = document.createElement('div');
         row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background-color: #111827; border-radius: 0.25rem; margin-bottom: 0.25rem;';
         const link = document.createElement('a');
-        link.href = '/player-detail.html?name=' + encodeURIComponent(sanitizeDisplayName(s.name));
+        link.href = playerPageHref(sanitizeDisplayName(s.name));
         link.style.cssText = 'color: #e5e7eb; text-decoration: none;';
         link.textContent = `${pos + 1}. ${sanitizeDisplayName(s.name)}`;
         const record = document.createElement('span');
@@ -3535,7 +3545,7 @@ function displaySpoilerGroupsOnly(groupMatches, participants, container) {
       const row = document.createElement('div');
       row.style.cssText = 'padding: 0.4rem 0.5rem; background-color: #111827; border-radius: 0.25rem; margin-bottom: 0.25rem; color: #d1d5db; font-size: 0.9rem;';
       
-      row.innerHTML = `<a href="/player-detail.html?name=${encodeURIComponent(name)}" style="color: inherit; text-decoration: none;">${escHtml(name)}</a>`;
+      row.innerHTML = `<a href="${playerPageHref(name)}" style="color: inherit; text-decoration: none;">${escHtml(name)}</a>`;
       namesList.appendChild(row);
     });
     

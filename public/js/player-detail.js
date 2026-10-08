@@ -848,12 +848,15 @@
             try {
               const tr = await fetchJson('/api/tournaments/' + encodeURIComponent(tid));
               if (!tr || !tr.participants) return;
-              // Match participants by normalized name (exact match only to avoid substring confusion like Cola/Icola)
-              const p = (tr.participants || []).find(part => {
-                const a = normalize(part.displayName || part.name || '');
-                const b = normalize(part.name || part.displayName || '');
-                return a === wanted || b === wanted;
-              });
+              // Match participants by their racetime account, else by normalized bracket name
+              // (exact match only to avoid substring confusion like Cola/Icola)
+              const p = (tr.participants || []).find(part => part.racetimeName && normalize(part.racetimeName) === wanted)
+                || (tr.participants || []).find(part => {
+                  if (part.racetimeName) return false;
+                  const a = normalize(part.displayName || part.name || '');
+                  const b = normalize(part.name || part.displayName || '');
+                  return a === wanted || b === wanted;
+                });
                 if (!p) return;
 
                 // If finalRank is present, update immediately

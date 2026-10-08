@@ -142,6 +142,8 @@ async function buildPlayersResponse(includeTournaments) {
           tournamentName: '$name',
           tournamentGameName: '$gameName',
           participantName: { $ifNull: ['$participants.displayName', '$participants.name'] },
+          racetimeUserId: '$participants.racetimeUserId',
+          racetimeName: '$participants.racetimeName',
           finalRank: '$participants.finalRank',
           seed: '$participants.seed'
         }
@@ -172,8 +174,10 @@ async function buildPlayersResponse(includeTournaments) {
 
   const aliasIndex = buildAliasIndex(playerDocs);
   const playerDocsByName = new Map();
+  const playerDocsByUserId = new Map();
   playerDocs.forEach(p => {
     playerDocsByName.set(normalizeName(p.name), p);
+    if (p.userId) playerDocsByUserId.set(p.userId, p);
   });
 
   const raceCountsByPlayer = new Map();
@@ -196,7 +200,8 @@ async function buildPlayersResponse(includeTournaments) {
   const playersWithRaces = new Set(raceCountsByPlayer.keys());
 
   for (const row of tournamentParticipants) {
-    const rawName = row.participantName;
+    // The racetime account that raced the participant's matches, rather than the bracket name
+    const rawName = playerDocsByUserId.get(row.racetimeUserId)?.name || row.racetimeName || row.participantName;
     if (!rawName) continue;
 
     const canonicalName = getCanonicalName(aliasIndex, rawName);

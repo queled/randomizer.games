@@ -195,7 +195,10 @@ const tournamentSchema = new mongoose.Schema({
     team: String,
     startggEntrantId: String,
     // Bracket the participant entered, for tournaments made of several Challonge brackets
-    bracketChallongeId: Number
+    bracketChallongeId: Number,
+    // Racetime account that raced the participant's matches (helpers/participant-accounts.js)
+    racetimeUserId: String,
+    racetimeName: String
   }],
   // Challonge brackets of one tournament stored together (each one is a phase)
   challongeBrackets: [{

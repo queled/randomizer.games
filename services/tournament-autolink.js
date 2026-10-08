@@ -9,6 +9,7 @@ const {
   parseRaceStageInfo,
   parseStartggDisplayScore
 } = require('../helpers/race-match-linking');
+const { syncParticipantAccounts } = require('../helpers/participant-accounts');
 
 // tournamentPhase of the races attached to a tournament as qualifiers
 const QUALIFIER_PHASE = 'Qualifications';
@@ -828,6 +829,7 @@ async function applyAutoLinkProposals({ tournament, proposals, Race, Match }) {
     tournament.updatedAt = new Date();
     await tournament.save();
   }
+  if (linked) await syncParticipantAccounts({ tournament, Race });
 
   return { linked, total: proposals.length, errors };
 }

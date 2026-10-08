@@ -16,6 +16,7 @@ const {
 const { adminLoginLimiter } = require('../middleware/security');
 const { Game, Tournament, Match, Race, Player } = require('../models');
 const { normalizePlayerName } = require('../helpers/player-aliases');
+const { syncParticipantAccounts } = require('../helpers/participant-accounts');
 
 function escapeRegex(value) {
   return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -1757,6 +1758,7 @@ router.post('/tournaments/:id/link-race', requireAdmin, async (req, res, next) =
       matchDoc.completedAt = race.endedAt || matchDoc.completedAt;
       await matchDoc.save();
     }
+    await syncParticipantAccounts({ tournament, Race });
 
     res.json({ success: true, message: 'Race linked to match' });
   } catch (error) {

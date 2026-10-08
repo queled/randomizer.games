@@ -17,6 +17,7 @@ const { adminLoginLimiter } = require('../middleware/security');
 const { Game, Tournament, Match, Race, Player } = require('../models');
 const { normalizePlayerName } = require('../helpers/player-aliases');
 const { syncParticipantAccounts } = require('../helpers/participant-accounts');
+const { fillMissingFinalRanks } = require('../helpers/bracket-ranks');
 
 function escapeRegex(value) {
   return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -2305,8 +2306,9 @@ router.post('/tournaments-mgmt/import', requireAdmin, async (req, res, next) => 
       const tournamentData = await challongeService.getTournament(detected.id);
       if (!tournamentData) return res.status(404).json({ error: 'Tournoi Challonge introuvable' });
 
-      const participants = await challongeService.getParticipants(detected.id);
       const matches = await challongeService.getMatches(detected.id);
+      // Ranks of the played bracket while the organizer has not finalized it
+      const participants = fillMissingFinalRanks({ tournamentData, participants: await challongeService.getParticipants(detected.id), matches });
 
       const tournamentPayload = {
         name: tournamentData.name,

@@ -27,6 +27,7 @@ const challongeAPI = require('../services/challonge');
 const findGameForTournament = require('../helpers/findGameForTournament');
 const sanitizeHtml = require('sanitize-html');
 const { saveGroupedChallongeBracket } = require('../services/challonge-bracket-groups');
+const { fillMissingFinalRanks } = require('../helpers/bracket-ranks');
 
 const RATE_LIMIT_MS = 1500;
 
@@ -69,9 +70,10 @@ function cleanDescription(description) {
 async function updateActiveTournaments({ dryRun }) {
   const stats = { updated: 0, skipped: 0, errors: 0 };
 
-  // Find tournaments that are still active / not completed
+  // Find tournaments that are still active / not completed, or played but not finalized
+  // by the organizer yet (Challonge "awaiting_review": no final ranks until then)
   const activeTournaments = await Tournament.find({
-    state: { $in: ['pending', 'underway', 'in_progress', 'active', '1', '2', 'ACTIVE', 'CREATED'] }
+    state: { $in: ['pending', 'underway', 'in_progress', 'active', '1', '2', 'ACTIVE', 'CREATED', 'awaiting_review'] }
   }).lean();
 
   console.log(`\n🔄 Updating ${activeTournaments.length} active tournament(s)...`);
@@ -205,8 +207,9 @@ async function updateActiveTournaments({ dryRun }) {
         const tournamentData = await challongeAPI.getTournament(challongeId);
         if (!tournamentData) { stats.skipped++; continue; }
 
-        const participants = await challongeAPI.getParticipants(challongeId);
         const matches = await challongeAPI.getMatches(challongeId);
+        // Ranks of the played bracket while the organizer has not finalized it
+        const participants = fillMissingFinalRanks({ tournamentData, participants: await challongeAPI.getParticipants(challongeId), matches });
 
         await Tournament.findByIdAndUpdate(tournament._id, {
           $set: {

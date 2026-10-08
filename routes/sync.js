@@ -5,6 +5,7 @@ const sanitizeHtml = require('sanitize-html');
 const racetimeAPI = require('../services/racetime');
 const { Tournament, Match, Race, Player, Game } = require('../models');
 const findGameForTournament = require('../helpers/findGameForTournament');
+const { fillMissingFinalRanks } = require('../helpers/bracket-ranks');
 const { rankMatchesForRace, selectBestCandidate } = require('../helpers/race-match-linking');
 const { strictLimiter, validateObjectId } = require('../middleware/security');
 const { requireAdmin } = require('../middleware/admin-auth');
@@ -30,8 +31,9 @@ router.post('/tournament/:challongeId', async (req, res, next) => {
 
     // Fetch from Challonge
     const tournamentData = await challongeAPI.getTournament(challongeId);
-    const participants = await challongeAPI.getParticipants(challongeId);
     const matches = await challongeAPI.getMatches(challongeId);
+    // Ranks of the played bracket while the organizer has not finalized it
+    const participants = fillMissingFinalRanks({ tournamentData, participants: await challongeAPI.getParticipants(challongeId), matches });
 
     // Resolve game relation (prefer request override)
     const match = await findGameForTournament({

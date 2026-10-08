@@ -32,6 +32,7 @@ const challongeAPI = require('../services/challonge');
 const findGameForTournament = require('../helpers/findGameForTournament');
 const sanitizeHtml = require('sanitize-html');
 const { saveGroupedChallongeBracket } = require('../services/challonge-bracket-groups');
+const { fillMissingFinalRanks } = require('../helpers/bracket-ranks');
 
 // ─── Configuration ───────────────────────────────────────────────────────────
 
@@ -1039,8 +1040,9 @@ async function importChallongeTournament(tournamentPreview, gameSlug = null, { g
     return;
   }
 
-  const participants = await challongeAPI.getParticipants(challongeId);
   const matches = await challongeAPI.getMatches(challongeId);
+  // Ranks of the played bracket while the organizer has not finalized it
+  const participants = fillMissingFinalRanks({ tournamentData, participants: await challongeAPI.getParticipants(challongeId), matches });
 
   // Determine game
   const matchForGame = await findGameForTournament({

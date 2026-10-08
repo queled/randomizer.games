@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { syncParticipantAccounts } = require('../helpers/participant-accounts');
 
 const gameSchema = new mongoose.Schema({
   // === CORE IDENTITY (YOU control this) ===
@@ -445,6 +446,18 @@ const playerSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Ensure player stats ms values are populated before saving
+// Participants rewritten by an import or a sync: their racetime accounts again
+tournamentSchema.post('findOneAndUpdate', async function() {
+  const update = this.getUpdate() || {};
+  if (!(update.$set || update).participants) return;
+  try {
+    const tournament = await this.model.findOne(this.getQuery());
+    if (tournament) await syncParticipantAccounts({ tournament, Race: mongoose.model('Race') });
+  } catch (error) {
+    console.error(`Racetime accounts of the participants: ${error.message}`);
+  }
+});
+
 playerSchema.pre('save', function(next) {
   if (this.stats) {
     if ((this.stats.bestTime || this.stats.bestTime === 0) && !this.stats.bestTimeMs) {

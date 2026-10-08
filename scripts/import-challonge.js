@@ -8,6 +8,7 @@ const connectDB = require('../config/database');
 const sanitizeHtml = require('sanitize-html');
 const challonge = require('../services/challonge');
 const findGameForTournament = require('../helpers/findGameForTournament');
+const { fillMissingFinalRanks } = require('../helpers/bracket-ranks');
 
 function parseChallongeId(input){
   if(!input) return null;
@@ -40,8 +41,9 @@ async function main(){
   const tournamentData = await challonge.getTournament(challongeId);
   if(!tournamentData){ console.error('No tournament data returned'); process.exit(1); }
 
-  const participants = await challonge.getParticipants(challongeId);
   const matches = await challonge.getMatches(challongeId);
+  // Ranks of the played bracket while the organizer has not finalized it
+  const participants = fillMissingFinalRanks({ tournamentData, participants: await challonge.getParticipants(challongeId), matches });
 
   // Determine game mapping
   const matchForGame = await findGameForTournament({

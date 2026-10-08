@@ -129,24 +129,6 @@
     }
   }
 
-  function getTournamentStatus(t) {
-    if (!t.startDate) return 'à venir';
-    const now = Date.now();
-    const start = new Date(t.startDate).getTime();
-    const end = t.endDate ? new Date(t.endDate).getTime() : null;
-    const oneYear = 365 * 24 * 60 * 60 * 1000;
-    
-    // If explicit end date and we're past it, or if status is explicitly complete
-    if (end && now > end) return 'terminé';
-    if (t.status === 'complete' || t.status === 'awaiting_review') return 'terminé';
-    
-    // If no end date but started more than 1 year ago, consider it finished
-    if (!end && now - start > oneYear) return 'terminé';
-    
-    if (now >= start && (!end || now <= end)) return 'en cours';
-    return 'à venir';
-  }
-
   function getStatusText(status, isTournament = false) {
     if (typeof i18n !== 'undefined') {
       if (isTournament) {

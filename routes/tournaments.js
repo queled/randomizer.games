@@ -4,6 +4,7 @@ const { Tournament, Game } = require('../models');
 const { validateObjectId } = require('../middleware/security');
 const racetimeAPI = require('../services/racetime');
 const { buildTournamentQuery } = require('../helpers/game-matching');
+const { calculateTournamentStatus } = require('../helpers/tournament-status');
 
 function extractRaceSlug(race) {
   const externalId = race?.source?.externalId;
@@ -115,7 +116,7 @@ router.get('/', async (req, res, next) => {
         }
       }
 
-      tournament.status = calculateStatus(tournament);
+      tournament.status = calculateTournamentStatus(tournament);
       return tournament;
     });
 
@@ -159,7 +160,7 @@ router.get('/:id', validateObjectId('id'), async (req, res, next) => {
     if (tournamentObj.game && !tournamentObj.gameName) {
       tournamentObj.gameName = tournamentObj.game.name || tournamentObj.game.randomizer?.shortName || tournamentObj.game.id;
     }
-    tournamentObj.status = calculateStatus(tournamentObj);
+    tournamentObj.status = calculateTournamentStatus(tournamentObj);
 
     res.json(tournamentObj);
   } catch (error) {
@@ -361,16 +362,5 @@ router.get('/:id/races', async (req, res, next) => {
     next(error);
   }
 });
-
-// Helper function to calculate tournament status
-function calculateStatus(tournament) {
-  const today = new Date();
-  const startDate = new Date(tournament.startDate);
-  const endDate = new Date(tournament.endDate);
-  
-  if (today < startDate) return 'à venir';
-  if (today >= startDate && today <= endDate) return 'en cours';
-  return 'terminé';
-}
 
 module.exports = router;

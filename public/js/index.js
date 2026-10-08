@@ -285,16 +285,7 @@ async function loadRecentTournaments(request) {
     }));
 
     function getTournamentStatusFromState(t) {
-      if (!t.startDate) return 'à venir';
-      const now = Date.now();
-      const start = new Date(t.startDate).getTime();
-      const end = t.endDate ? new Date(t.endDate).getTime() : null;
-      const oneYear = 365 * 24 * 60 * 60 * 1000;
-      if (t.state === 'complete' || t.state === 'awaiting_review') return 'terminé';
-      if (end && now > end) return 'terminé';
-      if (!end && now - start > oneYear) return 'terminé';
-      if (now >= start && (!end || now <= end)) return 'en cours';
-      return 'à venir';
+      return getTournamentStatus(t);
     }
 
     enrichedTournaments.forEach(tournament => {
@@ -398,23 +389,7 @@ function createTournamentCard(tournament) {
   
   // Calculate status using the same logic as other pages
   function getTournamentStatusFromState(t) {
-    if (!t.startDate) return 'à venir';
-    const now = Date.now();
-    const start = new Date(t.startDate).getTime();
-    const end = t.endDate ? new Date(t.endDate).getTime() : null;
-    const oneYear = 365 * 24 * 60 * 60 * 1000;
-    
-    // If status is explicitly complete or awaiting_review, it's finished
-    if (t.state === 'complete' || t.state === 'awaiting_review') return 'terminé';
-    
-    // If explicit end date and we're past it
-    if (end && now > end) return 'terminé';
-    
-    // If no end date but started more than 1 year ago, consider it finished
-    if (!end && now - start > oneYear) return 'terminé';
-    
-    if (now >= start && (!end || now <= end)) return 'en cours';
-    return 'à venir';
+    return getTournamentStatus(t);
   }
   
   const status = getTournamentStatusFromState(tournament);

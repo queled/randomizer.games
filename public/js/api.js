@@ -106,32 +106,40 @@ function formatTime(seconds) {
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
+// Mirrors calculateTournamentStatus() in helpers/tournament-status.js: keep both in sync.
 function getTournamentStatus(tournament) {
-  const today = new Date();
+  const DAY_MS = 24 * 60 * 60 * 1000;
+  // Finished one year after its start, whatever its state.
+  const MAX_DURATION_MS = 365 * DAY_MS;
+  // How long an 'active' tournament stays 'en cours' after its planned end date.
+  const OVERTIME_GRACE_MS = 60 * DAY_MS;
+  const FINISHED_STATES = ['complete', 'completed', 'awaiting_review'];
+  const RUNNING_STATES = ['active', 'underway', 'in_progress'];
 
   const parseDate = (value) => {
     if (!value) return null;
     const d = new Date(value);
-    return isNaN(d.getTime()) ? null : d;
+    return isNaN(d.getTime()) ? null : d.getTime();
   };
 
-  const startDate = parseDate(tournament && tournament.startDate);
-  const endDate = parseDate(tournament && tournament.endDate);
+  const now = Date.now();
+  const start = parseDate(tournament && tournament.startDate);
+  const end = parseDate(tournament && tournament.endDate);
+  const state = String((tournament && tournament.state) || '').toLowerCase();
 
-  // If status is explicitly complete or awaiting_review, it's finished
-  if (tournament && (tournament.status === 'complete' || tournament.status === 'awaiting_review')) return 'terminé';
+  if (FINISHED_STATES.includes(state) || FINISHED_STATES.includes(tournament && tournament.status)) return 'terminé';
+  if (start && now - start >= MAX_DURATION_MS) return 'terminé';
+  if (start && now < start) return 'à venir';
 
-  // Règle métier: on considère un tournoi terminé au bout d'1 an.
-  const YEAR_MS = 365 * 24 * 60 * 60 * 1000;
-  if (startDate && (today.getTime() - startDate.getTime()) >= YEAR_MS) return 'terminé';
-  
-  // If explicit end date and we're past it
-  if (endDate && today > endDate) return 'terminé';
+  if (end && now > end) {
+    // Running late: still in progress while matches are scheduled, or for a while if the platform says so.
+    const schedule = tournament && tournament.midosHouse && tournament.midosHouse.schedule;
+    if (Array.isArray(schedule) && schedule.some((s) => (parseDate(s && s.startAt) || 0) > now)) return 'en cours';
+    if (RUNNING_STATES.includes(state) && now - end < OVERTIME_GRACE_MS) return 'en cours';
+    return 'terminé';
+  }
 
-  if (startDate && today < startDate) return 'à venir';
-  if (startDate && endDate && today >= startDate && today <= endDate) return 'en cours';
-  if (startDate && !endDate && today >= startDate) return 'en cours';
-  return 'terminé';
+  return start ? 'en cours' : 'à venir';
 }
 
 // Find tournament winner from matches if finalRank is not set

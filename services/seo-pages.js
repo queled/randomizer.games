@@ -11,6 +11,7 @@ const fs = require('fs');
 const path = require('path');
 const mongoose = require('mongoose');
 const { Game, Tournament, Player, Race } = require('../models');
+const { calculateTournamentStatus } = require('../helpers/tournament-status');
 
 const PUBLIC_DIR = path.join(__dirname, '..', 'public');
 const DEFAULT_IMAGE_PATH = '/assets/favicon.png';
@@ -194,15 +195,11 @@ async function gameMeta(query, siteUrl) {
   };
 }
 
+const TOURNAMENT_STATUS_LABELS = { 'à venir': 'Upcoming', 'en cours': 'Ongoing', 'terminé': 'Completed' };
+
 function tournamentStatus(tournament) {
-  // Mirrors getTournamentStatus() in public/js/tournament-detail.js.
-  const YEAR_MS = 365 * 24 * 60 * 60 * 1000;
-  const now = Date.now();
-  if (['complete', 'awaiting_review'].includes(tournament.status) || tournament.state === 'complete') return 'Completed';
-  if (tournament.startDate && now - new Date(tournament.startDate).getTime() >= YEAR_MS) return 'Completed';
-  if (tournament.endDate && new Date(tournament.endDate).getTime() < now) return 'Completed';
-  if (tournament.startDate && new Date(tournament.startDate).getTime() > now) return 'Upcoming';
-  return tournament.startDate ? 'Ongoing' : '';
+  if (!tournament.startDate && !tournament.endDate) return '';
+  return TOURNAMENT_STATUS_LABELS[calculateTournamentStatus(tournament)];
 }
 
 async function tournamentMeta(query, siteUrl) {

@@ -2606,34 +2606,6 @@ function switchTab(tabName) {
   activeBtn.classList.add('active');
 }
 
-function getTournamentStatus(tournament) {
-  const today = new Date();
-
-  const parseDate = (value) => {
-    if (!value) return null;
-    const d = new Date(value);
-    return isNaN(d.getTime()) ? null : d;
-  };
-
-  const startDate = parseDate(tournament && tournament.startDate);
-  const endDate = parseDate(tournament && tournament.endDate);
-
-  // If status is explicitly complete or awaiting_review, it's finished
-  if (tournament && (tournament.status === 'complete' || tournament.status === 'awaiting_review')) return 'terminé';
-
-  // Règle métier: on considère un tournoi terminé au bout d'1 an.
-  const YEAR_MS = 365 * 24 * 60 * 60 * 1000;
-  if (startDate && (today.getTime() - startDate.getTime()) >= YEAR_MS) return 'terminé';
-  
-  // If explicit end date and we're past it
-  if (endDate && today > endDate) return 'terminé';
-
-  if (startDate && today < startDate) return 'à venir';
-  if (startDate && endDate && today >= startDate && today <= endDate) return 'en cours';
-  if (startDate && !endDate && today >= startDate) return 'en cours';
-  return 'terminé';
-}
-
 function formatDate(dateString) {
   if (!dateString) return 'Undefined';
   const date = new Date(dateString);

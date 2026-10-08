@@ -796,7 +796,7 @@ function displayParticipants(participants, matches = [], options = {}) {
       return getTime(a) - getTime(b);
     });
 
-    // Create match history (V for victory, D for defeat)
+    // Create match history (V for victory, D for defeat): one badge per race of the match, or one for the match when its races are unknown
     const matchHistory = participantMatches.map(match => {
       if (!match.winnerId) return null; // Skip unfinished matches
       
@@ -819,10 +819,15 @@ function displayParticipants(participants, matches = [], options = {}) {
       const mid = match.challongeId || match.id || match._id || match.matchId || '';
       const baseStyle = 'display: inline-flex; align-items: center; justify-content: center; width: 1.5rem; height: 1.5rem; border-radius: 50%; font-weight: bold; font-size: 0.75rem; margin-left: 0.25rem; cursor: pointer;';
       // Render badge without inline onclick; use delegation on #participants-list
-      if (isWinner) {
-        return `<span class="match-badge" data-match-id="${escapeHtml(mid)}" style="${baseStyle} background-color: #10b981; color: white;">V</span>`;
-      }
-      return `<span class="match-badge" data-match-id="${escapeHtml(mid)}" style="${baseStyle} background-color: #ef4444; color: white;">D</span>`;
+      const badge = won => won
+        ? `<span class="match-badge" data-match-id="${escapeHtml(mid)}" style="${baseStyle} background-color: #10b981; color: white;">V</span>`
+        : `<span class="match-badge" data-match-id="${escapeHtml(mid)}" style="${baseStyle} background-color: #ef4444; color: white;">D</span>`;
+
+      const winnerSide = String(match.winnerId) === player1IdStr ? 1 : String(match.winnerId) === player2IdStr ? 2 : null;
+      const side = winnerSide && (isWinner ? winnerSide : 3 - winnerSide);
+      const raceSides = side ? findRacesForMatch(match, currentRaces).map(race => raceWinnerSide(match, race)) : [];
+      if (raceSides.length && raceSides.every(Boolean)) return raceSides.map(s => badge(s === side)).join('');
+      return badge(isWinner);
     }).filter(h => h !== null).join('');
 
     const nameHtml = participant.members
@@ -2265,21 +2270,7 @@ function createMatchCard(match, races = []) {
       
       // Determine manche winner from race
       let mancheWinner = null;
-      try {
-        const entrants = race.entrants || [];
-        const winnerEntr = entrants.find(e => e && (e.place === 1 || e.place === '1'));
-        if (isTeamMatch) {
-          mancheWinner = teamRaceWinner(race, match.player1Members, match.player2Members);
-        } else if (winnerEntr) {
-          const winnerName = winnerEntr.userName || (winnerEntr.user && winnerEntr.user.name) || '';
-          const norm = s => (s || '').toLowerCase().trim();
-          if (norm(winnerName) === norm(match.player1Name) || norm(winnerName).includes(norm(match.player1Name)) || norm(match.player1Name).includes(norm(winnerName))) {
-            mancheWinner = 1;
-          } else if (norm(winnerName) === norm(match.player2Name) || norm(winnerName).includes(norm(match.player2Name)) || norm(match.player2Name).includes(norm(winnerName))) {
-            mancheWinner = 2;
-          }
-        }
-      } catch (e) {}
+      try { mancheWinner = raceWinnerSide(match, race); } catch (e) {}
       
       manchesHtml += `
         <div role="link" tabindex="0" data-race-id="${race && race._id ? race._id : ''}" style="cursor:pointer;text-decoration:none;color:inherit;display:block;">
@@ -2811,7 +2802,8 @@ function getTimeFromEntrantObj(ent, race){
   return null;
 }
 
-function computeTimesFromRace(match, race){
+// The race entrants of the match's two players, paired so both cannot resolve to the same entrant
+function pairMatchEntrants(match, race){
   if (!race || !race.entrants || !Array.isArray(race.entrants)) return null;
   const entrants = race.entrants.map(ent => {
     const rawName = (ent.user && (ent.user.name || ent.user.id)) || ent.userName || ent.name || ent.displayName || ent.comment || '';
@@ -2887,11 +2879,33 @@ function computeTimesFromRace(match, race){
     bestPair.ent1 = entrants[0];
   }
 
+  return { ent1: bestPair.ent1, ent2: bestPair.ent2 };
+}
+
+function computeTimesFromRace(match, race){
+  const bestPair = pairMatchEntrants(match, race);
+  if (!bestPair) return null;
   const out = {time1: null, time2: null};
   if (bestPair.ent1) out.time1 = getTimeFromEntrantObj(bestPair.ent1.obj, race);
   if (bestPair.ent2) out.time2 = getTimeFromEntrantObj(bestPair.ent2.obj, race);
 
   return out;
+}
+
+// 1 or 2 for the player who won the race, null when unknown
+function raceWinnerSide(match, race){
+  if (match.player1Members && match.player1Members.length && match.player2Members && match.player2Members.length) {
+    return teamRaceWinner(race, match.player1Members, match.player2Members);
+  }
+  const pair = pairMatchEntrants(match, race);
+  if (!pair || !pair.ent1 || !pair.ent2) return null;
+  const place = ent => {
+    const n = Number(ent.obj.place);
+    return n > 0 ? n : Infinity;
+  };
+  const p1 = place(pair.ent1), p2 = place(pair.ent2);
+  if (p1 === p2) return null;
+  return p1 < p2 ? 1 : 2;
 }
 
 function getRoundName(round) {

@@ -471,6 +471,16 @@ function scoreRaceAgainstMatch(race, match, options = {}) {
 
   const extracted = extractRaceEntrants(race, { requireDirect: options.requireDirect });
   const fromEntrants = scoreExtractedAgainstMatch(race, match, extracted, options);
+  if (['group-label', 'stage-label'].includes(extracted.source)) {
+    // The label may shorten a bracket name its racetime account spells out ("Fox" for
+    // RedFox): a 1v1 room's own entrants are a reading of their own
+    const roomEntrants = (race?.entrants || [])
+      .map((entrant) => ({ name: normalizeName(entrant?.userName || entrant?.name || ''), finishedAt: entrant?.finishedAt || null }))
+      .filter((entrant) => entrant.name);
+    if (roomEntrants.length !== 2) return fromEntrants;
+    const fromRoom = scoreExtractedAgainstMatch(race, match, { ...extracted, entrants: roomEntrants, source: 'entrants' }, options);
+    return fromRoom.score > fromEntrants.score ? fromRoom : fromEntrants;
+  }
   const labelPlayers = extracted.source === 'entrants' ? extracted.stageInfo?.players : null;
   if (!labelPlayers) return fromEntrants;
 

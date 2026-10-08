@@ -14,6 +14,7 @@
  *   node scripts/sync-race-vods.js               # races of the last 2 days
  *   node scripts/sync-race-vods.js --days 60     # backfill, as far as Twitch keeps VODs
  *   node scripts/sync-race-vods.js --dry-run
+ *   node scripts/sync-race-vods.js --tournament <id>   # all the races of a tournament
  */
 
 const path = require('path');
@@ -35,11 +36,12 @@ function sleep(ms) {
 
 function parseArgs() {
   const args = process.argv.slice(2);
-  const opts = { dryRun: false, days: 2 };
+  const opts = { dryRun: false, days: 2, tournament: null };
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
       case '--dry-run': opts.dryRun = true; break;
       case '--days': opts.days = Math.min(60, Math.max(1, parseInt(args[++i], 10) || 2)); break;
+      case '--tournament': opts.tournament = args[++i]; break;
     }
   }
   return opts;
@@ -57,11 +59,11 @@ async function getEntrantChannels(raceUrl) {
     .map(e => ({ ...e, twitchName: e.twitchName.toLowerCase() }));
 }
 
-async function findRaceVods({ dryRun, days }, stats) {
+async function findRaceVods({ dryRun, days, tournament }, stats) {
   const now = Date.now();
   const races = (await Race.find({
     status: 'finished',
-    startedAt: { $gte: new Date(now - days * 24 * 3600 * 1000) },
+    ...(tournament ? { tournamentId: tournament } : { startedAt: { $gte: new Date(now - days * 24 * 3600 * 1000) } }),
     url: /^\/[^/]+\/[^/]+$/
   }).select('_id url name startedAt endedAt vods vodSearchedAt').lean())
     // Looked up until 12 h after the race end, then left alone

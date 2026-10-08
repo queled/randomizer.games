@@ -2350,9 +2350,11 @@ function createMatchCard(match, races = []) {
   let singleRaceLinkHtml = '';
   let time1 = null;
   let time2 = null;
+  let singleRace = null;
   
   if (!isMultiRaceSeries && matchRaces.length === 1) {
     const race = matchRaces[0];
+    singleRace = race;
     singleRaceLinkHtml = playerVodsHtml(race) + getRaceLinkHtml(race);
     const times = getTimesFromRace(race);
     time1 = times.time1;
@@ -2366,6 +2368,7 @@ function createMatchCard(match, races = []) {
       return ru === target || ru.endsWith(target) || target.endsWith(ru);
     });
     if (race) {
+      singleRace = race;
       singleRaceLinkHtml = getRaceLinkHtml(race);
       const times = getTimesFromRace(race);
       time1 = times.time1;
@@ -2408,6 +2411,15 @@ function createMatchCard(match, races = []) {
     </div>
     ${manchesHtml}
   `;
+
+  // A single-race match opens its race, its links (players, VODs, racetime) aside
+  if (singleRace && singleRace._id) {
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('a')) return;
+      window.location.href = '/race-detail.html?id=' + encodeURIComponent(singleRace._id);
+    });
+  }
   
   return card;
 }

@@ -107,8 +107,39 @@ fi
 
 cd "$APP_DIR" || exit 1
 
+# État de la dernière exécution, lu par la page de santé du panneau admin
+# (services/job-health.js) : $LOG_DIR/status/<tâche>.json
+STATUS_FILE="$LOG_DIR/status/$JOB.json"
+mkdir -p "$LOG_DIR/status"
+
+status_field() {
+  sed -n "s/.*\"$1\": *\"\{0,1\}\([^\",}]*\).*/\1/p" "$STATUS_FILE" 2>/dev/null | head -n 1
+}
+
+write_status() {
+  printf '{"job":"%s","state":"%s","startedAt":"%s","endedAt":"%s","exitCode":%s,"lastSuccessAt":"%s","consecutiveFailures":%s}\n' \
+    "$JOB" "$1" "$started_at" "$2" "$3" "$last_success" "$failures" >"$STATUS_FILE.tmp" &&
+    mv "$STATUS_FILE.tmp" "$STATUS_FILE"
+}
+
+last_success="$(status_field lastSuccessAt)"
+failures="$(status_field consecutiveFailures)"
+failures="${failures:-0}"
+previous_end="$(status_field endedAt)"
+previous_code="$(status_field exitCode)"
+started_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+write_status running "$previous_end" "${previous_code:-null}"
+
 log "début $JOB"
 "$fn"
 status=$?
 log "fin $JOB (code $status)"
+
+if [ "$status" -eq 0 ]; then
+  last_success="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  failures=0
+else
+  failures=$((failures + 1))
+fi
+write_status done "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$status"
 exit "$status"

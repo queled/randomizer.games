@@ -44,7 +44,9 @@ En production, la base MongoDB tourne sur le même serveur que le site et n'éco
 | `tournaments-discover` | tous les jours à 7h | `discover-tournaments.js --since <il y a 2 jours> --max-pages 3` : nouveaux tournois sur start.gg et Challonge |
 | `backup` | tous les jours à 3h30 | `backup-db.js` : archive `mongodump` de la base, 7 gardées |
 
-Chaque tâche se lance aussi à la main : `scripts/cron/run-job.sh <tâche>`. Pour resynchroniser entièrement un jeu : `node scripts/sync-racetime-game.js --game <slug> [--max-pages N]`.
+Chaque tâche se lance aussi à la main : `scripts/cron/run-job.sh <tâche>`.
+
+À chaque exécution, `run-job.sh` écrit l'état de la tâche dans `~/logs/status/<tâche>.json` (début, fin, code de sortie, dernier succès, échecs de suite). La page **Monitoring** du panneau admin les lit (`services/job-health.js`) et classe chaque tâche : ok, en cours, en échec (avec la fin de son journal), en retard (pas de succès depuis plus de deux périodes) ou jamais lancée. Elle montre aussi la dernière donnée écrite en base par la tâche (dernière course, dernière recherche de VOD, dernière archive…), qui trahit une tâche « réussie » sans rien faire. Le serveur et la crontab doivent partager le même `LOG_DIR` (`~/logs` par défaut). Pour resynchroniser entièrement un jeu : `node scripts/sync-racetime-game.js --game <slug> [--max-pages N]`.
 
 ### Anciens workflows GitHub Actions
 

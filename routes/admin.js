@@ -18,6 +18,7 @@ const { Game, Tournament, Match, Race, Player } = require('../models');
 const { normalizePlayerName } = require('../helpers/player-aliases');
 const { syncParticipantAccounts } = require('../helpers/participant-accounts');
 const { fillMissingFinalRanks } = require('../helpers/bracket-ranks');
+const { getJobsHealth } = require('../services/job-health');
 
 function escapeRegex(value) {
   return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -1242,6 +1243,8 @@ router.get('/health', requireAdmin, async (req, res, next) => {
       startggStatus = 'error';
     }
     
+    const jobs = await getJobsHealth({ Game, Tournament, Race });
+
     res.json({
       api: { status: 'ok', description: 'API du site Randomizer' },
       database: { status: dbStatus },
@@ -1259,6 +1262,7 @@ router.get('/health', requireAdmin, async (req, res, next) => {
         }
       },
       pm2: pm2Info,
+      jobs,
       lastSync: {
         racetime: lastRacetimeSync?.integrations?.racetime?.lastSync,
         randoList: lastRandoListSync?.integrations?.randoList?.lastSync

@@ -385,5 +385,6 @@ Les tâches planifiées prennent le nouveau code à leur prochaine exécution.
 | 502 Bad Gateway | `pm2 status`, puis `sudo nginx -t` et `/var/log/nginx/error.log` |
 | Connexion admin refusée | HTTPS actif ? une seule instance PM2 ? |
 | Erreur de connexion à la base | `sudo systemctl status mongod`, `sudo journalctl -u mongod -n 50` ; mot de passe ou `authSource` de l'URI |
+| Une tâche en échec ou en retard | Page **Monitoring** de l'admin : état de chaque tâche et fin de son journal ; `cat ~/logs/status/<tâche>.json` |
 | Pas de nouvelles courses | `tail ~/logs/racetime.log` ; `crontab -l` ; une exécution bloquée laisse « l'exécution précédente tourne encore » |
 | Serveur lent, swap très utilisé | `free -h`, `htop` ; réduire `cacheSizeGB` ou passer à un CX33 |

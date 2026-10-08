@@ -3335,6 +3335,8 @@ const admin = {
     
     container.innerHTML = `
       <div class="monitoring-grid">
+        ${this.renderJobsCard(data.jobs)}
+
         <!-- Services Status -->
         <div class="monitoring-card">
           <h3 class="monitoring-card-title">🔌 Services</h3>
@@ -3443,6 +3445,80 @@ const admin = {
     this.loadGitHubWorkflows();
   },
   
+  // Scheduled tasks of the server's crontab (scripts/cron/run-job.sh)
+  renderJobsCard(jobs) {
+    if (!Array.isArray(jobs)) return '';
+    const states = {
+      ok: { badge: 'success', text: '✓ ok' },
+      running: { badge: 'warning', text: '⏳ en cours' },
+      late: { badge: 'warning', text: '⚠️ en retard' },
+      error: { badge: 'danger', text: '✗ en échec' },
+      unknown: { badge: 'muted', text: '— jamais lancée' }
+    };
+    const every = (minutes) => minutes >= 1440 ? 'tous les jours' : `toutes les ${minutes} min`;
+    const failure = (job) => {
+      if (job.state === 'running') return job.consecutiveFailures ? `précédente en échec (${job.consecutiveFailures}×)` : '';
+      if (job.exitCode === 124) return 'délai dépassé';
+      if (job.exitCode) return `code ${job.exitCode}${job.consecutiveFailures > 1 ? `, ${job.consecutiveFailures} échecs de suite` : ''}`;
+      return '';
+    };
+    const failing = jobs.filter(job => job.state === 'error' || job.state === 'late').length;
+    const neverRan = jobs.every(job => job.state === 'unknown');
+
+    return `
+      <div class="monitoring-card monitoring-card-wide">
+        <h3 class="monitoring-card-title">
+          ⏱️ Tâches planifiées
+          ${failing ? `<span class="badge badge-danger">${failing} à vérifier</span>` : ''}
+        </h3>
+        ${neverRan ? '<p class="text-muted" style="font-size: 0.8125rem;">Aucune tâche n\'a encore tourné sur ce serveur (crontab absente ou <code>LOG_DIR</code> différent).</p>' : ''}
+        <div class="table-container">
+          <table class="table">
+            <thead>
+              <tr><th>Tâche</th><th>État</th><th>Dernier succès</th><th>Dernière exécution</th><th>En base</th></tr>
+            </thead>
+            <tbody>
+              ${jobs.map(job => {
+                const state = states[job.state] || states.unknown;
+                const detail = failure(job);
+                return `
+                  <tr>
+                    <td>
+                      <strong>${this.escapeHtml(job.label)}</strong>
+                      <div class="text-muted" style="font-size: 0.75rem;"><code>${this.escapeHtml(job.name)}</code> · ${every(job.everyMinutes)}</div>
+                    </td>
+                    <td>
+                      <span class="badge badge-${state.badge}">${state.text}</span>
+                      ${detail ? `<div class="text-muted" style="font-size: 0.75rem;">${this.escapeHtml(detail)}</div>` : ''}
+                    </td>
+                    <td title="${job.lastSuccessAt ? new Date(job.lastSuccessAt).toLocaleString('fr-FR') : ''}">${this.formatRelativeTime(job.lastSuccessAt)}</td>
+                    <td title="${job.startedAt ? new Date(job.startedAt).toLocaleString('fr-FR') : ''}">${this.formatRelativeTime(job.startedAt)}</td>
+                    <td>
+                      ${job.lastData ? `
+                        <span title="${job.lastData.at ? new Date(job.lastData.at).toLocaleString('fr-FR') : ''}">${this.formatRelativeTime(job.lastData.at)}</span>
+                        <div class="text-muted" style="font-size: 0.75rem;">${this.escapeHtml(job.lastData.label)}</div>
+                      ` : '<span class="text-muted">-</span>'}
+                    </td>
+                  </tr>
+                  ${job.logTail?.length ? `
+                    <tr>
+                      <td colspan="5">
+                        <details>
+                          <summary class="text-muted" style="font-size: 0.8125rem; cursor: pointer;">Fin du journal <code>~/logs/${this.escapeHtml(job.name)}.log</code></summary>
+                          <pre class="monitoring-log">${this.escapeHtml(job.logTail.join('\n'))}</pre>
+                        </details>
+                      </td>
+                    </tr>
+                  ` : ''}
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  },
+
   async loadGitHubWorkflows() {
     const container = document.getElementById('github-workflows-status');
     if (!container) return;

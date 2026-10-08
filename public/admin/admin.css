@@ -1127,6 +1127,24 @@ a:hover {
   padding: 1.25rem;
 }
 
+.monitoring-card-wide {
+  grid-column: 1 / -1;
+}
+
+.monitoring-log {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  max-height: 320px;
+  overflow: auto;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: var(--admin-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 6px;
+}
+
 .monitoring-card-title {
   font-size: 1rem;
   font-weight: 600;

@@ -3453,7 +3453,7 @@ function tiebreakRaces(races = []) {
 function createTiebreakCard(race, { inMatchList = false } = {}) {
   const card = document.createElement('div');
   card.style.cssText = inMatchList
-    ? 'background-color: #1f2937; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #fbbf24; margin-bottom: 0.75rem; cursor: pointer;'
+    ? 'background-color: #1f2937; padding: 1rem; border-radius: 0.5rem; margin-bottom: 0.75rem; cursor: pointer;'
     : 'background-color: #111827; padding: 0.5rem; border-radius: 0.25rem; border-left: 3px solid #fbbf24; cursor: pointer;';
   if (inMatchList) {
     card.id = 'match-tiebreak-' + race._id;

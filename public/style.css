@@ -3258,8 +3258,17 @@ a.compare-tour-match:hover {
 
 
 /* Match cards: the player name links to the profile, the rest of the card to the race */
+a.match-player-name,
+a.player-link {
+    border-radius: 3px;
+    padding: 0 2px;
+    margin: 0 -2px;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    transition: background-color 0.15s ease;
+}
+
 a.match-player-name:hover,
 a.player-link:hover {
-    text-decoration: underline !important;
-    text-underline-offset: 3px;
+    background-color: rgba(96, 165, 250, 0.35);
 }

@@ -9,7 +9,7 @@ const {
   parseRaceStageInfo,
   parseStartggDisplayScore
 } = require('../helpers/race-match-linking');
-const { syncParticipantAccounts } = require('../helpers/participant-accounts');
+const { learnScheduleAccounts, syncParticipantAccounts } = require('../helpers/participant-accounts');
 
 // tournamentPhase of the races attached to a tournament as qualifiers
 const QUALIFIER_PHASE = 'Qualifications';
@@ -290,6 +290,22 @@ function contradictsRecordedTimes(race, match) {
   return !recorded.some((time) => finishes.some((finish) => Math.abs(finish - time) <= 5));
 }
 
+// A room opened days after the match result was reported is a later meeting of the
+// same players (a rematch further in the bracket), not one of its games
+const PLAYED_AFTER_MATCH_MS = 3 * 24 * 60 * 60 * 1000;
+
+function playedAfterMatch(race, match) {
+  const raceAt = new Date(race?.startedAt || 0).getTime();
+  const completedAt = new Date(match?.completedAt || 0).getTime();
+  return !!raceAt && !!completedAt && raceAt - completedAt > PLAYED_AFTER_MATCH_MS;
+}
+
+function playedBeforeTournament(race, tournament) {
+  const raceAt = new Date(race?.startedAt || 0).getTime();
+  const startAt = new Date(tournament?.startDate || 0).getTime();
+  return !!raceAt && !!startAt && startAt - raceAt > DAY_MS;
+}
+
 // Games played in a Challonge series: one set per game ("1-0,0-1,0-0" = 2 games, the
 // unplayed 0-0 set excluded), or a single series score ("2-1" = 3 games)
 function getChallongeGamesPlayed(scoresCsv) {
@@ -465,18 +481,23 @@ function filterProposalsByGoal(tournament, proposals, races) {
   });
 }
 
+const PRACTICE_ROOM_RE = /\bpractice\b/i;
+
 // Manual links are stored with this confidence and never replaced
 const MANUAL_LINK_CONFIDENCE = 999;
 const REPLACE_MIN_SCORE = 700;
 const REPLACE_MIN_GAP = 300;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-// A room whose label names both players of the match is a real game of it, even far in time
-function labelNamesMatchPlayers(race, match) {
+// A room whose label names both players of the match (or their racetime account in this
+// tournament) is a real game of it, even far in time
+function labelNamesMatchPlayers(race, match, accounts = null) {
   const labelPlayers = parseRaceStageInfo(race).players;
   if (!labelPlayers) return false;
   const { player1, player2 } = getMatchPlayers(match);
-  return [player1, player2].every((player) => labelPlayers.some((labelPlayer) => scoreNameMatch(labelPlayer.name, player) > 0));
+  return [player1, player2].every((player) => labelPlayers.some((labelPlayer) => (
+    scoreNameMatch(labelPlayer.name, player) > 0 || !!accounts?.get(labelPlayer.name)?.has(player)
+  )));
 }
 
 function getRaceDistanceToMatch(race, match) {
@@ -484,6 +505,13 @@ function getRaceDistanceToMatch(race, match) {
   const matchAt = getMatchTimestamp(match);
   if (!raceAt || !matchAt || Number.isNaN(raceAt)) return null;
   return Math.abs(raceAt - matchAt);
+}
+
+// Weeks away from the match, only a room whose label names both players is one of its
+// games (a result reported late); otherwise it is an exhibition between them
+function tooFarFromMatch(race, match, accounts) {
+  const distance = getRaceDistanceToMatch(race, match);
+  return distance != null && distance > 7 * DAY_MS && !labelNamesMatchPlayers(race, match, accounts);
 }
 const ALIAS_MIN_CONFIDENCE = 500;
 
@@ -515,6 +543,20 @@ async function loadPlayerAliases({ Race, races }) {
   return aliases;
 }
 
+// Racetime account of each participant in this tournament: the one already known, else
+// the one that raced most of its matches (bracket names unlike the racetime name)
+function loadTournamentAccounts({ tournament, matches, races }) {
+  const accounts = learnScheduleAccounts(matches, races);
+  for (const participant of tournament?.participants || []) {
+    const account = normalizeName(participant?.racetimeName);
+    const names = [participant?.displayName, participant?.name].map(normalizeName).filter(Boolean);
+    if (!account || participant.team || !names.length) continue;
+    if (!accounts.has(account)) accounts.set(account, new Set());
+    names.forEach((name) => accounts.get(account).add(name));
+  }
+  return accounts;
+}
+
 async function buildAutoLinkPreview({
   tournament,
   Match,
@@ -531,7 +573,8 @@ async function buildAutoLinkPreview({
     requireDirect: true,
     allowOccupiedMatchReassign: false,
     skipOccupiedPenalty: true,
-    aliases
+    aliases,
+    accounts: loadTournamentAccounts({ tournament, matches, races })
   };
   const liveMatches = matches.map((match) => {
     const raceUrls = Array.isArray(match.raceUrls) ? [...match.raceUrls] : [];
@@ -545,7 +588,8 @@ async function buildAutoLinkPreview({
   const proposals = [];
   let skipped = 0;
 
-  for (const race of races) {
+  // Oldest rooms first: the first games of a series take its first slots
+  for (const race of [...races].sort((a, b) => getRaceSortTimestamp(a) - getRaceSortTimestamp(b))) {
     const isAlreadyLinked = isTournamentStartgg(tournament) ? !!race.startggSetId : !!race.matchId;
     if (isAlreadyLinked) {
       skipped++;
@@ -568,6 +612,13 @@ async function buildAutoLinkPreview({
       continue;
     }
 
+    // "S6 Tourney 1v1 Practice": a training room between players of the event, or an
+    // exhibition between them before the event began
+    if (PRACTICE_ROOM_RE.test(getRaceLabel(race)) || playedBeforeTournament(race, tournament)) {
+      skipped++;
+      continue;
+    }
+
     // Series (BO3, BO5...) take one race per game played
     const gameNumber = getRaceGameNumber(race);
     const getStageMatches = (stageOptions) => {
@@ -575,7 +626,7 @@ async function buildAutoLinkPreview({
         ? filterMatchesByRaceStage(race, liveMatches, tournament, stageOptions)
         : liveMatches;
       return ((phaseMatches && filterMatchesByBracketSide(race, phaseMatches)) || [])
-        .filter((match) => !contradictsRecordedTimes(race, match));
+        .filter((match) => !contradictsRecordedTimes(race, match) && !playedAfterMatch(race, match) && !tooFarFromMatch(race, match, scoreOptions.accounts));
     };
     const selectMatch = (matchesToRank) => (matchesToRank.length
       ? selectBestCandidate(rankMatchesForRace(race, matchesToRank, scoreOptions), { threshold, minGap, raceUrl: race.url })

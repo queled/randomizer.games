@@ -318,8 +318,10 @@ function scoreNameMatch(entrantName, target) {
   return 0;
 }
 
-// Racetime account → bracket names it played under, learned from linked races
-function scorePlayerName(entrantName, target, aliases = null) {
+// Racetime account → bracket names it played under: `accounts` of this tournament's
+// participants, `aliases` learned from linked races of the game or set on profiles
+function scorePlayerName(entrantName, target, { aliases = null, accounts = null } = {}) {
+  if (accounts?.get(entrantName)?.has(target)) return 300;
   if (aliases?.get(entrantName)?.has(target)) return 300;
   return scoreNameMatch(entrantName, target);
 }
@@ -422,6 +424,17 @@ function extractTeamEntrants(race, match) {
   };
 }
 
+// A 1v1 room holding no member of either team of a team match (two players of a solo
+// event, whose short name parts look like words of the team names)
+function isRoomOfOtherPlayers(race, match) {
+  const teams = getMatchMembers(match);
+  if (teams.player1.length < 2 || teams.player2.length < 2) return false;
+  const members = [...teams.player1, ...teams.player2];
+  const roomPlayers = (race?.entrants || []).map((e) => normalizeName(e?.userName || e?.name || '')).filter(Boolean);
+  return roomPlayers.length === 2 &&
+    roomPlayers.every((name) => members.every((member) => teamMemberMatch(name, member) === 0));
+}
+
 function getMatchCompletedAt(match) {
   return match?.completedAt || match?.startedAt || null;
 }
@@ -445,7 +458,7 @@ function scoreRaceAgainstMatch(race, match, options = {}) {
   if (teamEntrants) {
     const fromTeams = scoreExtractedAgainstMatch(race, match, teamEntrants, options);
     if (fromTeams.score > 0) return fromTeams;
-  } else if (getMatchMembers(match).player1.length && (race?.entrants || []).length > 2) {
+  } else if (getMatchMembers(match).player1.length && (race?.entrants || []).length > 2 || isRoomOfOtherPlayers(race, match)) {
     // A team room without both teams' players is another match, whatever its label says
     return {
       score: 0,
@@ -493,10 +506,10 @@ function scoreExtractedAgainstMatch(race, match, extracted, options = {}) {
   let best2 = { score: 0, entrant: null };
 
   for (const entrant of extracted.entrants) {
-    const s1 = scorePlayerName(entrant.name, player1, options.aliases);
+    const s1 = scorePlayerName(entrant.name, player1, options);
     if (s1 > best1.score) best1 = { score: s1, entrant };
 
-    const s2 = scorePlayerName(entrant.name, player2, options.aliases);
+    const s2 = scorePlayerName(entrant.name, player2, options);
     if (s2 > best2.score) best2 = { score: s2, entrant };
   }
 
@@ -507,7 +520,7 @@ function scoreExtractedAgainstMatch(race, match, extracted, options = {}) {
     let secondBest2 = { score: 0, entrant: null };
     for (const entrant of extracted.entrants) {
       if (entrant === best1.entrant) continue;
-      const s = scorePlayerName(entrant.name, player2, options.aliases);
+      const s = scorePlayerName(entrant.name, player2, options);
       if (s > secondBest2.score) secondBest2 = { score: s, entrant };
     }
 
@@ -515,7 +528,7 @@ function scoreExtractedAgainstMatch(race, match, extracted, options = {}) {
     let secondBest1 = { score: 0, entrant: null };
     for (const entrant of extracted.entrants) {
       if (entrant === best2.entrant) continue;
-      const s = scorePlayerName(entrant.name, player1, options.aliases);
+      const s = scorePlayerName(entrant.name, player1, options);
       if (s > secondBest1.score) secondBest1 = { score: s, entrant };
     }
 
@@ -615,9 +628,11 @@ function scoreExtractedAgainstMatch(race, match, extracted, options = {}) {
   const roundWeight = getRoundWeight(match);
   if (roundWeight > 0) total += Math.min(80, roundWeight * 6);
 
-  // Players recognised through an alias or a nickname rather than their own name
+  // Players recognised through an alias or a nickname rather than their own name or
+  // their account in this tournament
   const inferred = [[best1, player1], [best2, player2]].some(([best, player]) => (
-    !!options.aliases?.get(best.entrant.name)?.has(player) || best.score < 140
+    !options.accounts?.get(best.entrant.name)?.has(player) &&
+    (!!options.aliases?.get(best.entrant.name)?.has(player) || best.score < 140)
   ));
 
   return {

@@ -32,7 +32,7 @@ Comment les données arrivent dans le site, où elles sont stockées, et quels s
 
 ## Tâches planifiées
 
-En production, la base MongoDB tourne sur le même serveur que le site et n'écoute que sur `127.0.0.1`. Les synchronisations sont lancées par la crontab du serveur via [`scripts/cron/run-job.sh`](../scripts/cron/run-job.sh), qui pose un verrou par tâche (une exécution encore en cours n'est pas doublée), limite leur durée et écrit dans `~/logs/<tâche>.log`. La crontab elle-même est dans [DEPLOYMENT.md](DEPLOYMENT.md#6-tâches-planifiées).
+En production, la base MongoDB tourne sur le même serveur que le site et n'écoute que sur `127.0.0.1`. Les synchronisations sont lancées par la crontab du serveur via [`scripts/cron/run-job.sh`](../scripts/cron/run-job.sh), qui pose un verrou par tâche (une exécution encore en cours n'est pas doublée), limite leur durée et écrit dans `~/logs/<tâche>.log`. La crontab elle-même est dans [DEPLOYMENT.md](DEPLOYMENT.md#6-tâches-planifiées). L'ordre des étapes et leur relance à la main sur une période sont dans [SYNC-WORKFLOW.md](SYNC-WORKFLOW.md).
 
 | Tâche | Fréquence (UTC) | Ce qu'elle fait |
 |-------|-----------------|-----------------|

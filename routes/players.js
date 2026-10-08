@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { Player, Tournament, Race, Game } = require('../models');
+const { Player, Tournament, Race, Game, Match } = require('../models');
+const { buildCommonTournaments, racetimeRoomPath } = require('../helpers/compare-tournaments');
 const { buildAliasIndex, loadAliasIndex, getCanonicalName, getAliases } = require('../helpers/player-aliases');
 
 const PLAYERS_CACHE_TTL = 5 * 60 * 1000;
@@ -381,6 +382,7 @@ router.get('/compare', async (req, res, next) => {
         raceId: race._id,
         raceName: race.name,
         raceUrl: race.url,
+        tournamentId: race.tournamentId || null,
         category: race.category,
         gameName: gameDisplayBySlug.get(category) || race.category || null,
         goal: race.goal || null,
@@ -446,6 +448,32 @@ router.get('/compare', async (req, res, next) => {
       else if (rd.h2hWinner === 0) gameBreakdown[gn].draws++;
     }
 
+    // Tournaments both entered: final ranks and the bracket matches between them
+    const [playerDoc1, playerDoc2] = await Promise.all([canonical1, canonical2].map(name =>
+      Player.findOne({ name: exactNameRegex(name) }).select('userId tournaments.tournamentId tournaments.finalRank').lean()
+    ));
+    const rankByTournament = doc => new Map((doc?.tournaments || [])
+      .filter(t => t.tournamentId && t.finalRank)
+      .map(t => [String(t.tournamentId), t.finalRank]));
+    const raceIdByRoom = new Map(raceDetails.map(rd => [racetimeRoomPath(rd.raceUrl), rd.raceId]));
+    const commonTournaments = await buildCommonTournaments({
+      Tournament,
+      Match,
+      raceIdByRoom,
+      players: [
+        { key: 'player1', names: new Set(aliases1), userId: playerDoc1?.userId || null, rankByTournament: rankByTournament(playerDoc1) },
+        { key: 'player2', names: new Set(aliases2), userId: playerDoc2?.userId || null, rankByTournament: rankByTournament(playerDoc2) }
+      ]
+    });
+
+    // Tournament of each common race, to tell bracket races from casual ones
+    const raceTournamentIds = [...new Set(raceDetails.map(rd => rd.tournamentId && String(rd.tournamentId)).filter(Boolean))];
+    if (raceTournamentIds.length) {
+      const names = new Map((await Tournament.find({ _id: { $in: raceTournamentIds } }).select('name').lean())
+        .map(t => [String(t._id), t.name]));
+      for (const rd of raceDetails) rd.tournamentName = rd.tournamentId ? names.get(String(rd.tournamentId)) || null : null;
+    }
+
     res.json({
       player1: { name: canonical1 },
       player2: { name: canonical2 },
@@ -470,6 +498,7 @@ router.get('/compare', async (req, res, next) => {
       gameBreakdown: Object.entries(gameBreakdown)
         .map(([name, stats]) => ({ gameName: name, ...stats }))
         .sort((a, b) => b.count - a.count),
+      commonTournaments,
       races: raceDetails
     });
   } catch (error) {

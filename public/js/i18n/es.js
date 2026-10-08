@@ -282,7 +282,17 @@ roundOf16: "Octavos de final",
         draws: "empates",
         avgTime: "Tiempo promedio",
         races: "carreras",
-        compareWith: "Comparar con otro jugador"
+        compareWith: "Comparar con otro jugador",
+        commonTournaments: "🏆 Torneos comunes",
+        tournamentsInCommon: "torneos en común",
+        finishedAhead: "Mejor clasificado",
+        bracketMatches: "Partidas de bracket",
+        finalRank: "Clasificación final",
+        teammates: "Mismo equipo",
+        tournamentOngoing: "En curso",
+        round: "Ronda",
+        losersRound: "Ronda de perdedores",
+        groupStage: "Fase de grupos"
     },
 
     // Player detail page

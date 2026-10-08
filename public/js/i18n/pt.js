@@ -326,7 +326,17 @@ const pt = {
         draws: "empates",
         avgTime: "Tempo médio",
         races: "corridas",
-        compareWith: "Comparar com outro jogador"
+        compareWith: "Comparar com outro jogador",
+        commonTournaments: "🏆 Torneios em comum",
+        tournamentsInCommon: "torneios em comum",
+        finishedAhead: "Melhor classificado",
+        bracketMatches: "Partidas de bracket",
+        finalRank: "Classificação final",
+        teammates: "Mesma equipa",
+        tournamentOngoing: "Em curso",
+        round: "Ronda",
+        losersRound: "Ronda de perdedores",
+        groupStage: "Fase de grupos"
     },
 
     // Player detail page

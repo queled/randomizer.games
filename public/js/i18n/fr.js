@@ -290,7 +290,17 @@ const fr = {
         draws: "nuls",
         avgTime: "Temps moyen",
         races: "courses",
-        compareWith: "Comparer avec un autre joueur"
+        compareWith: "Comparer avec un autre joueur",
+        commonTournaments: "🏆 Tournois communs",
+        tournamentsInCommon: "tournois en commun",
+        finishedAhead: "Mieux classé",
+        bracketMatches: "Matchs en bracket",
+        finalRank: "Classement final",
+        teammates: "Même équipe",
+        tournamentOngoing: "En cours",
+        round: "Tour",
+        losersRound: "Tour perdants",
+        groupStage: "Poules"
     },
 
     // Player detail page

@@ -284,7 +284,17 @@ roundOf16: "Achtelfinale",
         draws: "Unentschieden",
         avgTime: "Durchschnittszeit",
         races: "Rennen",
-        compareWith: "Mit anderem Spieler vergleichen"
+        compareWith: "Mit anderem Spieler vergleichen",
+        commonTournaments: "🏆 Gemeinsame Turniere",
+        tournamentsInCommon: "gemeinsame Turniere",
+        finishedAhead: "Besser platziert",
+        bracketMatches: "Bracket-Matches",
+        finalRank: "Endplatzierung",
+        teammates: "Gleiches Team",
+        tournamentOngoing: "Läuft",
+        round: "Runde",
+        losersRound: "Verliererrunde",
+        groupStage: "Gruppenphase"
     },
 
     // Player detail page

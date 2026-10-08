@@ -302,7 +302,17 @@ const en = {
         draws: "draws",
         avgTime: "Avg. Time",
         races: "races",
-        compareWith: "Compare with another player"
+        compareWith: "Compare with another player",
+        commonTournaments: "🏆 Common Tournaments",
+        tournamentsInCommon: "tournaments in common",
+        finishedAhead: "Finished ahead",
+        bracketMatches: "Bracket matches",
+        finalRank: "Final rank",
+        teammates: "Same team",
+        tournamentOngoing: "In progress",
+        round: "Round",
+        losersRound: "Losers round",
+        groupStage: "Group stage"
     },
 
     // Player detail page

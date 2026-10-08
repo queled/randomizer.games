@@ -289,6 +289,9 @@
     highlightBetter('stat-3rd-1', 'stat-3rd-2', pl.player1.third, pl.player2.third, false);
     highlightBetter('stat-dnf-1', 'stat-dnf-2', pl.player1.dnf, pl.player2.dnf, true);
 
+    // Common tournaments
+    renderCommonTournaments(data.commonTournaments, p1, p2);
+
     // Game breakdown
     renderGameBreakdown(data.gameBreakdown, p1, p2);
 
@@ -310,6 +313,78 @@
       if (val1 > val2) { el1.classList.add('better'); el2.classList.add('worse'); }
       else { el2.classList.add('better'); el1.classList.add('worse'); }
     }
+  }
+
+  function roundLabel(m) {
+    let round = '';
+    if (m.groupStage) round = t('comparePlayers.groupStage', 'Group stage');
+    else if (m.round < 0) round = `${t('comparePlayers.losersRound', 'Losers round')} ${-m.round}`;
+    else if (m.round > 0) round = `${t('comparePlayers.round', 'Round')} ${m.round}`;
+    return [m.phase, round].filter(Boolean).join(' · ');
+  }
+
+  function rankHtml(rank, other, count, comparable) {
+    if (!rank) return '<span class="compare-tour-rank none">—</span>';
+    const cls = comparable && other && rank !== other ? (rank < other ? 'better' : 'worse') : '';
+    const medal = rank === 1 ? '🥇 ' : rank === 2 ? '🥈 ' : rank === 3 ? '🥉 ' : '';
+    const of = count ? `<span class="compare-tour-of">/ ${count}</span>` : '';
+    return `<span class="compare-tour-rank ${cls}">${medal}#${rank}</span>${of}`;
+  }
+
+  function renderCommonTournaments(common, p1Name, p2Name) {
+    const section = document.getElementById('common-tournaments-section');
+    const tournaments = common?.tournaments || [];
+    if (!tournaments.length) { section.style.display = 'none'; return; }
+    section.style.display = '';
+
+    // Only what tells something: who usually finishes ahead, and who wins when they meet
+    const s = common.summary;
+    const parts = [`<span>${tournaments.length} ${t('comparePlayers.tournamentsInCommon', 'tournaments in common')}</span>`];
+    if (s.betterRank.player1 + s.betterRank.player2 > 0) {
+      parts.push(`<span>${t('comparePlayers.finishedAhead', 'Finished ahead')} <b class="p1-color">${s.betterRank.player1}</b> – <b class="p2-color">${s.betterRank.player2}</b></span>`);
+    }
+    if (s.matchWins.player1 + s.matchWins.player2 > 0) {
+      parts.push(`<span>${t('comparePlayers.bracketMatches', 'Bracket matches')} <b class="p1-color">${s.matchWins.player1}</b> – <b class="p2-color">${s.matchWins.player2}</b></span>`);
+    }
+    document.getElementById('common-tournaments-summary').innerHTML = parts.join('<span class="compare-tour-sep">·</span>');
+
+    document.getElementById('common-tournaments-list').innerHTML = tournaments.map(tour => {
+      const finished = tour.status === 'terminé';
+      const comparable = finished && !tour.teammates;
+      const badge = tour.teammates
+        ? `<span class="compare-tour-badge">${t('comparePlayers.teammates', 'Same team')}</span>`
+        : !finished ? `<span class="compare-tour-badge live">${t('comparePlayers.tournamentOngoing', 'In progress')}</span>` : '';
+      const meta = [tour.gameName, formatDate(tour.startDate)].filter(Boolean).map(escHtml).join(' · ');
+
+      const matches = (tour.matches || []).map(m => {
+        const score1 = m.score ? m.score.player1 : (m.winner === 'player1' ? 'W' : m.winner ? 'L' : '');
+        const score2 = m.score ? m.score.player2 : (m.winner === 'player2' ? 'W' : m.winner ? 'L' : '');
+        const cls = m.winner === 'player1' ? 'p1-won' : m.winner === 'player2' ? 'p2-won' : 'pending';
+        const label = escHtml(roundLabel(m)) || '—';
+        const inner = `
+            <span class="compare-tour-score left ${m.winner === 'player1' ? 'winner' : ''}">${score1}</span>
+            <span class="compare-tour-round">${label}</span>
+            <span class="compare-tour-score right ${m.winner === 'player2' ? 'winner' : ''}">${score2}</span>`;
+        return m.raceId
+          ? `<a class="compare-tour-match ${cls}" href="/race-detail.html?id=${encodeURIComponent(m.raceId)}">${inner}</a>`
+          : `<div class="compare-tour-match ${cls}">${inner}</div>`;
+      }).join('');
+
+      return `
+        <div class="compare-tour-card">
+          <div class="compare-race-header">
+            <a class="compare-tour-name" href="/tournament-detail.html?id=${encodeURIComponent(tour.tournamentId)}">${escHtml(tour.name)}</a>
+            ${badge}
+          </div>
+          <div class="compare-tour-meta">${meta}</div>
+          <div class="compare-tour-ranks">
+            <div class="left">${rankHtml(tour.player1.rank, tour.player2.rank, tour.participantsCount, comparable)}</div>
+            <div class="compare-tour-ranks-label">${t('comparePlayers.finalRank', 'Final rank')}</div>
+            <div class="right">${rankHtml(tour.player2.rank, tour.player1.rank, tour.participantsCount, comparable)}</div>
+          </div>
+          ${matches ? `<div class="compare-tour-matches">${matches}</div>` : ''}
+        </div>`;
+    }).join('');
   }
 
   function renderGameBreakdown(games, p1Name, p2Name) {
@@ -355,7 +430,7 @@
       return `
         <a href="${raceLink}" class="compare-race-card ${winnerClass}">
           <div class="compare-race-header">
-            <span class="compare-race-game">${escHtml(r.gameName || r.category || '')}</span>
+            <span class="compare-race-game">${escHtml(r.gameName || r.category || '')}${r.tournamentName ? ` <span class="compare-race-tournament">🏆 ${escHtml(r.tournamentName)}</span>` : ''}</span>
             <span class="compare-race-date">${formatDate(r.startedAt)}</span>
           </div>
           <div class="compare-race-goal">${escHtml(r.goal || r.raceName || '')}</div>

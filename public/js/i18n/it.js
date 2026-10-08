@@ -282,7 +282,17 @@ match1: "Partita 1",
         draws: "pareggi",
         avgTime: "Tempo medio",
         races: "gare",
-        compareWith: "Confronta con un altro giocatore"
+        compareWith: "Confronta con un altro giocatore",
+        commonTournaments: "🏆 Tornei comuni",
+        tournamentsInCommon: "tornei in comune",
+        finishedAhead: "Meglio classificato",
+        bracketMatches: "Partite di bracket",
+        finalRank: "Classifica finale",
+        teammates: "Stessa squadra",
+        tournamentOngoing: "In corso",
+        round: "Turno",
+        losersRound: "Turno perdenti",
+        groupStage: "Fase a gironi"
     },
 
     // Player detail page

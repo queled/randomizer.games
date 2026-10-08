@@ -3078,7 +3078,8 @@ body.spoiler-mode .spoiler-text::before {
 
 
 /* Match cards: the player name links to the profile, the rest of the card to the race */
-a.match-player-name:hover {
+a.match-player-name:hover,
+a.player-link:hover {
     text-decoration: underline !important;
     text-underline-offset: 3px;
 }

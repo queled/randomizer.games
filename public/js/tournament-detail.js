@@ -956,7 +956,7 @@ function groupTeamParticipants(participants) {
 // Players of a team, each linking to their page
 function renderTeamMembers(members, style = '') {
   if (!members || !members.length) return '';
-  const links = members.map(m => `<a href="/player-detail.html?name=${encodeURIComponent(m)}" data-stop-propagation style="color: inherit; text-decoration: none;">${escHtml(m)}</a>`).join(' / ');
+  const links = members.map(m => `<a href="/player-detail.html?name=${encodeURIComponent(m)}" class="player-link" data-stop-propagation style="color: inherit; text-decoration: none;">${escHtml(m)}</a>`).join(' / ');
   return `<div class="team-members" style="color: #9ca3af; font-size: 0.75rem; font-weight: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; ${style}">${links}</div>`;
 }
 
@@ -3488,7 +3488,9 @@ function createTiebreakCard(race, { inMatchList = false } = {}) {
     const ms = e.finishTimeMs || (e.finishTime ? parseDurationToMs(e.finishTime) : null);
     const result = live ? '' : e.status === 'dnf' ? 'DNF' : e.status === 'dq' ? 'DQ' : (ms ? formatMs(ms) : '');
     return `<div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;">
-      <span style="font-weight: ${winner ? 'bold' : 'normal'}; color: ${winner ? '#fbbf24' : 'white'};">${escHtml(sanitizeDisplayName(e.userName || ''))}</span>
+      ${inMatchList
+        ? `<a href="${playerPageHref(sanitizeDisplayName(e.userName || ''))}" class="player-link" style="font-weight: ${winner ? 'bold' : 'normal'}; color: ${winner ? '#fbbf24' : 'white'}; text-decoration: none;">${escHtml(sanitizeDisplayName(e.userName || ''))}</a>`
+        : `<span style="font-weight: ${winner ? 'bold' : 'normal'}; color: ${winner ? '#fbbf24' : 'white'};">${escHtml(sanitizeDisplayName(e.userName || ''))}</span>`}
       ${result ? `<span style="color: ${e.status === 'done' ? '#9ca3af' : '#ef4444'}; font-family: monospace;">${escHtml(result)}</span>` : ''}
     </div>`;
   }).join('');

@@ -2,7 +2,8 @@
 /**
  * Link tournament participants to the racetime account that raced their matches
  * ("Ultimastrike" in the bracket = "Ultimaderp" on racetime), from the races linked
- * to the matches. Done after each race link; this script catches up past tournaments.
+ * to the matches, then from the account the same name or start.gg user raced with in
+ * other tournaments. Done after each race link; this script catches up past tournaments.
  *
  * Dry run by default: lists the participants whose account would change.
  *
@@ -18,7 +19,7 @@ require('dotenv').config({ path: path.resolve(process.cwd(), '.env') });
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/randomizer';
 const { Tournament, Race } = require('../models');
-const { syncParticipantAccounts } = require('../helpers/participant-accounts');
+const { loadKnownAccounts, syncParticipantAccounts } = require('../helpers/participant-accounts');
 
 function parseArgs() {
   const args = process.argv.slice(2);
@@ -41,14 +42,22 @@ async function main() {
   console.log(`🔎 ${tournaments.length} tournoi(s) à analyser`);
 
   let total = 0;
-  for (const tournament of tournaments) {
-    const changed = await syncParticipantAccounts({ tournament, Race, dryRun: !apply });
-    if (!changed.length) continue;
-    console.log(`\n🏆 ${tournament.name} (${tournament._id})`);
-    for (const { name, from, to } of changed) {
-      console.log(`   ${name} → ${to}${from ? ` (avant : ${from})` : ''}`);
+  // First the races of each tournament, then the accounts they taught to the others
+  const passes = [
+    { label: 'races du tournoi', knownAccounts: () => ({ byName: new Map(), byStartggUser: new Map() }) },
+    { label: 'autres tournois', knownAccounts: () => loadKnownAccounts(Tournament) }
+  ];
+  for (const pass of passes) {
+    const knownAccounts = await pass.knownAccounts();
+    for (const tournament of tournaments) {
+      const changed = await syncParticipantAccounts({ tournament, Race, knownAccounts, dryRun: !apply });
+      if (!changed.length) continue;
+      console.log(`\n🏆 ${tournament.name} (${tournament._id}) — ${pass.label}`);
+      for (const { name, from, to } of changed) {
+        console.log(`   ${name} → ${to}${from ? ` (avant : ${from})` : ''}`);
+      }
+      total += changed.length;
     }
-    total += changed.length;
   }
 
   console.log(apply

@@ -195,6 +195,11 @@ const tournamentSchema = new mongoose.Schema({
     // Team (start.gg entrant of several players, e.g. co-op) this player raced in
     team: String,
     startggEntrantId: String,
+    // start.gg account of the player (same person across tournaments) and the prefix
+    // its sets show before the gamer tag ("Prefix | GamerTag")
+    startggUserId: String,
+    startggUserSlug: String,
+    prefix: String,
     // Bracket the participant entered, for tournaments made of several Challonge brackets
     bracketChallongeId: Number,
     // Racetime account that raced the participant's matches (helpers/participant-accounts.js)

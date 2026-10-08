@@ -157,6 +157,7 @@ async function buildPlayersResponse(includeTournaments) {
       {
         $project: {
           category: '$category',
+          userId: '$entrants.userId',
           entrantName: { $ifNull: ['$entrants.userName', '$entrants.userId'] }
         }
       },
@@ -164,6 +165,7 @@ async function buildPlayersResponse(includeTournaments) {
       {
         $group: {
           _id: {
+            userId: '$userId',
             entrantName: '$entrantName',
             category: '$category'
           },
@@ -183,7 +185,8 @@ async function buildPlayersResponse(includeTournaments) {
 
   const raceCountsByPlayer = new Map();
   for (const row of raceCounts) {
-    const rawName = row?._id?.entrantName;
+    // A racetime account is one player whatever name it raced under: its current name
+    const rawName = playerDocsByUserId.get(row?._id?.userId)?.name || row?._id?.entrantName;
     const category = String(row?._id?.category || '').toLowerCase();
     if (!rawName || !category) continue;
 
@@ -557,7 +560,8 @@ router.get('/by-name/:name', async (req, res, next) => {
     // Case-insensitive search, by name then by alias (the page redirects aliases to the canonical name)
     const nameRegex = exactNameRegex(req.params.name);
     const player = await Player.findOne({ name: nameRegex }).populate('tournaments.tournamentId')
-      || await Player.findOne({ aliases: nameRegex }).populate('tournaments.tournamentId');
+      || await Player.findOne({ aliases: nameRegex }).populate('tournaments.tournamentId')
+      || await findPlayerOfOtherName(req.params.name);
 
     if (!player) {
       setPlayersCache(cacheKey, { __noContent: true });
@@ -603,6 +607,41 @@ function buildPlayerRacesFilter({ userId, names = [], aliases = [] }) {
     || (!e.userId && aliasRegexes.some(re => re.test(e.userName || '')));
 
   return { filter: or.length ? { $or: or } : { _id: null }, isPlayerEntrant };
+}
+
+/**
+ * Player of a name that is not its current one: a former racetime name ("Xavi" for an
+ * account now named otherwise) or a bracket name ("Xavi1337" on start.gg, shown in its
+ * sets as "Prefix | Xavi1337") linked to a racetime account. Only when the name leads to
+ * a single account. The Player document, or `{ name }` of the racetime name when the
+ * account has none; the player page redirects to it.
+ */
+async function findPlayerOfOtherName(name) {
+  const tag = String(name).split(' | ').pop().trim();
+  const tagRegex = exactNameRegex(tag);
+  const nameRegex = exactNameRegex(name);
+  const [participantAccounts, raceAccounts] = await Promise.all([
+    Tournament.aggregate([
+      { $match: { $or: [{ 'participants.name': tagRegex }, { 'participants.displayName': tagRegex }] } },
+      { $unwind: '$participants' },
+      { $match: { $or: [{ 'participants.name': tagRegex }, { 'participants.displayName': tagRegex }] } },
+      { $match: { 'participants.racetimeUserId': { $nin: [null, ''] } } },
+      { $group: { _id: '$participants.racetimeUserId', name: { $last: '$participants.racetimeName' } } }
+    ]),
+    Race.aggregate([
+      { $match: { entrants: { $elemMatch: { userName: nameRegex, userId: { $nin: [null, ''] } } } } },
+      { $unwind: '$entrants' },
+      { $match: { 'entrants.userName': nameRegex, 'entrants.userId': { $nin: [null, ''] } } },
+      { $group: { _id: '$entrants.userId', name: { $last: '$entrants.userName' } } }
+    ])
+  ]);
+  const accounts = new Map([...participantAccounts, ...raceAccounts].map(row => [row._id, row.name]));
+  if (accounts.size !== 1) return null;
+
+  const [[userId, accountName]] = accounts;
+  const player = await Player.findOne({ userId }).populate('tournaments.tournamentId');
+  if (player) return player;
+  return accountName && normalizeName(accountName) !== normalizeName(name) ? { name: accountName } : null;
 }
 
 /** Player document whose name, or one of whose aliases, is `name` (case-insensitive). */

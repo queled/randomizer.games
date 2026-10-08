@@ -932,9 +932,10 @@ function enrichMatchesWithParticipantNames(matches, participants) {
 // Player page of a bracket name: the racetime account that raced it, when known
 // (organizers type any name in the bracket, racetime says who raced)
 function playerPageHref(name) {
-  const key = normalizeName(sanitizeDisplayName(name));
-  const participant = key && (currentTournament?.participants || []).find(p => p.racetimeName
-    && [p.displayName, p.name].some(n => n && normalizeName(sanitizeDisplayName(n)) === key));
+  // start.gg sets show a player as "Prefix | GamerTag", the participant is its gamer tag
+  const keys = [name, String(name || '').split(' | ').pop()].map(n => normalizeName(sanitizeDisplayName(n))).filter(Boolean);
+  const participant = keys.length && (currentTournament?.participants || []).find(p => p.racetimeName
+    && [p.displayName, p.name].some(n => n && keys.includes(normalizeName(sanitizeDisplayName(n)))));
   return '/player-detail.html?name=' + encodeURIComponent(participant ? participant.racetimeName : name);
 }
 
@@ -956,7 +957,7 @@ function groupTeamParticipants(participants) {
 // Players of a team, each linking to their page
 function renderTeamMembers(members, style = '') {
   if (!members || !members.length) return '';
-  const links = members.map(m => `<a href="/player-detail.html?name=${encodeURIComponent(m)}" class="player-link" data-stop-propagation style="color: inherit; text-decoration: none;">${escHtml(m)}</a>`).join(' / ');
+  const links = members.map(m => `<a href="${playerPageHref(m)}" class="player-link" data-stop-propagation style="color: inherit; text-decoration: none;">${escHtml(m)}</a>`).join(' / ');
   return `<div class="team-members" style="color: #9ca3af; font-size: 0.75rem; font-weight: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; ${style}">${links}</div>`;
 }
 

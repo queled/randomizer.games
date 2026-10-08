@@ -144,11 +144,140 @@ function learnScheduleAccounts(matches, races) {
   return result;
 }
 
+// How much better a member's name must fit its account than the next one
+const MIN_MEMBER_MARGIN = 40;
+
+/**
+ * Racetime account of each team member, from the races linked to the team's matches
+ * ("Team A vs Team B"): the accounts that raced against most of the team's opponents
+ * are its members, each paired with the member name it fits best. When one member is
+ * left for one account, they go together, whatever their names.
+ * `teams`: Map(normalized team name → member names)
+ * → Map(normalized team name → Map(normalized member name → { userId, userName }))
+ */
+function learnTeamAccounts(races, teams) {
+  const result = new Map();
+  const sorted = [...(races || [])].sort((a, b) => new Date(a.startedAt || 0) - new Date(b.startedAt || 0));
+
+  for (const [team, memberNames] of teams) {
+    // Opponent → accounts that raced the team against it
+    const byOpponent = new Map();
+    const labels = new Map();
+    for (const race of sorted) {
+      const sides = String(race?.matchPlayers || '').split(/\s+vs\s+/i).map(normalizeName);
+      if (sides.length !== 2 || sides[0] === sides[1] || !sides.includes(team)) continue;
+      const opponent = sides[0] === team ? sides[1] : sides[0];
+      if (!byOpponent.has(opponent)) byOpponent.set(opponent, new Set());
+      for (const entrant of race.entrants || []) {
+        if (!entrant?.userId) continue;
+        byOpponent.get(opponent).add(entrant.userId);
+        labels.set(entrant.userId, entrant.userName);
+      }
+    }
+    // An opponent's players race the team once: members race it against several opponents
+    if (byOpponent.size < 2) continue;
+    const counts = new Map();
+    for (const accounts of byOpponent.values()) {
+      for (const userId of accounts) counts.set(userId, (counts.get(userId) || 0) + 1);
+    }
+    const accounts = [...counts].filter(([, count]) => count >= 2 && count * 2 > byOpponent.size).map(([userId]) => userId);
+    if (!accounts.length || accounts.length > memberNames.length) continue;
+
+    const members = memberNames.map(normalizeName).filter(Boolean);
+    const pairs = [];
+    for (const member of members) {
+      for (const userId of accounts) {
+        const score = scoreNameMatch(normalizeName(labels.get(userId)), member);
+        if (score > 0) pairs.push({ member, userId, score });
+      }
+    }
+    // Best fits first, each member and account once, and clearly better than the others
+    pairs.sort((a, b) => b.score - a.score);
+    const accountOf = new Map();
+    const taken = new Set();
+    for (const pair of pairs) {
+      if (accountOf.has(pair.member) || taken.has(pair.userId)) continue;
+      const rival = pairs.find((other) => other !== pair && !taken.has(other.userId) && !accountOf.has(other.member)
+        && (other.member === pair.member || other.userId === pair.userId));
+      if (rival && pair.score - rival.score < MIN_MEMBER_MARGIN) continue;
+      accountOf.set(pair.member, pair.userId);
+      taken.add(pair.userId);
+    }
+    const leftMembers = members.filter((member) => !accountOf.has(member));
+    const leftAccounts = accounts.filter((userId) => !taken.has(userId));
+    if (leftMembers.length === 1 && leftAccounts.length === 1 && accounts.length === members.length) {
+      accountOf.set(leftMembers[0], leftAccounts[0]);
+    }
+
+    if (!accountOf.size) continue;
+    result.set(team, new Map([...accountOf].map(([member, userId]) => [member, { userId, userName: labels.get(userId) }])));
+  }
+  return result;
+}
+
+/**
+ * Names a participant goes by in the bracket: start.gg shows a solo entrant as
+ * "Prefix | GamerTag" in its sets, the participant is stored by its gamer tag.
+ */
+function participantKeys(participant) {
+  const keys = [participant.displayName, participant.name];
+  if (participant.prefix) keys.push(`${participant.prefix} ${participant.name}`);
+  return [...new Set(keys.map(normalizeName).filter(Boolean))];
+}
+
+/**
+ * Racetime accounts already known for bracket names and start.gg users, over every
+ * tournament: a participant whose matches were never raced on a linked room (or
+ * imported later) gets the account the same person raced with elsewhere. A name kept
+ * by several accounts is left out: it may be two people.
+ * → { byName: Map(normalized name → account), byStartggUser: Map(id → account) }
+ */
+async function loadKnownAccounts(Tournament) {
+  const rows = await Tournament.aggregate([
+    { $unwind: '$participants' },
+    { $match: { 'participants.racetimeUserId': { $nin: [null, ''] } } },
+    {
+      $project: {
+        _id: 0,
+        name: '$participants.name',
+        displayName: '$participants.displayName',
+        prefix: '$participants.prefix',
+        startggUserId: '$participants.startggUserId',
+        userId: '$participants.racetimeUserId',
+        userName: '$participants.racetimeName'
+      }
+    }
+  ]);
+
+  const collect = (map, key, row) => {
+    if (!key) return;
+    if (!map.has(key)) map.set(key, new Map());
+    map.get(key).set(row.userId, { userId: row.userId, userName: row.userName });
+  };
+  const names = new Map();
+  const startggUsers = new Map();
+  for (const row of rows) {
+    for (const key of participantKeys(row)) collect(names, key, row);
+    collect(startggUsers, row.startggUserId ? String(row.startggUserId) : null, row);
+  }
+  const single = (map) => new Map([...map].filter(([, accounts]) => accounts.size === 1)
+    .map(([key, accounts]) => [key, [...accounts.values()][0]]));
+  return { byName: single(names), byStartggUser: single(startggUsers) };
+}
+
+// Bracket name learned from the sets of a start.gg participant stored without its prefix:
+// the only learned name ending with its gamer tag ("prefix | tag")
+function findPrefixedName(accounts, key) {
+  const found = [...accounts.keys()].filter((name) => name.endsWith(` ${key}`));
+  return found.length === 1 ? accounts.get(found[0]) : null;
+}
+
 /**
  * Set `racetimeUserId` / `racetimeName` on the participants of a tournament (a mongoose
- * document), from its races linked to matches. Returns the participants changed.
+ * document), from its races linked to matches, then from the accounts the same names
+ * raced with in other tournaments. Returns the participants changed.
  */
-async function syncParticipantAccounts({ tournament, Race, dryRun = false }) {
+async function syncParticipantAccounts({ tournament, Race, knownAccounts = null, dryRun = false }) {
   if (!Array.isArray(tournament?.participants) || !tournament.participants.length) return [];
 
   const races = await Race.find({
@@ -158,12 +287,35 @@ async function syncParticipantAccounts({ tournament, Race, dryRun = false }) {
   }).select('matchPlayers startedAt entrants.userId entrants.userName').lean();
   const accounts = learnBracketAccounts(races);
 
+  const teams = new Map();
+  for (const participant of tournament.participants) {
+    const team = normalizeName(participant.team);
+    if (!team) continue;
+    if (!teams.has(team)) teams.set(team, []);
+    teams.get(team).push(participant.displayName || participant.name);
+  }
+  const teamAccounts = teams.size ? learnTeamAccounts(races, teams) : new Map();
+
+  const known = knownAccounts || (typeof tournament.constructor?.aggregate === 'function'
+    ? await loadKnownAccounts(tournament.constructor)
+    : { byName: new Map(), byStartggUser: new Map() });
+  const isStartgg = tournament.source?.type === 'startgg';
+
   const changed = [];
   for (const participant of tournament.participants) {
-    // A team's races hold all its members: the team has no single account
-    if (participant.team) continue;
-    const account = accounts.get(normalizeName(participant.displayName || participant.name))
-      || accounts.get(normalizeName(participant.name));
+    const keys = participantKeys(participant);
+    let account;
+    if (participant.team) {
+      // A team's races hold all its members: each member is found among them
+      const members = teamAccounts.get(normalizeName(participant.team));
+      account = members && keys.map((key) => members.get(key)).find(Boolean);
+    } else {
+      account = keys.map((key) => accounts.get(key)).find(Boolean)
+        || (isStartgg && !participant.prefix && findPrefixedName(accounts, normalizeName(participant.name)));
+    }
+    account = account
+      || (participant.racetimeUserId ? null : (participant.startggUserId && known.byStartggUser.get(String(participant.startggUserId)))
+        || keys.map((key) => known.byName.get(key)).find(Boolean));
     if (!account) continue;
     if (participant.racetimeUserId === account.userId && participant.racetimeName === account.userName) continue;
     changed.push({ name: participant.displayName || participant.name, from: participant.racetimeName || null, to: account.userName });
@@ -181,5 +333,7 @@ async function syncParticipantAccounts({ tournament, Race, dryRun = false }) {
 module.exports = {
   learnBracketAccounts,
   learnScheduleAccounts,
+  learnTeamAccounts,
+  loadKnownAccounts,
   syncParticipantAccounts
 };

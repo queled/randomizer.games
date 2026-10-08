@@ -8,7 +8,8 @@
  * Then drops the VODs Twitch has deleted since, keeping the channel.
  *
  * A race is looked up until 12 h after its end (the VOD can show up late),
- * then left alone. Twitch keeps past broadcasts 7 to 60 days.
+ * then left alone. Twitch keeps past broadcasts 7 to 60 days: a tournament race
+ * imported later (qualifiers attached afterwards) is looked up once if under 60 days.
  *
  * Usage:
  *   node scripts/sync-race-vods.js               # races of the last 2 days
@@ -29,6 +30,7 @@ const twitchVods = require('../services/twitch-vods');
 const RACETIME_DELAY_MS = 500;
 const RETRY_AFTER_END_MS = 12 * 3600 * 1000;
 const BATCH_SIZE = 50;
+const MAX_VOD_AGE_MS = 60 * 24 * 3600 * 1000;
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -63,7 +65,13 @@ async function findRaceVods({ dryRun, days, tournament }, stats) {
   const now = Date.now();
   const races = (await Race.find({
     status: 'finished',
-    ...(tournament ? { tournamentId: tournament } : { startedAt: { $gte: new Date(now - days * 24 * 3600 * 1000) } }),
+    ...(tournament ? { tournamentId: tournament } : {
+      $or: [
+        { startedAt: { $gte: new Date(now - days * 24 * 3600 * 1000) } },
+        // Tournament races imported late (qualifiers attached afterwards), as far as Twitch keeps VODs
+        { tournamentId: { $ne: null }, vodSearchedAt: { $exists: false }, startedAt: { $gte: new Date(now - MAX_VOD_AGE_MS) } }
+      ]
+    }),
     url: /^\/[^/]+\/[^/]+$/
   }).select('_id url name startedAt endedAt vods vodSearchedAt').lean())
     // Looked up until 12 h after the race end, then left alone

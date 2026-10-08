@@ -1213,6 +1213,15 @@ function createQualificationRaceCard(race) {
     card.appendChild(dateDiv);
   }
 
+  // Restreams of the race with a VOD still kept by Twitch
+  const restreams = race.status === 'finished' ? mergeRestreams([], [race]).filter(s => s.vodUrl).map(restreamLinkHtml).join('') : '';
+  if (restreams) {
+    const restreamsDiv = document.createElement('div');
+    restreamsDiv.style.cssText = 'display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin-bottom: 0.75rem;';
+    restreamsDiv.innerHTML = restreams;
+    card.appendChild(restreamsDiv);
+  }
+
   // Entrants list
   if (race.entrants && race.entrants.length > 0) {
     const entrantsDiv = document.createElement('div');
@@ -1285,6 +1294,21 @@ function createQualificationRaceCard(race) {
         status.style.cssText = 'color: #9ca3af; font-size: 0.875rem; font-style: italic;';
         status.textContent = entrant.status;
         rightDiv.appendChild(status);
+      }
+      // The entrant's own stream of the race (sync-race-vods.js)
+      const vod = (race.vods || []).find(v => v.vodUrl && /^https:\/\/www\.twitch\.tv\/videos\/\d+/.test(v.vodUrl)
+        && ((entrant.userId && v.userId === entrant.userId) || (v.userName || '').toLowerCase() === (entrant.userName || '').toLowerCase()));
+      if (vod) {
+        rightDiv.style.cssText = 'display: flex; align-items: center; gap: 0.6rem;';
+        const vodLink = document.createElement('a');
+        vodLink.href = vod.vodUrl;
+        vodLink.target = '_blank';
+        vodLink.rel = 'noopener noreferrer';
+        vodLink.title = 'twitch.tv/' + (vod.twitchName || '');
+        vodLink.style.cssText = 'display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.2rem 0.4rem; border-radius: 0.25rem; font-size: 0.7rem; color: #c4b5fd; background: #222222; border: 1px solid #9344ff; text-decoration: none; white-space: nowrap;';
+        vodLink.innerHTML = '<img src="assets/twitch.svg" alt="Twitch" style="width: 12px; height: 12px;">';
+        vodLink.appendChild(document.createTextNode('▶ ' + ((typeof i18n !== 'undefined' && i18n.t('tournamentDetail.watchVod')) || 'VOD')));
+        rightDiv.prepend(vodLink);
       }
       entrantDiv.appendChild(rightDiv);
 

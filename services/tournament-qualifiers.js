@@ -98,6 +98,9 @@ function matchQualifierToTournament(race, tournament, window = getQualifierWindo
 
   const parsed = parseQualifierLabel(race);
   if (!parsed) return null;
+  // Two players running a qualifier async ("[ASYNC] S8 Qualifier #3") are not one
+  const fewEntrants = Array.isArray(race?.entrants) && race.entrants.length && race.entrants.length < MIN_QUALIFIER_ENTRANTS;
+  if (fewEntrants && /\basync\b/i.test(parsed.label)) return null;
 
   const tournamentTokens = getTournamentTokens(tournament);
   if (parsed.eventTokens.length) {
@@ -111,7 +114,7 @@ function matchQualifierToTournament(race, tournament, window = getQualifierWindo
   if (goalTokens.length && goalTokens.every((token) => tournamentTokens.has(token))) return 'named';
   if (GOAL_EVENT_RE.test(goal)) return null;
   // A plain qualifier of two players may be a match: a named one is sure ("SGL2026 - Live Quals 1")
-  if (Array.isArray(race?.entrants) && race.entrants.length && race.entrants.length < MIN_QUALIFIER_ENTRANTS) return null;
+  if (fewEntrants) return null;
   return 'bare';
 }
 

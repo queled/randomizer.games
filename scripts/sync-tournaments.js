@@ -177,7 +177,8 @@ async function updateActiveTournaments({ dryRun }) {
 
         for (const bracket of tournament.challongeBrackets) {
           await sleep(RATE_LIMIT_MS);
-          const challongeId = bracket.url || String(bracket.challongeId);
+          // The numeric id: the short url misses tournaments of an organization (z2r.challonge.com/sgl26)
+          const challongeId = String(bracket.challongeId || bracket.url);
           const tournamentData = await challongeAPI.getTournament(challongeId);
           if (!tournamentData) continue;
 
@@ -203,7 +204,8 @@ async function updateActiveTournaments({ dryRun }) {
         }
 
         await sleep(RATE_LIMIT_MS);
-        const challongeId = tournament.url || String(tournament.challongeId);
+        // The numeric id: the short url misses tournaments of an organization (z2r.challonge.com/sgl26)
+        const challongeId = String(tournament.challongeId || tournament.url);
         const tournamentData = await challongeAPI.getTournament(challongeId);
         if (!tournamentData) { stats.skipped++; continue; }
 

@@ -833,8 +833,7 @@ function displayParticipants(participants, matches = [], options = {}) {
     const nameHtml = participant.members
       ? `<div style="font-weight: bold; color: white; margin-bottom: 0.125rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escHtml(participant.name)}</div>${renderTeamMembers(participant.members, 'font-size: 0.875rem;')}`
       : `<a href="${playerPageHref(participant.displayName || participant.name)}" style="font-weight: bold; color: white; margin-bottom: 0.125rem; cursor: pointer; text-decoration: none; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escHtml(participant.displayName || participant.name)}</a>
-        ${participant.name !== participant.displayName && participant.displayName ? `<div style=\"color: #9ca3af; font-size: 0.875rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;\">${escHtml(participant.name)}</div>` : ''}
-        ${participant.racetimeName && normalizeName(participant.racetimeName) !== normalizeName(participant.displayName || participant.name) ? `<div title="racetime.gg" style="display: flex; align-items: center; gap: 0.25rem; color: #9ca3af; font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><img src="assets/racetime.svg" alt="Racetime" style="width: 12px; height: 12px;">${escHtml(participant.racetimeName)}</div>` : ''}`;
+        ${participant.name !== participant.displayName && participant.displayName ? `<div style=\"color: #9ca3af; font-size: 0.875rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;\">${escHtml(participant.name)}</div>` : ''}`;
 
     row.innerHTML = `
       <span class="spoiler-block">${rankBadge}</span>

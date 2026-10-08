@@ -17,10 +17,11 @@ const MIN_QUALIFIER_ENTRANTS = 3;
 
 // "Qualifier #13", "qualifier 18", "Qualifier race #3", "Qualifiers #1", "Qualifier B", "Live Quals 2"
 const QUALIFIER_RE = /\bqual(?:if(?:ier|ication)|)s?\b(?:\s+race)?\s*#?\s*(\d{1,3}|[a-z])\b/i;
-// Rooms announcing a qualifier without being one
-const NOT_QUALIFIER_RE = /\b(practice|showcase|not|format|draft|mock)\b/i;
+// Rooms announcing a qualifier without being one: an async qualifier is played off racetime,
+// its rooms ("[ASYNC] S8 Qualifier #3") gather a few players
+const NOT_QUALIFIER_RE = /\b(practice|showcase|not|format|draft|mock|async)\b/i;
 // Words of a qualifier label that never name the event
-const QUALIFIER_STOPWORDS = new Set(['qualifier', 'qualifiers', 'qualification', 'qual', 'quals', 'race', 'online', 'async', 'live', 'na', 'eu', 'weekly']);
+const QUALIFIER_STOPWORDS = new Set(['qualifier', 'qualifiers', 'qualification', 'qual', 'quals', 'race', 'online', 'live', 'na', 'eu', 'weekly']);
 // A room goal naming an event ("Scrubs Tournament Season 8") rather than a ruleset
 const GOAL_EVENT_RE = /\b(tournament|tourney|league|cup|season|qualif\w*|s\d+)\b/i;
 
@@ -98,9 +99,6 @@ function matchQualifierToTournament(race, tournament, window = getQualifierWindo
 
   const parsed = parseQualifierLabel(race);
   if (!parsed) return null;
-  // Two players running a qualifier async ("[ASYNC] S8 Qualifier #3") are not one
-  const fewEntrants = Array.isArray(race?.entrants) && race.entrants.length && race.entrants.length < MIN_QUALIFIER_ENTRANTS;
-  if (fewEntrants && /\basync\b/i.test(parsed.label)) return null;
 
   const tournamentTokens = getTournamentTokens(tournament);
   if (parsed.eventTokens.length) {
@@ -114,7 +112,7 @@ function matchQualifierToTournament(race, tournament, window = getQualifierWindo
   if (goalTokens.length && goalTokens.every((token) => tournamentTokens.has(token))) return 'named';
   if (GOAL_EVENT_RE.test(goal)) return null;
   // A plain qualifier of two players may be a match: a named one is sure ("SGL2026 - Live Quals 1")
-  if (fewEntrants) return null;
+  if (Array.isArray(race?.entrants) && race.entrants.length && race.entrants.length < MIN_QUALIFIER_ENTRANTS) return null;
   return 'bare';
 }
 

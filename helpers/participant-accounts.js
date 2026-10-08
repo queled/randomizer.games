@@ -5,6 +5,7 @@
  * so a bracket name never captures someone else's racetime account elsewhere.
  */
 const { normalizeName, scoreNameMatch } = require('./race-match-linking');
+const { escapeRegex, getExplicitRacetimeSlugs } = require('./game-matching');
 
 // How much better one pairing of the two entrants must fit the two bracket names
 const MIN_PAIRING_MARGIN = 140;
@@ -144,6 +145,9 @@ function learnScheduleAccounts(matches, races) {
   return result;
 }
 
+// How well a racetime name must fit a bracket name to be its leftover account
+const MIN_LOOKALIKE_SCORE = 120;
+
 // How much better a member's name must fit its account than the next one
 const MIN_MEMBER_MARGIN = 40;
 
@@ -265,6 +269,41 @@ async function loadKnownAccounts(Tournament) {
   return { byName: single(names), byStartggUser: single(startggUsers) };
 }
 
+/**
+ * Racetime accounts that raced under these exact names (case aside) in the game of the
+ * tournament: racetime says who a name is, but only among the players of that game, so a
+ * Melee bracket name never becomes a namesake who races something else.
+ * → Map(normalized name → Map(userId → { userId, userName, races }))
+ */
+async function findRaceNameAccounts(Race, names, categories) {
+  const result = new Map();
+  if (!names.length || !categories.length) return result;
+  const regexes = names.map((name) => new RegExp(`^${escapeRegex(name)}$`, 'i'));
+  const rows = await Race.aggregate([
+    { $match: { category: { $in: categories }, 'entrants.userName': { $in: regexes } } },
+    { $unwind: '$entrants' },
+    { $match: { 'entrants.userName': { $in: regexes }, 'entrants.userId': { $nin: [null, ''] } } },
+    { $group: { _id: '$entrants.userId', userName: { $last: '$entrants.userName' }, races: { $sum: 1 } } }
+  ]);
+  for (const row of rows) {
+    const key = normalizeName(row.userName);
+    if (!result.has(key)) result.set(key, new Map());
+    result.get(key).set(row._id, { userId: row._id, userName: row.userName, races: row.races });
+  }
+  return result;
+}
+
+// Racetime categories of the tournament: those of its races and of its game
+async function tournamentCategories(tournament, races, Race) {
+  const categories = new Set(races.map((race) => race.category).filter(Boolean));
+  let game = tournament.game && typeof tournament.game === 'object' && tournament.game.integrations ? tournament.game : null;
+  if (!game && tournament.game) {
+    game = await Race.db.model('Game').findById(tournament.game._id || tournament.game).select('integrations.racetime').lean();
+  }
+  getExplicitRacetimeSlugs(game).forEach((slug) => categories.add(slug));
+  return [...categories];
+}
+
 // Bracket name learned from the sets of a start.gg participant stored without its prefix:
 // the only learned name ending with its gamer tag ("prefix | tag")
 function findPrefixedName(accounts, key) {
@@ -284,7 +323,7 @@ async function syncParticipantAccounts({ tournament, Race, knownAccounts = null,
     tournamentId: tournament._id,
     matchPlayers: { $nin: [null, ''] },
     $or: [{ matchId: { $ne: null } }, { startggSetId: { $nin: [null, ''] } }]
-  }).select('matchPlayers startedAt entrants.userId entrants.userName').lean();
+  }).select('category matchPlayers startedAt entrants.userId entrants.userName').lean();
   const accounts = learnBracketAccounts(races);
 
   const teams = new Map();
@@ -301,6 +340,24 @@ async function syncParticipantAccounts({ tournament, Race, knownAccounts = null,
     : { byName: new Map(), byStartggUser: new Map() });
   const isStartgg = tournament.source?.type === 'startgg';
 
+  // Participants no race taught anything about: the racetime account of their exact name
+  const learned = (participant) => participant.racetimeUserId
+    || participantKeys(participant).some((key) => accounts.has(key) || known.byName.has(key))
+    || (participant.team && teamAccounts.get(normalizeName(participant.team))?.size);
+  const unknownNames = [...new Set(tournament.participants.filter((p) => !learned(p))
+    .flatMap((p) => [p.displayName, p.name]).filter(Boolean))];
+  const raceNames = unknownNames.length
+    ? await findRaceNameAccounts(Race, unknownNames, await tournamentCategories(tournament, races, Race))
+    : new Map();
+  const tournamentUserIds = new Set(races.flatMap((race) => (race.entrants || []).map((e) => e.userId)).filter(Boolean));
+  const accountOfRaceName = (key) => {
+    const candidates = [...(raceNames.get(key) || new Map()).values()];
+    if (candidates.length === 1) return candidates[0];
+    // A name several accounts raced under: the one that raced this tournament
+    const inTournament = candidates.filter((candidate) => tournamentUserIds.has(candidate.userId));
+    return inTournament.length === 1 ? inTournament[0] : null;
+  };
+
   const changed = [];
   for (const participant of tournament.participants) {
     const keys = participantKeys(participant);
@@ -315,12 +372,33 @@ async function syncParticipantAccounts({ tournament, Race, knownAccounts = null,
     }
     account = account
       || (participant.racetimeUserId ? null : (participant.startggUserId && known.byStartggUser.get(String(participant.startggUserId)))
-        || keys.map((key) => known.byName.get(key)).find(Boolean));
+        || keys.map((key) => known.byName.get(key)).find(Boolean)
+        || keys.map(accountOfRaceName).find(Boolean));
     if (!account) continue;
     if (participant.racetimeUserId === account.userId && participant.racetimeName === account.userName) continue;
     changed.push({ name: participant.displayName || participant.name, from: participant.racetimeName || null, to: account.userName });
     participant.racetimeUserId = account.userId;
     participant.racetimeName = account.userName;
+  }
+
+  // Still unknown: the account of the tournament's races no participant has, that looks
+  // like the name ("blueroses" racing as "blueroses4u"), when it fits no other one
+  const linkedIds = new Set(tournament.participants.map((p) => p.racetimeUserId).filter(Boolean));
+  const freeAccounts = new Map();
+  for (const entrant of races.flatMap((race) => race.entrants || [])) {
+    if (entrant.userId && !linkedIds.has(entrant.userId)) freeAccounts.set(entrant.userId, entrant.userName);
+  }
+  const unlinked = tournament.participants.filter((p) => !p.racetimeUserId);
+  const fits = (participant, userName) => participantKeys(participant).some((key) =>
+    Math.max(scoreNameMatch(normalizeName(userName), key), scoreNameMatch(key, normalizeName(userName))) >= MIN_LOOKALIKE_SCORE);
+  for (const participant of unlinked) {
+    const candidates = [...freeAccounts].filter(([, userName]) => fits(participant, userName));
+    if (candidates.length !== 1) continue;
+    const [userId, userName] = candidates[0];
+    if (unlinked.some((other) => other !== participant && fits(other, userName))) continue;
+    changed.push({ name: participant.displayName || participant.name, from: null, to: userName });
+    participant.racetimeUserId = userId;
+    participant.racetimeName = userName;
   }
 
   if (changed.length && !dryRun) {

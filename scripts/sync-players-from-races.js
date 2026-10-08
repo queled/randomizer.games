@@ -146,6 +146,7 @@ async function main() {
     });
 
     let upserts = 0;
+    const operations = [];
 
     for (const player of racePlayersByUserId.values()) {
       const existing = existingByUserId.get(player.userId);
@@ -164,16 +165,22 @@ async function main() {
       }
 
       upserts += 1;
-      if (!isDryRun) {
-        await Player.updateOne(
-          { userId: player.userId },
-          {
+      operations.push({
+        updateOne: {
+          filter: { userId: player.userId },
+          update: {
             $set: setPayload,
             $setOnInsert: { tournaments: [] },
             $currentDate: { updatedAt: true }
           },
-          { upsert: true }
-        );
+          upsert: true
+        }
+      });
+    }
+
+    if (!isDryRun) {
+      for (let i = 0; i < operations.length; i += 1000) {
+        await Player.bulkWrite(operations.slice(i, i + 1000), { ordered: false });
       }
     }
 

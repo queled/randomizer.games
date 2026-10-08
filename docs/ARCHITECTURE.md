@@ -42,6 +42,7 @@ En production, la base MongoDB tourne sur le même serveur que le site et n'éco
 | `midos-house` | toutes les 15 min | `sync-midos-house.js` : horaires et restreams des races des tournois OoTR, VOD Twitch des restreams (voir plus bas) |
 | `rando-list` | tous les jours à 6h | met à jour la copie locale de rando-list ; si `check-rando-list-changes.js` signale un nouveau commit, `sync-rando-list.js --detect-new` met à jour le cache et les ressources, puis signale les nouveaux jeux, à créer depuis le panneau admin |
 | `tournaments-discover` | tous les jours à 7h | `discover-tournaments.js --since <il y a 2 jours> --max-pages 3` : nouveaux tournois sur start.gg et Challonge |
+| `players` | tous les jours à 7h30 | `sync-players-from-races.js` : un joueur par compte racetime.gg (source de vérité), au nom de sa dernière course ; puis `link-participant-accounts.js --all --apply` relie chaque participant de tournoi au compte racetime qui a couru ses matchs (voir plus bas) |
 | `backup` | tous les jours à 3h30 | `backup-db.js` : archive `mongodump` de la base, 7 gardées |
 
 Chaque tâche se lance aussi à la main : `scripts/cron/run-job.sh <tâche>`.
@@ -114,8 +115,22 @@ Les schémas sont dans [`models/index.js`](../models/index.js).
 | `races` | Une course (racetime.gg ou SpeedRunsLive, URL `/srl/<id>`) |
 | `tournaments` | Un tournoi start.gg ou Challonge, ses phases, ses participants et, pour OoTR, ses races planifiées sur Mido's House |
 | `matches` | Un match de tournoi et les courses qui y sont liées |
-| `players` | Un joueur, avec ses alias (pseudos utilisés ailleurs) |
+| `players` | Un joueur = un compte racetime.gg (`userId`), avec ses alias (pseudos utilisés ailleurs) |
 | `rando_list_cache` | Copie brute de rando-list et métadonnées de la dernière synchronisation |
+
+### Joueurs et participants
+
+racetime.gg est la source de vérité : un joueur est un compte racetime (`userId`), affiché sous le nom de sa dernière course, quels que soient les pseudos de ses anciennes courses. Les joueurs SpeedRunsLive, sans compte, sont reconnus à leur nom. Les noms de tournoi ne créent pas de joueur.
+
+Chaque participant de tournoi garde le compte racetime qui a couru ses matchs (`racetimeUserId`, `racetimeName`, [`helpers/participant-accounts.js`](../helpers/participant-accounts.js)), trouvé dans cet ordre :
+
+1. les races 1v1 liées à ses matchs, y compris sous le nom start.gg « Préfixe | Gamertag » des sets ;
+2. pour une équipe, les comptes qui l'ont courue contre plusieurs adversaires, appariés aux noms des membres ;
+3. le compte qu'a eu le même nom, ou le même compte start.gg, dans un autre tournoi (si ce nom n'a jamais eu qu'un compte) ;
+4. le compte racetime de ce nom exact dans les catégories du jeu du tournoi ;
+5. le seul compte des races du tournoi encore libre qui ressemble au nom.
+
+La page d'un ancien pseudo ou d'un nom de bracket qui mène à un seul compte redirige vers la page du compte.
 
 ### Jeux (`games`)
 

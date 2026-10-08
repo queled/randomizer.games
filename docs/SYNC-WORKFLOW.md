@@ -42,7 +42,7 @@ Les étapes 1 et 2 sont indépendantes l'une de l'autre, et l'étape 6 ne dépen
 Hors chaîne, à lancer de temps en temps :
 
 - `node scripts/sync-rando-list.js --detect-new` : cache rando-list et nouveaux jeux (tâche `rando-list`, quotidienne) ;
-- `node scripts/sync-players-from-races.js` : collection des joueurs (`npm run sync`, pas dans la crontab). Il **supprime** les joueurs « tournoi uniquement » : le passer d'abord avec `--dry-run`.
+- `node scripts/sync-players-from-races.js` : collection des joueurs (tâche `players` de la crontab, avec `link-participant-accounts.js --all --apply`). Il **supprime** les joueurs « tournoi uniquement » : le passer d'abord avec `--dry-run`.
 
 ## En production
 

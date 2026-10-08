@@ -10,6 +10,7 @@
 #   race-vods             VOD Twitch des joueurs, restreams trouvés sur Twitch (toutes les 30 min)
 #   tournaments-discover  nouveaux tournois des 2 derniers jours    (tous les jours)
 #   rando-list            cache rando-list, si le dépôt a changé    (tous les jours)
+#   players               joueurs racetime.gg, comptes des participants (tous les jours)
 #   backup                mongodump avec rotation                   (toutes les nuits)
 #
 # Chaque tâche écrit dans $LOG_DIR/<tâche>.log (~/logs par défaut). Un verrou
@@ -78,6 +79,13 @@ run_rando_list() {
   RANDO_LIST_DIR="$dir" timeout 15m node scripts/sync-rando-list.js --detect-new
 }
 
+run_players() {
+  local status=0
+  timeout 10m node scripts/sync-players-from-races.js || status=$?
+  timeout 20m node scripts/link-participant-accounts.js --all --apply || status=$?
+  return "$status"
+}
+
 run_backup() {
   timeout 30m node scripts/backup-db.js
 }
@@ -89,9 +97,10 @@ case "$JOB" in
   race-vods)            fn=run_race_vods ;;
   tournaments-discover) fn=run_tournaments_discover ;;
   rando-list)           fn=run_rando_list ;;
+  players)              fn=run_players ;;
   backup)               fn=run_backup ;;
   *)
-    echo "Usage: $0 <racetime|tournaments-update|midos-house|race-vods|tournaments-discover|rando-list|backup>" >&2
+    echo "Usage: $0 <racetime|tournaments-update|midos-house|race-vods|tournaments-discover|rando-list|players|backup>" >&2
     exit 2
     ;;
 esac

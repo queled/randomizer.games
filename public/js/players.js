@@ -379,7 +379,7 @@ function renderPlayers(players, prioritizeAvatars = false) {
             const gameSlug = slugAliases[rawSlug] || rawSlug;
             return `
               <div style="font-size: 0.75rem; color: #d1d5db; font-weight: 500; display: flex; align-items: center; white-space: nowrap; overflow: hidden;">
-                <span class="game-link" data-game-id="${safeEncodeURIComponent(gameSlug)}" style="overflow: hidden; text-overflow: ellipsis; flex: 1 1 auto; min-width: 0; cursor: pointer; text-decoration: underline; color: #60a5fa; transition: color 0.2s, text-decoration-color 0.2s;">${escHtml(game.gameName)}</span>
+                <span class="game-link" data-game-id="${safeEncodeURIComponent(gameSlug)}" style="overflow: hidden; text-overflow: ellipsis; flex: 1 1 auto; min-width: 0; cursor: pointer; color: #60a5fa; transition: color 0.2s;">${escHtml(game.gameName)}</span>
                 <span style="color: #10b981; font-weight: bold; margin-left: 0.5ch; flex-shrink: 0; flex-grow: 0;">(${game.count})</span>
               </div>
             `;
@@ -418,11 +418,9 @@ function attachPlayerCardListeners(list) {
 
       gameLink.addEventListener('mouseenter', () => {
         gameLink.style.color = '#fbbf24';
-        gameLink.style.textDecorationColor = '#fbbf24';
       });
       gameLink.addEventListener('mouseleave', () => {
         gameLink.style.color = '#60a5fa';
-        gameLink.style.textDecorationColor = '#60a5fa';
       });
     });
   });

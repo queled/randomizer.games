@@ -1409,8 +1409,8 @@ body.spoiler-mode .spoiler-text::before {
 
 .player-games-summary-row a {
     color: #60a5fa;
-    text-decoration: underline;
-    text-underline-offset: 2px;
+    text-decoration: none;
+    transition: color 0.2s;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -1421,7 +1421,6 @@ body.spoiler-mode .spoiler-text::before {
 
 .player-games-summary-row a:hover {
     color: #fbbf24;
-    text-decoration-color: #fbbf24;
 }
 
 .player-games-summary-row .count {

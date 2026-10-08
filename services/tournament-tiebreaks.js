@@ -11,15 +11,50 @@ function normalizeGoal(value) {
   return String(value || '').trim().toLowerCase();
 }
 
-// The pool (and phase) every entrant played in: a tie-break settles one group
-function commonPool(entrantIds, poolsByUser) {
+// The pools (and phases) every entrant played in
+function sharedPools(entrantIds, poolsByUser) {
   let shared = null;
   for (const userId of entrantIds) {
     const pools = poolsByUser.get(userId);
-    if (!pools) return null;
+    if (!pools) return [];
     shared = shared ? new Set([...shared].filter((key) => pools.has(key))) : new Set(pools);
   }
-  return shared && shared.size === 1 ? [...shared][0] : null;
+  return shared ? [...shared] : [];
+}
+
+// First and last race the entrants played in a pool
+function entrantsSpan(entrantIds, userSpans) {
+  const spans = entrantIds.map((userId) => userSpans.get(userId)).filter(Boolean);
+  return {
+    min: Math.min(...spans.map((span) => span.min)),
+    max: Math.max(...spans.map((span) => span.max))
+  };
+}
+
+/**
+ * The pool a tie-break settles, among the ones its players shared: the group its info
+ * names, else the one they were playing on its date, else the last one they finished
+ * before it, as long as they played another pool afterwards.
+ */
+function pickPool(keys, race, entrantIds, poolSpans) {
+  const namedGroup = String(race.info || '').match(INFO_GROUP);
+  if (namedGroup) {
+    // The group the room names, if any, must be the players' one
+    keys = keys.filter((key) => String(Number(namedGroup[1])) === String(JSON.parse(key)[1]).trim());
+  }
+  if (keys.length <= 1) return keys[0] || null;
+
+  const startedAt = new Date(race.startedAt).getTime();
+  if (!Number.isFinite(startedAt)) return null;
+  const spans = new Map(keys.map((key) => [key, entrantsSpan(entrantIds, poolSpans.get(key))]));
+  const ongoing = keys.filter((key) => spans.get(key).min <= startedAt && startedAt <= spans.get(key).max);
+  if (ongoing.length) return ongoing.length === 1 ? ongoing[0] : null;
+
+  if (!keys.some((key) => spans.get(key).min > startedAt)) return null;
+  const over = keys
+    .filter((key) => spans.get(key).max < startedAt)
+    .sort((a, b) => spans.get(b).max - spans.get(a).max);
+  return over[0] || null;
 }
 
 /**
@@ -36,10 +71,18 @@ async function findTiebreakRaces({ tournament, Race }) {
   if (!linkedRaces.length) return [];
 
   const poolsByUser = new Map();
+  // pool -> userId -> first and last race of that player in it
+  const poolSpans = new Map();
   for (const race of linkedRaces) {
     const key = JSON.stringify([race.tournamentPhase, race.tournamentPool || null]);
+    const startedAt = new Date(race.startedAt).getTime();
+    if (!poolSpans.has(key)) poolSpans.set(key, new Map());
     for (const entrant of race.entrants || []) {
       if (!entrant.userId) continue;
+      if (Number.isFinite(startedAt)) {
+        const span = poolSpans.get(key).get(entrant.userId) || { min: Infinity, max: -Infinity };
+        poolSpans.get(key).set(entrant.userId, { min: Math.min(span.min, startedAt), max: Math.max(span.max, startedAt) });
+      }
       if (!poolsByUser.has(entrant.userId)) poolsByUser.set(entrant.userId, new Set());
       poolsByUser.get(entrant.userId).add(key);
     }
@@ -59,19 +102,16 @@ async function findTiebreakRaces({ tournament, Race }) {
     tournamentId: null,
     info: TIEBREAK_INFO,
     startedAt: { $gte: minDate, $lte: maxDate }
-  }).select('url goal info entrants.userId entrants.userName').lean();
+  }).select('url goal info startedAt entrants.userId entrants.userName').lean();
 
   const proposals = [];
   for (const race of candidates) {
     if (goals.size && !goals.has(normalizeGoal(race.goal))) continue;
     const entrantIds = (race.entrants || []).map((entrant) => entrant.userId);
     if (entrantIds.length < 2 || entrantIds.some((id) => !id)) continue;
-    const pool = commonPool(entrantIds, poolsByUser);
+    const pool = pickPool(sharedPools(entrantIds, poolsByUser), race, entrantIds, poolSpans);
     if (!pool) continue;
     const [phase, poolName] = JSON.parse(pool);
-    // The group the room names, if any, must be the players' one
-    const namedGroup = String(race.info || '').match(INFO_GROUP);
-    if (namedGroup && String(Number(namedGroup[1])) !== String(poolName).trim()) continue;
     proposals.push({
       raceId: race._id,
       raceUrl: race.url,

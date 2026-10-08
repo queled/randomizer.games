@@ -138,7 +138,7 @@ async function main() {
 
     const aliasIndex = await loadAliasIndex(Player);
     const { racePlayersByUserId, raceCanonicalNames } = await collectRacePlayers(allowedSlugs, aliasIndex);
-    const existingPlayers = await Player.find({}).select('_id userId name tournaments twitch').lean();
+    const existingPlayers = await Player.find({}).select('_id userId name tournaments twitch racetimeCheckedAt').lean();
 
     const existingByUserId = new Map();
     existingPlayers.forEach(p => {
@@ -162,6 +162,14 @@ async function main() {
 
       if (existing?.twitch) {
         setPayload.twitch = existing.twitch;
+      }
+
+      // The racetime profile is the truth: a race older than its last read keeps its name
+      const checkedAt = existing?.racetimeCheckedAt ? new Date(existing.racetimeCheckedAt).getTime() : 0;
+      if (checkedAt && player.lastSeenTs <= checkedAt) {
+        delete setPayload.name;
+        delete setPayload.discriminator;
+        delete setPayload.racetimeUrl;
       }
 
       upserts += 1;

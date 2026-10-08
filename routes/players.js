@@ -133,7 +133,7 @@ async function buildPlayersResponse(includeTournaments) {
   const { displayBySlug: gameDisplayBySlug, canonicalIdBySlug: canonicalGameIdBySlug } = await buildGameDisplayMaps();
 
   const [playerDocs, tournamentParticipants, raceCounts] = await Promise.all([
-    Player.find({}).select('name aliases racetimeUrl racetimeId userId twitch').lean(),
+    Player.find({}).select('name aliases racetimeUrl racetimeId userId twitch racetimeDeletedAt').lean(),
     Tournament.aggregate([
       { $match: { participants: { $exists: true, $ne: [] } } },
       { $unwind: '$participants' },
@@ -175,6 +175,8 @@ async function buildPlayersResponse(includeTournaments) {
     ])
   ]);
 
+  // Accounts deleted from racetime leave the list (their races stay)
+  const deletedUserIds = new Set(playerDocs.filter(p => p.racetimeDeletedAt).map(p => p.userId));
   const aliasIndex = buildAliasIndex(playerDocs);
   const playerDocsByName = new Map();
   const playerDocsByUserId = new Map();
@@ -185,6 +187,7 @@ async function buildPlayersResponse(includeTournaments) {
 
   const raceCountsByPlayer = new Map();
   for (const row of raceCounts) {
+    if (deletedUserIds.has(row?._id?.userId)) continue;
     // A racetime account is one player whatever name it raced under: its current name
     const rawName = playerDocsByUserId.get(row?._id?.userId)?.name || row?._id?.entrantName;
     const category = String(row?._id?.category || '').toLowerCase();
@@ -204,6 +207,7 @@ async function buildPlayersResponse(includeTournaments) {
   const playersWithRaces = new Set(raceCountsByPlayer.keys());
 
   for (const row of tournamentParticipants) {
+    if (deletedUserIds.has(row.racetimeUserId)) continue;
     // The racetime account that raced the participant's matches, rather than the bracket name
     const rawName = playerDocsByUserId.get(row.racetimeUserId)?.name || row.racetimeName || row.participantName;
     if (!rawName) continue;
@@ -246,6 +250,7 @@ async function buildPlayersResponse(includeTournaments) {
 
   // Include player documents that may have no tournament rows
   for (const p of playerDocs) {
+    if (p.racetimeDeletedAt) continue;
     const canonicalName = getCanonicalName(aliasIndex, p.name);
     const normalized = normalizeName(canonicalName);
     if (!playersWithRaces.has(normalized)) continue;

@@ -435,6 +435,10 @@ const playerSchema = new mongoose.Schema({
   challongeUrl: String,
   // Alternate names (e.g. Challonge/start.gg participant names) for this player
   aliases: { type: [String], default: [] },
+  // Last read of the racetime.gg profile (scripts/sync-racetime-profiles.js), and when
+  // racetime stopped knowing the account: a deleted account leaves the player lists
+  racetimeCheckedAt: Date,
+  racetimeDeletedAt: Date,
   tournaments: [{
     tournamentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Tournament' },
     finalRank: Number,

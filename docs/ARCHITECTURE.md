@@ -42,7 +42,7 @@ En production, la base MongoDB tourne sur le même serveur que le site et n'éco
 | `midos-house` | toutes les 15 min | `sync-midos-house.js` : horaires et restreams des races des tournois OoTR, VOD Twitch des restreams (voir plus bas) |
 | `rando-list` | tous les jours à 6h | met à jour la copie locale de rando-list ; si `check-rando-list-changes.js` signale un nouveau commit, `sync-rando-list.js --detect-new` met à jour le cache et les ressources, puis signale les nouveaux jeux, à créer depuis le panneau admin |
 | `tournaments-discover` | tous les jours à 7h | `discover-tournaments.js --since <il y a 2 jours> --max-pages 3` : nouveaux tournois sur start.gg et Challonge |
-| `players` | tous les jours à 7h30 | `sync-players-from-races.js` : un joueur par compte racetime.gg (source de vérité), au nom de sa dernière course ; puis `link-participant-accounts.js --all --apply` relie chaque participant de tournoi au compte racetime qui a couru ses matchs (voir plus bas) |
+| `players` | tous les jours à 7h30 | `sync-players-from-races.js` : un joueur par compte racetime.gg (source de vérité), au nom de sa dernière course ; `sync-racetime-profiles.js --stale-days 7 --limit 1200` relit le profil racetime des joueurs (chacun une fois par semaine) : nom actuel, compte supprimé ; puis `link-participant-accounts.js --all --apply` relie chaque participant de tournoi au compte racetime qui a couru ses matchs (voir plus bas) |
 | `backup` | tous les jours à 3h30 | `backup-db.js` : archive `mongodump` de la base, 7 gardées |
 
 Chaque tâche se lance aussi à la main : `scripts/cron/run-job.sh <tâche>`.
@@ -120,7 +120,7 @@ Les schémas sont dans [`models/index.js`](../models/index.js).
 
 ### Joueurs et participants
 
-racetime.gg est la source de vérité : un joueur est un compte racetime (`userId`), affiché sous le nom de sa dernière course, quels que soient les pseudos de ses anciennes courses. Les joueurs SpeedRunsLive, sans compte, sont reconnus à leur nom. Les noms de tournoi ne créent pas de joueur.
+racetime.gg est la source de vérité : un joueur est un compte racetime (`userId`), affiché sous son nom racetime actuel (celui de son profil, ou de sa dernière course si elle est plus récente que la dernière lecture du profil), quels que soient les pseudos de ses anciennes courses. Un compte que racetime ne connaît plus est marqué supprimé (`racetimeDeletedAt`) : il quitte la liste des joueurs et la recherche, ses courses restent ; il revient s'il répond de nouveau. Les joueurs SpeedRunsLive, sans compte, sont reconnus à leur nom. Les noms de tournoi ne créent pas de joueur.
 
 Chaque participant de tournoi garde le compte racetime qui a couru ses matchs (`racetimeUserId`, `racetimeName`, [`helpers/participant-accounts.js`](../helpers/participant-accounts.js)), trouvé dans cet ordre :
 
@@ -169,6 +169,7 @@ Les scripts qui écrivent en base proposent un mode `--dry-run` (ou n'écrivent 
 | `sync-tournaments.js` | `sync:tournaments` (+ `:dry`, `:update`) | Mise à jour des tournois actifs |
 | `auto-link-tournaments.js` | `link:tournaments:active` | Rattache les courses aux matchs, et les tie-breaks à leur poule (`--all --tiebreaks-only` pour le rattrapage des anciens tournois) |
 | `sync-players-from-races.js` | `sync:players` (+ `:dry`) | Recalcule la collection des joueurs |
+| `sync-racetime-profiles.js` | | Nom racetime actuel et comptes supprimés, depuis le profil de chaque joueur (`--dry-run`, `--limit N`, `--stale-days N`) |
 | `sync-race-vods.js` | `sync:race-vods` (+ `:dry`) | VOD Twitch des joueurs de chaque race (tâche `race-vods`) |
 | `sync-midos-house.js` | `sync:midos-house` (+ `:dry`) | Horaires, restreams et VOD Mido's House (tâche `midos-house`) |
 

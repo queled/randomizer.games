@@ -119,6 +119,7 @@ router.get('/', async (req, res, next) => {
     // 4. Search Players
     // First, get Player documents
     const playerDocs = await Player.find({
+      racetimeDeletedAt: null,
       $or: [
         { name: searchRegex },
         { racetimeId: searchRegex }

@@ -10,7 +10,7 @@
 #   race-vods             VOD Twitch des joueurs, restreams trouvés sur Twitch (toutes les 30 min)
 #   tournaments-discover  nouveaux tournois des 2 derniers jours    (tous les jours)
 #   rando-list            cache rando-list, si le dépôt a changé    (tous les jours)
-#   players               joueurs racetime.gg, comptes des participants (tous les jours)
+#   players               joueurs et profils racetime.gg, comptes des participants (tous les jours)
 #   backup                mongodump avec rotation                   (toutes les nuits)
 #
 # Chaque tâche écrit dans $LOG_DIR/<tâche>.log (~/logs par défaut). Un verrou
@@ -82,6 +82,8 @@ run_rando_list() {
 run_players() {
   local status=0
   timeout 10m node scripts/sync-players-from-races.js || status=$?
+  # 1/7 des profils par jour : chacun est relu chaque semaine
+  timeout 40m node scripts/sync-racetime-profiles.js --stale-days 7 --limit 1200 || status=$?
   timeout 20m node scripts/link-participant-accounts.js --all --apply || status=$?
   return "$status"
 }

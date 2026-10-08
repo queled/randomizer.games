@@ -269,6 +269,12 @@ function extractRaceEntrants(race, options = {}) {
   };
 }
 
+const LEET_LETTERS = { 0: 'o', 1: 'i', 3: 'e', 4: 'a', 5: 's', 7: 't' };
+
+function foldLeetspeak(name) {
+  return name.replace(/[013457]/g, (digit) => LEET_LETTERS[digit]);
+}
+
 function scoreNameMatch(entrantName, target) {
   if (!entrantName || !target) return 0;
   if (entrantName === target) return 300;
@@ -300,6 +306,9 @@ function scoreNameMatch(entrantName, target) {
   }
 
   if (nickname) return 120;
+
+  // Digits standing for letters ("n4m3" for "name")
+  if (/[a-z]/.test(entrantName) && /[a-z]/.test(target) && foldLeetspeak(entrantName) === foldLeetspeak(target)) return 200;
 
   const lev = levenshtein(entrantName, target);
   const maxLen = Math.max(entrantName.length, target.length) || 1;

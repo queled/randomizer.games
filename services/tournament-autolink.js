@@ -384,6 +384,8 @@ function goalTokens(value) {
     // "Season 3" and "S3" name the same edition
     .replace(/\b(?:season|saison)\s*(\d+)\b/g, 's$1')
     .split(/[^a-z0-9]+/)
+    // "Event2026" and "Event26" name the same edition
+    .map((token) => token.replace(/^([a-z]+)20(\d{2})$/, '$1$2'))
     .filter((token) => token.length >= 2 && !GOAL_STOPWORDS.has(token));
 }
 

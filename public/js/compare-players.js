@@ -225,6 +225,8 @@
     document.getElementById('cp-name1').href = `/player-detail.html?name=${encodeURIComponent(p1)}`;
     document.getElementById('cp-name2').textContent = p2;
     document.getElementById('cp-name2').href = `/player-detail.html?name=${encodeURIComponent(p2)}`;
+    document.getElementById('cp-avatar-link1').href = document.getElementById('cp-name1').href;
+    document.getElementById('cp-avatar-link2').href = document.getElementById('cp-name2').href;
 
     // Avatars (async, set placeholder first)
     document.getElementById('cp-avatar1').src = makeInitialAvatar(p1);
@@ -317,7 +319,7 @@
 
   function roundLabel(m) {
     let round = '';
-    if (m.groupStage) round = t('comparePlayers.groupStage', 'Group stage');
+    if (m.groupStage) round = [t('comparePlayers.groupStage', 'Group stage'), m.round > 0 ? `${t('comparePlayers.round', 'Round')} ${m.round}` : ''].filter(Boolean).join(' · ');
     else if (m.round < 0) round = `${t('comparePlayers.losersRound', 'Losers round')} ${-m.round}`;
     else if (m.round > 0) round = `${t('comparePlayers.round', 'Round')} ${m.round}`;
     return [m.phase, round].filter(Boolean).join(' · ');
@@ -351,14 +353,20 @@
     document.getElementById('common-tournaments-list').innerHTML = tournaments.map(tour => {
       const finished = tour.status === 'terminé';
       const comparable = finished && !tour.teammates;
+      const r1 = tour.player1.rank;
+      const r2 = tour.player2.rank;
+      const rankClass = !(r1 && r2) || !(comparable || tour.teammates) ? ''
+        : r1 < r2 ? 'p1-won' : r2 < r1 ? 'p2-won' : 'draw';
       const badge = tour.teammates
         ? `<span class="compare-tour-badge">${t('comparePlayers.teammates', 'Same team')}</span>`
         : !finished ? `<span class="compare-tour-badge live">${t('comparePlayers.tournamentOngoing', 'In progress')}</span>` : '';
       const meta = [tour.gameName, formatDate(tour.startDate)].filter(Boolean).map(escHtml).join(' · ');
 
       const matches = (tour.matches || []).map(m => {
-        const score1 = m.score ? m.score.player1 : (m.winner === 'player1' ? 'W' : m.winner ? 'L' : '');
-        const score2 = m.score ? m.score.player2 : (m.winner === 'player2' ? 'W' : m.winner ? 'L' : '');
+        const win = t('comparePlayers.win', 'W');
+        const loss = t('comparePlayers.loss', 'L');
+        const score1 = m.score ? m.score.player1 : (m.winner === 'player1' ? win : m.winner ? loss : '');
+        const score2 = m.score ? m.score.player2 : (m.winner === 'player2' ? win : m.winner ? loss : '');
         const cls = m.winner === 'player1' ? 'p1-won' : m.winner === 'player2' ? 'p2-won' : 'pending';
         const label = escHtml(roundLabel(m)) || '—';
         const inner = `
@@ -371,7 +379,7 @@
       }).join('');
 
       return `
-        <div class="compare-tour-card">
+        <div class="compare-tour-card ${rankClass}" data-href="/tournament-detail.html?id=${encodeURIComponent(tour.tournamentId)}">
           <div class="compare-race-header">
             <a class="compare-tour-name" href="/tournament-detail.html?id=${encodeURIComponent(tour.tournamentId)}">${escHtml(tour.name)}</a>
             ${badge}
@@ -387,6 +395,18 @@
     }).join('');
   }
 
+  // A tournament card opens its tournament, like a race card; its links (name, match races) keep their own target
+  function setupTournamentCards() {
+    document.getElementById('common-tournaments-list').addEventListener('click', (e) => {
+      if (e.target.closest('a')) return;
+      if (window.getSelection && String(window.getSelection())) return;
+      const card = e.target.closest('.compare-tour-card');
+      if (!card?.dataset.href) return;
+      if (e.ctrlKey || e.metaKey || e.button === 1) window.open(card.dataset.href, '_blank');
+      else window.location.href = card.dataset.href;
+    });
+  }
+
   function renderGameBreakdown(games, p1Name, p2Name) {
     const container = document.getElementById('game-breakdown');
     if (!games.length) {
@@ -397,8 +417,10 @@
       const gTotal = g.count;
       const pct1 = gTotal ? Math.round((g.p1Wins / gTotal) * 100) : 0;
       const pct2 = gTotal ? Math.round((g.p2Wins / gTotal) * 100) : 0;
+      const tag = g.gameId ? 'a' : 'div';
+      const href = g.gameId ? ` href="/game-detail.html?id=${encodeURIComponent(g.gameId)}"` : '';
       return `
-        <div class="compare-game-card">
+        <${tag} class="compare-game-card"${href}>
           <div class="compare-game-name">${escHtml(g.gameName)}</div>
           <div class="compare-game-stats">
             <span class="p1-color">${g.p1Wins}</span>
@@ -410,7 +432,7 @@
             <div class="h2h-bar-draw" style="width:${100 - pct1 - pct2}%"></div>
             <div class="h2h-bar-p2" style="width:${pct2}%"></div>
           </div>
-        </div>`;
+        </${tag}>`;
     }).join('');
   }
 
@@ -480,6 +502,7 @@
   function init() {
     setupAutocomplete('player1-input', 'player1-suggestions');
     setupAutocomplete('player2-input', 'player2-suggestions');
+    setupTournamentCards();
 
     // Pre-load players list
     loadPlayersList();

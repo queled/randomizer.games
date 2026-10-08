@@ -2628,6 +2628,7 @@ body.spoiler-mode .spoiler-text::before {
 }
 
 .compare-avatar-wrap {
+    display: block;
     width: 100px;
     height: 100px;
     border-radius: 50%;
@@ -2786,10 +2787,18 @@ body.spoiler-mode .spoiler-text::before {
 
 /* Game breakdown cards */
 .compare-game-card {
+    display: block;
     background: #1f2937;
     padding: 1rem 1.25rem;
     border-radius: 0.5rem;
     margin-bottom: 0.5rem;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.2s;
+}
+
+a.compare-game-card:hover {
+    background: #374151;
 }
 
 .compare-game-name {
@@ -2960,6 +2969,29 @@ body.spoiler-mode .spoiler-text::before {
     padding: 1rem 1.25rem;
     border-radius: 0.5rem;
     margin-bottom: 0.5rem;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.compare-tour-card.p1-won {
+    border-left-color: #3b82f6;
+}
+
+.compare-tour-card.p2-won {
+    border-left-color: #ef4444;
+}
+
+.compare-tour-card.draw {
+    border-left-color: #4b5563;
+}
+
+.compare-tour-card:hover {
+    background: #374151;
+}
+
+.compare-tour-card:hover a.compare-tour-match:hover {
+    background: #4b5563;
 }
 
 .compare-tour-name {
@@ -2969,9 +3001,6 @@ body.spoiler-mode .spoiler-text::before {
     text-decoration: none;
 }
 
-.compare-tour-name:hover {
-    text-decoration: underline;
-}
 
 .compare-tour-badge {
     flex-shrink: 0;

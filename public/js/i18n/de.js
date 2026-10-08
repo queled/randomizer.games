@@ -278,7 +278,7 @@ roundOf16: "Achtelfinale",
         compareBtn: "Vergleichen",
         headToHead: "⚔️ Direktvergleich",
         statistics: "📊 Statistiken",
-        byGame: "🎮 Nach Spiel",
+        byGame: "🎮 Gemeinsame Spiele",
         commonRaces: "🏁 Gemeinsame Rennen",
         commonRacesCount: "gemeinsame Rennen",
         draws: "Unentschieden",
@@ -294,7 +294,9 @@ roundOf16: "Achtelfinale",
         tournamentOngoing: "Läuft",
         round: "Runde",
         losersRound: "Verliererrunde",
-        groupStage: "Gruppenphase"
+        groupStage: "Gruppenphase",
+        win: "S",
+        loss: "N"
     },
 
     // Player detail page

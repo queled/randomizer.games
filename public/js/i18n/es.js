@@ -276,7 +276,7 @@ roundOf16: "Octavos de final",
         compareBtn: "Comparar",
         headToHead: "⚔️ Cara a cara",
         statistics: "📊 Estadísticas",
-        byGame: "🎮 Por juego",
+        byGame: "🎮 Juegos comunes",
         commonRaces: "🏁 Carreras comunes",
         commonRacesCount: "carreras comunes",
         draws: "empates",
@@ -292,7 +292,9 @@ roundOf16: "Octavos de final",
         tournamentOngoing: "En curso",
         round: "Ronda",
         losersRound: "Ronda de perdedores",
-        groupStage: "Fase de grupos"
+        groupStage: "Fase de grupos",
+        win: "V",
+        loss: "D"
     },
 
     // Player detail page

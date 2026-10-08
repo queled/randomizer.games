@@ -342,7 +342,7 @@ router.get('/compare', async (req, res, next) => {
     }).sort({ startedAt: -1 }).lean();
 
     // Build game display map for category → game name mapping
-    const { displayBySlug: gameDisplayBySlug } = await buildGameDisplayMaps();
+    const { displayBySlug: gameDisplayBySlug, canonicalIdBySlug: gameIdBySlug } = await buildGameDisplayMaps();
 
     let p1Wins = 0;
     let p2Wins = 0;
@@ -385,6 +385,7 @@ router.get('/compare', async (req, res, next) => {
         tournamentId: race.tournamentId || null,
         category: race.category,
         gameName: gameDisplayBySlug.get(category) || race.category || null,
+        gameId: gameIdBySlug.get(category) || null,
         goal: race.goal || null,
         startedAt: race.startedAt,
         totalEntrants: race.entrants.length,
@@ -441,7 +442,7 @@ router.get('/compare', async (req, res, next) => {
     const gameBreakdown = {};
     for (const rd of raceDetails) {
       const gn = rd.gameName || rd.category || 'Unknown';
-      if (!gameBreakdown[gn]) gameBreakdown[gn] = { count: 0, p1Wins: 0, p2Wins: 0, draws: 0 };
+      if (!gameBreakdown[gn]) gameBreakdown[gn] = { gameId: rd.gameId, count: 0, p1Wins: 0, p2Wins: 0, draws: 0 };
       gameBreakdown[gn].count++;
       if (rd.h2hWinner === 1) gameBreakdown[gn].p1Wins++;
       else if (rd.h2hWinner === 2) gameBreakdown[gn].p2Wins++;

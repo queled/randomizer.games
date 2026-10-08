@@ -320,7 +320,7 @@ const pt = {
         compareBtn: "Comparar",
         headToHead: "⚔️ Frente a frente",
         statistics: "📊 Estatísticas",
-        byGame: "🎮 Por jogo",
+        byGame: "🎮 Jogos em comum",
         commonRaces: "🏁 Corridas em comum",
         commonRacesCount: "corridas em comum",
         draws: "empates",
@@ -336,7 +336,9 @@ const pt = {
         tournamentOngoing: "Em curso",
         round: "Ronda",
         losersRound: "Ronda de perdedores",
-        groupStage: "Fase de grupos"
+        groupStage: "Fase de grupos",
+        win: "V",
+        loss: "D"
     },
 
     // Player detail page

@@ -296,7 +296,7 @@ const en = {
         compareBtn: "Compare",
         headToHead: "⚔️ Head to Head",
         statistics: "📊 Statistics",
-        byGame: "🎮 By Game",
+        byGame: "🎮 Common Games",
         commonRaces: "🏁 Common Races",
         commonRacesCount: "common races",
         draws: "draws",
@@ -312,7 +312,9 @@ const en = {
         tournamentOngoing: "In progress",
         round: "Round",
         losersRound: "Losers round",
-        groupStage: "Group stage"
+        groupStage: "Group stage",
+        win: "W",
+        loss: "L"
     },
 
     // Player detail page

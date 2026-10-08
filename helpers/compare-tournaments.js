@@ -52,11 +52,16 @@ function startggScores(match) {
   return firstIsPlayer2 ? [parsed[1].score, parsed[0].score] : [parsed[0].score, parsed[1].score];
 }
 
+// Above this, a Challonge "score" is not a count of races won (some group stages
+// store a points or time total there)
+const MAX_MATCH_SCORE = 99;
+
 // "2-1" (one score per set, comma separated) → [2, 1] summed over the sets
 function challongeScores(scoresCsv) {
   const sets = String(scoresCsv || '').split(',').map(s => s.trim().match(/^(\d+)-(\d+)$/));
   if (!sets.length || sets.some(m => !m)) return null;
-  return sets.reduce((acc, m) => [acc[0] + Number(m[1]), acc[1] + Number(m[2])], [0, 0]);
+  const scores = sets.reduce((acc, m) => [acc[0] + Number(m[1]), acc[1] + Number(m[2])], [0, 0]);
+  return Math.max(...scores) > MAX_MATCH_SCORE ? null : scores;
 }
 
 function bestRank(entries) {

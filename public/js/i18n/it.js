@@ -276,7 +276,7 @@ match1: "Partita 1",
         compareBtn: "Confronta",
         headToHead: "⚔️ Testa a testa",
         statistics: "📊 Statistiche",
-        byGame: "🎮 Per gioco",
+        byGame: "🎮 Giochi comuni",
         commonRaces: "🏁 Gare comuni",
         commonRacesCount: "gare comuni",
         draws: "pareggi",
@@ -292,7 +292,9 @@ match1: "Partita 1",
         tournamentOngoing: "In corso",
         round: "Turno",
         losersRound: "Turno perdenti",
-        groupStage: "Fase a gironi"
+        groupStage: "Fase a gironi",
+        win: "V",
+        loss: "S"
     },
 
     // Player detail page

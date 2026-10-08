@@ -284,7 +284,7 @@ const fr = {
         compareBtn: "Comparer",
         headToHead: "⚔️ Face à face",
         statistics: "📊 Statistiques",
-        byGame: "🎮 Par jeu",
+        byGame: "🎮 Jeux communs",
         commonRaces: "🏁 Courses communes",
         commonRacesCount: "courses communes",
         draws: "nuls",
@@ -300,7 +300,9 @@ const fr = {
         tournamentOngoing: "En cours",
         round: "Tour",
         losersRound: "Tour perdants",
-        groupStage: "Poules"
+        groupStage: "Poules",
+        win: "V",
+        loss: "D"
     },
 
     // Player detail page

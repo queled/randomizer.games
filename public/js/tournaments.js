@@ -10,6 +10,15 @@
   let currentGame = '';
   let gamesById = {};
   let gamesReady = Promise.resolve(); // cards need the games list to resolve names
+
+  function resolveGameLabel(game) {
+    return game?.official?.name
+      || game?.name
+      || game?.randomizer?.displayName
+      || game?.randomizer?.shortName
+      || game?.id
+      || null;
+  }
   let loadId = 0; // ignores responses from a request a newer filter replaced
   // Map frontend filter keys to server status strings (server returns French status strings)
   const statusFilterMap = {
@@ -44,7 +53,7 @@
     
     let gameName = t.gameName || '';
     if (!gameName && gamesById[t.gameId]) {
-      gameName = gamesById[t.gameId].officialName || gamesById[t.gameId].name;
+      gameName = resolveGameLabel(gamesById[t.gameId]);
     }
 
     // Find winner if participants exist and have finalRank set, or from _computedWinner
@@ -91,15 +100,19 @@
       const data = await res.json();
       const games = data.games || [];
       
-      games.forEach(g => {
-        gamesById[g.id] = g;
-        // Only list games that have tournaments
-        if (!(g.totalTournaments > 0)) return;
-        const opt = document.createElement('option');
-        opt.value = g.id;
-        opt.textContent = g.officialName || g.name;
-        gameSelect.appendChild(opt);
-      });
+      games.forEach(g => { gamesById[g.id] = g; });
+
+      // Same labels and order as the races page; only games that have tournaments
+      games
+        .filter(g => g.totalTournaments > 0)
+        .map(g => ({ id: g.id, label: resolveGameLabel(g) || g.id }))
+        .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base', numeric: true }))
+        .forEach(({ id, label }) => {
+          const opt = document.createElement('option');
+          opt.value = id;
+          opt.textContent = label;
+          gameSelect.appendChild(opt);
+        });
     } catch (e) {
       console.error('Failed to load games:', e);
     }

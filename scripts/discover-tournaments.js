@@ -361,7 +361,7 @@ async function buildSearchTerms(gameSlug = null) {
   const games = await Game.find(query).lean();
   if (!games.length) {
     console.warn('⚠️  No games found in database');
-    return { searchTerms: [], gameMap: new Map() };
+    return { searchTerms: [], gameMap: new Map(), games: [] };
   }
 
   const searchTerms = new Set();
@@ -757,7 +757,7 @@ async function importStartGGTournament(api, tournamentPreview, { game = null, di
   }
 }
 
-// ─── SpeedGaming Discovery (speedgaming.org/events → Challonge brackets) ─────
+// ─── SpeedGaming Discovery (speedgaming.org/events → Challonge and start.gg brackets) ─────
 
 function decodeEntities(value) {
   return String(value || '')
@@ -845,12 +845,19 @@ async function discoverSpeedGaming({ games, dryRun, challongeUrls = [] }) {
 
   const existingIds = new Set((await getKnownChallongeIds()).map(String));
   const seen = new Set();
+  // start.gg brackets go to the start.gg import ("2026 ALTTPR Casual Boots Tournament")
+  const startggSlugs = new Set();
 
   for (const { title, link, group = null, label = null } of entries) {
+    if (/(^|\.)start\.gg\//i.test(link.replace(/^https?:\/\//, ''))) {
+      const slug = StartGGAPI.extractSlugFromUrl(link);
+      if (slug) startggSlugs.add(slug);
+      continue;
+    }
     const ref = parseChallongeRef(link);
     if (!ref) {
       if (/challonge\.com/i.test(link)) console.log(`   ↪ Unresolvable Challonge link: ${link}`);
-      continue; // start.gg and other hosts are handled by their own sources
+      continue; // other hosts (sheets, league sites) have no bracket to import
     }
     if (seen.has(ref.apiId.toLowerCase())) continue;
     seen.add(ref.apiId.toLowerCase());
@@ -900,6 +907,12 @@ async function discoverSpeedGaming({ games, dryRun, challongeUrls = [] }) {
       console.error(`   ❌ Error processing ${link}: ${err.message}`);
       stats.errors++;
     }
+  }
+
+  if (startggSlugs.size) {
+    console.log(`\n   start.gg brackets listed on speedgaming.org: ${startggSlugs.size}`);
+    const startgg = await discoverStartGG({ games, dryRun, tournamentSlugs: [...startggSlugs], discoveredVia: 'speedgaming.org' });
+    for (const key of Object.keys(stats)) stats[key] += startgg[key] || 0;
   }
 
   return stats;

@@ -19,6 +19,7 @@ const { normalizePlayerName } = require('../helpers/player-aliases');
 const { syncParticipantAccounts } = require('../helpers/participant-accounts');
 const { fillMissingFinalRanks } = require('../helpers/bracket-ranks');
 const { getJobsHealth } = require('../services/job-health');
+const { computeLinkCoverage, summarizeCoverage } = require('../services/link-coverage');
 
 function escapeRegex(value) {
   return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -1386,7 +1387,9 @@ function parseRacetimeUrl(url) {
  */
 router.get('/tournaments', requireAdmin, async (req, res, next) => {
   try {
-    const { search, limit = 30, page = 1 } = req.query;
+    const { search, coverage: coverageFilter, sort } = req.query;
+    const limit = Math.max(1, parseInt(req.query.limit) || 30);
+    const page = Math.max(1, parseInt(req.query.page) || 1);
     const query = {};
 
     if (search) {
@@ -1397,34 +1400,26 @@ router.get('/tournaments', requireAdmin, async (req, res, next) => {
       ];
     }
 
-    const skip = (parseInt(page) - 1) * parseInt(limit);
-    const [tournaments, total] = await Promise.all([
-      Tournament.find(query)
-        .populate('game', 'id name')
-        .sort({ startDate: -1 })
-        .skip(skip)
-        .limit(parseInt(limit))
-        .select('name gameName gameId startDate endDate startggId challongeId participantsCount matches setsTotal game')
-        .lean(),
-      Tournament.countDocuments(query)
-    ]);
+    // Coverage is computed on every tournament of the search, to filter and sort on it
+    const tournaments = await Tournament.find(query)
+      .populate('game', 'id name')
+      .sort({ startDate: -1 })
+      .select('name gameName gameId startDate endDate startggId challongeId participantsCount game matches.state matches.displayScore matches.raceUrl matches.raceUrls matches.startggSetId matches.player1.name matches.player2.name')
+      .lean();
 
-    const challongeTournamentIds = tournaments
-      .filter(t => !!t.challongeId)
-      .map(t => t._id);
-
-    const challongeCounts = challongeTournamentIds.length
-      ? await Match.aggregate([
-        { $match: { tournamentId: { $in: challongeTournamentIds } } },
+    const [coverage, challongeCounts] = await Promise.all([
+      computeLinkCoverage({ tournaments, Match, Race }),
+      Match.aggregate([
+        { $match: { tournamentId: { $in: tournaments.filter(t => !!t.challongeId).map(t => t._id) } } },
         { $group: { _id: '$tournamentId', count: { $sum: 1 } } }
       ])
-      : [];
+    ]);
 
     const challongeCountMap = new Map(
       challongeCounts.map(entry => [String(entry._id), entry.count])
     );
 
-    const results = tournaments.map(t => ({
+    let results = tournaments.map(t => ({
       _id: t._id,
       name: t.name,
       gameName: t.gameName || t.game?.name || t.gameId || '-',
@@ -1435,12 +1430,25 @@ router.get('/tournaments', requireAdmin, async (req, res, next) => {
       participantsCount: t.participantsCount || 0,
       matchesCount: t.startggId
         ? (t.matches?.length || 0)
-        : (challongeCountMap.get(String(t._id)) || 0)
+        : (challongeCountMap.get(String(t._id)) || 0),
+      coverage: coverage.get(String(t._id))
     }));
 
+    // "todo": played matches without races, or races attached to no match
+    if (coverageFilter === 'todo') {
+      results = results.filter(t => t.coverage.status === 'partial' || t.coverage.orphanRaces > 0);
+    } else if (['partial', 'complete', 'none'].includes(coverageFilter)) {
+      results = results.filter(t => t.coverage.status === coverageFilter);
+    }
+    if (sort === 'missing') {
+      results.sort((a, b) => (b.coverage.missingMatches + b.coverage.orphanRaces) - (a.coverage.missingMatches + a.coverage.orphanRaces));
+    }
+
+    const total = results.length;
     res.json({
-      tournaments: results,
-      pagination: { total, page: parseInt(page), limit: parseInt(limit), pages: Math.ceil(total / parseInt(limit)) }
+      tournaments: results.slice((page - 1) * limit, page * limit),
+      coverageSummary: summarizeCoverage(coverage),
+      pagination: { total, page, limit, pages: Math.ceil(total / limit) }
     });
   } catch (error) {
     next(error);

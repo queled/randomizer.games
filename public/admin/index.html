@@ -466,7 +466,20 @@
           <div class="toolbar-search" style="max-width: 500px;">
             <input type="text" id="rl-tournament-search" class="form-input" placeholder="Rechercher un tournoi...">
           </div>
+          <select id="rl-coverage-filter" class="form-input form-select" style="max-width: 240px;" data-change="rlLoadTournaments">
+            <option value="">Tous les tournois</option>
+            <option value="todo">À reprendre</option>
+            <option value="partial">Couverture incomplète</option>
+            <option value="complete">Couverture complète</option>
+            <option value="none">Sans course racetime.gg</option>
+          </select>
+          <select id="rl-sort" class="form-input form-select" style="max-width: 240px;" data-change="rlLoadTournaments">
+            <option value="">Plus récents d'abord</option>
+            <option value="missing">Plus de rattachements manquants</option>
+          </select>
         </div>
+
+        <div id="rl-coverage-summary" class="rl-stats-bar" style="display: none;"></div>
 
         <div id="rl-tournament-list" class="rl-tournament-list">
           <p class="text-muted">Recherchez ou parcourez les tournois ci-dessus</p>

@@ -2201,8 +2201,14 @@ const admin = {
     this.rlTournamentsPage = page;
     try {
       const search = document.getElementById('rl-tournament-search')?.value || '';
+      const coverage = document.getElementById('rl-coverage-filter')?.value || '';
+      const sort = document.getElementById('rl-sort')?.value || '';
       const params = new URLSearchParams({ page, limit: 15 });
+      // Only the latest request renders: an earlier one may answer after it
+      const requestId = this.rlTournamentsRequest = (this.rlTournamentsRequest || 0) + 1;
       if (search) params.append('search', search);
+      if (coverage) params.append('coverage', coverage);
+      if (sort) params.append('sort', sort);
 
       const response = await fetch(`/api/admin/tournaments?${params}`, {
         headers: { 'Authorization': `Bearer ${this.token}` }
@@ -2210,11 +2216,45 @@ const admin = {
       if (!response.ok) throw new Error('Failed');
 
       const data = await response.json();
+      if (requestId !== this.rlTournamentsRequest) return;
+      this.rlRenderCoverageSummary(data.coverageSummary);
       this.rlRenderTournamentList(data.tournaments, data.pagination);
     } catch (error) {
       console.error('Error loading tournaments:', error);
       this.showToast('Erreur lors du chargement des tournois', 'error');
     }
+  },
+
+  // Totals over every tournament raced on racetime.gg, whatever the search
+  rlRenderCoverageSummary(summary) {
+    const el = document.getElementById('rl-coverage-summary');
+    if (!el || !summary) return;
+    el.style.display = '';
+    el.innerHTML = `
+      <div class="rl-stat"><span class="rl-stat-value">${summary.percent ?? '-'} %</span><span class="rl-stat-label">Matchs joués avec course</span></div>
+      <div class="rl-stat"><span class="rl-stat-value">${summary.linkedMatches.toLocaleString('fr-FR')} / ${summary.playedMatches.toLocaleString('fr-FR')}</span><span class="rl-stat-label">Matchs</span></div>
+      <div class="rl-stat rl-stat-success"><span class="rl-stat-value">${summary.complete}</span><span class="rl-stat-label">Tournois complets</span></div>
+      <div class="rl-stat rl-stat-warning"><span class="rl-stat-value">${summary.partial}</span><span class="rl-stat-label">Incomplets</span></div>
+      <div class="rl-stat ${summary.orphanRaces ? 'rl-stat-warning' : ''}"><span class="rl-stat-value">${summary.orphanRaces}</span><span class="rl-stat-label">Courses sans match</span></div>
+      <div class="rl-stat"><span class="rl-stat-value">${summary.none}</span><span class="rl-stat-label">Sans course</span></div>
+    `;
+  },
+
+  rlRenderCoverageCell(coverage) {
+    if (!coverage || coverage.status === 'empty') return '<span class="text-muted">-</span>';
+    if (coverage.status === 'none') return '<span class="badge badge-muted" title="Aucune course racetime.gg rattachée">sans course</span>';
+    const badge = coverage.status === 'complete' ? 'success' : coverage.percent >= 80 ? 'warning' : 'danger';
+    const details = [
+      `${coverage.linkedMatches} / ${coverage.playedMatches} matchs joués avec course`,
+      coverage.tiebreakRaces ? `${coverage.tiebreakRaces} tie-break(s)` : '',
+      coverage.qualifierRaces ? `${coverage.qualifierRaces} course(s) de qualif` : '',
+      coverage.orphanRaces ? `${coverage.orphanRaces} course(s) rattachée(s) au tournoi sans match` : ''
+    ].filter(Boolean).join('\n');
+    return `
+      <span class="badge badge-${badge}" title="${this.escapeHtml(details)}">${coverage.percent} %</span>
+      <span class="text-muted" style="font-size: 0.75rem;">${coverage.linkedMatches}/${coverage.playedMatches}</span>
+      ${coverage.orphanRaces ? `<span class="badge badge-danger" title="Courses rattachées au tournoi sans match">${coverage.orphanRaces} sans match</span>` : ''}
+    `;
   },
 
   rlRenderTournamentList(tournaments, pagination) {
@@ -2234,6 +2274,7 @@ const admin = {
               <th>Jeu</th>
               <th>Type</th>
               <th>Matchs</th>
+              <th>Couverture</th>
               <th>Participants</th>
               <th>Date</th>
               <th></th>
@@ -2249,6 +2290,7 @@ const admin = {
                   ${t.isChallonge ? '<span class="badge badge-warning">challonge</span>' : ''}
                 </td>
                 <td>${t.matchesCount || 0}</td>
+                <td style="white-space: nowrap;">${this.rlRenderCoverageCell(t.coverage)}</td>
                 <td>${t.participantsCount || 0}</td>
                 <td>${t.startDate ? new Date(t.startDate).toLocaleDateString('fr-FR') : '-'}</td>
                 <td>

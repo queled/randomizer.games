@@ -62,7 +62,7 @@ Les workflows de `.github/workflows/` faisaient le même travail depuis les serv
 
 `helpers/findGameForTournament.js` associe ensuite le tournoi à un jeu du site. Les tournois déjà présents en base ne sont pas réimportés.
 
-Les courses sont rattachées aux matchs par `services/tournament-autolink.js` (score de confiance) et aux qualifications par `services/tournament-qualifiers.js`. Le panneau admin permet de vérifier ou de corriger ces liens.
+Les courses sont rattachées aux matchs par `services/tournament-autolink.js` (score de confiance) et aux qualifications par `services/tournament-qualifiers.js`. Le panneau admin permet de vérifier ou de corriger ces liens. Sa liste des tournois (« Race ↔ Match ») donne pour chacun la part des matchs joués qui ont leurs courses (`services/link-coverage.js` : matchs terminés entre deux joueurs, forfaits « DQ » exclus) et les courses rattachées au tournoi sans match, qualification ni tie-break. Le filtre « À reprendre » et le tri « Plus de rattachements manquants » mènent aux tournois à compléter ; un tournoi sans aucune course (jeu qui ne se court pas sur racetime.gg, comme Melee) est classé « sans course » et sort du total.
 
 ### Horaires Mido's House
 

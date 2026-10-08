@@ -895,17 +895,18 @@ router.post('/sync/rando-list', requireAdmin, async (req, res, next) => {
 
 /**
  * POST /api/admin/sync/racetime/:gameId
- * Trigger racetime sync for a specific game
+ * Trigger racetime sync for a specific game, or for every game with gameId "all"
  */
 router.post('/sync/racetime/:gameId', requireAdmin, async (req, res, next) => {
   try {
     const { spawn } = require('child_process');
     const path = require('path');
-    
-    const scriptPath = path.join(__dirname, '..', 'scripts', 'sync-racetime-game.js');
-    const args = ['--game', req.params.gameId];
-    
-    if (req.body.maxPages) {
+
+    const syncAll = req.params.gameId === 'all';
+    const scriptPath = path.join(__dirname, '..', 'scripts', syncAll ? 'sync-racetime-global.js' : 'sync-racetime-game.js');
+    const args = syncAll ? [] : ['--game', req.params.gameId];
+
+    if (!syncAll && req.body.maxPages) {
       args.push('--max-pages', String(req.body.maxPages));
     }
     

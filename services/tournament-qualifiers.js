@@ -15,12 +15,12 @@ const RACETIME_SCAN_PADDING_MS = 10 * DAY_MS;
 const RACETIME_DELAY_MS = 500;
 const MIN_QUALIFIER_ENTRANTS = 3;
 
-// "Qualifier #13", "qualifier 18", "Qualifier race #3", "Qualifiers #1", "Qualifier B"
-const QUALIFIER_RE = /\bqualif(?:ier|ication)s?\b(?:\s+race)?\s*#?\s*(\d{1,3}|[a-z])\b/i;
+// "Qualifier #13", "qualifier 18", "Qualifier race #3", "Qualifiers #1", "Qualifier B", "Live Quals 2"
+const QUALIFIER_RE = /\bqual(?:if(?:ier|ication)|)s?\b(?:\s+race)?\s*#?\s*(\d{1,3}|[a-z])\b/i;
 // Rooms announcing a qualifier without being one
 const NOT_QUALIFIER_RE = /\b(practice|showcase|not|format|draft|mock)\b/i;
 // Words of a qualifier label that never name the event
-const QUALIFIER_STOPWORDS = new Set(['qualifier', 'qualifiers', 'qualification', 'race', 'online', 'async', 'live', 'na', 'eu', 'weekly']);
+const QUALIFIER_STOPWORDS = new Set(['qualifier', 'qualifiers', 'qualification', 'qual', 'quals', 'race', 'online', 'async', 'live', 'na', 'eu', 'weekly']);
 // A room goal naming an event ("Scrubs Tournament Season 8") rather than a ruleset
 const GOAL_EVENT_RE = /\b(tournament|tourney|league|cup|season|qualif\w*|s\d+)\b/i;
 
@@ -95,7 +95,6 @@ function matchQualifierToTournament(race, tournament, window = getQualifierWindo
   if (!window || ['pending', 'cancelled', 'open', 'invitational'].includes(race?.status)) return null;
   const startedAt = new Date(race?.startedAt || race?.openedAt || 0);
   if (startedAt < window.minDate || startedAt > window.maxDate) return null;
-  if (Array.isArray(race?.entrants) && race.entrants.length && race.entrants.length < MIN_QUALIFIER_ENTRANTS) return null;
 
   const parsed = parseQualifierLabel(race);
   if (!parsed) return null;
@@ -111,6 +110,8 @@ function matchQualifierToTournament(race, tournament, window = getQualifierWindo
   const goalTokens = eventTokens(goal);
   if (goalTokens.length && goalTokens.every((token) => tournamentTokens.has(token))) return 'named';
   if (GOAL_EVENT_RE.test(goal)) return null;
+  // A plain qualifier of two players may be a match: a named one is sure ("SGL2026 - Live Quals 1")
+  if (Array.isArray(race?.entrants) && race.entrants.length && race.entrants.length < MIN_QUALIFIER_ENTRANTS) return null;
   return 'bare';
 }
 
@@ -141,7 +142,7 @@ async function findDatabaseQualifiers({ tournament, Race }) {
   const races = await Race.find({
     category: { $in: categories },
     startedAt: { $gte: window.minDate, $lte: window.maxDate },
-    info: /qualif/i,
+    info: /\bqual(?:if|s?\b)/i,
     $or: [{ tournamentId: null }, { tournamentId: tournament._id }]
   }).select('-entrants.comment').lean();
 

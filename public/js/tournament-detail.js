@@ -864,14 +864,13 @@ function displayParticipants(participants, matches = [], options = {}) {
   } catch (e) { /* ignore listener attach errors */ }
 }
 
-// Challonge creates the bracket reset up front with both finalists; it is only played when the
-// losers-side finalist wins the grand final. Drop it once it can no longer happen.
+// Challonge creates the bracket reset up front; it is only played when the losers-side finalist
+// wins the grand final. Keep it hidden until that happens.
 function removeUnplayedBracketResets(matches, tournamentComplete) {
   const isPlayed = m => m.state === 'complete' || m.winnerId || m.winnerName || (m.scoresCsv && m.scoresCsv.trim());
-  const pairKey = m => [m.player1Id || m.player1Name, m.player2Id || m.player2Name].map(String).sort().join('|');
+  const hasPlayers = m => m.player1Id || m.player1Name || m.player2Id || m.player2Name;
   const brackets = new Map();
   matches.forEach(m => {
-    if ((m.round || 0) <= 0) return;
     const key = `${m.groupId ?? ''}|${m.phase ?? ''}|${m.phaseGroup ?? ''}`;
     if (!brackets.has(key)) brackets.set(key, []);
     brackets.get(key).push(m);
@@ -879,15 +878,20 @@ function removeUnplayedBracketResets(matches, tournamentComplete) {
 
   const unplayed = new Set();
   brackets.forEach(list => {
-    const lastRound = Math.max(...list.map(m => m.round));
-    list.filter(m => m.round === lastRound && !isPlayed(m)).forEach(reset => {
-      const grandFinal = list.find(m => m !== reset && m.round === lastRound && isPlayed(m) && pairKey(m) === pairKey(reset));
-      if (!grandFinal) return;
-      const winnersSideWon = grandFinal.winnerId
-        ? String(grandFinal.winnerId) === String(grandFinal.player1Id)
-        : grandFinal.winnerName && grandFinal.winnerName === grandFinal.player1Name;
-      if (tournamentComplete || winnersSideWon) unplayed.add(reset);
-    });
+    // Only double elimination has a losers side; a single elimination final shares its round
+    // with the third place match
+    if (!list.some(m => (m.round || 0) < 0)) return;
+    const lastRound = Math.max(...list.map(m => m.round || 0));
+    const finals = list.filter(m => m.round === lastRound);
+    if (lastRound <= 0 || finals.length !== 2) return;
+    // The grand final is the one already played, or else the one whose finalists are known
+    const grandFinal = finals.find(isPlayed) || finals.find(hasPlayers) || finals[0];
+    const reset = finals.find(m => m !== grandFinal);
+    if (isPlayed(reset)) return;
+    const losersSideWon = isPlayed(grandFinal) && (grandFinal.winnerId
+      ? String(grandFinal.winnerId) === String(grandFinal.player2Id)
+      : grandFinal.winnerName && grandFinal.winnerName === grandFinal.player2Name);
+    if (tournamentComplete || !losersSideWon) unplayed.add(reset);
   });
   return unplayed.size ? matches.filter(m => !unplayed.has(m)) : matches;
 }

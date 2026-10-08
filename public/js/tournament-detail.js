@@ -1507,9 +1507,13 @@ function displayMatches(matches, tournament, races = []) {
   // Only clear once at the start.
   container.innerHTML = '';
 
+  const tiebreaks = tiebreakRaces(races).reverse();
+
   // Start.gg multi-phase tournament: render each phase as a separate section
   if (hasStartggPhases && !hasGroupsThenFinal) {
     const sortedPhases = sortPhasesNewestFirst(phases, tournament, matches);
+    // Tie-breaks of a phase without any match: first, as the newest
+    appendTiebreakMatches(container, tiebreaks.filter(r => !sortedPhases.includes(r.tournamentPhase)));
 
     sortedPhases.forEach((phaseName, phaseIdx) => {
       const phaseMatches = matches.filter(m => m.phase === phaseName);
@@ -1521,6 +1525,9 @@ function displayMatches(matches, tournament, races = []) {
       phaseHeader.textContent = translatePhaseName(phaseName);
       phaseHeader.classList.add('text-gold');
       container.appendChild(phaseHeader);
+
+      // Tie-breaks close the groups: on top of the phase, the list running newest first
+      appendTiebreakMatches(container, tiebreaks.filter(r => r.tournamentPhase === phaseName));
 
       // Separate winner and loser bracket matches
       const renderRounds = (list) => {
@@ -1600,6 +1607,9 @@ function displayMatches(matches, tournament, races = []) {
 
     return;
   }
+
+  // Other layouts: the tie-breaks first, as the newest
+  appendTiebreakMatches(container, tiebreaks);
 
   // Special rendering for "Groups (4 → 2) then Single Elimination"
   if (isGroupsThenFinalSE) {
@@ -1818,6 +1828,16 @@ function displayMatches(matches, tournament, races = []) {
   });
 
   if (renderGroupStage) renderGroupStage();
+}
+
+function appendTiebreakMatches(container, races) {
+  if (!races.length) return;
+  const header = document.createElement('h4');
+  header.style.cssText = 'font-size: 1.1rem; font-weight: bold; margin-top: 1.25rem; margin-bottom: 0.75rem;';
+  header.textContent = i18n.t('tournamentDetail.tiebreaks') || 'Tie-breaks';
+  header.classList.add('text-gold');
+  container.appendChild(header);
+  races.forEach(r => container.appendChild(createTiebreakCard(r, { inMatchList: true })));
 }
 
 // Delegated click handler: navigate to race-detail when clicking a manche card (except Racetime links)
@@ -2122,6 +2142,32 @@ function findRacesForMatch(match, races) {
   return matchedRaces;
 }
 
+// Racetime (or SpeedRunsLive) link button of a race
+function raceLinkHtml(race) {
+  if (!race || !race.url) return '';
+  const rawUrl = (race.url || '').toString().trim();
+  let path = rawUrl;
+  if (/^https?:\/\//i.test(path)) {
+    try {
+      path = new URL(path).pathname || '';
+    } catch (e) {
+      path = path.replace(/^https?:\/\/(www\.)?racetime\.gg/i, '');
+    }
+  } else if (/racetime\.gg/i.test(path)) {
+    path = path.replace(/^https?:\/\/(www\.)?racetime\.gg/i, '');
+  }
+  path = '/' + String(path || '').replace(/^\/+/, '');
+  const parts = path.split('/').filter(Boolean);
+  if (parts.length >= 3 && parts[0] === parts[1]) parts.splice(1, 1);
+  const srlUrl = getSpeedRunsLiveRaceUrl(race.url);
+  const href = srlUrl || 'https://racetime.gg/' + parts.join('/');
+  const logo = srlUrl
+    ? '<span class="srl-logo" role="img" aria-label="SpeedRunsLive" style="--srl-logo-height:14px;"></span>'
+    : '<img src="assets/racetime.svg" alt="Racetime" style="width:14px;height:14px;">Racetime';
+  const brandColor = srlUrl ? '#F0C850' : '#C2CECF';
+  return `<a href="${href}" target="_blank" rel="noopener noreferrer" data-stop-propagation style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.2rem 0.4rem; border-radius:0.25rem; font-size:0.7rem; color:${brandColor}; background:#222222; border:1px solid ${brandColor}; text-decoration:none;">${logo}</a>`;
+}
+
 function createMatchCard(match, races = []) {
   const card = document.createElement('div');
   // Assign stable id so we can scroll to the match from participants
@@ -2197,31 +2243,7 @@ function createMatchCard(match, races = []) {
   const player1Winner = match.winnerId === match.player1Id;
   const player2Winner = match.winnerId === match.player2Id;
 
-  // Helper to get race link HTML
-  const getRaceLinkHtml = (race) => {
-    if (!race || !race.url) return '';
-    const rawUrl = (race.url || '').toString().trim();
-    let path = rawUrl;
-    if (/^https?:\/\//i.test(path)) {
-      try {
-        path = new URL(path).pathname || '';
-      } catch (e) {
-        path = path.replace(/^https?:\/\/(www\.)?racetime\.gg/i, '');
-      }
-    } else if (/racetime\.gg/i.test(path)) {
-      path = path.replace(/^https?:\/\/(www\.)?racetime\.gg/i, '');
-    }
-    path = '/' + String(path || '').replace(/^\/+/, '');
-    const parts = path.split('/').filter(Boolean);
-    if (parts.length >= 3 && parts[0] === parts[1]) parts.splice(1, 1);
-    const srlUrl = getSpeedRunsLiveRaceUrl(race.url);
-    const href = srlUrl || 'https://racetime.gg/' + parts.join('/');
-    const logo = srlUrl
-      ? '<span class="srl-logo" role="img" aria-label="SpeedRunsLive" style="--srl-logo-height:14px;"></span>'
-      : '<img src="assets/racetime.svg" alt="Racetime" style="width:14px;height:14px;">Racetime';
-    const brandColor = srlUrl ? '#F0C850' : '#C2CECF';
-    return `<a href="${href}" target="_blank" rel="noopener noreferrer" data-stop-propagation style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.2rem 0.4rem; border-radius:0.25rem; font-size:0.7rem; color:${brandColor}; background:#222222; border:1px solid ${brandColor}; text-decoration:none;">${logo}</a>`;
-  };
+  const getRaceLinkHtml = raceLinkHtml;
 
   // Helper to extract times from a race for this match
   const isTeamMatch = !!(match.player1Members && match.player1Members.length && match.player2Members && match.player2Members.length);
@@ -3427,14 +3449,22 @@ function tiebreakRaces(races = []) {
     .sort((a, b) => new Date(a.startedAt || 0) - new Date(b.startedAt || 0));
 }
 
-function createTiebreakCard(race) {
+// In the bracket (default) the card leads to its copy in the matches tab, which carries the VODs and restreams
+function createTiebreakCard(race, { inMatchList = false } = {}) {
   const card = document.createElement('div');
-  card.style.cssText = 'background-color: #111827; padding: 0.5rem; border-radius: 0.25rem; border-left: 3px solid #fbbf24; cursor: pointer;';
-  // The whole card opens the race, its VOD links aside
-  card.addEventListener('click', (e) => {
-    if (e.target.closest('a')) return;
-    window.location.href = '/race-detail.html?id=' + encodeURIComponent(race._id);
-  });
+  card.style.cssText = inMatchList
+    ? 'background-color: #1f2937; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #fbbf24; margin-bottom: 0.75rem; cursor: pointer;'
+    : 'background-color: #111827; padding: 0.5rem; border-radius: 0.25rem; border-left: 3px solid #fbbf24; cursor: pointer;';
+  if (inMatchList) {
+    card.id = 'match-tiebreak-' + race._id;
+    // The whole card opens the race, its VOD links aside
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('a')) return;
+      window.location.href = '/race-detail.html?id=' + encodeURIComponent(race._id);
+    });
+  } else {
+    card.addEventListener('click', () => goToMatchById('tiebreak-' + race._id));
+  }
 
   const live = ['open', 'invitational', 'in_progress'].includes(race.status);
   const entrants = (race.entrants || []).slice().sort((a, b) => {
@@ -3453,16 +3483,34 @@ function createTiebreakCard(race) {
   const liveBadge = live
     ? `<span style="display: inline-flex; align-items: center; gap: 0.3rem; color: #fca5a5; font-size: 0.7rem;"><span style="width: 6px; height: 6px; background: #dc2626; border-radius: 50%; animation: pulse 2s cubic-bezier(0.4,0,0.6,1) infinite;"></span>${escHtml(i18n.t('raceDetail.inProgress') || 'In progress')}</span>`
     : (race.startedAt ? `<span style="color: #6b7280; font-size: 0.7rem;">${escHtml(formatDateTime(race.startedAt))}</span>` : '');
-  const restreams = live ? '' : mergeRestreams([], [race]).filter(s => s.vodUrl).map(restreamLinkHtml).join('');
-  const vods = live ? '' : playerVodsHtml(race);
+  const title = `<span style="color: #fbbf24; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.03em;">⚖️ ${escHtml(i18n.t('tournamentDetail.tiebreak') || 'Tie-break')}</span>`;
+  const rowsHtml = `<div style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.875rem;">${rows}</div>`;
+
+  if (inMatchList) {
+    const state = live ? 'open' : (race.status === 'finished' ? 'complete' : 'pending');
+    const stateColor = state === 'complete' ? '#10b981' : state === 'open' ? '#3b82f6' : '#6b7280';
+    const where = [race.startedAt ? formatDateTime(race.startedAt) : '', race.tournamentPool ? `${i18n.t('tournamentDetail.group') || 'Group'} ${race.tournamentPool}` : ''].filter(Boolean).join(' • ');
+    card.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: #9ca3af;">${title}<span>${escHtml(where)}</span></div>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          ${live ? '' : mergeRestreams([], [race]).filter(s => s.vodUrl).map(restreamLinkHtml).join('')}
+          ${live ? '' : playerVodsHtml(race)}
+          ${raceLinkHtml(race)}
+          <span style="background-color: ${stateColor}; color: white; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem;">${formatMatchState(state)}</span>
+        </div>
+      </div>
+      ${rowsHtml}
+    `;
+    return card;
+  }
 
   card.innerHTML = `
     <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
-      <span style="color: #fbbf24; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.03em;">⚖️ ${escHtml(i18n.t('tournamentDetail.tiebreak') || 'Tie-break')}</span>
+      ${title}
       ${liveBadge}
     </div>
-    <div style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.875rem;">${rows}</div>
-    ${restreams || vods ? `<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin-top: 0.4rem;">${restreams}${vods}</div>` : ''}
+    ${rowsHtml}
   `;
   return card;
 }

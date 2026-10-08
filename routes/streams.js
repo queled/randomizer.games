@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { Game } = require('../models');
 const { titleNamesRace } = require('../helpers/restream-titles');
+const { gameGoalFilters, isGoalAllowed } = require('../helpers/racetime-goals');
 
 // Cache for stream results (5 minutes TTL)
 const cache = {
@@ -901,10 +902,12 @@ async function fetchRacetimeLiveStreamsForGame(gameDoc, gameIdLower) {
     const slugs = getRacetimeSlugsForGame(gameDoc);
     if (!slugs.length) return [];
 
+    const goalFilters = gameGoalFilters(gameDoc.integrations.racetime);
     const candidates = [];
     const racesWithPlayers = [];
     for (const slug of slugs) {
-      const races = await fetchRacetimeInProgressRaces(slug);
+      const races = (await fetchRacetimeInProgressRaces(slug))
+        .filter(race => isGoalAllowed(goalFilters, slug, race.goal));
       const raceEntrants = await mapWithConcurrency(races, 4, race => fetchRacetimeLiveEntrants(race.data_url));
       for (const race of raceEntrants) {
         candidates.push(...race.liveEntrants);

@@ -5,18 +5,21 @@
 
 const { Game } = require('../models');
 
-// slug -> RegExp, for the categories whose game sets integrations.racetime.goalFilter
+// slug -> RegExp of a game's integrations.racetime (Mongoose Map or lean object)
+function gameGoalFilters(racetime) {
+  const raw = racetime?.goalFilters;
+  const entries = raw instanceof Map ? [...raw] : Object.entries(raw || {});
+  return new Map(entries.filter(([, pattern]) => pattern).map(([slug, pattern]) => [slug, new RegExp(pattern, 'i')]));
+}
+
+// slug -> RegExp, for every game
 async function loadGoalFilters() {
-  const games = await Game.find({ 'integrations.racetime.goalFilter': { $nin: [null, ''] } })
-    .select('integrations.racetime').lean();
+  const games = await Game.find({ 'integrations.racetime.goalFilters': { $exists: true } })
+    .select('integrations.racetime.goalFilters').lean();
 
   const filters = new Map();
   for (const game of games) {
-    const { gameSlug, gameSlugs = [], goalFilter } = game.integrations.racetime;
-    const regex = new RegExp(goalFilter, 'i');
-    for (const slug of [gameSlug, ...gameSlugs]) {
-      if (slug) filters.set(slug, regex);
-    }
+    for (const [slug, regex] of gameGoalFilters(game.integrations.racetime)) filters.set(slug, regex);
   }
   return filters;
 }
@@ -27,4 +30,4 @@ function isGoalAllowed(filters, slug, goal) {
   return regex.test(goal?.name || goal || '');
 }
 
-module.exports = { loadGoalFilters, isGoalAllowed };
+module.exports = { gameGoalFilters, loadGoalFilters, isGoalAllowed };

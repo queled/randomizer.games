@@ -24,6 +24,7 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 const connectDB = require('../config/database');
 const { Game, Race } = require('../models');
 const racetimeAPI = require('../services/racetime');
+const { loadGoalFilters, isGoalAllowed } = require('../helpers/racetime-goals');
 
 // Configuration
 const RATE_LIMIT_MS = parseInt(process.env.RACETIME_RATE_LIMIT_MS) || 1500;
@@ -60,6 +61,7 @@ async function syncActiveRaces() {
   console.log('\n📡 Récupération des races actives...');
   
   const activeSlugs = await getActiveSlugs();
+  const goalFilters = await loadGoalFilters();
   console.log(`  ${activeSlugs.size} catégories actives`);
   
   const stats = { newRaces: 0, updatedRaces: 0, errors: 0, activeUrls: new Set() };
@@ -74,7 +76,9 @@ async function syncActiveRaces() {
     console.log(`  ${allRaces.length} races actives sur racetime.gg`);
     
     // Filtrer par nos catégories
-    const ourRaces = allRaces.filter(r => activeSlugs.has(r.category?.slug));
+    const ourRaces = allRaces.filter(r =>
+      activeSlugs.has(r.category?.slug) && isGoalAllowed(goalFilters, r.category?.slug, r.goal)
+    );
     console.log(`  ${ourRaces.length} races dans nos catégories`);
     
     for (const raceData of ourRaces) {
@@ -249,8 +253,9 @@ async function finalizeCompletedRaces(activeUrls) {
 /**
  * Insère ou met à jour une race terminée renvoyée par /<categorie>/races/data
  */
-async function upsertPastRace(raceData, gameSlug, stats) {
+async function upsertPastRace(raceData, gameSlug, stats, goalFilters) {
   const raceUrl = raceData.url;
+  if (!isGoalAllowed(goalFilters, gameSlug, raceData.goal)) return;
   
   try {
     const existingRace = await Race.findOne({ url: raceUrl });
@@ -317,6 +322,7 @@ async function catchUpFinishedRaces(options = {}) {
   console.log('\n🧹 Rattrapage des races terminées...');
   
   const slugs = (categories || [...await getActiveSlugs()]).sort();
+  const goalFilters = await loadGoalFilters();
   let slice = slugs;
   if (since) {
     console.log(`  ${slugs.length} catégories, depuis ${since.toISOString().slice(0, 10)}`);
@@ -347,7 +353,7 @@ async function catchUpFinishedRaces(options = {}) {
         }).select('url').lean()).map(r => r.url));
         
         for (const raceData of result.races) {
-          if (!known.has(raceData.url)) await upsertPastRace(raceData, slug, stats);
+          if (!known.has(raceData.url)) await upsertPastRace(raceData, slug, stats, goalFilters);
         }
         
         if (since) {
@@ -393,6 +399,7 @@ async function syncGameComplete(gameSlug, options = {}) {
   console.log(`\n📡 Sync complète: ${gameSlug} (max ${maxPages === Infinity ? '∞' : maxPages} pages)`);
   
   const stats = { newRaces: 0, updatedRaces: 0, errors: 0, pages: 0 };
+  const goalFilters = await loadGoalFilters();
   let page = 1;
   
   while (page <= maxPages) {
@@ -407,7 +414,7 @@ async function syncGameComplete(gameSlug, options = {}) {
       console.log(`  Page ${page}: ${result.races.length} races`);
       
       for (const raceData of result.races) {
-        await upsertPastRace(raceData, gameSlug, stats);
+        await upsertPastRace(raceData, gameSlug, stats, goalFilters);
       }
       
       if (!result.hasNext) break;

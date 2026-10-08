@@ -17,6 +17,7 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 const connectDB = require('../config/database');
 const { Game, Race } = require('../models');
 const racetimeAPI = require('../services/racetime');
+const { loadGoalFilters, isGoalAllowed } = require('../helpers/racetime-goals');
 
 const RATE_LIMIT_MS = parseInt(process.env.RACETIME_RATE_LIMIT_MS) || 2000;
 
@@ -77,6 +78,7 @@ async function syncGameRaces(gameId, maxPages = 100) {
   console.log(`🎮 Synchronisation: ${game.name} (${slug})`);
   
   const stats = { newRaces: 0, updatedRaces: 0, errors: 0 };
+  const goalFilters = await loadGoalFilters();
   let page = 1;
   
   while (page <= maxPages) {
@@ -91,7 +93,7 @@ async function syncGameRaces(gameId, maxPages = 100) {
       
       for (const raceData of result.races) {
         const raceUrl = buildRaceUrl(slug, raceData.url);
-        if (!raceUrl) continue;
+        if (!raceUrl || !isGoalAllowed(goalFilters, slug, raceData.goal)) continue;
         
         try {
           const updateResult = await Race.updateOne(
@@ -188,6 +190,7 @@ async function syncDirectFromRacetime(slug, maxPages) {
   }
   
   const stats = { newRaces: 0, updatedRaces: 0, errors: 0 };
+  const goalFilters = await loadGoalFilters();
   let page = 1;
   
   while (page <= maxPages) {
@@ -202,7 +205,7 @@ async function syncDirectFromRacetime(slug, maxPages) {
       
       for (const raceData of result.races) {
         const raceUrl = buildRaceUrl(slug, raceData.url);
-        if (!raceUrl) continue;
+        if (!raceUrl || !isGoalAllowed(goalFilters, slug, raceData.goal)) continue;
         
         try {
           const updateResult = await Race.updateOne(

@@ -100,6 +100,7 @@ const gameSchema = new mongoose.Schema({
       gameSlug: String,             // e.g. "ootr", "alttpr" (slug principal)
       gameSlugs: [String],          // e.g. ["alttpr", "alttpr-ladder"] (slugs additionnels à scanner)
       gameName: String,             // display name on racetime
+      goalFilter: String,           // regex (case-insensitive) of the goals to import, e.g. "randomizer" for "ffmq"
       confidence: { type: String, enum: ['manual', 'auto'], default: 'manual' },
       lastSync: Date
     },

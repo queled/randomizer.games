@@ -41,7 +41,8 @@ function parseQualifierLabel(race) {
   if (!match) return null;
 
   const before = label.slice(0, match.index);
-  const after = label.slice(match.index + match[0].length).split(/[-|(:,\n]/)[0];
+  // A seed link right after the number ends the label too ("Qualifier #4   https://...")
+  const after = label.slice(match.index + match[0].length).split(/[-|(:,\n]|https?:\/\//)[0];
   return {
     label,
     index: match[1].toUpperCase(),

@@ -782,8 +782,8 @@ function displayParticipants(participants, matches = [], options = {}) {
     const participantMatches = matches.filter(m => {
       const matchByIdP1 = m.player1Id === participant.challongeId;
       const matchByIdP2 = m.player2Id === participant.challongeId;
-      const matchByNameP1 = m.player1Name && (m.player1Name === participant.name || m.player1Name === participant.displayName);
-      const matchByNameP2 = m.player2Name && (m.player2Name === participant.name || m.player2Name === participant.displayName);
+      const matchByNameP1 = isParticipantName(m.player1Name, participant);
+      const matchByNameP2 = isParticipantName(m.player2Name, participant);
       return matchByIdP1 || matchByIdP2 || matchByNameP1 || matchByNameP2;
     }).sort((a, b) => {
       // Sort by date (oldest first)
@@ -810,9 +810,9 @@ function displayParticipants(participants, matches = [], options = {}) {
       
       if (participantIdStr && winnerIdStr === participantIdStr) {
         isWinner = true;
-      } else if (player1IdStr && winnerIdStr === player1IdStr && (match.player1Name === participant.name || match.player1Name === participant.displayName)) {
+      } else if (player1IdStr && winnerIdStr === player1IdStr && isParticipantName(match.player1Name, participant)) {
         isWinner = true;
-      } else if (player2IdStr && winnerIdStr === player2IdStr && (match.player2Name === participant.name || match.player2Name === participant.displayName)) {
+      } else if (player2IdStr && winnerIdStr === player2IdStr && isParticipantName(match.player2Name, participant)) {
         isWinner = true;
       }
       
@@ -930,6 +930,12 @@ function enrichMatchesWithParticipantNames(matches, participants) {
       match.player2Name = participantMap.get(match.player2Id) || null;
     }
   });
+}
+
+// start.gg sets show a player as "Prefix | GamerTag", the participant is its gamer tag
+function isParticipantName(name, participant) {
+  if (!name) return false;
+  return [name, name.split(' | ').pop()].some(n => n === participant.name || n === participant.displayName);
 }
 
 // Co-op tournaments list each player with the team they raced in: show one row per team

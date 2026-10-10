@@ -34,6 +34,7 @@ Chaque étape a besoin de ce que les précédentes ont écrit en base :
 | 3 | Tournois actifs | `node scripts/sync-tournaments.js --update-only` | les tournois en base (2) |
 | 4 | Auto-link | `node scripts/auto-link-tournaments.js` | les courses (1) et les matchs à jour (3) |
 | 5 | Mido's House | `node scripts/sync-midos-house.js` | les tournois start.gg (3) et les courses liées (4), pour l'heure de départ réelle et les événements sans sets start.gg |
+| 5b | VOD Speedrace | `node scripts/sync-speedrace.js` | les restreams Mido's House (5) |
 | 6 | VOD des joueurs | `node scripts/sync-race-vods.js` | les courses terminées (1) |
 | 7 | Restreams Twitch | `node scripts/sync-race-restreams.js` | les courses rattachées à un tournoi (4) et les chaînes de restream connues de Mido's House (5) |
 
@@ -53,7 +54,7 @@ La crontab lance ces étapes via [`scripts/cron/run-job.sh`](../scripts/cron/run
 | `racetime` | 1 | toutes les 5 min |
 | `tournaments-discover` | 2 (2 derniers jours) | tous les jours à 7h |
 | `tournaments-update` | 3 puis 4 | toutes les 15 min (minute 2) |
-| `midos-house` | 5 | toutes les 15 min (minute 7) |
+| `midos-house` | 5 puis 5b | toutes les 15 min (minute 7) |
 | `race-vods` | 6 puis 7 | toutes les 30 min (minute 12) |
 
 Si une tâche tombe avant que la précédente ait écrit ce qu'il lui faut, le passage suivant le rattrape : les étapes 6 et 7 cherchent une course jusqu'à 12 h après sa fin.
@@ -77,8 +78,9 @@ node scripts/discover-tournaments.js --since $SINCE --max-pages 3
 node scripts/sync-tournaments.js --update-only
 node scripts/auto-link-tournaments.js
 
-# 5. Mido's House
+# 5. Mido's House, puis les VOD Speedrace
 node scripts/sync-midos-house.js
+node scripts/sync-speedrace.js
 
 # 6. et 7. Twitch
 node scripts/sync-race-vods.js --days $DAYS

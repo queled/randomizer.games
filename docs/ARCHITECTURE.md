@@ -27,6 +27,7 @@ Comment les données arrivent dans le site, où elles sont stockées, et quels s
 | SpeedRunsLive | Historique des courses d'avant racetime.gg (import ponctuel) |
 | start.gg / Challonge | Tournois, participants, matchs |
 | [Mido's House](https://midos.house) | Horaires et restreams des races des tournois OoTR |
+| [Speedrace](https://speedrace.deeplydevs.com) | VOD saisies par les restreamers de quelques tournois OoTR |
 | speedrun.com | Plateformes, date de sortie, images des jeux |
 | Twitch | Streams en direct, identifiants des jeux, VOD des restreams |
 
@@ -39,7 +40,7 @@ En production, la base MongoDB tourne sur le même serveur que le site et n'éco
 | `racetime` | toutes les 5 min | `sync-racetime-global.js` : nouvelles courses, finalisation des courses bloquées « en cours » depuis plus de 24 h, rattrapage des courses terminées entre deux exécutions |
 | `tournaments-update` | toutes les 15 min | `sync-tournaments.js --update-only` met à jour les tournois actifs, puis `auto-link-tournaments.js` rattache les courses aux matchs, et les tie-breaks de poule (room « tie-break » entre joueurs d'une même poule) à leur poule |
 | `race-vods` | toutes les 30 min | `sync-race-vods.js` : VOD Twitch des joueurs de chaque race, puis `sync-race-restreams.js` : restreams absents de Mido's House, trouvés par le titre Twitch (voir plus bas) |
-| `midos-house` | toutes les 15 min | `sync-midos-house.js` : horaires et restreams des races des tournois OoTR, VOD Twitch des restreams (voir plus bas) |
+| `midos-house` | toutes les 15 min | `sync-midos-house.js` : horaires et restreams des races des tournois OoTR, VOD Twitch des restreams, puis `sync-speedrace.js` : VOD saisies sur Speedrace (voir plus bas) |
 | `rando-list` | tous les jours à 6h | met à jour la copie locale de rando-list ; si `check-rando-list-changes.js` signale un nouveau commit, `sync-rando-list.js --detect-new` met à jour le cache et les ressources, puis signale les nouveaux jeux, à créer depuis le panneau admin |
 | `tournaments-discover` | tous les jours à 7h | `discover-tournaments.js --since <il y a 2 jours> --max-pages 3` : nouveaux tournois sur start.gg et Challonge |
 | `players` | tous les jours à 7h30 | `sync-players-from-races.js` : un joueur par compte racetime.gg (source de vérité), au nom de sa dernière course ; `sync-racetime-profiles.js --stale-days 7 --limit 1200` relit le profil racetime des joueurs (chacun une fois par semaine) : nom actuel, compte supprimé ; puis `link-participant-accounts.js --all --apply` relie chaque participant de tournoi au compte racetime qui a couru ses matchs (voir plus bas) |
@@ -89,6 +90,12 @@ Twitch efface les rediffusions au bout de 7 à 60 jours selon la chaîne (ou plu
 Pour reprendre les événements terminés (une seule fois) : `node scripts/sync-midos-house.js --archive`.
 
 Un événement sans sets start.gg (Challonge, bracket géré sur Mido's House) est rattaché au tournoi auquel sont liées ses races racetime.gg, si au moins 5 d'entre elles (et un tiers de ses rooms) y mènent : c'est le cas des Standard S6 et S7 et des RSL S2 et S3. Les restreams y sont reliés aux matchs par leur room racetime.gg. Les autres événements (Tournoi Francophone, Scrubs, SpeedGaming, league…) n'ont pas de tournoi en base et sont ignorés.
+
+### VOD Speedrace
+
+[Speedrace](https://speedrace.deeplydevs.com) gère les restreams de quelques tournois OoTR, surtout francophones (Tournoi Francophone, Rupees of Time, Mixed Pools) : les organisateurs y créent les matchs, les restreamers s'y voient attribuer un match et y saisissent le lien de leur VOD. Les races restent planifiées sur Mido's House, où Speedrace renvoie le restreamer. Son API publique (`https://speedrace-api.deeplydevs.com/api/Planning/<jeu>/<tournoi>/<saison>?scope=All`, lue par `services/speedrace.js`) donne les matchs de chaque saison avec leurs restreams.
+
+`sync-speedrace.js` lit la saison active de chaque tournoi (toutes avec `--all-seasons`) et retrouve chaque restream dans `midosHouse.pastRestreams` : la race restreamée sur la même chaîne Twitch à la même heure (à 1 h près), quel que soit le tournoi qui la porte. C'est ce qui rattache une saison Speedrace à son tournoi, sans table de correspondance. La VOD Speedrace est ajoutée au restream qui n'en a pas encore, si Twitch l'a toujours ; une VOD déjà trouvée par `sync-midos-house.js` est gardée (elle pointe sur le départ de la race). Un restream dont la race n'est pas en base (Tournoi Francophone, phases hors start.gg) est ignoré.
 
 ### VOD des joueurs
 
@@ -172,6 +179,7 @@ Les scripts qui écrivent en base proposent un mode `--dry-run` (ou n'écrivent 
 | `sync-racetime-profiles.js` | | Nom racetime actuel et comptes supprimés, depuis le profil de chaque joueur (`--dry-run`, `--limit N`, `--stale-days N`) |
 | `sync-race-vods.js` | `sync:race-vods` (+ `:dry`) | VOD Twitch des joueurs de chaque race (tâche `race-vods`) |
 | `sync-midos-house.js` | `sync:midos-house` (+ `:dry`) | Horaires, restreams et VOD Mido's House (tâche `midos-house`) |
+| `sync-speedrace.js` | `sync:speedrace` (+ `:dry`) | VOD Speedrace des restreams Mido's House (tâche `midos-house`) |
 
 `npm run sync` enchaîne racetime, joueurs et rando-list.
 

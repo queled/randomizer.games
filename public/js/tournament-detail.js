@@ -2771,12 +2771,10 @@ function formatTournamentTypeForDisplay(tournament) {
 }
 
 function formatMatchState(state) {
-  const states = {
-    'complete': 'Finished',
-    'open': 'Ongoing',
-    'pending': 'Pending'
-  };
-  return states[state] || state || 'Unknown';
+  const keys = { 'complete': 'finished', 'open': 'ongoing', 'pending': 'pending' };
+  const fallbacks = { 'complete': 'Finished', 'open': 'Ongoing', 'pending': 'Pending' };
+  if (!keys[state]) return state || 'Unknown';
+  return typeof i18n !== 'undefined' ? i18n.t('status.' + keys[state]) : fallbacks[state];
 }
 
 function sanitizeDisplayName(s) {
@@ -4390,8 +4388,8 @@ function createBracketMatchCard(match, isFinal = false) {
     card.appendChild(scheduleIndicator);
   }
 
-  // Add match state indicator only for 'open' matches (ongoing)
-  if (match.state === 'open') {
+  // Add match state indicator only for 'open' matches (ongoing), unless the schedule is already shown
+  if (match.state === 'open' && !match.scheduledAt) {
     const stateIndicator = document.createElement('div');
     stateIndicator.style.cssText = 'padding: 0.25rem; text-align: center; background-color: #374151; font-size: 0.75rem; color: #9ca3af;';
     stateIndicator.textContent = formatMatchState(match.state);

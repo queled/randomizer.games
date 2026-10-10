@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     gamesData = gamesJson.games || [];
     
     // Render games immediately without waiting for streams
-    renderGames(sortGames(gamesData, 'name-asc'));
+    renderGames(sortGames(gamesData, sortSelect.value));
     
     // Handle sort change
     sortSelect.addEventListener('change', () => {
@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
 
       // Re-render with current sort to update stream counts
-      const currentSort = sortSelect.value || 'name-asc';
+      const currentSort = sortSelect.value || 'streamers-desc';
       renderGames(sortGames(gamesData, currentSort));
     })();
     

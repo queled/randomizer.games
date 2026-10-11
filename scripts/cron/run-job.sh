@@ -6,7 +6,7 @@
 # Usage : scripts/cron/run-job.sh <tâche>
 #   racetime              nouvelles courses racetime.gg            (toutes les 5 min)
 #   tournaments-update    tournois actifs + rattachement des courses (toutes les 15 min)
-#   midos-house           horaires, restreams et VOD des races OoTR, VOD Speedrace (toutes les 15 min)
+#   midos-house           horaires, restreams et VOD des races OoTR, saison de League, VOD Speedrace (toutes les 15 min)
 #   race-vods             VOD Twitch des joueurs, restreams trouvés sur Twitch (toutes les 30 min)
 #   tournaments-discover  nouveaux tournois des 2 derniers jours    (tous les jours)
 #   rando-list            cache rando-list, si le dépôt a changé    (tous les jours)
@@ -39,6 +39,7 @@ run_tournaments_update() {
 run_midos_house() {
   local status=0
   timeout 5m node scripts/sync-midos-house.js || status=$?
+  timeout 5m node scripts/sync-midos-league.js --current || status=$?
   timeout 2m node scripts/sync-speedrace.js || status=$?
   return "$status"
 }

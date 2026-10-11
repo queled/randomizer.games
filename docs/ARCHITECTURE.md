@@ -40,7 +40,7 @@ En production, la base MongoDB tourne sur le même serveur que le site et n'éco
 | `racetime` | toutes les 5 min | `sync-racetime-global.js` : nouvelles courses, finalisation des courses bloquées « en cours » depuis plus de 24 h, rattrapage des courses terminées entre deux exécutions |
 | `tournaments-update` | toutes les 15 min | `sync-tournaments.js --update-only` met à jour les tournois actifs, puis `auto-link-tournaments.js` rattache les courses aux matchs, et les tie-breaks de poule (room « tie-break » entre joueurs d'une même poule) à leur poule |
 | `race-vods` | toutes les 30 min | `sync-race-vods.js` : VOD Twitch des joueurs de chaque race, puis `sync-race-restreams.js` : restreams absents de Mido's House, trouvés par le titre Twitch (voir plus bas) |
-| `midos-house` | toutes les 15 min | `sync-midos-house.js` : horaires et restreams des races des tournois OoTR, VOD Twitch des restreams, puis `sync-speedrace.js` : VOD saisies sur Speedrace (voir plus bas) |
+| `midos-house` | toutes les 15 min | `sync-midos-house.js` : horaires et restreams des races des tournois OoTR, VOD Twitch des restreams, puis `sync-midos-league.js --current` : saison en cours de l'OoTR League, puis `sync-speedrace.js` : VOD saisies sur Speedrace (voir plus bas) |
 | `rando-list` | tous les jours à 6h | met à jour la copie locale de rando-list ; si `check-rando-list-changes.js` signale un nouveau commit, `sync-rando-list.js --detect-new` met à jour le cache et les ressources, puis signale les nouveaux jeux, à créer depuis le panneau admin |
 | `tournaments-discover` | tous les jours à 7h | `discover-tournaments.js --since <il y a 2 jours> --max-pages 3` : nouveaux tournois sur start.gg et Challonge |
 | `players` | tous les jours à 7h30 | `sync-players-from-races.js` : un joueur par compte racetime.gg (source de vérité), au nom de sa dernière course ; `sync-racetime-profiles.js --stale-days 7 --limit 1200` relit le profil racetime des joueurs (chacun une fois par semaine) : nom actuel, compte supprimé ; puis `link-participant-accounts.js --all --apply` relie chaque participant de tournoi au compte racetime qui a couru ses matchs (voir plus bas) |
@@ -89,7 +89,18 @@ Twitch efface les rediffusions au bout de 7 à 60 jours selon la chaîne (ou plu
 
 Pour reprendre les événements terminés (une seule fois) : `node scripts/sync-midos-house.js --archive`.
 
-Un événement sans sets start.gg (Challonge, bracket géré sur Mido's House) est rattaché au tournoi auquel sont liées ses races racetime.gg, si au moins 5 d'entre elles (et un tiers de ses rooms) y mènent : c'est le cas des Standard S6 et S7 et des RSL S2 et S3. Les restreams y sont reliés aux matchs par leur room racetime.gg. Les autres événements (Tournoi Francophone, Scrubs, SpeedGaming, league…) n'ont pas de tournoi en base et sont ignorés.
+Un événement sans sets start.gg (Challonge, bracket géré sur Mido's House) est rattaché au tournoi auquel sont liées ses races racetime.gg, si au moins 5 d'entre elles (et un tiers de ses rooms) y mènent : c'est le cas des Standard S6 et S7 et des RSL S2 et S3. Les restreams y sont reliés aux matchs par leur room racetime.gg. Les autres événements (Tournoi Francophone, Scrubs, SpeedGaming…) n'ont pas de tournoi en base et sont ignorés. La league a son propre script (ci-dessous).
+
+### OoTR League
+
+L'[OoTR League](https://league.ootrandomizer.com) fait s'affronter en 1 contre 1 les joueurs d'une même division ; son site, derrière une connexion Discord, n'est pas lisible. `sync-midos-league.js` crée donc un tournoi par saison (`source.type: 'midos-house'`, `source.externalId: 'league/<saison>'`), avec une phase round robin et un groupe par division, à partir des races racetime.gg :
+
+- les rooms que l'API GraphQL de Mido's House donne pour la saison (série `league`), avec leur division (`round: "Div 7B"`) ;
+- les races de l'objectif de la saison (« League Season 10 ») dont l'info commence par « Div 7D: A vs B » : la League ouvre aussi des rooms que Mido's House ne liste pas. Les races d'entraînement du même objectif (plusieurs joueurs, sans division) sont écartées.
+
+Seules les races à deux joueurs, non annulées, comptent ; le vainqueur est celui qui finit premier. Une race déjà rattachée à un autre tournoi y reste. Les races retenues reçoivent le `tournamentId` de la saison. La page du tournoi montre victoires et défaites par division, pas les points officiels de la League. Mido's House ne connaît la League qu'à partir de la saison 4.
+
+En routine, `--current` reprend la dernière saison en base et la suivante, dès que Mido's House la connaît. Sans option, le script reprend toutes les saisons.
 
 ### VOD Speedrace
 
@@ -179,6 +190,7 @@ Les scripts qui écrivent en base proposent un mode `--dry-run` (ou n'écrivent 
 | `sync-racetime-profiles.js` | | Nom racetime actuel et comptes supprimés, depuis le profil de chaque joueur (`--dry-run`, `--limit N`, `--stale-days N`) |
 | `sync-race-vods.js` | `sync:race-vods` (+ `:dry`) | VOD Twitch des joueurs de chaque race (tâche `race-vods`) |
 | `sync-midos-house.js` | `sync:midos-house` (+ `:dry`) | Horaires, restreams et VOD Mido's House (tâche `midos-house`) |
+| `sync-midos-league.js` | `sync:midos-league` (+ `:dry`) | Saisons de l'OoTR League en tournois (tâche `midos-house`, avec `--current`) |
 | `sync-speedrace.js` | `sync:speedrace` (+ `:dry`) | VOD Speedrace des restreams Mido's House (tâche `midos-house`) |
 
 `npm run sync` enchaîne racetime, joueurs et rando-list.

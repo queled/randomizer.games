@@ -3,7 +3,8 @@
  *
  * Players schedule their races there (Discord bot in the tournament's server)
  * and restreamers add their channel per language. Its GraphQL API has no
- * restream links nor start.gg set IDs, so the races page is read as HTML:
+ * restream links nor start.gg set IDs (it serves the rooms and rounds of an
+ * event's races), so the races page is read as HTML:
  * each row carries the start time (data-timestamp), the start.gg set link
  * and one link per restream, titled "<Language> restream".
  */
@@ -141,4 +142,14 @@ async function getEventRaces(series, event) {
   return { upcoming, past };
 }
 
-module.exports = { BASE_URL, listCurrentEvents, listArchivedEvents, getEventRaces, parseRaceRow };
+/**
+ * Query of the GraphQL API (races of an event with their rooms and rounds).
+ * Returns `data`; throws on GraphQL errors.
+ */
+async function graphql(query, variables = {}) {
+  const { data } = await http.post('/api/v1/graphql', { query, variables });
+  if (data?.errors?.length) throw new Error(data.errors.map(e => e.message).join('; '));
+  return data?.data;
+}
+
+module.exports = { BASE_URL, listCurrentEvents, listArchivedEvents, getEventRaces, parseRaceRow, graphql };

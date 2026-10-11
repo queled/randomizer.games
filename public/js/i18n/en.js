@@ -217,6 +217,7 @@ const en = {
         description: "Description",
         viewOnChallonge: "View on Challonge",
         viewOnStartgg: "View on Start.gg",
+        viewOnMidosHouse: "View on Mido's House",
         matchesHiddenSpoiler: "Matches hidden in anti-spoiler mode",
         bracketHiddenSpoiler: "Bracket hidden in spoiler-free mode",
         winner: "Winner",

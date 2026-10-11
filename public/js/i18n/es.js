@@ -197,6 +197,7 @@ const es = {
         description: "Descripción",
         viewOnChallonge: "Ver en Challonge",
         viewOnStartgg: "Ver en Start.gg",
+        viewOnMidosHouse: "Ver en Mido's House",
         matchesHiddenSpoiler: "Partidas ocultas en modo anti-spoiler",
         bracketHiddenSpoiler: "Bracket oculto en modo anti-spoiler",
         winner: "Ganador",

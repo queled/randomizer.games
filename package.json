@@ -17,6 +17,8 @@
     "link:tournaments:active": "node scripts/auto-link-tournaments.js",
     "sync:midos-house": "node scripts/sync-midos-house.js",
     "sync:midos-house:dry": "node scripts/sync-midos-house.js --dry-run",
+    "sync:midos-league": "node scripts/sync-midos-league.js",
+    "sync:midos-league:dry": "node scripts/sync-midos-league.js --dry-run",
     "sync:speedrace": "node scripts/sync-speedrace.js",
     "sync:speedrace:dry": "node scripts/sync-speedrace.js --dry-run",
     "sync:race-vods": "node scripts/sync-race-vods.js",

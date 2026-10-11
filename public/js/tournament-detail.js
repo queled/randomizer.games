@@ -507,6 +507,9 @@ function displayTournamentInfo(tournament) {
     if (sourceType === 'startgg') {
       document.getElementById('startgg-link-container').style.display = 'block';
       document.getElementById('startgg-link').href = tournament.fullUrl;
+    } else if (sourceType === 'midos-house') {
+      document.getElementById('midoshouse-link-container').style.display = 'block';
+      document.getElementById('midoshouse-link').href = tournament.fullUrl;
     } else {
       const container = document.getElementById('challonge-link-container');
       const link = document.getElementById('challonge-link');
@@ -3388,7 +3391,10 @@ function displayStandingsPhase(phaseMatches, container, isSwiss, phaseName = nul
     if (!isSwiss) {
       const title = document.createElement('h4');
       title.style.cssText = 'font-size: 1.1rem; font-weight: bold; margin-bottom: 0.75rem; color: #fbbf24; text-align: center;';
-      title.textContent = `${i18n.t('tournamentDetail.group') || 'Group'} ${key || String.fromCharCode(65 + (idx % 26))}`;
+      // League divisions are named already ("Division 7B")
+      title.textContent = /^division\s/i.test(key)
+        ? key
+        : `${i18n.t('tournamentDetail.group') || 'Group'} ${key || String.fromCharCode(65 + (idx % 26))}`;
       box.appendChild(title);
     }
 

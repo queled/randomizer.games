@@ -104,6 +104,7 @@ const gameSchema = new mongoose.Schema({
       enabled: { type: Boolean, default: false },
       seriesFile: String,           // e.g. "The_Legend_of_Zelda.yml"
       gameName: String,             // exact name in rando-list
+      gameNames: [String],          // other rando-list names of the same game (merged games)
       randomizerIdentifier: String, // identifier in rando-list
       confidence: { type: String, enum: ['manual', 'auto'], default: 'manual' },
       lastSync: Date

@@ -256,7 +256,9 @@ async function updateGameResources(seriesData, dryRun = false) {
       game.name,
       game.official?.name,
       game.randomizer?.name,
-      game.randomizer?.shortName
+      game.randomizer?.shortName,
+      game.integrations?.randoList?.gameName,
+      ...(game.integrations?.randoList?.gameNames || [])
     ].filter(Boolean);
     
     for (const name of namesToTry) {
@@ -388,6 +390,9 @@ async function detectNewGames(seriesData) {
     if (game.officialName) existingNames.add(normalizeGameName(game.officialName));
     if (game.integrations?.randoList?.gameName) {
       existingNames.add(normalizeGameName(game.integrations.randoList.gameName));
+    }
+    for (const name of game.integrations?.randoList?.gameNames || []) {
+      existingNames.add(normalizeGameName(name));
     }
   }
   

@@ -195,7 +195,7 @@ const TWITCH_GAME_NAMES = {
   'mm2': 'Mega Man 2',
   
   // === POKÉMON SERIES ===
-  'pe': 'Pokémon Emerald',
+  'pkmne': 'Pokémon Emerald',
   'prb': 'Pokémon Red and Blue',
   'up': 'Pokémon Crystal', // Universal Pokemon Randomizer works on various
   

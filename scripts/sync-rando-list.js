@@ -210,6 +210,7 @@ function buildRandomizerIndex(seriesData) {
 
 function normalizeGameName(name) {
   return name.toLowerCase()
+    .replace(/^\([ivx]+(-[ivx]+)?\)\s*/, '') // generation prefix of Pokémon.yml, e.g. "(III) Pokémon Emerald"
     .replace(/[^a-z0-9]/g, '')
     .replace(/thelegendofzelda/g, 'zelda')
     .replace(/supermetroid/g, 'sm')
@@ -261,19 +262,23 @@ async function updateGameResources(seriesData, dryRun = false) {
       ...(game.integrations?.randoList?.gameNames || [])
     ].filter(Boolean);
     
+    // Exact rando-list names found, kept on the game so that the link survives a rename
+    const matchedNames = new Set();
     for (const name of namesToTry) {
       const normalized = normalizeGameName(name);
       if (byGameName.has(normalized)) {
         matchedRandomizers.push(...byGameName.get(normalized));
+        byGameName.get(normalized).forEach(r => matchedNames.add(r.gameName));
       }
     }
     
-    // Dédupliquer
+    // Dédupliquer par URL : un même randomizer peut avoir un lien par version du jeu (jeux fusionnés)
     const uniqueRandomizers = [];
-    const seenIds = new Set();
+    const seenKeys = new Set();
     for (const r of matchedRandomizers) {
-      if (!seenIds.has(r.identifier)) {
-        seenIds.add(r.identifier);
+      const key = r.url || r.identifier;
+      if (!seenKeys.has(key)) {
+        seenKeys.add(key);
         uniqueRandomizers.push(r);
       }
     }
@@ -353,13 +358,35 @@ async function updateGameResources(seriesData, dryRun = false) {
     if (dryRun) {
       console.log(`  📋 [DRY-RUN] ${game.id}: ${allSites.length} site(s)${isManuallyLinked ? ' (liaison manuelle)' : ''}`);
     } else {
-      await Game.updateOne({ id: game.id }, { $set: updates });
+      const randoListNames = randoListNamesUpdate(game, matchedNames);
+      Object.assign(updates, randoListNames.$set);
+      await Game.updateOne({ id: game.id }, { $set: updates, ...(randoListNames.$addToSet && { $addToSet: randoListNames.$addToSet }) });
       stats.updated++;
     }
   }
   
   console.log(`\n  ✓ ${stats.updated} mis à jour, ${stats.skippedManual} jeux manuels ignorés, ${stats.notFound} non trouvés, ${stats.multipleUrls} avec plusieurs URLs`);
   return stats;
+}
+
+/**
+ * Update that records the rando-list names matched for a game: the first one becomes
+ * integrations.randoList.gameName if the game has none, the others go to gameNames.
+ */
+function randoListNamesUpdate(game, matchedNames) {
+  const current = game.integrations?.randoList || {};
+  const known = new Set([current.gameName, ...(current.gameNames || [])].filter(Boolean));
+  const missing = [...matchedNames].filter(name => !known.has(name));
+  if (missing.length === 0) return {};
+
+  const update = {};
+  if (!current.gameName) {
+    update.$set = { 'integrations.randoList.gameName': missing.shift() };
+  }
+  if (missing.length > 0) {
+    update.$addToSet = { 'integrations.randoList.gameNames': { $each: missing } };
+  }
+  return update;
 }
 
 function extractDomainName(url) {
@@ -714,4 +741,8 @@ Workflow recommandé:
   }
 }
 
-main();
+if (require.main === module) {
+  main();
+}
+
+module.exports = { syncRepo, parseSeriesFiles, buildRandomizerIndex, normalizeGameName, randoListNamesUpdate };

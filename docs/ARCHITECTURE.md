@@ -169,6 +169,10 @@ Deux règles protègent les données saisies à la main :
 - **L'`id` interne fait foi.** Les identifiants externes (slug racetime, id speedrun.com…) sont rangés dans `integrations.*` et ne le remplacent jamais.
 - **`confidence: 'manual'` n'est jamais écrasé.** Chaque intégration porte un champ `confidence` : `auto` (trouvé par un script, peut être mis à jour) ou `manual` (fixé par un admin, laissé tel quel par les scripts).
 
+**Lien avec rando-list.** `sync-rando-list.js` retrouve les randomizers d'un jeu par ses noms : `name`, `official.name`, `randomizer.name`, `randomizer.shortName` et surtout `integrations.randoList.gameName` et `gameNames`, les noms exacts de rando-list. Chaque nom de rando-list trouvé y est enregistré, pour que le lien survive à un changement de nom ou d'id. Le préfixe de génération de `Pokémon.yml` (« (III) Pokémon Emerald ») est ignoré.
+
+**Fusion de jeux.** Un même jeu peut figurer plusieurs fois dans rando-list (une entrée par plateforme ou par édition) ; sur le site, il n'en fait qu'un. La fusion (panneau admin, ou `node scripts/merge-games.js <cible> <source>... [--rename <id>] [--short-name "<libellé>"]`, code dans `services/game-merge.js`) garde le jeu cible et supprime les sources : leurs ressources s'ajoutent sans doublon d'URL, ce qui manque à la cible (logo, plateformes, intégrations, catégories) est repris, leurs catégories racetime.gg deviennent des catégories supplémentaires de la cible (les courses ne sont pas modifiées) et leurs noms rando-list passent dans `gameNames`. La synchronisation suivante retrouve donc les sites de toutes les versions et ne les signale plus comme nouveaux jeux.
+
 À l'affichage, la page d'un jeu prend `randomizer.displayName` comme titre et `official.name` comme sous-titre. Le bouton « Site officiel » (ou « Archipelago ») vient de `resources.officialSite`, ou du seul site connu s'il n'y en a qu'un.
 
 ## Scripts
@@ -215,6 +219,7 @@ Les scripts qui écrivent en base proposent un mode `--dry-run` (ou n'écrivent 
 | Script | Commande npm | Rôle |
 |--------|--------------|------|
 | `unlink-race.js` | — | Détache une course de son match (aussi depuis l'admin) |
+| `merge-games.js` | — | Fusionne plusieurs jeux en un (aussi depuis l'admin), avec renommage de l'id |
 | `migrations/*.js` | — | Migrations ponctuelles, idempotentes |
 | `backup-db.js` | `db:backup` | Archive `mongodump` de la base dans `backups/` (`BACKUP_DIR`), les `BACKUP_KEEP` plus récentes gardées (7 par défaut) |
 | `check-security.js` | `check-security` | Vérifications avant déploiement (lancé par `predeploy`) |

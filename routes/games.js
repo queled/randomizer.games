@@ -11,8 +11,10 @@ let gamesWithStatsInFlight = null;
 const {
   buildCategoryResolutionContext,
   buildCategoryQuery,
-  buildTournamentQuery
+  buildTournamentQuery,
+  getExplicitRacetimeSlugs
 } = require('../helpers/game-matching');
+const racetimeLeaderboards = require('../services/racetime-leaderboards');
 
 // Max simultaneous count queries: leaves database connections free for visitors
 const STATS_QUERY_CONCURRENCY = 8;
@@ -263,6 +265,172 @@ router.get('/:id/resources', async (req, res, next) => {
       other: resources.other || [],
       hasSingleSite: activeSites.length === 1,
       hasMultipleSites: activeSites.length > 1
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Racetime leaderboards of the game: its goals with ranked players, and the
+// ranking of one (?slug=&goal=, by default the current goal with the most players)
+router.get('/:id/leaderboards', async (req, res, next) => {
+  try {
+    const { Player } = require('../models');
+    const game = await Game.findOne({ id: req.params.id }).select('id integrations.racetime').lean();
+    if (!game) {
+      return res.status(404).json({ error: 'Game not found' });
+    }
+
+    const { categories, unavailable } = await racetimeLeaderboards.getGameCategories(game);
+    const boards = categories.flatMap(category => category.leaderboards
+      .filter(board => board.numRanked > 0)
+      .map(board => ({ category, board })));
+    boards.sort((a, b) => (b.board.active - a.board.active) || (b.board.numRanked - a.board.numRanked));
+
+    const selected = boards.find(({ category, board }) => category.slug === req.query.slug && board.goal === req.query.goal)
+      || boards[0];
+    let ranking = null;
+    if (selected) {
+      const { category, board } = selected;
+      const userIds = board.rankings.map(r => r.userId).filter(Boolean);
+      const players = await Player.find({ userId: { $in: userIds } }).select('userId').lean();
+      const known = new Set(players.map(p => p.userId));
+      ranking = {
+        slug: category.slug,
+        goal: board.goal,
+        active: board.active,
+        numRanked: board.numRanked,
+        url: `https://racetime.gg/${encodeURIComponent(category.slug)}/leaderboards`,
+        rankings: board.rankings.map(r => ({ ...r, hasProfile: known.has(r.userId) }))
+      };
+    }
+
+    const fetchedAt = categories.map(c => c.fetchedAt).sort((a, b) => a - b)[0] || null;
+    res.json({
+      goals: boards.map(({ category, board }) => ({
+        slug: category.slug,
+        categoryName: category.name,
+        goal: board.goal,
+        active: board.active,
+        numRanked: board.numRanked
+      })),
+      ranking,
+      fetchedAt,
+      unavailable
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+const GOAL_STATS_CACHE_TTL = 10 * 60 * 1000;
+const RECENT_RACES_DAYS = 30;
+// Goals of a category racetime does not answer for: those with enough races to not be one-off custom goals
+const MIN_RACES_WITHOUT_RACETIME = 5;
+const goalStatsCache = new Map();
+
+// Races of a game per (racetime slug, goal): { races, recentRaces, lastRaceAt }
+async function getGoalRaceStats(gameId, slugs) {
+  const cached = goalStatsCache.get(gameId);
+  if (cached && cached.expiresAt > Date.now()) return cached.value;
+
+  const { Race } = require('../models');
+  const since = new Date(Date.now() - RECENT_RACES_DAYS * 24 * 3600 * 1000);
+  const rows = await Race.aggregate([
+    { $match: { category: { $in: slugs } } },
+    {
+      $group: {
+        _id: { slug: '$category', goal: '$goal' },
+        races: { $sum: 1 },
+        recentRaces: { $sum: { $cond: [{ $gte: ['$startedAt', since] }, 1, 0] } },
+        lastRaceAt: { $max: '$startedAt' }
+      }
+    }
+  ]);
+  const value = new Map(rows.map(row => [`${row._id.slug}\n${row._id.goal}`, {
+    races: row.races,
+    recentRaces: row.recentRaces,
+    lastRaceAt: row.lastRaceAt
+  }]));
+  goalStatsCache.set(gameId, { value, expiresAt: Date.now() + GOAL_STATS_CACHE_TTL });
+  return value;
+}
+
+// Categories of the game: the ones written for it, the main settings, and every
+// racetime goal (current and archived) with its races and ranked players
+router.get('/:id/categories', async (req, res, next) => {
+  try {
+    const game = await Game.findOne({ id: req.params.id })
+      .select('id integrations.racetime categories categorySettings').lean();
+    if (!game) {
+      return res.status(404).json({ error: 'Game not found' });
+    }
+
+    const slugs = getExplicitRacetimeSlugs(game);
+    const [{ categories: racetimeCategories, unavailable }, raceStats] = await Promise.all([
+      racetimeLeaderboards.getGameCategories(game),
+      getGoalRaceStats(game.id, slugs)
+    ]);
+
+    const noRaces = { races: 0, recentRaces: 0, lastRaceAt: null };
+    const goals = new Map();
+    for (const category of racetimeCategories) {
+      const numRanked = new Map(category.leaderboards.map(board => [board.goal, board.numRanked]));
+      const names = new Set([...category.activeGoals, ...numRanked.keys()]);
+      for (const goal of names) {
+        const key = `${category.slug}\n${goal}`;
+        goals.set(key, {
+          slug: category.slug,
+          goal,
+          active: category.activeGoals.includes(goal),
+          numRanked: numRanked.get(goal) || 0,
+          ...(raceStats.get(key) || noRaces)
+        });
+      }
+    }
+
+    // Races whose goal is not a racetime goal: custom goals typed when opening the room
+    const knownSlugs = new Set(racetimeCategories.map(c => c.slug));
+    let customGoalRaces = 0;
+    for (const [key, stats] of raceStats) {
+      if (goals.has(key)) continue;
+      const [slug, goal] = key.split('\n');
+      if (knownSlugs.has(slug) || !goal || goal === 'null' || stats.races < MIN_RACES_WITHOUT_RACETIME) {
+        customGoalRaces += stats.races;
+        continue;
+      }
+      goals.set(key, { slug, goal, active: null, numRanked: 0, ...stats });
+    }
+
+    const categories = (game.categories || []).map(category => {
+      // Racetime goals, or custom goals a category is played with (e.g. one per league season)
+      const categoryGoals = (category.racetimeGoals || [])
+        .map(({ slug, goal }) => {
+          const key = `${slug}\n${goal}`;
+          if (goals.has(key)) return goals.get(key);
+          return raceStats.has(key) ? { slug, goal, active: null, numRanked: 0, ...raceStats.get(key) } : null;
+        })
+        .filter(Boolean);
+      const lastRaceAt = categoryGoals.map(g => g.lastRaceAt).filter(Boolean).sort((a, b) => b - a)[0] || null;
+      return {
+        id: category.id,
+        name: category.name,
+        description: category.description,
+        translations: category.translations || {},
+        goals: categoryGoals,
+        races: categoryGoals.reduce((sum, g) => sum + g.races, 0),
+        recentRaces: categoryGoals.reduce((sum, g) => sum + g.recentRaces, 0),
+        lastRaceAt
+      };
+    });
+
+    res.json({
+      categories,
+      settings: game.categorySettings || [],
+      goals: [...goals.values()].sort((a, b) => (Number(b.active) - Number(a.active)) || (b.races - a.races)),
+      customGoalRaces,
+      recentRacesDays: RECENT_RACES_DAYS,
+      unavailable
     });
   } catch (error) {
     next(error);

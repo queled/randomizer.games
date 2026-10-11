@@ -338,217 +338,262 @@
     return `${n} live stream${n > 1 ? 's' : ''}`;
   }
 
-  // Category data structure for games
-  // This can be extended or moved to an API later
-  const GAME_CATEGORIES = {
-    'sm64': {
-      name: 'Super Mario 64 Randomizer',
-      description: 'Le randomizer SM64 est un système modulaire avec plusieurs axes de randomisation combinables.',
-      mainCategories: [
-        {
-          name: '70 Star',
-          description: 'Collecter 70 étoiles et battre Bowser. La catégorie standard.',
-          tags: ['Standard', 'Compétitif']
-        },
-        {
-          name: '70 Star Non Stop',
-          description: 'Collecter 70 étoiles sans quitter les niveaux (pas de reset au château).',
-          tags: ['Challenge']
-        },
-        {
-          name: '120 Star',
-          description: 'Collecter toutes les 120 étoiles du jeu.',
-          tags: ['Complet']
-        },
-        {
-          name: '120 Star Non Stop',
-          description: 'Toutes les 120 étoiles sans quitter les niveaux.',
-          tags: ['Challenge', 'Complet']
-        }
-      ],
-      randomizationAxes: [
-        {
-          name: 'Entrées de niveaux (Level Entrance)',
-          description: 'Chaque entrée du château mène à un niveau différent.',
-          options: ['Castle-only', 'Including Grounds', 'Including Bowser Stages']
-        },
-        {
-          name: 'Étoiles (Star Shuffle)',
-          description: 'Les étoiles sont redistribuées entre les niveaux.',
-          options: ['Same-level shuffle', 'Cross-level shuffle', '100 Coins included/excluded']
-        },
-        {
-          name: 'Progression (Keys/Caps)',
-          description: 'Clés et casquettes peuvent être randomisées.',
-          options: ['Keys: Fixes/Randomisées', 'Caps: Normales/Randomisées', 'MIPS: Normal/Randomisé']
-        }
-      ],
-      logicModes: [
-        { name: 'No Logic', description: 'Tout est possible, softlocks possibles' },
-        { name: 'Basic Logic', description: 'Progression minimale assurée' },
-        { name: 'Advanced Logic', description: 'Suppose des techniques avancées' },
-        { name: 'Glitch Logic', description: 'BLJ et exploits autorisés' }
-      ]
-    },
-    'alttp': {
-      name: 'A Link to the Past Randomizer',
-      description: 'ALTTPR offre une grande variété d\'options de randomisation. Consultez alttpr.com/options pour les détails complets.',
-      mainCategories: [
-        {
-          name: 'Standard',
-          description: 'Mode standard avec progression logique normale.',
-          tags: ['Standard', 'Compétitif']
-        },
-        {
-          name: 'Open',
-          description: 'Début avec équipement initial, accès immédiat à la majorité du monde.',
-          tags: ['Standard', 'Compétitif']
-        },
-        {
-          name: 'Inverted',
-          description: 'Commence dans le Dark World, logique inversée.',
-          tags: ['Challenge']
-        },
-        {
-          name: 'Keysanity',
-          description: 'Clés de donjon mélangées dans le pool global.',
-          tags: ['Challenge', 'Long']
-        },
-        {
-          name: 'Entrance Randomizer',
-          description: 'Les entrées des donjons et grottes sont mélangées.',
-          tags: ['Challenge', 'Exploration']
-        }
-      ],
-      randomizationAxes: [
-        {
-          name: 'Item Placement',
-          description: 'Comment les objets sont placés dans le monde.',
-          options: ['Standard', 'Keysanity', 'Retro', 'Full Keysanity']
-        },
-        {
-          name: 'Entrance Shuffle',
-          description: 'Mélange des entrées de donjons et grottes.',
-          options: ['None', 'Simple', 'Restricted', 'Full', 'Crossed', 'Insanity']
-        },
-        {
-          name: 'Boss Shuffle',
-          description: 'Les boss peuvent être mélangés entre donjons.',
-          options: ['None', 'Simple', 'Full', 'Random']
-        },
-        {
-          name: 'Enemy Shuffle',
-          description: 'Les ennemis sont randomisés.',
-          options: ['None', 'Shuffled', 'Random']
-        }
-      ],
-      externalLinks: [
-        { name: 'Options complètes', url: 'https://alttpr.com/en/options' },
-        { name: 'Générateur de seed', url: 'https://alttpr.com/en/randomizer' }
-      ]
-    }
-  };
+  // ==================== LEADERBOARDS SECTION ====================
+  const leaderboardsContentEl = document.getElementById('leaderboards-content');
+  const LEADERBOARD_PAGE_SIZE = 50;
+  let leaderboardData = null;
+  let leaderboardShown = LEADERBOARD_PAGE_SIZE;
+  let leaderboardRequest = 0;
 
-  function renderCategories(gameId) {
-    const data = GAME_CATEGORIES[gameId.toLowerCase()];
-    
-    if (!data) {
-      const comingSoonText = typeof i18n !== 'undefined' ? i18n.t('gameDetail.categoriesComingSoon') : 'Category documentation coming soon...';
-      categoriesContentEl.innerHTML = `<p style="color:#9ca3af;">${comingSoonText}</p>`;
+  function plural(key, count, fallback) {
+    if (typeof i18n !== 'undefined' && typeof i18n.plural === 'function') {
+      const value = i18n.plural(key, count);
+      if (value && value !== key) return value;
+    }
+    return fallback;
+  }
+
+  // Ranking of one racetime goal (the busiest current goal when none is given)
+  async function loadLeaderboard(slug, goal) {
+    const request = ++leaderboardRequest;
+    const params = slug && goal ? `?slug=${encodeURIComponent(slug)}&goal=${encodeURIComponent(goal)}` : '';
+    try {
+      const data = await fetchJson(`/api/games/${encodeURIComponent(id)}/leaderboards${params}`);
+      if (request !== leaderboardRequest) return;
+      leaderboardData = data;
+      leaderboardShown = LEADERBOARD_PAGE_SIZE;
+      renderLeaderboard();
+    } catch (e) {
+      if (request !== leaderboardRequest) return;
+      leaderboardsContentEl.innerHTML = `<p class="text-muted">${escapeHtml(t('gameDetail.leaderboardsUnavailable', 'racetime.gg is not answering right now. Try again later.'))}</p>`;
+    }
+  }
+
+  function leaderboardPlayerCell(r) {
+    const name = escapeHtml(r.name || '—');
+    if (r.hasProfile) return `<a class="player-link" href="/player-detail.html?id=${encodeURIComponent(r.userId)}">${name}</a>`;
+    if (r.userId) return `<a class="player-link" ${buildExternalLinkAttrs(`https://racetime.gg/user/${encodeURIComponent(r.userId)}`)}>${name}</a>`;
+    return name;
+  }
+
+  function renderLeaderboard() {
+    const data = leaderboardData;
+    if (!data) return;
+    if (!data.goals.length) {
+      const message = data.unavailable.length
+        ? t('gameDetail.leaderboardsUnavailable', 'racetime.gg is not answering right now. Try again later.')
+        : t('gameDetail.leaderboardsNone', 'No racetime.gg leaderboard for this game.');
+      leaderboardsContentEl.innerHTML = `<p class="text-muted">${escapeHtml(message)}</p>`;
       return;
     }
 
+    const ranking = data.ranking;
+    // Current goals grouped by racetime category when the game has several, archived ones last
+    const categoryNames = [...new Set(data.goals.map(g => g.categoryName))];
+    const groups = categoryNames.length > 1
+      ? categoryNames.map(name => [g => g.active && g.categoryName === name, name])
+      : [[g => g.active, t('gameDetail.leaderboardCurrentGoals', 'Current goals')]];
+    groups.push([g => !g.active, t('gameDetail.leaderboardArchivedGoals', 'Archived goals')]);
+    const optionGroups = groups.map(([inGroup, label]) => {
+      const options = data.goals.map((g, i) => {
+        if (!inGroup(g)) return '';
+        const selected = g.slug === ranking.slug && g.goal === ranking.goal;
+        return `<option value="${i}"${selected ? ' selected' : ''}>${escapeHtml(g.goal)} (${g.numRanked})</option>`;
+      }).join('');
+      return options ? `<optgroup label="${escapeHtml(label)}">${options}</optgroup>` : '';
+    }).join('');
+
+    const rows = ranking.rankings.slice(0, leaderboardShown).map(r => `
+      <tr${r.place <= 3 ? ' class="podium"' : ''}>
+        <td class="num">${r.place}</td>
+        <td>${leaderboardPlayerCell(r)}</td>
+        <td class="num">${r.score}</td>
+        <td class="num col-optional">${r.bestTimeMs ? formatMs(r.bestTimeMs) : '—'}</td>
+        <td class="num col-optional">${r.timesRaced}</td>
+      </tr>`).join('');
+
+    const updated = data.fetchedAt
+      ? ` · ${escapeHtml(t('gameDetail.leaderboardUpdated', 'Updated'))} ${escapeHtml(formatDateTime(data.fetchedAt))}`
+      : '';
+    const archivedNote = ranking.active
+      ? ''
+      : `<p class="text-muted leaderboard-note">${escapeHtml(t('gameDetail.leaderboardArchivedNote', 'Archived goal: this leaderboard no longer changes.'))}</p>`;
+    const showMore = ranking.rankings.length > leaderboardShown
+      ? `<button type="button" class="filter-select leaderboard-more">${escapeHtml(t('gameDetail.leaderboardShowMore', 'Show more'))}</button>`
+      : '';
+
+    leaderboardsContentEl.innerHTML = `
+      <div class="leaderboard-toolbar">
+        <label for="leaderboard-goal">${escapeHtml(t('gameDetail.leaderboardGoal', 'Goal'))}</label>
+        <select id="leaderboard-goal" class="filter-select">${optionGroups}</select>
+        <span class="text-muted">${escapeHtml(plural('gameDetail.leaderboardPlayers', ranking.numRanked, `${ranking.numRanked} ranked players`))}</span>
+      </div>
+      ${archivedNote}
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead><tr>
+            <th class="num">#</th>
+            <th>${escapeHtml(t('gameDetail.leaderboardPlayer', 'Player'))}</th>
+            <th class="num">${escapeHtml(t('gameDetail.leaderboardScore', 'Score'))}</th>
+            <th class="num col-optional">${escapeHtml(t('gameDetail.leaderboardBestTime', 'Best time'))}</th>
+            <th class="num col-optional">${escapeHtml(t('gameDetail.leaderboardRaces', 'Races'))}</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+      ${showMore}
+      <p class="text-muted leaderboard-source">
+        <a ${buildExternalLinkAttrs(ranking.url)}>${escapeHtml(t('gameDetail.leaderboardFullRanking', 'Full leaderboard on racetime.gg'))}</a>${updated}
+      </p>
+    `;
+
+    leaderboardsContentEl.querySelector('#leaderboard-goal').addEventListener('change', (event) => {
+      const goal = data.goals[Number(event.target.value)];
+      if (goal) loadLeaderboard(goal.slug, goal.goal);
+    });
+    const moreBtn = leaderboardsContentEl.querySelector('.leaderboard-more');
+    if (moreBtn) {
+      moreBtn.addEventListener('click', () => {
+        leaderboardShown += LEADERBOARD_PAGE_SIZE;
+        renderLeaderboard();
+      });
+    }
+  }
+
+  function showLeaderboard(slug, goal) {
+    switchTab('leaderboards');
+    loadLeaderboard(slug, goal);
+  }
+
+  // ==================== CATEGORIES SECTION ====================
+  let categoriesData = null;
+
+  // Name and description in the current language
+  function localized(item) {
+    const tr = item?.translations?.[getCurrentLanguage()] || {};
+    return { name: tr.name || item.name || '', description: tr.description || item.description || '' };
+  }
+
+  // Racetime goal opening its leaderboard when it has ranked players
+  function goalLink(goal, label) {
+    if (!goal.numRanked) return escapeHtml(label);
+    return `<button type="button" class="link-button" data-leaderboard-slug="${escapeHtml(goal.slug)}" data-leaderboard-goal="${escapeHtml(goal.goal)}">${escapeHtml(label)}</button>`;
+  }
+
+  function renderCategories() {
+    const data = categoriesData;
+    if (!data) return;
+    const days = data.recentRacesDays;
     let html = '';
 
-    // Main categories section
-    if (data.mainCategories && data.mainCategories.length > 0) {
-      const mainCatTitle = typeof i18n !== 'undefined' ? 'Catégories principales' : 'Main Categories';
-      html += `<div style="margin-bottom:2rem;">
-        <h3 style="color:#fbbf24;margin-bottom:1rem;font-size:1.25rem;">${mainCatTitle}</h3>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));gap:1rem;">`;
-      
-      data.mainCategories.forEach(cat => {
-        const tagsHtml = (cat.tags || []).map(tag => 
-          `<span style="background:#374151;color:#9ca3af;padding:0.125rem 0.5rem;border-radius:0.25rem;font-size:0.7rem;">${tag}</span>`
-        ).join(' ');
-        
+    if (data.categories.length) {
+      html += `<section class="categories-section">
+        <h3>${escapeHtml(t('gameDetail.categoriesMain', 'Main categories'))}</h3>
+        <div class="category-grid">`;
+      data.categories.forEach(category => {
+        const { name, description } = localized(category);
+        const stats = [plural('gameDetail.categoriesRaces', category.races, `${category.races} races`)];
+        if (category.recentRaces) {
+          stats.push(t('gameDetail.categoriesRecentRaces', `${category.recentRaces} in the last ${days} days`)
+            .replace('{n}', category.recentRaces).replace('{days}', days));
+        }
+        if (category.lastRaceAt) {
+          stats.push(t('gameDetail.categoriesLastRace', `last on ${formatDate(category.lastRaceAt)}`)
+            .replace('{date}', formatDate(category.lastRaceAt)));
+        }
+        const ranked = category.goals.filter(g => g.numRanked);
+        const leaderboards = ranked.length
+          ? `<div class="category-goals">🏆 ${ranked.map(g => goalLink(g, g.goal)).join(' · ')}</div>`
+          : '';
         html += `
-          <div style="background:#1f2937;padding:1rem;border-radius:0.5rem;border-left:3px solid #fbbf24;">
-            <h4 style="color:#60a5fa;margin-bottom:0.5rem;">${cat.name}</h4>
-            <p style="color:#d1d5db;font-size:0.875rem;margin-bottom:0.5rem;">${cat.description}</p>
-            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">${tagsHtml}</div>
-          </div>
-        `;
+          <div class="category-card">
+            <h4>${escapeHtml(name)}</h4>
+            ${description ? `<p>${escapeHtml(description)}</p>` : ''}
+            <div class="category-stats">${escapeHtml(stats.join(' · '))}</div>
+            ${leaderboards}
+          </div>`;
       });
-      html += `</div></div>`;
+      html += `</div></section>`;
     }
 
-    // Randomization axes section
-    if (data.randomizationAxes && data.randomizationAxes.length > 0) {
-      const axesTitle = typeof i18n !== 'undefined' ? 'Axes de randomisation' : 'Randomization Options';
-      html += `<div style="margin-bottom:2rem;">
-        <h3 style="color:#fbbf24;margin-bottom:1rem;font-size:1.25rem;">${axesTitle}</h3>`;
-      
-      data.randomizationAxes.forEach(axis => {
-        const optionsHtml = (axis.options || []).map(opt => 
-          `<span style="background:#374151;color:#10b981;padding:0.25rem 0.75rem;border-radius:0.25rem;font-size:0.8rem;">${opt}</span>`
-        ).join(' ');
-        
+    if (data.settings.length) {
+      html += `<section class="categories-section">
+        <h3>${escapeHtml(t('gameDetail.categoriesSettings', 'Main settings'))}</h3>`;
+      data.settings.forEach(setting => {
+        const { name, description } = localized(setting);
+        const values = (setting.values || []).map(v => `<span class="setting-value">${escapeHtml(v)}</span>`).join(' ');
         html += `
-          <div style="background:#1f2937;padding:1rem;border-radius:0.5rem;margin-bottom:0.75rem;">
-            <h4 style="color:#60a5fa;margin-bottom:0.25rem;">${axis.name}</h4>
-            <p style="color:#9ca3af;font-size:0.875rem;margin-bottom:0.75rem;">${axis.description}</p>
-            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">${optionsHtml}</div>
-          </div>
-        `;
+          <div class="setting-card">
+            <h4>${escapeHtml(name)}</h4>
+            ${description ? `<p>${escapeHtml(description)}</p>` : ''}
+            <div class="setting-values">${values}</div>
+          </div>`;
       });
-      html += `</div>`;
+      html += `</section>`;
     }
 
-    // Logic modes section (if present)
-    if (data.logicModes && data.logicModes.length > 0) {
-      const logicTitle = typeof i18n !== 'undefined' ? 'Modes de logique' : 'Logic Modes';
-      html += `<div style="margin-bottom:2rem;">
-        <h3 style="color:#fbbf24;margin-bottom:1rem;font-size:1.25rem;">${logicTitle}</h3>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));gap:0.75rem;">`;
-      
-      data.logicModes.forEach(mode => {
-        html += `
-          <div style="background:#1f2937;padding:0.75rem;border-radius:0.5rem;">
-            <h4 style="color:#8b5cf6;font-size:0.9rem;margin-bottom:0.25rem;">${mode.name}</h4>
-            <p style="color:#9ca3af;font-size:0.8rem;">${mode.description}</p>
-          </div>
-        `;
-      });
-      html += `</div></div>`;
+    if (data.goals.length) {
+      const multipleCategories = new Set(data.goals.map(g => g.slug)).size > 1;
+      const rows = data.goals.map(goal => {
+        const status = goal.active === null
+          ? '—'
+          : `<span class="goal-status ${goal.active ? 'is-active' : ''}">${escapeHtml(goal.active ? t('gameDetail.goalActive', 'Current') : t('gameDetail.goalArchived', 'Archived'))}</span>`;
+        return `
+          <tr>
+            <td>${escapeHtml(goal.goal)}${multipleCategories ? ` <span class="text-muted">(${escapeHtml(goal.slug)})</span>` : ''}</td>
+            <td>${status}</td>
+            <td class="num">${goal.races}</td>
+            <td class="num col-optional">${goal.recentRaces}</td>
+            <td class="col-optional">${goal.lastRaceAt ? escapeHtml(formatDate(goal.lastRaceAt)) : '—'}</td>
+            <td class="num">${goal.numRanked ? goalLink(goal, String(goal.numRanked)) : '—'}</td>
+          </tr>`;
+      }).join('');
+      const custom = data.customGoalRaces
+        ? `<p class="text-muted">${escapeHtml(t('gameDetail.categoriesCustomGoals', `Plus ${data.customGoalRaces} races with a custom goal (tournaments, special races).`).replace('{n}', data.customGoalRaces))}</p>`
+        : '';
+      html += `<section class="categories-section">
+        <h3>${escapeHtml(t('gameDetail.categoriesGoals', 'racetime.gg goals'))}</h3>
+        <p class="text-muted">${escapeHtml(t('gameDetail.categoriesGoalsDescription', 'Every goal racetime.gg offers for this game, current and archived, with the races recorded on this site.'))}</p>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead><tr>
+              <th>${escapeHtml(t('gameDetail.leaderboardGoal', 'Goal'))}</th>
+              <th>${escapeHtml(t('gameDetail.goalStatus', 'Status'))}</th>
+              <th class="num">${escapeHtml(t('gameDetail.leaderboardRaces', 'Races'))}</th>
+              <th class="num col-optional">${escapeHtml(t('gameDetail.goalRecentRaces', `Last ${days} days`).replace('{days}', days))}</th>
+              <th class="col-optional">${escapeHtml(t('gameDetail.goalLastRace', 'Last race'))}</th>
+              <th class="num">${escapeHtml(t('gameDetail.goalRankedPlayers', 'Ranked players'))}</th>
+            </tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+        ${custom}
+      </section>`;
     }
 
-    // External links section (if present)
-    if (data.externalLinks && data.externalLinks.length > 0) {
-      const linksTitle = typeof i18n !== 'undefined' ? 'Liens utiles' : 'Useful Links';
-      html += `<div style="margin-bottom:2rem;">
-        <h3 style="color:#fbbf24;margin-bottom:1rem;font-size:1.25rem;">${linksTitle}</h3>
-        <div style="display:flex;gap:1rem;flex-wrap:wrap;">`;
-      
-      data.externalLinks.forEach(link => {
-        const linkAttrs = buildExternalLinkAttrs(link.url);
-        const tagName = linkAttrs ? 'a' : 'div';
-        html += `
-          <${tagName}${linkAttrs ? ' ' + linkAttrs : ''} style="display:inline-flex;align-items:center;gap:0.5rem;background:#374151;color:#60a5fa;padding:0.5rem 1rem;border-radius:0.5rem;text-decoration:none;transition:background 0.2s;" data-hover-style="background:#4b5563" data-rest-style="background:#374151">
-            🔗 ${escapeHtml(link.name || link.url || 'Link')}
-          </${tagName}>
-        `;
-      });
-      html += `</div></div>`;
+    if (!html) {
+      const message = data.unavailable.length
+        ? t('gameDetail.leaderboardsUnavailable', 'racetime.gg is not answering right now. Try again later.')
+        : t('gameDetail.categoriesNone', 'No category documented for this game yet.');
+      html = `<p class="text-muted">${escapeHtml(message)}</p>`;
     }
 
     categoriesContentEl.innerHTML = html;
+    categoriesContentEl.querySelectorAll('[data-leaderboard-goal]').forEach(btn => {
+      btn.addEventListener('click', () => showLeaderboard(btn.dataset.leaderboardSlug, btn.dataset.leaderboardGoal));
+    });
   }
 
-  function loadCategories() {
+  async function loadCategories() {
     if (categoriesLoaded) return;
     categoriesLoaded = true;
-    renderCategories(id);
+    try {
+      categoriesData = await fetchJson(`/api/games/${encodeURIComponent(id)}/categories`);
+      renderCategories();
+    } catch (e) {
+      categoriesLoaded = false;
+      categoriesContentEl.innerHTML = `<p class="text-muted">${escapeHtml(t('common.error', 'Loading error'))}</p>`;
+    }
   }
 
   // ==================== RESOURCES SECTION ====================
@@ -1057,9 +1102,14 @@
     }
   }
 
-  if(id) load();
+  if(id) {
+    load();
+    loadLeaderboard();
+  }
 
   window.addEventListener('languageChanged', () => {
     rerenderLocalizedResources();
+    renderLeaderboard();
+    renderCategories();
   });
 })();

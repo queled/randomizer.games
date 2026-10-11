@@ -3271,3 +3271,182 @@ body.spoiler-mode a.spoiler-winner:hover {
 a.match-player-name.match-winner:hover {
     color: #f59e0b !important;
 }
+
+
+/* Game page: leaderboards and categories tabs */
+.leaderboard-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 1rem 0;
+}
+
+.leaderboard-toolbar select {
+    max-width: 100%;
+}
+
+.leaderboard-note,
+.leaderboard-source {
+    font-size: 0.875rem;
+    margin: 0.75rem 0;
+}
+
+.leaderboard-source a {
+    color: #60a5fa;
+}
+
+.leaderboard-more {
+    margin-top: 0.75rem;
+}
+
+.data-table-wrap {
+    overflow-x: auto;
+    background: #1f2937;
+    border-radius: 0.5rem;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.data-table th,
+.data-table td {
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #374151;
+}
+
+.data-table th {
+    color: #9ca3af;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.data-table .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.data-table a.player-link {
+    color: #e5e7eb;
+    text-decoration: none;
+}
+
+.data-table tr.podium td:first-child {
+    color: #fbbf24;
+    font-weight: 600;
+}
+
+.link-button {
+    background: none;
+    border: none;
+    padding: 0;
+    color: #60a5fa;
+    font: inherit;
+    cursor: pointer;
+    text-align: inherit;
+}
+
+.link-button:hover {
+    color: #fbbf24;
+    text-decoration: underline;
+}
+
+.goal-status {
+    font-size: 0.75rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.25rem;
+    background: #374151;
+    color: #9ca3af;
+    white-space: nowrap;
+}
+
+.goal-status.is-active {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+}
+
+.categories-section {
+    margin: 1.5rem 0 2rem;
+}
+
+.categories-section h3 {
+    color: #fbbf24;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.category-card,
+.setting-card {
+    background: #1f2937;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+.category-card {
+    border-left: 3px solid #fbbf24;
+}
+
+.setting-card {
+    margin-bottom: 0.75rem;
+}
+
+.category-card h4,
+.setting-card h4 {
+    color: #60a5fa;
+    margin-bottom: 0.5rem;
+}
+
+.category-card p,
+.setting-card p {
+    color: #d1d5db;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+.category-stats {
+    color: #9ca3af;
+    font-size: 0.8rem;
+}
+
+.category-goals {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+}
+
+.setting-values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.setting-value {
+    background: #374151;
+    color: #10b981;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    font-size: 0.8rem;
+}
+
+@media (max-width: 600px) {
+    .data-table .col-optional {
+        display: none;
+    }
+
+    .category-grid {
+        grid-template-columns: 1fr;
+    }
+}

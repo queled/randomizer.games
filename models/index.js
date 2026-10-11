@@ -80,10 +80,22 @@ const gameSchema = new mongoose.Schema({
   series: String,           // e.g. "Zelda Series"
   
   // === CATEGORIES ===
+  // Categories the game is raced in (shown on its Categories tab)
   categories: [{
     id: String,
     name: String,
-    description: String
+    description: String,
+    translations: { type: mongoose.Schema.Types.Mixed, default: {} }, // { fr: { name, description } }
+    // Racetime goals of this category: their races and leaderboards
+    racetimeGoals: [{ _id: false, slug: String, goal: String }]
+  }],
+  // Main settings of the randomizer, shown with the categories
+  categorySettings: [{
+    _id: false,
+    name: String,
+    description: String,
+    values: [String],
+    translations: { type: mongoose.Schema.Types.Mixed, default: {} } // { fr: { name, description } }
   }],
   
   // === EXTERNAL INTEGRATIONS (each source tracked separately) ===

@@ -1,5 +1,17 @@
 const axios = require('axios');
 
+// Milliseconds of an ISO8601-like duration PT#H#M#S or P0DT#H#M#S, or null
+function durationToMs(duration) {
+  if (!duration) return null;
+  const cleaned = String(duration).replace(/^P(?:\d+D)?T/, 'PT');
+  const m = /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?/.exec(cleaned);
+  if (!m) return null;
+  const h = parseInt(m[1] || 0, 10);
+  const mm = parseInt(m[2] || 0, 10);
+  const ss = parseFloat(m[3] || 0);
+  return Math.round(((h * 3600) + (mm * 60) + ss) * 1000);
+}
+
 class RacetimeAPI {
   constructor() {
     this.baseURL = 'https://racetime.gg';
@@ -150,22 +162,7 @@ class RacetimeAPI {
    */
   formatEntrant(entrant) {
     const finishTime = entrant.finish_time || null;
-    const finishTimeMs = (() => {
-      try {
-        if (!finishTime) return null;
-        // Parse ISO8601-like duration PT#H#M#S or P0DT#H#M#S
-        const cleaned = String(finishTime).replace(/^P(?:\d+D)?T/, 'PT');
-        const re = /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?/;
-        const m = re.exec(cleaned);
-        if (!m) return null;
-        const h = parseInt(m[1] || 0, 10);
-        const mm = parseInt(m[2] || 0, 10);
-        const ss = parseFloat(m[3] || 0);
-        return Math.round(((h * 3600) + (mm * 60) + ss) * 1000);
-      } catch (e) {
-        return null;
-      }
-    })();
+    const finishTimeMs = durationToMs(finishTime);
 
     return {
       // Deleted racetime accounts come back without a user
@@ -207,12 +204,13 @@ class RacetimeAPI {
   }
 
   /**
-   * Get leaderboard for a category
+   * Get leaderboard for a category: one ranking per goal, current and archived
    */
   async getLeaderboard(category) {
     try {
       const response = await axios.get(
-        `${this.baseURL}/${category}/leaderboards/data`
+        `${this.baseURL}/${encodeURIComponent(category)}/leaderboards/data`,
+        { timeout: 15000 }
       );
       return response.data;
     } catch (error) {
@@ -259,14 +257,16 @@ class RacetimeAPI {
    */
   async getCategoryInfo(slug) {
     try {
-      const response = await axios.get(`${this.baseURL}/${slug}/data`);
+      const response = await axios.get(`${this.baseURL}/${encodeURIComponent(slug)}/data`, { timeout: 15000 });
       if (response.data?.name) {
         return {
           slug: slug,
           name: response.data.name,
           shortName: response.data.short_name,
           url: `${this.baseURL}/${slug}`,
-          image: response.data.image
+          image: response.data.image,
+          // Goals races can currently be opened with
+          goals: response.data.goals || []
         };
       }
       return null;
@@ -280,3 +280,4 @@ class RacetimeAPI {
 }
 
 module.exports = new RacetimeAPI();
+module.exports.durationToMs = durationToMs;

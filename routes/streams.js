@@ -93,7 +93,17 @@ const COMBO_KEYWORDS = {
   'hodbt': ['hodbt', 'hod bt', 'hodxbt', 'harmony bomberman'],
   'mpcg': ['mpcg', 'crossgame', 'cross game', 'mp1 mp2', 'prime crossover'],
   'z1m1': ['z1m1', 'z1 m1', 'zelda metroid nes', 'z1xm1'],
-  'z1m1z3m3': ['z1m1z3m3', 'z1m1z3', 'multiworld', 'quad randomizer', 'quad crossover randomizer']
+  'z1m1z3m3': ['z1m1z3m3', 'z1m1z3', 'multiworld', 'quad randomizer', 'quad crossover randomizer'],
+  'mmtww': ['wily wars', 'wilywars', 'wily war', 'mmtww', 'mega world', 'megaworld']
+};
+
+// Combo games whose source games are looked up by Twitch category ID rather
+// than by name: Twitch answers some names with a duplicate category nobody
+// streams in (e.g. "Mega Man 3"). Streams are then kept by COMBO_KEYWORDS.
+const COMBO_TWITCH_CATEGORY_IDS = {
+  // Wily Wars has no Twitch category: it is streamed under the games it remakes
+  // (Mega Man, Mega Man 2, Mega Man 3, both real and duplicate categories)
+  'mmtww': ['4815', '12870', '1003948618', '4133', '1311228706', '1595493467']
 };
 
 // Per-game extra filters:
@@ -976,9 +986,17 @@ async function buildGameStreamsResult(gameId, preloadedDoc) {
   }
 
   const comboGames = COMBO_GAMES[gameIdLower];
+  const comboCategoryIds = COMBO_TWITCH_CATEGORY_IDS[gameIdLower];
   let twitchStreamsAll = [];
 
-  if (comboGames) {
+  if (comboCategoryIds) {
+    const results = await Promise.all(comboCategoryIds.map(id => fetchTwitchStreamsByCategoryId(id, null)));
+    const streamMap = new Map();
+    for (const stream of results.flat()) {
+      if (!streamMap.has(stream.id)) streamMap.set(stream.id, stream);
+    }
+    twitchStreamsAll = filterComboStreams(Array.from(streamMap.values()), gameIdLower);
+  } else if (comboGames) {
     const streamPromises = comboGames.map(gameName => fetchTwitchStreams(gameName, PASS_THROUGH_TWITCH_CATEGORIES.has(String(gameName).toLowerCase())));
     const results = await Promise.all(streamPromises);
 

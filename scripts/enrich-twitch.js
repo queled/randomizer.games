@@ -195,6 +195,8 @@ async function enrichTwitchCategories(options = {}) {
   if (ids) {
     query.id = { $in: ids };
   }
+  // Une catégorie validée à la main n'est jamais remplacée, même avec --force
+  query['integrations.twitch.confidence'] = { $ne: 'manual' };
   if (!force) {
     // Ne pas ré-essayer ceux déjà marqués comme introuvables
     query['integrations.twitch.notFound'] = { $ne: true };

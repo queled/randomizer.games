@@ -76,16 +76,6 @@ async function requestTwitchToken() {
   }
 }
 
-// Combo games that should fetch streams from multiple source games
-const COMBO_GAMES = {
-  'ootmm': ['The Legend of Zelda: Ocarina of Time', 'The Legend of Zelda: Majora\'s Mask'],
-  'smz3': ['The Legend of Zelda: A Link to the Past', 'Super Metroid'],
-  'hodbt': ['Castlevania: Harmony of Dissonance', 'Bomberman Tournament'],
-  'mpcg': ['Metroid Prime', 'Metroid Prime 2: Echoes'],
-  'z1m1': ['The Legend of Zelda', 'Metroid'],
-  'z1m1z3m3': ['The Legend of Zelda', 'Metroid', 'The Legend of Zelda: A Link to the Past', 'Metroid Prime 3: Corruption']
-};
-
 // Keywords that must appear in title/tags for combo games (case-insensitive)
 const COMBO_KEYWORDS = {
   'ootmm': ['ootmm', 'oot mm', 'ootxmm', 'oot x mm', 'ocarina majora', 'oot+mm', 'oot/mm'],
@@ -97,21 +87,58 @@ const COMBO_KEYWORDS = {
   'mmtww': ['wily wars', 'wilywars', 'wily war', 'mmtww', 'mega world', 'megaworld']
 };
 
-// Combo games whose source games are looked up by Twitch category ID rather
-// than by name: Twitch answers some names with a duplicate category nobody
-// streams in (e.g. "Mega Man 3"). Streams are then kept by COMBO_KEYWORDS.
+// Combo games: streams are fetched from the Twitch categories of their source
+// games, then kept by COMBO_KEYWORDS (all of them when the game has none).
+// Categories are given by ID: Twitch answers some names with a duplicate
+// category (the Switch 2 remake for "Ocarina of Time", the Famicom Disk
+// System version for "Metroid", a stub for "Metroid Prime").
 const COMBO_TWITCH_CATEGORY_IDS = {
-  // Wily Wars has no Twitch category: it is streamed under the games it remakes
-  // (Mega Man, Mega Man 2, Mega Man 3, both real and duplicate categories)
-  'mmtww': ['4815', '12870', '1003948618', '4133', '1311228706', '1595493467']
+  'ootmm': ['11557', '12482'], // Ocarina of Time (N64), Majora's Mask
+  'smz3': ['9435', '7595'], // A Link to the Past, Super Metroid
+  'hodbt': ['16541', '8352'], // Harmony of Dissonance, Bomberman Tournament
+  'mpcg': ['14198', '1459'], // Metroid Prime (GC), Metroid Prime 2: Echoes
+  'z1m1': ['10979', '19813'], // The Legend of Zelda, Metroid (NES)
+  'z1m1z3m3': ['10979', '19813', '9435', '4327'], // + A Link to the Past, Metroid Prime 3
+  // Wily Wars has no Twitch category: it is streamed under the games it remakes,
+  // the NES originals or the Wily Wars versions Twitch lists apart
+  'mmtww': ['4815', '12870', '4133', '1478044090', '1003948618', '1311228706'],
+  // Fates is sold as two games (Birthright, Conquest); Revelation has no category
+  'fe14': ['405007883', '1674286069']
 };
 
 // Per-game extra filters:
-// - PER_GAME_TITLE_KEYWORDS: require one of these keywords to appear in title/tags
+// - PER_GAME_TITLE_KEYWORDS: require one of these keywords to start a word of the title/tags
 // - PER_GAME_ALLOWED_TWITCH_CATEGORIES: only accept streams whose Twitch category name matches one of these
 const PER_GAME_TITLE_KEYWORDS = {
   // ootmq requires "master quest" or "mq" or "ootmqr" in title/tags
-  'ootmq': ['master quest', 'mq', 'ootmqr']
+  'ootmq': ['master quest', 'mq', 'ootmq'],
+  // ROM hacks have no Twitch category of their own: they are streamed under
+  // the game they modify (stored as their category), named in the title
+  'ascent': ['ascent'],
+  'cryogenesis': ['cryogenesis'],
+  'dc': ['digital cube'],
+  'mtbp': ['blue plague'],
+  'nature': ['nature'],
+  'oxide': ['oxide'],
+  'recovery': ['recovery'],
+  'smcr': ['cliffhanger'],
+  'sme2': ['escape ii', 'escape 2'],
+  'smeris': ['eris'],
+  'smgd': ['golden dawn'],
+  'smhm': ['hyper metroid'],
+  'smpb': ['project base'],
+  'stardust': ['stardust'],
+  'subversion': ['subversion'],
+  'szm': ['super zero mission'],
+  'vitality': ['vitality'],
+  'zf': ['z-factor', 'z factor', 'zfactor'],
+  'msm': ['spooky mission'],
+  'msm2': ['spooky mission 2', 'spooky mission ii'],
+  's6': ['scrolls six', 'scrolls 6'],
+  'wm': ['winter mission'],
+  'zmdf': ['deep freeze'],
+  // Archipelago games without a Twitch category are streamed under Archipelago
+  'jigsaw': ['jigsaw']
 };
 
 const PER_GAME_ALLOWED_TWITCH_CATEGORIES = {
@@ -985,7 +1012,6 @@ async function buildGameStreamsResult(gameId, preloadedDoc) {
     };
   }
 
-  const comboGames = COMBO_GAMES[gameIdLower];
   const comboCategoryIds = COMBO_TWITCH_CATEGORY_IDS[gameIdLower];
   let twitchStreamsAll = [];
 
@@ -996,20 +1022,6 @@ async function buildGameStreamsResult(gameId, preloadedDoc) {
       if (!streamMap.has(stream.id)) streamMap.set(stream.id, stream);
     }
     twitchStreamsAll = filterComboStreams(Array.from(streamMap.values()), gameIdLower);
-  } else if (comboGames) {
-    const streamPromises = comboGames.map(gameName => fetchTwitchStreams(gameName, PASS_THROUGH_TWITCH_CATEGORIES.has(String(gameName).toLowerCase())));
-    const results = await Promise.all(streamPromises);
-
-    const streamMap = new Map();
-    for (const streams of results) {
-      for (const stream of streams) {
-        if (!streamMap.has(stream.id)) {
-          streamMap.set(stream.id, stream);
-        }
-      }
-    }
-    twitchStreamsAll = Array.from(streamMap.values());
-    twitchStreamsAll = filterComboStreams(twitchStreamsAll, gameIdLower);
   } else {
     const twitchCategoryId = gameDoc.integrations?.twitch?.categoryId;
     const twitchNameFromDb = gameDoc.integrations?.twitch?.categoryName;
@@ -1057,12 +1069,14 @@ async function buildGameStreamsResult(gameId, preloadedDoc) {
   try {
     const titleKeywords = PER_GAME_TITLE_KEYWORDS[gameIdLower];
     if (titleKeywords && titleKeywords.length > 0) {
-      const kws = titleKeywords.map(k => k.toLowerCase());
+      // A keyword must start a word: "eris" must not match "series"
+      const patterns = titleKeywords.map(k =>
+        new RegExp(`(^|[^a-z0-9])${k.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`));
       twitchStreamsAll = twitchStreamsAll.filter(s => {
         const title = (s.title || '').toLowerCase();
         const tags = (s.tags || []).map(t => (t || '').toLowerCase()).join(' ');
         const combined = title + ' ' + tags;
-        return kws.some(k => combined.includes(k));
+        return patterns.some(p => p.test(combined));
       });
     }
 
@@ -1113,7 +1127,7 @@ async function buildGameStreamsResult(gameId, preloadedDoc) {
 // Twitch category names a game's stream lookup may use (see buildGameStreamsResult)
 function twitchNamesForGame(gameDoc) {
   const gameIdLower = String(gameDoc.id || '').toLowerCase();
-  if (COMBO_GAMES[gameIdLower]) return COMBO_GAMES[gameIdLower];
+  if (COMBO_TWITCH_CATEGORY_IDS[gameIdLower]) return [];
   const name = gameDoc.integrations?.twitch?.categoryName
     || TWITCH_GAME_NAMES[gameIdLower] || gameDoc.official?.name || gameDoc.name;
   return Array.isArray(name) ? name : [name];

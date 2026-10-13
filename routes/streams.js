@@ -84,7 +84,8 @@ const COMBO_KEYWORDS = {
   'mpcg': ['mpcg', 'crossgame', 'cross game', 'mp1 mp2', 'prime crossover'],
   'z1m1': ['z1m1', 'z1 m1', 'zelda metroid nes', 'z1xm1'],
   'z1m1z3m3': ['z1m1z3m3', 'z1m1z3', 'multiworld', 'quad randomizer', 'quad crossover randomizer'],
-  'mmtww': ['wily wars', 'wilywars', 'wily war', 'mmtww', 'mega world', 'megaworld']
+  'mmtww': ['wily wars', 'wilywars', 'wily war', 'mmtww', 'mega world', 'megaworld'],
+  'upkmn': ['upr', 'universal pokemon', 'universal pokémon', 'universal randomizer']
 };
 
 // Combo games: streams are fetched from the Twitch categories of their source
@@ -103,7 +104,18 @@ const COMBO_TWITCH_CATEGORY_IDS = {
   // the NES originals or the Wily Wars versions Twitch lists apart
   'mmtww': ['4815', '12870', '4133', '1478044090', '1003948618', '1311228706'],
   // Fates is sold as two games (Birthright, Conquest); Revelation has no category
-  'fe14': ['405007883', '1674286069']
+  'fe14': ['405007883', '1674286069'],
+  // The Universal Pokémon Randomizer randomizes the main series games of
+  // generations 1 to 7, streamed under each game's category, pair or version
+  'upkmn': [
+    '3623', '1528763908', '17124', // Red/Blue, Red, Yellow
+    '7528', '185837347', '14543', // Gold, Silver, Crystal
+    '9287', '1144464298', '10609', '13332', // Ruby/Sapphire, Sapphire, Emerald, FireRed/LeafGreen
+    '2993', '1343302596', '19745', '23857', // Diamond/Pearl, Pearl, Platinum, HeartGold/SoulSilver
+    '27602', '1432908059', '33734', '1690221315', // Black/White, White, Black 2/White 2, Black 2
+    '103828', '2045592890', '460327', // X/Y, X, Omega Ruby/Alpha Sapphire
+    '491599', '1926347727', '497334', '351385416' // Sun/Moon, Sun, Ultra Sun/Ultra Moon, Ultra Sun
+  ]
 };
 
 // Per-game extra filters:
@@ -615,6 +627,18 @@ async function fetchTwitchStreamsByCategoryId(categoryId, gameNameForFilter, inc
   }
 }
 
+// Whether a stream's title or tags contain one of the keywords at the start
+// of a word ("eris" must not match "series", "upr" not "supreme")
+function streamMentions(stream, keywords) {
+  const title = (stream.title || '').toLowerCase();
+  const tags = (stream.tags || []).map(t => (t || '').toLowerCase()).join(' ');
+  const combined = title + ' ' + tags;
+  return keywords.some(keyword => {
+    const escaped = keyword.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return new RegExp(`(^|[^a-z0-9])${escaped}`).test(combined);
+  });
+}
+
 // Filter streams for combo games by checking if title/tags contain combo-specific keywords
 function filterComboStreams(streams, gameId) {
   const keywords = COMBO_KEYWORDS[gameId.toLowerCase()];
@@ -622,14 +646,7 @@ function filterComboStreams(streams, gameId) {
     return streams; // No filtering for non-combo games
   }
 
-  return streams.filter(stream => {
-    const title = (stream.title || '').toLowerCase();
-    const tags = (stream.tags || []).map(t => t.toLowerCase());
-    const combined = title + ' ' + tags.join(' ');
-    
-    // Check if any of the combo keywords appear in title or tags
-    return keywords.some(keyword => combined.includes(keyword.toLowerCase()));
-  });
+  return streams.filter(stream => streamMentions(stream, keywords));
 }
 
 // Check if a stream is a randomizer stream based on title, tags, and game-specific acronyms
@@ -1069,15 +1086,7 @@ async function buildGameStreamsResult(gameId, preloadedDoc) {
   try {
     const titleKeywords = PER_GAME_TITLE_KEYWORDS[gameIdLower];
     if (titleKeywords && titleKeywords.length > 0) {
-      // A keyword must start a word: "eris" must not match "series"
-      const patterns = titleKeywords.map(k =>
-        new RegExp(`(^|[^a-z0-9])${k.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`));
-      twitchStreamsAll = twitchStreamsAll.filter(s => {
-        const title = (s.title || '').toLowerCase();
-        const tags = (s.tags || []).map(t => (t || '').toLowerCase()).join(' ');
-        const combined = title + ' ' + tags;
-        return patterns.some(p => p.test(combined));
-      });
+      twitchStreamsAll = twitchStreamsAll.filter(s => streamMentions(s, titleKeywords));
     }
 
     const allowedCats = PER_GAME_ALLOWED_TWITCH_CATEGORIES[gameIdLower];

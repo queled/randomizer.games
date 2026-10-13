@@ -5,6 +5,31 @@ class ChallongeAPI {
     this.apiKey = process.env.CHALLONGE_API_KEY;
     this.username = process.env.CHALLONGE_USERNAME;
     this.baseURL = 'https://api.challonge.com/v1';
+    this.requestCount = 0;
+    this.quotaExhausted = false;
+  }
+
+  /**
+   * GET on the API. The plan allows 500 requests per 30 days: every call is counted,
+   * and once Challonge answers 429 the next ones fail without being sent.
+   */
+  async get(path, params = {}) {
+    if (this.quotaExhausted) {
+      const error = new Error('Challonge API request limit exceeded (skipped)');
+      error.code = 'CHALLONGE_QUOTA';
+      throw error;
+    }
+    this.requestCount++;
+    try {
+      const response = await axios.get(`${this.baseURL}${path}`, { params: { api_key: this.apiKey, ...params } });
+      return response.data;
+    } catch (error) {
+      if (error.response?.status === 429) {
+        this.quotaExhausted = true;
+        error.code = 'CHALLONGE_QUOTA';
+      }
+      throw error;
+    }
   }
 
   /**
@@ -12,18 +37,22 @@ class ChallongeAPI {
    * @param {string} tournamentId - The tournament ID or URL
    */
   async getTournament(tournamentId) {
+    return (await this.getTournamentDetails(tournamentId)).tournamentData;
+  }
+
+  /**
+   * Tournament with its participants and matches, in a single request
+   * (getParticipants and getMatches would cost one request each)
+   */
+  async getTournamentDetails(tournamentId) {
     try {
-      const response = await axios.get(
-        `${this.baseURL}/tournaments/${tournamentId}.json`,
-        {
-          params: {
-            api_key: this.apiKey,
-            include_participants: 1,
-            include_matches: 1
-          }
-        }
-      );
-      return this.formatTournament(response.data.tournament);
+      const data = await this.get(`/tournaments/${tournamentId}.json`, { include_participants: 1, include_matches: 1 });
+      const tournament = data.tournament;
+      return {
+        tournamentData: this.formatTournament(tournament),
+        participants: (tournament.participants || []).map(p => this.formatParticipant(p.participant)),
+        matches: (tournament.matches || []).map(m => this.formatMatch(m.match))
+      };
     } catch (error) {
       console.error(`Error fetching tournament ${tournamentId}:`, error.message);
       throw error;
@@ -35,13 +64,8 @@ class ChallongeAPI {
    */
   async getParticipants(tournamentId) {
     try {
-      const response = await axios.get(
-        `${this.baseURL}/tournaments/${tournamentId}/participants.json`,
-        {
-          params: { api_key: this.apiKey }
-        }
-      );
-      return response.data.map(p => this.formatParticipant(p.participant));
+      const data = await this.get(`/tournaments/${tournamentId}/participants.json`);
+      return data.map(p => this.formatParticipant(p.participant));
     } catch (error) {
       console.error(`Error fetching participants for ${tournamentId}:`, error.message);
       throw error;
@@ -53,13 +77,8 @@ class ChallongeAPI {
    */
   async getMatches(tournamentId) {
     try {
-      const response = await axios.get(
-        `${this.baseURL}/tournaments/${tournamentId}/matches.json`,
-        {
-          params: { api_key: this.apiKey }
-        }
-      );
-      return response.data.map(m => this.formatMatch(m.match));
+      const data = await this.get(`/tournaments/${tournamentId}/matches.json`);
+      return data.map(m => this.formatMatch(m.match));
     } catch (error) {
       console.error(`Error fetching matches for ${tournamentId}:`, error.message);
       throw error;
@@ -71,16 +90,9 @@ class ChallongeAPI {
    */
   async getGroupParticipants(tournamentId, groupId) {
     try {
-      const response = await axios.get(
-        `${this.baseURL}/tournaments/${tournamentId}/participants.json`,
-        {
-          params: { 
-            api_key: this.apiKey
-          }
-        }
-      );
+      const data = await this.get(`/tournaments/${tournamentId}/participants.json`);
       // Filter participants by group_player_ids that match the group
-      const allParticipants = response.data.map(p => ({
+      const allParticipants = data.map(p => ({
         ...this.formatParticipant(p.participant),
         groupPlayerIds: p.participant.group_player_ids || []
       }));
@@ -104,19 +116,13 @@ class ChallongeAPI {
    */
   async listTournaments({ state = 'all', createdAfter = null, subdomain = null } = {}) {
     try {
-      const params = {
-        api_key: this.apiKey,
-        state
-      };
+      const params = { state };
       if (createdAfter) params.created_after = createdAfter;
       if (subdomain) params.subdomain = subdomain;
 
-      const response = await axios.get(
-        `${this.baseURL}/tournaments.json`,
-        { params }
-      );
+      const data = await this.get('/tournaments.json', params);
 
-      return (response.data || []).map(t => this.formatTournament(t.tournament));
+      return (data || []).map(t => this.formatTournament(t.tournament));
     } catch (error) {
       console.error('Error listing Challonge tournaments:', error.message);
       throw error;

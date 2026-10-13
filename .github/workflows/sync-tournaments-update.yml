@@ -2,6 +2,9 @@
 # Ce workflow re-récupère les données des tournois actifs (pending, underway, in_progress)
 # toutes les 15 minutes pour mettre à jour leur statut, participants, résultats.
 # Les tournois terminés (complete, ended) sont ignorés automatiquement.
+# Challonge n'autorise que 500 requêtes par 30 jours : un tournoi Challonge n'est
+# relu qu'une fois par 24 h (une fois par semaine s'il attend la validation de
+# l'organisateur), voir --challonge-hours dans scripts/sync-tournaments.js.
 #
 # Similaire à sync-racetime.yml mais pour les tournois start.gg et Challonge.
 

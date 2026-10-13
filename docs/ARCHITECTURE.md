@@ -48,6 +48,8 @@ En production, la base MongoDB tourne sur le même serveur que le site et n'éco
 
 Chaque tâche se lance aussi à la main : `scripts/cron/run-job.sh <tâche>`.
 
+L'API Challonge n'autorise que 500 requêtes par 30 jours (au-delà : erreur 429 jusqu'à la fin de la fenêtre). Un bracket coûte une seule requête (`getTournamentDetails`, participants et matchs inclus). `tournaments-update` ne relit un tournoi Challonge qu'une fois par 24 h (`--challonge-hours`), une fois par semaine s'il attend la validation de l'organisateur (`awaiting_review`), et n'appelle plus Challonge dès le premier 429. La découverte speedgaming.org n'interroge pas l'API pour un lien déjà en base, dont le titre n'évoque pas un randomizer, ou écarté depuis moins de 30 jours (`discoveryskips`).
+
 À chaque exécution, `run-job.sh` écrit l'état de la tâche dans `~/logs/status/<tâche>.json` (début, fin, code de sortie, dernier succès, échecs de suite). La page **Monitoring** du panneau admin les lit (`services/job-health.js`) et classe chaque tâche : ok, en cours, en échec (avec la fin de son journal), en retard (pas de succès depuis plus de deux périodes) ou jamais lancée. Elle montre aussi la dernière donnée écrite en base par la tâche (dernière course, dernière recherche de VOD, dernière archive…), qui trahit une tâche « réussie » sans rien faire. Le serveur et la crontab doivent partager le même `LOG_DIR` (`~/logs` par défaut). Pour resynchroniser entièrement un jeu : `node scripts/sync-racetime-game.js --game <slug> [--max-pages N]`.
 
 ### Anciens workflows GitHub Actions
@@ -134,6 +136,7 @@ Les schémas sont dans [`models/index.js`](../models/index.js).
 | `tournaments` | Un tournoi start.gg ou Challonge, ses phases, ses participants et, pour OoTR, ses races planifiées sur Mido's House |
 | `matches` | Un match de tournoi et les courses qui y sont liées |
 | `players` | Un joueur = un compte racetime.gg (`userId`), avec ses alias (pseudos utilisés ailleurs) |
+| `discoveryskips` | Liens Challonge écartés par la découverte speedgaming.org (pas un randomizer, bracket privé…), revus après 30 jours |
 | `rando_list_cache` | Copie brute de rando-list et métadonnées de la dernière synchronisation |
 
 ### Joueurs et participants

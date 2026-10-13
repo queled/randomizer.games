@@ -271,6 +271,8 @@ const tournamentSchema = new mongoose.Schema({
   startggId: Number,
   startggTournamentId: Number,
   startggSlug: String,
+  // Last refresh from the Challonge API (the update job spaces them out: 500 requests per 30 days)
+  challongeSyncedAt: Date,
   // Races scheduled on Mido's House (OoTR), linked to matches by start.gg set.
   // Kept apart from `matches`, which the start.gg sync rebuilds.
   midosHouse: {
@@ -494,6 +496,15 @@ playerSchema.pre('save', function(next) {
   next();
 });
 
+// Challonge bracket links the speedgaming.org discovery rejected (not a randomizer,
+// private bracket...), so it does not spend API requests on them every day
+const discoverySkipSchema = new mongoose.Schema({
+  url: { type: String, required: true, unique: true },
+  title: String,
+  reason: String,
+  checkedAt: Date
+});
+
 // Indexes for better query performance
 // Indexes
 tournamentSchema.index({ gameId: 1, startDate: -1 });
@@ -512,5 +523,6 @@ module.exports = {
   Tournament: mongoose.model('Tournament', tournamentSchema),
   Match: mongoose.model('Match', matchSchema),
   Race: mongoose.model('Race', raceSchema),
-  Player: mongoose.model('Player', playerSchema)
+  Player: mongoose.model('Player', playerSchema),
+  DiscoverySkip: mongoose.model('DiscoverySkip', discoverySkipSchema)
 };

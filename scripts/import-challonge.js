@@ -38,12 +38,12 @@ async function main(){
   const { Tournament, Match } = require('../models');
 
   console.log('Fetching tournament from Challonge:', challongeId);
-  const tournamentData = await challonge.getTournament(challongeId);
+  const details = await challonge.getTournamentDetails(challongeId);
+  const { tournamentData, matches } = details;
   if(!tournamentData){ console.error('No tournament data returned'); process.exit(1); }
 
-  const matches = await challonge.getMatches(challongeId);
   // Ranks of the played bracket while the organizer has not finalized it
-  const participants = fillMissingFinalRanks({ tournamentData, participants: await challonge.getParticipants(challongeId), matches });
+  const participants = fillMissingFinalRanks({ tournamentData, participants: details.participants, matches });
 
   // Determine game mapping
   const matchForGame = await findGameForTournament({

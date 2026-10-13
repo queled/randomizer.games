@@ -30,10 +30,10 @@ router.post('/tournament/:challongeId', async (req, res, next) => {
     const { gameId, gameSlug } = req.body;
 
     // Fetch from Challonge
-    const tournamentData = await challongeAPI.getTournament(challongeId);
-    const matches = await challongeAPI.getMatches(challongeId);
+    const details = await challongeAPI.getTournamentDetails(challongeId);
+    const { tournamentData, matches } = details;
     // Ranks of the played bracket while the organizer has not finalized it
-    const participants = fillMissingFinalRanks({ tournamentData, participants: await challongeAPI.getParticipants(challongeId), matches });
+    const participants = fillMissingFinalRanks({ tournamentData, participants: details.participants, matches });
 
     // Resolve game relation (prefer request override)
     const match = await findGameForTournament({

@@ -26,7 +26,7 @@ const mongoose = require('mongoose');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
 const connectDB = require('../config/database');
-const { Game, Tournament, Match, Race } = require('../models');
+const { Game, Tournament, Match, Race, DiscoverySkip } = require('../models');
 const StartGGAPI = require('../services/startgg');
 const challongeAPI = require('../services/challonge');
 const findGameForTournament = require('../helpers/findGameForTournament');
@@ -44,6 +44,9 @@ const MIDOS_BASE_URL = 'https://midos.house';
 const MIDOS_DELAY_MS = 300;
 
 // Keywords that strongly indicate an actual randomizer / multiworld tournament
+// A bracket link rejected by the speedgaming.org discovery is checked again after this delay
+const SKIP_RETRY_MS = 30 * 24 * 60 * 60 * 1000;
+
 const RANDOMIZER_SIGNAL_KEYWORDS = [
   'randomizer', 'randomiser', 'rando',
   'multiworld', 'multi-world', 'multi world',
@@ -844,6 +847,10 @@ async function discoverSpeedGaming({ games, dryRun, challongeUrls = [] }) {
   }
 
   const existingIds = new Set((await getKnownChallongeIds()).map(String));
+  const knownUrls = await getKnownChallongeUrls();
+  // Links rejected lately (not a randomizer, private bracket...): the API quota is small
+  const recentSkips = new Set((await DiscoverySkip.find({ checkedAt: { $gte: new Date(Date.now() - SKIP_RETRY_MS) } }).select('url').lean()).map(s => s.url));
+  const manual = challongeUrls.length > 0;
   const seen = new Set();
   // start.gg brackets go to the start.gg import ("2026 ALTTPR Casual Boots Tournament")
   const startggSlugs = new Set();
@@ -863,24 +870,41 @@ async function discoverSpeedGaming({ games, dryRun, challongeUrls = [] }) {
     seen.add(ref.apiId.toLowerCase());
     stats.found++;
 
+    // Checks that cost no API request: already imported, not a randomizer event, rejected lately
+    const urlKey = ref.url.toLowerCase();
+    if (knownUrls.has(urlKey)) { stats.skipped++; continue; }
+    if (!manual) {
+      if (!RANDOMIZER_SIGNAL_KEYWORDS.some(keyword => normalizeText(title).includes(keyword))) { stats.skipped++; continue; }
+      if (recentSkips.has(urlKey)) { stats.skipped++; continue; }
+    }
+    const rememberSkip = reason => (dryRun ? null : DiscoverySkip.updateOne({ url: urlKey }, { $set: { reason, title, checkedAt: new Date() } }, { upsert: true }));
+
     try {
       await sleep(RATE_LIMIT_MS);
-      let tournament;
+      let details;
       try {
-        tournament = await challongeAPI.getTournament(ref.apiId).catch(async err => {
-          if (err.response) throw err; // HTTP answers (404...) are final; only network errors are retried
+        details = await challongeAPI.getTournamentDetails(ref.apiId).catch(async err => {
+          if (err.response || err.code === 'CHALLONGE_QUOTA') throw err; // HTTP answers (404...) are final; only network errors are retried
           await sleep(RATE_LIMIT_MS * 2);
-          return challongeAPI.getTournament(ref.apiId);
+          return challongeAPI.getTournamentDetails(ref.apiId);
         });
       } catch (err) {
+        if (err.code === 'CHALLONGE_QUOTA') {
+          console.log('   ⛔ Challonge API quota exceeded: speedgaming discovery stops here');
+          stats.skipped++;
+          break;
+        }
         // Private, deleted or not exposed by the API: keep it visible for manual review
         console.log(`   ⚠️  Unresolved (${err.response?.status || err.message}): ${link}${title ? ` — ${title}` : ''}`);
+        if (err.response) await rememberSkip(`http ${err.response.status}`);
         stats.skipped++;
         continue;
       }
+      const tournament = details.tournamentData;
 
       if (existingIds.has(String(tournament.id))) {
         console.log(`   ↪ Already imported: ${tournament.name} (${ref.url})`);
+        await rememberSkip('already imported');
         stats.skipped++;
         continue;
       }
@@ -891,6 +915,7 @@ async function discoverSpeedGaming({ games, dryRun, challongeUrls = [] }) {
       if (!match || !RANDOMIZER_SIGNAL_KEYWORDS.some(keyword => signalText.includes(keyword))) {
         console.log(`   ↪ Not a tracked randomizer: ${tournament.name} [${tournament.gameName || 'no game'}] (${ref.url})`);
         stats.skipped++;
+        await rememberSkip('not a tracked randomizer');
         continue;
       }
 
@@ -900,7 +925,7 @@ async function discoverSpeedGaming({ games, dryRun, challongeUrls = [] }) {
         continue;
       }
 
-      await importChallongeTournament({ name: tournament.name, url: ref.apiId }, match.game.id, { group, label, discoveredVia: 'speedgaming.org' });
+      await importChallongeTournament({ name: tournament.name, url: ref.apiId }, match.game.id, { group, label, discoveredVia: 'speedgaming.org', details });
       existingIds.add(String(tournament.id));
       stats.imported++;
     } catch (err) {
@@ -1042,20 +1067,29 @@ async function getKnownChallongeIds() {
   return tournaments.flatMap(t => [t.challongeId, ...(t.challongeBrackets || []).map(b => b.challongeId)]).filter(id => id != null).map(Number);
 }
 
-async function importChallongeTournament(tournamentPreview, gameSlug = null, { group = null, label = null, discoveredVia = null } = {}) {
+// `details`: the tournament already fetched with getTournamentDetails, so it is not requested again
+// Bracket URLs already stored (https://[sub.]challonge.com/slug, lowercase), to skip them without an API request
+async function getKnownChallongeUrls() {
+  const tournaments = await Tournament.find({
+    $or: [{ challongeId: { $exists: true, $ne: null } }, { 'challongeBrackets.0': { $exists: true } }]
+  }).select('fullUrl challongeBrackets.fullUrl').lean();
+  const urls = tournaments.flatMap(t => [t.fullUrl, ...(t.challongeBrackets || []).map(b => b.fullUrl)]);
+  return new Set(urls.map(url => url && parseChallongeRef(url)?.url.toLowerCase()).filter(Boolean));
+}
+
+async function importChallongeTournament(tournamentPreview, gameSlug = null, { group = null, label = null, discoveredVia = null, details = null } = {}) {
   const challongeId = tournamentPreview.url || tournamentPreview.id;
 
   console.log(`   ⬇️  Importing: ${tournamentPreview.name}`);
 
-  const tournamentData = await challongeAPI.getTournament(challongeId);
+  const { tournamentData, matches, participants: rawParticipants } = details || await challongeAPI.getTournamentDetails(challongeId);
   if (!tournamentData) {
     console.log(`   ⚠️  No data returned for ${challongeId}`);
     return;
   }
 
-  const matches = await challongeAPI.getMatches(challongeId);
   // Ranks of the played bracket while the organizer has not finalized it
-  const participants = fillMissingFinalRanks({ tournamentData, participants: await challongeAPI.getParticipants(challongeId), matches });
+  const participants = fillMissingFinalRanks({ tournamentData, participants: rawParticipants, matches });
 
   // Determine game
   const matchForGame = await findGameForTournament({

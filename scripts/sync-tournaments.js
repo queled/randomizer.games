@@ -14,6 +14,11 @@
  *   node scripts/sync-tournaments.js --discover-only     # Only discover new tournaments
  *   node scripts/sync-tournaments.js --days 7            # Discover from last N days (default: 30)
  *   node scripts/sync-tournaments.js --dry-run           # Preview only
+ *   node scripts/sync-tournaments.js --challonge-hours 6 # Refresh Challonge tournaments every 6 h (default: 24)
+ *
+ * The Challonge plan allows 500 API requests per 30 days: a Challonge tournament is
+ * refreshed once per --challonge-hours, and once a week while it awaits the organizer's
+ * review (played, final ranks not published), whatever the job's own schedule.
  */
 
 const path = require('path');
@@ -30,6 +35,9 @@ const { saveGroupedChallongeBracket } = require('../services/challonge-bracket-g
 const { fillMissingFinalRanks } = require('../helpers/bracket-ranks');
 
 const RATE_LIMIT_MS = 1500;
+const HOUR_MS = 60 * 60 * 1000;
+// Played brackets the organizer has not finalized: often left like that for good
+const AWAITING_REVIEW_HOURS = 7 * 24;
 
 function parseArgs() {
   const args = process.argv.slice(2);
@@ -37,7 +45,8 @@ function parseArgs() {
     updateOnly: false,
     discoverOnly: false,
     days: 30,
-    dryRun: false
+    dryRun: false,
+    challongeHours: 24
   };
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
@@ -45,6 +54,7 @@ function parseArgs() {
       case '--discover-only': opts.discoverOnly = true; break;
       case '--days': opts.days = parseInt(args[++i]) || 30; break;
       case '--dry-run': opts.dryRun = true; break;
+      case '--challonge-hours': opts.challongeHours = Number(args[++i]) || 24; break;
     }
   }
   return opts;
@@ -67,7 +77,13 @@ function cleanDescription(description) {
 
 // ─── Update existing in-progress tournaments ─────────────────────────────────
 
-async function updateActiveTournaments({ dryRun }) {
+function isChallongeRefreshDue(tournament, challongeHours) {
+  if (!tournament.challongeSyncedAt) return true;
+  const hours = tournament.state === 'awaiting_review' ? Math.max(challongeHours, AWAITING_REVIEW_HOURS) : challongeHours;
+  return Date.now() - new Date(tournament.challongeSyncedAt).getTime() >= hours * HOUR_MS;
+}
+
+async function updateActiveTournaments({ dryRun, challongeHours }) {
   const stats = { updated: 0, skipped: 0, errors: 0 };
 
   // Find tournaments that are still active / not completed, or played but not finalized
@@ -79,6 +95,12 @@ async function updateActiveTournaments({ dryRun }) {
   console.log(`\n🔄 Updating ${activeTournaments.length} active tournament(s)...`);
 
   for (const tournament of activeTournaments) {
+    const fromChallonge = !tournament.startggId && Boolean(tournament.challongeBrackets?.length || tournament.challongeId);
+    if (fromChallonge && (challongeAPI.quotaExhausted || !isChallongeRefreshDue(tournament, challongeHours))) {
+      stats.skipped++;
+      continue;
+    }
+
     try {
       if (tournament.startggId) {
         // Refresh from start.gg
@@ -179,16 +201,15 @@ async function updateActiveTournaments({ dryRun }) {
           await sleep(RATE_LIMIT_MS);
           // The numeric id: the short url misses tournaments of an organization (z2r.challonge.com/sgl26)
           const challongeId = String(bracket.challongeId || bracket.url);
-          const tournamentData = await challongeAPI.getTournament(challongeId);
+          const { tournamentData, participants, matches } = await challongeAPI.getTournamentDetails(challongeId);
           if (!tournamentData) continue;
 
-          const participants = await challongeAPI.getParticipants(challongeId);
-          const matches = await challongeAPI.getMatches(challongeId);
           await saveGroupedChallongeBracket(
             { Tournament, Match, Race },
             { group: tournament.source?.group || tournament.name, label: bracket.label, tournamentData, participants, matches }
           );
         }
+        await Tournament.updateOne({ _id: tournament._id }, { $set: { challongeSyncedAt: new Date() } });
 
         console.log(`   ✅ Updated: ${tournament.name} (${tournament.challongeBrackets.length} brackets)`);
         stats.updated++;
@@ -206,12 +227,12 @@ async function updateActiveTournaments({ dryRun }) {
         await sleep(RATE_LIMIT_MS);
         // The numeric id: the short url misses tournaments of an organization (z2r.challonge.com/sgl26)
         const challongeId = String(tournament.challongeId || tournament.url);
-        const tournamentData = await challongeAPI.getTournament(challongeId);
+        const details = await challongeAPI.getTournamentDetails(challongeId);
+        const { tournamentData, matches } = details;
         if (!tournamentData) { stats.skipped++; continue; }
 
-        const matches = await challongeAPI.getMatches(challongeId);
         // Ranks of the played bracket while the organizer has not finalized it
-        const participants = fillMissingFinalRanks({ tournamentData, participants: await challongeAPI.getParticipants(challongeId), matches });
+        const participants = fillMissingFinalRanks({ tournamentData, participants: details.participants, matches });
 
         await Tournament.findByIdAndUpdate(tournament._id, {
           $set: {
@@ -221,6 +242,7 @@ async function updateActiveTournaments({ dryRun }) {
             startDate: tournamentData.startedAt,
             endDate: tournamentData.completedAt,
             description: cleanDescription(tournamentData.description),
+            challongeSyncedAt: new Date(),
             'source.importedAt': new Date()
           },
           $currentDate: { updatedAt: true }
@@ -259,11 +281,18 @@ async function updateActiveTournaments({ dryRun }) {
         stats.skipped++;
       }
     } catch (err) {
+      if (err.code === 'CHALLONGE_QUOTA') {
+        // Nothing to fix on our side: the remaining Challonge tournaments wait for the quota
+        console.warn(`   ⛔ Challonge API quota exceeded: ${tournament.name} and the next Challonge tournaments are skipped`);
+        stats.skipped++;
+        continue;
+      }
       console.error(`   ❌ Error updating ${tournament.name}: ${err.message}`);
       stats.errors++;
     }
   }
 
+  if (challongeAPI.requestCount) console.log(`   Challonge API requests: ${challongeAPI.requestCount}`);
   return stats;
 }
 
@@ -314,7 +343,7 @@ async function main() {
 
   // Phase 1: Update active tournaments
   if (!opts.discoverOnly) {
-    const updateStats = await updateActiveTournaments({ dryRun: opts.dryRun });
+    const updateStats = await updateActiveTournaments({ dryRun: opts.dryRun, challongeHours: opts.challongeHours });
     totalUpdated += updateStats.updated;
     totalSkipped += updateStats.skipped;
     totalErrors += updateStats.errors;

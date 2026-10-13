@@ -2193,12 +2193,12 @@ router.post('/tournaments-mgmt/import', requireAdmin, async (req, res, next) => 
     }
 
     if (detected.source === 'challonge') {
-      const tournamentData = await challongeService.getTournament(detected.id);
+      const details = await challongeService.getTournamentDetails(detected.id);
+      const { tournamentData, matches } = details;
       if (!tournamentData) return res.status(404).json({ error: 'Tournoi Challonge introuvable' });
 
-      const matches = await challongeService.getMatches(detected.id);
       // Ranks of the played bracket while the organizer has not finalized it
-      const participants = fillMissingFinalRanks({ tournamentData, participants: await challongeService.getParticipants(detected.id), matches });
+      const participants = fillMissingFinalRanks({ tournamentData, participants: details.participants, matches });
 
       const tournamentPayload = {
         name: tournamentData.name,

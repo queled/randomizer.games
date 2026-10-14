@@ -204,6 +204,11 @@ h1 {
     padding: 3rem;
 }
 
+#games-grid > .loading,
+#players-list > .loading {
+    grid-column: 1 / -1;
+}
+
 /* Games Grid */
 #games-grid {
     display: grid;
@@ -263,7 +268,7 @@ h1 {
 /* Players List */
 #players-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(clamp(280px, 22vw, 330px), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     align-items: stretch;
     gap: 1rem;
     margin-top: 2rem;
@@ -2710,9 +2715,9 @@ body.spoiler-mode .spoiler-text::before {
         font-size: 1rem;
     }
 
-    /* Players list */
+    /* Players list: two columns, like the games grid */
     #players-list {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         justify-content: stretch;
     }
 
@@ -2794,12 +2799,6 @@ body.spoiler-mode .spoiler-text::before {
     .tournament-details,
     [style*="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))"] {
         grid-template-columns: 1fr !important;
-    }
-
-    /* Games grid single column on very small screens */
-    #games-grid {
-        grid-template-columns: 1fr;
-        justify-content: stretch;
     }
 
     /* Player stats row wrap */
@@ -2921,23 +2920,16 @@ body.spoiler-mode .spoiler-text::before {
     }
 }
 
-/* iPhone 19.5:9 (1179x2556 / 1290x2796) en CSS pixels ~393/430 de large */
-@media (max-width: 430px) and (min-height: 800px) {
-    /* Densifier l'affichage sans augmenter la taille des cartes */
-    #games-grid {
+/* ======== Phones (max-width: 480px) ========
+   No height condition: Safari's toolbar changes the viewport height while scrolling */
+@media (max-width: 480px) {
+    /* Games and players: two columns of cards */
+    #games-grid,
+    #players-list {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         justify-content: stretch;
         gap: 0.75rem;
-    }
-
-    .game-card {
-        padding: 0.75rem;
-    }
-
-    .game-card img {
-        width: min(100%, 200px);
-        aspect-ratio: 256 / 360;
-        height: auto;
+        margin-top: 1rem;
     }
 
     #tournament-list > li {
@@ -2945,8 +2937,164 @@ body.spoiler-mode .spoiler-text::before {
         margin-bottom: 0.75rem;
     }
 
-    .player-card {
-        padding: 1rem;
+    .game-card {
+        padding: 0.75rem 0.5rem;
+    }
+
+    .game-card h2 {
+        font-size: 1rem !important;
+        margin: 0.6rem 0 0.25rem 0 !important;
+        overflow-wrap: anywhere;
+    }
+
+    .game-card p {
+        font-size: 0.8rem !important;
+        overflow-wrap: anywhere;
+    }
+
+    .game-card > div:has(> span[title]) {
+        gap: 0.6rem !important;
+        font-size: 0.75rem !important;
+    }
+
+    .game-card .official-link {
+        font-size: 0.8rem;
+    }
+
+    #players-list .player-card {
+        padding: 0.75rem 0.5rem !important;
+        aspect-ratio: auto !important;
+        contain-intrinsic-size: auto 240px;
+    }
+
+    #players-list .player-card h3 {
+        font-size: 0.95rem !important;
+        margin-bottom: 0.5rem !important;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+    #players-list .player-card .rt-avatar {
+        width: 80px !important;
+        height: 80px !important;
+        margin-bottom: 0.6rem !important;
+    }
+
+    /* Search, sort, count and legend stacked full width */
+    .games-controls,
+    .players-controls {
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 0.6rem !important;
+        padding: 0 0.25rem !important;
+        margin-bottom: 0.75rem !important;
+    }
+
+    .games-filter,
+    .players-controls .search-container {
+        flex: 0 0 auto;
+        max-width: none !important;
+        width: 100%;
+    }
+
+    .games-filter,
+    #player-search {
+        padding-top: 0.65rem !important;
+        padding-bottom: 0.65rem !important;
+        font-size: 1rem !important; /* below 16px iOS zooms in on focus */
+    }
+
+    .games-controls .sort-container,
+    .players-controls > div:has(> select) {
+        justify-content: space-between;
+    }
+
+    #sort-select,
+    #player-sort {
+        flex: 1 1 auto;
+        min-width: 0;
+        padding: 0.5rem 0.75rem !important;
+    }
+
+    .games-legend {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0 0.25rem;
+        margin-bottom: 0;
+        text-align: center;
+    }
+
+    .games-legend-keys {
+        justify-content: center;
+    }
+
+    #players-count {
+        margin-bottom: 0 !important;
+    }
+
+    /* Game page: "Get started" alone, the other two buttons below it */
+    .game-overview-actions {
+        display: grid;
+        grid-template-columns: repeat(2, auto);
+        justify-content: center;
+        gap: 0.6rem;
+    }
+
+    .game-overview-actions .home-hero-btn {
+        padding: 0.55rem 0.9rem;
+        text-align: center;
+    }
+
+    .game-overview-actions .home-hero-btn-primary {
+        grid-column: 1 / -1;
+        justify-self: center;
+    }
+
+    /* Tournament matches: links wrap and scores stay in the card */
+    .match-card {
+        padding: 0.75rem !important;
+    }
+
+    .match-card-head {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .match-card-links {
+        flex-wrap: wrap;
+        gap: 0.35rem !important;
+    }
+
+    .match-card .match-player-name {
+        overflow-wrap: anywhere;
+    }
+
+    .match-card-score {
+        flex-shrink: 0;
+        margin-left: 0.75rem !important;
+        gap: 1rem !important;
+    }
+
+    .match-manche {
+        flex-wrap: wrap;
+        gap: 0.35rem;
+    }
+
+    .match-manche-detail {
+        flex-wrap: wrap;
+        gap: 0.35rem 0.75rem !important;
+        width: 100%;
+    }
+
+    .match-manche-detail > span {
+        min-width: 0 !important;
+    }
+
+    /* Compare page: tournament of a race on its own line */
+    .compare-race-tournament {
+        display: block;
+        margin-left: 0;
     }
 }
 

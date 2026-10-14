@@ -341,9 +341,6 @@ function renderPlayers(players, prioritizeAvatars = false) {
     return;
   }
 
-  // Create grid container
-  list.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem;';
-
   list.innerHTML = players.map(player => {
     // Use racesByGame from API (already sorted by count desc, limited to 3)
     const racesByGame = player.racesByGame || [];

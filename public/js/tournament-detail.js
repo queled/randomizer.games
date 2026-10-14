@@ -2234,6 +2234,7 @@ function createMatchCard(match, races = []) {
   const card = document.createElement('div');
   // Assign stable id so we can scroll to the match from participants
   try { card.id = 'match-' + (match.challongeId || match.id || match._id || match.matchId || ''); } catch (e) {}
+  card.className = 'match-card';
   card.style.cssText = 'background-color: #1f2937; padding: 1rem; border-radius: 0.5rem; margin-bottom: 0.75rem;';
   
   const stateColor = match.state === 'complete' ? '#10b981' 
@@ -2392,9 +2393,9 @@ function createMatchCard(match, races = []) {
       
       manchesHtml += `
         <div role="link" tabindex="0" data-race-id="${race && race._id ? race._id : ''}" style="cursor:pointer;text-decoration:none;color:inherit;display:block;">
-          <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0.5rem; background: #111827; border-radius: 0.25rem; margin-bottom: 0.35rem; font-size: 0.8rem;">
+          <div class="match-manche" style="display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0.5rem; background: #111827; border-radius: 0.25rem; margin-bottom: 0.35rem; font-size: 0.8rem;">
             <span style="color: #9ca3af; font-weight: 500;">Manche ${idx + 1}</span>
-            <div class="spoiler-block" style="display: flex; align-items: center; gap: 1rem;">
+            <div class="spoiler-block match-manche-detail" style="display: flex; align-items: center; gap: 1rem;">
               <span class="${mancheWinner === 1 ? 'spoiler-winner' : ''}" style="color: ${mancheWinner === 1 ? '#fbbf24' : '#d1d5db'}; min-width: 80px;">${escHtml(sanitizeDisplayName(match.player1Name) || 'P1')}: <span style="color: #10b981; font-family: monospace;">${times.time1 || '-'}</span></span>
               <span class="${mancheWinner === 2 ? 'spoiler-winner' : ''}" style="color: ${mancheWinner === 2 ? '#fbbf24' : '#d1d5db'}; min-width: 80px;">${escHtml(sanitizeDisplayName(match.player2Name) || 'P2')}: <span style="color: #10b981; font-family: monospace;">${times.time2 || '-'}</span></span>
               ${playerVodsHtml(race)}
@@ -2439,11 +2440,11 @@ function createMatchCard(match, races = []) {
   }
 
   card.innerHTML = `
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+    <div class="match-card-head" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
       <div style="font-size: 0.875rem; color: #9ca3af;">
         ${match.completedAt ? formatDateTime(match.completedAt) : match.startedAt ? formatDateTime(match.startedAt) : match.scheduledAt ? escHtml(formatScheduledAt(match.scheduledAt)) : 'Not scheduled'}${match.groupId !== null && match.groupId !== undefined && match.round ? ` • Round ${match.round}` : ''}
       </div>
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <div class="match-card-links" style="display: flex; align-items: center; gap: 0.5rem;">
         ${mergeRestreams(match.restreams, matchRaces).filter(s => s.vodUrl).map(restreamLinkHtml).join('')}
         ${!isMultiRaceSeries ? singleRaceLinkHtml : ''}
         ${stateBadge}
@@ -2454,7 +2455,7 @@ function createMatchCard(match, races = []) {
         <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
           ${match.player1Members && match.player1Members.length ? `<div style="flex: 1; min-width: 0;"><span class="match-player-name ${player1Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'};">${escHtml(sanitizeDisplayName(match.player1Name))}</span>${renderTeamMembers(match.player1Members)}</div>` : match.player1Name ? `<span style="flex: 1; min-width: 0;"><a href="${playerPageHref(sanitizeDisplayName(match.player1Name))}" class="match-player-name ${player1Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'}; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player1Name))}</a></span>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
           ${displayScore1 !== null && displayScore2 !== null ? `
-            <span class="spoiler-block" style="color: #9ca3af; margin-left: 8rem; display:flex; align-items:center; gap:4rem;">
+            <span class="spoiler-block match-card-score" style="color: #9ca3af; margin-left: 8rem; display:flex; align-items:center; gap:4rem;">
               ${!isMultiRaceSeries ? `<span>${time1 !== null && time1 !== undefined ? time1 : '-'}</span>` : ''}
               <span style="display:inline-block; min-width:2rem; text-align:center; font-family:monospace;">${displayScore1}</span>
             </span>
@@ -2463,7 +2464,7 @@ function createMatchCard(match, races = []) {
         <div style="display: flex; align-items: center;">
           ${match.player2Members && match.player2Members.length ? `<div style="flex: 1; min-width: 0;"><span class="match-player-name ${player2Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'};">${escHtml(sanitizeDisplayName(match.player2Name))}</span>${renderTeamMembers(match.player2Members)}</div>` : match.player2Name ? `<span style="flex: 1; min-width: 0;"><a href="${playerPageHref(sanitizeDisplayName(match.player2Name))}" class="match-player-name ${player2Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'}; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player2Name))}</a></span>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
           ${displayScore2 !== null && displayScore1 !== null ? `
-            <span class="spoiler-block" style="color: #9ca3af; margin-left: 8rem; display:flex; align-items:center; gap:4rem;">
+            <span class="spoiler-block match-card-score" style="color: #9ca3af; margin-left: 8rem; display:flex; align-items:center; gap:4rem;">
               ${!isMultiRaceSeries ? `<span>${time2 !== null && time2 !== undefined ? time2 : '-'}</span>` : ''}
               <span style="display:inline-block; min-width:2rem; text-align:center; font-family:monospace;">${displayScore2}</span>
             </span>
@@ -3531,6 +3532,7 @@ function createTiebreakCard(race, { inMatchList = false } = {}) {
     ? 'background-color: #1f2937; padding: 1rem; border-radius: 0.5rem; margin-bottom: 0.75rem; cursor: pointer;'
     : 'background-color: #111827; padding: 0.5rem; border-radius: 0.25rem; border-left: 3px solid #fbbf24; cursor: pointer;';
   if (inMatchList) {
+    card.className = 'match-card';
     card.id = 'match-tiebreak-' + race._id;
     // The whole card opens the race, its VOD links aside
     card.addEventListener('click', (e) => {
@@ -3568,9 +3570,9 @@ function createTiebreakCard(race, { inMatchList = false } = {}) {
     const stateColor = state === 'complete' ? '#10b981' : state === 'open' ? '#3b82f6' : '#6b7280';
     const where = [race.startedAt ? formatDateTime(race.startedAt) : '', race.tournamentPool ? `${i18n.t('tournamentDetail.group') || 'Group'} ${race.tournamentPool}` : ''].filter(Boolean).join(' • ');
     card.innerHTML = `
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+      <div class="match-card-head" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
         <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: #9ca3af;">${title}<span>${escHtml(where)}</span></div>
-        <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <div class="match-card-links" style="display: flex; align-items: center; gap: 0.5rem;">
           ${live ? '' : mergeRestreams([], [race]).filter(s => s.vodUrl).map(restreamLinkHtml).join('')}
           ${live ? '' : playerVodsHtml(race)}
           ${raceLinkHtml(race)}

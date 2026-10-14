@@ -973,6 +973,15 @@ body.spoiler-mode .spoiler-text::before {
 .stream-game .game-link {
     display: inline-block;
     vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    color: #60a5fa;
+    transition: color 0.2s;
+}
+
+.stream-game .game-link:hover {
+    color: #fbbf24;
 }
 
 .no-streams {

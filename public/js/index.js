@@ -328,6 +328,8 @@ function renderHomeLive(streams) {
     const login = String(stream.userLogin || '').replace(/[^a-zA-Z0-9_]/g, '');
     if (!login) return '';
     const thumb = stream.thumbnailUrl ? `/api/proxy-image?url=${encodeURIComponent(stream.thumbnailUrl)}` : fallback;
+    // The server gives the site's game id of each stream
+    const gameId = stream.gameId && stream.gameId !== 'unknown' ? stream.gameId : '';
     return `
       <a class="stream-card" href="https://twitch.tv/${login}" target="_blank" rel="noopener noreferrer">
         <div class="stream-thumbnail">
@@ -338,10 +340,24 @@ function renderHomeLive(streams) {
         <div class="stream-info">
           <div class="stream-title">${escHtml(stream.title || '')}</div>
           <div class="stream-channel">${escHtml(stream.userName || login)}</div>
-          ${stream.gameName ? `<div class="stream-game">🎮 ${escHtml(stream.gameName)}</div>` : ''}
+          ${stream.gameName ? `<div class="stream-game">🎮 ${gameId
+            ? `<span class="game-link" data-game-id="${escHtml(gameId)}">${escHtml(stream.gameName)}</span>`
+            : escHtml(stream.gameName)}</div>` : ''}
         </div>
       </a>`;
   }).join('');
+
+  // The game name leads to its page instead of the stream (like on the live page)
+  if (!grid.dataset.gameLinks) {
+    grid.dataset.gameLinks = '1';
+    grid.addEventListener('click', e => {
+      const link = e.target.closest('.game-link');
+      if (!link) return;
+      e.preventDefault();
+      e.stopPropagation();
+      window.location.href = '/game-detail.html?id=' + encodeURIComponent(link.dataset.gameId);
+    });
+  }
 }
 
 async function loadRecentRaces(request) {

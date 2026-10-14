@@ -45,7 +45,8 @@
     </header>
 
     <main>
-        <div class="games-controls" style="display: flex; justify-content: flex-end; margin-bottom: 1.5rem; padding: 0 1rem;">
+        <div class="games-controls">
+            <input type="search" id="games-filter" class="games-filter" placeholder="Search a game or a randomizer..." data-i18n-placeholder="games.searchPlaceholder" aria-label="Search a game or a randomizer" autocomplete="off">
             <div class="sort-container" style="display: flex; align-items: center; gap: 0.5rem;">
                 <label for="sort-select" data-i18n="games.sortBy" style="color: #9ca3af; font-size: 0.9rem;">Sort by:</label>
                 <select id="sort-select" style="background: #374151; color: #f3f4f6; border: 1px solid #4b5563; border-radius: 8px; padding: 0.5rem 1rem; font-size: 0.9rem; cursor: pointer;">
@@ -62,6 +63,14 @@
                     <option value="release-asc" data-i18n="games.sortReleaseOldest">Oldest release</option>
                 </select>
             </div>
+        </div>
+        <div class="games-legend">
+            <span id="games-count"></span>
+            <span class="games-legend-keys">
+                <span>🏁 <span data-i18n="games.legendRaces">races</span></span>
+                <span>🏆 <span data-i18n="games.legendTournaments">tournaments</span></span>
+                <span>📺 <span data-i18n="games.legendLive">live streams</span></span>
+            </span>
         </div>
         <div id="games-grid"></div>
     </main>

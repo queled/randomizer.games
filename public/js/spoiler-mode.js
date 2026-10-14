@@ -35,27 +35,28 @@
     }
   }
 
+  // i18n.js loads async: English until it is ready
+  function tr(key, fallback) {
+    return window.i18n ? window.i18n.t(key, {}, fallback) : fallback;
+  }
+
   // Update toggle button UI
   function updateToggleUI() {
     const toggle = document.getElementById('spoiler-toggle');
     if (!toggle) return;
-    
+
     const isEnabled = isSpoilerModeEnabled();
-    const getText = window.i18n ? window.i18n.t : (key) => {
-      // Fallback titles in English
-      return isEnabled ? 'Anti-Spoiler Mode enabled - Click to disable' : 'Anti-Spoiler Mode disabled - Click to enable';
-    };
-    
     toggle.classList.toggle('active', isEnabled);
     toggle.setAttribute('aria-checked', isEnabled ? 'true' : 'false');
-    
-    if (window.i18n) {
-      toggle.title = isEnabled 
-        ? window.i18n.t('tooltips.spoilerEnabled', {}, 'Anti-Spoiler Mode enabled - Click to disable')
-        : window.i18n.t('tooltips.spoilerDisabled', {}, 'Anti-Spoiler Mode disabled - Click to enable');
-    } else {
-      toggle.title = isEnabled ? 'Anti-Spoiler Mode enabled - Click to disable' : 'Anti-Spoiler Mode disabled - Click to enable';
-    }
+
+    // 👁 results visible, 🙈 results hidden
+    toggle.querySelector('.spoiler-toggle-icon').textContent = isEnabled ? '🙈' : '👁';
+    const label = tr('spoiler.toggleLabel', 'No spoilers');
+    toggle.querySelector('.spoiler-toggle-text').textContent = label;
+    toggle.setAttribute('aria-label', label);
+    toggle.title = isEnabled
+      ? tr('tooltips.spoilerEnabled', 'No spoilers on: results are hidden. Click to show them')
+      : tr('tooltips.spoilerDisabled', 'No spoilers off: results are visible. Click to hide them, handy before watching a VOD');
   }
 
   // Create and inject the toggle button
@@ -71,8 +72,8 @@
     const toggleContainer = document.createElement('div');
     toggleContainer.className = 'spoiler-toggle-container';
     toggleContainer.innerHTML = `
-      <button id="spoiler-toggle" class="spoiler-toggle" role="switch" aria-checked="false" title="Mode Anti-Spoiler désactivé - Cliquez pour activer">
-        <span class="spoiler-toggle-label">Spoiler</span>
+      <button id="spoiler-toggle" class="spoiler-toggle" role="switch" aria-checked="false">
+        <span class="spoiler-toggle-label"><span class="spoiler-toggle-icon" aria-hidden="true">👁</span><span class="spoiler-toggle-text">No spoilers</span></span>
         <span class="spoiler-toggle-knob"></span>
       </button>
     `;
@@ -91,6 +92,9 @@
     applySpoilerMode();
     updateToggleUI();
   }
+
+  // Label and tooltip arrive with the translations
+  window.addEventListener('languageChanged', updateToggleUI);
 
   // Expose for dynamic content updates
   window.applySpoilerMode = applySpoilerMode;

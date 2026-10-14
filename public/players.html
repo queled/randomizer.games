@@ -45,7 +45,7 @@
     </header>
 
     <main>
-        <div class="players-controls" style="display: flex; justify-content: center; margin-bottom: 1.5rem; padding: 0 1rem;">
+        <div class="players-controls" style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.75rem 1.5rem; margin-bottom: 0.75rem; padding: 0 1rem;">
             <div class="search-container" style="position: relative; width: 100%; max-width: 400px;">
                 <input type="text" id="player-search" 
                        data-i18n-placeholder="players.searchPlaceholder" 
@@ -53,7 +53,16 @@
                        style="width: 100%; background: #374151; color: #f3f4f6; border: 1px solid #4b5563; border-radius: 8px; padding: 0.75rem 1rem 0.75rem 2.5rem; font-size: 1rem;">
                 <span style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: #9ca3af; pointer-events: none;">🔍</span>
             </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <label for="player-sort" data-i18n="players.sortBy" style="color: #9ca3af; font-size: 0.9rem;">Sort by:</label>
+                <select id="player-sort" style="background: #374151; color: #f3f4f6; border: 1px solid #4b5563; border-radius: 8px; padding: 0.5rem 1rem; font-size: 0.9rem; cursor: pointer;">
+                    <option value="recent" selected data-i18n="players.sortRecent">Recently active</option>
+                    <option value="races" data-i18n="players.sortRaces">Most races</option>
+                    <option value="name" data-i18n="players.sortName">Name (A-Z)</option>
+                </select>
+            </div>
         </div>
+        <div id="players-count" style="text-align: center; color: #9ca3af; font-size: 0.85rem; margin-bottom: 1.5rem;"></div>
         <div id="players-list"></div>
     </main>
 

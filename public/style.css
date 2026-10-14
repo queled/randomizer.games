@@ -383,46 +383,46 @@ h1 {
 }
 
 .spoiler-toggle {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     position: relative;
-    width: 5.5rem;
     height: 1.75rem;
-    padding: 0;
+    /* Room for the knob on the left (off) or on the right (on) */
+    padding: 0 0.6rem 0 1.85rem;
     border-radius: 2rem;
     border: none;
-    background: #9ca3af;
+    background: #4b5563;
     cursor: pointer;
     font-size: 0.7rem;
     transition: all 0.3s ease;
     white-space: nowrap;
-    overflow: hidden;
 }
 
 .spoiler-toggle:hover {
     background: #6b7280;
 }
 
+/* On: results are hidden, the switch takes the accent color */
 .spoiler-toggle.active {
-    background: #4b5563;
+    background: #fbbf24;
+    padding: 0 1.85rem 0 0.6rem;
 }
 
 .spoiler-toggle.active:hover {
-    background: #374151;
+    background: #f59e0b;
 }
 
 .spoiler-toggle-label {
-    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
     font-weight: 600;
     color: white;
-    transition: all 0.3s ease;
-    right: 0.5rem;
     pointer-events: none;
 }
 
 .spoiler-toggle.active .spoiler-toggle-label {
-    left: 0.5rem;
-    right: auto;
+    color: #111827;
 }
 
 .spoiler-toggle-knob {
@@ -440,6 +440,48 @@ h1 {
 
 .spoiler-toggle.active .spoiler-toggle-knob {
     left: calc(100% - 1.55rem);
+}
+
+.games-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    padding: 0 1rem;
+}
+
+.games-filter {
+    flex: 1 1 18rem;
+    max-width: 28rem;
+    background: #374151;
+    color: #f3f4f6;
+    border: 1px solid #4b5563;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+.games-filter::placeholder {
+    color: #9ca3af;
+}
+
+.games-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    margin-bottom: 1.5rem;
+    padding: 0 1rem;
+    color: #9ca3af;
+    font-size: 0.85rem;
+}
+
+.games-legend-keys {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
 }
 
 /* Spoiler content - hidden when spoiler mode is active */
@@ -2368,9 +2410,18 @@ body.spoiler-mode .spoiler-text::before {
     }
 
     .spoiler-toggle {
-        width: 4.5rem;
         height: 1.5rem;
         font-size: 0.6rem;
+        padding: 0 0.5rem 0 1.55rem;
+    }
+
+    .spoiler-toggle.active {
+        padding: 0 1.55rem 0 0.5rem;
+    }
+
+    /* Narrow header: the icon alone, the label stays in aria-label and the tooltip */
+    .spoiler-toggle-text {
+        display: none;
     }
 
     .spoiler-toggle-knob {

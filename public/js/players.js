@@ -1,6 +1,23 @@
 // Store all players globally for filtering
 let allPlayers = [];
 
+// i18n.js loads async: English until it is ready
+function tr(key, fallback, params = {}) {
+  if (window.i18n && typeof window.i18n.t === 'function') return window.i18n.t(key, params, fallback);
+  return fallback.replace(/\{(\w+)\}/g, (m, k) => (k in params ? params[k] : m));
+}
+
+function pageLocale() {
+  return (window.i18n && window.i18n.getLanguage) ? window.i18n.getLanguage() : undefined;
+}
+
+const playerSorts = {
+  // Players who raced most recently first, the most useful view for a visitor
+  recent: (a, b) => (new Date(b.lastRaceAt || 0) - new Date(a.lastRaceAt || 0)) || a.name.localeCompare(b.name),
+  races: (a, b) => ((b.totalRaces || 0) - (a.totalRaces || 0)) || a.name.localeCompare(b.name),
+  name: (a, b) => a.name.localeCompare(b.name)
+};
+
 // Global IntersectionObserver instance (will be recreated on filter)
 let avatarObserver = null;
 
@@ -331,8 +348,12 @@ function renderPlayers(players, prioritizeAvatars = false) {
     // Use racesByGame from API (already sorted by count desc, limited to 3)
     const racesByGame = player.racesByGame || [];
     
-    // Avatar setup
-    const initial = (player.name && player.name[0]) ? player.name[0].toUpperCase() : '?';
+    // Avatar setup: first letter or digit, so "(DX)Oblast" shows "D" rather than "("
+    const initialMatch = String(player.name || '').match(/[\p{L}\p{N}]/u);
+    const initial = initialMatch ? initialMatch[0].toUpperCase() : '?';
+    const lastRace = player.lastRaceAt
+      ? tr('players.lastRace', 'Last race: {date}', { date: new Date(player.lastRaceAt).toLocaleDateString(pageLocale(), { day: 'numeric', month: 'short', year: 'numeric' }) })
+      : '';
     const placeholder = 'data:image/svg+xml,' + safeEncodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><rect width="120" height="120" fill="#374151"/><text x="50%" y="50%" dy=".35em" font-size="48" fill="#fbbf24" text-anchor="middle">' + initial + '</text></svg>');
     
     // Get Racetime URL if available
@@ -347,10 +368,10 @@ function renderPlayers(players, prioritizeAvatars = false) {
         
         <img class="rt-avatar" 
              src="${placeholder}" 
-             alt="${player.name}" 
+             alt="${escHtml(player.name)}" 
              data-placeholder="${placeholder}"
-             data-racetime-url="${racetimeUrl}"
-             data-twitch="${twitchUsername}"
+             data-racetime-url="${escHtml(racetimeUrl)}"
+             data-twitch="${escHtml(twitchUsername)}"
              style="width:120px;height:120px;border-radius:50%;margin-bottom:1rem;object-fit:cover;background:#374151;display:block;transition:opacity 0.2s;">
         
         <div style="display: flex; flex-direction: column; gap: 0.25rem; width: 100%; overflow: hidden;">
@@ -385,6 +406,7 @@ function renderPlayers(players, prioritizeAvatars = false) {
             `;
           }).join('') : ``}
         </div>
+        ${lastRace ? `<div style="margin-top: auto; padding-top: 0.5rem; font-size: 0.75rem; color: #9ca3af;">${escHtml(lastRace)}</div>` : ''}
       </div>
     `;
   }).join('');
@@ -469,22 +491,28 @@ function setupAvatarLazyLoading(list, prioritize = false) {
   }
 }
 
-// Filter players based on search query
+// Filter by the search box, sort by the selected order, render and count
 function filterPlayers(query) {
-  const normalizedQuery = query.trim().toLowerCase();
-  
-  if (!normalizedQuery) {
-    renderPlayers(allPlayers, false);
-    return;
+  const searchInput = document.getElementById('player-search');
+  const normalizedQuery = (query != null ? query : (searchInput ? searchInput.value : '')).trim().toLowerCase();
+  const sortSelect = document.getElementById('player-sort');
+  const compare = playerSorts[sortSelect ? sortSelect.value : 'recent'] || playerSorts.recent;
+
+  const filtered = normalizedQuery
+    ? allPlayers.filter(player => (player.name || '').toLowerCase().includes(normalizedQuery))
+    : allPlayers;
+  const shown = [...filtered].sort(compare);
+
+  const countEl = document.getElementById('players-count');
+  if (countEl) {
+    const fmt = (n) => n.toLocaleString(pageLocale());
+    countEl.textContent = shown.length === allPlayers.length
+      ? tr('players.count', '{count} players', { count: fmt(allPlayers.length) })
+      : tr('players.countFiltered', '{count} of {total} players', { count: fmt(shown.length), total: fmt(allPlayers.length) });
   }
-  
-  const filtered = allPlayers.filter(player => {
-    const name = (player.name || '').toLowerCase();
-    return name.includes(normalizedQuery);
-  });
-  
+
   // Prioritize avatar loading for filtered results (smaller set)
-  renderPlayers(filtered, true);
+  renderPlayers(shown, Boolean(normalizedQuery));
 }
 
 // Debounced filter function (150ms delay)
@@ -506,7 +534,12 @@ async function loadPlayers() {
     allPlayers = data.players;
     
     // Initial render
-    renderPlayers(allPlayers);
+    filterPlayers('');
+
+    const sortSelect = document.getElementById('player-sort');
+    if (sortSelect) sortSelect.addEventListener('change', () => filterPlayers());
+    // Count and dates arrive with the translations
+    window.addEventListener('languageChanged', () => filterPlayers());
     
     // Setup search input listener
     const searchInput = document.getElementById('player-search');

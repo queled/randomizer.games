@@ -3,6 +3,20 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const grid = document.getElementById('games-grid');
   const sortSelect = document.getElementById('sort-select');
+  const filterInput = document.getElementById('games-filter');
+  const countEl = document.getElementById('games-count');
+
+  // i18n.js loads async: English until it is ready
+  function tr(key, fallback, params = {}) {
+    if (window.i18n && typeof window.i18n.t === 'function') return window.i18n.t(key, params, fallback);
+    return fallback.replace(/\{(\w+)\}/g, (m, k) => (k in params ? params[k] : m));
+  }
+  function locale() {
+    return (window.i18n && window.i18n.getLanguage) ? window.i18n.getLanguage() : undefined;
+  }
+  function formatCount(n) {
+    return Number(n || 0).toLocaleString(locale());
+  }
   
   const loadingText = (typeof i18n !== 'undefined' && typeof i18n.t === 'function') 
     ? i18n.t('common.loading', {}, 'Loading...')
@@ -97,6 +111,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     return sorted;
   }
   
+  // Lowercase without accents, so "pokemon" finds "Pokémon"
+  function normalize(text) {
+    return String(text || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
+
+  // Every name a game goes by: "OoTR", "Ocarina of Time", "The Legend of Zelda: Ocarina of Time"...
+  function searchableText(game) {
+    const r = game.randomizer || {};
+    return normalize([game.id, game.name, game.official?.name, r.displayName, r.shortName, r.tinyName, r.name].filter(Boolean).join(' | '));
+  }
+
+  function filterGames(games) {
+    const words = normalize(filterInput ? filterInput.value : '').split(/\s+/).filter(Boolean);
+    if (!words.length) return games;
+    return games.filter(game => {
+      const text = searchableText(game);
+      return words.every(word => text.includes(word));
+    });
+  }
+
+  // Filter, sort, render and update the count
+  function renderCurrent() {
+    const shown = sortGames(filterGames(gamesData), sortSelect.value);
+    renderGames(shown);
+    if (countEl) {
+      countEl.textContent = shown.length === gamesData.length
+        ? tr('games.count', '{count} games', { count: formatCount(gamesData.length) })
+        : tr('games.countFiltered', '{count} of {total} games', { count: formatCount(shown.length), total: formatCount(gamesData.length) });
+    }
+  }
+
   function renderGames(games) {
     if (!games.length) {
       const noGamesText = (typeof i18n !== 'undefined' && typeof i18n.t === 'function')
@@ -124,9 +169,9 @@ document.addEventListener('DOMContentLoaded', async () => {
           <h2 style="color:#fbbf24;font-size:1.3rem;font-weight:bold;margin:1rem 0 0.5rem 0;text-align:center;">${escHtml(displayTitle)}</h2>
           <p style="color:#d1d5db;font-size:1rem;text-align:center;margin:0 0 0.5rem 0;">${escHtml(gameName)}</p>
           <div style="display:flex;gap:1rem;color:#9ca3af;font-size:0.85rem;margin-bottom:0.5rem;">
-            <span title="${typeof i18n !== 'undefined' ? i18n.t('games.races') : 'races'}">🏁 ${game.totalRaces || 0}</span>
-            <span title="${typeof i18n !== 'undefined' ? i18n.t('games.tournaments') : 'tournaments'}">🏆 ${game.totalTournaments || 0}</span>
-            ${stats.streamers > 0 ? `<span title="${typeof i18n !== 'undefined' ? i18n.t('games.liveNow') : 'live now'}">📺 ${stats.streamers}</span>` : ''}
+            <span title="${escHtml(tr('games.legendRaces', 'races'))}">🏁 ${formatCount(game.totalRaces)}</span>
+            <span title="${escHtml(tr('games.legendTournaments', 'tournaments'))}">🏆 ${formatCount(game.totalTournaments)}</span>
+            ${stats.streamers > 0 ? `<span title="${escHtml(tr('games.legendLive', 'live streams'))}">📺 ${formatCount(stats.streamers)}</span>` : ''}
           </div>
           ${website ? `<a class="official-link" href="${website}" target="_blank" rel="noopener noreferrer" style="color:#60a5fa;text-decoration:underline;transition:color 0.2s,text-decoration-color 0.2s;">${typeof i18n !== 'undefined' ? i18n.t('common.officialSite') : 'Official site'} →</a>` : ''}
         </div>
@@ -168,12 +213,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     gamesData = gamesJson.games || [];
     
     // Render games immediately without waiting for streams
-    renderGames(sortGames(gamesData, sortSelect.value));
-    
-    // Handle sort change
-    sortSelect.addEventListener('change', () => {
-      const sorted = sortGames(gamesData, sortSelect.value);
-      renderGames(sorted);
+    renderCurrent();
+
+    sortSelect.addEventListener('change', renderCurrent);
+    if (filterInput) filterInput.addEventListener('input', renderCurrent);
+    // Count and tooltips arrive with the translations
+    window.addEventListener('languageChanged', () => {
+      if (filterInput) filterInput.setAttribute('aria-label', tr('games.searchPlaceholder', 'Search a game or a randomizer...'));
+      renderCurrent();
     });
     
     // Fetch stream stats in background (lower priority)
@@ -208,9 +255,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         streamStats = fallbackStats;
       }
 
-      // Re-render with current sort to update stream counts
-      const currentSort = sortSelect.value || 'streamers-desc';
-      renderGames(sortGames(gamesData, currentSort));
+      // Re-render to update stream counts
+      renderCurrent();
     })();
     
   } catch (e) {

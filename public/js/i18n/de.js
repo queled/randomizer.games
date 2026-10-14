@@ -66,8 +66,8 @@ const de = {
         liveNow: "jetzt live",
         sortBy: "Sortieren nach:",
         sortName: "Name",
-        sortStreamersMost: "Aktivste Streamer",
-        sortStreamersLeast: "Am wenigsten aktive Streamer",
+        sortStreamersMost: "Meiste Livestreams",
+        sortStreamersLeast: "Wenigste Livestreams",
         sortViewersMost: "Meiste Zuschauer",
         sortViewersLeast: "Wenigste Zuschauer",
         sortRacesMost: "Meiste Rennen",
@@ -75,7 +75,13 @@ const de = {
         sortTournamentsMost: "Meiste Turniere",
         sortTournamentsLeast: "Wenigste Turniere",
         sortReleaseNewest: "Neueste Veröffentlichung",
-        sortReleaseOldest: "Älteste Veröffentlichung"
+        sortReleaseOldest: "Älteste Veröffentlichung",
+        searchPlaceholder: "Spiel oder Randomizer suchen...",
+        legendRaces: "Rennen",
+        legendTournaments: "Turniere",
+        legendLive: "Livestreams",
+        count: "{count} Spiele",
+        countFiltered: "{count} von {total} Spielen"
     },
     
     // Game detail page
@@ -295,7 +301,14 @@ roundOf16: "Achtelfinale",
         searchPlaceholder: "Spieler suchen...",
         races: "Rennen",
         tournaments: "Turniere",
-        wins: "Siege"
+        wins: "Siege",
+        sortBy: "Sortieren nach:",
+        sortRecent: "Zuletzt aktiv",
+        sortRaces: "Meiste Rennen",
+        sortName: "Name (A-Z)",
+        lastRace: "Letztes Rennen: {date}",
+        count: "{count} Spieler",
+        countFiltered: "{count} von {total} Spielern"
     },
     
     // Compare players page
@@ -526,6 +539,7 @@ roundOf16: "Achtelfinale",
     
     // Spoiler mode
     spoiler: {
+        toggleLabel: "Spoilerfrei",
         show: "Anzeigen",
         hide: "Ausblenden"
     },
@@ -594,8 +608,8 @@ roundOf16: "Achtelfinale",
     
     // Tooltips
     tooltips: {
-        spoilerEnabled: "Anti-Spoiler-Modus aktiviert - Klicken Sie zum Deaktivieren",
-        spoilerDisabled: "Anti-Spoiler-Modus deaktiviert - Klicken Sie zum Aktivieren",
+        spoilerEnabled: "Spoilerfrei an: Ergebnisse sind ausgeblendet. Klicken, um sie anzuzeigen",
+        spoilerDisabled: "Spoilerfrei aus: Ergebnisse sind sichtbar. Klicken, um sie auszublenden, praktisch vor einem VOD",
         patreon: "Unterstützen Sie uns auf Patreon"
     }
 };

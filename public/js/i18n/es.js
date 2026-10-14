@@ -64,8 +64,8 @@ const es = {
         liveNow: "en directo",
         sortBy: "Ordenar por:",
         sortName: "Nombre",
-        sortStreamersMost: "Streamers más activos",
-        sortStreamersLeast: "Streamers menos activos",
+        sortStreamersMost: "Más streams en directo",
+        sortStreamersLeast: "Menos streams en directo",
         sortViewersMost: "Más espectadores",
         sortViewersLeast: "Menos espectadores",
         sortRacesMost: "Más carreras",
@@ -73,7 +73,13 @@ const es = {
         sortTournamentsMost: "Más torneos",
         sortTournamentsLeast: "Menos torneos",
         sortReleaseNewest: "Lanzamiento más reciente",
-        sortReleaseOldest: "Lanzamiento más antiguo"
+        sortReleaseOldest: "Lanzamiento más antiguo",
+        searchPlaceholder: "Buscar un juego o un randomizer...",
+        legendRaces: "carreras",
+        legendTournaments: "torneos",
+        legendLive: "streams en directo",
+        count: "{count} juegos",
+        countFiltered: "{count} de {total} juegos"
     },
     
     // Game detail page
@@ -293,7 +299,14 @@ roundOf16: "Octavos de final",
         searchPlaceholder: "Buscar jugadores...",
         races: "carreras",
         tournaments: "torneos",
-        wins: "victorias"
+        wins: "victorias",
+        sortBy: "Ordenar por:",
+        sortRecent: "Activos recientemente",
+        sortRaces: "Más carreras",
+        sortName: "Nombre (A-Z)",
+        lastRace: "Última carrera: {date}",
+        count: "{count} jugadores",
+        countFiltered: "{count} de {total} jugadores"
     },
     
     // Compare players page
@@ -524,6 +537,7 @@ roundOf16: "Octavos de final",
     
     // Spoiler mode
     spoiler: {
+        toggleLabel: "Sin spoilers",
         show: "Mostrar",
         hide: "Ocultar"
     },
@@ -592,8 +606,8 @@ roundOf16: "Octavos de final",
     
     // Tooltips
     tooltips: {
-        spoilerEnabled: "Modo Anti-Spoiler activado - Haz clic para desactivar",
-        spoilerDisabled: "Modo Anti-Spoiler desactivado - Haz clic para activar",
+        spoilerEnabled: "Sin spoilers activado: los resultados están ocultos. Haz clic para mostrarlos",
+        spoilerDisabled: "Sin spoilers desactivado: los resultados son visibles. Haz clic para ocultarlos, útil antes de ver un VOD",
         patreon: "Apóyanos en Patreon"
     }
 };

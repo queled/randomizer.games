@@ -158,6 +158,7 @@ async function buildPlayersResponse(includeTournaments) {
       {
         $project: {
           category: '$category',
+          startedAt: '$startedAt',
           userId: '$entrants.userId',
           entrantName: { $ifNull: ['$entrants.userName', '$entrants.userId'] }
         }
@@ -170,7 +171,8 @@ async function buildPlayersResponse(includeTournaments) {
             entrantName: '$entrantName',
             category: '$category'
           },
-          count: { $sum: 1 }
+          count: { $sum: 1 },
+          lastRaceAt: { $max: '$startedAt' }
         }
       }
     ])
@@ -187,6 +189,8 @@ async function buildPlayersResponse(includeTournaments) {
   });
 
   const raceCountsByPlayer = new Map();
+  // Most recent race of each player, for the "recently active" sort
+  const lastRaceByPlayer = new Map();
   for (const row of raceCounts) {
     if (deletedUserIds.has(row?._id?.userId)) continue;
     // A racetime account is one player whatever name it raced under: its current name
@@ -202,6 +206,9 @@ async function buildPlayersResponse(includeTournaments) {
 
     const perGame = raceCountsByPlayer.get(normalized);
     perGame.set(category, (perGame.get(category) || 0) + (row.count || 0));
+
+    const last = row.lastRaceAt ? new Date(row.lastRaceAt) : null;
+    if (last && !(lastRaceByPlayer.get(normalized) >= last)) lastRaceByPlayer.set(normalized, last);
   }
 
   const playersMap = new Map();
@@ -289,6 +296,7 @@ async function buildPlayersResponse(includeTournaments) {
       });
     }
 
+    const totalRaces = Array.from(racesByGameId.values()).reduce((sum, g) => sum + g.count, 0);
     const racesByGame = Array.from(racesByGameId.values())
       .sort((a, b) => b.count - a.count || String(a.gameSlug).localeCompare(String(b.gameSlug)))
       .slice(0, 3);
@@ -299,6 +307,8 @@ async function buildPlayersResponse(includeTournaments) {
       tournamentsCount: player.tournamentsCount,
       tournaments: includeTournaments ? player.tournaments : [],
       racesByGame,
+      totalRaces,
+      lastRaceAt: lastRaceByPlayer.get(normalized) || null,
       racetimeUrl: player.racetimeUrl,
       racetimeId: player.racetimeId,
       twitch: player.twitch

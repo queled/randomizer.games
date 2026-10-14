@@ -78,8 +78,8 @@ const en = {
         liveNow: "live now",
         sortBy: "Sort by:",
         sortName: "Name",
-        sortStreamersMost: "Most active streamers",
-        sortStreamersLeast: "Least active streamers",
+        sortStreamersMost: "Most live streams",
+        sortStreamersLeast: "Fewest live streams",
         sortViewersMost: "Most viewers",
         sortViewersLeast: "Least viewers",
         sortRacesMost: "Most races",
@@ -87,7 +87,13 @@ const en = {
         sortTournamentsMost: "Most tournaments",
         sortTournamentsLeast: "Least tournaments",
         sortReleaseNewest: "Newest release",
-        sortReleaseOldest: "Oldest release"
+        sortReleaseOldest: "Oldest release",
+        searchPlaceholder: "Search a game or a randomizer...",
+        legendRaces: "races",
+        legendTournaments: "tournaments",
+        legendLive: "live streams",
+        count: "{count} games",
+        countFiltered: "{count} of {total} games"
     },
     
     // Game detail page
@@ -312,7 +318,14 @@ const en = {
         searchPlaceholder: "Search players...",
         races: "races",
         tournaments: "tournaments",
-        wins: "wins"
+        wins: "wins",
+        sortBy: "Sort by:",
+        sortRecent: "Recently active",
+        sortRaces: "Most races",
+        sortName: "Name (A-Z)",
+        lastRace: "Last race: {date}",
+        count: "{count} players",
+        countFiltered: "{count} of {total} players"
     },
     
     // Compare players page
@@ -543,6 +556,7 @@ const en = {
     
     // Spoiler mode
     spoiler: {
+        toggleLabel: "No spoilers",
         show: "Show",
         hide: "Hide"
     },
@@ -611,8 +625,8 @@ const en = {
     
     // Tooltips
     tooltips: {
-        spoilerEnabled: "Anti-Spoiler Mode enabled - Click to disable",
-        spoilerDisabled: "Anti-Spoiler Mode disabled - Click to enable",
+        spoilerEnabled: "No spoilers on: results are hidden. Click to show them",
+        spoilerDisabled: "No spoilers off: results are visible. Click to hide them, handy before watching a VOD",
         patreon: "Support us on Patreon"
     }
 };

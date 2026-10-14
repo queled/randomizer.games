@@ -64,8 +64,8 @@ const it = {
         liveNow: "in diretta",
         sortBy: "Ordina per:",
         sortName: "Nome",
-        sortStreamersMost: "Streamer più attivi",
-        sortStreamersLeast: "Streamer meno attivi",
+        sortStreamersMost: "Più stream in diretta",
+        sortStreamersLeast: "Meno stream in diretta",
         sortViewersMost: "Più spettatori",
         sortViewersLeast: "Meno spettatori",
         sortRacesMost: "Più gare",
@@ -73,7 +73,13 @@ const it = {
         sortTournamentsMost: "Più tornei",
         sortTournamentsLeast: "Meno tornei",
         sortReleaseNewest: "Uscita più recente",
-        sortReleaseOldest: "Uscita più vecchia"
+        sortReleaseOldest: "Uscita più vecchia",
+        searchPlaceholder: "Cerca un gioco o un randomizer...",
+        legendRaces: "gare",
+        legendTournaments: "tornei",
+        legendLive: "stream in diretta",
+        count: "{count} giochi",
+        countFiltered: "{count} giochi su {total}"
     },
     
     // Game detail page
@@ -293,7 +299,14 @@ match1: "Partita 1",
         searchPlaceholder: "Cerca giocatori...",
         races: "gare",
         tournaments: "tornei",
-        wins: "vittorie"
+        wins: "vittorie",
+        sortBy: "Ordina per:",
+        sortRecent: "Attivi di recente",
+        sortRaces: "Più gare",
+        sortName: "Nome (A-Z)",
+        lastRace: "Ultima gara: {date}",
+        count: "{count} giocatori",
+        countFiltered: "{count} giocatori su {total}"
     },
     
     // Compare players page
@@ -524,6 +537,7 @@ match1: "Partita 1",
     
     // Spoiler mode
     spoiler: {
+        toggleLabel: "No spoiler",
         show: "Mostra",
         hide: "Nascondi"
     },
@@ -592,8 +606,8 @@ match1: "Partita 1",
     
     // Tooltips
     tooltips: {
-        spoilerEnabled: "Modalità Anti-Spoiler attivata - Fare clic per disattivare",
-        spoilerDisabled: "Modalità Anti-Spoiler disattivata - Fare clic per attivare",
+        spoilerEnabled: "No spoiler attivo: i risultati sono nascosti. Clicca per mostrarli",
+        spoilerDisabled: "No spoiler disattivato: i risultati sono visibili. Clicca per nasconderli, utile prima di guardare un VOD",
         patreon: "Sostienici su Patreon"
     }
 };

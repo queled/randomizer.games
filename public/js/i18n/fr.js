@@ -66,16 +66,22 @@ const fr = {
         liveNow: "en direct",
         sortBy: "Trier par :",
         sortName: "Nom",
-        sortStreamersMost: "Joueurs les plus actifs",
-        sortStreamersLeast: "Joueurs les moins actifs",
-        sortViewersMost: "Spectateurs les plus actifs",
-        sortViewersLeast: "Spectateurs les moins actifs",
+        sortStreamersMost: "Le plus de streams en direct",
+        sortStreamersLeast: "Le moins de streams en direct",
+        sortViewersMost: "Le plus de spectateurs",
+        sortViewersLeast: "Le moins de spectateurs",
         sortRacesMost: "Plus grand nombre de courses",
         sortRacesLeast: "Plus petit nombre de courses",
         sortTournamentsMost: "Plus grand nombre de tournois",
         sortTournamentsLeast: "Plus petit nombre de tournois",
         sortReleaseNewest: "Plus récent sorti",
-        sortReleaseOldest: "Plus ancien sorti"
+        sortReleaseOldest: "Plus ancien sorti",
+        searchPlaceholder: "Rechercher un jeu ou un randomizer...",
+        legendRaces: "courses",
+        legendTournaments: "tournois",
+        legendLive: "streams en direct",
+        count: "{count} jeux",
+        countFiltered: "{count} jeux sur {total}"
     },
     
     // Game detail page
@@ -300,7 +306,14 @@ const fr = {
         searchPlaceholder: "Rechercher un joueur...",
         races: "courses",
         tournaments: "tournois",
-        wins: "victoires"
+        wins: "victoires",
+        sortBy: "Trier par :",
+        sortRecent: "Actifs récemment",
+        sortRaces: "Le plus de courses",
+        sortName: "Nom (A-Z)",
+        lastRace: "Dernière course : {date}",
+        count: "{count} joueurs",
+        countFiltered: "{count} joueurs sur {total}"
     },
     
     // Compare players page
@@ -531,6 +544,7 @@ const fr = {
     
     // Spoiler mode
     spoiler: {
+        toggleLabel: "Anti-spoil",
         show: "Afficher",
         hide: "Masquer"
     },
@@ -599,8 +613,8 @@ const fr = {
     
     // Tooltips
     tooltips: {
-        spoilerEnabled: "Mode Anti-Spoiler activé - Cliquez pour désactiver",
-        spoilerDisabled: "Mode Anti-Spoiler désactivé - Cliquez pour activer",
+        spoilerEnabled: "Anti-spoil activé : les résultats sont masqués. Cliquez pour les afficher",
+        spoilerDisabled: "Anti-spoil désactivé : les résultats sont visibles. Cliquez pour les masquer, pratique avant de regarder une VOD",
         patreon: "Soutenez-nous sur Patreon"
     }
 };

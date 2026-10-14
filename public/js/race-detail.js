@@ -407,7 +407,7 @@
     if (num === 1) return '🥇';
     if (num === 2) return '🥈';
     if (num === 3) return '🥉';
-    return `${num}ème`;
+    return (window.i18n && window.i18n.ordinal) ? window.i18n.ordinal(num) : `${num}`;
   }
 
   async function fetchJson(url) {

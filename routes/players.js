@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { Player, Tournament, Race, Game, Match } = require('../models');
 const { buildCommonTournaments, racetimeRoomPath } = require('../helpers/compare-tournaments');
+const { buildPlayerTournaments } = require('../helpers/player-tournaments');
 const { buildAliasIndex, loadAliasIndex, getCanonicalName, getAliases } = require('../helpers/player-aliases');
 
 const PLAYERS_CACHE_TTL = 5 * 60 * 1000;
@@ -582,7 +583,7 @@ router.get('/by-name/:name', async (req, res, next) => {
 
 // ?compact=1 (player page): only the fields the page displays, and only the
 // player's own entrant, instead of every entrant of every race (~10x smaller).
-const COMPACT_RACE_FIELDS = 'name category goal info status startedAt endedAt createdAt updatedAt entrants.userId entrants.userName entrants.place';
+const COMPACT_RACE_FIELDS = 'name category goal info status startedAt endedAt createdAt updatedAt entrants.userId entrants.userName entrants.place entrants.status';
 
 function isCompactRequest(req) {
   return req.query.compact === '1' || req.query.compact === 'true';
@@ -729,6 +730,40 @@ router.get('/:id/races', async (req, res, next) => {
 });
 
 // Get player by ID
+// Tournaments of a player, by racetime account (or by name for a player without one)
+async function sendPlayerTournaments(res, cacheKey, lookup) {
+  const cached = getPlayersCache(cacheKey);
+  if (cached) return res.json(cached);
+  const { userId, names } = await lookup();
+  const result = { tournaments: await buildPlayerTournaments({ Tournament, Match, userId, names }) };
+  setPlayersCache(cacheKey, result);
+  res.json(result);
+}
+
+router.get('/by-name/:name/tournaments', async (req, res, next) => {
+  try {
+    const name = req.params.name;
+    await sendPlayerTournaments(res, `players:by-name-tournaments:${normalizeName(name)}`, async () => {
+      const player = await findPlayerByNameOrAlias(name);
+      return { userId: player?.userId || null, names: [name, player?.name, ...(player?.aliases || [])] };
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/:id/tournaments', async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    await sendPlayerTournaments(res, `players:id-tournaments:${userId}`, async () => {
+      const player = await Player.findOne({ userId }).select('name aliases').lean();
+      return { userId, names: [player?.name, ...(player?.aliases || [])] };
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/:id', async (req, res, next) => {
   try {
     const player = await Player.findOne({ userId: req.params.id })

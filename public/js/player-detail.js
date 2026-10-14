@@ -139,6 +139,7 @@
   let gameDisplayMap = null;
   let gameDisplayMapPromise = null;
   let latestRenderedRaces = null;
+  let latestRenderedTournaments = null;
   let avatarLoadedFor = null;
 
   if (id || nameParam) {
@@ -386,8 +387,7 @@
     if (n === null || typeof n === 'undefined' || n === '') return '-';
     const num = Number(n);
     if (Number.isNaN(num)) return String(n);
-    if (num === 1) return '1er';
-    return `${num}ème`;
+    return (typeof i18n !== 'undefined' && i18n.ordinal) ? i18n.ordinal(num) : String(num);
   }
 
   function renderProfile(p, tournaments, races, options = {}){
@@ -501,21 +501,6 @@
 
     applyPlayerSeo(p, tournaments, races);
   }
-  function getTournamentGameName(t) {
-    if (!t) return '-';
-    // Only return explicit game name fields, never the tournament name
-    return t.gameName
-      || t.tournamentGameName
-      || (t.game && typeof t.game === 'object' && t.game.name)
-      || (t.game && typeof t.game === 'string' ? t.game : null)
-      || (t.tournament && typeof t.tournament === 'object' && t.tournament.gameName)
-      || (t.tournament && typeof t.tournament === 'object' && t.tournament.game && t.tournament.game.name)
-      || (t.tournamentId && typeof t.tournamentId === 'object' && t.tournamentId.gameName)
-      || (t.tournamentId && typeof t.tournamentId === 'object' && t.tournamentId.game && t.tournamentId.game.name)
-      || t.gameSlug
-      || '-';
-  }
-
   // Normalize game names to count unique games properly
   function normalizeGameName(name) {
     if (!name || name === '-' || name === 'Unknown') return null;
@@ -704,209 +689,118 @@
     updateGamesSummaryVisibility();
   }
 
-  // States of a tournament whose results are final
-  const FINISHED_TOURNAMENT_STATES = ['complete', 'completed', 'ended', 'awaiting_review'];
-
-  function isTournamentFinished(tr) {
-    return FINISHED_TOURNAMENT_STATES.includes(String(tr?.state || '').toLowerCase())
-      || String(tr?.status || '').toLowerCase() === 'terminé';
+  function tr(key, fallback, params) {
+    if (typeof i18n === 'undefined') return fallback;
+    const value = i18n.t(key, params || {});
+    return value === key ? fallback : value;
   }
 
-  function normalizePlayerName(s) {
-    if (!s && s !== 0) return '';
-    try {
-      return String(s).normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/\s+/g, ' ').trim().toLowerCase();
-    } catch (e) {
-      return String(s).replace(/[̀-ͯ]/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
-    }
+  function trPlural(key, count, fallback) {
+    if (typeof i18n === 'undefined' || typeof i18n.plural !== 'function') return fallback;
+    const value = i18n.plural(key, count);
+    return value === key ? fallback : value;
   }
 
-  // Best-effort rank from the matches when Challonge gives none (group stage → single elimination).
-  // Players knocked out before the final bracket tie behind the players who reached it.
-  async function computeRankFromMatches(tr, tid, participant) {
-    const pidWanted = participant.challongeId != null ? String(participant.challongeId) : null;
-    if (!pidWanted) return null;
-
-    let matches = [];
-    try {
-      matches = await fetchJson('/api/tournaments/' + encodeURIComponent(tid) + '/matches');
-    } catch (err) {
-      matches = [];
-    }
-    // Normalise la forme de la réponse: certains endpoints renvoient { matches: [...] }
-    if (!Array.isArray(matches) && matches && Array.isArray(matches.matches)) matches = matches.matches;
-    if (!Array.isArray(matches)) matches = [];
-
-    const participants = tr.participants || [];
-    const map = new Map();
-    participants.forEach(part => {
-      const pid = part && (part.challongeId != null ? String(part.challongeId) : null);
-      if (!pid) return;
-      map.set(pid, { qualified: false, maxFinalRound: 0, finalWins: 0, groupWins: 0, seed: (part.seed != null ? Number(part.seed) : null) });
-    });
-
-    // Group matches may carry names only
-    const getByName = (name) => {
-      if (!name) return null;
-      const participant = participants.find(part => part.challongeId != null && (part.name === name || part.displayName === name));
-      return participant ? map.get(String(participant.challongeId)) : null;
-    };
-
-    matches.forEach(m => {
-      if (!m) return;
-      const p1 = m.player1Id != null ? String(m.player1Id) : null;
-      const p2 = m.player2Id != null ? String(m.player2Id) : null;
-      if (!p1 && !p2) return;
-      const winner = m.winnerId != null ? String(m.winnerId) : null;
-      const s1 = (p1 && map.get(p1)) || getByName(m.player1Name);
-      const s2 = (p2 && map.get(p2)) || getByName(m.player2Name);
-
-      if (m.groupId === null || m.groupId === undefined) {
-        const round = Number(m.round || 0);
-        if (s1) { s1.qualified = true; s1.maxFinalRound = Math.max(s1.maxFinalRound, round); }
-        if (s2) { s2.qualified = true; s2.maxFinalRound = Math.max(s2.maxFinalRound, round); }
-        if (winner && s1 && winner === p1) s1.finalWins += 1;
-        if (winner && s2 && winner === p2) s2.finalWins += 1;
-      } else if (winner) {
-        if (s1 && winner === p1) s1.groupWins += 1;
-        if (s2 && winner === p2) s2.groupWins += 1;
-      }
-    });
-
-    const hasRank = (part) => {
-      const r = part && part.finalRank != null ? Number(part.finalRank) : null;
-      return Number.isFinite(r) && r > 0;
-    };
-    const statsOf = (part) => (part && part.challongeId != null ? map.get(String(part.challongeId)) : null) || null;
-
-    const wantedStats = map.get(pidWanted);
-    if (!wantedStats || !wantedStats.qualified) {
-      const ahead = participants.filter(part => hasRank(part) || statsOf(part)?.qualified).length;
-      if (ahead) return ahead + 1;
-    }
-
-    // Same order as tournament-detail.js
-    const sortedParticipants = [...participants].sort((a, b) => {
-      const aHas = hasRank(a);
-      const bHas = hasRank(b);
-      if (aHas && bHas) return Number(a.finalRank) - Number(b.finalRank);
-      if (aHas !== bHas) return aHas ? -1 : 1;
-      const sa = statsOf(a);
-      const sb = statsOf(b);
-      const aq = !!(sa && sa.qualified);
-      const bq = !!(sb && sb.qualified);
-      if (aq !== bq) return aq ? -1 : 1;
-      const arnd = sa ? sa.maxFinalRound : 0;
-      const brnd = sb ? sb.maxFinalRound : 0;
-      if (brnd !== arnd) return brnd - arnd;
-      const aw = sa ? sa.finalWins : 0;
-      const bw = sb ? sb.finalWins : 0;
-      if (bw !== aw) return bw - aw;
-      const agw = sa ? sa.groupWins : 0;
-      const bgw = sb ? sb.groupWins : 0;
-      if (bgw !== agw) return bgw - agw;
-      const as = sa && Number.isFinite(sa.seed) ? sa.seed : 9999;
-      const bs = sb && Number.isFinite(sb.seed) ? sb.seed : 9999;
-      return as - bs;
-    });
-    const index = sortedParticipants.findIndex(part => part.challongeId != null && String(part.challongeId) === pidWanted);
-    return index >= 0 ? index + 1 : null;
+  function formatShortDate(value) {
+    if (!value) return '';
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return '';
+    const lang = (typeof i18n !== 'undefined' && i18n.getLanguage) ? i18n.getLanguage() : 'en';
+    return d.toLocaleDateString(lang, { day: 'numeric', month: 'short', year: 'numeric' });
   }
 
-  function renderTournaments(tournaments, playerName){
-    if(!tournaments || !tournaments.length){ toursEl.innerHTML = '<p style="color:#9ca3af;">No tournament participation.</p>'; return; }
-    const getTid = (t) => t._id || t.tournamentId || t.id || '';
-    // Sort by date descending (most recent first). Use multiple fallbacks for start date.
-    const getStartTime = (t) => {
-      if (!t) return 0;
-      if (t._resolvedStartTime) return t._resolvedStartTime;
-      const candidates = [t.startDate, t.start, (t.tournament && t.tournament.startDate), (t.tournament && t.tournament.start), t.createdAt, t.updatedAt];
-      for (const c of candidates) {
-        if (c) {
-          const n = new Date(c).getTime();
-          if (Number.isFinite(n) && n > 0) return n;
-        }
-      }
-      return 0;
-    };
-    const t_ = (key, fallback) => (typeof i18n !== 'undefined' ? i18n.t(key) : fallback);
-    const draw = (list) => {
-      const labelRanking = t_('playerDetail.ranking', 'Ranking');
-      const sorted = [...list].sort((a, b) => getStartTime(b) - getStartTime(a));
-      toursEl.innerHTML = sorted.map(t => {
-        const rankText = t._rankText || (t.finalRank ? formatRank(t.finalRank) : '-');
-        return `
-      <a href="/tournament-detail.html?id=${encodeURIComponent(getTid(t))}" style="text-decoration:none;color:inherit;display:block;">
-        <div class="tournament-card tournament-hover-card" data-tid="${encodeURIComponent(getTid(t))}" style="background:#1f2937;padding:1rem;border-radius:0.5rem;margin-bottom:1rem;">
-          <h3 style="color:#fbbf24;font-size:1rem;margin-bottom:0.5rem;">${escHtml(t.tournamentName || t.name || 'Tournoi')}</h3>
-          <div class="tournament-game" style="color:#d1d5db;font-size:0.875rem;margin-bottom:0.25rem;">${escHtml(getTournamentGameName(t))}</div>
-          <div class="spoiler-block" style="color:#9ca3af;font-size:0.875rem;">${labelRanking}: <strong style="color:#fbbf24;">${escHtml(rankText)}</strong></div>
+  // Card shared by races and tournaments: title and result on top, a detail line, then
+  // date and status. The whole card links to the page; links inside it stay clickable.
+  function renderResultCard({ href, title, result, resultClass, resultTitle, subtitle, extra, meta }) {
+    return `
+      <div class="result-card">
+        <div class="result-card-head">
+          <h3><a class="result-card-link" href="${href}">${escHtml(title)}</a></h3>
+          <span class="result-card-result spoiler-block ${resultClass || ''}"${resultTitle ? ` title="${escHtml(resultTitle)}"` : ''}>${escHtml(result)}</span>
         </div>
-      </a>
+        ${subtitle ? `<div class="result-card-subtitle">${escHtml(subtitle)}</div>` : ''}
+        ${extra || ''}
+        <div class="result-card-meta">${meta.filter(Boolean).map(escHtml).join(' • ')}</div>
+      </div>
     `;
-      }).join('\n');
-    };
-    // Render immediately using available data
-    draw(tournaments);
-
-    // Then complete missing dates, games and ranks from the tournament documents and render once more
-    const wanted = normalizePlayerName(playerName);
-    const hasRank = (t) => !!(t.finalRank || t.finalRank === 0);
-    const needsLookup = (t) => getTid(t) && (!getStartTime(t) || ['-', 'Unknown', ''].includes(getTournamentGameName(t)) || !hasRank(t));
-    if (!tournaments.some(needsLookup)) return;
-
-    const docs = new Map();
-    const getDoc = (tid) => {
-      if (!docs.has(tid)) docs.set(tid, fetchJson('/api/tournaments/' + encodeURIComponent(tid)).catch(() => null));
-      return docs.get(tid);
-    };
-
-    const resolveRank = async (tr, tid) => {
-      if (!wanted || !tr || !Array.isArray(tr.participants)) return null;
-      // Match participants by their racetime account, else by normalized bracket name
-      // (exact match only to avoid substring confusion between similar names)
-      const p = tr.participants.find(part => part.racetimeName && normalizePlayerName(part.racetimeName) === wanted)
-        || tr.participants.find(part => {
-          if (part.racetimeName) return false;
-          return normalizePlayerName(part.displayName || part.name) === wanted || normalizePlayerName(part.name || part.displayName) === wanted;
-        });
-      if (!p) return null;
-      if (p.finalRank != null) return formatRank(p.finalRank);
-      if (!isTournamentFinished(tr)) return t_('playerDetail.inProgress', 'In progress');
-      const computed = await computeRankFromMatches(tr, tid, p);
-      return computed ? formatRank(computed) : null;
-    };
-
-    Promise.all(tournaments.map(async (t) => {
-      if (!needsLookup(t)) return t;
-      const tid = getTid(t);
-      const tr = await getDoc(tid);
-      if (!tr) return t;
-      const extra = {};
-      if (!getStartTime(t) && tr.startDate) extra._resolvedStartTime = new Date(tr.startDate).getTime();
-      if (['-', 'Unknown', ''].includes(getTournamentGameName(t))) {
-        const game = tr.gameName || (tr.game && tr.game.name) || tr.gameSlug || null;
-        if (game) extra.gameName = game;
-      }
-      if (!hasRank(t)) {
-        try {
-          const rankText = await resolveRank(tr, tid);
-          if (rankText) extra._rankText = rankText;
-        } catch (e) { /* ignore compute errors */ }
-      }
-      return Object.assign({}, t, extra);
-    })).then(draw).catch(() => { /* keep the first render */ });
   }
+
+  function resultClassOfRank(rank) {
+    const n = Number(rank);
+    if (n === 1) return 'is-gold';
+    if (n === 2) return 'is-silver';
+    if (n === 3) return 'is-bronze';
+    return '';
+  }
+
+  const TOURNAMENT_STATUS_KEYS = { finished: 'finished', ongoing: 'ongoing', upcoming: 'upcoming' };
+
+  function renderTournaments(tournaments){
+    latestRenderedTournaments = tournaments;
+    if(!tournaments || !tournaments.length){
+      toursEl.innerHTML = `<p style="color:#9ca3af;">${escHtml(tr('playerDetail.noTournaments', 'No tournament participation.'))}</p>`;
+      return;
+    }
+    toursEl.innerHTML = tournaments.map(t => {
+      let result = t.rank ? formatRank(t.rank) : '-';
+      let resultClass = t.rank ? resultClassOfRank(t.rank) : 'is-muted';
+      let resultTitle = t.rankComputed ? tr('playerDetail.rankComputed', 'Rank computed from the bracket') : '';
+      if (!t.rank && t.record) {
+        result = tr('playerDetail.record', `${t.record.wins} W – ${t.record.losses} L`, t.record);
+        resultClass = 'is-record';
+      } else if (!t.rank && t.status !== 'finished') {
+        result = tr('playerDetail.inProgress', 'In progress');
+      }
+
+      const game = getTournamentGameName(t);
+      const entrants = t.entrants
+        ? (t.team ? trPlural('playerDetail.teams', t.entrants, `${t.entrants} teams`) : trPlural('playerDetail.participants', t.entrants, `${t.entrants} participants`))
+        : '';
+
+      let extra = '';
+      if (t.team) {
+        const members = (t.team.members || []).map(m => m.userId
+          ? `<a class="result-card-inner-link" href="/player-detail.html?id=${encodeURIComponent(m.userId)}">${escHtml(m.name)}</a>`
+          : escHtml(m.name)).join(', ');
+        extra = `<div class="result-card-team">${escHtml(tr('playerDetail.team', 'Team'))} <em>${escHtml(t.team.name)}</em>${members ? ` ${escHtml(tr('playerDetail.teamWith', 'with'))} ${members}` : ''}</div>`;
+      }
+
+      const statusKey = TOURNAMENT_STATUS_KEYS[t.status] || 'ongoing';
+      return renderResultCard({
+        href: `/tournament-detail.html?id=${encodeURIComponent(t.tournamentId)}`,
+        title: t.name || 'Tournament',
+        result,
+        resultClass,
+        resultTitle,
+        subtitle: [game, t.record && t.record.division].filter(v => v && v !== '-').join(' · '),
+        extra,
+        meta: [formatShortDate(t.startDate), tr('status.tournament.' + statusKey, statusKey), entrants]
+      });
+    }).join('\n');
+  }
+
+  function getTournamentGameName(t) {
+    if (!t) return '-';
+    // Same names as the race cards when the game is known
+    const meta = t.gameSlug ? getGameMetaFromCategory(t.gameSlug) : null;
+    return (meta && meta.slug && meta.name) || t.gameName || t.gameSlug || '-';
+  }
+
+  const RACE_STATUS_KEYS = { finished: 'finished', cancelled: 'cancelled', in_progress: 'inProgress', open: 'open', invitational: 'invitational', pending: 'pending' };
 
   function renderRaces(races){
     latestRenderedRaces = races;
     const mapWasLoaded = !!gameDisplayMap;
     renderGamesSummary(races || []).then(() => {
-      // Race titles depend on the games map; re-render once it is available
+      // Race and tournament titles depend on the games map; re-render once it is available
       if (!mapWasLoaded && gameDisplayMap && races === latestRenderedRaces && races && races.length) renderRaces(races);
+      if (!mapWasLoaded && gameDisplayMap && latestRenderedTournaments) renderTournaments(latestRenderedTournaments);
     });
 
-    if(!races || !races.length){ racesEl.innerHTML = '<p style="color:#9ca3af;">No races found.</p>'; return; }
+    if(!races || !races.length){
+      racesEl.innerHTML = `<p style="color:#9ca3af;">${escHtml(tr('playerDetail.noRaces', 'No races found.'))}</p>`;
+      return;
+    }
     // Sort by startedAt (or createdAt) descending (most recent first)
     const getRaceTime = (r) => {
       if (!r) return 0;
@@ -920,11 +814,6 @@
       return 0;
     };
     const sorted = [...races].sort((a,b) => getRaceTime(b) - getRaceTime(a));
-    
-    const truncateText = (text, max) => {
-      if (!text) return '';
-      return text.length > max ? text.slice(0, max - 1) + '…' : text;
-    };
 
     racesEl.innerHTML = sorted.map(r => {
       // Find the entrant data for this player. The compact API only returns this player's
@@ -934,32 +823,31 @@
         e.userId === id ||
         (nameParam && (e.userName === nameParam || e.userName?.toLowerCase() === nameParam.toLowerCase()))
       ) || r.entrants[0]) : null;
-      const place = entrant ? (entrant.place || '-') : '-';
-      
-      // Get game name from race - racetime.gg stores it in 'name' field usually like "oot/weekly-XXX"
+
+      let result = '-';
+      let resultClass = 'is-muted';
+      if (entrant && entrant.place) {
+        result = formatRank(entrant.place);
+        resultClass = resultClassOfRank(entrant.place);
+      } else if (entrant && entrant.status === 'dnf') {
+        result = tr('playerDetail.dnf', 'Forfeit');
+      } else if (entrant && entrant.status === 'dq') {
+        result = tr('playerDetail.dq', 'Disqualified');
+      }
+
       // The category field contains the game slug (e.g., 'oot', 'alttp')
       const gameName = getGameDisplayName(r.category || r.name?.split('/')[0] || '');
-      const goal = r.goal || r.info || '';
-      const goalDisplay = truncateText(goal || 'Standard', 80);
-const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof window.i18n !== 'undefined' && window.i18n.getLanguage) ? window.i18n.getLanguage() : 'en', { 
-        day: 'numeric', month: 'short', year: 'numeric' 
-      }) : '-';
-      
+      const statusKey = RACE_STATUS_KEYS[r.status];
       const raceId = r._id || r.id || '';
-      const raceUrl = raceId ? `/race-detail.html?id=${encodeURIComponent(raceId)}` : '#';
-      
-      return `
-      <a href="${raceUrl}" style="text-decoration:none;color:inherit;display:block;">
-        <div style="background:#1f2937;padding:0.75rem;border-radius:0.5rem;margin-bottom:1rem;transition:background 0.2s;max-height:105px;overflow:hidden;" data-hover-style="background:#374151" data-rest-style="background:#1f2937">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.25rem;">
-            <h3 style="color:#fbbf24;font-size:0.95rem;flex:1;margin-right:0.75rem;">${escHtml(gameName)}</h3>
-            <span class="spoiler-block" style="color:#10b981;font-weight:bold;font-size:0.875rem;">${place && place !== '-' ? formatRank(place) : '-'}</span>
-          </div>
-          <div style="color:#d1d5db;font-size:0.8rem;margin-bottom:0.25rem;overflow:hidden;text-overflow:ellipsis;">${escHtml(goalDisplay)}</div>
-          <div style="color:#9ca3af;font-size:0.75rem;">${raceDate} • ${escHtml(r.status || '-')}</div>
-        </div>
-      </a>
-      `;
+
+      return renderResultCard({
+        href: raceId ? `/race-detail.html?id=${encodeURIComponent(raceId)}` : '#',
+        title: gameName,
+        result,
+        resultClass,
+        subtitle: r.goal || r.info || 'Standard',
+        meta: [formatShortDate(r.startedAt), statusKey ? tr('status.race.' + statusKey, r.status) : r.status]
+      });
     }).join('\n');
   }
 
@@ -972,18 +860,12 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
   async function loadById(pid){
     const racesRequest = fetchJson('/api/players/'+encodeURIComponent(pid)+'/races?compact=1');
     racesRequest.catch(() => {});
+    const tournamentsRequest = fetchJson('/api/players/'+encodeURIComponent(pid)+'/tournaments')
+      .then(r => r.tournaments || []).catch(() => []);
     const player = await fetchJson('/api/players/'+encodeURIComponent(pid));
-    let tournaments = player.tournaments || [];
-    // Tournament participations are often only in the aggregated list (as on ?name= pages)
-    if (!tournaments.length && player.name) {
-      try {
-        const all = await fetchJson('/api/players?includeTournaments=1&name=' + encodeURIComponent(player.name));
-        const aggregated = (all.players || []).find(p => (p.name || '').toLowerCase() === player.name.toLowerCase());
-        if (aggregated && aggregated.tournaments) tournaments = aggregated.tournaments;
-      } catch (e) { /* keep the player's own (empty) list */ }
-    }
+    const tournaments = await tournamentsRequest;
     renderProfile(player, tournaments, [], { deferCounts: true });
-    renderTournaments(tournaments, player.name || player.userId || headerName.textContent);
+    renderTournaments(tournaments);
     const jr = await racesRequest;
     const races = jr.races || [];
     player.stats = player.stats || {};
@@ -1005,13 +887,17 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
       return racesByNameResponse;
     };
 
-    // First try the aggregated players list to get tournament data and basic info
+    // Tournaments by racetime account when the name belongs to a known player
+    const tournamentsRequest = fetchJson('/api/players/by-name/' + encodeURIComponent(name) + '/tournaments')
+      .then(r => r.tournaments || []).catch(() => []);
+
+    // First try the aggregated players list to get basic info
     try {
-      const all = await fetchJson('/api/players?includeTournaments=1&name=' + encodeURIComponent(name));
+      const all = await fetchJson('/api/players?name=' + encodeURIComponent(name));
       const aggregated = (all.players || []).find(p => p.name.toLowerCase() === name.toLowerCase());
       
       if (aggregated) {
-        const tournaments = aggregated.tournaments || [];
+        const tournaments = await tournamentsRequest;
         
         // Enrich with racetimeUrl/twitch if available from aggregated data
         const playerData = {
@@ -1039,7 +925,7 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
         // so the profile does not wait for racetime.gg before showing up
         
         renderProfile(playerData, tournaments, [], { deferCounts: true });
-        renderTournaments(tournaments, aggregated.name || name);
+        renderTournaments(tournaments);
         
         // Try to load races by player name
         try {
@@ -1053,13 +939,13 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
               renderProfile(playerData, tournaments, races);
               renderRaces(races);
             } else {
-              racesEl.innerHTML = '<p style="color:#9ca3af;">No races found for this player.</p>';
+              racesEl.innerHTML = `<p style="color:#9ca3af;">${escHtml(tr('playerDetail.noRaces', 'No races found.'))}</p>`;
             }
           } else {
-            racesEl.innerHTML = '<p style="color:#9ca3af;">No races found.</p>';
+            racesEl.innerHTML = `<p style="color:#9ca3af;">${escHtml(tr('playerDetail.noRaces', 'No races found.'))}</p>`;
           }
         } catch (e) {
-          racesEl.innerHTML = '<p style="color:#9ca3af;">Error loading races.</p>';
+          racesEl.innerHTML = `<p style="color:#9ca3af;">${escHtml(tr('playerDetail.racesError', 'Error loading races.'))}</p>`;
         }
         return;
       }
@@ -1099,7 +985,7 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
 
         renderProfile(playerData, [], races);
         if (races.length) renderRaces(races);
-        else racesEl.innerHTML = '<p style="color:#9ca3af;">No races found for this player.</p>';
+        else racesEl.innerHTML = `<p style="color:#9ca3af;">${escHtml(tr('playerDetail.noRaces', 'No races found.'))}</p>`;
         return;
       }
       // The name is an alias (former name, Challonge name...): show the canonical profile
@@ -1107,49 +993,10 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
         window.location.replace('/player-detail.html?name=' + encodeURIComponent(player.name));
         return;
       }
-      // Normalize tournaments to the shape expected by renderTournaments
-      const tournaments = (player.tournaments || []).map(t => {
-        const tour = t.tournamentId || {};
-        const gameName = tour.gameName || (tour.game && tour.game.name) || t.gameName || (t.game && t.game.name) || null;
-        return {
-          _id: tour._id || t.tournamentId,
-          tournamentId: tour._id || t.tournamentId,
-          tournamentName: tour.name || t.tournamentName,
-          name: tour.name || t.tournamentName,
-          gameName: gameName,
-          startDate: tour.startDate || t.startDate,
-          finalRank: t.finalRank || t.finalRank
-        };
-      });
-
-      // If the player document returned by `/api/players/by-name` doesn't include
-      // populated `tournaments`, try fetching the canonical player by userId
-      // which contains tournament participations.
-      let displayTournaments = tournaments || [];
-      if ((!displayTournaments || displayTournaments.length === 0) && player.userId) {
-        try {
-          const full = await fetchJson('/api/players/' + encodeURIComponent(player.userId));
-          const fullT = full.tournaments || [];
-          displayTournaments = fullT.map(t => {
-            const tour = t.tournamentId || {};
-            const gameName = tour.gameName || (tour.game && tour.game.name) || t.gameName || (t.game && t.game.name) || null;
-            return {
-              _id: tour._id || t.tournamentId,
-              tournamentId: tour._id || t.tournamentId,
-              tournamentName: tour.name || t.tournamentName,
-              name: tour.name || t.tournamentName,
-              gameName: gameName,
-              startDate: tour.startDate || t.startDate,
-              finalRank: t.finalRank || t.finalRank
-            };
-          });
-        } catch (e) {
-          // ignore and fall back to the (empty) tournaments list
-        }
-      }
+      const displayTournaments = await tournamentsRequest;
 
       renderProfile(player, displayTournaments, [], { deferCounts: true });
-      renderTournaments(displayTournaments, player.name || name || player.userId);
+      renderTournaments(displayTournaments);
 
       // Load races by userId or by name
       if (player.userId) {
@@ -1171,18 +1018,18 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
             renderProfile(player, displayTournaments, races);
             renderRaces(races);
           } else {
-            racesEl.innerHTML = '<p style="color:#9ca3af;">No races found for this player.</p>';
+            racesEl.innerHTML = `<p style="color:#9ca3af;">${escHtml(tr('playerDetail.noRaces', 'No races found.'))}</p>`;
           }
         } catch (e) {
-          racesEl.innerHTML = '<p style="color:#9ca3af;">Error loading races.</p>';
+          racesEl.innerHTML = `<p style="color:#9ca3af;">${escHtml(tr('playerDetail.racesError', 'Error loading races.'))}</p>`;
         }
       }
     } catch (err) {
       // Fallback to aggregated list if direct player lookup fails
-      const all = await fetchJson('/api/players?includeTournaments=1&name=' + encodeURIComponent(name));
+      const all = await fetchJson('/api/players?name=' + encodeURIComponent(name));
       const found = (all.players || []).find(p => p.name.toLowerCase() === name.toLowerCase());
       if(!found) throw new Error('Player not found by name');
-      const tournaments = found.tournaments || [];
+      const tournaments = await tournamentsRequest;
       
       const playerData = {
         name: found.name,
@@ -1193,7 +1040,7 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
       };
       
       renderProfile(playerData, tournaments, [], { deferCounts: true });
-      renderTournaments(tournaments, found.name || name);
+      renderTournaments(tournaments);
       
       // Try to load races
       try {
@@ -1205,13 +1052,19 @@ const raceDate = r.startedAt ? new Date(r.startedAt).toLocaleDateString((typeof 
           renderProfile(playerData, tournaments, races);
           renderRaces(races);
         } else {
-          racesEl.innerHTML = '<p style="color:#9ca3af;">No races found.</p>';
+          racesEl.innerHTML = `<p style="color:#9ca3af;">${escHtml(tr('playerDetail.noRaces', 'No races found.'))}</p>`;
         }
       } catch (e) {
-        racesEl.innerHTML = '<p style="color:#9ca3af;">Error loading races.</p>';
+        racesEl.innerHTML = `<p style="color:#9ca3af;">${escHtml(tr('playerDetail.racesError', 'Error loading races.'))}</p>`;
       }
     }
   }
+
+  // Ranks, dates and statuses follow the language
+  window.addEventListener('languageChanged', () => {
+    if (latestRenderedRaces) renderRaces(latestRenderedRaces);
+    if (latestRenderedTournaments) renderTournaments(latestRenderedTournaments);
+  });
 
   (async function(){
     try{

@@ -1429,6 +1429,94 @@ body.spoiler-mode .spoiler-text::before {
     flex: 0 0 auto;
 }
 
+/* Player page: race and tournament result cards */
+.result-card {
+    position: relative;
+    background: #1f2937;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    transition: background 0.2s;
+}
+
+.result-card:hover {
+    background: #374151;
+}
+
+.result-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.25rem;
+}
+
+.result-card-head h3 {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    font-size: 0.95rem;
+    color: #fbbf24;
+}
+
+.result-card-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* The whole card opens the race or tournament */
+.result-card-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+}
+
+.result-card-result {
+    flex: 0 0 auto;
+    font-weight: bold;
+    font-size: 0.875rem;
+    color: #10b981;
+    white-space: nowrap;
+}
+
+.result-card-result.is-gold { color: #fbbf24; }
+.result-card-result.is-silver { color: #d1d5db; }
+.result-card-result.is-bronze { color: #d97706; }
+.result-card-result.is-muted { color: #9ca3af; font-weight: normal; }
+.result-card-result.is-record { color: #93c5fd; }
+
+.result-card-subtitle {
+    color: #d1d5db;
+    font-size: 0.8rem;
+    margin-bottom: 0.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.result-card-team {
+    color: #9ca3af;
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+}
+
+/* Teammates' pages, above the card link */
+.result-card-inner-link {
+    position: relative;
+    z-index: 1;
+    color: #93c5fd;
+    text-decoration: none;
+}
+
+.result-card-inner-link:hover {
+    text-decoration: underline;
+}
+
+.result-card-meta {
+    color: #9ca3af;
+    font-size: 0.75rem;
+}
+
 .tournament-hover-card {
     transition: background 0.2s;
 }

@@ -319,11 +319,32 @@ function getLanguageFlag(code) {
     return flags[code] || '🌐';
 }
 
+/**
+ * Ordinal of a rank in the current language (1er, 2nd, 3.)
+ */
+function ordinal(n) {
+    const num = Number(n);
+    if (!Number.isFinite(num)) return String(n);
+    switch (currentLanguage) {
+        case 'fr': return num === 1 ? '1er' : `${num}e`;
+        case 'de': return `${num}.`;
+        case 'es':
+        case 'pt': return `${num}.º`;
+        case 'it': return `${num}°`;
+        default: {
+            const mod100 = num % 100;
+            const suffix = mod100 >= 11 && mod100 <= 13 ? 'th' : ({ 1: 'st', 2: 'nd', 3: 'rd' }[num % 10] || 'th');
+            return `${num}${suffix}`;
+        }
+    }
+}
+
 // Export functions for global use
 window.i18n = {
     init: initI18n,
     t,
     plural,
+    ordinal,
     setLanguage,
     getLanguage,
     formatDate,

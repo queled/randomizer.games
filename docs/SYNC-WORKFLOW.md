@@ -44,6 +44,7 @@ Hors chaîne, à lancer de temps en temps :
 
 - `node scripts/sync-rando-list.js --detect-new` : cache rando-list et nouveaux jeux (tâche `rando-list`, quotidienne) ;
 - `node scripts/sync-players-from-races.js` : collection des joueurs (tâche `players` de la crontab, avec `link-participant-accounts.js --all --apply`). Il **supprime** les joueurs « tournoi uniquement » : le passer d'abord avec `--dry-run`.
+- `node scripts/check-challonge-quota.js` : une seule requête pour savoir si le quota Challonge (500 requêtes sur 30 jours glissants) est revenu (tâche `challonge-check`, quotidienne). Tant qu'il est épuisé, l'étape 3 saute les tournois Challonge dès le premier refus, sans erreur.
 
 ## En production
 

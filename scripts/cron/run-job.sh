@@ -11,6 +11,7 @@
 #   tournaments-discover  nouveaux tournois des 2 derniers jours    (tous les jours)
 #   rando-list            cache rando-list, si le dépôt a changé    (tous les jours)
 #   players               joueurs et profils racetime.gg, comptes des participants (tous les jours)
+#   challonge-check       une requête pour savoir si le quota Challonge est revenu (tous les jours)
 #   backup                mongodump avec rotation                   (toutes les nuits)
 #
 # Chaque tâche écrit dans $LOG_DIR/<tâche>.log (~/logs par défaut). Un verrou
@@ -92,6 +93,10 @@ run_players() {
   return "$status"
 }
 
+run_challonge_check() {
+  timeout 2m node scripts/check-challonge-quota.js
+}
+
 run_backup() {
   timeout 30m node scripts/backup-db.js
 }
@@ -104,9 +109,10 @@ case "$JOB" in
   tournaments-discover) fn=run_tournaments_discover ;;
   rando-list)           fn=run_rando_list ;;
   players)              fn=run_players ;;
+  challonge-check)      fn=run_challonge_check ;;
   backup)               fn=run_backup ;;
   *)
-    echo "Usage: $0 <racetime|tournaments-update|midos-house|race-vods|tournaments-discover|rando-list|players|backup>" >&2
+    echo "Usage: $0 <racetime|tournaments-update|midos-house|race-vods|tournaments-discover|rando-list|players|challonge-check|backup>" >&2
     exit 2
     ;;
 esac

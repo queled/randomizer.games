@@ -21,6 +21,7 @@ const JOBS = [
   { name: 'tournaments-discover', label: 'Découverte de tournois', every: DAY, maxRun: 15 * MINUTE },
   { name: 'rando-list', label: 'rando-list', every: DAY, maxRun: 20 * MINUTE },
   { name: 'players', label: 'Joueurs et comptes racetime', every: DAY, maxRun: 70 * MINUTE },
+  { name: 'challonge-check', label: 'Quota API Challonge', every: DAY, maxRun: 2 * MINUTE },
   { name: 'backup', label: 'Sauvegarde de la base', every: DAY, maxRun: 30 * MINUTE }
 ];
 

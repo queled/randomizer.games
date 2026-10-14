@@ -222,6 +222,7 @@ PATH=/usr/local/bin:/usr/bin:/bin
 0     6 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh rando-list
 0     7 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh tournaments-discover
 30    7 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh players
+45    7 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh challonge-check
 30    3 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh backup
 ```
 

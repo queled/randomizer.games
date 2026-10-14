@@ -412,6 +412,17 @@ class StartGGAPI {
   }
 
   /**
+   * Name of the tournament made of one start.gg event: "Tournament - Event", or the
+   * tournament name alone when it already ends with the event's ("RSL Season 7 - RSL Season 7").
+   */
+  static eventTournamentName(tournamentName, eventName) {
+    const squash = (value) => String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    const event = squash(eventName);
+    if (!eventName || (event.length >= 3 && squash(tournamentName).endsWith(event))) return tournamentName;
+    return `${tournamentName} - ${eventName}`;
+  }
+
+  /**
    * One participant per player, from the standings (or the entrants before standings exist).
    * Players of a team entrant carry the team name.
    */

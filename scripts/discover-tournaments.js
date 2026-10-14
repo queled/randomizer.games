@@ -643,7 +643,7 @@ async function importStartGGTournament(api, tournamentPreview, { game = null, di
     const matchForGame = await findGameForTournament({
       providedGameSlug: game ? game.id : null,
       providedGameId: event.game?.id,
-      tournamentName: `${tournamentData.name} - ${event.name}`,
+      tournamentName: StartGGAPI.eventTournamentName(tournamentData.name, event.name),
       tournamentDescription: event.game?.name || ''
     });
 
@@ -717,7 +717,7 @@ async function importStartGGTournament(api, tournamentPreview, { game = null, di
 
     const eventUrl = `https://start.gg/${event.slug}`;
     const tournamentPayload = {
-      name: `${tournamentData.name} - ${event.name}`,
+      name: StartGGAPI.eventTournamentName(tournamentData.name, event.name),
       startggId: event.id,
       startggTournamentId: tournamentData.id,
       startggSlug: event.slug,

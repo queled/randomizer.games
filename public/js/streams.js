@@ -1,10 +1,6 @@
 // Streams page - Display live streams from the randomizer community
 
 const API_BASE = '';
-const GAME_MAP_CACHE_KEY = 'randomizer_streams_game_map_v1';
-const GAME_MAP_CACHE_TTL = 24 * 60 * 60 * 1000; // 24h
-let gameMapMemory = null;
-let gameMapInFlight = null;
 
 function sanitizeExternalUrl(url) {
     const raw = String(url || '').trim();
@@ -48,8 +44,6 @@ async function loadStreams() {
         const data = await res.json();
         const streams = data.streams || [];
 
-        // Use cached game mapping if available (non-blocking for first render)
-        const gameMap = getCachedGameMap();
         
         if (!streams || streams.length === 0) {
             grid.innerHTML = '';
@@ -75,10 +69,8 @@ async function loadStreams() {
             const cardAttrs = safeStreamUrl
                 ? `href="${escapeHtml(safeStreamUrl)}" target="_blank" rel="noopener noreferrer"`
                 : '';
-            // Resolve game id using the gameMap fallbacking to slugified name
-            const rawName = (stream.gameName || '').trim();
-            const resolved = resolveGameIdFromName(rawName, gameMap);
-            const gameSlug = resolved || '';
+            // The server gives the site's game id of each stream
+            const gameSlug = stream.gameId && stream.gameId !== 'unknown' ? stream.gameId : '';
 
             return `
             <${cardTag}${cardAttrs ? ' ' + cardAttrs : ''} class="stream-card">
@@ -124,11 +116,6 @@ async function loadStreams() {
                 gameLink.style.color = '#60a5fa';
             });
         });
-
-        // Refresh game IDs in background if cache missing/stale
-        ensureGameMapLoaded().then(freshMap => {
-            hydrateGameLinks(freshMap);
-        }).catch(() => {});
         
     } catch (error) {
         console.error('Error loading streams:', error);
@@ -197,120 +184,6 @@ function populateGameFilter(streams) {
         filter.value = selected;
         filterStreams(selected);
     }
-}
-
-function getCachedGameMap() {
-    if (gameMapMemory) return gameMapMemory;
-    try {
-        const raw = localStorage.getItem(GAME_MAP_CACHE_KEY);
-        if (!raw) return {};
-        const parsed = JSON.parse(raw);
-        if (!parsed || !parsed.map || !parsed.timestamp) return {};
-        if ((Date.now() - parsed.timestamp) > GAME_MAP_CACHE_TTL) return {};
-        gameMapMemory = parsed.map;
-        return gameMapMemory;
-    } catch (e) {
-        return {};
-    }
-}
-
-function setCachedGameMap(map) {
-    if (!map || typeof map !== 'object') return;
-    gameMapMemory = map;
-    try {
-        localStorage.setItem(GAME_MAP_CACHE_KEY, JSON.stringify({
-            timestamp: Date.now(),
-            map
-        }));
-    } catch (e) {
-        // Ignore cache write errors
-    }
-}
-
-async function ensureGameMapLoaded() {
-    const cached = getCachedGameMap();
-    if (cached && Object.keys(cached).length > 0) {
-        return cached;
-    }
-
-    if (gameMapInFlight) {
-        return gameMapInFlight;
-    }
-
-    gameMapInFlight = buildGameMap()
-        .then(map => {
-            setCachedGameMap(map);
-            return map;
-        })
-        .finally(() => {
-            gameMapInFlight = null;
-        });
-
-    return gameMapInFlight;
-}
-
-function hydrateGameLinks(gameMap) {
-    if (!gameMap || typeof gameMap !== 'object') return;
-    document.querySelectorAll('.stream-card .game-link').forEach(gameLink => {
-        const currentId = gameLink.getAttribute('data-game-id');
-        if (currentId) return;
-        const rawName = (gameLink.textContent || '').trim();
-        const resolved = resolveGameIdFromName(rawName, gameMap);
-        if (resolved) {
-            gameLink.setAttribute('data-game-id', encodeURIComponent(resolved));
-        }
-    });
-}
-
-// Fetch games list and build a lookup map from possible display names -> id
-async function buildGameMap() {
-    try {
-        const res = await fetch('/api/games');
-        if (!res.ok) return {};
-        const j = await res.json();
-        const games = j.games || [];
-        const map = {};
-        const slugify = (s) => (s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-        for (const g of games) {
-            const id = (g.id || '').toLowerCase();
-            const names = new Set();
-            if (g.name) names.add(g.name.trim().toLowerCase());
-            if (g.officialName) names.add(g.officialName.trim().toLowerCase());
-            if (g.randomizer?.shortName) names.add(g.randomizer.shortName.trim().toLowerCase());
-            // slugified variants
-            names.add(slugify(g.name || ''));
-            names.add(slugify(g.officialName || ''));
-            names.add(slugify(g.randomizer?.shortName || ''));
-            names.add(id);
-            // add entries
-            for (const n of names) {
-                if (!n) continue;
-                map[n] = id;
-            }
-        }
-        return map;
-    } catch (e) {
-        return {};
-    }
-}
-
-function resolveGameIdFromName(name, map) {
-    if (!name) return null;
-    const slugify = (s) => (s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-    const lookupKeys = [
-        name.trim().toLowerCase(),
-        slugify(name),
-    ];
-    for (const k of lookupKeys) {
-        if (k && map[k]) return map[k];
-    }
-    // fallback: try partial match (startsWith) on map keys
-    const lower = name.trim().toLowerCase();
-    for (const key in map) {
-        if (!key) continue;
-        if (key.indexOf(lower) !== -1 || lower.indexOf(key) !== -1) return map[key];
-    }
-    return null;
 }
 
 function filterStreams(game) {

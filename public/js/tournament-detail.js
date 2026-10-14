@@ -278,12 +278,44 @@ function displayRestreams(tournament) {
   });
 
   const withStreams = r => r && r.startAt && Array.isArray(r.restreams) && r.restreams.length;
-  // A race moves to the past list at the next sync once played; hide it meanwhile after a few hours
+  // The match a card leads to in the matches tab
+  const matchBySet = new Map((currentMatches || []).filter(m => m && m.startggSetId).map(m => [String(m.startggSetId), m]));
+  const withTarget = r => ({ ...r, target: r.target || (matchBySet.has(String(r.startggSetId)) || !currentMatches.length ? r.startggSetId : null) });
+
+  // A race moves to the past list at the next sync once played; hide it meanwhile after a few hours,
+  // unless its match is already played
   const now = Date.now();
-  const upcoming = (mh.schedule || [])
-    .filter(r => withStreams(r) && new Date(r.startAt).getTime() > now - 6 * 3600 * 1000)
+  const played = r => { const m = matchBySet.get(String(r.startggSetId)); return !!(m && m.completedAt); };
+  const scheduled = (mh.schedule || []).filter(withStreams);
+  const upcoming = scheduled
+    .filter(r => !played(r) && new Date(r.startAt).getTime() > now - 6 * 3600 * 1000)
+    .map(withTarget)
     .sort((a, b) => new Date(a.startAt) - new Date(b.startAt));
-  const past = (mh.pastRestreams || [])
+
+  // Played: Mido's House, plus the restreams found from Twitch titles on the races, as in the matches tab
+  const pastBySet = new Map();
+  (mh.pastRestreams || []).concat(scheduled.filter(played)).filter(withStreams).forEach(r => {
+    const key = String(r.startggSetId || r.roomUrl || r.startAt);
+    const prev = pastBySet.get(key);
+    pastBySet.set(key, prev ? { ...prev, restreams: mergeRestreams(prev.restreams, [r]) } : withTarget(r));
+  });
+  matchBySet.forEach((m, setId) => {
+    const races = findRacesForMatch(m, currentRaces).filter(race => race.restreams && race.restreams.length);
+    if (!races.length) return;
+    const prev = pastBySet.get(setId);
+    pastBySet.set(setId, {
+      ...(prev || { startggSetId: setId, startAt: races[0].startedAt, round: m.phaseGroup ? `${i18n.t('tournamentDetail.group') || 'Group'} ${m.phaseGroup}` : null, target: setId }),
+      restreams: mergeRestreams(prev ? prev.restreams : [], races)
+    });
+  });
+  const tiebreaks = tiebreakRaces(currentRaces).filter(race => race.restreams && race.restreams.length).map(race => ({
+    startAt: race.startedAt,
+    round: [i18n.t('tournamentDetail.tiebreak') || 'Tie-break', race.tournamentPool ? `${i18n.t('tournamentDetail.group') || 'Group'} ${race.tournamentPool}` : ''].filter(Boolean).join(' • '),
+    entrants: (race.entrants || []).map(e => e.userName).filter(Boolean),
+    restreams: mergeRestreams([], [race]),
+    target: 'tiebreak-' + race._id
+  }));
+  const past = [...pastBySet.values()].concat(tiebreaks)
     .filter(withStreams)
     .sort((a, b) => new Date(b.startAt) - new Date(a.startAt));
 
@@ -296,12 +328,16 @@ function displayRestreams(tournament) {
 
   const raceCard = r => {
     const names = playersBySet.get(String(r.startggSetId)) || [];
-    const p1 = sanitizeDisplayName(names[0] || (r.entrants || [])[0] || '') || (i18n.t('tournamentDetail.tbd') || 'TBD');
-    const p2 = sanitizeDisplayName(names[1] || (r.entrants || [])[1] || '') || (i18n.t('tournamentDetail.tbd') || 'TBD');
-    return `<div style="background-color: #1f2937; padding: 1rem; border-radius: 0.5rem; margin-bottom: 0.75rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem;">
+    const tbd = i18n.t('tournamentDetail.tbd') || 'TBD';
+    // A tie-break room can gather more than two players
+    const players = names.some(Boolean) ? names : (r.entrants || []);
+    const shownPlayers = [players[0], players[1], ...players.slice(2)].map(n => sanitizeDisplayName(n || '') || tbd);
+    const vs = ' <span style="color: #6b7280; font-weight: normal;">vs</span> ';
+    const link = r.target ? ` role="link" tabindex="0" data-restream-match="${escHtml(String(r.target))}"` : '';
+    return `<div${link} style="background-color: #1f2937; padding: 1rem; border-radius: 0.5rem; margin-bottom: 0.75rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem;${r.target ? ' cursor: pointer;' : ''}">
       <div style="min-width: 0;">
         <div style="font-size: 0.875rem; color: #9ca3af; margin-bottom: 0.35rem;">${escHtml(formatDateTime(r.startAt))}${r.round ? ` • ${escHtml(r.round)}` : ''}</div>
-        <div style="color: white; font-weight: 600;">${escHtml(p1)} <span style="color: #6b7280; font-weight: normal;">vs</span> ${escHtml(p2)}</div>
+        <div style="color: white; font-weight: 600;">${shownPlayers.map(escHtml).join(vs)}</div>
       </div>
       <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">${r.restreams.filter(inLanguage).map(restreamLinkHtml).join('')}</div>
     </div>`;
@@ -332,6 +368,12 @@ function displayRestreams(tournament) {
       restreamLanguageFilter = btn.getAttribute('data-restream-language') || null;
       displayRestreams(tournament);
     });
+  });
+  // The card leads to the match in the matches tab, its Twitch links aside
+  container.querySelectorAll('[data-restream-match]').forEach(card => {
+    const open = () => goToMatchById(card.getAttribute('data-restream-match'));
+    card.addEventListener('click', e => { if (!e.target.closest('a')) open(); });
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target === card) open(); });
   });
 }
 
@@ -1044,6 +1086,8 @@ async function loadMatches(tournamentId) {
     // Store for re-rendering on spoiler mode change
     currentMatches = allMatches;
     currentRaces = races;
+    // Restreams found on the races and links to the matches need them
+    displayRestreams(currentTournament);
     
     // Update end date with last match date now that matches and races are loaded
     updateEndDateFromMatches(allMatches, races);

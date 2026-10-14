@@ -1375,7 +1375,8 @@ async function buildAllStreams() {
       const primary = refs[0] || { gameId: 'unknown', categoryName: '' };
       const includeAll = PASS_THROUGH_TWITCH_CATEGORIES.has(String(primary.categoryName || '').toLowerCase());
       const streams = await fetchTwitchStreamsByCategoryId(categoryId, primary.categoryName, includeAll);
-      return { streams, primaryGameId: primary.gameId };
+      // A multi-game category (Archipelago) doesn't tell which game is played
+      return { streams, primaryGameId: includeAll ? null : primary.gameId };
     });
 
     for (const result of categoryResults) {
@@ -1392,9 +1393,10 @@ async function buildAllStreams() {
     // Fallback only for games without explicit categoryId
     const fallbackGameNames = Array.from(fallbackTwitchGameToGameIds.keys());
     const fallbackResults = await mapWithConcurrency(fallbackGameNames, 8, async (gameName) => {
-      const streams = await fetchTwitchStreams(gameName, PASS_THROUGH_TWITCH_CATEGORIES.has(String(gameName).toLowerCase()));
+      const includeAll = PASS_THROUGH_TWITCH_CATEGORIES.has(String(gameName).toLowerCase());
+      const streams = await fetchTwitchStreams(gameName, includeAll);
       const gameIds = fallbackTwitchGameToGameIds.get(gameName) || [];
-      const primaryGameId = gameIds[0] || 'unknown';
+      const primaryGameId = includeAll ? null : (gameIds[0] || 'unknown');
       return { streams, primaryGameId };
     });
 

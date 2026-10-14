@@ -85,7 +85,8 @@ async function loadStreams() {
                 <div class="stream-info">
                     <div class="stream-title">${escapeHtml(stream.title || 'Sans titre')}</div>
                     <div class="stream-channel">${escapeHtml(stream.userName || stream.userLogin || 'Unknown')}</div>
-                    ${stream.gameName ? `<div class="stream-game">🎮 <span class="game-link" data-game-id="${encodeURIComponent(gameSlug)}" style="overflow: hidden; text-overflow: ellipsis; display:inline-block; cursor:pointer; color:#60a5fa; transition: color 0.2s;">${escapeHtml(stream.gameName)}</span></div>` : ''}
+                    ${stream.gameName && !gameSlug ? `<div class="stream-game">🎮 ${escapeHtml(stream.gameName)}</div>` : ''}
+                    ${stream.gameName && gameSlug ? `<div class="stream-game">🎮 <span class="game-link" data-game-id="${encodeURIComponent(gameSlug)}" style="overflow: hidden; text-overflow: ellipsis; display:inline-block; cursor:pointer; color:#60a5fa; transition: color 0.2s;">${escapeHtml(stream.gameName)}</span></div>` : ''}
                 </div>
             </${cardTag}>
         `;

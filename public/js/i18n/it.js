@@ -102,6 +102,7 @@ const it = {
         overviewTournaments: "tornei",
         overviewLive: "in diretta",
         ongoingTournament: "Torneo in corso:",
+        ongoingTournaments: "Tornei in corso:",
         upcomingTournament: "Prossimo torneo:",
         ctaStart: "🚀 Inizia",
         ctaRaces: "Vedi le gare",

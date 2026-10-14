@@ -140,6 +140,7 @@ const pt = {
         overviewTournaments: "torneios",
         overviewLive: "ao vivo",
         ongoingTournament: "Torneio em andamento:",
+        ongoingTournaments: "Torneios em andamento:",
         upcomingTournament: "Próximo torneio:",
         ctaStart: "🚀 Começar",
         ctaRaces: "Ver as corridas",

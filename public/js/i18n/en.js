@@ -116,6 +116,7 @@ const en = {
         overviewTournaments: "tournaments",
         overviewLive: "live now",
         ongoingTournament: "Tournament in progress:",
+        ongoingTournaments: "Tournaments in progress:",
         upcomingTournament: "Next tournament:",
         ctaStart: "🚀 Get started",
         ctaRaces: "See the races",

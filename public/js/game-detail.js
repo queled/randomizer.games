@@ -1033,22 +1033,31 @@
       figures.push(`<a href="#" data-overview-tab="streams"><strong>${fmt(liveCount)}</strong> ${escHtml(overviewT('gameDetail.overviewLive', 'live now'))}</a>`);
     }
 
-    // A tournament in progress first, otherwise the next one
-    const tournaments = stats.recentTournaments || [];
-    const ongoing = tournaments.find(t => getTournamentStatus(t) === 'en cours');
+    // The tournaments in progress (a few, the others behind "+N") and the next one
+    const MAX_ONGOING = 3;
+    const tournaments = stats.activeTournaments || stats.recentTournaments || [];
+    const ongoing = tournaments
+      .filter(t => getTournamentStatus(t) === 'en cours')
+      .sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
     const upcoming = tournaments
       .filter(t => getTournamentStatus(t) === 'à venir')
       .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))[0];
-    const featured = ongoing || upcoming;
+    const tournamentLink = (t) => `<a href="/tournament-detail.html?id=${encodeURIComponent(t._id || t.id)}">${escHtml(t.name)}</a>`;
     let tournamentHtml = '';
-    if (featured) {
-      const label = ongoing
-        ? overviewT('gameDetail.ongoingTournament', 'Tournament in progress:')
-        : overviewT('gameDetail.upcomingTournament', 'Next tournament:');
-      const date = !ongoing && featured.startDate
-        ? ` (${new Date(featured.startDate).toLocaleDateString(overviewLocale(), { day: 'numeric', month: 'short' })})`
+    if (ongoing.length) {
+      const label = ongoing.length > 1
+        ? overviewT('gameDetail.ongoingTournaments', 'Tournaments in progress:')
+        : overviewT('gameDetail.ongoingTournament', 'Tournament in progress:');
+      const more = ongoing.length > MAX_ONGOING
+        ? ` <a href="/tournaments.html?game=${encodeURIComponent(game.id)}">+${ongoing.length - MAX_ONGOING}</a>`
         : '';
-      tournamentHtml = `<p class="game-overview-tournament">🏆 ${escHtml(label)} <a href="/tournament-detail.html?id=${encodeURIComponent(featured._id || featured.id)}">${escHtml(featured.name)}</a>${escHtml(date)}</p>`;
+      tournamentHtml += `<p class="game-overview-tournament">🏆 ${escHtml(label)} ${ongoing.slice(0, MAX_ONGOING).map(tournamentLink).join(' · ')}${more}</p>`;
+    }
+    if (upcoming) {
+      const date = upcoming.startDate
+        ? ` (${new Date(upcoming.startDate).toLocaleDateString(overviewLocale(), { day: 'numeric', month: 'short' })})`
+        : '';
+      tournamentHtml += `<p class="game-overview-tournament">📅 ${escHtml(overviewT('gameDetail.upcomingTournament', 'Next tournament:'))} ${tournamentLink(upcoming)}${escHtml(date)}</p>`;
     }
 
     el.innerHTML = `

@@ -209,12 +209,24 @@ router.get('/:id/stats', async (req, res, next) => {
       .sort({ startDate: -1 })
       .limit(10);
 
+    // Tournaments that can still be in progress or upcoming (a tournament is over one year
+    // after its start): the page sorts them out with the same status rules as everywhere else
+    const activeTournaments = await Tournament.find({
+      ...tournamentQuery,
+      startDate: { $gte: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000) },
+      state: { $nin: ['complete', 'completed', 'awaiting_review'] }
+    })
+      .sort({ startDate: -1 })
+      .limit(30)
+      .select('name startDate endDate state status midosHouse.schedule');
+
     res.json({
       gameId,
       totalTournaments,
       totalRaces,
       recentRaces,
-      recentTournaments
+      recentTournaments,
+      activeTournaments
     });
   } catch (error) {
     next(error);

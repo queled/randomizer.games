@@ -354,6 +354,7 @@ const en = {
         races: "Races",
         tournaments: "Tournaments",
         ranking: "Ranking",
+        inProgress: "In progress",
         totalRaces: "Total Races",
         totalTournaments: "Total Tournaments",
         totalWins: "Total Wins",

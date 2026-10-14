@@ -342,6 +342,7 @@ const fr = {
         races: "Courses",
         tournaments: "Tournois",
         ranking: "Classement",
+        inProgress: "En cours",
         totalRaces: "Total Courses",
         totalTournaments: "Total Tournois",
         totalWins: "Total Victoires",

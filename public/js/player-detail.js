@@ -704,11 +704,122 @@
     updateGamesSummaryVisibility();
   }
 
+  // States of a tournament whose results are final
+  const FINISHED_TOURNAMENT_STATES = ['complete', 'completed', 'ended', 'awaiting_review'];
+
+  function isTournamentFinished(tr) {
+    return FINISHED_TOURNAMENT_STATES.includes(String(tr?.state || '').toLowerCase())
+      || String(tr?.status || '').toLowerCase() === 'terminé';
+  }
+
+  function normalizePlayerName(s) {
+    if (!s && s !== 0) return '';
+    try {
+      return String(s).normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/\s+/g, ' ').trim().toLowerCase();
+    } catch (e) {
+      return String(s).replace(/[̀-ͯ]/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
+    }
+  }
+
+  // Best-effort rank from the matches when Challonge gives none (group stage → single elimination).
+  // Players knocked out before the final bracket tie behind the players who reached it.
+  async function computeRankFromMatches(tr, tid, participant) {
+    const pidWanted = participant.challongeId != null ? String(participant.challongeId) : null;
+    if (!pidWanted) return null;
+
+    let matches = [];
+    try {
+      matches = await fetchJson('/api/tournaments/' + encodeURIComponent(tid) + '/matches');
+    } catch (err) {
+      matches = [];
+    }
+    // Normalise la forme de la réponse: certains endpoints renvoient { matches: [...] }
+    if (!Array.isArray(matches) && matches && Array.isArray(matches.matches)) matches = matches.matches;
+    if (!Array.isArray(matches)) matches = [];
+
+    const participants = tr.participants || [];
+    const map = new Map();
+    participants.forEach(part => {
+      const pid = part && (part.challongeId != null ? String(part.challongeId) : null);
+      if (!pid) return;
+      map.set(pid, { qualified: false, maxFinalRound: 0, finalWins: 0, groupWins: 0, seed: (part.seed != null ? Number(part.seed) : null) });
+    });
+
+    // Group matches may carry names only
+    const getByName = (name) => {
+      if (!name) return null;
+      const participant = participants.find(part => part.challongeId != null && (part.name === name || part.displayName === name));
+      return participant ? map.get(String(participant.challongeId)) : null;
+    };
+
+    matches.forEach(m => {
+      if (!m) return;
+      const p1 = m.player1Id != null ? String(m.player1Id) : null;
+      const p2 = m.player2Id != null ? String(m.player2Id) : null;
+      if (!p1 && !p2) return;
+      const winner = m.winnerId != null ? String(m.winnerId) : null;
+      const s1 = (p1 && map.get(p1)) || getByName(m.player1Name);
+      const s2 = (p2 && map.get(p2)) || getByName(m.player2Name);
+
+      if (m.groupId === null || m.groupId === undefined) {
+        const round = Number(m.round || 0);
+        if (s1) { s1.qualified = true; s1.maxFinalRound = Math.max(s1.maxFinalRound, round); }
+        if (s2) { s2.qualified = true; s2.maxFinalRound = Math.max(s2.maxFinalRound, round); }
+        if (winner && s1 && winner === p1) s1.finalWins += 1;
+        if (winner && s2 && winner === p2) s2.finalWins += 1;
+      } else if (winner) {
+        if (s1 && winner === p1) s1.groupWins += 1;
+        if (s2 && winner === p2) s2.groupWins += 1;
+      }
+    });
+
+    const hasRank = (part) => {
+      const r = part && part.finalRank != null ? Number(part.finalRank) : null;
+      return Number.isFinite(r) && r > 0;
+    };
+    const statsOf = (part) => (part && part.challongeId != null ? map.get(String(part.challongeId)) : null) || null;
+
+    const wantedStats = map.get(pidWanted);
+    if (!wantedStats || !wantedStats.qualified) {
+      const ahead = participants.filter(part => hasRank(part) || statsOf(part)?.qualified).length;
+      if (ahead) return ahead + 1;
+    }
+
+    // Same order as tournament-detail.js
+    const sortedParticipants = [...participants].sort((a, b) => {
+      const aHas = hasRank(a);
+      const bHas = hasRank(b);
+      if (aHas && bHas) return Number(a.finalRank) - Number(b.finalRank);
+      if (aHas !== bHas) return aHas ? -1 : 1;
+      const sa = statsOf(a);
+      const sb = statsOf(b);
+      const aq = !!(sa && sa.qualified);
+      const bq = !!(sb && sb.qualified);
+      if (aq !== bq) return aq ? -1 : 1;
+      const arnd = sa ? sa.maxFinalRound : 0;
+      const brnd = sb ? sb.maxFinalRound : 0;
+      if (brnd !== arnd) return brnd - arnd;
+      const aw = sa ? sa.finalWins : 0;
+      const bw = sb ? sb.finalWins : 0;
+      if (bw !== aw) return bw - aw;
+      const agw = sa ? sa.groupWins : 0;
+      const bgw = sb ? sb.groupWins : 0;
+      if (bgw !== agw) return bgw - agw;
+      const as = sa && Number.isFinite(sa.seed) ? sa.seed : 9999;
+      const bs = sb && Number.isFinite(sb.seed) ? sb.seed : 9999;
+      return as - bs;
+    });
+    const index = sortedParticipants.findIndex(part => part.challongeId != null && String(part.challongeId) === pidWanted);
+    return index >= 0 ? index + 1 : null;
+  }
+
   function renderTournaments(tournaments, playerName){
     if(!tournaments || !tournaments.length){ toursEl.innerHTML = '<p style="color:#9ca3af;">No tournament participation.</p>'; return; }
+    const getTid = (t) => t._id || t.tournamentId || t.id || '';
     // Sort by date descending (most recent first). Use multiple fallbacks for start date.
     const getStartTime = (t) => {
       if (!t) return 0;
+      if (t._resolvedStartTime) return t._resolvedStartTime;
       const candidates = [t.startDate, t.start, (t.tournament && t.tournament.startDate), (t.tournament && t.tournament.start), t.createdAt, t.updatedAt];
       for (const c of candidates) {
         if (c) {
@@ -718,317 +829,73 @@
       }
       return 0;
     };
-    const sorted = [...tournaments].sort((a,b) => {
-      return getStartTime(b) - getStartTime(a);
-    });
-    // Render immediately using available data
-    toursEl.innerHTML = sorted.map(t => {
-      const tid = t._id || t.tournamentId || t.id || '';
-      const gameDisplay = getTournamentGameName(t);
-      const labelRanking = typeof i18n !== 'undefined' ? i18n.t('playerDetail.ranking') : 'Ranking';
-      return `
-      <a href="/tournament-detail.html?id=${encodeURIComponent(tid)}" style="text-decoration:none;color:inherit;display:block;">
-        <div class="tournament-card tournament-hover-card" data-tid="${encodeURIComponent(tid)}" style="background:#1f2937;padding:1rem;border-radius:0.5rem;margin-bottom:1rem;">
+    const t_ = (key, fallback) => (typeof i18n !== 'undefined' ? i18n.t(key) : fallback);
+    const draw = (list) => {
+      const labelRanking = t_('playerDetail.ranking', 'Ranking');
+      const sorted = [...list].sort((a, b) => getStartTime(b) - getStartTime(a));
+      toursEl.innerHTML = sorted.map(t => {
+        const rankText = t._rankText || (t.finalRank ? formatRank(t.finalRank) : '-');
+        return `
+      <a href="/tournament-detail.html?id=${encodeURIComponent(getTid(t))}" style="text-decoration:none;color:inherit;display:block;">
+        <div class="tournament-card tournament-hover-card" data-tid="${encodeURIComponent(getTid(t))}" style="background:#1f2937;padding:1rem;border-radius:0.5rem;margin-bottom:1rem;">
           <h3 style="color:#fbbf24;font-size:1rem;margin-bottom:0.5rem;">${escHtml(t.tournamentName || t.name || 'Tournoi')}</h3>
-          <div class="tournament-game" style="color:#d1d5db;font-size:0.875rem;margin-bottom:0.25rem;">${escHtml(gameDisplay)}</div>
-          <div class="spoiler-block" style="color:#9ca3af;font-size:0.875rem;">${labelRanking}: <strong style="color:#fbbf24;">${t.finalRank ? formatRank(t.finalRank) : '-'}</strong></div>
+          <div class="tournament-game" style="color:#d1d5db;font-size:0.875rem;margin-bottom:0.25rem;">${escHtml(getTournamentGameName(t))}</div>
+          <div class="spoiler-block" style="color:#9ca3af;font-size:0.875rem;">${labelRanking}: <strong style="color:#fbbf24;">${escHtml(rankText)}</strong></div>
         </div>
       </a>
     `;
-    }).join('\n');
+      }).join('\n');
+    };
+    // Render immediately using available data
+    draw(tournaments);
 
-    // If some tournaments lack date info, try to fetch full tournament docs and re-sort
-    (async () => {
-      try {
-        const needLookup = [];
-        const byTid = new Map();
-        for (const t of tournaments) {
-          const tid = t._id || t.tournamentId || t.id || null;
-          const st = getStartTime(t);
-          if ((!st || st === 0) && tid && !byTid.has(tid)) {
-            byTid.set(tid, null);
-            needLookup.push(tid);
-          }
-        }
-        if (!needLookup.length) return;
-        // Fetch tournament docs in parallel
-        const promises = needLookup.map(tid => fetchJson('/api/tournaments/' + encodeURIComponent(tid)).catch(() => null));
-        const results = await Promise.all(promises);
-        // Map fetched start times
-        const startMap = new Map();
-        results.forEach((res, idx) => {
-          const tid = needLookup[idx];
-          if (res && res.startDate) startMap.set(tid, new Date(res.startDate).getTime());
+    // Then complete missing dates, games and ranks from the tournament documents and render once more
+    const wanted = normalizePlayerName(playerName);
+    const hasRank = (t) => !!(t.finalRank || t.finalRank === 0);
+    const needsLookup = (t) => getTid(t) && (!getStartTime(t) || ['-', 'Unknown', ''].includes(getTournamentGameName(t)) || !hasRank(t));
+    if (!tournaments.some(needsLookup)) return;
+
+    const docs = new Map();
+    const getDoc = (tid) => {
+      if (!docs.has(tid)) docs.set(tid, fetchJson('/api/tournaments/' + encodeURIComponent(tid)).catch(() => null));
+      return docs.get(tid);
+    };
+
+    const resolveRank = async (tr, tid) => {
+      if (!wanted || !tr || !Array.isArray(tr.participants)) return null;
+      // Match participants by their racetime account, else by normalized bracket name
+      // (exact match only to avoid substring confusion between similar names)
+      const p = tr.participants.find(part => part.racetimeName && normalizePlayerName(part.racetimeName) === wanted)
+        || tr.participants.find(part => {
+          if (part.racetimeName) return false;
+          return normalizePlayerName(part.displayName || part.name) === wanted || normalizePlayerName(part.name || part.displayName) === wanted;
         });
+      if (!p) return null;
+      if (p.finalRank != null) return formatRank(p.finalRank);
+      if (!isTournamentFinished(tr)) return t_('playerDetail.inProgress', 'In progress');
+      const computed = await computeRankFromMatches(tr, tid, p);
+      return computed ? formatRank(computed) : null;
+    };
 
-        // If we found any start times, attach them to tournament entries and re-render sorted
-        let anyResolved = false;
-        const augmented = tournaments.map(t => {
-          const tid = t._id || t.tournamentId || t.id || null;
-          const resolved = tid && startMap.has(tid) ? startMap.get(tid) : null;
-          if (resolved) anyResolved = true;
-          return Object.assign({}, t, resolved ? { _resolvedStartTime: resolved } : {});
-        });
-        if (!anyResolved) return;
-
-        const getStartTimeOrResolved = (t) => {
-          if (t && t._resolvedStartTime) return t._resolvedStartTime;
-          return getStartTime(t);
-        };
-
-        const resorted = [...augmented].sort((a,b) => getStartTimeOrResolved(b) - getStartTimeOrResolved(a));
-        // Re-render without showing dates (only used for ordering)
-        const labelRanking = typeof i18n !== 'undefined' ? i18n.t('playerDetail.ranking') : 'Ranking';
-        toursEl.innerHTML = resorted.map(t => {
-          const tid = t._id || t.tournamentId || t.id || '';
-          const gameDisplay = getTournamentGameName(t);
-          return `
-          <a href="/tournament-detail.html?id=${encodeURIComponent(tid)}" style="text-decoration:none;color:inherit;display:block;">
-            <div class="tournament-card tournament-hover-card" data-tid="${encodeURIComponent(tid)}" style="background:#1f2937;padding:1rem;border-radius:0.5rem;margin-bottom:1rem;">
-              <h3 style="color:#fbbf24;font-size:1rem;margin-bottom:0.25rem;">${escHtml(t.tournamentName || t.name || 'Tournoi')}</h3>
-              <div class="tournament-game" style="color:#d1d5db;font-size:0.875rem;margin-bottom:0.25rem;">${escHtml(gameDisplay)}</div>
-              <div class="spoiler-block" style="color:#9ca3af;font-size:0.875rem;">${labelRanking}: <strong style="color:#fbbf24;">${t.finalRank ? formatRank(t.finalRank) : '-'}</strong></div>
-            </div>
-          </a>
-        `;
-        }).join('\n');
-      } catch (e) { /* ignore lookup errors */ }
-    })();
-
-    // After rendering, for any tournament entries with a missing game name, fetch the tournament
-    // document to try to resolve the game and update the DOM. Use decoded data-tid for robust matching.
-    try {
-      sorted.forEach(t => {
-        const tid = t._id || t.tournamentId || t.id || '';
-        if (!tid) return;
-        
-        // Find the card by iterating and comparing decoded data-tid
-        const cards = toursEl.querySelectorAll('.tournament-card');
-        for (const card of cards) {
-          const dataTidRaw = card.getAttribute('data-tid') || '';
-          let cardTid = dataTidRaw;
-          try { cardTid = dataTidRaw ? decodeURIComponent(dataTidRaw) : dataTidRaw; } catch (e) { cardTid = dataTidRaw; }
-          
-          if (String(cardTid) === String(tid)) {
-            const el = card.querySelector('.tournament-game');
-            if (!el) break;
-            const text = (el.textContent || '').trim();
-            if (text === '-' || text === 'Unknown' || text === '') {
-              fetchJson('/api/tournaments/' + encodeURIComponent(tid)).then(tr => {
-                const resolved = tr.gameName || (tr.game && tr.game.name) || tr.gameSlug || null;
-                if (resolved && resolved !== '-') el.textContent = resolved;
-              }).catch(() => {});
-            }
-            break;
-          }
-        }
-      });
-    } catch (e) { /* ignore post-render lookup errors */ }
-
-    // Try to fill missing finalRank values by fetching the tournament
-    // documents and matching participants by normalized name.
-    try {
-      if (playerName) {
-        const normalize = (s) => {
-          if (!s && s !== 0) return '';
-          try {
-            return String(s).normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/\s+/g, ' ').trim().toLowerCase();
-          } catch (e) {
-            return String(s).replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
-          }
-        };
-        const wanted = normalize(playerName);
-
-        sorted.forEach(t => {
-          const tid = t._id || t.tournamentId || t.id || '';
-          if (!tid) return;
-          if (t.finalRank || t.finalRank === 0) return;
-
-          (async () => {
-            try {
-              const tr = await fetchJson('/api/tournaments/' + encodeURIComponent(tid));
-              if (!tr || !tr.participants) return;
-              // Match participants by their racetime account, else by normalized bracket name
-              // (exact match only to avoid substring confusion like Cola/Icola)
-              const p = (tr.participants || []).find(part => part.racetimeName && normalize(part.racetimeName) === wanted)
-                || (tr.participants || []).find(part => {
-                  if (part.racetimeName) return false;
-                  const a = normalize(part.displayName || part.name || '');
-                  const b = normalize(part.name || part.displayName || '');
-                  return a === wanted || b === wanted;
-                });
-                if (!p) return;
-
-                // If finalRank is present, update immediately
-                if (p.finalRank != null) {
-                  const cards = toursEl.querySelectorAll('.tournament-card');
-                  for (const card of cards) {
-                    const dataTidRaw = card.getAttribute('data-tid') || '';
-                    let cardTid = dataTidRaw;
-                    try { cardTid = dataTidRaw ? decodeURIComponent(dataTidRaw) : dataTidRaw; } catch (e) { cardTid = dataTidRaw; }
-                    if (String(cardTid) === String(tid)) {
-                      const strong = card.querySelector('strong');
-                      if (strong) strong.textContent = formatRank(p.finalRank);
-                    }
-                  }
-                  return;
-                }
-
-                // Otherwise try to compute the ranking from matches (group -> single elimination hybrid)
-                try {
-                  let matches = [];
-                  try {
-                    matches = await fetchJson('/api/tournaments/' + encodeURIComponent(tid) + '/matches');
-                    if (!matches) matches = [];
-                  } catch (err) {
-                    matches = [];
-                  }
-                  // Normalise la forme de la réponse: certains endpoints renvoient { matches: [...] }
-                  if (!Array.isArray(matches) && matches && Array.isArray(matches.matches)) {
-                    matches = matches.matches;
-                  }
-                  if (!Array.isArray(matches)) matches = [];
-                  const map = new Map();
-                  (tr.participants || []).forEach(part => {
-                    const pid = part && (part.challongeId != null ? String(part.challongeId) : null);
-                    if (!pid) return;
-                    map.set(pid, {
-                      pid,
-                      qualified: false,
-                      maxFinalRound: 0,
-                      finalWins: 0,
-                      groupWins: 0,
-                      groupLosses: 0,
-                      seed: (part.seed != null ? Number(part.seed) : null)
-                    });
-                  });
-
-                  (matches || []).forEach(m => {
-                    if (!m) return;
-                    const p1 = m.player1Id != null ? String(m.player1Id) : null;
-                    const p2 = m.player2Id != null ? String(m.player2Id) : null;
-                    if (!p1 && !p2) return;
-
-                    const isFinalStage = (m.groupId === null || m.groupId === undefined);
-                    const winner = m.winnerId != null ? String(m.winnerId) : null;
-                    const round = Number(m.round || 0);
-
-                    // Only return existing participant stats — do not create new entries from match ids
-                    const get = (pid) => {
-                      if (!pid) return null;
-                      return map.has(pid) ? map.get(pid) : null;
-                    };
-
-                    // Helper to match by name when IDs missing (group stage)
-                    const getByName = (playerName) => {
-                      if (!playerName) return null;
-                      for (const [pid, stat] of map.entries()) {
-                        const participant = (tr.participants || []).find(p => String(p.challongeId) === pid);
-                        if (participant && (participant.name === playerName || participant.displayName === playerName)) {
-                          return stat;
-                        }
-                      }
-                      return null;
-                    };
-
-                    let s1 = get(p1);
-                    let s2 = get(p2);
-                    if (!s1 && m.player1Name) s1 = getByName(m.player1Name);
-                    if (!s2 && m.player2Name) s2 = getByName(m.player2Name);
-
-                    if (isFinalStage) {
-                      if (s1) { s1.qualified = true; s1.maxFinalRound = Math.max(s1.maxFinalRound, round); }
-                      if (s2) { s2.qualified = true; s2.maxFinalRound = Math.max(s2.maxFinalRound, round); }
-                      if (winner) {
-                        if (s1 && winner === p1) s1.finalWins += 1;
-                        if (s2 && winner === p2) s2.finalWins += 1;
-                      }
-                    } else {
-                      if (winner) {
-                        let p1Won = false;
-                        let p2Won = false;
-                        if (winner === p1) p1Won = true;
-                        else if (winner === p2) p2Won = true;
-                        else if (m.player1Name && m.player2Name) {
-                          const winnerParticipant = (tr.participants || []).find(part =>
-                            String(part.challongeId) === winner || part.name === m.player1Name || part.displayName === m.player1Name || part.name === m.player2Name || part.displayName === m.player2Name
-                          );
-                          if (winnerParticipant) {
-                            if (winnerParticipant.name === m.player1Name || winnerParticipant.displayName === m.player1Name) p1Won = true;
-                            else if (winnerParticipant.name === m.player2Name || winnerParticipant.displayName === m.player2Name) p2Won = true;
-                          }
-                        }
-                        if (s1) { if (p1Won) s1.groupWins += 1; else if (p2Won) s1.groupLosses += 1; }
-                        if (s2) { if (p2Won) s2.groupWins += 1; else if (p1Won) s2.groupLosses += 1; }
-                      }
-                    }
-                  });
-
-                  // Use the exact same sorting logic as tournament-detail.js
-                  // Build sorted participants (not statsArr) to match tournament display order
-                  const sortedParticipants = [...(tr.participants || [])].sort((a, b) => {
-                    const ar = (a && a.finalRank != null) ? Number(a.finalRank) : null;
-                    const br = (b && b.finalRank != null) ? Number(b.finalRank) : null;
-                    const aHas = Number.isFinite(ar) && ar > 0;
-                    const bHas = Number.isFinite(br) && br > 0;
-                    if (aHas && bHas) return ar - br;
-                    if (aHas && !bHas) return -1;
-                    if (!aHas && bHas) return 1;
-
-                    // Groups→SE: use match-based ranking
-                    const aid = a && a.challongeId != null ? String(a.challongeId) : null;
-                    const bid = b && b.challongeId != null ? String(b.challongeId) : null;
-                    const sa = aid ? map.get(aid) : null;
-                    const sb = bid ? map.get(bid) : null;
-
-                    const aq = !!(sa && sa.qualified);
-                    const bq = !!(sb && sb.qualified);
-                    if (aq !== bq) return aq ? -1 : 1;
-
-                    const arnd = sa ? sa.maxFinalRound : 0;
-                    const brnd = sb ? sb.maxFinalRound : 0;
-                    if (brnd !== arnd) return brnd - arnd;
-
-                    const aw = sa ? sa.finalWins : 0;
-                    const bw = sb ? sb.finalWins : 0;
-                    if (bw !== aw) return bw - aw;
-
-                    const agw = sa ? sa.groupWins : 0;
-                    const bgw = sb ? sb.groupWins : 0;
-                    if (bgw !== agw) return bgw - agw;
-
-                    const as = sa && Number.isFinite(sa.seed) ? sa.seed : 9999;
-                    const bs = sb && Number.isFinite(sb.seed) ? sb.seed : 9999;
-                    return as - bs;
-                  });
-
-                  const pidWanted = p.challongeId != null ? String(p.challongeId) : null;
-                  let computedRank = null;
-                  for (let i = 0; i < sortedParticipants.length; i++) {
-                    const pid = sortedParticipants[i] && sortedParticipants[i].challongeId != null ? String(sortedParticipants[i].challongeId) : null;
-                    if (pid === pidWanted) { computedRank = i + 1; break; }
-                  }
-                  
-                  if (computedRank == null) return;
-
-                  const cards = toursEl.querySelectorAll('.tournament-card');
-                  for (const card of cards) {
-                    const dataTidRaw = card.getAttribute('data-tid') || '';
-                    let cardTid = dataTidRaw;
-                    try { cardTid = dataTidRaw ? decodeURIComponent(dataTidRaw) : dataTidRaw; } catch (e) { cardTid = dataTidRaw; }
-                    if (String(cardTid) === String(tid)) {
-                      const strong = card.querySelector('strong');
-                      if (strong) {
-                        strong.textContent = formatRank(computedRank);
-                      }
-                    }
-                  }
-                } catch (e) { /* ignore compute errors */ }
-            } catch (e) { /* ignore per-tournament errors */ }
-          })();
-        });
+    Promise.all(tournaments.map(async (t) => {
+      if (!needsLookup(t)) return t;
+      const tid = getTid(t);
+      const tr = await getDoc(tid);
+      if (!tr) return t;
+      const extra = {};
+      if (!getStartTime(t) && tr.startDate) extra._resolvedStartTime = new Date(tr.startDate).getTime();
+      if (['-', 'Unknown', ''].includes(getTournamentGameName(t))) {
+        const game = tr.gameName || (tr.game && tr.game.name) || tr.gameSlug || null;
+        if (game) extra.gameName = game;
       }
-    } catch (e) { /* ignore errors */ }
+      if (!hasRank(t)) {
+        try {
+          const rankText = await resolveRank(tr, tid);
+          if (rankText) extra._rankText = rankText;
+        } catch (e) { /* ignore compute errors */ }
+      }
+      return Object.assign({}, t, extra);
+    })).then(draw).catch(() => { /* keep the first render */ });
   }
 
   function renderRaces(races){

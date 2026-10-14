@@ -378,6 +378,7 @@ const pt = {
         races: "Corridas",
         tournaments: "Torneios",
         ranking: "Classificação",
+        inProgress: "Em andamento",
         totalRaces: "Total de Corridas",
         totalTournaments: "Total de Torneios",
         totalWins: "Total de Vitórias",

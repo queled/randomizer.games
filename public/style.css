@@ -197,6 +197,12 @@ h1 {
     font-weight: 600;
 }
 
+/* Match card links: one row on wide screens, split on phones */
+.match-card-media,
+.match-card-meta {
+    display: contents;
+}
+
 /* Loading state */
 .loading {
     text-align: center;
@@ -3061,9 +3067,32 @@ body.spoiler-mode .spoiler-text::before {
         gap: 0.5rem;
     }
 
+    /* Racetime link and state on the date's row, at the right; streams and VODs on the row below */
+    .match-card-head {
+        align-items: flex-start !important;
+    }
+
     .match-card-links {
+        display: contents !important;
+    }
+
+    .match-card-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        margin-left: auto;
+    }
+
+    .match-card-media {
+        order: 1;
+        display: flex;
         flex-wrap: wrap;
-        gap: 0.35rem !important;
+        gap: 0.35rem;
+        width: 100%;
+    }
+
+    .match-card-media:empty {
+        display: none;
     }
 
     .match-card .match-player-name {
@@ -3796,6 +3825,7 @@ a.compare-tour-match:hover {
     }
 
     .compare-vs {
+        align-self: center;
         padding-bottom: 0;
     }
 

@@ -2411,6 +2411,7 @@ function createMatchCard(match, races = []) {
 
   // For single race, get times and race link
   let singleRaceLinkHtml = '';
+  let singleRaceVodsHtml = '';
   let time1 = null;
   let time2 = null;
   let singleRace = null;
@@ -2418,7 +2419,8 @@ function createMatchCard(match, races = []) {
   if (!isMultiRaceSeries && matchRaces.length === 1) {
     const race = matchRaces[0];
     singleRace = race;
-    singleRaceLinkHtml = playerVodsHtml(race) + getRaceLinkHtml(race);
+    singleRaceVodsHtml = playerVodsHtml(race);
+    singleRaceLinkHtml = getRaceLinkHtml(race);
     const times = getTimesFromRace(race);
     time1 = times.time1;
     time2 = times.time2;
@@ -2445,9 +2447,11 @@ function createMatchCard(match, races = []) {
         ${match.completedAt ? formatDateTime(match.completedAt) : match.startedAt ? formatDateTime(match.startedAt) : match.scheduledAt ? escHtml(formatScheduledAt(match.scheduledAt)) : 'Not scheduled'}${match.groupId !== null && match.groupId !== undefined && match.round ? ` • Round ${match.round}` : ''}
       </div>
       <div class="match-card-links" style="display: flex; align-items: center; gap: 0.5rem;">
-        ${mergeRestreams(match.restreams, matchRaces).filter(s => s.vodUrl).map(restreamLinkHtml).join('')}
-        ${!isMultiRaceSeries ? singleRaceLinkHtml : ''}
-        ${stateBadge}
+        <div class="match-card-media">${mergeRestreams(match.restreams, matchRaces).filter(s => s.vodUrl).map(restreamLinkHtml).join('')}${!isMultiRaceSeries ? singleRaceVodsHtml : ''}</div>
+        <div class="match-card-meta">
+          ${!isMultiRaceSeries ? singleRaceLinkHtml : ''}
+          ${stateBadge}
+        </div>
       </div>
     </div>
     <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -3067,7 +3071,7 @@ function displayGroupStages(groupMatches, participants, races = []) {
   
   // Create a grid container for all groups
   const gridContainer = document.createElement('div');
-  gridContainer.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 1.5rem;';
+  gridContainer.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(min(400px, 100%), 1fr)); gap: 1.5rem;';
   
   groupIds.forEach((gid, idx) => {
     const letter = String.fromCharCode('A'.charCodeAt(0) + (idx % 26));
@@ -3431,7 +3435,7 @@ function displayStandingsPhase(phaseMatches, container, isSwiss, phaseName = nul
   };
 
   const grid = document.createElement('div');
-  grid.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 1.5rem;';
+  grid.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(min(380px, 100%), 1fr)); gap: 1.5rem;';
 
   [...groups.keys()].sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true })).forEach((key, idx) => {
     const matches = groups.get(key);
@@ -3573,10 +3577,11 @@ function createTiebreakCard(race, { inMatchList = false } = {}) {
       <div class="match-card-head" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
         <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: #9ca3af;">${title}<span>${escHtml(where)}</span></div>
         <div class="match-card-links" style="display: flex; align-items: center; gap: 0.5rem;">
-          ${live ? '' : mergeRestreams([], [race]).filter(s => s.vodUrl).map(restreamLinkHtml).join('')}
-          ${live ? '' : playerVodsHtml(race)}
-          ${raceLinkHtml(race)}
-          <span style="background-color: ${stateColor}; color: white; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem;">${formatMatchState(state)}</span>
+          <div class="match-card-media">${live ? '' : mergeRestreams([], [race]).filter(s => s.vodUrl).map(restreamLinkHtml).join('') + playerVodsHtml(race)}</div>
+          <div class="match-card-meta">
+            ${raceLinkHtml(race)}
+            <span style="background-color: ${stateColor}; color: white; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem;">${formatMatchState(state)}</span>
+          </div>
         </div>
       </div>
       ${rowsHtml}

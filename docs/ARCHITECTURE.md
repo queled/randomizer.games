@@ -195,7 +195,7 @@ Les scripts qui écrivent en base proposent un mode `--dry-run` (ou n'écrivent 
 | `sync-tournaments.js` | `sync:tournaments` (+ `:dry`, `:update`) | Mise à jour des tournois actifs |
 | `auto-link-tournaments.js` | `link:tournaments:active` | Rattache les courses aux matchs, et les tie-breaks à leur poule (`--all --tiebreaks-only` pour le rattrapage des anciens tournois) |
 | `sync-players-from-races.js` | `sync:players` (+ `:dry`) | Recalcule la collection des joueurs |
-| `sync-racetime-profiles.js` | | Nom racetime actuel et comptes supprimés, depuis le profil de chaque joueur (`--dry-run`, `--limit N`, `--stale-days N`) |
+| `sync-racetime-profiles.js` | | Nom racetime actuel et comptes supprimés (404, ou profil anonymisé « --Deleted Account-- »), depuis le profil de chaque joueur (`--dry-run`, `--limit N`, `--stale-days N`, `--user ID`) |
 | `sync-race-vods.js` | `sync:race-vods` (+ `:dry`) | VOD Twitch des joueurs de chaque race (tâche `race-vods`) |
 | `sync-midos-house.js` | `sync:midos-house` (+ `:dry`) | Horaires, restreams et VOD Mido's House (tâche `midos-house`) |
 | `sync-midos-league.js` | `sync:midos-league` (+ `:dry`) | Saisons de l'OoTR League en tournois (tâche `midos-house`, avec `--current`) |

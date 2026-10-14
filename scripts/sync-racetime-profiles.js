@@ -2,16 +2,18 @@
 /**
  * Lit le profil racetime.gg de chaque joueur (source de vérité) :
  * - le nom affiché devient le nom racetime actuel, même sans course récente ;
- * - un compte que racetime ne connaît plus (404) est marqué supprimé
- *   (`racetimeDeletedAt`) et quitte les listes de joueurs ; ses courses restent.
+ * - un compte que racetime ne connaît plus (404) ou qu'il a anonymisé après sa
+ *   suppression (« --Deleted Account-- ») est marqué supprimé (`racetimeDeletedAt`)
+ *   et quitte les listes de joueurs ; ses courses restent.
  *   Un compte marqué qui répond de nouveau est rétabli.
  *
  * Les joueurs lus le moins récemment passent en premier. Les joueurs SpeedRunsLive
  * n'ont pas de compte racetime ni de document Player : ils ne sont pas concernés.
  *
  * Usage :
- *   node scripts/sync-racetime-profiles.js [--dry-run] [--limit N] [--stale-days N]
+ *   node scripts/sync-racetime-profiles.js [--dry-run] [--limit N] [--stale-days N] [--user ID]
  *     --limit N       au plus N profils lus
+ *     --user ID       seulement ce compte racetime
  *     --stale-days N  seulement les profils non lus depuis N jours
  */
 
@@ -26,6 +28,9 @@ const RATE_LIMIT_MS = parseInt(process.env.RACETIME_RATE_LIMIT_MS) || 1000;
 const MAX_CONSECUTIVE_ERRORS = 10;
 const { Player } = require('../models');
 
+// Nom que racetime donne à un compte supprimé : son id reste, le profil est vidé
+const DELETED_ACCOUNT_NAME = '--Deleted Account--';
+
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function parseArgs() {
@@ -34,7 +39,8 @@ function parseArgs() {
   return {
     dryRun: args.includes('--dry-run'),
     limit: value('--limit'),
-    staleDays: value('--stale-days')
+    staleDays: value('--stale-days'),
+    user: args.includes('--user') ? args[args.indexOf('--user') + 1] : null
   };
 }
 
@@ -61,10 +67,10 @@ async function fetchProfile(userId) {
 }
 
 async function main() {
-  const { dryRun, limit, staleDays } = parseArgs();
+  const { dryRun, limit, staleDays, user } = parseArgs();
   await mongoose.connect(MONGODB_URI);
 
-  const filter = { userId: { $nin: [null, ''] } };
+  const filter = user ? { userId: user } : { userId: { $nin: [null, ''] } };
   if (staleDays) {
     filter.$or = [
       { racetimeCheckedAt: null },
@@ -97,7 +103,8 @@ async function main() {
     stats.read++;
 
     const update = { $set: { racetimeCheckedAt: new Date() } };
-    if (profile.status === 404) {
+    if (profile.status === 404 || profile.data?.name === DELETED_ACCOUNT_NAME) {
+      if (profile.status !== 404) update.$set.name = DELETED_ACCOUNT_NAME;
       if (!player.racetimeDeletedAt) {
         update.$set.racetimeDeletedAt = new Date();
         stats.deleted++;

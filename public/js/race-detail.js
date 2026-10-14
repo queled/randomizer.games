@@ -197,7 +197,7 @@
     }
     const description = descriptionParts.join(' ');
     const gameDoc = getGameDocForCategory(race?.category);
-    const image = gameDoc?.image || gameDoc?.logo || '/assets/favicon.png';
+    const image = gameDoc?.image || gameDoc?.logo || '/assets/icon-512.png';
     const breadcrumb = window.RandomizerSEO.buildBreadcrumbList([
       { name: 'Home', url: '/' },
       { name: 'Races', url: '/races.html' },

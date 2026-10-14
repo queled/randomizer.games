@@ -155,7 +155,7 @@ function applyTournamentSeo(tournament) {
     { name: 'Tournaments', url: '/tournaments.html' },
     { name: tournament.name, url: detailUrl }
   ]);
-  const image = tournament.game?.image || tournament.game?.logo || '/assets/favicon.png';
+  const image = tournament.game?.image || tournament.game?.logo || '/assets/icon-512.png';
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Event',

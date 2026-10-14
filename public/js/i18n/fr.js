@@ -71,6 +71,7 @@ const fr = {
     
     // Games page
     games: {
+        heading: "Jeux Randomizer",
         title: "Jeux",
         pageTitle: "Jeux - Randomizer",
         tournaments: "tournois",
@@ -179,6 +180,7 @@ const fr = {
     
     // Races page
     races: {
+        heading: "Courses Randomizer",
         title: "Courses",
         pageTitle: "Courses - Randomizer",
         filterAll: "Toutes",
@@ -215,6 +217,7 @@ const fr = {
     
     // Tournaments page
     tournaments: {
+        heading: "Tournois Randomizer",
         title: "Tournois",
         pageTitle: "Tournois - Randomizer",
         filterAll: "Tous",
@@ -323,6 +326,7 @@ const fr = {
     
     // Players page
     players: {
+        heading: "Joueurs Randomizer",
         title: "Joueurs",
         pageTitle: "Joueurs - Randomizer",
         searchPlaceholder: "Rechercher un joueur...",
@@ -574,6 +578,12 @@ const fr = {
     },
     
     // Footer
+    notFound: {
+        pageTitle: "Page introuvable - Randomizer",
+        title: "Page introuvable",
+        message: "Cette page n’existe pas ou a été déplacée. Les jeux, courses, tournois et joueurs sont à portée de clic.",
+        home: "Retour à l’accueil"
+    },
     footer: {
         language: "Langue",
         explore: "Explorer",

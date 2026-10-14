@@ -658,7 +658,7 @@
     ].map((value) => sanitizeExternalUrl(value)).filter(Boolean);
 
     const canonicalUrl = `/game-detail.html?id=${encodeURIComponent(id)}`;
-    const image = game.image || game.logo || '/assets/favicon.png';
+    const image = game.image || game.logo || '/assets/icon-512.png';
     const breadcrumb = window.RandomizerSEO.buildBreadcrumbList([
       { name: 'Home', url: '/' },
       { name: 'Games', url: '/games.html' },

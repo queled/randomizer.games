@@ -6,7 +6,9 @@
   <title data-i18n-page-title="gameDetail.pageTitle">Game - Randomizer</title>
   <script defer src="/js/seo.js"></script>
   <link rel="stylesheet" href="/style.css">
-  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/assets/icon-512.png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   
   <!-- Language initialization to prevent flicker -->
   <style>
@@ -16,13 +18,8 @@
   <script src="/js/i18n-boot.js"></script>
     <script src="/js/ui-events.js"></script>
   
-  <!-- Load translations early in head (async to not block parsing) -->
+  <!-- English (fallback) here; i18n-boot.js adds the visitor's language -->
   <script async src="/js/i18n/en.js"></script>
-  <script async src="/js/i18n/fr.js"></script>
-  <script async src="/js/i18n/es.js"></script>
-  <script async src="/js/i18n/de.js"></script>
-  <script async src="/js/i18n/it.js"></script>
-  <script async src="/js/i18n/pt.js"></script>
   <script async src="/js/i18n.js"></script>
 </head>
 <body>

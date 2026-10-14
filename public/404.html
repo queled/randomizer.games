@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n-page-title="notFound.pageTitle">Page Not Found - Randomizer</title>
+    <meta name="robots" content="noindex,follow">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/icon-512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    
+    <!-- Language initialization to prevent flicker -->
+    <style>
+        body { opacity: 0; transition: opacity 0.1s ease-in; }
+        body.i18n-ready { opacity: 1; }
+    </style>
+    <script src="/js/i18n-boot.js"></script>
+    <script src="/js/ui-events.js"></script>
+    
+    <!-- English (fallback) here; i18n-boot.js adds the visitor's language -->
+    <script async src="/js/i18n/en.js"></script>
+    <script async src="/js/i18n.js"></script>
+</head>
+<body>
+
+    <header>
+        <a href="/"><img src="/assets/favicon.png" alt="Randomizer" class="site-logo">Randomizer</a>
+        <button class="mobile-menu-toggle" aria-label="Menu" data-menu-toggle>
+            <span></span><span></span><span></span>
+        </button>
+        <nav>
+            <ul>
+                <li><a href="/games.html" data-i18n="nav.games">🎮 Games</a></li>
+                <li><a href="/races.html" data-i18n="nav.races">🥇 Races</a></li>
+                <li><a href="/tournaments.html" data-i18n="nav.tournaments">🏆 Tournaments</a></li>
+                <li><a href="/players.html" data-i18n="nav.players">👤 Players</a></li>
+                <li><a href="/streams.html" data-i18n="nav.live">📺 Live</a></li>
+            </ul>
+        </nav>
+        <div class="flex-grow"></div>
+        <input type="text" id="search" placeholder="Search..." data-i18n-placeholder="nav.search">
+    </header>
+
+    <main>
+        <div class="terms-content not-found">
+            <h1 data-i18n="notFound.title">Page not found</h1>
+            <p data-i18n="notFound.message">This page does not exist or has moved. The games, races, tournaments and players are a click away.</p>
+            <p><a href="/" data-i18n="notFound.home">Back to the home page</a></p>
+        </div>
+    </main>
+
+    <script src="/js/spoiler-mode.js"></script>
+    <script src="/js/global-search.js"></script>
+    <script src="/js/footer.js"></script>
+</body>
+</html>

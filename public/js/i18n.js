@@ -19,8 +19,10 @@ async function initI18n() {
     // Get saved language or detect from browser
     currentLanguage = getSavedLanguage() || detectBrowserLanguage() || DEFAULT_LANGUAGE;
     
-    // Load all translations. The language files are async scripts, so this
-    // file can run before they do: wait briefly for the ones we need.
+    // Load the translations. The language files are async scripts (English in
+    // the page, the visitor's language added by i18n-boot.js), so this file can
+    // run before they do: wait briefly for the ones we need.
+    loadLanguageScript(currentLanguage);
     await loadAllTranslations();
     await waitForTranslations([currentLanguage, DEFAULT_LANGUAGE]);
 
@@ -64,6 +66,18 @@ async function loadAllTranslations() {
         it: typeof it !== 'undefined' ? it : {},
         pt: typeof pt !== 'undefined' ? pt : {}
     };
+}
+
+/**
+ * Add the script of a language unless the page already has it
+ */
+function loadLanguageScript(lang) {
+    if (document.querySelector(`script[src="/js/i18n/${lang}.js"]`)) return;
+    const script = document.createElement('script');
+    script.src = `/js/i18n/${lang}.js`;
+    script.async = true;
+    script.setAttribute('data-i18n-lang', lang);
+    document.head.appendChild(script);
 }
 
 /**
@@ -120,14 +134,20 @@ function saveLanguage(lang) {
 /**
  * Change the current language
  */
-function setLanguage(lang) {
+async function setLanguage(lang) {
     if (!SUPPORTED_LANGUAGES.includes(lang)) {
         console.warn(`Language '${lang}' is not supported`);
         return;
     }
+
+    // Saved first: the footer selector reloads the page right after this call
+    saveLanguage(lang);
+
+    // Only the current language is loaded with the page
+    loadLanguageScript(lang);
+    await waitForTranslations([lang]);
     
     currentLanguage = lang;
-    saveLanguage(lang);
     
     // Update HTML lang attribute
     document.documentElement.lang = lang;

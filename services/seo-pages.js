@@ -14,7 +14,8 @@ const { Game, Tournament, Player, Race } = require('../models');
 const { calculateTournamentStatus } = require('../helpers/tournament-status');
 
 const PUBLIC_DIR = path.join(__dirname, '..', 'public');
-const DEFAULT_IMAGE_PATH = '/assets/favicon.png';
+// Square logo for social previews and the Organization logo
+const DEFAULT_IMAGE_PATH = '/assets/icon-512.png';
 
 const PAGE_META = {
   '/index.html': {
@@ -172,6 +173,7 @@ async function gameMeta(query, siteUrl) {
 
   return {
     title: `${displayTitle} - Randomizer`,
+    heading: displayTitle,
     description,
     canonicalPath,
     image,
@@ -217,6 +219,7 @@ async function tournamentMeta(query, siteUrl) {
 
   return {
     title: `${tournament.name} - Tournament - Randomizer`,
+    heading: tournament.name,
     description,
     canonicalPath,
     image,
@@ -226,7 +229,8 @@ async function tournamentMeta(query, siteUrl) {
         { name: 'Tournaments', url: '/tournaments.html' },
         { name: tournament.name, url: canonicalPath }
       ]),
-      compact({
+      // Google requires a start date on an Event: undated tournaments get none
+      tournament.startDate && compact({
         '@context': 'https://schema.org',
         '@type': 'Event',
         name: tournament.name,
@@ -234,11 +238,12 @@ async function tournamentMeta(query, siteUrl) {
         startDate: tournament.startDate ? new Date(tournament.startDate).toISOString() : undefined,
         endDate: tournament.endDate ? new Date(tournament.endDate).toISOString() : undefined,
         eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
-        location: { '@type': 'VirtualLocation', url: tournament.fullUrl || tournament.url || absoluteUrl(siteUrl, canonicalPath) },
+        // Challonge `url` is a bare slug: only a full address is a location
+        location: { '@type': 'VirtualLocation', url: [tournament.fullUrl, tournament.url].find((u) => /^https?:\/\//i.test(String(u || ''))) || absoluteUrl(siteUrl, canonicalPath) },
         image: absoluteUrl(siteUrl, image) || undefined,
         description
       })
-    ]
+    ].filter(Boolean)
   };
 }
 
@@ -269,6 +274,7 @@ async function playerMeta(query, siteUrl) {
 
   return {
     title: `${playerName} - Randomizer Player Profile`,
+    heading: playerName,
     description,
     canonicalPath,
     ogType: 'profile',
@@ -291,13 +297,6 @@ async function playerMeta(query, siteUrl) {
       }
     ]
   };
-}
-
-// Races imported from SpeedRunsLive keep their SRL page in source.url
-function getRaceExternalUrl(race) {
-  if (race?.source?.type === 'speedrunslive' && race.source.url) return race.source.url;
-  if (!race?.url) return null;
-  return `https://racetime.gg${race.url.startsWith('/') ? '' : '/'}${race.url}`;
 }
 
 async function raceMeta(query, siteUrl) {
@@ -330,6 +329,7 @@ async function raceMeta(query, siteUrl) {
 
   return {
     title: `${label} - ${gameName} Race - Randomizer`,
+    heading: gameName,
     description,
     canonicalPath,
     image,
@@ -338,22 +338,21 @@ async function raceMeta(query, siteUrl) {
         { name: 'Home', url: '/' },
         { name: 'Races', url: '/races.html' },
         { name: `${gameName} - ${label}`, url: canonicalPath }
-      ]),
-      compact({
-        '@context': 'https://schema.org',
-        '@type': 'Event',
-        name: `${gameName} - ${label}`,
-        url: absoluteUrl(siteUrl, canonicalPath),
-        startDate: race.startedAt ? new Date(race.startedAt).toISOString() : undefined,
-        endDate: race.endedAt ? new Date(race.endedAt).toISOString() : undefined,
-        eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
-        location: { '@type': 'VirtualLocation', url: getRaceExternalUrl(race) || absoluteUrl(siteUrl, canonicalPath) },
-        image: absoluteUrl(siteUrl, image) || undefined,
-        description
-      })
+      ])
+      // No Event: a race is not an event people attend, and Event markup on
+      // thousands of races would be reported as invalid by search engines
     ]
   };
 }
+
+// <h1> of each detail page, filled by its script; the server writes the entity
+// name in it so crawlers that skip JavaScript do not read "Loading..."
+const DETAIL_HEADING_IDS = {
+  '/game-detail.html': 'game-meta',
+  '/tournament-detail.html': 'tournament-title',
+  '/player-detail.html': 'player-name',
+  '/race-detail.html': 'race-game'
+};
 
 const DETAIL_RESOLVERS = {
   '/game-detail.html': gameMeta,
@@ -465,6 +464,13 @@ async function renderPage(pathname, query, siteUrl) {
     // but other attributes (the id the page scripts look up) are kept.
     renderHead(meta, siteUrl, specific ? attrs.replace(/\s+data-i18n-page-title="[^"]*"/i, '') : attrs)
   ));
+  if (specific && meta.heading && DETAIL_HEADING_IDS[file]) {
+    const headingRe = new RegExp(`<h1([^>]*\\sid="${DETAIL_HEADING_IDS[file]}"[^>]*)>[\\s\\S]*?<\\/h1>`, 'i');
+    html = html.replace(headingRe, (match, attrs) => (
+      // Without data-i18n, the translations do not put "Loading..." back
+      `<h1${attrs.replace(/\s+data-i18n="[^"]*"/i, '')}>${htmlEscape(meta.heading)}</h1>`
+    ));
+  }
   if (specific) {
     // Tells seo.js the head already describes this entity.
     html = html.replace(/<html([^>]*)>/i, '<html$1 data-seo-ssr="1">');

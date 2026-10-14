@@ -69,6 +69,7 @@ const es = {
     
     // Games page
     games: {
+        heading: "Juegos Randomizer",
         title: "Juegos",
         pageTitle: "Juegos - Randomizer",
         tournaments: "torneos",
@@ -173,6 +174,7 @@ const es = {
     
     // Races page
     races: {
+        heading: "Carreras Randomizer",
         title: "Carreras",
         pageTitle: "Carreras - Randomizer",
         filterAll: "Todas",
@@ -209,6 +211,7 @@ const es = {
     
     // Tournaments page
     tournaments: {
+        heading: "Torneos Randomizer",
         title: "Torneos",
         pageTitle: "Torneos - Randomizer",
         filterAll: "Todos",
@@ -316,6 +319,7 @@ roundOf16: "Octavos de final",
     
     // Players page
     players: {
+        heading: "Jugadores Randomizer",
         title: "Jugadores",
         pageTitle: "Jugadores - Randomizer",
         searchPlaceholder: "Buscar jugadores...",
@@ -567,6 +571,12 @@ roundOf16: "Octavos de final",
     },
     
     // Footer
+    notFound: {
+        pageTitle: "Página no encontrada - Randomizer",
+        title: "Página no encontrada",
+        message: "Esta página no existe o se ha movido. Los juegos, carreras, torneos y jugadores están a un clic.",
+        home: "Volver al inicio"
+    },
     footer: {
         language: "Idioma",
         explore: "Explorar",

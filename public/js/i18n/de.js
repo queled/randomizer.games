@@ -71,6 +71,7 @@ const de = {
     
     // Games page
     games: {
+        heading: "Randomizer-Spiele",
         title: "Spiele",
         pageTitle: "Spiele - Randomizer",
         tournaments: "Turniere",
@@ -175,6 +176,7 @@ const de = {
     
     // Races page
     races: {
+        heading: "Randomizer-Rennen",
         title: "Rennen",
         pageTitle: "Rennen - Randomizer",
         filterAll: "Alle",
@@ -211,6 +213,7 @@ const de = {
     
     // Tournaments page
     tournaments: {
+        heading: "Randomizer-Turniere",
         title: "Turniere",
         pageTitle: "Turniere - Randomizer",
         filterAll: "Alle",
@@ -318,6 +321,7 @@ roundOf16: "Achtelfinale",
     
     // Players page
     players: {
+        heading: "Randomizer-Spieler",
         title: "Spieler",
         pageTitle: "Spieler - Randomizer",
         searchPlaceholder: "Spieler suchen...",
@@ -569,6 +573,12 @@ roundOf16: "Achtelfinale",
     },
     
     // Footer
+    notFound: {
+        pageTitle: "Seite nicht gefunden - Randomizer",
+        title: "Seite nicht gefunden",
+        message: "Diese Seite existiert nicht oder wurde verschoben. Spiele, Rennen, Turniere und Spieler sind nur einen Klick entfernt.",
+        home: "Zurück zur Startseite"
+    },
     footer: {
         language: "Sprache",
         explore: "Erkunden",

@@ -20,8 +20,10 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 const SITEMAP_CACHE_TTL = 30 * 60 * 1000;
+// A sitemap file holds at most 50,000 URLs; stay well below
+const SITEMAP_MAX_URLS = 40000;
 const SITE_URL = (process.env.SITE_URL || 'https://randomizer.games').replace(/\/+$/, '');
-let sitemapCache = { xml: null, expiresAt: 0, inFlight: null };
+let sitemapCache = { files: null, expiresAt: 0, inFlight: null };
 
 function xmlEscape(value) {
   return String(value || '')
@@ -45,7 +47,16 @@ function buildSitemapEntry(loc, lastmod) {
   return `<url><loc>${xmlEscape(safeLoc)}</loc>${lastmodTag}</url>`;
 }
 
-async function generateSitemapXml() {
+function buildUrlset(entries) {
+  const urls = entries.map(([loc, lastmod]) => buildSitemapEntry(loc, lastmod)).join('');
+  return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</urlset>`;
+}
+
+/**
+ * Every sitemap file by name: "sitemap.xml" is the index, the others
+ * ("sitemaps/players-1.xml"...) hold the URLs of one kind of page.
+ */
+async function generateSitemaps() {
   const staticEntries = [
     ['/', null],
     ['/games.html', null],
@@ -61,71 +72,68 @@ async function generateSitemapXml() {
   const [games, tournaments, players, races] = await Promise.all([
     Game.find({ enabled: { $ne: false } }).select('id updatedAt').sort({ updatedAt: -1 }).lean(),
     Tournament.find({}).select('_id updatedAt').sort({ updatedAt: -1 }).lean(),
-    Player.find({ $or: [{ userId: { $exists: true, $ne: '' } }, { name: { $exists: true, $ne: '' } }] })
+    // Accounts deleted from racetime leave the player lists, and the sitemap
+    Player.find({
+      $or: [{ userId: { $exists: true, $ne: '' } }, { name: { $exists: true, $ne: '' } }],
+      racetimeDeletedAt: null
+    })
       .select('userId name updatedAt')
       .sort({ updatedAt: -1 })
       .lean(),
+    // Most recent races only: older ones are reached through players and tournaments
     Race.find({}).select('_id updatedAt startedAt').sort({ startedAt: -1, updatedAt: -1 }).limit(1000).lean()
   ]);
 
-  const dynamicEntries = [];
+  const groups = {
+    pages: staticEntries,
+    games: games.filter((game) => game?.id)
+      .map((game) => [`/game-detail.html?id=${encodeURIComponent(game.id)}`, formatLastMod(game.updatedAt)]),
+    tournaments: tournaments.filter((tournament) => tournament?._id)
+      .map((tournament) => [`/tournament-detail.html?id=${encodeURIComponent(String(tournament._id))}`, formatLastMod(tournament.updatedAt)]),
+    players: players.map((player) => {
+      const identifier = player?.userId
+        ? `id=${encodeURIComponent(player.userId)}`
+        : (player?.name ? `name=${encodeURIComponent(player.name)}` : '');
+      return identifier ? [`/player-detail.html?${identifier}`, formatLastMod(player.updatedAt)] : null;
+    }).filter(Boolean),
+    races: races.filter((race) => race?._id)
+      .map((race) => [`/race-detail.html?id=${encodeURIComponent(String(race._id))}`, formatLastMod(race.updatedAt || race.startedAt)])
+  };
 
-  games.forEach((game) => {
-    if (!game?.id) return;
-    dynamicEntries.push([`/game-detail.html?id=${encodeURIComponent(game.id)}`, formatLastMod(game.updatedAt)]);
-  });
-
-  tournaments.forEach((tournament) => {
-    if (!tournament?._id) return;
-    dynamicEntries.push([`/tournament-detail.html?id=${encodeURIComponent(String(tournament._id))}`, formatLastMod(tournament.updatedAt)]);
-  });
-
-  players.forEach((player) => {
-    const identifier = player?.userId
-      ? `id=${encodeURIComponent(player.userId)}`
-      : (player?.name ? `name=${encodeURIComponent(player.name)}` : '');
-    if (!identifier) return;
-    dynamicEntries.push([`/player-detail.html?${identifier}`, formatLastMod(player.updatedAt)]);
-  });
-
-  races.forEach((race) => {
-    if (!race?._id) return;
-    dynamicEntries.push([`/race-detail.html?id=${encodeURIComponent(String(race._id))}`, formatLastMod(race.updatedAt || race.startedAt)]);
-  });
-
-  const entries = [...staticEntries, ...dynamicEntries]
-    .map(([loc, lastmod]) => buildSitemapEntry(loc, lastmod))
-    .join('');
-
-  return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${entries}</urlset>`;
-}
-
-async function getSitemapXmlCached() {
-  if (sitemapCache.xml && sitemapCache.expiresAt > Date.now()) {
-    return sitemapCache.xml;
-  }
-
-  if (sitemapCache.inFlight) {
-    return sitemapCache.inFlight;
-  }
-
-  sitemapCache.inFlight = (async () => {
-    const xml = await generateSitemapXml();
-    sitemapCache = {
-      xml,
-      expiresAt: Date.now() + SITEMAP_CACHE_TTL,
-      inFlight: null
-    };
-    return xml;
-  })();
-
-  try {
-    return await sitemapCache.inFlight;
-  } finally {
-    if (sitemapCache.inFlight) {
-      sitemapCache.inFlight = null;
+  const files = new Map();
+  for (const [name, entries] of Object.entries(groups)) {
+    for (let part = 0; part * SITEMAP_MAX_URLS < entries.length; part++) {
+      const chunk = entries.slice(part * SITEMAP_MAX_URLS, (part + 1) * SITEMAP_MAX_URLS);
+      const lastmod = chunk.map(([, date]) => date).filter(Boolean).sort().pop() || '';
+      files.set(`sitemaps/${name}-${part + 1}.xml`, { xml: buildUrlset(chunk), lastmod });
     }
   }
+
+  const index = Array.from(files, ([file, { lastmod }]) => (
+    `<sitemap><loc>${xmlEscape(`${SITE_URL}/${file}`)}</loc>${lastmod ? `<lastmod>${xmlEscape(lastmod)}</lastmod>` : ''}</sitemap>`
+  )).join('');
+  files.set('sitemap.xml', {
+    xml: `<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${index}</sitemapindex>`
+  });
+  return files;
+}
+
+async function getSitemapCached(name) {
+  if (!sitemapCache.files || sitemapCache.expiresAt <= Date.now()) {
+    if (!sitemapCache.inFlight) {
+      sitemapCache.inFlight = generateSitemaps()
+        .then((files) => {
+          sitemapCache.files = files;
+          sitemapCache.expiresAt = Date.now() + SITEMAP_CACHE_TTL;
+          return files;
+        })
+        .finally(() => {
+          sitemapCache.inFlight = null;
+        });
+    }
+    await sitemapCache.inFlight;
+  }
+  return sitemapCache.files.get(name)?.xml || null;
 }
 
 // Trust proxy (important for rate limiting behind reverse proxy)
@@ -186,10 +194,11 @@ app.use((req, res, next) => {
   next();
 });
 
-// Search engines show the favicon next to results: serve the real icon (a PNG).
+// Search engines show the favicon next to results: serve the real icon, a
+// square PNG whose side is a multiple of 48 px as Google asks.
 app.get('/favicon.ico', (req, res) => {
   res.type('image/png');
-  res.sendFile(path.join(__dirname, 'public', 'assets', 'favicon.png'), { maxAge: '7d' });
+  res.sendFile(path.join(__dirname, 'public', 'assets', 'favicon-48.png'), { maxAge: '7d' });
 });
 
 // One URL per page: /index.html duplicates the home page.
@@ -212,9 +221,10 @@ app.get(['/', '/:page.html'], async (req, res, next) => {
   }
 });
 
-app.get('/sitemap.xml', async (req, res, next) => {
+app.get(['/sitemap.xml', '/sitemaps/:file.xml'], async (req, res, next) => {
   try {
-    const xml = await getSitemapXmlCached();
+    const xml = await getSitemapCached(req.params.file ? `sitemaps/${req.params.file}.xml` : 'sitemap.xml');
+    if (!xml) return next();
     res.type('application/xml');
     res.send(xml);
   } catch (error) {
@@ -262,6 +272,14 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
     version: '2.0.0'
   });
+});
+
+// Unknown API routes answer JSON; unknown pages get the 404 page
+app.use('/api', (req, res) => {
+  res.status(404).json({ error: 'Not found' });
+});
+app.use((req, res) => {
+  res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
 });
 
 // Error handling - use secure error handler

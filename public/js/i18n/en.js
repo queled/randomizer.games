@@ -83,8 +83,9 @@ const en = {
     
     // Games page
     games: {
+        heading: "Randomizer Games",
         title: "Games",
-        pageTitle: "Games - Randomizer",
+        pageTitle: "Randomizer Games - Randomizer",
         tournaments: "tournaments",
         races: "races",
         players: "players",
@@ -191,8 +192,9 @@ const en = {
     
     // Races page
     races: {
+        heading: "Randomizer Races",
         title: "Races",
-        pageTitle: "Races - Randomizer",
+        pageTitle: "Randomizer Races - Randomizer",
         filterAll: "All",
         filterUpcoming: "Upcoming",
         filterInProgress: "Ongoing",
@@ -227,8 +229,9 @@ const en = {
     
     // Tournaments page
     tournaments: {
+        heading: "Randomizer Tournaments",
         title: "Tournaments",
-        pageTitle: "Tournaments - Randomizer",
+        pageTitle: "Randomizer Tournaments - Randomizer",
         filterAll: "All",
         filterUpcoming: "Upcoming",
         filterOngoing: "Ongoing",
@@ -335,8 +338,9 @@ const en = {
     
     // Players page
     players: {
+        heading: "Randomizer Players",
         title: "Players",
-        pageTitle: "Players - Randomizer",
+        pageTitle: "Randomizer Players - Randomizer",
         searchPlaceholder: "Search players...",
         races: "races",
         tournaments: "tournaments",
@@ -413,7 +417,7 @@ const en = {
     // Streams page
     streams: {
         title: "📺 Live Streams",
-        pageTitle: "Live Streams - Randomizer",
+        pageTitle: "Live Randomizer Streams - Randomizer",
         subtitle: "Live streams from the randomizer community. Watch your favorite players live!",
         allGames: "All games",
         loadingStreams: "Loading streams...",
@@ -586,6 +590,12 @@ const en = {
     },
     
     // Footer
+    notFound: {
+        pageTitle: "Page Not Found - Randomizer",
+        title: "Page not found",
+        message: "This page does not exist or has moved. The games, races, tournaments and players are a click away.",
+        home: "Back to the home page"
+    },
     footer: {
         language: "Language",
         explore: "Explore",

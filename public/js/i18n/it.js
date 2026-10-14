@@ -69,6 +69,7 @@ const it = {
     
     // Games page
     games: {
+        heading: "Giochi Randomizer",
         title: "Giochi",
         pageTitle: "Giochi - Randomizer",
         tournaments: "tornei",
@@ -173,6 +174,7 @@ const it = {
     
     // Races page
     races: {
+        heading: "Gare Randomizer",
         title: "Gare",
         pageTitle: "Gare - Randomizer",
         filterAll: "Tutte",
@@ -209,6 +211,7 @@ const it = {
     
     // Tournaments page
     tournaments: {
+        heading: "Tornei Randomizer",
         title: "Tornei",
         pageTitle: "Tornei - Randomizer",
         filterAll: "Tutti",
@@ -316,6 +319,7 @@ match1: "Partita 1",
     
     // Players page
     players: {
+        heading: "Giocatori Randomizer",
         title: "Giocatori",
         pageTitle: "Giocatori - Randomizer",
         searchPlaceholder: "Cerca giocatori...",
@@ -567,6 +571,12 @@ match1: "Partita 1",
     },
     
     // Footer
+    notFound: {
+        pageTitle: "Pagina non trovata - Randomizer",
+        title: "Pagina non trovata",
+        message: "Questa pagina non esiste o è stata spostata. Giochi, gare, tornei e giocatori sono a un clic.",
+        home: "Torna alla home"
+    },
     footer: {
         language: "Lingua",
         explore: "Esplora",

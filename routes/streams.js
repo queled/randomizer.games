@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Game } = require('../models');
+const { isSafeImageContentType, setRelayedImageHeaders } = require('../middleware/security');
 const { titleNamesRace } = require('../helpers/restream-titles');
 const { gameGoalFilters, isGoalAllowed } = require('../helpers/racetime-goals');
 
@@ -1269,64 +1270,80 @@ router.get('/:gameId', async (req, res, next) => {
   }
 });
 
-// Get Twitch user avatar by username (streams the image directly)
-router.get('/twitch-avatar/:username', async (req, res, next) => {
+// Twitch avatars: login -> { avatarUrl, expires }, bounded (logins come from visitors)
+const TWITCH_LOGIN_PATTERN = /^[a-z0-9_]{1,25}$/;
+const TWITCH_AVATAR_TTL = 6 * 60 * 60 * 1000;
+const TWITCH_AVATAR_CACHE_MAX = 2000;
+const TWITCH_AVATAR_MAX_BYTES = 2 * 1024 * 1024;
+const twitchAvatarUrls = new Map();
+
+function rememberTwitchAvatar(login, avatarUrl) {
+  if (!twitchAvatarUrls.has(login) && twitchAvatarUrls.size >= TWITCH_AVATAR_CACHE_MAX) {
+    twitchAvatarUrls.delete(twitchAvatarUrls.keys().next().value);
+  }
+  twitchAvatarUrls.set(login, { avatarUrl, expires: Date.now() + TWITCH_AVATAR_TTL });
+}
+
+// Profile pictures are served by Twitch's CDN only
+function isTwitchCdnUrl(url) {
   try {
-    const { username } = req.params;
-    const cacheKey = `twitch-avatar:${username.toLowerCase()}`;
-    
-    // Check cache for avatar URL
-    const cached = getCached(cacheKey);
-    let avatarUrl = cached?.avatarUrl;
-    
-    if (!avatarUrl) {
+    const parsed = new URL(url);
+    return parsed.protocol === 'https:' && parsed.hostname === 'static-cdn.jtvnw.net';
+  } catch (e) {
+    return false;
+  }
+}
+
+// Get Twitch user avatar by username (streams the image directly)
+router.get('/twitch-avatar/:username', async (req, res) => {
+  try {
+    const login = String(req.params.username || '').toLowerCase();
+    if (!TWITCH_LOGIN_PATTERN.test(login)) {
+      return res.status(400).json({ error: 'Invalid Twitch login' });
+    }
+
+    const cached = twitchAvatarUrls.get(login);
+    let avatarUrl = cached && cached.expires > Date.now() ? cached.avatarUrl : undefined;
+
+    if (avatarUrl === undefined) {
       const token = await getTwitchToken();
       if (!token) {
         return res.status(503).json({ error: 'Twitch API not configured' });
       }
 
-      const response = await fetch(`https://api.twitch.tv/helix/users?login=${encodeURIComponent(username)}`, {
+      const response = await fetch(`https://api.twitch.tv/helix/users?login=${encodeURIComponent(login)}`, {
         headers: {
           'Client-ID': TWITCH_CLIENT_ID,
           'Authorization': `Bearer ${token}`
-        }
+        },
+        signal: AbortSignal.timeout(8000)
       });
+      if (!response.ok) return res.status(204).end();
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data.data && data.data.length > 0) {
-          avatarUrl = data.data[0].profile_image_url;
-          if (avatarUrl) {
-            setCache(cacheKey, { avatarUrl });
-          }
-        }
-      }
-      
-      if (!avatarUrl) {
-        setCache(cacheKey, { avatarUrl: null });
-        return res.status(204).end();
-      }
+      const data = await response.json();
+      const url = data?.data?.[0]?.profile_image_url;
+      avatarUrl = isTwitchCdnUrl(url) ? url : null;
+      rememberTwitchAvatar(login, avatarUrl);
     }
-    
-    // Stream the image directly instead of redirecting
-    try {
-      const imgResponse = await fetch(avatarUrl);
-      if (imgResponse.ok) {
-        const contentType = imgResponse.headers.get('content-type') || 'image/png';
-        res.setHeader('Content-Type', contentType);
-        res.setHeader('Cache-Control', 'public, max-age=3600');
-        
-        // Stream the response body
-        const arrayBuffer = await imgResponse.arrayBuffer();
-        return res.send(Buffer.from(arrayBuffer));
-      }
-    } catch (e) {
-      console.error('Error streaming Twitch avatar:', e);
+
+    if (!avatarUrl) return res.status(204).end();
+
+    const imgResponse = await fetch(avatarUrl, { redirect: 'error', signal: AbortSignal.timeout(8000) });
+    const contentType = (imgResponse.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
+    const declaredLength = Number(imgResponse.headers.get('content-length'));
+    if (!imgResponse.ok || !isSafeImageContentType(contentType)
+      || (Number.isFinite(declaredLength) && declaredLength > TWITCH_AVATAR_MAX_BYTES)) {
+      return res.status(204).end();
     }
-    
-    return res.status(204).end();
+    const buffer = Buffer.from(await imgResponse.arrayBuffer());
+    if (buffer.length > TWITCH_AVATAR_MAX_BYTES) return res.status(204).end();
+
+    setRelayedImageHeaders(res);
+    res.setHeader('Content-Type', contentType);
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    return res.send(buffer);
   } catch (error) {
-    console.error('Error fetching Twitch avatar:', error);
+    console.error('Error fetching Twitch avatar:', error.message);
     return res.status(204).end();
   }
 });

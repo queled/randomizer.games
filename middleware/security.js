@@ -5,8 +5,18 @@ const validator = require('validator');
 // Check if in development mode
 const isDevelopment = process.env.NODE_ENV === 'development';
 
-// Rate limiting configuration
-const createRateLimiter = (windowMs, max, message) => {
+// Images served through the API (avatars, stream thumbnails): a page shows
+// dozens of them, so they have their own, larger budget (mediaLimiter).
+const MEDIA_PATH = /^\/api\/(avatar|proxy-image|streams\/twitch-avatar)(\/|\?|$)/;
+const isMediaRequest = (req) => MEDIA_PATH.test(req.originalUrl);
+
+// The admin panel makes many calls; its routes require a session (256-bit
+// token, not guessable) and the login has its own limiter.
+const isAdminRequest = (req) => req.originalUrl.startsWith('/api/admin/') && !req.originalUrl.startsWith('/api/admin/login');
+
+// Rate limiting configuration. Limiters are mounted on sub-paths, where
+// req.path is relative: the full URL (originalUrl) is what the skips test.
+const createRateLimiter = (windowMs, max, message, skip = () => false) => {
   return rateLimit({
     windowMs,
     max,
@@ -14,15 +24,24 @@ const createRateLimiter = (windowMs, max, message) => {
     standardHeaders: true,
     legacyHeaders: false,
     // Skip rate limiting for health checks and in development
-    skip: (req) => req.path === '/api/health' || isDevelopment
+    skip: (req) => isDevelopment || req.originalUrl.split('?')[0] === '/api/health' || skip(req)
   });
 };
 
-// General API rate limiter - More lenient in development (600 req/15min vs 100 in prod)
+// General API rate limiter - More lenient in development (600 req/15min vs 150 in prod)
 const apiLimiter = createRateLimiter(
   15 * 60 * 1000,
   isDevelopment ? 600 : 150,
-  'Too many API requests, please try again later'
+  'Too many API requests, please try again later',
+  (req) => isMediaRequest(req) || isAdminRequest(req)
+);
+
+// Images through the API: about ten pages full of avatars per 15 minutes
+const mediaLimiter = createRateLimiter(
+  15 * 60 * 1000,
+  1000,
+  'Too many image requests, please try again later',
+  (req) => !isMediaRequest(req)
 );
 
 // Strict rate limiter for write operations - More lenient in development (100 req/hour vs 10 in prod)
@@ -220,6 +239,7 @@ const setRelayedImageHeaders = (res) => {
 
 module.exports = {
   apiLimiter,
+  mediaLimiter,
   strictLimiter,
   searchLimiter,
   adminLoginLimiter,

@@ -9,6 +9,7 @@ const { Game, Tournament, Player, Race } = require('./models');
 const seoPages = require('./services/seo-pages');
 const { 
   apiLimiter, 
+  mediaLimiter,
   searchLimiter,
   validatePagination,
   errorHandler,
@@ -227,8 +228,9 @@ app.get('/sitemap.xml', async (req, res, next) => {
 app.use('/assets', express.static(path.join(__dirname, 'public', 'assets'), { maxAge: '1d' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Apply rate limiting to all API routes
+// Apply rate limiting to all API routes (images have their own budget)
 app.use('/api/', apiLimiter);
+app.use('/api/', mediaLimiter);
 
 // Apply pagination validation to routes that use it
 app.use('/api/tournaments', validatePagination);
@@ -245,11 +247,12 @@ app.use('/api/runs', require('./routes/runs'));
 app.use('/api/players', require('./routes/players'));
 app.use('/api/sync', require('./routes/sync'));
 app.use('/api/racetime', require('./routes/racetime'));
+app.use('/api/avatar', require('./routes/avatar'));
 app.use('/api/streams', require('./routes/streams'));
 app.use('/api/search', require('./routes/search'));
 app.use('/api/proxy-image', require('./routes/proxy-image'));
 
-// Admin routes (no rate limiting - authenticated)
+// Admin routes (authenticated: no general rate limit, the login has its own)
 app.use('/api/admin', require('./routes/admin'));
 
 // Health check

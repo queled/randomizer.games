@@ -1,38 +1,4 @@
 (function(){
-  // Avatar cache with localStorage persistence
-  const AVATAR_CACHE_KEY = 'randomizer_avatar_cache';
-  const AVATAR_CACHE_EXPIRY = 24 * 60 * 60 * 1000; // 24 hours
-
-  const avatarCache = {
-    get(key) {
-      try {
-        const cache = JSON.parse(localStorage.getItem(AVATAR_CACHE_KEY) || '{}');
-        const entry = cache[key];
-        if (entry && entry.timestamp && (Date.now() - entry.timestamp < AVATAR_CACHE_EXPIRY)) {
-          // Only return if it's a valid data URL (not a placeholder SVG with just initials)
-          if (entry.data && entry.data.startsWith('data:image/') && entry.data.length > 500) {
-            return entry.data;
-          }
-        }
-        return null;
-      } catch (e) {
-        return null;
-      }
-    },
-    set(key, data) {
-      try {
-        // Only cache real avatars (not placeholder SVGs)
-        if (!data || data.length < 500) return;
-        
-        const cache = JSON.parse(localStorage.getItem(AVATAR_CACHE_KEY) || '{}');
-        cache[key] = { data, timestamp: Date.now() };
-        localStorage.setItem(AVATAR_CACHE_KEY, JSON.stringify(cache));
-      } catch (e) {
-        // Ignore cache errors
-      }
-    }
-  };
-
   function qs(name){
     const m = location.search.match(new RegExp('[?&]'+name+'=([^&]+)'));
     return m ? decodeURIComponent(m[1]) : null;
@@ -144,7 +110,8 @@
   let latestRenderedTournaments = null;
   let avatarLoadedFor = null;
 
-  if (id || nameParam) {
+  // The server already wrote the player's name when it knows them
+  if ((id || nameParam) && document.documentElement.getAttribute('data-seo-ssr') !== '1') {
     headerName.textContent = 'Loading...';
   }
   if(!id && !nameParam){ headerName.textContent = 'No player specified'; }
@@ -233,154 +200,27 @@
     }
   }
 
-  // Helper to try loading Twitch avatar
-  async function tryTwitchAvatar(twitchUsername, playerName) {
-    if (!twitchUsername) return false;
-    
-    try {
-      const res = await fetch('/api/streams/twitch-avatar/' + encodeURIComponent(twitchUsername), {
-        method: 'GET',
-        cache: 'default'
-      });
-      
-      if (res.ok && res.status !== 204) {
-        const ct = res.headers.get('Content-Type') || '';
-        if (ct.indexOf('image/') === 0) {
-          const blob = await res.blob();
-          if (blob.size > 0) {
-            const objUrl = URL.createObjectURL(blob);
-            avatarEl.onload = () => { 
-              avatarEl.alt = playerName + ' avatar'; 
-              URL.revokeObjectURL(objUrl); 
-            };
-            avatarEl.onerror = null;
-            avatarEl.src = objUrl;
-            return true;
-          }
-        }
-      }
-    } catch (e) {
-      // Continue
-    }
-    return false;
-  }
+  // racetime avatar, else Twitch avatar, in one request: the server reads the
+  // racetime profile again every few hours, so a new avatar shows up
+  function loadAvatar(p){
+    const initial = (p.name ? p.name[0].toUpperCase() : '?').replace(/[<>&"']/g, '?');
+    const placeholder = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect fill="%23374151" width="200" height="200"/%3E%3Ctext x="50%25" y="50%25" font-size="64" fill="%23fbbf24" text-anchor="middle" dy=".3em"%3E' + encodeURIComponent(initial) + '%3C/text%3E%3C/svg%3E';
+    const racetimeAccount = p.racetimeId || p.userId || p.racetimeUrl || '';
+    const twitch = p.twitch || '';
 
-  // Load avatar with cascade: Racetime → Twitch → Placeholder
-  async function loadAvatar(p){
-    const playerKey = p.name || p.userId || 'unknown';
-    
-    function setPlaceholder(){
-      avatarEl.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect fill="%23374151" width="200" height="200"/%3E%3Ctext x="50%25" y="50%25" font-size="64" fill="%23fbbf24" text-anchor="middle" dy=".3em"%3E' + (p.name ? p.name[0].toUpperCase() : '?') + '%3C/text%3E%3C/svg%3E';
+    avatarEl.onerror = null;
+    if (!racetimeAccount && !twitch) {
+      avatarEl.src = placeholder;
       avatarEl.alt = 'Avatar';
-    }
-
-    // Check cache first
-    const cached = avatarCache.get(playerKey);
-    if (cached) {
-      avatarEl.src = cached;
       return;
     }
-
-    // clear any previous handlers
-    avatarEl.onload = null;
-    avatarEl.onerror = null;
-
-    let racetimeUrl = null;
-    let twitchUsername = p.twitch || p.twitchUsername || null;
-
-    // Step 1: Try Racetime avatar if available
-    if (p.racetimeUrl || p.racetimeId) {
-      racetimeUrl = normalizeRacetimeProfileUrl(p.racetimeUrl, p.racetimeId);
-
-      // Use proxy which handles parsing
-      const proxy = '/api/racetime/avatar?url=' + encodeURIComponent(racetimeUrl) + (p.name ? '&name=' + encodeURIComponent(p.name) : '');
-      
-      try {
-        const res = await fetch(proxy, { method: 'GET' });
-        if (res.ok && res.status !== 204) {
-          const ct = res.headers.get('Content-Type') || '';
-          if (ct.indexOf('image/') === 0) {
-            const blob = await res.blob();
-            if (blob.size > 0) {
-              const objUrl = URL.createObjectURL(blob);
-              avatarEl.onload = () => { 
-                avatarEl.alt = (p.name || p.userId) + ' avatar'; 
-                URL.revokeObjectURL(objUrl); 
-              };
-              avatarEl.onerror = null;
-              avatarEl.src = objUrl;
-              return; // Stop here - Racetime avatar found, don't try Twitch
-            }
-          }
-        }
-      } catch (e) {
-        // Continue to Twitch fallback
-      }
-    }
-
-    // Step 2: Try to get Twitch username from Racetime profile if not provided (only if Racetime failed)
-    if (!twitchUsername && racetimeUrl) {
-      const fetchedTwitch = await fetchTwitchFromRacetime(racetimeUrl);
-      if (fetchedTwitch) {
-        twitchUsername = fetchedTwitch.split('/').pop();
-      }
-    }
-
-    // Step 3: If no racetime URL, try to find the profile
-    if (!racetimeUrl && p.name) {
-      try {
-        const find = await fetch('/api/racetime/find?q=' + encodeURIComponent(p.name));
-        if (find.ok) {
-          const j = await find.json();
-          if (j && j.url) {
-            racetimeUrl = normalizeRacetimeProfileUrl(j.url);
-            
-            // Try avatar from found profile
-            const proxy = '/api/racetime/avatar?url=' + encodeURIComponent(racetimeUrl || j.url) + '&name=' + encodeURIComponent(p.name);
-            try {
-              const res = await fetch(proxy, { method: 'GET' });
-              if (res.ok && res.status !== 204) {
-                const ct = res.headers.get('Content-Type') || '';
-                if (ct.indexOf('image/') === 0) {
-                  const blob = await res.blob();
-                  if (blob.size > 0) {
-                    const objUrl = URL.createObjectURL(blob);
-                    avatarEl.onload = () => { 
-                      avatarEl.alt = p.name + ' avatar'; 
-                      URL.revokeObjectURL(objUrl); 
-                    };
-                    avatarEl.onerror = null;
-                    avatarEl.src = objUrl;
-                    return;
-                  }
-                }
-              }
-            } catch (e) {
-              // Continue
-            }
-            
-            // Try to get Twitch from found profile
-            if (!twitchUsername) {
-              const fetchedTwitch = await fetchTwitchFromRacetime(racetimeUrl || j.url);
-              if (fetchedTwitch) {
-                twitchUsername = fetchedTwitch.split('/').pop();
-              }
-            }
-          }
-        }
-      } catch (e) { /* ignore */ }
-    }
-
-    // Step 4: Try Twitch avatar
-    if (twitchUsername) {
-      const success = await tryTwitchAvatar(twitchUsername, p.name || p.userId || 'Player');
-      if (success) {
-        return;
-      }
-    }
-
-    // Fallback: Use placeholder (don't cache placeholders)
-    setPlaceholder();
+    avatarEl.onerror = () => {
+      avatarEl.onerror = null;
+      avatarEl.src = placeholder;
+      avatarEl.alt = 'Avatar';
+    };
+    avatarEl.alt = (p.name || p.userId || 'Player') + ' avatar';
+    avatarEl.src = '/api/avatar?racetime=' + encodeURIComponent(racetimeAccount) + '&twitch=' + encodeURIComponent(twitch);
   }
 
   function formatDate(d){ if(!d) return '-'; const t = new Date(d); return t.toLocaleString(); }
@@ -400,7 +240,7 @@
     const avatarKey = p.name || p.userId || 'unknown';
     if (avatarLoadedFor !== avatarKey) {
       avatarLoadedFor = avatarKey;
-      loadAvatar(p).catch(() => {});
+      loadAvatar(p);
     }
 
     const links = [];

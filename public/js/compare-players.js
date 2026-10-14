@@ -5,29 +5,6 @@
     return m ? decodeURIComponent(m[1]) : null;
   }
 
-  function normalizeRacetimeProfileUrl(input, racetimeId) {
-    const raw = String(input || '').trim();
-    if (raw) {
-      if (/^https?:\/\//i.test(raw)) {
-        return raw.replace(/^http:\/\//i, 'https://').replace(/\/+$/, '');
-      }
-      if (raw.startsWith('/')) {
-        return ('https://racetime.gg' + raw).replace(/\/+$/, '');
-      }
-      if (raw.startsWith('user/')) {
-        return ('https://racetime.gg/' + raw).replace(/\/+$/, '');
-      }
-      if (/^[A-Za-z0-9_-]{6,}$/.test(raw)) {
-        return 'https://racetime.gg/user/' + encodeURIComponent(raw);
-      }
-      return ('https://racetime.gg/' + raw.replace(/^\/+/, '')).replace(/\/+$/, '');
-    }
-
-    const id = String(racetimeId || '').trim();
-    if (!id) return null;
-    return 'https://racetime.gg/user/' + encodeURIComponent(id);
-  }
-
   function t(key, fallback) {
     if (typeof window.i18n === 'function') return window.i18n(key) || fallback || key;
     if (typeof window.i18n === 'object' && window.i18n?.t) return window.i18n.t(key) || fallback || key;
@@ -79,57 +56,19 @@
     return `<span class="compare-place-badge other">${place ? place + 'th' : '—'}</span>`;
   }
 
-  // ─── Avatar resolution (same cascade as player-detail.js) ───
+  // ─── Avatar: racetime, else Twitch, in one request (like player-detail.js) ───
 
   async function resolveAvatar(name) {
     try {
-      // Try to get racetime info from the players API
       const resp = await fetch(`/api/players?name=${encodeURIComponent(name)}`);
       if (!resp.ok) return null;
       const data = await resp.json();
       const player = data.players?.[0];
       if (!player) return null;
-
-      // Try racetime avatar via dedicated endpoint
-      if (player.racetimeUrl || player.racetimeId) {
-        const racetimeUrl = normalizeRacetimeProfileUrl(player.racetimeUrl, player.racetimeId);
-        if (racetimeUrl) {
-          try {
-            const proxy = '/api/racetime/avatar?url=' + encodeURIComponent(racetimeUrl) + '&name=' + encodeURIComponent(name);
-            const profileResp = await fetch(proxy, { method: 'GET' });
-            if (profileResp.ok && profileResp.status !== 204) {
-              const ct = profileResp.headers.get('Content-Type') || '';
-              if (ct.indexOf('image/') === 0) {
-                const blob = await profileResp.blob();
-                if (blob.size > 0) {
-                  return URL.createObjectURL(blob);
-                }
-              }
-            }
-          } catch (e) { /* ignore */ }
-        }
-      }
-
-      // Try twitch avatar via dedicated endpoint
-      if (player.twitch) {
-        try {
-          const tResp = await fetch('/api/streams/twitch-avatar/' + encodeURIComponent(player.twitch), {
-            method: 'GET',
-            cache: 'default'
-          });
-          if (tResp.ok && tResp.status !== 204) {
-            const ct = tResp.headers.get('Content-Type') || '';
-            if (ct.indexOf('image/') === 0) {
-              const blob = await tResp.blob();
-              if (blob.size > 0) {
-                return URL.createObjectURL(blob);
-              }
-            }
-          }
-        } catch (e) { /* ignore */ }
-      }
-
-      return null;
+      const racetimeAccount = player.racetimeId || player.racetimeUrl || '';
+      const twitch = player.twitch || '';
+      if (!racetimeAccount && !twitch) return null;
+      return '/api/avatar?racetime=' + encodeURIComponent(racetimeAccount) + '&twitch=' + encodeURIComponent(twitch);
     } catch (e) {
       return null;
     }
@@ -234,8 +173,10 @@
     resolveAvatar(p1).then(url => {
       if (url) {
         const img = document.getElementById('cp-avatar1');
-        img.onload = () => {
-          if (url.startsWith('blob:')) URL.revokeObjectURL(url);
+        // No avatar (204) or an error: back to the initial
+        img.onerror = () => {
+          img.onerror = null;
+          img.src = makeInitialAvatar(p1);
         };
         img.src = url;
       }
@@ -243,8 +184,10 @@
     resolveAvatar(p2).then(url => {
       if (url) {
         const img = document.getElementById('cp-avatar2');
-        img.onload = () => {
-          if (url.startsWith('blob:')) URL.revokeObjectURL(url);
+        // No avatar (204) or an error: back to the initial
+        img.onerror = () => {
+          img.onerror = null;
+          img.src = makeInitialAvatar(p2);
         };
         img.src = url;
       }

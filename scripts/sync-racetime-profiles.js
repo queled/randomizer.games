@@ -2,6 +2,8 @@
 /**
  * Lit le profil racetime.gg de chaque joueur (source de vérité) :
  * - le nom affiché devient le nom racetime actuel, même sans course récente ;
+ * - l'avatar racetime est enregistré (le site le relit aussi toutes les 6 h,
+ *   voir services/racetime-profile.js), la chaîne Twitch si aucune n'est saisie ;
  * - un compte que racetime ne connaît plus (404) ou qu'il a anonymisé après sa
  *   suppression (« --Deleted Account-- ») est marqué supprimé (`racetimeDeletedAt`)
  *   et quitte les listes de joueurs ; ses courses restent.
@@ -27,6 +29,7 @@ const RATE_LIMIT_MS = parseInt(process.env.RACETIME_RATE_LIMIT_MS) || 1000;
 // Erreurs (hors 404) de suite avant d'abandonner : racetime est sans doute indisponible
 const MAX_CONSECUTIVE_ERRORS = 10;
 const { Player } = require('../models');
+const { profileFromUserData } = require('../services/racetime-profile');
 
 // Nom que racetime donne à un compte supprimé : son id reste, le profil est vidé
 const DELETED_ACCOUNT_NAME = '--Deleted Account--';
@@ -77,7 +80,7 @@ async function main() {
       { racetimeCheckedAt: { $lt: new Date(Date.now() - staleDays * 24 * 3600 * 1000) } }
     ];
   }
-  let query = Player.find(filter).select('userId name discriminator racetimeDeletedAt').sort({ racetimeCheckedAt: 1 }).lean();
+  let query = Player.find(filter).select('userId name discriminator twitch racetimeDeletedAt').sort({ racetimeCheckedAt: 1 }).lean();
   if (limit) query = query.limit(limit);
   const players = await query;
   console.log(`🔎 ${players.length} profil(s) racetime à lire${dryRun ? ' (dry run)' : ''}`);
@@ -105,6 +108,8 @@ async function main() {
     const update = { $set: { racetimeCheckedAt: new Date() } };
     if (profile.status === 404 || profile.data?.name === DELETED_ACCOUNT_NAME) {
       if (profile.status !== 404) update.$set.name = DELETED_ACCOUNT_NAME;
+      update.$set.avatarUrl = null;
+      update.$set.avatarCheckedAt = new Date();
       if (!player.racetimeDeletedAt) {
         update.$set.racetimeDeletedAt = new Date();
         stats.deleted++;
@@ -115,6 +120,10 @@ async function main() {
       if (name) update.$set.name = name;
       if (discriminator) update.$set.discriminator = discriminator;
       if (url) update.$set.racetimeUrl = `https://racetime.gg${url}`;
+      const { avatarUrl, twitch } = profileFromUserData(profile.data);
+      update.$set.avatarUrl = avatarUrl;
+      update.$set.avatarCheckedAt = new Date();
+      if (twitch && !player.twitch) update.$set.twitch = twitch;
       if (name && name !== player.name) {
         stats.renamed++;
         console.log(`   ✏️ ${player.name} → ${name}`);

@@ -26,14 +26,36 @@ function raceNeedsEntrantHydration(race) {
   });
 }
 
+// A page view reloads at most this many races from racetime.gg, and a race is
+// not tried again for an hour: a visitor cannot make the server call racetime
+// (and write to the database) once per race of a big tournament.
+const MAX_HYDRATIONS_PER_REQUEST = 3;
+const HYDRATION_RETRY_MS = 60 * 60 * 1000;
+const HYDRATION_ATTEMPTS_MAX = 5000;
+const hydrationAttempts = new Map();
+
+function claimHydrationAttempt(raceId) {
+  const key = String(raceId);
+  const last = hydrationAttempts.get(key);
+  if (last && Date.now() - last < HYDRATION_RETRY_MS) return false;
+  if (!last && hydrationAttempts.size >= HYDRATION_ATTEMPTS_MAX) {
+    hydrationAttempts.delete(hydrationAttempts.keys().next().value);
+  }
+  hydrationAttempts.delete(key);
+  hydrationAttempts.set(key, Date.now());
+  return true;
+}
+
 async function hydrateMissingRaceEntrants(races, Race) {
   const hydrated = [];
+  let budget = MAX_HYDRATIONS_PER_REQUEST;
 
   for (const race of races) {
-    if (!raceNeedsEntrantHydration(race) || !race?.category) {
+    if (!raceNeedsEntrantHydration(race) || !race?.category || budget <= 0 || !claimHydrationAttempt(race._id)) {
       hydrated.push(race);
       continue;
     }
+    budget--;
 
     const raceSlug = extractRaceSlug(race);
     if (!raceSlug) {
@@ -349,7 +371,7 @@ router.get('/:id/matches', validateObjectId('id'), async (req, res, next) => {
 });
 
 // Get tournament races
-router.get('/:id/races', async (req, res, next) => {
+router.get('/:id/races', validateObjectId('id'), async (req, res, next) => {
   try {
     const { Race } = require('../models');
     const races = await Race.find({ tournamentId: req.params.id })

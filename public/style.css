@@ -841,14 +841,11 @@ body.spoiler-mode .spoiler-text::before {
         gap: 1rem;
     }
     
+    /* Taller touch target; the width follows the wide Patreon logo */
     .footer-patreon-btn {
-        width: 44px;
+        width: auto;
         height: 44px;
-    }
-    
-    .footer-patreon-btn svg {
-        width: 24px;
-        height: 24px;
+        padding: 6px 12px;
     }
 
     .footer-container {

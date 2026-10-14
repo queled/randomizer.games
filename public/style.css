@@ -1793,8 +1793,9 @@ body.spoiler-mode .spoiler-text::before {
 }
 
 /* Game detail */
+/* The overview makes the text taller than the poster: the poster stays centered beside it */
 .game-header {
-    align-items: flex-start;
+    align-items: center;
 }
 
 .game-poster {

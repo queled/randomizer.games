@@ -1326,135 +1326,179 @@ router.get('/twitch-avatar/:username', async (req, res, next) => {
 });
 
 // Get all randomizer streams (not game-specific)
-router.get('/', async (req, res, next) => {
+// Every live randomizer stream: Twitch categories of all the games plus racetime live entrants
+async function buildAllStreams() {
+  const token = await getTwitchToken();
+  if (!token) {
+    return { streams: [], total: 0, message: 'Twitch API not configured' };
+  }
+
+  // Build reverse map: Twitch game name -> gameIds (from DB only)
+  const fallbackTwitchGameToGameIds = new Map();
+  const twitchCategoryIdToGameRefs = new Map();
+  const games = await Game.find({ enabled: { $ne: false } });
+  for (const game of games) {
+    const gameId = (game.id || '').toLowerCase();
+    const twitchCategoryId = game.integrations?.twitch?.categoryId;
+    const twitchNameFromDb = game.integrations?.twitch?.categoryName;
+    const fallbackName = TWITCH_GAME_NAMES[gameId] || game.official?.name || game.name;
+    const twitchGameName = twitchNameFromDb || fallbackName;
+
+    if (twitchCategoryId) {
+      if (!twitchCategoryIdToGameRefs.has(twitchCategoryId)) {
+        twitchCategoryIdToGameRefs.set(twitchCategoryId, []);
+      }
+      twitchCategoryIdToGameRefs.get(twitchCategoryId).push({
+        gameId,
+        categoryName: twitchNameFromDb || ''
+      });
+    } else {
+      if (!twitchGameName) continue;
+      const names = Array.isArray(twitchGameName) ? twitchGameName : [twitchGameName];
+      for (const name of names) {
+        if (!fallbackTwitchGameToGameIds.has(name)) {
+          fallbackTwitchGameToGameIds.set(name, []);
+        }
+        fallbackTwitchGameToGameIds.get(name).push(gameId);
+      }
+    }
+  }
+
+  // Get all streams from known randomizer games
+  const allStreams = [];
+  const streamMap = new Map(); // To deduplicate
+  
   try {
-    const cacheKey = 'streams:all';
-    
-    // Check cache
-    const cached = getCached(cacheKey);
-    if (cached) {
-      return res.json(cached);
-    }
+    // Fetch streams from known categories with bounded concurrency
+    const categoryEntries = Array.from(twitchCategoryIdToGameRefs.entries());
+    const categoryResults = await mapWithConcurrency(categoryEntries, 8, async ([categoryId, refs]) => {
+      const primary = refs[0] || { gameId: 'unknown', categoryName: '' };
+      const includeAll = PASS_THROUGH_TWITCH_CATEGORIES.has(String(primary.categoryName || '').toLowerCase());
+      const streams = await fetchTwitchStreamsByCategoryId(categoryId, primary.categoryName, includeAll);
+      return { streams, primaryGameId: primary.gameId };
+    });
 
-    const token = await getTwitchToken();
-    if (!token) {
-      return res.json({ streams: [], total: 0, message: 'Twitch API not configured' });
-    }
-
-    // Build reverse map: Twitch game name -> gameIds (from DB only)
-    const fallbackTwitchGameToGameIds = new Map();
-    const twitchCategoryIdToGameRefs = new Map();
-    const games = await Game.find({ enabled: { $ne: false } });
-    for (const game of games) {
-      const gameId = (game.id || '').toLowerCase();
-      const twitchCategoryId = game.integrations?.twitch?.categoryId;
-      const twitchNameFromDb = game.integrations?.twitch?.categoryName;
-      const fallbackName = TWITCH_GAME_NAMES[gameId] || game.official?.name || game.name;
-      const twitchGameName = twitchNameFromDb || fallbackName;
-
-      if (twitchCategoryId) {
-        if (!twitchCategoryIdToGameRefs.has(twitchCategoryId)) {
-          twitchCategoryIdToGameRefs.set(twitchCategoryId, []);
-        }
-        twitchCategoryIdToGameRefs.get(twitchCategoryId).push({
-          gameId,
-          categoryName: twitchNameFromDb || ''
-        });
-      } else {
-        if (!twitchGameName) continue;
-        const names = Array.isArray(twitchGameName) ? twitchGameName : [twitchGameName];
-        for (const name of names) {
-          if (!fallbackTwitchGameToGameIds.has(name)) {
-            fallbackTwitchGameToGameIds.set(name, []);
-          }
-          fallbackTwitchGameToGameIds.get(name).push(gameId);
+    for (const result of categoryResults) {
+      for (const stream of (result?.streams || [])) {
+        if (!streamMap.has(stream.id)) {
+          streamMap.set(stream.id, {
+            ...stream,
+            gameId: result.primaryGameId
+          });
         }
       }
     }
 
-    // Get all streams from known randomizer games
-    const allStreams = [];
-    const streamMap = new Map(); // To deduplicate
+    // Fallback only for games without explicit categoryId
+    const fallbackGameNames = Array.from(fallbackTwitchGameToGameIds.keys());
+    const fallbackResults = await mapWithConcurrency(fallbackGameNames, 8, async (gameName) => {
+      const streams = await fetchTwitchStreams(gameName, PASS_THROUGH_TWITCH_CATEGORIES.has(String(gameName).toLowerCase()));
+      const gameIds = fallbackTwitchGameToGameIds.get(gameName) || [];
+      const primaryGameId = gameIds[0] || 'unknown';
+      return { streams, primaryGameId };
+    });
+
+    for (const result of fallbackResults) {
+      for (const stream of (result?.streams || [])) {
+        if (!streamMap.has(stream.id)) {
+          streamMap.set(stream.id, {
+            ...stream,
+            gameId: result.primaryGameId
+          });
+        }
+      }
+    }
     
+    allStreams.push(...streamMap.values());
+
+    // Additive augmentation: cross-reference racetime.gg live races per game
+    // to catch mistagged Twitch streams. Never removes anything found above.
     try {
-      // Fetch streams from known categories with bounded concurrency
-      const categoryEntries = Array.from(twitchCategoryIdToGameRefs.entries());
-      const categoryResults = await mapWithConcurrency(categoryEntries, 8, async ([categoryId, refs]) => {
-        const primary = refs[0] || { gameId: 'unknown', categoryName: '' };
-        const includeAll = PASS_THROUGH_TWITCH_CATEGORIES.has(String(primary.categoryName || '').toLowerCase());
-        const streams = await fetchTwitchStreamsByCategoryId(categoryId, primary.categoryName, includeAll);
-        return { streams, primaryGameId: primary.gameId };
+      const gamesWithRacetimeSlug = games.filter(g => getRacetimeSlugsForGame(g).length > 0);
+      const racetimeResults = await mapWithConcurrency(gamesWithRacetimeSlug, 4, async (game) => {
+        const gameId = (game.id || '').toLowerCase();
+        return fetchRacetimeLiveStreamsForGame(game, gameId);
       });
-
-      for (const result of categoryResults) {
-        for (const stream of (result?.streams || [])) {
+      for (const streams of racetimeResults) {
+        for (const stream of (streams || [])) {
           if (!streamMap.has(stream.id)) {
-            streamMap.set(stream.id, {
-              ...stream,
-              gameId: result.primaryGameId
-            });
+            streamMap.set(stream.id, stream);
+            allStreams.push(stream);
           }
         }
-      }
-
-      // Fallback only for games without explicit categoryId
-      const fallbackGameNames = Array.from(fallbackTwitchGameToGameIds.keys());
-      const fallbackResults = await mapWithConcurrency(fallbackGameNames, 8, async (gameName) => {
-        const streams = await fetchTwitchStreams(gameName, PASS_THROUGH_TWITCH_CATEGORIES.has(String(gameName).toLowerCase()));
-        const gameIds = fallbackTwitchGameToGameIds.get(gameName) || [];
-        const primaryGameId = gameIds[0] || 'unknown';
-        return { streams, primaryGameId };
-      });
-
-      for (const result of fallbackResults) {
-        for (const stream of (result?.streams || [])) {
-          if (!streamMap.has(stream.id)) {
-            streamMap.set(stream.id, {
-              ...stream,
-              gameId: result.primaryGameId
-            });
-          }
-        }
-      }
-      
-      allStreams.push(...streamMap.values());
-
-      // Additive augmentation: cross-reference racetime.gg live races per game
-      // to catch mistagged Twitch streams. Never removes anything found above.
-      try {
-        const gamesWithRacetimeSlug = games.filter(g => getRacetimeSlugsForGame(g).length > 0);
-        const racetimeResults = await mapWithConcurrency(gamesWithRacetimeSlug, 4, async (game) => {
-          const gameId = (game.id || '').toLowerCase();
-          return fetchRacetimeLiveStreamsForGame(game, gameId);
-        });
-        for (const streams of racetimeResults) {
-          for (const stream of (streams || [])) {
-            if (!streamMap.has(stream.id)) {
-              streamMap.set(stream.id, stream);
-              allStreams.push(stream);
-            }
-          }
-        }
-      } catch (error) {
-        console.warn('Racetime live augmentation skipped for aggregate streams:', error?.message || error);
       }
     } catch (error) {
-      console.error('Error fetching Twitch streams:', error);
+      console.warn('Racetime live augmentation skipped for aggregate streams:', error?.message || error);
+    }
+  } catch (error) {
+    console.error('Error fetching Twitch streams:', error);
+  }
+
+  // Sort streams by viewer count (highest first)
+  allStreams.sort((a, b) => (b.viewerCount || 0) - (a.viewerCount || 0));
+
+  const result = {
+    streams: allStreams,
+    total: allStreams.length,
+    fetchedAt: new Date().toISOString()
+  };
+
+
+  return result;
+}
+
+// Building the list queries Twitch for every game and takes several seconds: like the stats
+// by game, an expired list keeps being served (up to ALL_STREAMS_MAX_STALE) while a single
+// background refresh runs, and a timer keeps it fresh so the home page never waits for it.
+const ALL_STREAMS_KEY = 'streams:all';
+const ALL_STREAMS_MAX_STALE = 15 * 60 * 1000;
+let allStreamsInFlight = null;
+
+function refreshAllStreams() {
+  if (!allStreamsInFlight) {
+    allStreamsInFlight = buildAllStreams()
+      .then(result => {
+        if (!result.message) setCache(ALL_STREAMS_KEY, result);
+        return result;
+      })
+      .finally(() => {
+        allStreamsInFlight = null;
+      });
+  }
+  return allStreamsInFlight;
+}
+
+function warmAllStreams() {
+  refreshAllStreams().catch(err => {
+    console.warn('Refresh /api/streams failed:', err?.message || err);
+  });
+}
+setTimeout(warmAllStreams, 4000);
+// Refreshed a little before the cache expires
+setInterval(warmAllStreams, CACHE_TTL - 30 * 1000).unref();
+
+router.get('/', async (req, res, next) => {
+  try {
+    // ?limit=4: only the most watched streams (the home page shows four)
+    const limit = parseInt(req.query.limit, 10);
+    const send = (data) => res.json(limit > 0 && Array.isArray(data.streams)
+      ? { ...data, streams: data.streams.slice(0, limit) }
+      : data);
+
+    const cached = getCached(ALL_STREAMS_KEY);
+    if (cached) {
+      return send(cached);
     }
 
-    // Sort streams by viewer count (highest first)
-    allStreams.sort((a, b) => (b.viewerCount || 0) - (a.viewerCount || 0));
+    const stale = cache.data[ALL_STREAMS_KEY];
+    if (stale && cache.expires[ALL_STREAMS_KEY] + ALL_STREAMS_MAX_STALE > Date.now()) {
+      refreshAllStreams().catch(err => {
+        console.warn('Refresh /api/streams failed:', err?.message || err);
+      });
+      return send(stale);
+    }
 
-    const result = {
-      streams: allStreams,
-      total: allStreams.length,
-      fetchedAt: new Date().toISOString()
-    };
-
-
-    setCache(cacheKey, result);
-
-    res.json(result);
+    send(await refreshAllStreams());
   } catch (error) {
     next(error);
   }

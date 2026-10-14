@@ -649,6 +649,8 @@ function filterComboStreams(streams, gameId) {
   return streams.filter(stream => streamMentions(stream, keywords));
 }
 
+const RANDO_WORD = /(^|[^a-z0-9])(randos?|randomi[sz]ed)([^a-z0-9]|$)/;
+
 // Check if a stream is a randomizer stream based on title, tags, and game-specific acronyms
 function isRandomizerStream(stream, gameName) {
   const title = (stream.title || '').toLowerCase();
@@ -664,11 +666,10 @@ function isRandomizerStream(stream, gameName) {
     return true;
   }
   
-  // Check generic randomizer/rando mentions
-  if (title.includes('randomizer') || title.includes('rando')) {
-    return true;
-  }
-  if (tags.some(t => t.includes('randomizer') || t.includes('rando'))) {
+  // Check generic randomizer/rando mentions. "randomizer" is specific enough inside
+  // another word ("OoTRandomizer", tag "ZeldaRandomizer"); "rando" and "randomized"
+  // must be whole words, or "random", "Randolocke" and Spanish "explorando" match
+  if ([title, ...tags].some(text => /randomi[sz]er/.test(text) || RANDO_WORD.test(text))) {
     return true;
   }
   

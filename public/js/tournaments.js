@@ -51,24 +51,14 @@
     const date = formatDate(t.startDate);
     const participantsCount = t.participantsCount || (t.participants && t.participants.length) || 0;
     
-    let gameName = t.gameName || '';
-    if (!gameName && gamesById[t.gameId]) {
-      gameName = resolveGameLabel(gamesById[t.gameId]);
-    }
+    // The linked game's official name first: the source's own label varies
+    // ("Ocarina of Time Randomizer", "the Legend of Zelda: …")
+    const gameName = (gamesById[t.gameId] && resolveGameLabel(gamesById[t.gameId])) || t.gameName || '';
 
-    // Find winner if participants exist and have finalRank set, or from _computedWinner
-    let winnerText = '';
-    let winner = null;
-    
-    if (t.participants && t.participants.length > 0) {
-      winner = t.participants.find(p => p.finalRank != null && p.finalRank === 1);
-    }
-    
-    if (!winner && t._computedWinner) {
-      winnerText = `<div class="spoiler-block" style="color:#9ca3af;font-size:0.8rem;margin-top:0.5rem;">🏆 ${escHtml(t._computedWinner)}</div>`;
-    } else if (winner) {
-      winnerText = `<div class="spoiler-block" style="color:#9ca3af;font-size:0.8rem;margin-top:0.5rem;">🏆 ${escHtml(winner.displayName || winner.name || 'Gagnant')}</div>`;
-    }
+    const winnerName = getTournamentWinnerName(t);
+    const winnerText = winnerName
+      ? `<div class="spoiler-block" style="color:#9ca3af;font-size:0.8rem;margin-top:0.5rem;">🏆 ${escHtml(winnerName)}</div>`
+      : '';
 
     const url = `/tournament-detail.html?id=${encodeURIComponent(t._id || t.id)}`;
 

@@ -47,6 +47,7 @@ const en = {
     
     // Home page
     home: {
+        pageTitle: "Randomizer - Races, Tournaments and Players for Randomizer Games",
         title: "Randomizer",
         recentRaces: "Recent Races",
         recentTournaments: "Recent Tournaments",
@@ -515,7 +516,14 @@ const en = {
         tabGames: "Games",
         tabTournaments: "Tournaments",
         tabRaces: "Races",
-        tabPlayers: "Players"
+        tabPlayers: "Players",
+        resultsCount: "{count} SEARCH RESULTS",
+        noResultsFor: "No results found for",
+        tryOtherTerms: "Try other search terms",
+        minChars: "Enter at least 2 characters to search",
+        noResultsInCategory: "No results in this category",
+        error: "Search error",
+        errorRetry: "Please try again later"
     },
     
     // Footer

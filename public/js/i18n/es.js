@@ -45,6 +45,7 @@ const es = {
     
     // Home page
     home: {
+        pageTitle: "Randomizer - Carreras, torneos y jugadores de juegos randomizer",
         title: "Randomizer",
         recentRaces: "Carreras Recientes",
         recentTournaments: "Torneos Recientes",
@@ -496,7 +497,14 @@ roundOf16: "Octavos de final",
         tabGames: "Juegos",
         tabTournaments: "Torneos",
         tabRaces: "Carreras",
-        tabPlayers: "Jugadores"
+        tabPlayers: "Jugadores",
+        resultsCount: "{count} RESULTADOS DE BÚSQUEDA",
+        noResultsFor: "No se encontraron resultados para",
+        tryOtherTerms: "Prueba con otros términos de búsqueda",
+        minChars: "Escribe al menos 2 caracteres para buscar",
+        noResultsInCategory: "No hay resultados en esta categoría",
+        error: "Error de búsqueda",
+        errorRetry: "Inténtalo de nuevo más tarde"
     },
     
     // Footer

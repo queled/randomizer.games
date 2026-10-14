@@ -270,16 +270,10 @@ async function loadRecentTournaments(request) {
       return;
     }
 
-    // Enrich tournaments with winners and last match date
+    // Enrich finished tournaments with their last match date
     const enrichedTournaments = await Promise.all(data.tournaments.map(async (t) => {
-      const needsWinner = (!t.participants || t.participants.every(p => p.finalRank == null)) && !t.winner;
-      // Fetch last match date for finished tournaments
       const isFinished = getTournamentStatusFromState(t) === 'terminé';
-      const [winner, lastMatchDate] = await Promise.all([
-        needsWinner ? findTournamentWinner(t._id || t.id, t) : null,
-        isFinished ? getLastMatchDate(t._id || t.id) : null
-      ]);
-      if (needsWinner) t._computedWinner = winner;
+      const lastMatchDate = isFinished ? await getLastMatchDate(t._id || t.id) : null;
       if (lastMatchDate) t._lastMatchDate = lastMatchDate;
       return t;
     }));

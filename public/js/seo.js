@@ -233,6 +233,11 @@
     const twitterCard = options.twitterCard || 'summary';
 
     document.title = title;
+    // A page-specific title (player, race...) must not be replaced by the generic translated one
+    if (options.title) {
+      const titleEl = document.querySelector('title[data-i18n-page-title]');
+      if (titleEl) titleEl.removeAttribute('data-i18n-page-title');
+    }
 
     ensureMetaByName('description', description);
     ensureMetaByName('robots', robots);

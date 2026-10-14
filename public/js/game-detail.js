@@ -169,19 +169,10 @@
     const participantsCount = t.participantsCount || (t.participants && t.participants.length) || 0;
     const participantsLabel = typeof i18n !== 'undefined' ? i18n.t('home.participants') : 'participants';
     
-    // Find winner: first check finalRank, then check _computedWinner
-    let winnerHtml = '';
-    let winner = null;
-    
-    if (t.participants && t.participants.length > 0) {
-      winner = t.participants.find(p => p.finalRank != null && p.finalRank === 1);
-    }
-    
-    if (!winner && t._computedWinner) {
-      winnerHtml = `<div class="spoiler-block" style="color:#fbbf24;font-size:0.8rem;margin-top:0.5rem;"><span>🏆</span> <span style="color:#d1d5db;">${t._computedWinner}</span></div>`;
-    } else if (winner) {
-      winnerHtml = `<div class="spoiler-block" style="color:#fbbf24;font-size:0.8rem;margin-top:0.5rem;"><span>🏆</span> <span style="color:#d1d5db;">${winner.displayName || winner.name || 'Gagnant'}</span></div>`;
-    }
+    const winnerName = getTournamentWinnerName(t);
+    const winnerHtml = winnerName
+      ? `<div class="spoiler-block" style="color:#fbbf24;font-size:0.8rem;margin-top:0.5rem;"><span>🏆</span> <span style="color:#d1d5db;">${escHtml(winnerName)}</span></div>`
+      : '';
     
     return `
       <a href="/tournament-detail.html?id=${encodeURIComponent(tid)}" style="text-decoration:none;color:inherit;display:block;">

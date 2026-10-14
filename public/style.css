@@ -1183,7 +1183,8 @@ body.spoiler-mode .spoiler-text::before {
 
 .two-column-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    /* minmax(0, …) lets a column shrink below its longest unbreakable line */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 2rem;
 }
 
@@ -1727,6 +1728,12 @@ body.spoiler-mode .spoiler-text::before {
 .tournament-description {
     margin-top: 1.5rem;
     display: none;
+    /* Long links (Dropbox, Google Docs…) wrap instead of widening the page */
+    overflow-wrap: anywhere;
+}
+
+.bracket-scroll {
+    overflow-x: auto;
 }
 
 .tournament-description p:last-child {
@@ -1904,7 +1911,7 @@ body.spoiler-mode .spoiler-text::before {
 
     /* Two-column layouts */
     .two-column-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 
     /* Game detail tabs - scrollable */
@@ -1944,7 +1951,7 @@ body.spoiler-mode .spoiler-text::before {
 
     .home-grid,
     .two-column-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         gap: 1.5rem;
     }
 
@@ -1985,7 +1992,7 @@ body.spoiler-mode .spoiler-text::before {
     }
 
     .races-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .pagination-container {

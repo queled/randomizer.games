@@ -72,8 +72,9 @@ function initLanguageSelector() {
     const selector = document.getElementById('language-selector');
     if (!selector) return;
     
-    // Load saved language preference
-    const savedLang = window.i18n ? window.i18n.getLanguage() : (localStorage.getItem('preferred-language') || 'en');
+    // i18n.js loads async: before it is ready, <html lang> already holds the language
+    // picked by i18n-boot.js (saved choice or browser language)
+    const savedLang = window.i18n ? window.i18n.getLanguage() : (document.documentElement.lang || 'en');
     selector.value = savedLang;
     
     // Handle language change
@@ -96,6 +97,9 @@ function initLanguageSelector() {
 window.addEventListener('languageChanged', () => {
     // Update footer text when language changes
     if (window.i18n) {
+        const selector = document.getElementById('language-selector');
+        if (selector) selector.value = window.i18n.getLanguage();
+
         const copyrightEl = document.querySelector('.footer-copyright');
         if (copyrightEl) {
             copyrightEl.textContent = window.i18n.t('footer.copyright', { year: new Date().getFullYear() });

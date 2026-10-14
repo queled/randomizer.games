@@ -119,7 +119,7 @@
     };
 
     window.RandomizerSEO.updatePage({
-      title: `${playerName} - Randomizer Player Profile`,
+      title: `${playerName} - ${((window.i18n && window.i18n.t('playerDetail.pageTitle', {}, 'Player Profile - Randomizer')) || 'Player Profile - Randomizer')}`,
       description,
       canonicalParams: id ? { id } : { name: nameParam || playerName },
       jsonLd: [breadcrumb, schema]

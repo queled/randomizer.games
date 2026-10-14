@@ -47,6 +47,7 @@ const fr = {
     
     // Home page
     home: {
+        pageTitle: "Randomizer - Courses, tournois et joueurs des jeux randomizer",
         title: "Randomizer",
         recentRaces: "Dernières Courses",
         recentTournaments: "Derniers Tournois",
@@ -503,7 +504,14 @@ const fr = {
         tabGames: "Jeux",
         tabTournaments: "Tournois",
         tabRaces: "Courses",
-        tabPlayers: "Joueurs"
+        tabPlayers: "Joueurs",
+        resultsCount: "{count} RÉSULTATS DE RECHERCHE",
+        noResultsFor: "Aucun résultat pour",
+        tryOtherTerms: "Essayez avec d'autres termes de recherche",
+        minChars: "Saisissez au moins 2 caractères pour lancer la recherche",
+        noResultsInCategory: "Aucun résultat dans cette catégorie",
+        error: "Erreur de recherche",
+        errorRetry: "Réessayez plus tard"
     },
     
     // Footer

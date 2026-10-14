@@ -13,7 +13,7 @@ async function loadStats() {
         const responses = await Promise.allSettled([
             fetch(`${API_BASE}/api/games`),
             fetch(`${API_BASE}/api/runs?limit=1`),
-            fetch(`${API_BASE}/api/tournaments`),
+            fetch(`${API_BASE}/api/tournaments?limit=1`),
             fetch(`${API_BASE}/api/players?limit=1`)
         ]);
         
@@ -38,9 +38,8 @@ async function loadStats() {
         // Handle tournaments (index 2)
         if (responses[2].status === 'fulfilled' && responses[2].value.ok) {
             const tournamentsData = await responses[2].value.json();
-            const tournaments = tournamentsData.tournaments || tournamentsData;
-            statTournaments.textContent = Array.isArray(tournaments) ? tournaments.length : 
-                (tournamentsData.total || '0');
+            // /api/tournaments is paginated: the list holds one page, the total is in pagination
+            statTournaments.textContent = (tournamentsData.pagination && tournamentsData.pagination.total) || tournamentsData.total || '0';
         } else {
             statTournaments.textContent = '0';
         }
@@ -52,6 +51,13 @@ async function loadStats() {
         } else {
             statPlayers.textContent = '0';
         }
+
+        // Thousands separators in the page language (186913 → 186 913)
+        const locale = (window.i18n && window.i18n.getLanguage) ? window.i18n.getLanguage() : undefined;
+        [statGames, statRaces, statTournaments, statPlayers].forEach(el => {
+            const n = Number(el.textContent);
+            if (Number.isFinite(n)) el.textContent = n.toLocaleString(locale);
+        });
 
         // Make stat numbers clickable to the relevant pages
         const makeLink = (el, href) => {

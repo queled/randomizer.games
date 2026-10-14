@@ -47,6 +47,7 @@ const de = {
     
     // Home page
     home: {
+        pageTitle: "Randomizer - Rennen, Turniere und Spieler von Randomizer-Spielen",
         title: "Randomizer",
         recentRaces: "Aktuelle Rennen",
         recentTournaments: "Aktuelle Turniere",
@@ -498,7 +499,14 @@ roundOf16: "Achtelfinale",
         tabGames: "Spiele",
         tabTournaments: "Turniere",
         tabRaces: "Rennen",
-        tabPlayers: "Spieler"
+        tabPlayers: "Spieler",
+        resultsCount: "{count} SUCHERGEBNISSE",
+        noResultsFor: "Keine Ergebnisse für",
+        tryOtherTerms: "Versuche es mit anderen Suchbegriffen",
+        minChars: "Gib mindestens 2 Zeichen ein, um zu suchen",
+        noResultsInCategory: "Keine Ergebnisse in dieser Kategorie",
+        error: "Suchfehler",
+        errorRetry: "Bitte versuche es später erneut"
     },
     
     // Footer

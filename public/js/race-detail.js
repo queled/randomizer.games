@@ -214,7 +214,7 @@
     };
 
     window.RandomizerSEO.updatePage({
-      title: `${goal} - ${gameDisplayName} Race - Randomizer`,
+      title: `${goal} - ${gameDisplayName} - ${((window.i18n && window.i18n.t('raceDetail.pageTitle', {}, 'Race - Randomizer')) || 'Race - Randomizer')}`,
       description,
       canonicalParams: raceId ? { id: raceId } : { url: raceUrl },
       image,

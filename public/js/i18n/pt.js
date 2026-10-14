@@ -47,6 +47,7 @@ const pt = {
     
     // Home page
     home: {
+        pageTitle: "Randomizer - Corridas, torneios e jogadores de jogos randomizer",
         title: "Randomizer",
         recentRaces: "Corridas Recentes",
         recentTournaments: "Torneios Recentes",
@@ -539,7 +540,14 @@ const pt = {
         tabGames: "Jogos",
         tabTournaments: "Torneios",
         tabRaces: "Corridas",
-        tabPlayers: "Jogadores"
+        tabPlayers: "Jogadores",
+        resultsCount: "{count} RESULTADOS DA PESQUISA",
+        noResultsFor: "Nenhum resultado para",
+        tryOtherTerms: "Tente outros termos de pesquisa",
+        minChars: "Digite pelo menos 2 caracteres para pesquisar",
+        noResultsInCategory: "Nenhum resultado nesta categoria",
+        error: "Erro na pesquisa",
+        errorRetry: "Tente novamente mais tarde"
     },
     
     // Footer

@@ -169,7 +169,7 @@ function applyTournamentSeo(tournament) {
   };
 
   window.RandomizerSEO.updatePage({
-    title: `${tournament.name} - Tournament - Randomizer`,
+    title: `${tournament.name} - ${((window.i18n && window.i18n.t('tournamentDetail.pageTitle', {}, 'Tournament - Randomizer')) || 'Tournament - Randomizer')}`,
     description,
     canonicalParams: { id: tournament._id || tournament.id },
     image,
@@ -457,7 +457,7 @@ function displayTournamentInfo(tournament) {
   document.getElementById('tournament-title').textContent = tournament.name;
   document.title = `${tournament.name} - Randomizer`;
   const tournamentGameEl = document.getElementById('tournament-game');
-  const tournamentGameLabel = tournament.gameName || 'Unknown game';
+  const tournamentGameLabel = tournament.game?.official?.name || tournament.gameName || 'Unknown game';
   if (tournament.game?.id) {
     tournamentGameEl.innerHTML = `<a href="/game-detail.html?id=${encodeURIComponent(tournament.game.id)}" style="color:inherit;text-decoration:none;">${escHtml(tournamentGameLabel)}</a>`;
   } else {
@@ -3869,9 +3869,13 @@ function displayBracketSection(matches, container, bracketType = 'winner', isDou
   const numRounds = sortedRounds.length;
   const columnWidth = `${100 / numRounds}%`;
   
-  // Create bracket wrapper with position relative for SVG overlay
+  // Create bracket wrapper with position relative for SVG overlay.
+  // Each round keeps a readable width; on a narrow screen the bracket scrolls sideways instead of the page.
   const bracketWrapper = document.createElement('div');
-  bracketWrapper.style.cssText = 'position: relative; width: 100%;';
+  bracketWrapper.style.cssText = `position: relative; width: 100%; min-width: ${numRounds * 140}px;`;
+  const bracketScroll = document.createElement('div');
+  bracketScroll.className = 'bracket-scroll';
+  bracketScroll.appendChild(bracketWrapper);
   
   // Create bracket HTML
   const bracketHTML = document.createElement('div');
@@ -3894,7 +3898,7 @@ function displayBracketSection(matches, container, bracketType = 'winner', isDou
   svg.setAttribute('preserveAspectRatio', 'none');
   bracketWrapper.appendChild(svg);
   
-  container.appendChild(bracketWrapper);
+  container.appendChild(bracketScroll);
   
   // Draw connector lines after a brief delay to ensure elements are rendered
   setTimeout(() => drawBracketConnectors(bracketHTML, svg, sortedRounds.length, bracketType, byRound, sortedRounds, isPoolBracket), 50);

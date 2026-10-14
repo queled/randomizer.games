@@ -5,32 +5,10 @@
     return params.get('q') || '';
   }
 
-  // Game slug to display name mapping
-  const gameDisplayNames = {
-    'oot': 'Ocarina of Time',
-    'ootr': 'Ocarina of Time',
-    'alttp': 'A Link to the Past',
-    'alttpr': 'A Link to the Past',
-    'mm': 'Majora\'s Mask',
-    'mmr': 'Majora\'s Mask',
-    'sm': 'Super Metroid',
-    'smr': 'Super Metroid',
-    'sm64': 'Super Mario 64',
-    'dk64': 'Donkey Kong 64',
-    'dk64r': 'Donkey Kong 64',
-    'tww': 'Wind Waker',
-    'tp': 'Twilight Princess',
-    'kh2fm': 'Kingdom Hearts 2 FM',
-    'kh2r': 'Kingdom Hearts 2 FM',
-    'kh2fmr': 'Kingdom Hearts 2 FM',
-    'sotn': 'Symphony of the Night',
-    'smz3': 'SMZ3 Combo',
-    'ootmm': 'OoT+MM Combo'
-  };
-
-  function getGameDisplayName(slug) {
-    if (!slug) return 'Inconnu';
-    return gameDisplayNames[slug.toLowerCase()] || slug;
+  // i18n.js loads async: fall back to English until it is ready
+  function tr(key, fallback, params = {}) {
+    if (window.i18n && typeof window.i18n.t === 'function') return window.i18n.t(key, params, fallback);
+    return fallback.replace(/\{(\w+)\}/g, (m, k) => (k in params ? params[k] : m));
   }
 
   // Highlight search term in text
@@ -74,16 +52,16 @@
   function renderTabs(counts) {
     const tabsContainer = document.getElementById('search-tabs');
     const tabs = [
-      { id: 'all', label: 'Tous', count: counts.total },
-      { id: 'games', label: 'Jeux', count: counts.games },
-      { id: 'races', label: 'Races', count: counts.races },
-      { id: 'tournaments', label: 'Tournois', count: counts.tournaments },
-      { id: 'players', label: 'Joueurs', count: counts.players }
+      { id: 'all', label: tr('search.tabAll', 'All'), count: counts.total },
+      { id: 'games', label: tr('search.tabGames', 'Games'), count: counts.games },
+      { id: 'races', label: tr('search.tabRaces', 'Races'), count: counts.races },
+      { id: 'tournaments', label: tr('search.tabTournaments', 'Tournaments'), count: counts.tournaments },
+      { id: 'players', label: tr('search.tabPlayers', 'Players'), count: counts.players }
     ];
 
     tabsContainer.innerHTML = tabs.map(tab => `
       <button class="search-tab ${currentFilter === tab.id ? 'active' : ''}" data-filter="${tab.id}">
-        ${tab.label}<span class="count">${tab.count}</span>
+        ${escHtml(tab.label)}<span class="count">${tab.count}</span>
       </button>
     `).join('');
 
@@ -115,7 +93,7 @@
         <div class="subtitle">${highlightText(tournament.gameName || '', searchQuery)}</div>
         <div class="meta">
           <span>📅 ${formatDate(tournament.startDate)}</span>
-          <span>👥 ${tournament.participantCount || 0} participants</span>
+          <span>👥 ${tournament.participantCount || 0} ${escHtml(tr('home.participants', 'participants'))}</span>
         </div>
       </a>
     `;
@@ -125,20 +103,21 @@
   function renderRaceCard(race) {
     const statusClass = race.status === 'finished' ? 'status-finished' : 
                         race.status === 'open' ? 'status-open' : '';
-    const statusText = race.status === 'finished' ? 'Terminée' : 
-                       race.status === 'open' ? 'Ouverte' : 
-                       race.status === 'in_progress' ? 'En cours' : race.status;
+    const statusText = race.status === 'finished' ? tr('status.race.finished', 'Finished') :
+                       race.status === 'open' ? tr('status.race.open', 'Open') :
+                       race.status === 'in_progress' ? tr('status.race.ongoing', 'Ongoing') :
+                       race.status === 'cancelled' ? tr('status.race.cancelled', 'Cancelled') : race.status;
     
     return `
       <a href="/race-detail.html?id=${encodeURIComponent(race._id)}" class="result-card">
         <div class="title">${highlightText(race.goal || race.name, searchQuery)}</div>
         <div class="subtitle">
-          <span class="badge game">${escHtml(getGameDisplayName(race.category))}</span>
+          <span class="badge game">${escHtml(race.gameName || race.category || '')}</span>
           <span class="badge ${statusClass}">${escHtml(statusText)}</span>
         </div>
         <div class="meta">
           <span>📅 ${formatDate(race.startedAt)}</span>
-          <span>👥 ${race.entrantCount || 0} participants</span>
+          <span>👥 ${race.entrantCount || 0} ${escHtml(tr('home.participants', 'participants'))}</span>
         </div>
       </a>
     `;
@@ -148,7 +127,7 @@
   function renderPlayerCard(player) {
     const gamesHtml = player.games && player.games.length > 0 
       ? `<div class="player-games">${player.games.slice(0, 4).map(g => 
-          `<span class="game-tag">${escHtml(getGameDisplayName(g))}</span>`
+          `<span class="game-tag">${escHtml(g)}</span>`
         ).join('')}${player.games.length > 4 ? `<span class="game-tag">+${player.games.length - 4}</span>` : ''}</div>`
       : '';
     
@@ -169,7 +148,7 @@
       <div class="results-section">
         <div class="section-header">
           <span class="section-count">${count}</span>
-          <span class="section-title">${icon} ${title}</span>
+          <span class="section-title">${icon} ${escHtml(title)}</span>
         </div>
         <div class="results-grid">
           ${items.map(renderFn).join('')}
@@ -183,7 +162,7 @@
     const container = document.getElementById('results-container');
     
     if (!searchResults) {
-      container.innerHTML = '<div class="loading">Loading results...</div>';
+      container.innerHTML = `<div class="loading">${escHtml(tr('common.loading', 'Loading...'))}</div>`;
       return;
     }
 
@@ -193,8 +172,8 @@
       container.innerHTML = `
         <div class="no-results">
           <div class="no-results-icon">🔍</div>
-          <div>No results found for "<strong>${escHtml(searchQuery)}</strong>"</div>
-          <div style="margin-top: 0.5rem; font-size: 0.9rem;">Essayez avec d'autres termes de recherche</div>
+          <div>${escHtml(tr('search.noResultsFor', 'No results found for'))} "<strong>${escHtml(searchQuery)}</strong>"</div>
+          <div style="margin-top: 0.5rem; font-size: 0.9rem;">${escHtml(tr('search.tryOtherTerms', 'Try other search terms'))}</div>
         </div>
       `;
       return;
@@ -204,26 +183,26 @@
 
     // Show sections based on filter
     if (currentFilter === 'all' || currentFilter === 'games') {
-      html += renderSection('Jeux', '🎮', results.games, renderGameCard, counts.games);
+      html += renderSection(tr('search.tabGames', 'Games'), '🎮', results.games, renderGameCard, counts.games);
     }
     
     if (currentFilter === 'all' || currentFilter === 'races') {
-      html += renderSection('Races', '🥇', results.races, renderRaceCard, counts.races);
+      html += renderSection(tr('search.tabRaces', 'Races'), '🥇', results.races, renderRaceCard, counts.races);
     }
     
     if (currentFilter === 'all' || currentFilter === 'tournaments') {
-      html += renderSection('Tournois', '🏆', results.tournaments, renderTournamentCard, counts.tournaments);
+      html += renderSection(tr('search.tabTournaments', 'Tournaments'), '🏆', results.tournaments, renderTournamentCard, counts.tournaments);
     }
     
     if (currentFilter === 'all' || currentFilter === 'players') {
-      html += renderSection('Joueurs', '👤', results.players, renderPlayerCard, counts.players);
+      html += renderSection(tr('search.tabPlayers', 'Players'), '👤', results.players, renderPlayerCard, counts.players);
     }
 
     if (!html) {
       html = `
         <div class="no-results">
           <div class="no-results-icon">📭</div>
-          <div>No results in this category</div>
+          <div>${escHtml(tr('search.noResultsInCategory', 'No results in this category'))}</div>
         </div>
       `;
     }
@@ -231,13 +210,19 @@
     container.innerHTML = html;
   }
 
+  function renderHeader() {
+    document.getElementById('search-query').textContent = searchQuery || tr('search.title', 'Search');
+    const locale = (window.i18n && window.i18n.getLanguage) ? window.i18n.getLanguage() : undefined;
+    document.getElementById('search-subtitle').textContent = searchResults
+      ? tr('search.resultsCount', '{count} SEARCH RESULTS', { count: searchResults.counts.total.toLocaleString(locale) })
+      : tr('search.searchResults', 'SEARCH RESULTS');
+  }
+
   // Perform search
   async function performSearch(query) {
     searchQuery = query;
     
-    // Update header
-    document.getElementById('search-query').textContent = query || 'Recherche';
-    document.getElementById('search-subtitle').textContent = 'SEARCH RESULTS';
+    renderHeader();
     
     // Update search input
     const searchInput = document.getElementById('search');
@@ -247,7 +232,7 @@
       document.getElementById('results-container').innerHTML = `
         <div class="no-results">
           <div class="no-results-icon">🔍</div>
-          <div>Enter at least 2 characters to search</div>
+          <div>${escHtml(tr('search.minChars', 'Enter at least 2 characters to search'))}</div>
         </div>
       `;
       document.getElementById('search-tabs').innerHTML = '';
@@ -260,10 +245,7 @@
       
       searchResults = await response.json();
       
-      // Update subtitle with count
-      document.getElementById('search-subtitle').textContent = 
-        `${searchResults.counts.total} SEARCH RESULTS`;
-      
+      renderHeader();
       renderTabs(searchResults.counts);
       renderResults();
       
@@ -272,8 +254,8 @@
       document.getElementById('results-container').innerHTML = `
         <div class="no-results">
           <div class="no-results-icon">❌</div>
-          <div>Search error</div>
-          <div style="margin-top: 0.5rem; font-size: 0.9rem;">Please try again later</div>
+          <div>${escHtml(tr('search.error', 'Search error'))}</div>
+          <div style="margin-top: 0.5rem; font-size: 0.9rem;">${escHtml(tr('search.errorRetry', 'Please try again later'))}</div>
         </div>
       `;
     }
@@ -293,6 +275,18 @@
       }
     });
   }
+
+  // Translations arrive after the first render when i18n.js loads late
+  window.addEventListener('languageChanged', () => {
+    if (!searchResults) {
+      // A too-short query shows a message without fetching: render it again translated
+      if (searchQuery.trim().length < 2) performSearch(searchQuery);
+      return;
+    }
+    renderHeader();
+    renderTabs(searchResults.counts);
+    renderResults();
+  });
 
   // Initialize
   document.addEventListener('DOMContentLoaded', () => {

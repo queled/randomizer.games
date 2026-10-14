@@ -142,8 +142,19 @@ function getTournamentStatus(tournament) {
   return start ? 'en cours' : 'à venir';
 }
 
+// Winner to show on a tournament card: only once the tournament is finished,
+// since a league leader or a provisional rank 1 is not a winner yet.
+function getTournamentWinnerName(tournament) {
+  if (!tournament || getTournamentStatus(tournament) !== 'terminé') return null;
+  const ranked = (tournament.participants || []).find(p => p.finalRank === 1);
+  if (ranked) return ranked.displayName || ranked.name || null;
+  return tournament._computedWinner || null;
+}
+
 // Find tournament winner from matches if finalRank is not set
 async function findTournamentWinner(tournamentId, tournamentData) {
+  if (tournamentData && getTournamentStatus(tournamentData) !== 'terminé') return null;
+
   // First check if we have a winner with finalRank set
   if (tournamentData && tournamentData.participants && tournamentData.participants.length > 0) {
     const winner = tournamentData.participants.find(p => p.finalRank != null && p.finalRank === 1);

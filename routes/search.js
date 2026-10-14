@@ -16,6 +16,38 @@ function normalizeName(name) {
     .replace(/[\u0300-\u036f]/g, '');
 }
 
+// Official game names keyed by game id, racetime category and the other names a
+// game goes by, so results show "The Legend of Zelda" rather than a racetime slug
+// like "z1r" or a tournament's own label like "Ocarina of Time Randomizer"
+async function loadGameLabels() {
+  const docs = await Game.find({})
+    .select('id name official.name randomizer.name randomizer.displayName integrations.racetime.gameSlug integrations.racetime.gameSlugs')
+    .lean();
+  const labels = new Map();
+  const labelOf = (g) => (g.official && g.official.name) || g.name;
+  // Weakest key first: other names, "<id>r" (oot → ootr), then the id, then the racetime slugs
+  docs.forEach(g => {
+    [g.name, g.randomizer && g.randomizer.name, g.randomizer && g.randomizer.displayName, g.official && g.official.name]
+      .filter(Boolean)
+      .forEach(name => labels.set(name.toLowerCase(), labelOf(g)));
+  });
+  docs.forEach(g => { if (g.id) labels.set(`${g.id}r`.toLowerCase(), labelOf(g)); });
+  // Older tournaments store the game's Mongo _id as gameId
+  docs.forEach(g => labels.set(String(g._id), labelOf(g)));
+  docs.forEach(g => { if (g.id) labels.set(g.id.toLowerCase(), labelOf(g)); });
+  docs.forEach(g => {
+    const rt = (g.integrations && g.integrations.racetime) || {};
+    [rt.gameSlug, ...(rt.gameSlugs || [])].filter(Boolean)
+      .forEach(slug => labels.set(slug.toLowerCase(), labelOf(g)));
+  });
+  return (key) => {
+    if (!key) return null;
+    const k = String(key).toLowerCase().trim();
+    // "the Legend of Zelda: A Link to the Past Randomizer" → the game's own name
+    return labels.get(k) || labels.get(k.replace(/\s+randomizer$/, '')) || null;
+  };
+}
+
 // Global search endpoint
 router.get('/', async (req, res, next) => {
   try {
@@ -83,13 +115,14 @@ router.get('/', async (req, res, next) => {
         const inferredCategories = categoriesFromQuery(searchTerm);
 
     // 1. Search Games
-    const games = await Game.find({
+    const gameQuery = {
       $or: [
         { name: searchRegex },
-        { officialName: searchRegex },
+        { 'official.name': searchRegex },
         { id: searchRegex }
       ]
-    }).limit(limitNum);
+    };
+    const games = await Game.find(gameQuery).limit(limitNum);
 
     // 2. Search Tournaments (by name or game name)
     const tournaments = await Tournament.find({
@@ -202,19 +235,13 @@ router.get('/', async (req, res, next) => {
     const players = Array.from(playersMap.values())
       .map(p => ({
         ...p,
-        games: Array.from(p.games)
+        games: p.games
       }))
       .slice(0, limitNum);
 
     // Get counts (without limit for totals)
     const [gamesCount, tournamentsCount, racesCount] = await Promise.all([
-      Game.countDocuments({
-        $or: [
-          { name: searchRegex },
-          { officialName: searchRegex },
-          { id: searchRegex }
-        ]
-      }),
+      Game.countDocuments(gameQuery),
       Tournament.countDocuments({
         $or: [
           { name: searchRegex },
@@ -225,6 +252,7 @@ router.get('/', async (req, res, next) => {
     ]);
 
     const playersCount = playersMap.size;
+    const gameLabel = await loadGameLabels();
 
     res.json({
       query: searchTerm,
@@ -232,13 +260,13 @@ router.get('/', async (req, res, next) => {
         games: games.map(g => ({
           id: g.id,
           name: g.name,
-          officialName: g.officialName,
+          officialName: g.official && g.official.name,
           icon: g.icon
         })),
         tournaments: tournaments.map(t => ({
           _id: t._id,
           name: t.name,
-          gameName: t.gameName,
+          gameName: gameLabel(t.gameId) || gameLabel(t.gameName) || t.gameName,
           startDate: t.startDate,
           endDate: t.endDate,
           participantCount: t.participants ? t.participants.length : 0
@@ -247,12 +275,16 @@ router.get('/', async (req, res, next) => {
           _id: r._id,
           name: r.name,
           category: r.category,
+          gameName: gameLabel(r.category),
           goal: r.goal,
           status: r.status,
           startedAt: r.startedAt,
           entrantCount: r.entrants ? r.entrants.length : 0
         })),
-        players
+        players: players.map(p => ({
+          ...p,
+          games: [...new Set(Array.from(p.games).map(g => gameLabel(g) || g))]
+        }))
       },
       counts: {
         games: gamesCount,

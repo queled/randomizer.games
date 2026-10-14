@@ -45,6 +45,7 @@ const it = {
     
     // Home page
     home: {
+        pageTitle: "Randomizer - Gare, tornei e giocatori dei giochi randomizer",
         title: "Randomizer",
         recentRaces: "Gare Recenti",
         recentTournaments: "Tornei Recenti",
@@ -496,7 +497,14 @@ match1: "Partita 1",
         tabGames: "Giochi",
         tabTournaments: "Tornei",
         tabRaces: "Gare",
-        tabPlayers: "Giocatori"
+        tabPlayers: "Giocatori",
+        resultsCount: "{count} RISULTATI DELLA RICERCA",
+        noResultsFor: "Nessun risultato per",
+        tryOtherTerms: "Prova con altri termini di ricerca",
+        minChars: "Inserisci almeno 2 caratteri per cercare",
+        noResultsInCategory: "Nessun risultato in questa categoria",
+        error: "Errore di ricerca",
+        errorRetry: "Riprova più tardi"
     },
     
     // Footer

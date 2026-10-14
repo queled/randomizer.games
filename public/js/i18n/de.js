@@ -245,7 +245,6 @@ const de = {
         restreams: "Restreams",
         noRestreams: "Noch kein Restream.",
         allLanguages: "Alle",
-        restreamSource: "Zeitplan und Restreams von {source}",
         bracket: "Bracket",
         matches: "Matches",
         qualifications: "Qualifikationen",

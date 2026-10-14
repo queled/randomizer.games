@@ -260,17 +260,13 @@ function restreamLinkHtml(stream) {
   </a>`;
 }
 
-// Restream tab: races of a tournament restreamed according to Mido's House, upcoming then played
+// Restream tab: restreamed races of a tournament, upcoming (Mido's House) then played,
+// also reachable in spoiler-free mode where the matches tab hides them
 function displayRestreams(tournament) {
-  const mh = tournament && tournament.midosHouse;
+  const mh = (tournament && tournament.midosHouse) || {};
   const tabBtn = document.getElementById('tab-restream');
   const container = document.getElementById('restream-list');
   if (!tabBtn || !container) return;
-  if (!mh || !mh.url) {
-    tabBtn.style.display = 'none';
-    return;
-  }
-  tabBtn.style.display = '';
 
   const playersBySet = new Map();
   (tournament.matches || []).forEach(m => {
@@ -280,6 +276,7 @@ function displayRestreams(tournament) {
   const withStreams = r => r && r.startAt && Array.isArray(r.restreams) && r.restreams.length;
   // The match a card leads to in the matches tab
   const matchBySet = new Map((currentMatches || []).filter(m => m && m.startggSetId).map(m => [String(m.startggSetId), m]));
+  const matchKey = m => String(m.startggSetId || m.challongeId || m.id || m._id || m.matchId || '');
   const withTarget = r => ({ ...r, target: r.target || (matchBySet.has(String(r.startggSetId)) || !currentMatches.length ? r.startggSetId : null) });
 
   // A race moves to the past list at the next sync once played; hide it meanwhile after a few hours,
@@ -299,13 +296,18 @@ function displayRestreams(tournament) {
     const prev = pastBySet.get(key);
     pastBySet.set(key, prev ? { ...prev, restreams: mergeRestreams(prev.restreams, [r]) } : withTarget(r));
   });
-  matchBySet.forEach((m, setId) => {
+  (currentMatches || []).forEach(m => {
+    const key = m && matchKey(m);
+    if (!key) return;
     const races = findRacesForMatch(m, currentRaces).filter(race => race.restreams && race.restreams.length);
-    if (!races.length) return;
-    const prev = pastBySet.get(setId);
-    pastBySet.set(setId, {
-      ...(prev || { startggSetId: setId, startAt: races[0].startedAt, round: m.phaseGroup ? `${i18n.t('tournamentDetail.group') || 'Group'} ${m.phaseGroup}` : null, target: setId }),
-      restreams: mergeRestreams(prev ? prev.restreams : [], races)
+    if (!races.length && !(m.completedAt && m.restreams && m.restreams.length)) return;
+    const prev = pastBySet.get(key);
+    const startAt = (races[0] && races[0].startedAt) || m.completedAt || m.startedAt;
+    const round = m.phaseGroup ? `${i18n.t('tournamentDetail.group') || 'Group'} ${m.phaseGroup}` : null;
+    const entrants = [m.player1Name || (m.player1 && m.player1.name), m.player2Name || (m.player2 && m.player2.name)];
+    pastBySet.set(key, {
+      ...(prev || { startggSetId: m.startggSetId, startAt, round, entrants, target: key }),
+      restreams: mergeRestreams(mergeRestreams(prev ? prev.restreams : [], [m]), races)
     });
   });
   const tiebreaks = tiebreakRaces(currentRaces).filter(race => race.restreams && race.restreams.length).map(race => ({
@@ -319,18 +321,22 @@ function displayRestreams(tournament) {
     .filter(withStreams)
     .sort((a, b) => new Date(b.startAt) - new Date(a.startAt));
 
+  // Without Mido's House, the tab only shows when restreams were found
+  if (!mh.url && !upcoming.length && !past.length) {
+    tabBtn.style.display = 'none';
+    return;
+  }
+  tabBtn.style.display = '';
+
   const languages = [...new Set(upcoming.concat(past).flatMap(r => r.restreams.map(s => s.language)))].sort();
   if (restreamLanguageFilter && !languages.includes(restreamLanguageFilter)) restreamLanguageFilter = null;
   const inLanguage = s => !restreamLanguageFilter || s.language === restreamLanguageFilter;
-
-  const sourceLink = `<a href="${escHtml(sanitizeExternalUrl(mh.url) || 'https://midos.house')}" target="_blank" rel="noopener noreferrer" style="color: #93c5fd;">Mido's House</a>`;
-  const sourceText = (i18n.t('tournamentDetail.restreamSource') || 'Schedules and restreams from {source}').replace('{source}', sourceLink);
 
   const raceCard = r => {
     const names = playersBySet.get(String(r.startggSetId)) || [];
     const tbd = i18n.t('tournamentDetail.tbd') || 'TBD';
     // A tie-break room can gather more than two players
-    const players = names.some(Boolean) ? names : (r.entrants || []);
+    const players = names.some(Boolean) ? names : (r.entrants || []).map(n => n || '');
     const shownPlayers = [players[0], players[1], ...players.slice(2)].map(n => sanitizeDisplayName(n || '') || tbd);
     const vs = ' <span style="color: #6b7280; font-weight: normal;">vs</span> ';
     const link = r.target ? ` role="link" tabindex="0" data-restream-match="${escHtml(String(r.target))}"` : '';
@@ -360,7 +366,6 @@ function displayRestreams(tournament) {
   const sections = section(i18n.t('tournamentDetail.upcomingRestreams') || 'Upcoming', upcoming)
     + section(i18n.t('tournamentDetail.pastRestreams') || 'Played', past);
   html += sections || `<p style="color: #9ca3af;">${escHtml(i18n.t('tournamentDetail.noRestreams') || 'No restream scheduled yet.')}</p>`;
-  html += `<p style="color: #6b7280; font-size: 0.75rem; margin-top: 1rem;">${sourceText}</p>`;
 
   container.innerHTML = html;
   container.querySelectorAll('[data-restream-language]').forEach(btn => {

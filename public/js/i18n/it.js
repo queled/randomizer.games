@@ -243,7 +243,6 @@ const it = {
         restreams: "Restream",
         noRestreams: "Nessun restream per ora.",
         allLanguages: "Tutte",
-        restreamSource: "Orari e restream da {source}",
         bracket: "Bracket",
         matches: "Partite",
         qualifications: "Qualificazioni",

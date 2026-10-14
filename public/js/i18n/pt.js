@@ -285,7 +285,6 @@ const pt = {
         restreams: "Restreams",
         noRestreams: "Nenhum restream por enquanto.",
         allLanguages: "Todos",
-        restreamSource: "Horários e restreams de {source}",
         bracket: "Bracket",
         matches: "Partidas",
         qualifications: "Qualificações",

@@ -93,7 +93,7 @@ async function loadStreams() {
                 <div class="stream-info">
                     <div class="stream-title">${escapeHtml(stream.title || 'Sans titre')}</div>
                     <div class="stream-channel">${escapeHtml(stream.userName || stream.userLogin || 'Unknown')}</div>
-                    ${stream.gameName ? `<div class="stream-game">🎮 <span class="game-link" data-game-id="${encodeURIComponent(gameSlug)}" style="overflow: hidden; text-overflow: ellipsis; display:inline-block; cursor:pointer; text-decoration:underline; color:#60a5fa; transition: color 0.2s, text-decoration-color 0.2s;">${escapeHtml(stream.gameName)}</span></div>` : ''}
+                    ${stream.gameName ? `<div class="stream-game">🎮 <span class="game-link" data-game-id="${encodeURIComponent(gameSlug)}" style="overflow: hidden; text-overflow: ellipsis; display:inline-block; cursor:pointer; color:#60a5fa; transition: color 0.2s;">${escapeHtml(stream.gameName)}</span></div>` : ''}
                 </div>
             </${cardTag}>
         `;
@@ -119,11 +119,9 @@ async function loadStreams() {
             });
             gameLink.addEventListener('mouseenter', () => {
                 gameLink.style.color = '#fbbf24';
-                gameLink.style.textDecorationColor = '#fbbf24';
             });
             gameLink.addEventListener('mouseleave', () => {
                 gameLink.style.color = '#60a5fa';
-                gameLink.style.textDecorationColor = '#60a5fa';
             });
         });
 

@@ -261,7 +261,6 @@ const en = {
         restreams: "Restreams",
         noRestreams: "No restream yet.",
         allLanguages: "All",
-        restreamSource: "Schedules and restreams from {source}",
         bracket: "Bracket",
         matches: "Matches",
         qualifications: "Qualifications",

@@ -97,8 +97,6 @@ const it = {
     
     // Game detail page
     gameDetail: {
-        introTextNoRaces: "{randomizer} mescola la posizione degli oggetti e delle abilità di {game}: ogni seed è un nuovo rompicapo.",
-        introText: "{randomizer} mescola la posizione degli oggetti e delle abilità di {game}: ogni seed è un nuovo rompicapo e i giocatori si sfidano in gara sullo stesso seed.",
         released: "Uscito nel {year}",
         overviewRaces: "gare",
         overviewTournaments: "tornei",
@@ -107,6 +105,7 @@ const it = {
         upcomingTournament: "Prossimo torneo:",
         ctaStart: "🚀 Inizia",
         ctaRaces: "Vedi le gare",
+        ctaTournaments: "Vedi i tornei",
         pageTitle: "Gioco - Randomizer",
         tabLeaderboards: "🏆 Classifiche",
         tabCategories: "🎯 Categorie",

@@ -135,8 +135,6 @@ const pt = {
     
     // Game detail page
     gameDetail: {
-        introTextNoRaces: "{randomizer} embaralha onde ficam os itens e as habilidades de {game}: cada seed é um novo quebra-cabeça.",
-        introText: "{randomizer} embaralha onde ficam os itens e as habilidades de {game}: cada seed é um novo quebra-cabeça, e os jogadores disputam corridas na mesma seed.",
         released: "Lançado em {year}",
         overviewRaces: "corridas",
         overviewTournaments: "torneios",
@@ -145,6 +143,7 @@ const pt = {
         upcomingTournament: "Próximo torneio:",
         ctaStart: "🚀 Começar",
         ctaRaces: "Ver as corridas",
+        ctaTournaments: "Ver os torneios",
         pageTitle: "Jogo - Randomizer",
         tabLeaderboards: "🏆 Classificações",
         tabCategories: "🎯 Categorias",

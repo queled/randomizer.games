@@ -99,8 +99,6 @@ const de = {
     
     // Game detail page
     gameDetail: {
-        introTextNoRaces: "{randomizer} mischt, wo die Gegenstände und Fähigkeiten von {game} zu finden sind: Jeder Seed ist ein neues Rätsel.",
-        introText: "{randomizer} mischt, wo die Gegenstände und Fähigkeiten von {game} zu finden sind: Jeder Seed ist ein neues Rätsel, und Spieler treten im Rennen auf demselben Seed gegeneinander an.",
         released: "Erschienen {year}",
         overviewRaces: "Rennen",
         overviewTournaments: "Turniere",
@@ -109,6 +107,7 @@ const de = {
         upcomingTournament: "Nächstes Turnier:",
         ctaStart: "🚀 Loslegen",
         ctaRaces: "Rennen ansehen",
+        ctaTournaments: "Turniere ansehen",
         pageTitle: "Spiel - Randomizer",
         tabLeaderboards: "🏆 Bestenlisten",
         tabCategories: "🎯 Kategorien",

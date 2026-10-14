@@ -215,6 +215,7 @@ Les scripts qui écrivent en base proposent un mode `--dry-run` (ou n'écrivent 
 | `sync-speedrunslive.js` | `sync:speedrunslive` | Historique SpeedRunsLive |
 | `enrich-games.js` | `enrich-games` | Complète les jeux via speedrun.com et racetime.gg |
 | `enrich-twitch.js` | — | Associe les jeux à leurs catégories Twitch |
+| `enrich-release-years.js` | — | Renseigne l'année de sortie des jeux depuis IGDB (via leur catégorie Twitch) |
 | `import-games-csv.js` | `import-games <fichier.csv>` | Import de jeux depuis un CSV (modèle : [`data/games-template.csv`](../data/games-template.csv)) |
 | `import-multiworld-manual.js` | `import:multiworld-manual` | Marque les jeux disponibles sur Archipelago / Multiworld |
 

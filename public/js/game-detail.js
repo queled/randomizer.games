@@ -1009,30 +1009,24 @@
     return (window.i18n && window.i18n.getLanguage) ? window.i18n.getLanguage() : undefined;
   }
 
-  // What the randomizer is, its key figures and what is happening now, built from the
-  // game's data (games have no written description)
+  // Key figures and what is happening now, built from the game's data. Platforms stay in
+  // the database but are not shown: most randomizers are played on PC (emulator, decompilation)
   function renderOverview(game, stats, liveCount) {
     const el = document.getElementById('game-overview');
     if (!el) return;
-    const randomizerName = game.randomizer?.displayName || game.randomizer?.shortName || `${game.name} Randomizer`;
-    const gameName = game.official?.name || game.name;
     const fmt = (n) => Number(n || 0).toLocaleString(overviewLocale());
 
     const facts = [];
     if (game.official?.releaseYear) facts.push(escHtml(overviewT('gameDetail.released', 'Released in {year}', { year: game.official.releaseYear })));
-    const platforms = Array.isArray(game.platforms) ? game.platforms : [];
-    if (platforms.length) {
-      const shown = platforms.slice(0, 4).join(', ');
-      facts.push('🎮 ' + escHtml(platforms.length > 4 ? `${shown} +${platforms.length - 4}` : shown));
-    }
 
     // Many catalog games have no race on racetime yet: only the figures that exist
     const hasRaces = stats.totalRaces > 0;
+    const hasTournaments = stats.totalTournaments > 0;
     const figures = [];
     if (hasRaces) {
       figures.push(`<a href="/races.html?game=${encodeURIComponent(game.id)}"><strong>${fmt(stats.totalRaces)}</strong> ${escHtml(overviewT('gameDetail.overviewRaces', 'races'))}</a>`);
     }
-    if (stats.totalTournaments > 0) {
+    if (hasTournaments) {
       figures.push(`<a href="/tournaments.html?game=${encodeURIComponent(game.id)}"><strong>${fmt(stats.totalTournaments)}</strong> ${escHtml(overviewT('gameDetail.overviewTournaments', 'tournaments'))}</a>`);
     }
     if (liveCount > 0) {
@@ -1058,15 +1052,13 @@
     }
 
     el.innerHTML = `
-      <p class="game-overview-intro">${escHtml(hasRaces
-        ? overviewT('gameDetail.introText', '{randomizer} shuffles where the items and abilities of {game} are found: every seed is a new puzzle, and players race each other on the same seed.', { randomizer: randomizerName, game: gameName })
-        : overviewT('gameDetail.introTextNoRaces', '{randomizer} shuffles where the items and abilities of {game} are found: every seed is a new puzzle.', { randomizer: randomizerName, game: gameName }))}</p>
       ${facts.length ? `<p class="game-overview-facts">${facts.join(' · ')}</p>` : ''}
       ${figures.length ? `<div class="game-overview-figures">${figures.join('')}</div>` : ''}
       ${tournamentHtml}
       <div class="game-overview-actions">
         <button type="button" class="home-hero-btn home-hero-btn-primary" data-overview-tab="resources">${escHtml(overviewT('gameDetail.ctaStart', '🚀 Get started'))}</button>
         ${hasRaces ? `<a class="home-hero-btn" href="/races.html?game=${encodeURIComponent(game.id)}">${escHtml(overviewT('gameDetail.ctaRaces', 'See the races'))}</a>` : ''}
+        ${hasTournaments ? `<a class="home-hero-btn" href="/tournaments.html?game=${encodeURIComponent(game.id)}">${escHtml(overviewT('gameDetail.ctaTournaments', 'See the tournaments'))}</a>` : ''}
       </div>
     `;
 

@@ -1860,13 +1860,6 @@ body.spoiler-mode .spoiler-text::before {
     margin-top: 1.25rem;
 }
 
-.game-overview-intro {
-    color: #d1d5db;
-    line-height: 1.6;
-    max-width: 48rem;
-    margin: 0 0 0.75rem 0;
-}
-
 .game-overview-facts {
     color: #9ca3af;
     font-size: 0.9rem;

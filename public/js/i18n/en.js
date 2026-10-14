@@ -111,8 +111,6 @@ const en = {
     
     // Game detail page
     gameDetail: {
-        introTextNoRaces: "{randomizer} shuffles where the items and abilities of {game} are found: every seed is a new puzzle.",
-        introText: "{randomizer} shuffles where the items and abilities of {game} are found: every seed is a new puzzle, and players race each other on the same seed.",
         released: "Released in {year}",
         overviewRaces: "races",
         overviewTournaments: "tournaments",
@@ -121,6 +119,7 @@ const en = {
         upcomingTournament: "Next tournament:",
         ctaStart: "🚀 Get started",
         ctaRaces: "See the races",
+        ctaTournaments: "See the tournaments",
         pageTitle: "Game - Randomizer",
         tabLeaderboards: "🏆 Leaderboards",
         tabCategories: "🎯 Categories",

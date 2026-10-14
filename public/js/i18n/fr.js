@@ -99,16 +99,15 @@ const fr = {
     
     // Game detail page
     gameDetail: {
-        introTextNoRaces: "{randomizer} mélange l'emplacement des objets et des capacités de {game} : chaque seed est un nouveau puzzle.",
-        introText: "{randomizer} mélange l'emplacement des objets et des capacités de {game} : chaque seed est un nouveau puzzle, et les joueurs s'affrontent en course sur la même seed.",
         released: "Sorti en {year}",
         overviewRaces: "courses",
         overviewTournaments: "tournois",
         overviewLive: "en direct",
         ongoingTournament: "Tournoi en cours :",
         upcomingTournament: "Prochain tournoi :",
-        ctaStart: "🚀 Commencer",
+        ctaStart: "🚀 Débuter",
         ctaRaces: "Voir les courses",
+        ctaTournaments: "Voir les tournois",
         pageTitle: "Jeu - Randomizer",
         tabLeaderboards: "🏆 Classements",
         tabCategories: "🎯 Catégories",

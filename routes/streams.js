@@ -1099,9 +1099,15 @@ async function buildGameStreamsResult(gameId, preloadedDoc) {
     console.warn('Per-game stream filtering failed for', gameIdLower, e);
   }
 
+  // Show the site's name rather than the Twitch styling ("ELDEN RING"), except where the
+  // category tells which game is played: combos and multi-game categories (Archipelago)
+  const siteGameName = gameDoc.official?.name || gameDoc.name;
   let allStreams = twitchStreamsAll
     .map(stream => ({
       ...stream,
+      ...(siteGameName && !comboCategoryIds && !PASS_THROUGH_TWITCH_CATEGORIES.has(String(stream.gameName || '').toLowerCase())
+        ? { gameName: siteGameName }
+        : {}),
       gameId: gameIdLower
     }));
 
@@ -1434,6 +1440,13 @@ async function buildAllStreams() {
     }
   } catch (error) {
     console.error('Error fetching Twitch streams:', error);
+  }
+
+  // Twitch category names follow each publisher's styling ("ELDEN RING"): show the site's name
+  const siteGameNames = new Map(games.map(g => [(g.id || '').toLowerCase(), g.official?.name || g.name]));
+  for (const stream of allStreams) {
+    const siteName = stream.gameId && siteGameNames.get(stream.gameId);
+    if (siteName) stream.gameName = siteName;
   }
 
   // Sort streams by viewer count (highest first)

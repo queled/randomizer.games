@@ -14,7 +14,7 @@ async function loadStats() {
             fetch(`${API_BASE}/api/games`),
             fetch(`${API_BASE}/api/runs?limit=1`),
             fetch(`${API_BASE}/api/tournaments?limit=1`),
-            fetch(`${API_BASE}/api/players?limit=1`)
+            fetch(`${API_BASE}/api/players/count`)
         ]);
         
         // Handle games (index 0)

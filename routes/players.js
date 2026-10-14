@@ -527,35 +527,46 @@ router.get('/compare', async (req, res, next) => {
 });
 
 // Get all players from tournaments with race counts per game
+// Players list from the cache, built once when several requests ask at the same time
+async function getPlayersList(includeTournaments) {
+  const cacheKey = includeTournaments ? 'players:with-tournaments' : 'players:summary';
+
+  const cached = getPlayersCache(cacheKey);
+  if (cached) return cached;
+
+  if (playersCache.inFlight.has(cacheKey)) {
+    return playersCache.inFlight.get(cacheKey);
+  }
+
+  const buildPromise = buildPlayersResponse(includeTournaments)
+    .then(result => {
+      setPlayersCache(cacheKey, result);
+      return result;
+    })
+    .finally(() => {
+      playersCache.inFlight.delete(cacheKey);
+    });
+
+  playersCache.inFlight.set(cacheKey, buildPromise);
+  return buildPromise;
+}
+
 router.get('/', async (req, res, next) => {
   try {
     const includeTournaments = req.query.includeTournaments === '1' || req.query.includeTournaments === 'true';
     const filterName = (req.query.name || '').toString();
-    const cacheKey = includeTournaments ? 'players:with-tournaments' : 'players:summary';
-
-    const cached = getPlayersCache(cacheKey);
-    if (cached) {
-      return res.json(filterName ? filterPlayersByName(cached, filterName) : cached);
-    }
-
-    if (playersCache.inFlight.has(cacheKey)) {
-      const result = await playersCache.inFlight.get(cacheKey);
-      return res.json(filterName ? filterPlayersByName(result, filterName) : result);
-    }
-
-    const buildPromise = buildPlayersResponse(includeTournaments)
-      .then(result => {
-        setPlayersCache(cacheKey, result);
-        return result;
-      })
-      .finally(() => {
-        playersCache.inFlight.delete(cacheKey);
-      });
-
-    playersCache.inFlight.set(cacheKey, buildPromise);
-
-    const result = await buildPromise;
+    const result = await getPlayersList(includeTournaments);
     res.json(filterName ? filterPlayersByName(result, filterName) : result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Number of players only, for the home page and About page counters (the list weighs megabytes)
+router.get('/count', async (req, res, next) => {
+  try {
+    const result = await getPlayersList(false);
+    res.json({ total: result.total });
   } catch (error) {
     next(error);
   }

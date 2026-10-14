@@ -42,6 +42,7 @@
                 <li><a href="/races.html" data-i18n="nav.races">🥇 Races</a></li>
                 <li><a href="/tournaments.html" data-i18n="nav.tournaments">🏆 Tournaments</a></li>
                 <li><a href="/players.html" data-i18n="nav.players">👤 Players</a></li>
+                <li><a href="/streams.html" data-i18n="nav.live">📺 Live</a></li>
             </ul>
         </nav>
 
@@ -54,6 +55,33 @@
 
     <!-- Contenu principal -->
     <main class="main-container">
+        <!-- Introduction for first-time visitors; regulars can hide it -->
+        <section id="home-hero" class="home-hero">
+            <button type="button" id="home-hero-close" class="home-hero-close" aria-label="Hide this introduction" data-i18n-title="home.heroClose" title="Hide this introduction">×</button>
+            <h1 class="home-hero-title" data-i18n="home.heroTitle">Every randomizer race and tournament, in one place</h1>
+            <p class="home-hero-text" data-i18n="home.heroText">A randomizer shuffles where a game's items and abilities are found: a game you know by heart becomes a new puzzle every time. Players from all over the world race these shuffled games and compete in tournaments.</p>
+            <div class="home-hero-stats">
+                <a href="/games.html"><strong id="hero-stat-games">–</strong> <span data-i18n="home.statGames">games</span></a>
+                <a href="/races.html"><strong id="hero-stat-races">–</strong> <span data-i18n="home.statRaces">races</span></a>
+                <a href="/tournaments.html"><strong id="hero-stat-tournaments">–</strong> <span data-i18n="home.statTournaments">tournaments</span></a>
+                <a href="/players.html"><strong id="hero-stat-players">–</strong> <span data-i18n="home.statPlayers">players</span></a>
+            </div>
+            <div class="home-hero-actions">
+                <a class="home-hero-btn home-hero-btn-primary" href="/games.html" data-i18n="home.ctaGames">Discover the games</a>
+                <a class="home-hero-btn" href="/streams.html" data-i18n="home.ctaLive">Watch live</a>
+                <a class="home-hero-link" href="/about.html" data-i18n="home.ctaAbout">What is a randomizer?</a>
+            </div>
+        </section>
+
+        <!-- Shown once live streams are known, hidden when there are none -->
+        <section id="home-live" class="home-live" hidden>
+            <div class="home-live-header">
+                <h2 class="section-title" data-i18n="home.liveTitle">🔴 Live now</h2>
+                <a href="/streams.html" data-i18n="home.liveAll">See all live streams →</a>
+            </div>
+            <div id="home-live-grid" class="streams-grid home-live-grid"></div>
+        </section>
+
         <div class="home-grid">
             <!-- Colonne gauche: Dernières races -->
             <div>

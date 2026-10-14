@@ -47,6 +47,8 @@
   const raceUrl = qs('url');
   
   const gameEl = document.getElementById('race-game');
+  // Filled by this script: the "Loading..." key must not come back when the translations arrive
+  gameEl?.removeAttribute('data-i18n');
   const goalEl = document.getElementById('race-goal');
   const statusEl = document.getElementById('race-status');
   const infoEl = document.getElementById('race-info');

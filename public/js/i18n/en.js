@@ -6,6 +6,7 @@ const en = {
         races: "🏁 Races",
         tournaments: "🏆 Tournaments",
         players: "👤 Players",
+        live: "📺 Live",
         search: "Search..."
     },
     
@@ -47,6 +48,18 @@ const en = {
     
     // Home page
     home: {
+        heroTitle: "Every randomizer race and tournament, in one place",
+        heroText: "A randomizer shuffles where a game's items and abilities are found: a game you know by heart becomes a new puzzle every time. Players from all over the world race these shuffled games and compete in tournaments.",
+        statGames: "games",
+        statRaces: "races",
+        statTournaments: "tournaments",
+        statPlayers: "players",
+        ctaGames: "Discover the games",
+        ctaLive: "Watch live",
+        ctaAbout: "What is a randomizer?",
+        heroClose: "Hide this introduction",
+        liveTitle: "🔴 Live now",
+        liveAll: "See all live streams →",
         pageTitle: "Randomizer - Races, Tournaments and Players for Randomizer Games",
         title: "Randomizer",
         recentRaces: "Recent Races",
@@ -98,6 +111,16 @@ const en = {
     
     // Game detail page
     gameDetail: {
+        introTextNoRaces: "{randomizer} shuffles where the items and abilities of {game} are found: every seed is a new puzzle.",
+        introText: "{randomizer} shuffles where the items and abilities of {game} are found: every seed is a new puzzle, and players race each other on the same seed.",
+        released: "Released in {year}",
+        overviewRaces: "races",
+        overviewTournaments: "tournaments",
+        overviewLive: "live now",
+        ongoingTournament: "Tournament in progress:",
+        upcomingTournament: "Next tournament:",
+        ctaStart: "🚀 Get started",
+        ctaRaces: "See the races",
         pageTitle: "Game - Randomizer",
         tabLeaderboards: "🏆 Leaderboards",
         tabCategories: "🎯 Categories",
@@ -407,6 +430,30 @@ const en = {
     
     // About page
     about: {
+        glossaryTitle: "📖 Glossary",
+        glossaryIntro: "The words you will meet in races and tournaments.",
+        glossarySeedTerm: "Seed",
+        glossarySeedDef: "One shuffled version of a game, generated from a number. Players on the same seed find every item in the same place.",
+        glossaryHashTerm: "Hash",
+        glossaryHashDef: "A short code of icons shown at the start of the game, to check that everyone plays the same seed.",
+        glossaryRaceTerm: "Race",
+        glossaryRaceDef: "Players start the same seed at the same time and the first to finish wins. Races are run on racetime.gg.",
+        glossaryGoalTerm: "Goal / ruleset",
+        glossaryGoalDef: "The rules of a race: the settings of the seed, the tricks allowed and what ends the run.",
+        glossaryAsyncTerm: "Async",
+        glossaryAsyncDef: "A race played separately: each player runs the seed alone and the times are compared afterwards.",
+        glossaryTrackerTerm: "Tracker",
+        glossaryTrackerDef: "A tool to note the items found and the places already checked during a run.",
+        glossaryLogicTerm: "Logic",
+        glossaryLogicDef: "The randomizer makes sure the seed can be finished. In glitchless logic, no glitch is ever required.",
+        glossaryMultiworldTerm: "Multiworld / Archipelago",
+        glossaryMultiworldDef: "Several players, sometimes on different games, share their items: yours can turn up in someone else's game.",
+        glossaryBracketTerm: "Bracket",
+        glossaryBracketDef: "The tournament chart: who faces whom, round after round, up to the final.",
+        glossaryQualifiersTerm: "Qualifiers",
+        glossaryQualifiersDef: "Races before a tournament that decide who takes part and how players are seeded.",
+        glossaryVodTerm: "Restream / VOD",
+        glossaryVodDef: "A restream broadcasts a match with commentary; a VOD is its recording. Turn on No spoilers before watching one.",
         title: "About",
         pageTitle: "About - Randomizer",
         heroTitle: "🎲 Randomizer",

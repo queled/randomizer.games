@@ -6,6 +6,7 @@ const pt = {
         races: "🏁 Corridas",
         tournaments: "🏆 Torneios",
         players: "👤 Jogadores",
+        live: "📺 Ao vivo",
         search: "Pesquisar..."
     },
     
@@ -47,6 +48,18 @@ const pt = {
     
     // Home page
     home: {
+        heroTitle: "Todas as corridas e torneios de randomizers, num só lugar",
+        heroText: "Um randomizer embaralha onde ficam os itens e as habilidades de um jogo: um jogo que você conhece de cor vira um novo quebra-cabeça a cada partida. Jogadores do mundo todo disputam corridas e torneios com essas partidas embaralhadas.",
+        statGames: "jogos",
+        statRaces: "corridas",
+        statTournaments: "torneios",
+        statPlayers: "jogadores",
+        ctaGames: "Descobrir os jogos",
+        ctaLive: "Assistir ao vivo",
+        ctaAbout: "O que é um randomizer?",
+        heroClose: "Ocultar esta apresentação",
+        liveTitle: "🔴 Ao vivo agora",
+        liveAll: "Ver todas as transmissões →",
         pageTitle: "Randomizer - Corridas, torneios e jogadores de jogos randomizer",
         title: "Randomizer",
         recentRaces: "Corridas Recentes",
@@ -122,6 +135,16 @@ const pt = {
     
     // Game detail page
     gameDetail: {
+        introTextNoRaces: "{randomizer} embaralha onde ficam os itens e as habilidades de {game}: cada seed é um novo quebra-cabeça.",
+        introText: "{randomizer} embaralha onde ficam os itens e as habilidades de {game}: cada seed é um novo quebra-cabeça, e os jogadores disputam corridas na mesma seed.",
+        released: "Lançado em {year}",
+        overviewRaces: "corridas",
+        overviewTournaments: "torneios",
+        overviewLive: "ao vivo",
+        ongoingTournament: "Torneio em andamento:",
+        upcomingTournament: "Próximo torneio:",
+        ctaStart: "🚀 Começar",
+        ctaRaces: "Ver as corridas",
         pageTitle: "Jogo - Randomizer",
         tabLeaderboards: "🏆 Classificações",
         tabCategories: "🎯 Categorias",
@@ -431,6 +454,30 @@ const pt = {
     
     // About page
     about: {
+        glossaryTitle: "📖 Glossário",
+        glossaryIntro: "As palavras que você vai encontrar nas corridas e torneios.",
+        glossarySeedTerm: "Seed",
+        glossarySeedDef: "Uma versão embaralhada de um jogo, gerada a partir de um número. Jogadores na mesma seed encontram cada item no mesmo lugar.",
+        glossaryHashTerm: "Hash",
+        glossaryHashDef: "Um pequeno código de ícones mostrado ao iniciar o jogo, para conferir que todos jogam a mesma seed.",
+        glossaryRaceTerm: "Corrida (race)",
+        glossaryRaceDef: "Os jogadores começam a mesma seed ao mesmo tempo e vence quem terminar primeiro. As corridas acontecem no racetime.gg.",
+        glossaryGoalTerm: "Objetivo / regulamento",
+        glossaryGoalDef: "As regras de uma corrida: as configurações da seed, as técnicas permitidas e o que encerra a partida.",
+        glossaryAsyncTerm: "Async",
+        glossaryAsyncDef: "Uma corrida jogada separadamente: cada um joga a seed por conta própria e os tempos são comparados depois.",
+        glossaryTrackerTerm: "Tracker",
+        glossaryTrackerDef: "Uma ferramenta para anotar os itens encontrados e os lugares já visitados durante uma partida.",
+        glossaryLogicTerm: "Lógica",
+        glossaryLogicDef: "O randomizer garante que a seed pode ser terminada. Na lógica glitchless, nenhum glitch é necessário.",
+        glossaryMultiworldTerm: "Multiworld / Archipelago",
+        glossaryMultiworldDef: "Vários jogadores, às vezes em jogos diferentes, compartilham seus itens: os seus podem aparecer no jogo de outra pessoa.",
+        glossaryBracketTerm: "Bracket",
+        glossaryBracketDef: "A tabela do torneio: quem enfrenta quem, rodada após rodada, até a final.",
+        glossaryQualifiersTerm: "Classificatórias",
+        glossaryQualifiersDef: "Corridas antes de um torneio que decidem quem participa e a ordem dos cabeças de chave.",
+        glossaryVodTerm: "Restream / VOD",
+        glossaryVodDef: "Um restream transmite uma partida com narração; um VOD é a gravação. Ative Sem spoilers antes de assistir.",
         title: "Sobre",
         pageTitle: "Sobre - Randomizer",
         heroTitle: "🎲 Randomizer",

@@ -999,6 +999,87 @@
     }
   }
 
+  // ==================== OVERVIEW (header) ====================
+  function overviewT(key, fallback, params = {}) {
+    if (window.i18n && typeof window.i18n.t === 'function') return window.i18n.t(key, params, fallback);
+    return fallback.replace(/\{(\w+)\}/g, (m, k) => (k in params ? params[k] : m));
+  }
+
+  function overviewLocale() {
+    return (window.i18n && window.i18n.getLanguage) ? window.i18n.getLanguage() : undefined;
+  }
+
+  // What the randomizer is, its key figures and what is happening now, built from the
+  // game's data (games have no written description)
+  function renderOverview(game, stats, liveCount) {
+    const el = document.getElementById('game-overview');
+    if (!el) return;
+    const randomizerName = game.randomizer?.displayName || game.randomizer?.shortName || `${game.name} Randomizer`;
+    const gameName = game.official?.name || game.name;
+    const fmt = (n) => Number(n || 0).toLocaleString(overviewLocale());
+
+    const facts = [];
+    if (game.official?.releaseYear) facts.push(escHtml(overviewT('gameDetail.released', 'Released in {year}', { year: game.official.releaseYear })));
+    const platforms = Array.isArray(game.platforms) ? game.platforms : [];
+    if (platforms.length) {
+      const shown = platforms.slice(0, 4).join(', ');
+      facts.push('🎮 ' + escHtml(platforms.length > 4 ? `${shown} +${platforms.length - 4}` : shown));
+    }
+
+    // Many catalog games have no race on racetime yet: only the figures that exist
+    const hasRaces = stats.totalRaces > 0;
+    const figures = [];
+    if (hasRaces) {
+      figures.push(`<a href="/races.html?game=${encodeURIComponent(game.id)}"><strong>${fmt(stats.totalRaces)}</strong> ${escHtml(overviewT('gameDetail.overviewRaces', 'races'))}</a>`);
+    }
+    if (stats.totalTournaments > 0) {
+      figures.push(`<a href="/tournaments.html?game=${encodeURIComponent(game.id)}"><strong>${fmt(stats.totalTournaments)}</strong> ${escHtml(overviewT('gameDetail.overviewTournaments', 'tournaments'))}</a>`);
+    }
+    if (liveCount > 0) {
+      figures.push(`<a href="#" data-overview-tab="streams"><strong>${fmt(liveCount)}</strong> ${escHtml(overviewT('gameDetail.overviewLive', 'live now'))}</a>`);
+    }
+
+    // A tournament in progress first, otherwise the next one
+    const tournaments = stats.recentTournaments || [];
+    const ongoing = tournaments.find(t => getTournamentStatus(t) === 'en cours');
+    const upcoming = tournaments
+      .filter(t => getTournamentStatus(t) === 'à venir')
+      .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))[0];
+    const featured = ongoing || upcoming;
+    let tournamentHtml = '';
+    if (featured) {
+      const label = ongoing
+        ? overviewT('gameDetail.ongoingTournament', 'Tournament in progress:')
+        : overviewT('gameDetail.upcomingTournament', 'Next tournament:');
+      const date = !ongoing && featured.startDate
+        ? ` (${new Date(featured.startDate).toLocaleDateString(overviewLocale(), { day: 'numeric', month: 'short' })})`
+        : '';
+      tournamentHtml = `<p class="game-overview-tournament">🏆 ${escHtml(label)} <a href="/tournament-detail.html?id=${encodeURIComponent(featured._id || featured.id)}">${escHtml(featured.name)}</a>${escHtml(date)}</p>`;
+    }
+
+    el.innerHTML = `
+      <p class="game-overview-intro">${escHtml(hasRaces
+        ? overviewT('gameDetail.introText', '{randomizer} shuffles where the items and abilities of {game} are found: every seed is a new puzzle, and players race each other on the same seed.', { randomizer: randomizerName, game: gameName })
+        : overviewT('gameDetail.introTextNoRaces', '{randomizer} shuffles where the items and abilities of {game} are found: every seed is a new puzzle.', { randomizer: randomizerName, game: gameName }))}</p>
+      ${facts.length ? `<p class="game-overview-facts">${facts.join(' · ')}</p>` : ''}
+      ${figures.length ? `<div class="game-overview-figures">${figures.join('')}</div>` : ''}
+      ${tournamentHtml}
+      <div class="game-overview-actions">
+        <button type="button" class="home-hero-btn home-hero-btn-primary" data-overview-tab="resources">${escHtml(overviewT('gameDetail.ctaStart', '🚀 Get started'))}</button>
+        ${hasRaces ? `<a class="home-hero-btn" href="/races.html?game=${encodeURIComponent(game.id)}">${escHtml(overviewT('gameDetail.ctaRaces', 'See the races'))}</a>` : ''}
+      </div>
+    `;
+
+    // "Get started" and the live count open their tab and bring it into view
+    el.querySelectorAll('[data-overview-tab]').forEach(link => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        switchTab(link.getAttribute('data-overview-tab'));
+        document.querySelector('.tabs-container')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  }
+
   async function load(){
     try{
       const game = await fetchJson('/api/games/'+encodeURIComponent(id));
@@ -1022,13 +1103,19 @@
       const displayTitle = game.randomizer?.displayName || game.randomizer?.shortName || game.officialName || `${game.name} Randomizer`;
       const gameName = game.official?.name || game.name;
       
+      // The "Loading..." key would put the placeholder back when the translations arrive
+      metaEl.removeAttribute('data-i18n');
       metaEl.textContent = displayTitle || '';
       titleEl.textContent = gameName || '';
       
       if (siteEl) {
         const website = game.randomizer?.website || game.officialWebsite;
         const websiteLinkAttrs = buildExternalLinkAttrs(website);
-        siteEl.innerHTML = websiteLinkAttrs ? `<div><a ${websiteLinkAttrs} style="color:#60a5fa;">${typeof i18n !== 'undefined' ? i18n.t('common.officialSite') : 'Official site'}</a></div>` : '';
+        const renderSite = () => {
+          siteEl.innerHTML = websiteLinkAttrs ? `<div><a ${websiteLinkAttrs} style="color:#60a5fa;">${escHtml(overviewT('common.officialSite', 'Official site'))}</a></div>` : '';
+        };
+        renderSite();
+        window.addEventListener('languageChanged', renderSite);
       }
 
       // Load and render resources (sites, trackers, guides)
@@ -1037,6 +1124,17 @@
       // Load stats with recent data
       const stats = await fetchJson('/api/games/'+encodeURIComponent(id)+'/stats');
       applyGameSeo(game, stats);
+
+      let liveCount = 0;
+      renderOverview(game, stats, liveCount);
+      window.addEventListener('languageChanged', () => renderOverview(game, stats, liveCount));
+      // Live count arrives later (the streams stats can take a while to build)
+      fetchJson('/api/streams/stats/by-game')
+        .then(data => {
+          liveCount = data?.stats?.[game.id]?.streamers || 0;
+          if (liveCount > 0) renderOverview(game, stats, liveCount);
+        })
+        .catch(() => {});
       
       const racesUrl = `/races.html?game=${encodeURIComponent(id)}`;
       const tournamentsUrl = `/tournaments.html?game=${encodeURIComponent(id)}`;

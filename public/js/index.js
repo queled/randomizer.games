@@ -196,11 +196,19 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Start every request now; cards are rendered once the games list is in
   const racesRequest = API.getRaces({ limit: 10 });
   const tournamentsRequest = API.getTournaments({ limit: 10 });
+  const gamesRequest = API.getGames();
   racesRequest.catch(() => {});
   tournamentsRequest.catch(() => {});
+  gamesRequest.catch(() => {});
+
+  // Introduction banner counters reuse the requests above (their pagination holds the totals)
+  if (setupHero()) {
+    loadHeroStats(racesRequest, tournamentsRequest, gamesRequest).catch(() => {});
+  }
+  loadHomeLive();
 
   try {
-    const gamesResp = await API.getGames();
+    const gamesResp = await gamesRequest;
     const games = gamesResp.games || [];
     gamesById = {};
     gamesBySlug = {};
@@ -236,6 +244,105 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadRecentTournaments(tournamentsRequest)
   ]);
 });
+
+// ---------------------------------------------------------------------------
+// Introduction banner and live streams, for visitors discovering the site
+// ---------------------------------------------------------------------------
+
+const HERO_HIDDEN_KEY = 'homeHeroHidden';
+
+function homeT(key, fallback) {
+  return (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t(key, {}, fallback) : fallback;
+}
+
+function formatHomeCount(n) {
+  const locale = (window.i18n && window.i18n.getLanguage) ? window.i18n.getLanguage() : undefined;
+  return Number(n).toLocaleString(locale);
+}
+
+// The banner stays closed for a visitor who hid it (storage may be unavailable: then it just shows)
+function setupHero() {
+  const hero = document.getElementById('home-hero');
+  const close = document.getElementById('home-hero-close');
+  if (!hero) return false;
+  let hidden = false;
+  try { hidden = localStorage.getItem(HERO_HIDDEN_KEY) === '1'; } catch (e) { /* ignore */ }
+  if (hidden) {
+    hero.remove();
+    return false;
+  }
+  close?.addEventListener('click', () => {
+    hero.remove();
+    try { localStorage.setItem(HERO_HIDDEN_KEY, '1'); } catch (e) { /* ignore */ }
+  });
+  const label = () => close?.setAttribute('aria-label', homeT('home.heroClose', 'Hide this introduction'));
+  label();
+  window.addEventListener('languageChanged', label);
+  return true;
+}
+
+async function loadHeroStats(racesRequest, tournamentsRequest, gamesRequest) {
+  const set = (id, value) => {
+    const el = document.getElementById(id);
+    if (el && Number.isFinite(value)) el.textContent = formatHomeCount(value);
+  };
+  const total = (data) => data?.pagination?.total ?? data?.total;
+  const [games, races, tournaments, players] = await Promise.allSettled([
+    gamesRequest,
+    racesRequest,
+    tournamentsRequest,
+    fetch('/api/players/count').then(r => (r.ok ? r.json() : null))
+  ]);
+  if (games.status === 'fulfilled') set('hero-stat-games', (games.value?.games || []).length);
+  if (races.status === 'fulfilled') set('hero-stat-races', total(races.value));
+  if (tournaments.status === 'fulfilled') set('hero-stat-tournaments', total(tournaments.value));
+  if (players.status === 'fulfilled') set('hero-stat-players', total(players.value));
+}
+
+// The four most watched randomizer streams; the section stays hidden without any
+async function loadHomeLive() {
+  const section = document.getElementById('home-live');
+  const grid = document.getElementById('home-live-grid');
+  if (!section || !grid) return;
+  try {
+    const res = await fetch('/api/streams?limit=4');
+    if (!res.ok) return;
+    const data = await res.json();
+    const streams = (data.streams || []).slice(0, 4);
+    if (!streams.length) return;
+    renderHomeLive(streams);
+    section.hidden = false;
+    // Badge and viewer counts follow the translations when they arrive later
+    window.addEventListener('languageChanged', () => renderHomeLive(streams));
+  } catch (e) {
+    console.warn('Live streams unavailable on the home page:', e);
+  }
+}
+
+function renderHomeLive(streams) {
+  const grid = document.getElementById('home-live-grid');
+  if (!grid) return;
+
+  const fallback = "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27320%27 height=%27180%27%3E%3Crect fill=%27%23374151%27 width=%27320%27 height=%27180%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 font-size=%2740%27 fill=%27%236b7280%27 text-anchor=%27middle%27 dy=%27.3em%27%3E📺%3C/text%3E%3C/svg%3E";
+  grid.innerHTML = streams.map(stream => {
+    const login = String(stream.userLogin || '').replace(/[^a-zA-Z0-9_]/g, '');
+    if (!login) return '';
+    const thumb = stream.thumbnailUrl ? `/api/proxy-image?url=${encodeURIComponent(stream.thumbnailUrl)}` : fallback;
+    return `
+      <a class="stream-card" href="https://twitch.tv/${login}" target="_blank" rel="noopener noreferrer">
+        <div class="stream-thumbnail">
+          <img src="${escHtml(thumb)}" alt="${escHtml(stream.title || '')}" loading="lazy" data-fallback-src="${fallback}">
+          <span class="stream-live-badge">${escHtml(homeT('streams.live', 'LIVE'))}</span>
+          ${stream.viewerCount ? `<span class="stream-viewers">👁 ${escHtml(new Intl.NumberFormat((window.i18n && window.i18n.getLanguage) ? window.i18n.getLanguage() : undefined, { notation: 'compact' }).format(stream.viewerCount))}</span>` : ''}
+        </div>
+        <div class="stream-info">
+          <div class="stream-title">${escHtml(stream.title || '')}</div>
+          <div class="stream-channel">${escHtml(stream.userName || login)}</div>
+          ${stream.gameName ? `<div class="stream-game">🎮 ${escHtml(stream.gameName)}</div>` : ''}
+        </div>
+      </a>`;
+  }).join('');
+}
 
 async function loadRecentRaces(request) {
   try {

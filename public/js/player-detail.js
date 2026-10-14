@@ -129,6 +129,8 @@
   const id = qs('id');
   const nameParam = qs('name');
   const headerName = document.getElementById('player-name');
+  // Filled by this script: the "Loading..." key must not come back when the translations arrive
+  headerName?.removeAttribute('data-i18n');
   const avatarEl = document.getElementById('player-avatar');
   const playerLinks = document.getElementById('player-links');
   const playerCompareAction = document.getElementById('player-compare-action');

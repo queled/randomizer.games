@@ -6,6 +6,7 @@ const fr = {
         races: "🏁 Courses",
         tournaments: "🏆 Tournois",
         players: "👤 Joueurs",
+        live: "📺 Direct",
         search: "Rechercher..."
     },
     
@@ -47,6 +48,18 @@ const fr = {
     
     // Home page
     home: {
+        heroTitle: "Toutes les courses et tous les tournois de randomizers, au même endroit",
+        heroText: "Un randomizer mélange l'emplacement des objets et des capacités d'un jeu : un jeu que vous connaissez par cœur devient un nouveau puzzle à chaque partie. Des joueurs du monde entier s'affrontent en course sur ces parties mélangées et en tournois.",
+        statGames: "jeux",
+        statRaces: "courses",
+        statTournaments: "tournois",
+        statPlayers: "joueurs",
+        ctaGames: "Découvrir les jeux",
+        ctaLive: "Regarder en direct",
+        ctaAbout: "C'est quoi un randomizer ?",
+        heroClose: "Masquer cette présentation",
+        liveTitle: "🔴 En direct maintenant",
+        liveAll: "Voir tous les streams →",
         pageTitle: "Randomizer - Courses, tournois et joueurs des jeux randomizer",
         title: "Randomizer",
         recentRaces: "Dernières Courses",
@@ -86,6 +99,16 @@ const fr = {
     
     // Game detail page
     gameDetail: {
+        introTextNoRaces: "{randomizer} mélange l'emplacement des objets et des capacités de {game} : chaque seed est un nouveau puzzle.",
+        introText: "{randomizer} mélange l'emplacement des objets et des capacités de {game} : chaque seed est un nouveau puzzle, et les joueurs s'affrontent en course sur la même seed.",
+        released: "Sorti en {year}",
+        overviewRaces: "courses",
+        overviewTournaments: "tournois",
+        overviewLive: "en direct",
+        ongoingTournament: "Tournoi en cours :",
+        upcomingTournament: "Prochain tournoi :",
+        ctaStart: "🚀 Commencer",
+        ctaRaces: "Voir les courses",
         pageTitle: "Jeu - Randomizer",
         tabLeaderboards: "🏆 Classements",
         tabCategories: "🎯 Catégories",
@@ -395,6 +418,30 @@ const fr = {
     
     // About page
     about: {
+        glossaryTitle: "📖 Lexique",
+        glossaryIntro: "Les mots que vous croiserez dans les courses et les tournois.",
+        glossarySeedTerm: "Seed",
+        glossarySeedDef: "Une version mélangée d'un jeu, générée à partir d'un nombre. Les joueurs d'une même seed trouvent chaque objet au même endroit.",
+        glossaryHashTerm: "Hash",
+        glossaryHashDef: "Un petit code d'icônes affiché au lancement du jeu, pour vérifier que tout le monde joue la même seed.",
+        glossaryRaceTerm: "Course (race)",
+        glossaryRaceDef: "Les joueurs lancent la même seed en même temps et le premier à finir gagne. Les courses se déroulent sur racetime.gg.",
+        glossaryGoalTerm: "Objectif / règlement",
+        glossaryGoalDef: "Les règles d'une course : les réglages de la seed, les techniques autorisées et ce qui termine la partie.",
+        glossaryAsyncTerm: "Async",
+        glossaryAsyncDef: "Une course jouée séparément : chacun joue la seed de son côté et les temps sont comparés ensuite.",
+        glossaryTrackerTerm: "Tracker",
+        glossaryTrackerDef: "Un outil pour noter les objets trouvés et les endroits déjà visités pendant une partie.",
+        glossaryLogicTerm: "Logique",
+        glossaryLogicDef: "Le randomizer garantit que la seed peut être terminée. En logique glitchless, aucun glitch n'est jamais nécessaire.",
+        glossaryMultiworldTerm: "Multiworld / Archipelago",
+        glossaryMultiworldDef: "Plusieurs joueurs, parfois sur des jeux différents, partagent leurs objets : les vôtres peuvent se trouver dans le jeu d'un autre.",
+        glossaryBracketTerm: "Bracket",
+        glossaryBracketDef: "Le tableau du tournoi : qui affronte qui, tour après tour, jusqu'à la finale.",
+        glossaryQualifiersTerm: "Qualifications",
+        glossaryQualifiersDef: "Des courses avant un tournoi, qui décident qui y participe et dans quel ordre de tête de série.",
+        glossaryVodTerm: "Restream / VOD",
+        glossaryVodDef: "Un restream diffuse un match avec des commentateurs ; une VOD en est l'enregistrement. Activez l'anti-spoil avant d'en regarder une.",
         title: "À propos",
         pageTitle: "À propos - Randomizer",
         heroTitle: "🎲 Randomizer",

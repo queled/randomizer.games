@@ -56,6 +56,37 @@ nav ul {
 
 nav a {
     transition: color 0.2s;
+    white-space: nowrap;
+}
+
+/* Five menu entries, the switch and the search share a narrower header */
+@media (max-width: 1180px) {
+    nav {
+        margin-left: 1rem;
+    }
+
+    nav ul {
+        gap: 1rem;
+    }
+}
+
+/* Tablet, before the burger menu: logo without its name, switch without its label */
+@media (min-width: 769px) and (max-width: 1024px) {
+    header > a {
+        font-size: 0;
+    }
+
+    nav ul {
+        gap: 0.85rem;
+    }
+
+    .spoiler-toggle-text {
+        display: none;
+    }
+
+    header input[type="text"] {
+        width: 9rem;
+    }
 }
 
 nav a.nav-active {
@@ -840,9 +871,12 @@ body.spoiler-mode .spoiler-text::before {
 }
 
 .stream-card {
+    display: block;
     background-color: #1f2937;
     border-radius: 0.5rem;
     overflow: hidden;
+    color: inherit;
+    text-decoration: none;
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
@@ -1206,8 +1240,189 @@ body.spoiler-mode .spoiler-text::before {
 
 .home-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 2rem;
+}
+
+/* Introduction banner for first-time visitors */
+.home-hero {
+    position: relative;
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    border: 1px solid #374151;
+    border-radius: 0.75rem;
+    padding: 2rem 2.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.home-hero-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 2rem;
+    height: 2rem;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #9ca3af;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.home-hero-close:hover {
+    background: #374151;
+    color: #f3f4f6;
+}
+
+.home-hero-title {
+    color: #fbbf24;
+    font-size: 1.75rem;
+    font-weight: bold;
+    margin: 0 2rem 0.75rem 0;
+}
+
+.home-hero-text {
+    color: #d1d5db;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 52rem;
+    margin: 0 0 1.5rem 0;
+}
+
+.home-hero-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.home-hero-stats a {
+    color: #9ca3af;
+    text-decoration: none;
+}
+
+.home-hero-stats a:hover {
+    color: #f3f4f6;
+}
+
+.home-hero-stats strong {
+    color: #f3f4f6;
+    font-size: 1.35rem;
+}
+
+.home-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+}
+
+.home-hero-btn {
+    display: inline-block;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.5rem;
+    border: 1px solid #4b5563;
+    color: #f3f4f6;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.home-hero-btn:hover {
+    background: #374151;
+}
+
+.home-hero-btn-primary {
+    background: #fbbf24;
+    border-color: #fbbf24;
+    color: #111827;
+}
+
+.home-hero-btn-primary:hover {
+    background: #f59e0b;
+    border-color: #f59e0b;
+}
+
+.home-hero-link {
+    color: #60a5fa;
+    text-decoration: underline;
+}
+
+.home-hero-link:hover {
+    color: #fbbf24;
+}
+
+/* Live streams on the home page */
+.home-live {
+    margin-bottom: 2.5rem;
+}
+
+.home-live-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem 1rem;
+}
+
+.home-live-header a {
+    color: #60a5fa;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.home-live-header a:hover {
+    color: #fbbf24;
+}
+
+/* Four streams on one row on a wide screen */
+.home-live-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    margin-top: 0;
+}
+
+@media (max-width: 640px) {
+    .home-hero {
+        padding: 1.25rem;
+    }
+
+    .home-hero-title {
+        font-size: 1.3rem;
+    }
+
+    .home-hero-text {
+        font-size: 0.95rem;
+    }
+
+    .home-hero-stats {
+        gap: 0.5rem 1.25rem;
+    }
+
+    /* Two small streams per row, so the races stay close */
+    .home-live .home-live-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+    }
+
+    .home-live-grid .stream-info {
+        padding: 0.5rem 0.6rem;
+    }
+
+    .home-live-grid .stream-title {
+        font-size: 0.75rem;
+    }
+
+    .home-live-grid .stream-game {
+        display: none;
+    }
+
+    .home-live-header .section-title {
+        margin-bottom: 0.25rem;
+    }
+
+    .home-live-header {
+        margin-bottom: 0.75rem;
+    }
 }
 
 .section-title {
@@ -1597,6 +1812,109 @@ body.spoiler-mode .spoiler-text::before {
     color: #9ca3af;
     margin-bottom: 0.25rem;
     font-size: 1.25rem;
+}
+
+/* Glossary of the About page */
+.glossary {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+    gap: 0.75rem 1.5rem;
+    margin-top: 1rem;
+}
+
+.glossary-item {
+    background: #111827;
+    border-radius: 0.5rem;
+    padding: 0.85rem 1rem;
+    scroll-margin-top: 5rem;
+}
+
+.glossary dt {
+    color: #fbbf24;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+}
+
+.glossary dd {
+    color: #d1d5db;
+    margin: 0;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+#glossary {
+    scroll-margin-top: 4rem;
+}
+
+/* Game overview, next to the poster */
+.game-overview {
+    margin-top: 1.25rem;
+}
+
+.game-overview-intro {
+    color: #d1d5db;
+    line-height: 1.6;
+    max-width: 48rem;
+    margin: 0 0 0.75rem 0;
+}
+
+.game-overview-facts {
+    color: #9ca3af;
+    font-size: 0.9rem;
+    margin: 0 0 1rem 0;
+}
+
+.game-overview-figures {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.75rem;
+    margin-bottom: 1rem;
+}
+
+.game-overview-figures a {
+    color: #9ca3af;
+    text-decoration: none;
+}
+
+.game-overview-figures a:hover {
+    color: #f3f4f6;
+}
+
+.game-overview-figures strong {
+    color: #f3f4f6;
+    font-size: 1.25rem;
+}
+
+.game-overview-tournament {
+    color: #d1d5db;
+    margin: 0 0 1.25rem 0;
+}
+
+.game-overview-tournament a {
+    color: #60a5fa;
+}
+
+.game-overview-tournament a:hover {
+    color: #fbbf24;
+}
+
+.game-overview-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.game-overview-actions button {
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .game-overview-figures,
+    .game-overview-actions {
+        justify-content: center;
+    }
 }
 
 /* Tabs */

@@ -108,7 +108,7 @@ function midosHouseRestreams(tournament) {
 
 function fitsTournament(title, tournament) {
   const mh = tournament.midosHouse || {};
-  return !mh.series || titleFitsEvent(title, mh.series, mh.event);
+  return !mh.series || titleFitsEvent(title, mh.series, mh.event, mh.site);
 }
 
 function setRestream(race, login, fields) {
@@ -141,7 +141,7 @@ async function findRestreams({ dryRun, days }, stats) {
   console.log(`\n🏁 ${races.length} race(s) de tournoi à chercher`);
 
   const tournaments = new Map((await Tournament.find({ _id: { $in: [...new Set(races.map(r => String(r.tournamentId)))] } })
-    .select('_id name midosHouse.series midosHouse.event midosHouse.pastRestreams midosHouse.schedule').lean())
+    .select('_id name midosHouse.site midosHouse.series midosHouse.event midosHouse.pastRestreams midosHouse.schedule').lean())
     .map(t => [String(t._id), { tournament: t, ...midosHouseRestreams(t) }]));
 
   // Each race's players and the channels that may restream it
@@ -225,7 +225,7 @@ async function findHighlights({ dryRun, days }, stats) {
     startedAt: { $gte: since }
   }).select('_id url startedAt startggSetId tournamentId restreams entrants.userName').lean();
   const tournaments = await Tournament.find({ _id: { $in: [...new Set(races.map(r => String(r.tournamentId)))] }, 'midosHouse.pastRestreams.0': { $exists: true } })
-    .select('_id name midosHouse.series midosHouse.event midosHouse.pastRestreams midosHouse.schedule').lean();
+    .select('_id name midosHouse.site midosHouse.series midosHouse.event midosHouse.pastRestreams midosHouse.schedule').lean();
   if (!tournaments.length) return;
 
   const contexts = tournaments.map(t => ({ tournament: t, ...midosHouseRestreams(t) }));

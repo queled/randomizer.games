@@ -273,9 +273,12 @@ const tournamentSchema = new mongoose.Schema({
   startggSlug: String,
   // Last refresh from the Challonge API (the update job spaces them out: 500 requests per 30 days)
   challongeSyncedAt: Date,
-  // Races scheduled on Mido's House (OoTR), linked to matches by start.gg set.
+  // Races scheduled on Mido's House (OoTR) or Hyrule Town Hall (its fork for other
+  // Zelda games), linked to matches by start.gg set.
   // Kept apart from `matches`, which the start.gg sync rebuilds.
   midosHouse: {
+    // 'midos' or 'hth' (services/midos-house.js); missing: Mido's House
+    site: String,
     series: String,
     event: String,
     url: String,

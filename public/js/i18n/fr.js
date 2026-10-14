@@ -499,6 +499,8 @@ const fr = {
         visitRacetime: "Visiter racetime.gg →",
         midosHouseDesc: "Le hub communautaire de l'Ocarina of Time randomizer pour les tournois et événements. Mido's House gère les inscriptions, les brackets, la planification et la génération des seeds, avec une intégration directe à racetime.gg.",
         visitMidosHouse: "Visiter midos.house →",
+        hyruleTownHallDesc: "Le hub des tournois des autres randomizers Zelda (A Link to the Past, The Wind Waker, Majora's Mask…), bâti sur Mido's House. Inscriptions, brackets, planification des races et restreams, avec intégration racetime.gg.",
+        visitHyruleTownHall: "Visiter hyruletownhall.com →",
         speedgamingDesc: "L'organisation de restream derrière de nombreux tournois randomizer. SpeedGaming diffuse les matchs en direct sur Twitch avec des commentateurs et publie le planning des événements à venir.",
         visitSpeedgaming: "Visiter speedgaming.org →",
         archipelagoDesc: "Le système de multiworld randomizer cross-game. Archipelago permet de mélanger les objets entre plusieurs jeux différents lors d'une même session multijoueur. Une expérience unique qui combine coopération et exploration !",

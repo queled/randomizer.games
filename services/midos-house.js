@@ -1,5 +1,7 @@
 /**
- * Mido's House (https://midos.house) — OoTR tournament scheduling.
+ * Mido's House (https://midos.house) — OoTR tournament scheduling — and
+ * Hyrule Town Hall (https://hyruletownhall.com), its fork for ALTTPR, TWWR,
+ * MMR and other Zelda tournaments. Both run the same code: same pages, same API.
  *
  * Players schedule their races there (Discord bot in the tournament's server)
  * and restreamers add their channel per language. Its GraphQL API has no
@@ -7,23 +9,45 @@
  * event's races), so the races page is read as HTML:
  * each row carries the start time (data-timestamp), the start.gg set link
  * and one link per restream, titled "<Language> restream".
+ *
+ * Tournaments store what these sites give in `midosHouse`, whose `site` says
+ * which one (no `site`: Mido's House).
  */
 
 const axios = require('axios');
 
-const BASE_URL = 'https://midos.house';
+const SITES = {
+  midos: { key: 'midos', name: "Mido's House", baseUrl: 'https://midos.house' },
+  hth: { key: 'hth', name: 'Hyrule Town Hall', baseUrl: 'https://hyruletownhall.com' }
+};
 
-const http = axios.create({
-  baseURL: BASE_URL,
-  timeout: 60000,
-  headers: { 'User-Agent': 'RandomizerWebsite/1.0' }
-});
+const BASE_URL = SITES.midos.baseUrl;
 
 // A race still listed as upcoming this long after its start time counts as played
 const PLAYED_AFTER_MS = 12 * 3600 * 1000;
 
-// Mido's House can be slow to build big race pages: one retry
-async function getPage(url) {
+function siteOf(key) {
+  const site = SITES[key || 'midos'];
+  if (!site) throw new Error(`Unknown site: ${key} (${Object.keys(SITES).join(', ')})`);
+  return site;
+}
+
+const clients = new Map();
+function httpFor(key) {
+  const site = siteOf(key);
+  if (!clients.has(site.key)) {
+    clients.set(site.key, axios.create({
+      baseURL: site.baseUrl,
+      timeout: 60000,
+      headers: { 'User-Agent': 'RandomizerWebsite/1.0' }
+    }));
+  }
+  return clients.get(site.key);
+}
+
+// Big race pages can be slow to build: one retry
+async function getPage(url, siteKey) {
+  const http = httpFor(siteKey);
   try {
     return (await http.get(url)).data;
   } catch (error) {
@@ -47,29 +71,47 @@ function stripTags(html) {
   return decodeEntities(String(html || '').replace(/<[^>]*>/g, '')).trim();
 }
 
-function eventLinks(html) {
+function eventUrl(siteKey, series, event) {
+  return `${siteOf(siteKey).baseUrl}/event/${series}/${event}`;
+}
+
+function eventLinks(html, siteKey) {
   const paths = new Set();
   for (const m of html.matchAll(/href="\/event\/([^/"]+)\/([^/"]+)"/g)) {
     paths.add(`${m[1]}/${m[2]}`);
   }
   return [...paths].map(p => {
     const [series, event] = p.split('/');
-    return { series, event, url: `${BASE_URL}/event/${series}/${event}` };
+    return { site: siteOf(siteKey).key, series, event, url: eventUrl(siteKey, series, event) };
   });
 }
 
 /**
  * Events listed on the home page (ongoing and upcoming), as "series/event" paths.
  */
-async function listCurrentEvents() {
-  return eventLinks(await getPage('/'));
+async function listCurrentEvents(siteKey) {
+  return eventLinks(await getPage('/', siteKey), siteKey);
 }
 
 /**
  * Finished events, for a one-off backfill of past restreams.
  */
-async function listArchivedEvents() {
-  return eventLinks(await getPage('/archive'));
+async function listArchivedEvents(siteKey) {
+  return eventLinks(await getPage('/archive', siteKey), siteKey);
+}
+
+/**
+ * Games the site has a page for (their slug, the site's own), each with its events
+ * (ongoing, upcoming and finished): [{ game, events }].
+ */
+async function listGames(siteKey) {
+  const slugs = [...new Set([...String(await getPage('/', siteKey)).matchAll(/href="\/games\/([^/"#?]+)"/g)].map(m => m[1]))];
+  const games = [];
+  for (const game of slugs) {
+    await new Promise(resolve => setTimeout(resolve, 300));
+    games.push({ game, events: eventLinks(await getPage(`/games/${encodeURIComponent(game)}`, siteKey), siteKey) });
+  }
+  return games;
 }
 
 /**
@@ -129,8 +171,8 @@ function parseTable(html) {
  * Races of one event: { upcoming, past }. The page splits them with a "Past races"
  * heading, but a finished event has a single table without it.
  */
-async function getEventRaces(series, event) {
-  const data = await getPage(`/event/${encodeURIComponent(series)}/${encodeURIComponent(event)}/races`);
+async function getEventRaces(series, event, siteKey) {
+  const data = await getPage(`/event/${encodeURIComponent(series)}/${encodeURIComponent(event)}/races`, siteKey);
   const pastIdx = data.indexOf('<h2>Past races</h2>');
   const upcoming = [];
   const past = pastIdx >= 0 ? parseTable(data.slice(pastIdx)) : [];
@@ -146,10 +188,10 @@ async function getEventRaces(series, event) {
  * Query of the GraphQL API (races of an event with their rooms and rounds).
  * Returns `data`; throws on GraphQL errors.
  */
-async function graphql(query, variables = {}) {
-  const { data } = await http.post('/api/v1/graphql', { query, variables });
+async function graphql(query, variables = {}, siteKey) {
+  const { data } = await httpFor(siteKey).post('/api/v1/graphql', { query, variables });
   if (data?.errors?.length) throw new Error(data.errors.map(e => e.message).join('; '));
   return data?.data;
 }
 
-module.exports = { BASE_URL, listCurrentEvents, listArchivedEvents, getEventRaces, parseRaceRow, graphql };
+module.exports = { SITES, BASE_URL, siteOf, eventUrl, listCurrentEvents, listArchivedEvents, listGames, getEventRaces, parseRaceRow, graphql };

@@ -27,6 +27,7 @@ Comment les données arrivent dans le site, où elles sont stockées, et quels s
 | SpeedRunsLive | Historique des courses d'avant racetime.gg (import ponctuel) |
 | start.gg / Challonge | Tournois, participants, matchs |
 | [Mido's House](https://midos.house) | Horaires et restreams des races des tournois OoTR |
+| [Hyrule Town Hall](https://hyruletownhall.com) | Le même outil pour d'autres jeux Zelda (ALTTPR, TWWR, MMR…) : horaires, restreams et nouveaux tournois |
 | [Speedrace](https://speedrace.deeplydevs.com) | VOD saisies par les restreamers de quelques tournois OoTR |
 | speedrun.com | Plateformes, date de sortie, images des jeux |
 | Twitch | Streams en direct, identifiants des jeux, VOD des restreams |
@@ -40,9 +41,9 @@ En production, la base MongoDB tourne sur le même serveur que le site et n'éco
 | `racetime` | toutes les 5 min | `sync-racetime-global.js` : nouvelles courses, finalisation des courses bloquées « en cours » depuis plus de 24 h, rattrapage des courses terminées entre deux exécutions |
 | `tournaments-update` | toutes les 15 min | `sync-tournaments.js --update-only` met à jour les tournois actifs, puis `auto-link-tournaments.js` rattache les courses aux matchs, et les tie-breaks de poule (room « tie-break » entre joueurs d'une même poule) à leur poule |
 | `race-vods` | toutes les 30 min | `sync-race-vods.js` : VOD Twitch des joueurs de chaque race, puis `sync-race-restreams.js` : restreams absents de Mido's House, trouvés par le titre Twitch (voir plus bas) |
-| `midos-house` | toutes les 15 min | `sync-midos-house.js` : horaires et restreams des races des tournois OoTR, VOD Twitch des restreams, puis `sync-midos-league.js --current` : saison en cours de l'OoTR League, puis `sync-speedrace.js` : VOD saisies sur Speedrace (voir plus bas) |
+| `midos-house` | toutes les 15 min | `sync-midos-house.js` : horaires et restreams des races des tournois de Mido's House et Hyrule Town Hall, rattachement des courses par leur room, VOD Twitch des restreams, puis `sync-midos-league.js --current` : saison en cours de l'OoTR League, puis `sync-speedrace.js` : VOD saisies sur Speedrace (voir plus bas) |
 | `rando-list` | tous les jours à 6h | met à jour la copie locale de rando-list ; si `check-rando-list-changes.js` signale un nouveau commit, `sync-rando-list.js --detect-new` met à jour le cache et les ressources, puis signale les nouveaux jeux, à créer depuis le panneau admin |
-| `tournaments-discover` | tous les jours à 7h | `discover-tournaments.js --since <il y a 2 jours> --max-pages 3` : nouveaux tournois sur start.gg et Challonge |
+| `tournaments-discover` | tous les jours à 7h | `discover-tournaments.js --since <il y a 2 jours> --max-pages 3` : nouveaux tournois sur start.gg et Challonge, et ceux liés depuis Mido's House et Hyrule Town Hall |
 | `players` | tous les jours à 7h30 | `sync-players-from-races.js` : un joueur par compte racetime.gg (source de vérité), au nom de sa dernière course ; `sync-racetime-profiles.js --stale-days 7 --limit 1200` relit le profil racetime des joueurs (chacun une fois par semaine) : nom actuel, compte supprimé ; puis `link-participant-accounts.js --all --apply` relie chaque participant de tournoi au compte racetime qui a couru ses matchs (voir plus bas) |
 | `challonge-check` | tous les jours à 7h45 | `check-challonge-quota.js` : une seule requête Challonge, en erreur sur la page de santé tant que le quota (500 requêtes sur 30 jours glissants) est épuisé ; à son retour, les imports Challonge en attente se lancent à la main |
 | `backup` | tous les jours à 3h30 | `backup-db.js` : archive `mongodump` de la base, 7 gardées |
@@ -69,16 +70,22 @@ Les workflows de `.github/workflows/` faisaient le même travail depuis les serv
 
 Les courses sont rattachées aux matchs par `services/tournament-autolink.js` (score de confiance) et aux qualifications par `services/tournament-qualifiers.js`. Le panneau admin permet de vérifier ou de corriger ces liens. Sa liste des tournois (« Race ↔ Match ») donne pour chacun la part des matchs joués qui ont leurs courses (`services/link-coverage.js` : matchs terminés entre deux joueurs, forfaits « DQ » exclus) et les courses rattachées au tournoi sans match, qualification ni tie-break. Le filtre « À reprendre » et le tri « Plus de rattachements manquants » mènent aux tournois à compléter ; un tournoi sans aucune course (jeu qui ne se court pas sur racetime.gg, comme Melee) est classé « sans course » et sort du total.
 
-### Horaires Mido's House
+### Horaires Mido's House et Hyrule Town Hall
+
+[Hyrule Town Hall](https://hyruletownhall.com) fait tourner le code de Mido's House pour d'autres jeux Zelda (ALTTPR, TWWR, MMR, mais aussi des tournois speedrun BotW et TP) : mêmes pages, même API. Tout ce qui suit vaut pour les deux sites ; `midosHouse.site` dit d'où viennent les données d'un tournoi (`midos` ou `hth`, absent : Mido's House). `sync-midos-house.js` lit les deux sites, ou un seul avec `--site midos|hth`.
 
 Les joueurs des tournois OoTR fixent l'horaire de leurs races sur [Mido's House](https://midos.house) (commande `/schedule` du bot Discord, dans le serveur du tournoi) et les restreamers y ajoutent leur chaîne, par langue. Son API GraphQL ne donne ni les liens de restream ni les sets start.gg : `services/midos-house.js` lit donc la page `/event/<série>/<édition>/races` de chaque événement listé sur l'accueil, et y prend l'heure de départ, le lien du set start.gg et les liens « <Langue> restream ».
 
 `sync-midos-house.js` range ces races sur le tournoi start.gg correspondant (trouvé par son `startggSlug`), dans un champ à part de `matches`, que la synchronisation start.gg reconstruit à chaque passage :
 
-- `midosHouse.schedule` : les races à venir, remplacées à chaque exécution. Une race jouée en sort, et un événement qui quitte l'accueil de Mido's House voit sa liste vidée.
+- `midosHouse.schedule` : les races à venir, remplacées à chaque exécution. Une race jouée en sort, et un événement qui quitte l'accueil de son site voit sa liste vidée.
 - `midosHouse.pastRestreams` : les races jouées qui ont eu un restream, gardées une fois l'événement terminé.
 
 Une race encore listée « à venir » 12 h après son heure compte comme jouée : la page d'un événement terminé n'a qu'un seul tableau, sans titre « Past races ».
+
+Chaque ligne donne aussi la room racetime.gg de la race et son set start.gg : la course est rattachée directement à ce match (confiance 900), sans passer par les noms et les horaires de l'auto-link. Une course que l'auto-link avait mise sur un autre match du tournoi est déplacée ; un lien fait à la main (999) ne bouge pas. Une room en trop pour un set déjà complet (room relancée…) est laissée de côté.
+
+Le filtre des titres Twitch par série (« tournoi fr », « rsl »…, `helpers/restream-titles.js`) ne vaut que pour Mido's House : sur Hyrule Town Hall, « SpeedGaming » dans un titre ne désigne pas un autre tournoi.
 
 Le script cherche ensuite la VOD de chaque restream joué, de trois façons :
 
@@ -90,7 +97,9 @@ Twitch efface les rediffusions au bout de 7 à 60 jours selon la chaîne (ou plu
 
 `GET /api/tournaments/:id/matches` ajoute `scheduledAt` et `restreams` (avec `vodUrl`) à chaque match. L'onglet Restream de la page d'un tournoi liste les races à venir et jouées qui ont un restream, filtrables par langue.
 
-Pour reprendre les événements terminés (une seule fois) : `node scripts/sync-midos-house.js --archive`.
+Pour reprendre les événements terminés (une seule fois) : `node scripts/sync-midos-house.js --archive` (les deux sites, ou `--site hth --archive`).
+
+`discover-tournaments.js --source hth` importe les tournois start.gg liés depuis les événements de Hyrule Town Hall. Le jeu vient de la page `/games/<slug>` de l'événement : ses slugs sont des catégories racetime.gg, et seul un slug qui est la catégorie d'un de nos jeux (`integrations.racetime.gameSlug(s)` : `alttpr`, `twwr`, `mmr`) mène à un import. Les tournois speedrun (`botw`, `tp`, dont les randomizers sont `botwr` et `tpr`) sont ignorés. La source fait partie de la découverte quotidienne.
 
 Un événement sans sets start.gg (Challonge, bracket géré sur Mido's House) est rattaché au tournoi auquel sont liées ses races racetime.gg, si au moins 5 d'entre elles (et un tiers de ses rooms) y mènent : c'est le cas des Standard S6 et S7 et des RSL S2 et S3. Les restreams y sont reliés aux matchs par leur room racetime.gg. Les autres événements (Tournoi Francophone, Scrubs, SpeedGaming…) n'ont pas de tournoi en base et sont ignorés. La league a son propre script (ci-dessous).
 

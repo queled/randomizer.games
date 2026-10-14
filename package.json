@@ -29,6 +29,7 @@
     "discover:tournaments:dry": "node scripts/discover-tournaments.js --dry-run",
     "discover:tournaments:startgg": "node scripts/discover-tournaments.js --source startgg",
     "discover:tournaments:challonge": "node scripts/discover-tournaments.js --source challonge",
+    "discover:tournaments:hth": "node scripts/discover-tournaments.js --source hth",
     "import:startgg": "node scripts/import-startgg.js",
     "import:challonge": "node scripts/import-challonge.js",
     "link:startgg-races": "node scripts/link-startgg-races.js",

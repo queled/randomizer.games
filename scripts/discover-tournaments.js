@@ -17,6 +17,7 @@
  *   node scripts/discover-tournaments.js --source startgg --game oot --startgg-slug tournament/example
  *   node scripts/discover-tournaments.js --source speedgaming --dry-run   # Brackets listed on speedgaming.org/events
  *   node scripts/discover-tournaments.js --source midos --dry-run         # OoT brackets linked from midos.house
+ *   node scripts/discover-tournaments.js --source hth --dry-run           # brackets linked from hyruletownhall.com (ALTTPR, TWWR...)
  *   node scripts/discover-tournaments.js --source speedgaming --challonge-url https://challonge.com/xyz
  */
 
@@ -33,6 +34,7 @@ const findGameForTournament = require('../helpers/findGameForTournament');
 const sanitizeHtml = require('sanitize-html');
 const { saveGroupedChallongeBracket } = require('../services/challonge-bracket-groups');
 const { fillMissingFinalRanks } = require('../helpers/bracket-ranks');
+const scheduleSites = require('../services/midos-house');
 
 // ─── Configuration ───────────────────────────────────────────────────────────
 
@@ -63,7 +65,7 @@ const STARTGG_ALIAS_MAX_PAGES = 5;
 function parseArgs() {
   const args = process.argv.slice(2);
   const opts = {
-    source: 'all',       // 'all', 'startgg', 'challonge', 'speedgaming', 'midos'
+    source: 'all',       // 'all', 'startgg', 'challonge', 'speedgaming', 'midos', 'hth'
     dryRun: false,
     keywords: [],
     maxPages: DEFAULT_MAX_PAGES,
@@ -994,6 +996,62 @@ async function discoverMidos({ games, dryRun }) {
   return discoverStartGG({ games: [oot], dryRun, tournamentSlugs: [...result.slugs.keys()], discoveredVia: 'midos.house', trustSource: true });
 }
 
+// ─── Hyrule Town Hall Discovery (events → start.gg brackets) ─────────────────
+
+// Hyrule Town Hall runs Mido's House for other games. Its game slugs are racetime.gg
+// categories ("alttpr", "twwr"), so one of a game of ours is a randomizer; "botw" or
+// "tp" (speedrun tournaments, whose randomizers are "botwr" and "tpr") are not.
+function hthGame(hthSlug, games) {
+  return games.find(game => {
+    const racetime = game.integrations?.racetime || {};
+    return racetime.gameSlug === hthSlug || (racetime.gameSlugs || []).includes(hthSlug);
+  }) || null;
+}
+
+async function discoverHth({ games, dryRun }) {
+  const total = { found: 0, imported: 0, skipped: 0, errors: 0 };
+  const site = scheduleSites.SITES.hth;
+  console.log(`\n🔍 ${site.name}: reading game and event pages...`);
+
+  let siteGames;
+  try {
+    siteGames = await scheduleSites.listGames('hth');
+  } catch (err) {
+    console.error(`   ❌ Could not read ${site.baseUrl}: ${err.message}`);
+    return { ...total, errors: 1 };
+  }
+
+  const http = { timeout: 20000, headers: { 'User-Agent': 'RandomizerHub-discovery/1.0 (+tournament index)' } };
+  for (const { game: hthSlug, events } of siteGames) {
+    const game = hthGame(hthSlug, games);
+    if (!game) {
+      console.log(`   ⏭️  ${hthSlug}: ${events.length} event(s), no randomizer of ours on racetime.gg/${hthSlug}`);
+      continue;
+    }
+
+    const slugs = new Set();
+    for (const ev of events) {
+      await sleep(MIDOS_DELAY_MS);
+      try {
+        const { data } = await axios.get(ev.url, http);
+        for (const match of String(data).matchAll(/href="(https?:\/\/(?:www\.)?start\.gg\/tournament\/[^"#?\s]+)"/gi)) {
+          const slug = StartGGAPI.extractSlugFromUrl(decodeEntities(match[1]));
+          if (slug) slugs.add(slug);
+        }
+      } catch (err) {
+        console.log(`   ⚠️  Could not read ${ev.url}: ${err.message}`);
+      }
+    }
+    console.log(`   ${hthSlug} → ${game.id}: ${events.length} event(s), ${slugs.size} distinct start.gg tournament(s)`);
+    // An empty list must not fall through to discoverStartGG's global search
+    if (!slugs.size) continue;
+
+    const stats = await discoverStartGG({ games: [game], dryRun, tournamentSlugs: [...slugs], discoveredVia: 'hyruletownhall.com', forceGame: true });
+    for (const key of Object.keys(total)) total[key] += stats[key] || 0;
+  }
+  return total;
+}
+
 // ─── Challonge Discovery ────────────────────────────────────────────────────
 
 async function discoverChallonge({ searchTerms, games, keywords, since, dryRun }) {
@@ -1216,6 +1274,10 @@ async function main() {
 
   if (opts.source === 'all' || opts.source === 'midos') {
     results.midos = await discoverMidos({ games, dryRun: opts.dryRun });
+  }
+
+  if (opts.source === 'all' || opts.source === 'hth') {
+    results.hth = await discoverHth({ games, dryRun: opts.dryRun });
   }
 
   if (opts.source === 'all' || opts.source === 'speedgaming') {

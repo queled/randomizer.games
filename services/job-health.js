@@ -16,7 +16,7 @@ const DAY = 24 * 60 * MINUTE;
 const JOBS = [
   { name: 'racetime', label: 'Courses racetime.gg', every: 5 * MINUTE, maxRun: 10 * MINUTE },
   { name: 'tournaments-update', label: 'Tournois actifs et rattachements', every: 15 * MINUTE, maxRun: 20 * MINUTE },
-  { name: 'midos-house', label: "Mido's House", every: 15 * MINUTE, maxRun: 5 * MINUTE },
+  { name: 'midos-house', label: "Mido's House et Hyrule Town Hall", every: 15 * MINUTE, maxRun: 15 * MINUTE },
   { name: 'race-vods', label: 'VOD et restreams Twitch', every: 30 * MINUTE, maxRun: 20 * MINUTE },
   { name: 'tournaments-discover', label: 'Découverte de tournois', every: DAY, maxRun: 15 * MINUTE },
   { name: 'rando-list', label: 'rando-list', every: DAY, maxRun: 20 * MINUTE },
@@ -115,7 +115,7 @@ async function lastDataByJob({ Game, Tournament, Race }) {
   ]);
   return {
     racetime: { at: race, label: 'dernière course enregistrée' },
-    'midos-house': { at: midosHouse, label: "dernière lecture de Mido's House" },
+    'midos-house': { at: midosHouse, label: "dernière lecture de Mido's House ou Hyrule Town Hall" },
     'race-vods': { at: vods, label: 'dernière recherche de VOD' },
     'rando-list': { at: randoList, label: 'dernière mise à jour des jeux' },
     backup: { at: backup, label: 'dernière archive' }

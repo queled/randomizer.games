@@ -27,9 +27,10 @@ const SERIES_KEYWORDS = {
   scrubs: /scrubs/
 };
 
-function titleFitsEvent(title, series, event) {
+// `site`: where the event is scheduled (services/midos-house.js); the series keywords are Mido's House's
+function titleFitsEvent(title, series, event, site = 'midos') {
   const lower = String(title).toLowerCase();
-  const named = Object.keys(SERIES_KEYWORDS).filter(key => SERIES_KEYWORDS[key].test(lower));
+  const named = (site || 'midos') === 'midos' ? Object.keys(SERIES_KEYWORDS).filter(key => SERIES_KEYWORDS[key].test(lower)) : [];
   if (named.length && !named.includes(series)) return false;
   // "S6" in the title against season 2 of the event
   const season = lower.match(/\b(?:s|season|saison) ?(\d{1,2})\b/);

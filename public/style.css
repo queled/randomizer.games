@@ -3877,6 +3877,12 @@ a.match-player-name.match-winner:hover {
     margin-bottom: 0.5rem;
 }
 
+.category-card h4 .english-name,
+.setting-card h4 .english-name {
+    color: #9ca3af;
+    font-weight: normal;
+}
+
 .category-card p,
 .setting-card p {
     color: #d1d5db;

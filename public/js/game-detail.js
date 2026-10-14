@@ -465,6 +465,13 @@
     return { name: tr.name || item.name || '', description: tr.description || item.description || '' };
   }
 
+  // Card title: the translated name followed by the English one, the name the community uses
+  function localizedTitle(item, name) {
+    const english = item?.name || '';
+    if (!english || english.toLowerCase() === name.toLowerCase()) return escapeHtml(name);
+    return `${escapeHtml(name)} <span class="english-name">(${escapeHtml(english)})</span>`;
+  }
+
   // Racetime goal opening its leaderboard when it has ranked players
   function goalLink(goal, label) {
     if (!goal.numRanked) return escapeHtml(label);
@@ -498,7 +505,7 @@
           : '';
         html += `
           <div class="category-card">
-            <h4>${escapeHtml(name)}</h4>
+            <h4>${localizedTitle(category, name)}</h4>
             ${description ? `<p>${escapeHtml(description)}</p>` : ''}
             <div class="category-stats">${escapeHtml(stats.join(' · '))}</div>
             ${leaderboards}
@@ -515,7 +522,7 @@
         const values = (setting.values || []).map(v => `<span class="setting-value">${escapeHtml(v)}</span>`).join(' ');
         html += `
           <div class="setting-card">
-            <h4>${escapeHtml(name)}</h4>
+            <h4>${localizedTitle(setting, name)}</h4>
             ${description ? `<p>${escapeHtml(description)}</p>` : ''}
             <div class="setting-values">${values}</div>
           </div>`;

@@ -195,7 +195,7 @@ Garder la base Atlas quelques semaines comme filet de sécurité avant de la sup
 
 ## 5. Démarrer avec PM2
 
-**Une seule instance** : les sessions admin et les compteurs de rate limiting sont gardés en mémoire. Avec plusieurs processus (`-i max`, mode cluster), une connexion admin ouverte sur l'un ne serait pas reconnue par les autres.
+**Une seule instance** : les compteurs de rate limiting sont gardés en mémoire. Avec plusieurs processus (`-i max`, mode cluster), chacun compterait de son côté. Les sessions admin, elles, sont en base (collection `adminsessions`) : un redémarrage ne déconnecte pas l'admin.
 
 ```bash
 cd ~/randomizer-app

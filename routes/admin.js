@@ -32,7 +32,7 @@ function escapeRegex(value) {
  * POST /api/admin/login
  * Login with admin token
  */
-router.post('/login', adminLoginLimiter, (req, res) => {
+router.post('/login', adminLoginLimiter, async (req, res, next) => {
   const { token } = req.body;
   
   if (!token) {
@@ -47,8 +47,13 @@ router.post('/login', adminLoginLimiter, (req, res) => {
     return;
   }
   
-  const sessionToken = createSession('admin');
-  
+  let sessionToken;
+  try {
+    sessionToken = await createSession('admin');
+  } catch (error) {
+    return next(error);
+  }
+
   // Set cookie for browser
   res.cookie('adminSession', sessionToken, {
     httpOnly: true,
@@ -67,9 +72,11 @@ router.post('/login', adminLoginLimiter, (req, res) => {
  * POST /api/admin/logout
  * Logout and destroy session
  */
-router.post('/logout', requireAdmin, (req, res) => {
-  if (req.adminSessionToken) {
-    destroySession(req.adminSessionToken);
+router.post('/logout', requireAdmin, async (req, res, next) => {
+  try {
+    await destroySession(req.adminSessionToken);
+  } catch (error) {
+    return next(error);
   }
   
   res.clearCookie('adminSession', {

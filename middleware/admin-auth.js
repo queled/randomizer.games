@@ -1,11 +1,12 @@
 /**
  * Admin Authentication Middleware
  * 
- * Simple token-based authentication for admin routes.
- * In production, consider using a more robust solution like JWT or OAuth.
+ * Token-based authentication for admin routes: the admin token opens a
+ * session stored in MongoDB, carried by an httpOnly cookie.
  */
 
 const crypto = require('crypto');
+const { AdminSession } = require('../models');
 
 // Admin token from environment. The public default is only accepted when
 // NODE_ENV is explicitly 'development', so a server started without NODE_ENV
@@ -17,62 +18,40 @@ if (process.env.NODE_ENV !== 'development' && ADMIN_TOKEN === DEFAULT_ADMIN_TOKE
   throw new Error('ADMIN_TOKEN must be set to a strong value (only NODE_ENV=development may use the default)');
 }
 
-// Simple in-memory session store (use Redis in production for multi-instance)
-const sessions = new Map();
 const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
-/**
- * Generate a secure session token
- */
-function generateSessionToken() {
-  return crypto.randomBytes(32).toString('hex');
+// Sessions live in MongoDB (AdminSession) so a restart or a deploy does not log
+// the admin out. The cookie holds a random token; only its hash is stored.
+function hashToken(token) {
+  return crypto.createHash('sha256').update(token, 'utf8').digest('hex');
 }
 
 /**
- * Create a new session
+ * Create a new session, returns its token
  */
-function createSession(adminId = 'admin') {
-  const token = generateSessionToken();
-  const session = {
+async function createSession(adminId = 'admin') {
+  const token = crypto.randomBytes(32).toString('hex');
+  await AdminSession.create({
+    tokenHash: hashToken(token),
     adminId,
-    createdAt: Date.now(),
-    expiresAt: Date.now() + SESSION_DURATION
-  };
-  sessions.set(token, session);
-  
-  // Cleanup expired sessions periodically
-  cleanupExpiredSessions();
-  
+    expiresAt: new Date(Date.now() + SESSION_DURATION)
+  });
   return token;
 }
 
 /**
  * Validate a session token
  */
-function validateSession(token) {
-  if (!token) return null;
-  
-  const session = sessions.get(token);
+async function validateSession(token) {
+  if (typeof token !== 'string' || !/^[a-f0-9]{64}$/.test(token)) return null;
+  // MongoDB removes expired sessions only once a minute: check the date here too
+  const session = await AdminSession.findOne({ tokenHash: hashToken(token), expiresAt: { $gt: new Date() } }).lean();
   if (!session) return null;
-  
-  if (Date.now() > session.expiresAt) {
-    sessions.delete(token);
-    return null;
-  }
-  
-  return session;
-}
-
-/**
- * Cleanup expired sessions
- */
-function cleanupExpiredSessions() {
-  const now = Date.now();
-  for (const [token, session] of sessions.entries()) {
-    if (now > session.expiresAt) {
-      sessions.delete(token);
-    }
-  }
+  return {
+    adminId: session.adminId,
+    createdAt: session.createdAt ? session.createdAt.getTime() : null,
+    expiresAt: session.expiresAt.getTime()
+  };
 }
 
 /**
@@ -94,80 +73,44 @@ function verifyAdminToken(providedToken) {
 /**
  * Middleware to require admin authentication
  */
-function requireAdmin(req, res, next) {
-  const authHeader = req.headers.authorization;
-  const cookieToken = req.cookies?.adminSession;
+async function requireAdmin(req, res, next) {
+  try {
+    const authHeader = req.headers.authorization;
+    const bearerToken = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
+    const candidates = [bearerToken, req.cookies?.adminSession].filter(Boolean);
 
-  let sessionToken = null;
-  let session = null;
-
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    const bearerToken = authHeader.slice(7).trim();
-    if (bearerToken) {
-      session = validateSession(bearerToken);
+    let session = null;
+    let sessionToken = null;
+    for (const token of candidates) {
+      session = await validateSession(token);
       if (session) {
-        sessionToken = bearerToken;
+        sessionToken = token;
+        break;
       }
     }
-  }
 
-  if (!session && cookieToken) {
-    session = validateSession(cookieToken);
-    if (session) {
-      sessionToken = cookieToken;
+    if (!session) {
+      return res.status(401).json({
+        error: 'Unauthorized',
+        message: 'Valid admin session required'
+      });
     }
+
+    // Attach session info to request
+    req.adminSession = session;
+    req.adminSessionToken = sessionToken;
+    next();
+  } catch (error) {
+    next(error);
   }
-  
-  if (!session) {
-    return res.status(401).json({ 
-      error: 'Unauthorized',
-      message: 'Valid admin session required'
-    });
-  }
-  
-  // Attach session info to request
-  req.adminSession = session;
-  req.adminSessionToken = sessionToken;
-  next();
-}
-
-/**
- * Optional admin check (doesn't block if not authenticated)
- */
-function optionalAdmin(req, res, next) {
-  const authHeader = req.headers.authorization;
-  const cookieToken = req.cookies?.adminSession;
-
-  let session = null;
-  let sessionToken = null;
-
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    const bearerToken = authHeader.slice(7).trim();
-    if (bearerToken) {
-      session = validateSession(bearerToken);
-      if (session) {
-        sessionToken = bearerToken;
-      }
-    }
-  }
-
-  if (!session && cookieToken) {
-    session = validateSession(cookieToken);
-    if (session) {
-      sessionToken = cookieToken;
-    }
-  }
-
-  req.adminSession = session;
-  req.adminSessionToken = sessionToken;
-  next();
 }
 
 /**
  * Destroy a session
  */
-function destroySession(token) {
-  sessions.delete(token);
+async function destroySession(token) {
+  if (typeof token !== 'string' || !token) return;
+  await AdminSession.deleteOne({ tokenHash: hashToken(token) });
 }
 
 module.exports = {
@@ -175,6 +118,5 @@ module.exports = {
   createSession,
   validateSession,
   destroySession,
-  requireAdmin,
-  optionalAdmin
+  requireAdmin
 };

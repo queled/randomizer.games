@@ -454,6 +454,10 @@ const playerSchema = new mongoose.Schema({
   // racetime stopped knowing the account: a deleted account leaves the player lists
   racetimeCheckedAt: Date,
   racetimeDeletedAt: Date,
+  // racetime.gg avatar (null: the account has none) and when it was last read, so a
+  // new avatar shows up within hours (services/racetime-profile.js)
+  avatarUrl: String,
+  avatarCheckedAt: Date,
   tournaments: [{
     tournamentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Tournament' },
     finalRank: Number,
@@ -506,7 +510,6 @@ const discoverySkipSchema = new mongoose.Schema({
 });
 
 // Indexes for better query performance
-// Indexes
 tournamentSchema.index({ gameId: 1, startDate: -1 });
 // consider also indexing new relation
 tournamentSchema.index({ game: 1, startDate: -1 });
@@ -516,7 +519,21 @@ raceSchema.index({ category: 1, startedAt: -1 });
 // Add composite index for live queries
 raceSchema.index({ status: 1, startedAt: -1 });
 raceSchema.index({ 'vods.vodUrl': 1 }, { sparse: true });
+// Races of a player (player page, comparison, search) and the plain race list
+raceSchema.index({ 'entrants.userId': 1, startedAt: -1 });
+raceSchema.index({ 'entrants.userName': 1 });
+raceSchema.index({ startedAt: -1 });
 playerSchema.index({ name: 1 });
+playerSchema.index({ aliases: 1 });
+
+// Admin sessions, kept in the database so a restart does not log the admin out.
+// Only a hash of the session token is stored; MongoDB drops expired sessions.
+const adminSessionSchema = new mongoose.Schema({
+  tokenHash: { type: String, required: true, unique: true },
+  adminId: { type: String, default: 'admin' },
+  expiresAt: { type: Date, required: true }
+}, { timestamps: { createdAt: true, updatedAt: false } });
+adminSessionSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 module.exports = {
   Game: mongoose.model('Game', gameSchema),
@@ -524,5 +541,6 @@ module.exports = {
   Match: mongoose.model('Match', matchSchema),
   Race: mongoose.model('Race', raceSchema),
   Player: mongoose.model('Player', playerSchema),
-  DiscoverySkip: mongoose.model('DiscoverySkip', discoverySkipSchema)
+  DiscoverySkip: mongoose.model('DiscoverySkip', discoverySkipSchema),
+  AdminSession: mongoose.model('AdminSession', adminSessionSchema)
 };

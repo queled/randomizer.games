@@ -6,7 +6,7 @@
 # Usage : scripts/cron/run-job.sh <tâche>
 #   racetime              nouvelles courses racetime.gg            (toutes les 5 min)
 #   tournaments-update    tournois actifs + rattachement des courses (toutes les 15 min)
-#   midos-house           horaires, restreams et VOD des races (Mido's House, Hyrule Town Hall), saison de League, VOD Speedrace (toutes les 15 min)
+#   schedule-sites        horaires, restreams et VOD des races (Mido's House, Hyrule Town Hall), saison de League, VOD Speedrace (toutes les 15 min)
 #   race-vods             VOD Twitch des joueurs, restreams trouvés sur Twitch (toutes les 30 min)
 #   tournaments-discover  nouveaux tournois des 2 derniers jours    (tous les jours)
 #   rando-list            cache rando-list, si le dépôt a changé    (tous les jours)
@@ -37,7 +37,7 @@ run_tournaments_update() {
   return "$status"
 }
 
-run_midos_house() {
+run_schedule_sites() {
   local status=0
   timeout 8m node scripts/sync-schedule-sites.js || status=$?
   timeout 5m node scripts/sync-midos-league.js --current || status=$?
@@ -104,7 +104,7 @@ run_backup() {
 case "$JOB" in
   racetime)             fn=run_racetime ;;
   tournaments-update)   fn=run_tournaments_update ;;
-  midos-house)          fn=run_midos_house ;;
+  schedule-sites)       fn=run_schedule_sites ;;
   race-vods)            fn=run_race_vods ;;
   tournaments-discover) fn=run_tournaments_discover ;;
   rando-list)           fn=run_rando_list ;;
@@ -112,7 +112,7 @@ case "$JOB" in
   challonge-check)      fn=run_challonge_check ;;
   backup)               fn=run_backup ;;
   *)
-    echo "Usage: $0 <racetime|tournaments-update|midos-house|race-vods|tournaments-discover|rando-list|players|challonge-check|backup>" >&2
+    echo "Usage: $0 <racetime|tournaments-update|schedule-sites|race-vods|tournaments-discover|rando-list|players|challonge-check|backup>" >&2
     exit 2
     ;;
 esac

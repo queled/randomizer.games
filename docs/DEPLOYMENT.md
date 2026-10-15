@@ -217,7 +217,7 @@ PATH=/usr/local/bin:/usr/bin:/bin
 
 */5   * * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh racetime
 2-59/15 * * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh tournaments-update
-7-59/15 * * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh midos-house
+7-59/15 * * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh schedule-sites
 12-59/30 * * * * /home/randomizer/randomizer-app/scripts/cron/run-job.sh race-vods
 0     6 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh rando-list
 0     7 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh tournaments-discover
@@ -230,7 +230,7 @@ Tester chaque tâche une fois à la main, par exemple `scripts/cron/run-job.sh r
 
 Pour rattraper une période où les tâches ne tournaient pas, voir [SYNC-WORKFLOW.md](SYNC-WORKFLOW.md#relancer-à-la-main-sur-une-période).
 
-À la mise en place de la tâche `midos-house`, reprendre une fois les restreams des événements terminés : `node scripts/sync-schedule-sites.js --archive` (Mido's House et Hyrule Town Hall). Pour `race-vods`, reprendre une fois les 60 derniers jours : `node scripts/sync-race-vods.js --days 60`, puis `node scripts/sync-race-restreams.js --days 60` et, pour les temps forts plus anciens, `node scripts/sync-race-restreams.js --days 3650 --highlights` (à vérifier d'abord avec `--dry-run`).
+À la mise en place de la tâche `schedule-sites`, reprendre une fois les restreams des événements terminés : `node scripts/sync-schedule-sites.js --archive` (Mido's House et Hyrule Town Hall). Pour `race-vods`, reprendre une fois les 60 derniers jours : `node scripts/sync-race-vods.js --days 60`, puis `node scripts/sync-race-restreams.js --days 60` et, pour les temps forts plus anciens, `node scripts/sync-race-restreams.js --days 3650 --highlights` (à vérifier d'abord avec `--dry-run`).
 
 La resynchronisation complète d'un jeu (ancien workflow manuel `sync-racetime-game-full.yml`) se lance en SSH :
 

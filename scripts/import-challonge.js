@@ -3,7 +3,7 @@
 
 const mongoose = require('mongoose');
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+require('dotenv').config({ path: path.join(__dirname, '..', '.env'), quiet: true });
 const connectDB = require('../config/database');
 const sanitizeHtml = require('sanitize-html');
 const challonge = require('../services/challonge');

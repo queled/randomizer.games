@@ -15,7 +15,7 @@ const {
   errorHandler,
   mongoSanitize
 } = require('./middleware/security');
-require('dotenv').config();
+require('dotenv').config({ quiet: true });
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -159,9 +159,6 @@ app.use(cors(corsOptions));
 
 app.use(compression());
 
-// MongoDB injection protection
-app.use(mongoSanitize);
-
 // Cookie parser for admin sessions
 app.use(cookieParser());
 
@@ -169,6 +166,9 @@ app.use(express.json({
   limit: '1mb' // Prevent payload attacks
 }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+
+// MongoDB injection protection (after the body parsers, so it sees the body)
+app.use(mongoSanitize);
 
 // Adjust CSP and Permissions-Policy to avoid browser warnings when served via tunnels
 // Allow blob: for images (used by some browsers when loading blobs) and set a

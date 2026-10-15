@@ -7,7 +7,7 @@
 
 const mongoose = require('mongoose');
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+require('dotenv').config({ path: path.join(__dirname, '..', '.env'), quiet: true });
 const connectDB = require('../config/database');
 const { Game } = require('../models');
 const { mergeGames, changeGameId } = require('../services/game-merge');

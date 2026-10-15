@@ -19,7 +19,7 @@
 const path = require('path');
 const mongoose = require('mongoose');
 const axios = require('axios');
-require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+require('dotenv').config({ path: path.join(__dirname, '..', '.env'), quiet: true });
 
 const connectDB = require('../config/database');
 const { Game, Race } = require('../models');

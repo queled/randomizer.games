@@ -1,5 +1,4 @@
 const rateLimit = require('express-rate-limit');
-const mongoSanitize = require('express-mongo-sanitize');
 const validator = require('validator');
 
 // Check if in development mode
@@ -19,7 +18,7 @@ const isAdminRequest = (req) => req.originalUrl.startsWith('/api/admin/') && !re
 const createRateLimiter = (windowMs, max, message, skip = () => false) => {
   return rateLimit({
     windowMs,
-    max,
+    limit: max,
     message: { error: message || 'Too many requests, please try again later' },
     standardHeaders: true,
     legacyHeaders: false,
@@ -64,6 +63,35 @@ const adminLoginLimiter = createRateLimiter(
   isDevelopment ? 50 : 10,
   'Too many admin login attempts, please try again later'
 );
+
+// MongoDB injection protection: drop keys starting with "$" or holding a "."
+// (operators, dotted paths) from the query string and the parsed body.
+const isUnsafeKey = (key) => key.startsWith('$') || key.includes('.');
+
+const stripUnsafeKeys = (value) => {
+  if (Array.isArray(value)) {
+    value.forEach(stripUnsafeKeys);
+  } else if (value && typeof value === 'object') {
+    for (const key of Object.keys(value)) {
+      if (isUnsafeKey(key)) delete value[key];
+      else stripUnsafeKeys(value[key]);
+    }
+  }
+  return value;
+};
+
+// Express 5 parses req.query again on every read: store one sanitized copy on
+// the request so later middleware (validatePagination) can also adjust it.
+const mongoSanitize = (req, res, next) => {
+  Object.defineProperty(req, 'query', {
+    value: stripUnsafeKeys(req.query),
+    writable: true,
+    configurable: true,
+    enumerable: true
+  });
+  stripUnsafeKeys(req.body);
+  next();
+};
 
 // Validation middleware
 const validatePagination = (req, res, next) => {
@@ -241,5 +269,5 @@ module.exports = {
   isSafeImageContentType,
   setRelayedImageHeaders,
   errorHandler,
-  mongoSanitize: mongoSanitize()
+  mongoSanitize
 };

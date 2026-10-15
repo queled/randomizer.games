@@ -430,7 +430,7 @@ function _parseTimeToMs(value) {
   return null;
 }
 
-raceSchema.pre('save', function(next) {
+raceSchema.pre('save', function() {
   if (Array.isArray(this.entrants)) {
     for (const ent of this.entrants) {
       if ((ent.finishTime || ent.finishTime === 0) && !ent.finishTimeMs) {
@@ -439,7 +439,6 @@ raceSchema.pre('save', function(next) {
       }
     }
   }
-  next();
 });
 
 const playerSchema = new mongoose.Schema({
@@ -489,7 +488,7 @@ tournamentSchema.post('findOneAndUpdate', async function() {
   }
 });
 
-playerSchema.pre('save', function(next) {
+playerSchema.pre('save', function() {
   if (this.stats) {
     if ((this.stats.bestTime || this.stats.bestTime === 0) && !this.stats.bestTimeMs) {
       const ms = _parseTimeToMs(this.stats.bestTime);
@@ -500,7 +499,6 @@ playerSchema.pre('save', function(next) {
       if (ms != null) this.stats.averageTimeMs = ms;
     }
   }
-  next();
 });
 
 // Challonge bracket links the speedgaming.org discovery rejected (not a randomizer,

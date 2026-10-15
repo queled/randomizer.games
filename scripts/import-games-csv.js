@@ -26,7 +26,7 @@ const mongoose = require('mongoose');
 const { parse } = require('csv-parse/sync');
 
 // Chargement de la configuration
-require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+require('dotenv').config({ path: path.join(__dirname, '..', '.env'), quiet: true });
 
 const connectDB = require('../config/database');
 const { Game } = require('../models');

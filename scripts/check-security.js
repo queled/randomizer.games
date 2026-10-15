@@ -34,7 +34,7 @@ if (!fs.existsSync('.env')) {
   console.log('✅ Fichier .env trouvé');
   
   // Charger .env
-  require('dotenv').config();
+  require('dotenv').config({ quiet: true });
   
   // 2. Vérifier les variables d'environnement requises
   console.log('\n🔑 Vérification des variables d\'environnement...');
@@ -81,7 +81,6 @@ console.log('\n📦 Vérification des dépendances de sécurité...');
 const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 const requiredDeps = [
   'express-rate-limit',
-  'express-mongo-sanitize',
   'validator',
   'helmet'
 ];

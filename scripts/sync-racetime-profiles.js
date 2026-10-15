@@ -22,7 +22,7 @@
 const mongoose = require('mongoose');
 const axios = require('axios');
 const path = require('path');
-require('dotenv').config({ path: path.resolve(process.cwd(), '.env') });
+require('dotenv').config({ path: path.resolve(process.cwd(), '.env'), quiet: true });
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/randomizer';
 const RATE_LIMIT_MS = parseInt(process.env.RACETIME_RATE_LIMIT_MS) || 1000;

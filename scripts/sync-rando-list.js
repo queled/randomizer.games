@@ -24,7 +24,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 const yaml = require('js-yaml');
 const mongoose = require('mongoose');
-require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+require('dotenv').config({ path: path.join(__dirname, '..', '.env'), quiet: true });
 
 const REPO_URL = process.env.RANDO_LIST_REPO || 'https://github.com/video-game-randomizers/rando-list.git';
 const BRANCH = process.env.RANDO_LIST_BRANCH || 'main';

@@ -267,6 +267,8 @@ server {
     server_name randomizer.games www.randomizer.games;
 
     client_max_body_size 2M;
+    # Pas de version de Nginx dans les en-têtes ni les pages d'erreur
+    server_tokens off;
 
     location / {
         proxy_pass http://127.0.0.1:3000;

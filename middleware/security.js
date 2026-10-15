@@ -44,14 +44,14 @@ const mediaLimiter = createRateLimiter(
   (req) => !isMediaRequest(req)
 );
 
-// Strict rate limiter for write operations - More lenient in development (100 req/hour vs 10 in prod)
+// Strict rate limiter for write operations - More lenient in development (100 req/hour vs 20 in prod)
 const strictLimiter = createRateLimiter(
   60 * 60 * 1000,
   isDevelopment ? 100 : 20,
   'Too many requests to this endpoint, please try again later'
 );
 
-// Search rate limiter - More lenient in development (500 req/min vs 30 in prod)
+// Search rate limiter - More lenient in development (500 req/min vs 50 in prod)
 const searchLimiter = createRateLimiter(
   60 * 1000,
   isDevelopment ? 500 : 50,
@@ -97,15 +97,6 @@ const validateObjectId = (paramName) => {
     }
     next();
   };
-};
-
-// Sanitize string inputs (prevent XSS in user-provided strings)
-const sanitizeString = (str, maxLength = 500) => {
-  if (!str) return '';
-  return String(str)
-    .slice(0, maxLength)
-    .replace(/[<>]/g, '') // Remove potential HTML tags
-    .trim();
 };
 
 // Validate URL for proxy (whitelist approach)
@@ -245,7 +236,6 @@ module.exports = {
   adminLoginLimiter,
   validatePagination,
   validateObjectId,
-  sanitizeString,
   validateProxyUrl,
   checkProxyUrl,
   isSafeImageContentType,

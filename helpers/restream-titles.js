@@ -27,7 +27,7 @@ const SERIES_KEYWORDS = {
   scrubs: /scrubs/
 };
 
-// `site`: where the event is scheduled (services/midos-house.js); the series keywords are Mido's House's
+// `site`: where the event is scheduled (services/schedule-sites.js); the series keywords are Mido's House's
 function titleFitsEvent(title, series, event, site = 'midos') {
   const lower = String(title).toLowerCase();
   const named = (site || 'midos') === 'midos' ? Object.keys(SERIES_KEYWORDS).filter(key => SERIES_KEYWORDS[key].test(lower)) : [];

@@ -25,7 +25,7 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env'), quiet: true
 
 const connectDB = require('../config/database');
 const { Game, Tournament, Race, Player } = require('../models');
-const midosHouse = require('../services/midos-house');
+const scheduleSites = require('../services/schedule-sites');
 
 const SERIES = 'league';
 const GAME_ID = 'oot';
@@ -49,7 +49,7 @@ function parseArgs() {
 }
 
 async function getSeasonRaces(season) {
-  const data = await midosHouse.graphql(
+  const data = await scheduleSites.graphql(
     'query($series: String!, $event: String!) { series(name: $series) { event(name: $event) { races { start room round } } } }',
     { series: SERIES, event: season }
   );
@@ -153,7 +153,7 @@ async function syncSeason(season, mhRaces, { game, dryRun }) {
   const over = !upcoming && lastPlayed && Date.now() - lastPlayed > SEASON_OVER_AFTER_MS;
   const divisions = new Set(matches.map(m => m.division));
 
-  const url = `${midosHouse.BASE_URL}/event/${SERIES}/${season}`;
+  const url = `${scheduleSites.SITES.midos.baseUrl}/event/${SERIES}/${season}`;
   const doc = {
     name: `OoTR League Season ${season}`,
     game: game._id,

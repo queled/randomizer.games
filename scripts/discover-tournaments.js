@@ -34,7 +34,7 @@ const findGameForTournament = require('../helpers/findGameForTournament');
 const sanitizeHtml = require('sanitize-html');
 const { saveGroupedChallongeBracket } = require('../services/challonge-bracket-groups');
 const { fillMissingFinalRanks } = require('../helpers/bracket-ranks');
-const scheduleSites = require('../services/midos-house');
+const scheduleSites = require('../services/schedule-sites');
 
 // ─── Configuration ───────────────────────────────────────────────────────────
 
@@ -42,7 +42,7 @@ const RATE_LIMIT_MS = 1500; // ms between API calls
 const DEFAULT_MAX_PAGES = null;
 const STARTGG_RESULTS_PER_PAGE = 50;
 const SPEEDGAMING_EVENTS_URL = 'https://speedgaming.org/events/';
-const MIDOS_BASE_URL = 'https://midos.house';
+const MIDOS_BASE_URL = scheduleSites.SITES.midos.baseUrl;
 const MIDOS_DELAY_MS = 300;
 
 // Keywords that strongly indicate an actual randomizer / multiworld tournament

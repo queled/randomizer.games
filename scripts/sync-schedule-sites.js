@@ -18,12 +18,12 @@
  * Events without start.gg sets (Challonge, league, manual brackets) are skipped.
  *
  * Usage:
- *   node scripts/sync-midos-house.js                    # events on the home page of both sites
- *   node scripts/sync-midos-house.js --site hth         # one site only: midos or hth (repeatable)
- *   node scripts/sync-midos-house.js --archive          # finished events too, highlights of any age (one-off backfill)
- *   node scripts/sync-midos-house.js --event rot/1      # one event (repeatable), of the first --site (default midos), highlights of any age
- *   node scripts/sync-midos-house.js --no-vods          # skip the Twitch VOD lookup
- *   node scripts/sync-midos-house.js --dry-run
+ *   node scripts/sync-schedule-sites.js                    # events on the home page of both sites
+ *   node scripts/sync-schedule-sites.js --site hth         # one site only: midos or hth (repeatable)
+ *   node scripts/sync-schedule-sites.js --archive          # finished events too, highlights of any age (one-off backfill)
+ *   node scripts/sync-schedule-sites.js --event rot/1      # one event (repeatable), of the first --site (default midos), highlights of any age
+ *   node scripts/sync-schedule-sites.js --no-vods          # skip the Twitch VOD lookup
+ *   node scripts/sync-schedule-sites.js --dry-run
  */
 
 const path = require('path');
@@ -32,7 +32,7 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env'), quiet: true
 
 const connectDB = require('../config/database');
 const { Tournament, Race, Match } = require('../models');
-const midosHouse = require('../services/midos-house');
+const scheduleSites = require('../services/schedule-sites');
 const twitchVods = require('../services/twitch-vods');
 const { applyAutoLinkProposals } = require('../services/tournament-autolink');
 const { normalizeName, titleFitsEvent } = require('../helpers/restream-titles');
@@ -57,16 +57,16 @@ function parseArgs() {
       case '--dry-run': opts.dryRun = true; break;
       case '--archive': opts.archive = true; break;
       case '--no-vods': opts.vods = false; break;
-      case '--site': opts.sites.push(midosHouse.siteOf(args[++i]).key); break;
+      case '--site': opts.sites.push(scheduleSites.siteOf(args[++i]).key); break;
       case '--event': eventPaths.push(String(args[++i] || '')); break;
     }
   }
   const eventSite = opts.sites[0] || 'midos';
   for (const eventPath of eventPaths) {
     const [series, event] = eventPath.split('/');
-    if (series && event) opts.events.push({ site: eventSite, series, event, url: midosHouse.eventUrl(eventSite, series, event) });
+    if (series && event) opts.events.push({ site: eventSite, series, event, url: scheduleSites.eventUrl(eventSite, series, event) });
   }
-  if (!opts.sites.length) opts.sites = opts.events.length ? [eventSite] : Object.keys(midosHouse.SITES);
+  if (!opts.sites.length) opts.sites = opts.events.length ? [eventSite] : Object.keys(scheduleSites.SITES);
   return opts;
 }
 
@@ -214,7 +214,7 @@ async function linkRooms(tournamentId, races, { dryRun }, stats) {
 
 async function syncEvent(ev, { dryRun }, stats, syncedIds) {
   const label = `${ev.site}:${ev.series}/${ev.event}`;
-  const { upcoming, past } = await midosHouse.getEventRaces(ev.series, ev.event, ev.site);
+  const { upcoming, past } = await scheduleSites.getEventRaces(ev.series, ev.event, ev.site);
   numberGames(upcoming.concat(past));
 
   // One Mido's House event can map to several start.gg events (e.g. one per bracket)
@@ -519,12 +519,12 @@ async function main() {
   if (!opts.events.length) {
     events = [];
     for (const site of opts.sites) {
-      const name = midosHouse.SITES[site].name;
+      const name = scheduleSites.SITES[site].name;
       try {
-        let siteEvents = await midosHouse.listCurrentEvents(site);
+        let siteEvents = await scheduleSites.listCurrentEvents(site);
         if (opts.archive) {
           const current = new Set(siteEvents.map(ev => `${ev.series}/${ev.event}`));
-          siteEvents = siteEvents.concat((await midosHouse.listArchivedEvents(site)).filter(ev => !current.has(`${ev.series}/${ev.event}`)));
+          siteEvents = siteEvents.concat((await scheduleSites.listArchivedEvents(site)).filter(ev => !current.has(`${ev.series}/${ev.event}`)));
         }
         console.log(`\n🏠 ${siteEvents.length} événement(s) sur ${name}`);
         events = events.concat(siteEvents);
@@ -562,7 +562,7 @@ async function main() {
     }
   }
 
-  console.log(`\n📊 Résumé ${opts.sites.map(site => midosHouse.SITES[site].name).join(' + ')}`);
+  console.log(`\n📊 Résumé ${opts.sites.map(site => scheduleSites.SITES[site].name).join(' + ')}`);
   console.log(`Tournois reliés : ${stats.linked}`);
   console.log(`Races planifiées : ${stats.scheduled}`);
   console.log(`Races passées restreamées : ${stats.pastRestreams}`);

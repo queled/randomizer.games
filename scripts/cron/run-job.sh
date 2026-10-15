@@ -39,7 +39,7 @@ run_tournaments_update() {
 
 run_midos_house() {
   local status=0
-  timeout 8m node scripts/sync-midos-house.js || status=$?
+  timeout 8m node scripts/sync-schedule-sites.js || status=$?
   timeout 5m node scripts/sync-midos-league.js --current || status=$?
   timeout 2m node scripts/sync-speedrace.js || status=$?
   return "$status"

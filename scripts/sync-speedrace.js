@@ -5,7 +5,7 @@
  * Reads the restream planning of the tournaments on
  * https://speedrace.deeplydevs.com and adds the VOD links restreamers entered
  * there to the restreams already found on Mido's House
- * (`midosHouse.pastRestreams`, see sync-midos-house.js), when none was found yet.
+ * (`midosHouse.pastRestreams`, see sync-schedule-sites.js), when none was found yet.
  *
  * A Speedrace restream is the Mido's House race restreamed on the same Twitch
  * channel at the same time, whichever tournament it is stored on: that is how

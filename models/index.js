@@ -277,7 +277,7 @@ const tournamentSchema = new mongoose.Schema({
   // Zelda games), linked to matches by start.gg set.
   // Kept apart from `matches`, which the start.gg sync rebuilds.
   midosHouse: {
-    // 'midos' or 'hth' (services/midos-house.js); missing: Mido's House
+    // 'midos' or 'hth' (services/schedule-sites.js); missing: Mido's House
     site: String,
     series: String,
     event: String,

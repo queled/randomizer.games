@@ -21,8 +21,6 @@ const SITES = {
   hth: { key: 'hth', name: 'Hyrule Town Hall', baseUrl: 'https://hyruletownhall.com' }
 };
 
-const BASE_URL = SITES.midos.baseUrl;
-
 // A race still listed as upcoming this long after its start time counts as played
 const PLAYED_AFTER_MS = 12 * 3600 * 1000;
 
@@ -194,4 +192,4 @@ async function graphql(query, variables = {}, siteKey) {
   return data?.data;
 }
 
-module.exports = { SITES, BASE_URL, siteOf, eventUrl, listCurrentEvents, listArchivedEvents, listGames, getEventRaces, parseRaceRow, graphql };
+module.exports = { SITES, siteOf, eventUrl, listCurrentEvents, listArchivedEvents, listGames, getEventRaces, parseRaceRow, graphql };

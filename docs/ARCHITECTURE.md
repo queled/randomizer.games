@@ -28,6 +28,7 @@ Comment les données arrivent dans le site, où elles sont stockées, et quels s
 | start.gg / Challonge | Tournois, participants, matchs |
 | [Mido's House](https://midos.house) | Horaires et restreams des races des tournois OoTR |
 | [Hyrule Town Hall](https://hyruletownhall.com) | Le même outil pour d'autres jeux Zelda (ALTTPR, TWWR, MMR…) : horaires, restreams et nouveaux tournois |
+| [SpeedGaming](https://speedgaming.org) | Liens des brackets (Challonge, start.gg) des tournois qu'il restreame |
 | [Speedrace](https://speedrace.deeplydevs.com) | VOD saisies par les restreamers de quelques tournois OoTR |
 | speedrun.com | Plateformes, date de sortie, images des jeux |
 | Twitch | Streams en direct, identifiants des jeux, VOD des restreams |
@@ -43,7 +44,7 @@ En production, la base MongoDB tourne sur le même serveur que le site et n'éco
 | `race-vods` | toutes les 30 min | `sync-race-vods.js` : VOD Twitch des joueurs de chaque race, puis `sync-race-restreams.js` : restreams absents de Mido's House, trouvés par le titre Twitch (voir plus bas) |
 | `schedule-sites` | toutes les 15 min | `sync-schedule-sites.js` : horaires et restreams des races des tournois de Mido's House et Hyrule Town Hall, rattachement des courses par leur room, VOD Twitch des restreams, puis `sync-midos-league.js --current` : saison en cours de l'OoTR League, puis `sync-speedrace.js` : VOD saisies sur Speedrace (voir plus bas) |
 | `rando-list` | tous les jours à 6h | met à jour la copie locale de rando-list ; si `check-rando-list-changes.js` signale un nouveau commit, `sync-rando-list.js --detect-new` met à jour le cache et les ressources, puis signale les nouveaux jeux, à créer depuis le panneau admin |
-| `tournaments-discover` | tous les jours à 7h | `discover-tournaments.js --since <il y a 2 jours> --max-pages 3` : nouveaux tournois sur start.gg et Challonge, et ceux liés depuis Mido's House et Hyrule Town Hall |
+| `tournaments-discover` | tous les jours à 7h | `discover-tournaments.js --since <il y a 2 jours> --max-pages 3` : nouveaux tournois sur start.gg et Challonge, et ceux liés depuis Mido's House, Hyrule Town Hall et SpeedGaming |
 | `players` | tous les jours à 7h30 | `sync-players-from-races.js` : un joueur par compte racetime.gg (source de vérité), au nom de sa dernière course ; `sync-racetime-profiles.js --stale-days 7 --limit 1200` relit le profil racetime des joueurs (chacun une fois par semaine) : nom actuel, compte supprimé ; puis `link-participant-accounts.js --all --apply` relie chaque participant de tournoi au compte racetime qui a couru ses matchs (voir plus bas) |
 | `challonge-check` | tous les jours à 7h45 | `check-challonge-quota.js` : une seule requête Challonge, en erreur sur la page de santé tant que le quota (500 requêtes sur 30 jours glissants) est épuisé ; à son retour, les imports Challonge en attente se lancent à la main |
 | `backup` | tous les jours à 3h30 | `backup-db.js` : archive `mongodump` de la base, 7 gardées |
@@ -65,6 +66,8 @@ Les workflows de `.github/workflows/` faisaient le même travail depuis les serv
 1. des mots-clés génériques : `randomizer`, `randomiser`, `rando`, `multiworld`, `archipelago`…
 2. les noms des jeux présents en base (nom, acronymes) ;
 3. le jeu déclaré sur start.gg ou Challonge.
+
+`discover-tournaments.js --source speedgaming` lit la page [speedgaming.org/events](https://speedgaming.org/events/), qui n'a pas d'API, et y prend les liens « Bracket/standings » de chaque événement. Un bracket start.gg passe par l'import start.gg ; un bracket Challonge coûte une requête, aussi n'est-il lu que si le titre de l'événement évoque un randomizer. Un lien écarté (pas un randomizer suivi, bracket privé ou supprimé) est noté dans `discoveryskips`. La source fait partie de la découverte quotidienne.
 
 `helpers/findGameForTournament.js` associe ensuite le tournoi à un jeu du site. Les tournois déjà présents en base ne sont pas réimportés.
 

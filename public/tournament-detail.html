@@ -120,6 +120,9 @@
                 <button id="tab-qualifications" class="tab-btn" data-tab="qualifications" data-i18n="tournamentDetail.tabQualifications">
                     🎯 Qualifications
                 </button>
+                <button id="tab-calendar" class="tab-btn" data-tab="calendar" data-i18n="tournamentDetail.tabCalendar" style="display: none;">
+                    📅 Calendar
+                </button>
                 <button id="tab-participants" class="tab-btn" data-tab="participants" data-i18n="tournamentDetail.tabParticipants">
                     👥 Participants
                 </button>
@@ -156,6 +159,11 @@
             <div id="qualifications-list">
                 <p class="text-muted" data-i18n="common.loading">Loading...</p>
             </div>
+        </div>
+
+        <div id="tab-content-calendar" class="tab-content" style="display: none;">
+            <h2 class="tab-content-title" data-i18n="tournamentDetail.calendar">Calendar</h2>
+            <div id="calendar-content"></div>
         </div>
 
         <div id="tab-content-participants" class="tab-content" style="display: none;">

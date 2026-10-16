@@ -383,6 +383,297 @@ function displayRestreams(tournament) {
   });
 }
 
+// Calendar tab: the races of the tournament by day, played (racetime.gg) and scheduled (Mido's House),
+// each one leading to its match. Shown month by month, in the visitor's time zone.
+let calendarMonth = null;
+
+function calendarLocale() {
+  return (typeof i18n !== 'undefined' && typeof i18n.getLanguage === 'function' && i18n.getLanguage()) || 'en';
+}
+
+function calendarDayKey(date) {
+  const d = new Date(date);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+// The race times of the tournament, one entry per race
+function buildCalendarEvents(tournament) {
+  const t = (key, fallback, params = {}) => i18n.t(`tournamentDetail.${key}`, params, fallback);
+  const roomPath = url => String(url || '').replace(/^https?:\/\/(?:www\.)?racetime\.gg/i, '').replace(/^\/+|\/+$/g, '').toLowerCase();
+  const matchKey = m => String(m.challongeId || m.id || m._id || m.matchId || '');
+  const events = [];
+  const usedRaces = new Set();
+
+  // Round names as the matches tab gives them, phase by phase
+  const byPhase = new Map();
+  (currentMatches || []).forEach(m => {
+    const phase = m.phase || '';
+    if (!byPhase.has(phase)) byPhase.set(phase, []);
+    byPhase.get(phase).push(m);
+  });
+  const roundLabel = new Map();
+  byPhase.forEach((list, phase) => {
+    const standings = isStandingsPhase(tournament, phase) || list.some(m => m.groupId !== null && m.groupId !== undefined);
+    const labels = standings ? null : getBracketRoundLabels(list.filter(m => m.groupId === null || m.groupId === undefined));
+    list.forEach(m => {
+      const group = m.phaseGroup && (standings || byPhase.size > 1)
+        ? `${t('group', 'Group')} ${m.phaseGroup}` : null;
+      roundLabel.set(m, [phase ? translatePhaseName(phase) : null, group, labels ? labels.label(m.round) : null].filter(Boolean).join(' • '));
+    });
+  });
+
+  const matchBySet = new Map();
+  (currentMatches || []).forEach(m => {
+    if (m.startggSetId) matchBySet.set(String(m.startggSetId), m);
+    const races = findRacesForMatch(m, currentRaces).filter(r => r && r.startedAt);
+    const players = [m.player1Name || (m.player1 && m.player1.name), m.player2Name || (m.player2 && m.player2.name)];
+    races.forEach((race, idx) => {
+      usedRaces.add(race);
+      events.push({
+        at: race.startedAt,
+        players,
+        round: roundLabel.get(m),
+        kind: 'match',
+        game: races.length > 1 ? idx + 1 : null,
+        live: ['open', 'invitational', 'in_progress'].includes(race.status),
+        target: matchKey(m),
+        raceId: race._id,
+        roomUrl: race.url,
+        restreams: mergeRestreams(m.completedAt ? m.restreams : [], [race])
+      });
+    });
+  });
+
+  // Without a start.gg set, the match still to play between the same two players
+  const pairKey = names => (names || []).map(n => normalizeName(n)).filter(Boolean).sort().join('|');
+  const openByPair = new Map();
+  (currentMatches || []).forEach(m => {
+    const key = pairKey([m.player1Name, m.player2Name]);
+    if (key.includes('|') && !m.completedAt && !openByPair.has(key)) openByPair.set(key, m);
+  });
+  const matchOfPlayers = names => (names && names.length === 2 && openByPair.get(pairKey(names))) || null;
+
+  // Scheduled races: a played one is already there from its racetime.gg room
+  const playedRooms = new Set(events.map(e => roomPath(e.roomUrl)).filter(Boolean));
+  const now = Date.now();
+  ((tournament.midosHouse && tournament.midosHouse.schedule) || []).forEach(r => {
+    if (!r.startAt || (r.roomUrl && playedRooms.has(roomPath(r.roomUrl)))) return;
+    const m = r.startggSetId ? matchBySet.get(String(r.startggSetId)) : matchOfPlayers(r.entrants);
+    // Gone from the schedule at the next sync once played
+    if (m && m.completedAt && new Date(r.startAt).getTime() < now) return;
+    const sameRace = m && events.some(e => e.target === matchKey(m) && Math.abs(new Date(e.at) - new Date(r.startAt)) < 3 * 3600 * 1000);
+    if (sameRace) return;
+    events.push({
+      at: r.startAt,
+      players: m ? [m.player1Name, m.player2Name] : (r.entrants || []),
+      round: r.round || (m && roundLabel.get(m)) || null,
+      game: r.game || null,
+      kind: 'match',
+      scheduled: true,
+      target: m ? matchKey(m) : null,
+      url: m ? null : sanitizeExternalUrl(r.roomUrl),
+      roomUrl: r.roomUrl,
+      restreams: r.restreams || []
+    });
+  });
+
+  // Tie-breaks, qualifiers and races with no match
+  (currentRaces || []).forEach(race => {
+    if (!race || !race.startedAt || usedRaces.has(race)) return;
+    const qualifier = (!race.matchId && !race.tournamentPhase) || race.tournamentPhase === 'Qualifications';
+    const entrants = (race.entrants || []).map(e => e.userName).filter(Boolean);
+    events.push({
+      at: race.startedAt,
+      players: entrants.length <= 4 ? entrants : [],
+      count: entrants.length > 4 ? entrants.length : 0,
+      round: race.tiebreak
+        ? [t('tiebreak', 'Tie-break'), race.tournamentPool ? `${t('group', 'Group')} ${race.tournamentPool}` : ''].filter(Boolean).join(' • ')
+        : (qualifier ? t('qualifications', 'Qualifications') : (race.tournamentPhase ? translatePhaseName(race.tournamentPhase) : null)),
+      live: ['open', 'invitational', 'in_progress'].includes(race.status),
+      kind: race.tiebreak ? 'tiebreak' : (qualifier ? 'qualifier' : null),
+      target: race.tiebreak ? 'tiebreak-' + race._id : null,
+      raceId: race._id,
+      roomUrl: race.url,
+      restreams: mergeRestreams([], [race])
+    });
+  });
+
+  // Async qualifier seeds (alttprasyncs.com) whose live race is not among the races: on the day they open
+  const raceRooms = new Set(events.map(e => roomPath(e.roomUrl)).filter(Boolean));
+  (tournament.alttprAsyncs || []).filter(s => s.qualifier).forEach(series => {
+    (series.seeds || []).forEach(seed => {
+      if (!seed.createdAt || (seed.roomUrl && raceRooms.has(roomPath(seed.roomUrl)))) return;
+      events.push({
+        at: seed.createdAt,
+        players: [],
+        count: seed.participants || 0,
+        round: [t('calendarAsyncQualifier', 'Async qualifier'), seed.description || seed.mode].filter(Boolean).join(' • '),
+        kind: 'qualifier',
+        url: sanitizeExternalUrl(series.url),
+        restreams: []
+      });
+    });
+  });
+
+  return events
+    .filter(e => !isNaN(new Date(e.at).getTime()))
+    .sort((a, b) => new Date(a.at) - new Date(b.at));
+}
+
+function displayCalendar(tournament) {
+  const tabBtn = document.getElementById('tab-calendar');
+  const container = document.getElementById('calendar-content');
+  if (!tabBtn || !container || !tournament) return;
+
+  const events = buildCalendarEvents(tournament);
+  if (!events.length) {
+    tabBtn.style.display = 'none';
+    return;
+  }
+  tabBtn.style.display = '';
+
+  const locale = calendarLocale();
+  const t = (key, fallback, params = {}) => i18n.t(`tournamentDetail.${key}`, params, fallback);
+  const byDay = new Map();
+  events.forEach(e => {
+    const key = calendarDayKey(e.at);
+    if (!byDay.has(key)) byDay.set(key, []);
+    byDay.get(key).push(e);
+  });
+  const months = [...new Set([...byDay.keys()].map(k => k.slice(0, 7)))].sort();
+  const todayKey = calendarDayKey(new Date());
+  const thisMonth = todayKey.slice(0, 7);
+  // By default the month of the next race, else the current one, else the last one played
+  if (!calendarMonth || !months.includes(calendarMonth)) {
+    const next = events.find(e => calendarDayKey(e.at) >= todayKey);
+    calendarMonth = next ? calendarDayKey(next.at).slice(0, 7) : (months.includes(thisMonth) ? thisMonth : months[months.length - 1]);
+  }
+  const monthIdx = months.indexOf(calendarMonth);
+  const [year, month] = calendarMonth.split('-').map(Number);
+  const first = new Date(year, month - 1, 1);
+  const daysInMonth = new Date(year, month, 0).getDate();
+  const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
+  const monthTitle = capitalize(first.toLocaleDateString(locale, { month: 'long', year: 'numeric' }));
+  const monthCount = [...byDay.entries()].filter(([k]) => k.startsWith(calendarMonth)).reduce((n, [, list]) => n + list.length, 0);
+  const tbd = t('tbd', 'TBD');
+  const time = at => new Date(at).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
+
+  // A restream in a day cell: the Twitch logo and the language, to its VOD or its channel
+  const restreamChip = stream => {
+    const vod = sanitizeExternalUrl(stream.vodUrl);
+    const href = vod || sanitizeExternalUrl(stream.url);
+    if (!href) return '';
+    const code = (RESTREAM_LANGUAGE_CODES[stream.language] || String(stream.language || '').slice(0, 2)).toUpperCase();
+    const title = [restreamLanguageLabel(stream.language), restreamChannelName(stream.url || href), vod ? (i18n.t('tournamentDetail.watchVod') || 'VOD') : ''].filter(Boolean).join(' · ');
+    return `<a href="${escHtml(href)}" target="_blank" rel="noopener noreferrer" class="calendar-stream${vod ? ' calendar-stream-vod' : ''}" title="${escHtml(title)}"><img src="assets/twitch.svg" alt="">${code ? `<span>${escHtml(code)}</span>` : ''}</a>`;
+  };
+
+  const eventHtml = e => {
+    const names = e.players.length ? e.players.map(n => sanitizeDisplayName(n || '') || tbd) : [];
+    const who = names.length
+      ? names.map(n => `<span class="calendar-event-name">${escHtml(n)}</span>`).join('<span class="calendar-vs">vs</span>')
+      : `<span class="calendar-event-name">${escHtml(e.kind === 'qualifier' ? `🎯 ${t('calendarQualifier', 'Qualifier')}` : (e.round || ''))}</span>`;
+    const meta = [
+      names.length || e.kind !== 'qualifier' ? null : e.round,
+      e.count ? i18n.plural('tournamentDetail.calendarEntrants', e.count) : null,
+      names.length && e.round ? e.round : null,
+      e.game ? t('calendarRaceN', `Race ${e.game}`, { n: e.game }) : null
+    ].filter(Boolean).filter(x => x !== t('qualifications', 'Qualifications')).join(' • ');
+    const upcoming = !e.live && new Date(e.at).getTime() > Date.now();
+    const classes = ['calendar-event', `calendar-event-${e.kind || 'match'}`];
+    if (upcoming) classes.push('calendar-event-upcoming');
+    if (e.live) classes.push('calendar-event-live');
+    const attrs = e.target ? ` data-calendar-match="${escHtml(e.target)}"`
+      : e.raceId ? ` data-calendar-race="${escHtml(String(e.raceId))}"`
+      : e.url ? ` data-calendar-url="${escHtml(e.url)}"` : '';
+    if (attrs) classes.push('calendar-event-link');
+    const streams = (e.restreams || []).map(restreamChip).join('');
+    return `<div class="${classes.join(' ')}"${attrs ? ` role="link" tabindex="0"${attrs}` : ''}>
+      <div class="calendar-event-head">
+        <span class="calendar-event-time">${escHtml(time(e.at))}</span>
+        ${e.live ? `<span class="calendar-badge calendar-badge-live">${escHtml(t('calendarLive', 'Live'))}</span>` : ''}
+        ${streams ? `<span class="calendar-event-streams">${streams}</span>` : ''}
+      </div>
+      <div class="calendar-event-players">${who}</div>
+      ${meta ? `<div class="calendar-event-meta">${escHtml(meta)}</div>` : ''}
+    </div>`;
+  };
+
+  // Month grid, weeks starting on Monday; on a phone only the days with races, one under the other
+  const weekdays = Array.from({ length: 7 }, (_, i) => new Date(2024, 0, 1 + i).toLocaleDateString(locale, { weekday: 'long' }));
+  const lead = (first.getDay() + 6) % 7;
+  const trail = (7 - (lead + daysInMonth) % 7) % 7;
+  let cells = '';
+  for (let i = 0; i < lead; i++) cells += '<div class="calendar-cell calendar-cell-outside"></div>';
+  for (let day = 1; day <= daysInMonth; day++) {
+    const key = `${calendarMonth}-${String(day).padStart(2, '0')}`;
+    const dayEvents = byDay.get(key) || [];
+    const date = new Date(year, month - 1, day);
+    const classes = ['calendar-cell'];
+    if (dayEvents.length) classes.push('calendar-cell-active');
+    else classes.push('calendar-cell-empty');
+    if (key < todayKey) classes.push('calendar-cell-past');
+    if (key === todayKey) classes.push('calendar-cell-today');
+    cells += `<div class="${classes.join(' ')}">
+      <div class="calendar-cell-header">
+        <span class="calendar-cell-day">${day}</span>
+        <span class="calendar-cell-date">${escHtml(capitalize(date.toLocaleDateString(locale, { weekday: 'long', day: 'numeric', month: 'long' })))}</span>
+        ${key === todayKey ? `<span class="calendar-badge calendar-badge-today">${escHtml(t('calendarToday', 'Today'))}</span>` : ''}
+      </div>
+      ${dayEvents.map(eventHtml).join('')}
+    </div>`;
+  }
+  for (let i = 0; i < trail; i++) cells += '<div class="calendar-cell calendar-cell-outside"></div>';
+
+  const navBtn = (dir, label, disabled) => `<button type="button" class="calendar-nav-btn" data-calendar-nav="${dir}" aria-label="${escHtml(label)}" title="${escHtml(label)}"${disabled ? ' disabled' : ''}>${dir < 0 ? '‹' : '›'}</button>`;
+  // Jump to any month with races
+  const monthOptions = months.map(m => {
+    const [y, mo] = m.split('-').map(Number);
+    return `<option value="${m}"${m === calendarMonth ? ' selected' : ''}>${escHtml(capitalize(new Date(y, mo - 1, 1).toLocaleDateString(locale, { month: 'long', year: 'numeric' })))}</option>`;
+  }).join('');
+
+  let timeZone = '';
+  try { timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) { /* ignore */ }
+
+  container.innerHTML = `
+    <div class="calendar-toolbar">
+      ${navBtn(-1, t('calendarPrevMonth', 'Previous month'), monthIdx <= 0)}
+      <div class="calendar-month-title">
+        ${months.length > 1 ? `<select class="calendar-month-select" aria-label="${escHtml(monthTitle)}">${monthOptions}</select>` : `<span>${escHtml(monthTitle)}</span>`}
+        <span class="calendar-month-count">${escHtml(i18n.plural('tournamentDetail.calendarRaceCount', monthCount))}</span>
+      </div>
+      ${navBtn(1, t('calendarNextMonth', 'Next month'), monthIdx >= months.length - 1)}
+    </div>
+    <div class="calendar-grid">
+      ${weekdays.map(w => `<div class="calendar-weekday">${escHtml(capitalize(w))}</div>`).join('')}
+      ${cells}
+    </div>
+    ${timeZone ? `<p class="calendar-timezone">${escHtml(t('calendarTimeZone', `Times in your time zone: ${timeZone}`, { tz: timeZone }))}</p>` : ''}`;
+
+  const goTo = m => {
+    if (!m || !months.includes(m)) return;
+    calendarMonth = m;
+    displayCalendar(tournament);
+  };
+  container.querySelectorAll('[data-calendar-nav]').forEach(btn => {
+    btn.addEventListener('click', () => goTo(months[monthIdx + Number(btn.getAttribute('data-calendar-nav'))]));
+  });
+  container.querySelector('.calendar-month-select')?.addEventListener('change', e => goTo(e.target.value));
+  // A race leads to its match in the matches tab, else to its page, its restream links aside
+  container.querySelectorAll('.calendar-event-link').forEach(card => {
+    const open = () => {
+      const match = card.getAttribute('data-calendar-match');
+      const race = card.getAttribute('data-calendar-race');
+      const url = card.getAttribute('data-calendar-url');
+      if (match) goToMatchById(match);
+      else if (race) window.location.href = '/race-detail.html?id=' + encodeURIComponent(race);
+      else if (url) window.open(url, '_blank', 'noopener');
+    };
+    card.addEventListener('click', e => { if (!e.target.closest('a')) open(); });
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target === card) open(); });
+  });
+}
+
 function updateEndDateFromMatches(matches, races = []) {
   if (!matches || matches.length === 0) return;
 
@@ -1130,6 +1421,7 @@ async function loadMatches(tournamentId) {
       displayGroupStages(groupStageMatches, currentTournament.participants || [], races);
     }
     displayQualifications(races);
+    displayCalendar(currentTournament);
     currentOptions = { rankOnly: isGroupsThenFinalSE };
     displayParticipants(currentTournament.participants || [], allMatches, currentOptions);
   } catch (error) {

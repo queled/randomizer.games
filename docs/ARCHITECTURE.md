@@ -100,7 +100,7 @@ Le script cherche ensuite la VOD de chaque restream joué, de trois façons :
 
 Twitch efface les rediffusions au bout de 7 à 60 jours selon la chaîne (ou plus tôt, si le streamer les supprime). À chaque exécution, le script vérifie que les VOD Twitch trouvées sont encore en ligne : une VOD disparue perd son lien (`vodUrl`) et reçoit `vodGoneAt`, mais le restream garde sa chaîne et sa langue, et la page renvoie alors vers la chaîne.
 
-`GET /api/tournaments/:id/matches` ajoute `scheduledAt` et `restreams` (avec `vodUrl`) à chaque match. L'onglet Restream de la page d'un tournoi liste les races à venir et jouées qui ont un restream, filtrables par langue.
+`GET /api/tournaments/:id/matches` ajoute `scheduledAt` et `restreams` (avec `vodUrl`) à chaque match. L'onglet Restream de la page d'un tournoi liste les races à venir et jouées qui ont un restream, filtrables par langue. L'onglet Calendrier place mois par mois, à l'heure du visiteur, toutes les races du tournoi : jouées (départ de la room racetime.gg) et planifiées (`midosHouse.schedule`), chacune menant à son match.
 
 Pour reprendre les événements terminés (une seule fois) : `node scripts/sync-schedule-sites.js --archive` (les deux sites, ou `--site hth --archive`).
 

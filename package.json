@@ -27,6 +27,8 @@
     "sync:speedrace:dry": "node scripts/sync-speedrace.js --dry-run",
     "sync:localhorst": "node scripts/sync-localhorst.js",
     "sync:localhorst:dry": "node scripts/sync-localhorst.js --dry-run",
+    "sync:ical-restreams": "node scripts/sync-ical-restreams.js",
+    "sync:ical-restreams:dry": "node scripts/sync-ical-restreams.js --dry-run",
     "sync:alttpr-asyncs": "node scripts/sync-alttpr-asyncs.js",
     "sync:alttpr-asyncs:dry": "node scripts/sync-alttpr-asyncs.js --dry-run",
     "sync:race-vods": "node scripts/sync-race-vods.js",

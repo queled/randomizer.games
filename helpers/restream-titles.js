@@ -62,7 +62,35 @@ function titleNamesRace(title, players) {
   return players.length >= 2 && countNamedPlayers(title, players) >= needed;
 }
 
+/**
+ * "Event: Round 2 - A vs. B (G2)" → { event: "Event: Round 2", sides: ["A", "B"] }:
+ * the two sides of a match title, without the round before them nor the game
+ * number or mode after. null without a "vs".
+ */
+function parseMatchup(title) {
+  const text = String(title || '');
+  const vs = text.match(/\s+vs\.?\s+/i);
+  if (!vs) return null;
+  const before = text.slice(0, vs.index);
+  const cut = Math.max(before.lastIndexOf(' - '), before.lastIndexOf(': '));
+  const left = (cut >= 0 ? before.slice(cut + 2) : before).trim();
+  const right = text.slice(vs.index + vs[0].length).split(/\s+[-|(]|,/)[0].trim();
+  if (!left || !right) return null;
+  return { event: (cut >= 0 ? before.slice(0, cut) : '').trim(), sides: [left, right] };
+}
+
+/**
+ * A side of a match title stands for a player when one name contains the other:
+ * "Tyrant" for "Tyrant242", "Mr. Navigator" for "mr__navigator". The shorter
+ * name needs 4 characters, as "Jem" would be found in any other name.
+ */
+function sideNamesPlayer(side, names) {
+  const s = normalizeName(side);
+  return names.map(normalizeName).some(n => n === s
+    || (Math.min(n.length, s.length) >= 4 && (n.includes(s) || s.includes(n))));
+}
+
 // Twitch broadcaster language → the English name Mido's House uses
 const LANGUAGE_NAMES = { en: 'English', fr: 'French', de: 'German', es: 'Spanish', it: 'Italian', pt: 'Portuguese', ja: 'Japanese' };
 
-module.exports = { normalizeName, titleFitsEvent, titleNamesRace, countNamedPlayers, LANGUAGE_NAMES };
+module.exports = { normalizeName, titleFitsEvent, titleNamesRace, countNamedPlayers, parseMatchup, sideNamesPlayer, LANGUAGE_NAMES };

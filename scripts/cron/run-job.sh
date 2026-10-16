@@ -6,7 +6,7 @@
 # Usage : scripts/cron/run-job.sh <tâche>
 #   racetime              nouvelles courses racetime.gg            (toutes les 5 min)
 #   tournaments-update    tournois actifs + rattachement des courses (toutes les 15 min)
-#   schedule-sites        horaires, restreams et VOD des races (Mido's House, Hyrule Town Hall), saison de League, VOD Speedrace (toutes les 15 min)
+#   schedule-sites        horaires, restreams et VOD des races (Mido's House, Hyrule Town Hall), saison de League, VOD Speedrace, plannings localhorst et iCal (toutes les 15 min)
 #   race-vods             VOD Twitch des joueurs, restreams trouvés sur Twitch (toutes les 30 min)
 #   tournaments-discover  nouveaux tournois des 2 derniers jours    (tous les jours)
 #   rando-list            cache rando-list, si le dépôt a changé    (tous les jours)
@@ -43,6 +43,7 @@ run_schedule_sites() {
   timeout 5m node scripts/sync-midos-league.js --current || status=$?
   timeout 2m node scripts/sync-speedrace.js || status=$?
   timeout 3m node scripts/sync-localhorst.js || status=$?
+  timeout 3m node scripts/sync-ical-restreams.js || status=$?
   return "$status"
 }
 

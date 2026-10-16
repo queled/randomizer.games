@@ -31,6 +31,7 @@ Comment les données arrivent dans le site, où elles sont stockées, et quels s
 | [SpeedGaming](https://speedgaming.org) | Liens des brackets (Challonge, start.gg) des tournois qu'il restreame |
 | [Speedrace](https://speedrace.deeplydevs.com) | VOD saisies par les restreamers de quelques tournois OoTR |
 | [alttp.localhorst.tv](https://alttp.localhorst.tv) | Planning communautaire ALTTPR, Super Metroid Rando et SMZ3 (surtout allemand) : chaînes de restream de chaque room racetime.gg |
+| Calendriers iCal | Plannings publics des chaînes de restream (ZeldaSpeedRuns FR et DE) : restreams des matchs, retrouvés sur racetime.gg |
 | [ALttPR Asyncs](https://alttprasyncs.com) | Séries de seeds async ALTTPR : entraînements des tournois, qualifs live et leurs résultats async |
 | speedrun.com | Plateformes, date de sortie, images des jeux |
 | Twitch | Streams en direct, identifiants des jeux, VOD des restreams |
@@ -44,7 +45,7 @@ En production, la base MongoDB tourne sur le même serveur que le site et n'éco
 | `racetime` | toutes les 5 min | `sync-racetime-global.js` : nouvelles courses, finalisation des courses bloquées « en cours » depuis plus de 24 h, rattrapage des courses terminées entre deux exécutions |
 | `tournaments-update` | toutes les 15 min | `sync-tournaments.js --update-only` met à jour les tournois actifs, puis `auto-link-tournaments.js` rattache les courses aux matchs, et les tie-breaks de poule (room « tie-break » entre joueurs d'une même poule) à leur poule |
 | `race-vods` | toutes les 30 min | `sync-race-vods.js` : VOD Twitch des joueurs de chaque race, puis `sync-race-restreams.js` : restreams absents de Mido's House, trouvés par le titre Twitch (voir plus bas) |
-| `schedule-sites` | toutes les 15 min | `sync-schedule-sites.js` : horaires et restreams des races des tournois de Mido's House et Hyrule Town Hall, rattachement des courses par leur room, VOD Twitch des restreams, puis `sync-midos-league.js --current` : saison en cours de l'OoTR League, puis `sync-speedrace.js` : VOD saisies sur Speedrace, puis `sync-localhorst.js` : restreams planifiés sur localhorst (voir plus bas) |
+| `schedule-sites` | toutes les 15 min | `sync-schedule-sites.js` : horaires et restreams des races des tournois de Mido's House et Hyrule Town Hall, rattachement des courses par leur room, VOD Twitch des restreams, puis `sync-midos-league.js --current` : saison en cours de l'OoTR League, puis `sync-speedrace.js` : VOD saisies sur Speedrace, puis `sync-localhorst.js` : restreams planifiés sur localhorst, puis `sync-ical-restreams.js` : restreams des calendriers iCal (voir plus bas) |
 | `rando-list` | tous les jours à 6h | met à jour la copie locale de rando-list ; si `check-rando-list-changes.js` signale un nouveau commit, `sync-rando-list.js --detect-new` met à jour le cache et les ressources, puis signale les nouveaux jeux, à créer depuis le panneau admin |
 | `tournaments-discover` | tous les jours à 7h | `discover-tournaments.js --since <il y a 2 jours> --max-pages 3` : nouveaux tournois sur start.gg et Challonge, et ceux liés depuis Mido's House, Hyrule Town Hall et SpeedGaming, puis `sync-alttpr-asyncs.js` : séries async ALTTPR (voir plus bas) |
 | `players` | tous les jours à 7h30 | `sync-players-from-races.js` : un joueur par compte racetime.gg (source de vérité), au nom de sa dernière course ; `sync-racetime-profiles.js --stale-days 7 --limit 1200` relit le profil racetime des joueurs (chacun une fois par semaine) : nom actuel, compte supprimé ; puis `link-participant-accounts.js --all --apply` relie chaque participant de tournoi au compte racetime qui a couru ses matchs (voir plus bas) |
@@ -132,6 +133,20 @@ En routine, `--current` reprend la dernière saison en base et la suivante, dès
 Beaucoup de ses événements recopient un autre planning : SpeedGaming (`external_schedule` « sg:… »), que le site ne lit pas par ailleurs, ou Hyrule Town Hall (« hth:… », races dont l'`ext_id` commence par « hth: »). Ces derniers sont ignorés : `sync-schedule-sites.js` les lit à la source. Pour les autres, `sync-localhorst.js` range les chaînes de chaque race dans `race.restreams` de la course de sa room racetime.gg (langue de la chaîne), avec la rediffusion Twitch qui couvre le départ tant que Twitch la garde. Rien ne dépend de start.gg : la race n'a pas besoin d'être rattachée à un tournoi. Aucune donnée de joueur ni d'équipe n'est gardée.
 
 Par défaut : événements en cours, races des 3 derniers jours (`--days N` pour remonter) ; `--archive` reprend tout une fois.
+
+### Restreams des calendriers iCal
+
+Certaines équipes de restream publient leur planning en calendrier public, un événement par match : « ALttPR Tournoi francophone 9e Édition: Ronde 2 - A vs B », la chaîne dans la description. C'est le cas des chaînes française et allemande de ZeldaSpeedRuns ([zsr.gg/schedule](https://zsr.gg/schedule), Google Calendar), qui restreament des tournois absents de Mido's House et de start.gg (Tournoi francophone et Micro-Tournoi ALTTPR, Deutsches Turnier, Rival Cup, Crosskeys…). `sync-ical-restreams.js` lit les flux de sa liste `FEEDS` (adresse `.ics`, chaîne et langue par défaut) avec `services/ical.js`, qui vaut pour tout calendrier iCal (Google Calendar, Horaro…). Le calendrier n'est pas toujours complet : les rediffusions Twitch de la chaîne du flux, dont les titres suivent le même format, sont lues de la même façon.
+
+Aucun des deux ne donne la room racetime.gg. Un match est rattaché aux races :
+
+- du jeu que nomme le titre avant les joueurs (`helpers/find-game-for-tournament.js`, puis les catégories racetime.gg du jeu) : un tournoi speedrun (BotW…) n'a pas de race rando et ne trouve rien ;
+- parties entre 30 min avant et 3 h après l'heure prévue (pendant la rediffusion, pour une rediffusion Twitch) : toutes sont prises, un stream pouvant enchaîner plusieurs manches ;
+- dont deux participants différents correspondent aux deux côtés de « A vs B » (`parseMatchup`, `sideNamesPlayer` de `helpers/restream-titles.js`) : un nom contient l'autre, sur au moins 4 caractères (« Tyrant » pour « Tyrant242 », « Mr. Navigator » pour « mr__navigator »).
+
+Les matchs d'équipes (noms d'équipe), les courses hebdomadaires (sans « vs ») et les titres sans nom d'événement sont laissés de côté. La chaîne va dans `race.restreams`, avec la langue du flux et la rediffusion Twitch qui couvre le départ tant que Twitch la garde (ZeldaSpeedRuns met surtout ses VOD sur YouTube, que le site ne lit pas). Comme pour localhorst, la race n'a pas besoin d'être rattachée à un tournoi.
+
+Par défaut : matchs des 3 derniers jours (`--days N` pour remonter) ; `--archive` reprend tous les événements des calendriers une fois ; `--feed <nom>` limite à un flux. Pour ajouter un calendrier, ajouter son adresse `.ics` à `FEEDS` et vérifier les rattachements avec `--dry-run --archive`, qui affiche chaque titre et la race trouvée.
 
 ### Asyncs ALTTPR
 
@@ -231,6 +246,7 @@ Les scripts qui écrivent en base proposent un mode `--dry-run` (ou n'écrivent 
 | `sync-midos-league.js` | `sync:midos-league` (+ `:dry`) | Saisons de l'OoTR League en tournois (tâche `schedule-sites`, avec `--current`) |
 | `sync-speedrace.js` | `sync:speedrace` (+ `:dry`) | VOD Speedrace des restreams Mido's House (tâche `schedule-sites`) |
 | `sync-localhorst.js` | `sync:localhorst` (+ `:dry`) | Restreams planifiés sur alttp.localhorst.tv (tâche `schedule-sites`) |
+| `sync-ical-restreams.js` | `sync:ical-restreams` (+ `:dry`) | Restreams des calendriers iCal des chaînes de restream (tâche `schedule-sites`) |
 | `sync-alttpr-asyncs.js` | `sync:alttpr-asyncs` (+ `:dry`) | Séries async ALTTPR et résultats des qualifs (tâche `tournaments-discover`) |
 
 `npm run sync` enchaîne racetime, joueurs et rando-list.

@@ -192,4 +192,14 @@ async function buildPlayerTournaments({ Tournament, Match, userId, names }) {
   }).sort((a, b) => new Date(b.startDate || 0) - new Date(a.startDate || 0));
 }
 
-module.exports = { buildPlayerTournaments, computeRankFromMatches };
+// Number of tournaments buildPlayerTournaments lists, without loading brackets
+async function countPlayerTournaments({ Tournament, userId, names }) {
+  const cleanNames = [...new Set(names.filter(Boolean))];
+  const owner = { userId, normalizedNames: new Set(cleanNames.map(normalizeName)) };
+  const tournaments = await Tournament.find(participantQuery({ userId, names: cleanNames }))
+    .select('participants.racetimeUserId participants.racetimeName participants.name participants.displayName')
+    .lean();
+  return tournaments.filter(t => (t.participants || []).some(p => isPlayerParticipant(p, owner))).length;
+}
+
+module.exports = { buildPlayerTournaments, countPlayerTournaments, computeRankFromMatches };

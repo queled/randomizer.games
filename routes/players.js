@@ -4,6 +4,7 @@ const { Player, Tournament, Race, Game, Match } = require('../models');
 const { buildCommonTournaments, racetimeRoomPath } = require('../helpers/compare-tournaments');
 const { buildPlayerTournaments } = require('../helpers/player-tournaments');
 const { buildAliasIndex, loadAliasIndex, getCanonicalName, getAliases } = require('../helpers/player-aliases');
+const { exactNameRegex, buildPlayerRacesFilter } = require('../helpers/player-races-filter');
 
 const PLAYERS_CACHE_TTL = 5 * 60 * 1000;
 const playersCache = {
@@ -608,32 +609,6 @@ const COMPACT_RACE_FIELDS = 'name category goal info status startedAt endedAt cr
 
 function isCompactRequest(req) {
   return req.query.compact === '1' || req.query.compact === 'true';
-}
-
-const escapeRegex = s => String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-const exactNameRegex = name => new RegExp('^' + escapeRegex(name) + '$', 'i');
-
-/**
- * Race filter for a player: their racetime userId (stable across renames), their
- * current name, and their aliases. Aliases only match entrants without a userId
- * (SpeedRunsLive history, manual imports), so they never capture someone else's
- * racetime account.
- */
-function buildPlayerRacesFilter({ userId, names = [], aliases = [] }) {
-  const or = [];
-  const nameRegexes = names.filter(Boolean).map(exactNameRegex);
-  const aliasRegexes = aliases.filter(Boolean).map(exactNameRegex);
-  if (userId) or.push({ 'entrants.userId': userId });
-  if (nameRegexes.length) or.push({ 'entrants.userName': { $in: nameRegexes } });
-  if (aliasRegexes.length) {
-    or.push({ entrants: { $elemMatch: { userName: { $in: aliasRegexes }, userId: { $in: [null, ''] } } } });
-  }
-
-  const isPlayerEntrant = e => (userId && e.userId === userId)
-    || nameRegexes.some(re => re.test(e.userName || ''))
-    || (!e.userId && aliasRegexes.some(re => re.test(e.userName || '')));
-
-  return { filter: or.length ? { $or: or } : { _id: null }, isPlayerEntrant };
 }
 
 /**

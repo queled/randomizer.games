@@ -12,6 +12,8 @@ const path = require('path');
 const mongoose = require('mongoose');
 const { Game, Tournament, Player, Race } = require('../models');
 const { calculateTournamentStatus } = require('../helpers/tournament-status');
+const { buildPlayerRacesFilter } = require('../helpers/player-races-filter');
+const { countPlayerTournaments } = require('../helpers/player-tournaments');
 
 const PUBLIC_DIR = path.join(__dirname, '..', 'public');
 // Square logo for social previews and the Organization logo
@@ -247,6 +249,33 @@ async function tournamentMeta(query, siteUrl) {
   };
 }
 
+// Race count and most played games of a player, for a preview worth clicking.
+async function playerRaceSummary(player) {
+  const { filter } = player.userId
+    ? buildPlayerRacesFilter({ userId: player.userId, aliases: player.aliases })
+    : buildPlayerRacesFilter({ names: [player.name], aliases: player.aliases });
+  const byCategory = await Race.aggregate([
+    { $match: filter },
+    { $group: { _id: '$category', count: { $sum: 1 } } }
+  ]).option({ maxTimeMS: 3000 });
+
+  // Several racetime categories can belong to one game (alttpr and alttpr-ladder)
+  const byGame = new Map();
+  await Promise.all(byCategory.map(async ({ _id: category, count }) => {
+    const game = await findGameForRaceCategory(category);
+    const key = game?.id || category;
+    const entry = byGame.get(key) || { name: gameDisplayName(game) || category, count: 0 };
+    entry.count += count;
+    byGame.set(key, entry);
+  }));
+
+  const games = [...byGame.values()].sort((a, b) => b.count - a.count);
+  return {
+    total: games.reduce((sum, g) => sum + g.count, 0),
+    games: games.slice(0, 2).map((g) => g.name).filter(Boolean)
+  };
+}
+
 async function playerMeta(query, siteUrl) {
   const id = String(query.id || '').trim();
   const name = String(query.name || '').trim();
@@ -259,9 +288,21 @@ async function playerMeta(query, siteUrl) {
   if (!player) return null;
 
   const playerName = player.name || player.userId;
-  const tournamentsCount = Array.isArray(player.tournaments) ? player.tournaments.length : 0;
-  const description = tournamentsCount
-    ? `${playerName} on Randomizer: randomizer race results, ${tournamentsCount} tournament${tournamentsCount > 1 ? 's' : ''} and game activity.`
+  // Counted as the page counts them (/api/players/:id/races and /tournaments).
+  // A slow count must not cost the whole preview: fall back to the generic text.
+  const [{ total: racesCount, games }, tournamentsCount] = await Promise.all([
+    playerRaceSummary(player),
+    countPlayerTournaments({ Tournament, userId: player.userId || null, names: [player.name, ...(player.aliases || [])] })
+  ]).catch((error) => {
+    console.error('SEO counts failed for player:', error.message);
+    return [{ total: 0, games: [] }, 0];
+  });
+  const facts = [
+    racesCount && `${racesCount} race${racesCount > 1 ? 's' : ''}${games.length ? ` (${games.join(', ')})` : ''}`,
+    tournamentsCount && `${tournamentsCount} tournament${tournamentsCount > 1 ? 's' : ''}`
+  ].filter(Boolean);
+  const description = facts.length
+    ? `${playerName} on Randomizer: ${facts.join(', ')}. Race results, tournament history and head-to-heads.`
     : `${playerName} on Randomizer: randomizer race results, tournaments and game activity.`;
   const canonicalPath = player.userId
     ? `/player-detail.html?id=${encodeURIComponent(player.userId)}`

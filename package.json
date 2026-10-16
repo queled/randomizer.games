@@ -31,6 +31,8 @@
     "sync:ical-restreams:dry": "node scripts/sync-ical-restreams.js --dry-run",
     "sync:alttpr-asyncs": "node scripts/sync-alttpr-asyncs.js",
     "sync:alttpr-asyncs:dry": "node scripts/sync-alttpr-asyncs.js --dry-run",
+    "sync:alttpr-league": "node scripts/sync-alttpr-league.js",
+    "sync:alttpr-league:dry": "node scripts/sync-alttpr-league.js --dry-run",
     "sync:race-vods": "node scripts/sync-race-vods.js",
     "sync:race-vods:dry": "node scripts/sync-race-vods.js --dry-run",
     "sync:race-restreams": "node scripts/sync-race-restreams.js",

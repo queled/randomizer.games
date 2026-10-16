@@ -29,6 +29,7 @@ Comment les données arrivent dans le site, où elles sont stockées, et quels s
 | [Mido's House](https://midos.house) | Horaires et restreams des races des tournois OoTR |
 | [Hyrule Town Hall](https://hyruletownhall.com) | Le même outil pour d'autres jeux Zelda (ALTTPR, TWWR, MMR…) : horaires, restreams et nouveaux tournois |
 | [SpeedGaming](https://speedgaming.org) | Liens des brackets (Challonge, start.gg) des tournois qu'il restreame |
+| [ALTTPR League](https://alttprleague.com) | Saisons de la ligue par équipes ALTTPR (Invitational, et Open sur open.alttprleague.com) : équipes, divisions, matchs et temps |
 | [Speedrace](https://speedrace.deeplydevs.com) | VOD saisies par les restreamers de quelques tournois OoTR |
 | [alttp.localhorst.tv](https://alttp.localhorst.tv) | Planning communautaire ALTTPR, Super Metroid Rando et SMZ3 (surtout allemand) : chaînes de restream de chaque room racetime.gg |
 | Calendriers iCal | Plannings publics des chaînes de restream (ZeldaSpeedRuns FR et DE) : restreams des matchs, retrouvés sur racetime.gg |
@@ -47,7 +48,7 @@ En production, la base MongoDB tourne sur le même serveur que le site et n'éco
 | `race-vods` | toutes les 30 min | `sync-race-vods.js` : VOD Twitch des joueurs de chaque race, puis `sync-race-restreams.js` : restreams absents de Mido's House, trouvés par le titre Twitch (voir plus bas) |
 | `schedule-sites` | toutes les 15 min | `sync-schedule-sites.js` : horaires et restreams des races des tournois de Mido's House et Hyrule Town Hall, rattachement des courses par leur room, VOD Twitch des restreams, puis `sync-midos-league.js --current` : saison en cours de l'OoTR League, puis `sync-speedrace.js` : VOD saisies sur Speedrace, puis `sync-localhorst.js` : restreams planifiés sur localhorst, puis `sync-ical-restreams.js` : restreams des calendriers iCal (voir plus bas) |
 | `rando-list` | tous les jours à 6h | met à jour la copie locale de rando-list ; si `check-rando-list-changes.js` signale un nouveau commit, `sync-rando-list.js --detect-new` met à jour le cache et les ressources, puis signale les nouveaux jeux, à créer depuis le panneau admin |
-| `tournaments-discover` | tous les jours à 7h | `discover-tournaments.js --since <il y a 2 jours> --max-pages 3` : nouveaux tournois sur start.gg et Challonge, et ceux liés depuis Mido's House, Hyrule Town Hall et SpeedGaming, puis `sync-alttpr-asyncs.js` : séries async ALTTPR (voir plus bas) |
+| `tournaments-discover` | tous les jours à 7h | `discover-tournaments.js --since <il y a 2 jours> --max-pages 3` : nouveaux tournois sur start.gg et Challonge, et ceux liés depuis Mido's House, Hyrule Town Hall et SpeedGaming, puis `sync-alttpr-asyncs.js` : séries async ALTTPR, puis `sync-alttpr-league.js --current` : saison en cours de l'ALTTPR League (voir plus bas) |
 | `players` | tous les jours à 7h30 | `sync-players-from-races.js` : un joueur par compte racetime.gg (source de vérité), au nom de sa dernière course ; `sync-racetime-profiles.js --stale-days 7 --limit 1200` relit le profil racetime des joueurs (chacun une fois par semaine) : nom actuel, compte supprimé ; puis `link-participant-accounts.js --all --apply` relie chaque participant de tournoi au compte racetime qui a couru ses matchs (voir plus bas) |
 | `challonge-check` | tous les jours à 7h45 | `check-challonge-quota.js` : une seule requête Challonge, en erreur sur la page de santé tant que le quota (500 requêtes sur 30 jours glissants) est épuisé ; à son retour, les imports Challonge en attente se lancent à la main |
 | `backup` | tous les jours à 3h30 | `backup-db.js` : archive `mongodump` de la base, 7 gardées |
@@ -156,6 +157,19 @@ Par défaut : matchs des 3 derniers jours (`--days N` pour remonter) ; `--archiv
 - série d'entraînement : titre, lien et nombre de seeds, en bouton sur la page du tournoi ;
 - série de qualifs (titre contenant « qualif ») : chaque seed avec sa room et ses résultats (arrivées live et asyncs ensemble, abandons, VOD), relus pendant 30 jours, affichés dans l'onglet Qualifications (masqués en mode anti-spoiler).
 
+### ALTTPR League
+
+L'[ALTTPR League](https://alttprleague.com) oppose des équipes de trois joueurs, une fois par semaine dans leur division, puis en playoffs ; chaque match d'équipes compte deux races (1 contre 1, co-op, ou « pilot » : un joueur de chaque équipe joue, l'autre guide). La ligue Open a son propre site, [open.alttprleague.com](https://open.alttprleague.com), avec le même logiciel. Pas d'API : `services/alttpr-league.js` lit la page de chaque équipe d'une saison (`/season_<n>/teams/<équipe>/`), qui contient un onglet par saison de l'équipe : ligue, division, effectif, puis chaque match (semaine ou tour de playoffs, adversaire, joueurs et temps de fin de chaque race).
+
+`sync-alttpr-league.js` crée un tournoi par saison et par ligue (`source.type: 'alttpr-league'`, `source.externalId: '<invitational|open>/<saison>'`) : une phase « Saison régulière » (un groupe par division, le tour est la semaine) et une phase « Playoffs », un match par match d'équipes, au score des races gagnées, avec les joueurs de chaque équipe qui l'ont couru. Le site ne donne pas les rooms racetime.gg ; chaque race est retrouvée :
+
+1. **par ses temps de fin**, que la League donne à la seconde, parmi les rooms ALTTPR de 2 à 4 participants dont l'objectif ou l'info parle d'une ligue : deux temps suffisent, un seul s'il s'accompagne des noms des joueurs. Certaines races n'ont que `finishTime` (« P0DT01H38M52S ») sans `finishTimeMs` : les deux sont lus ;
+2. **par les noms des joueurs**, dans la semaine de la race (datée par les races trouvées par leurs temps ; une semaine sans aucune est placée entre ses voisines) : une room dont l'info nomme la League (« ALTTPR League S8 Invitational - A vs. B », abandons compris), ou toute room ALTTPR de la période dont les temps sont à moins d'une minute de ceux de la League (en 2020, les rooms SRL n'ont que le mode en objectif, et leurs temps diffèrent de quelques secondes des temps officiels).
+
+Un nom de joueur correspond à un participant quand l'un contient l'autre (`sideNamesPlayer`) ; une room « pilot » n'a qu'un participant par équipe. Les races déjà rattachées à un autre tournoi y restent. Les participants du tournoi reçoivent le compte racetime.gg qui a couru leurs races. Environ 90 % des races sont retrouvées ; la saison 2 (2020, sur SRL) l'est aux deux tiers.
+
+`--current` ne reprend que la dernière saison de chaque ligue ; `--site <invitational|open>` et `--season <n>` en choisissent une ; `--dry-run` affiche les races non retrouvées.
+
 ### VOD des joueurs
 
 Les joueurs streament leurs races. `sync-race-vods.js` prend les races racetime.gg terminées, lit sur racetime.gg la chaîne Twitch de chaque joueur (`/data` de la race) et cherche la rediffusion en cours au départ de la race, avec un lien sur ce moment de la vidéo. Le résultat est rangé dans `race.vods` (`userId`, `userName`, `twitchName`, `vodUrl`), à part de `entrants`, que la synchronisation racetime.gg réécrit. Une race est cherchée jusqu'à 12 h après sa fin (`vodSearchedAt`), puis laissée de côté. Il faut un appel racetime.gg par race et un appel Twitch par joueur (les rediffusions d'une chaîne servent pour toutes ses races de l'exécution) ; en cas de limite de débit Twitch, le script attend puis réessaie.
@@ -248,6 +262,7 @@ Les scripts qui écrivent en base proposent un mode `--dry-run` (ou n'écrivent 
 | `sync-localhorst.js` | `sync:localhorst` (+ `:dry`) | Restreams planifiés sur alttp.localhorst.tv (tâche `schedule-sites`) |
 | `sync-ical-restreams.js` | `sync:ical-restreams` (+ `:dry`) | Restreams des calendriers iCal des chaînes de restream (tâche `schedule-sites`) |
 | `sync-alttpr-asyncs.js` | `sync:alttpr-asyncs` (+ `:dry`) | Séries async ALTTPR et résultats des qualifs (tâche `tournaments-discover`) |
+| `sync-alttpr-league.js` | `sync:alttpr-league` (+ `:dry`) | Saisons de l'ALTTPR League (Invitational et Open) en tournois (tâche `tournaments-discover`, avec `--current`) |
 
 `npm run sync` enchaîne racetime, joueurs et rando-list.
 

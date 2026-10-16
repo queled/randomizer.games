@@ -4,8 +4,10 @@
  *
  * Mido's House lists the restreams it schedules; races set up by hand
  * (tie-breaks...) have none there. This looks for them on Twitch, on the
- * channels that restream the tournament (according to Mido's House) and the
- * channel of whoever opened the racetime.gg room, players' own channels aside:
+ * channels that restream the tournament (according to Mido's House), the
+ * community channels restreaming events Mido's House does not list them for
+ * and the channel of whoever opened the racetime.gg room, players' own
+ * channels aside:
  * a broadcast whose title names the race's players (racetime.gg name or Twitch
  * channel, both of a 1v1, half of a bigger room) and no other event.
  *   - running race: that channel live now;
@@ -19,6 +21,7 @@
  * Usage:
  *   node scripts/sync-race-restreams.js                 # running races, finished in the last 2 days
  *   node scripts/sync-race-restreams.js --days 60       # backfill, as far as Twitch keeps past broadcasts
+ *   node scripts/sync-race-restreams.js --days 60 --recheck   # again for races already searched (a channel added)
  *   node scripts/sync-race-restreams.js --days 3650 --highlights   # older races: highlights
  *   node scripts/sync-race-restreams.js --dry-run
  */
@@ -39,6 +42,9 @@ const LIVE_STATUSES = ['open', 'invitational', 'in_progress'];
 // A highlight is cut from the broadcast within days of the race
 const HIGHLIGHT_MAX_DELAY_MS = 14 * 24 * 3600 * 1000;
 const SAME_RACE_MS = 3600 * 1000;
+// Community channels restreaming in their language, looked up for every
+// tournament; the language comes from the broadcast
+const COMMUNITY_RESTREAMERS = ['randomizerbrasil'];
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -46,11 +52,12 @@ function sleep(ms) {
 
 function parseArgs() {
   const args = process.argv.slice(2);
-  const opts = { dryRun: false, days: 2, highlights: false };
+  const opts = { dryRun: false, days: 2, highlights: false, recheck: false };
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
       case '--dry-run': opts.dryRun = true; break;
       case '--highlights': opts.highlights = true; break;
+      case '--recheck': opts.recheck = true; break;
       case '--days': opts.days = Math.max(1, parseInt(args[++i], 10) || 2); break;
     }
   }
@@ -124,7 +131,7 @@ function setRestream(race, login, fields) {
 }
 
 // Running races, and finished ones still within reach of their past broadcast
-async function findRestreams({ dryRun, days }, stats) {
+async function findRestreams({ dryRun, days, recheck }, stats) {
   const now = Date.now();
   const races = (await Race.find({
     tournamentId: { $ne: null },
@@ -135,7 +142,7 @@ async function findRestreams({ dryRun, days }, stats) {
       { status: 'finished', startedAt: { $gte: new Date(now - Math.min(days, 60) * 24 * 3600 * 1000) } }
     ]
   }).select('_id url status startedAt endedAt startggSetId tournamentId restreams restreamSearchedAt').lean())
-    .filter(r => LIVE_STATUSES.includes(r.status)
+    .filter(r => LIVE_STATUSES.includes(r.status) || recheck
       || !r.restreamSearchedAt || new Date(r.restreamSearchedAt).getTime() < new Date(r.endedAt || r.startedAt).getTime() + RETRY_AFTER_END_MS);
   if (!races.length) return;
   console.log(`\n🏁 ${races.length} race(s) de tournoi à chercher`);
@@ -155,7 +162,7 @@ async function findRestreams({ dryRun, days }, stats) {
       const own = new Set(players.map(p => p.twitchName).filter(Boolean));
       const known = context.knownFor(race);
       const done = new Set((race.restreams || []).filter(s => s.vodUrl).map(s => twitchVods.twitchLogin(s.url)));
-      const channels = [...new Set([...context.languageByLogin.keys(), opener].filter(Boolean))]
+      const channels = [...new Set([...context.languageByLogin.keys(), ...COMMUNITY_RESTREAMERS, opener].filter(Boolean))]
         .filter(login => !own.has(login) && !known.has(login) && !done.has(login));
       pending.push({ race, context, players, channels });
     } catch (error) {
@@ -215,7 +222,7 @@ async function findRestreams({ dryRun, days }, stats) {
   }
 }
 
-// Highlights and uploads of the tournaments' restreamers for older races without a restream VOD
+// Highlights and uploads of the tournaments' restreamers (and community channels) for older races without a restream VOD
 async function findHighlights({ dryRun, days }, stats) {
   const since = new Date(Date.now() - days * 24 * 3600 * 1000);
   const races = await Race.find({
@@ -224,12 +231,12 @@ async function findHighlights({ dryRun, days }, stats) {
     url: /^\/[^/]+\/[^/]+$/,
     startedAt: { $gte: since }
   }).select('_id url startedAt startggSetId tournamentId restreams entrants.userName').lean();
-  const tournaments = await Tournament.find({ _id: { $in: [...new Set(races.map(r => String(r.tournamentId)))] }, 'midosHouse.pastRestreams.0': { $exists: true } })
+  const tournaments = await Tournament.find({ _id: { $in: [...new Set(races.map(r => String(r.tournamentId)))] } })
     .select('_id name midosHouse.site midosHouse.series midosHouse.event midosHouse.pastRestreams midosHouse.schedule').lean();
   if (!tournaments.length) return;
 
   const contexts = tournaments.map(t => ({ tournament: t, ...midosHouseRestreams(t) }));
-  const logins = [...new Set(contexts.flatMap(c => [...c.languageByLogin.keys()]))];
+  const logins = [...new Set([...contexts.flatMap(c => [...c.languageByLogin.keys()]), ...COMMUNITY_RESTREAMERS])];
   const userIds = await twitchVods.getUserIds(logins);
   const videosByLogin = new Map();
   for (const login of logins) {
@@ -243,7 +250,7 @@ async function findHighlights({ dryRun, days }, stats) {
     // racetime.gg names only: the Twitch channels would take one call per race
     const playersOf = race => (race.entrants || []).map(e => [e.userName].filter(Boolean));
     const touched = new Set();
-    for (const [login, language] of context.languageByLogin) {
+    for (const login of new Set([...context.languageByLogin.keys(), ...COMMUNITY_RESTREAMERS])) {
       for (const video of videosByLogin.get(login) || []) {
         if (used.has(video.id) || !fitsTournament(video.title, context.tournament)) continue;
         const created = new Date(video.created_at).getTime();
@@ -259,6 +266,7 @@ async function findHighlights({ dryRun, days }, stats) {
         if (own.has(login) || context.knownFor(race).has(login)) continue;
         if ((race.restreams || []).some(s => s.vodUrl && twitchVods.twitchLogin(s.url) === login)) continue;
         used.add(video.id);
+        const language = context.languageByLogin.get(login) || LANGUAGE_NAMES[video.language] || undefined;
         setRestream(race, login, { language, title: video.title, vodUrl: video.url });
         touched.add(race);
         stats.highlights++;

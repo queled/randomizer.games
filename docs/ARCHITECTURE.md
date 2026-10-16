@@ -131,9 +131,9 @@ Les joueurs streament leurs races. `sync-race-vods.js` prend les races racetime.
 
 ### Restreams trouvés sur Twitch
 
-Mido's House ne connaît que les restreams qu'il planifie : une race montée à la main (tie-break…) n'y figure pas. `sync-race-restreams.js` les cherche sur Twitch pour les races rattachées à un tournoi, sur les chaînes qui restreament ce tournoi d'après Mido's House et sur celle de la personne qui a ouvert la room racetime.gg (les chaînes des joueurs exceptées). Un stream compte quand son titre nomme les joueurs (nom racetime.gg ou chaîne Twitch : les deux d'un 1v1, la moitié d'une room plus grande), ne parle pas d'entraînement et ne désigne pas un autre événement (mêmes mots-clés de série que pour les temps forts Mido's House) :
+Mido's House ne connaît que les restreams qu'il planifie : une race montée à la main (tie-break…) n'y figure pas. `sync-race-restreams.js` les cherche sur Twitch pour les races rattachées à un tournoi, sur les chaînes qui restreament ce tournoi d'après Mido's House, sur les chaînes communautaires de `COMMUNITY_RESTREAMERS` (Randomizer Brasil, qui restreame en portugais des tournois où Mido's House ne la liste pas ; langue lue sur Twitch) et sur celle de la personne qui a ouvert la room racetime.gg (les chaînes des joueurs exceptées). Un stream compte quand son titre nomme les joueurs (nom racetime.gg ou chaîne Twitch : les deux d'un 1v1, la moitié d'une room plus grande), ne parle pas d'entraînement et ne désigne pas un autre événement (mêmes mots-clés de série que pour les temps forts Mido's House) :
 - race en cours : la chaîne en live, sur la page de la race ;
-- race terminée : la rediffusion qui couvre le départ, liée à ce moment, cherchée jusqu'à 12 h après la fin (`restreamSearchedAt`) ;
+- race terminée : la rediffusion qui couvre le départ, liée à ce moment, cherchée jusqu'à 12 h après la fin (`restreamSearchedAt`) ; `--recheck` repasse les races déjà cherchées, après l'ajout d'une chaîne ;
 - `--highlights` (rattrapage) : les temps forts et uploads, quand le titre ne correspond qu'à une seule race du tournoi dans les 14 jours précédents.
 
 Le résultat va dans `race.restreams` (`language`, `url` de la chaîne, `vodUrl`, `title`), fusionné à l'affichage avec les restreams de Mido's House (un par chaîne). Les VOD supprimées par Twitch perdent leur lien, comme pour les joueurs.

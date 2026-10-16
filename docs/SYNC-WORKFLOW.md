@@ -36,7 +36,7 @@ Chaque étape a besoin de ce que les précédentes ont écrit en base :
 | 5 | Mido's House et Hyrule Town Hall | `node scripts/sync-schedule-sites.js` | les tournois start.gg (3) et les courses liées (4), pour l'heure de départ réelle et les événements sans sets start.gg |
 | 5b | VOD Speedrace | `node scripts/sync-speedrace.js` | les restreams Mido's House (5) |
 | 6 | VOD des joueurs | `node scripts/sync-race-vods.js` | les courses terminées (1) |
-| 7 | Restreams Twitch | `node scripts/sync-race-restreams.js` | les courses rattachées à un tournoi (4) et les chaînes de restream connues de Mido's House (5) |
+| 7 | Restreams Twitch | `node scripts/sync-race-restreams.js` | les courses rattachées à un tournoi (4) et les chaînes de restream connues de Mido's House (5), plus les chaînes communautaires |
 
 Les étapes 1 et 2 sont indépendantes l'une de l'autre, et l'étape 6 ne dépend que de la 1. Lancer quand même le tout dans l'ordre du tableau : c'est le plus simple et rien n'est fait deux fois.
 

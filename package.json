@@ -33,6 +33,8 @@
     "sync:alttpr-asyncs:dry": "node scripts/sync-alttpr-asyncs.js --dry-run",
     "sync:alttpr-league": "node scripts/sync-alttpr-league.js",
     "sync:alttpr-league:dry": "node scripts/sync-alttpr-league.js --dry-run",
+    "sync:gdq-runs": "node scripts/sync-gdq-runs.js",
+    "sync:gdq-runs:dry": "node scripts/sync-gdq-runs.js --dry-run",
     "sync:race-vods": "node scripts/sync-race-vods.js",
     "sync:race-vods:dry": "node scripts/sync-race-vods.js --dry-run",
     "sync:race-restreams": "node scripts/sync-race-restreams.js",

@@ -560,6 +560,27 @@ raceSchema.index({ startedAt: -1 });
 playerSchema.index({ name: 1 });
 playerSchema.index({ aliases: 1 });
 
+// Randomizer runs of speedrun marathons (scripts/sync-gdq-runs.js), shown on the game page
+const marathonRunSchema = new mongoose.Schema({
+  // 'gdq'
+  source: { type: String, required: true },
+  // The run's id at the source
+  externalId: { type: String, required: true },
+  event: { short: String, name: String },
+  game: { type: mongoose.Schema.Types.ObjectId, ref: 'Game' },
+  gameSlug: String,
+  // Game and category as the marathon names them
+  name: String,
+  category: String,
+  runners: [String],
+  startedAt: Date,
+  // Seconds
+  runTime: Number,
+  videos: [{ _id: false, type: { type: String }, url: String }]
+}, { timestamps: true });
+marathonRunSchema.index({ source: 1, externalId: 1 }, { unique: true });
+marathonRunSchema.index({ gameSlug: 1, startedAt: -1 });
+
 // Admin sessions, kept in the database so a restart does not log the admin out.
 // Only a hash of the session token is stored; MongoDB drops expired sessions.
 const adminSessionSchema = new mongoose.Schema({
@@ -576,5 +597,6 @@ module.exports = {
   Race: mongoose.model('Race', raceSchema),
   Player: mongoose.model('Player', playerSchema),
   DiscoverySkip: mongoose.model('DiscoverySkip', discoverySkipSchema),
+  MarathonRun: mongoose.model('MarathonRun', marathonRunSchema),
   AdminSession: mongoose.model('AdminSession', adminSessionSchema)
 };

@@ -978,6 +978,7 @@
   async function loadStreams() {
     if (streamsLoaded) return;
     streamsLoaded = true;
+    loadMarathonRuns();
 
     streamsListEl.innerHTML = `<p style="color:#9ca3af;">${typeof i18n !== 'undefined' ? i18n.t('streams.loadingStreams') : 'Chargement des streams...'}</p>`;
 
@@ -1003,6 +1004,55 @@
       console.error('Error loading streams:', e);
       const errText = typeof i18n !== 'undefined' ? i18n.t('streams.loadError') : 'Impossible de charger les streams.';
       streamsListEl.innerHTML = `<div class="no-streams"><p style="font-size:1.5rem;margin-bottom:0.5rem;">⚠️</p><p style="color:#9ca3af;">${errText}</p></div>`;
+    }
+  }
+
+  // ==================== MARATHON RUNS (GDQ) ====================
+  let marathonRuns = null;
+
+  function renderMarathonRuns() {
+    const section = document.getElementById('marathon-runs');
+    const list = document.getElementById('marathon-runs-list');
+    if (!section || !list || !marathonRuns || !marathonRuns.length) return;
+    const locale = overviewLocale();
+    const rows = marathonRuns.map(run => {
+      const date = run.startedAt ? new Date(run.startedAt).toLocaleDateString(locale, { year: 'numeric', month: 'short' }) : '';
+      const video = (run.videos || []).find(v => sanitizeExternalUrl(v.url));
+      const vod = video
+        ? `<a ${buildExternalLinkAttrs(video.url)}>▶ ${escapeHtml(t('gameDetail.marathonWatchVod', 'Watch the VOD'))}</a>`
+        : `<span class="text-muted">${escapeHtml(t('gameDetail.marathonNoVod', 'No VOD'))}</span>`;
+      return `<tr>
+        <td>${escapeHtml(run.event?.name || run.event?.short || '')}<div class="text-muted">${escapeHtml(date)}</div></td>
+        <td>${escapeHtml(run.category || '')}</td>
+        <td class="col-optional">${escapeHtml((run.runners || []).join(', '))}</td>
+        <td>${vod}</td>
+      </tr>`;
+    }).join('');
+    list.innerHTML = `
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead><tr>
+            <th>${escapeHtml(t('gameDetail.marathonEvent', 'Marathon'))}</th>
+            <th>${escapeHtml(t('gameDetail.marathonCategory', 'Category'))}</th>
+            <th class="col-optional">${escapeHtml(t('gameDetail.marathonRunners', 'Runners'))}</th>
+            <th>${escapeHtml(t('gameDetail.marathonVod', 'VOD'))}</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    `;
+    section.style.display = 'block';
+  }
+
+  // Runs of the game at speedrun marathons, below the live streams; the section stays hidden without any
+  async function loadMarathonRuns() {
+    try {
+      const data = await fetchJson(`/api/games/${encodeURIComponent(id)}/marathon-runs`);
+      marathonRuns = data.runs || [];
+      renderMarathonRuns();
+      window.addEventListener('languageChanged', renderMarathonRuns);
+    } catch (e) {
+      console.error('Error loading marathon runs:', e);
     }
   }
 

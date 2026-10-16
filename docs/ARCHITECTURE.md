@@ -30,6 +30,7 @@ Comment les données arrivent dans le site, où elles sont stockées, et quels s
 | [Hyrule Town Hall](https://hyruletownhall.com) | Le même outil pour d'autres jeux Zelda (ALTTPR, TWWR, MMR…) : horaires, restreams et nouveaux tournois |
 | [SpeedGaming](https://speedgaming.org) | Liens des brackets (Challonge, start.gg) des tournois qu'il restreame |
 | [ALTTPR League](https://alttprleague.com) | Saisons de la ligue par équipes ALTTPR (Invitational, et Open sur open.alttprleague.com) : équipes, divisions, matchs et temps |
+| [GDQ](https://tracker.gamesdonequick.com) | Runs randomizer des marathons Games Done Quick et leur VOD YouTube |
 | [Speedrace](https://speedrace.deeplydevs.com) | VOD saisies par les restreamers de quelques tournois OoTR |
 | [alttp.localhorst.tv](https://alttp.localhorst.tv) | Planning communautaire ALTTPR, Super Metroid Rando et SMZ3 (surtout allemand) : chaînes de restream de chaque room racetime.gg |
 | Calendriers iCal | Plannings publics des chaînes de restream (ZeldaSpeedRuns FR et DE) : restreams des matchs, retrouvés sur racetime.gg |
@@ -48,7 +49,7 @@ En production, la base MongoDB tourne sur le même serveur que le site et n'éco
 | `race-vods` | toutes les 30 min | `sync-race-vods.js` : VOD Twitch des joueurs de chaque race, puis `sync-race-restreams.js` : restreams absents de Mido's House, trouvés par le titre Twitch (voir plus bas) |
 | `schedule-sites` | toutes les 15 min | `sync-schedule-sites.js` : horaires et restreams des races des tournois de Mido's House et Hyrule Town Hall, rattachement des courses par leur room, VOD Twitch des restreams, puis `sync-midos-league.js --current` : saison en cours de l'OoTR League, puis `sync-speedrace.js` : VOD saisies sur Speedrace, puis `sync-localhorst.js` : restreams planifiés sur localhorst, puis `sync-ical-restreams.js` : restreams des calendriers iCal (voir plus bas) |
 | `rando-list` | tous les jours à 6h | met à jour la copie locale de rando-list ; si `check-rando-list-changes.js` signale un nouveau commit, `sync-rando-list.js --detect-new` met à jour le cache et les ressources, puis signale les nouveaux jeux, à créer depuis le panneau admin |
-| `tournaments-discover` | tous les jours à 7h | `discover-tournaments.js --since <il y a 2 jours> --max-pages 3` : nouveaux tournois sur start.gg et Challonge, et ceux liés depuis Mido's House, Hyrule Town Hall et SpeedGaming, puis `sync-alttpr-asyncs.js` : séries async ALTTPR, puis `sync-alttpr-league.js --current` : saison en cours de l'ALTTPR League (voir plus bas) |
+| `tournaments-discover` | tous les jours à 7h | `discover-tournaments.js --since <il y a 2 jours> --max-pages 3` : nouveaux tournois sur start.gg et Challonge, et ceux liés depuis Mido's House, Hyrule Town Hall et SpeedGaming, puis `sync-alttpr-asyncs.js` : séries async ALTTPR, puis `sync-alttpr-league.js --current` : saison en cours de l'ALTTPR League, puis `sync-gdq-runs.js` : runs randomizer des marathons GDQ (voir plus bas) |
 | `players` | tous les jours à 7h30 | `sync-players-from-races.js` : un joueur par compte racetime.gg (source de vérité), au nom de sa dernière course ; `sync-racetime-profiles.js --stale-days 7 --limit 1200` relit le profil racetime des joueurs (chacun une fois par semaine) : nom actuel, compte supprimé ; puis `link-participant-accounts.js --all --apply` relie chaque participant de tournoi au compte racetime qui a couru ses matchs (voir plus bas) |
 | `challonge-check` | tous les jours à 7h45 | `check-challonge-quota.js` : une seule requête Challonge, en erreur sur la page de santé tant que le quota (500 requêtes sur 30 jours glissants) est épuisé ; à son retour, les imports Challonge en attente se lancent à la main |
 | `backup` | tous les jours à 3h30 | `backup-db.js` : archive `mongodump` de la base, 7 gardées |
@@ -170,6 +171,16 @@ Un nom de joueur correspond à un participant quand l'un contient l'autre (`side
 
 `--current` ne reprend que la dernière saison de chaque ligue ; `--site <invitational|open>` et `--season <n>` en choisissent une ; `--dry-run` affiche les races non retrouvées.
 
+### Runs des marathons GDQ
+
+Les marathons Games Done Quick (AGDQ, SGDQ, Frost et Flame Fatales…) accueillent régulièrement des runs et des races randomizer. L'API publique du tracker GDQ (`services/gdq.js`) donne chaque marathon, ses runs, leurs joueurs et leurs vidéos (VOD YouTube, ajoutées quelques semaines après le marathon). `sync-gdq-runs.js` garde les runs dont la catégorie ou le nom parle de randomizer (« Random Seed » des roguelikes ne compte pas) et les range dans `marathonruns`, rattachés au jeu du site :
+
+- par la catégorie Twitch du run, quand elle est donnée, parmi celles des jeux (si plusieurs jeux la partagent : celui que le nom du run désigne, sinon celui dont le nom officiel est la catégorie, alttp plutôt que ses hacks) ;
+- sinon par le nom du run, sans « Randomizer » ni « BONUS GAME n - » ;
+- `GAME_HINTS` pour les noms qu'aucun des deux ne trouve (randomizer combo SMZ3).
+
+Un run d'un jeu absent du site est signalé et laissé de côté. En routine, les marathons des 400 derniers jours sont relus (pour les VOD ajoutées après coup) ; `--all` les reprend tous. `GET /api/games/:id/marathon-runs` donne les runs d'un jeu ; l'onglet Streams de la page du jeu les liste sous les streams en direct (marathon, catégorie, joueurs, VOD), et la section reste masquée pour un jeu qui n'en a pas.
+
 ### VOD des joueurs
 
 Les joueurs streament leurs races. `sync-race-vods.js` prend les races racetime.gg terminées, lit sur racetime.gg la chaîne Twitch de chaque joueur (`/data` de la race) et cherche la rediffusion en cours au départ de la race, avec un lien sur ce moment de la vidéo. Le résultat est rangé dans `race.vods` (`userId`, `userName`, `twitchName`, `vodUrl`), à part de `entrants`, que la synchronisation racetime.gg réécrit. Une race est cherchée jusqu'à 12 h après sa fin (`vodSearchedAt`), puis laissée de côté. Il faut un appel racetime.gg par race et un appel Twitch par joueur (les rediffusions d'une chaîne servent pour toutes ses races de l'exécution) ; en cas de limite de débit Twitch, le script attend puis réessaie.
@@ -196,6 +207,7 @@ Les schémas sont dans [`models/index.js`](../models/index.js).
 | `tournaments` | Un tournoi start.gg ou Challonge, ses phases, ses participants et, pour OoTR, ses races planifiées sur Mido's House |
 | `matches` | Un match de tournoi et les courses qui y sont liées |
 | `players` | Un joueur = un compte racetime.gg (`userId`), avec ses alias (pseudos utilisés ailleurs) |
+| `marathonruns` | Un run randomizer d'un marathon (GDQ) : marathon, jeu, catégorie, joueurs, vidéos |
 | `discoveryskips` | Liens Challonge écartés par la découverte speedgaming.org (pas un randomizer, bracket privé…), revus après 30 jours |
 | `rando_list_cache` | Copie brute de rando-list et métadonnées de la dernière synchronisation |
 
@@ -263,6 +275,7 @@ Les scripts qui écrivent en base proposent un mode `--dry-run` (ou n'écrivent 
 | `sync-ical-restreams.js` | `sync:ical-restreams` (+ `:dry`) | Restreams des calendriers iCal des chaînes de restream (tâche `schedule-sites`) |
 | `sync-alttpr-asyncs.js` | `sync:alttpr-asyncs` (+ `:dry`) | Séries async ALTTPR et résultats des qualifs (tâche `tournaments-discover`) |
 | `sync-alttpr-league.js` | `sync:alttpr-league` (+ `:dry`) | Saisons de l'ALTTPR League (Invitational et Open) en tournois (tâche `tournaments-discover`, avec `--current`) |
+| `sync-gdq-runs.js` | `sync:gdq-runs` (+ `:dry`) | Runs randomizer des marathons GDQ (tâche `tournaments-discover`) |
 
 `npm run sync` enchaîne racetime, joueurs et rando-list.
 

@@ -183,6 +183,20 @@ router.get('/:id/tournaments', async (req, res, next) => {
   }
 });
 
+// Randomizer runs of speedrun marathons (GDQ), newest first
+router.get('/:id/marathon-runs', async (req, res, next) => {
+  try {
+    const { MarathonRun } = require('../models');
+    const runs = await MarathonRun.find({ gameSlug: req.params.id })
+      .select('-_id source externalId event name category runners startedAt runTime videos')
+      .sort({ startedAt: -1 })
+      .lean();
+    res.json({ runs });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Get game statistics
 router.get('/:id/stats', async (req, res, next) => {
   try {

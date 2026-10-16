@@ -8,7 +8,7 @@
 #   tournaments-update    tournois actifs + rattachement des courses (toutes les 15 min)
 #   schedule-sites        horaires, restreams et VOD des races (Mido's House, Hyrule Town Hall), saison de League, VOD Speedrace, plannings localhorst et iCal (toutes les 15 min)
 #   race-vods             VOD Twitch des joueurs, restreams trouvés sur Twitch (toutes les 30 min)
-#   tournaments-discover  nouveaux tournois des 2 derniers jours, asyncs ALTTPR, saison de l'ALTTPR League (tous les jours)
+#   tournaments-discover  nouveaux tournois des 2 derniers jours, asyncs ALTTPR, saison de l'ALTTPR League, runs GDQ (tous les jours)
 #   rando-list            cache rando-list, si le dépôt a changé    (tous les jours)
 #   players               joueurs et profils racetime.gg, comptes des participants (tous les jours)
 #   challonge-check       une requête pour savoir si le quota Challonge est revenu (tous les jours)
@@ -61,6 +61,7 @@ run_tournaments_discover() {
   timeout 15m node scripts/discover-tournaments.js --since "$since" --max-pages 3 || status=$?
   timeout 5m node scripts/sync-alttpr-asyncs.js || status=$?
   timeout 10m node scripts/sync-alttpr-league.js --current || status=$?
+  timeout 5m node scripts/sync-gdq-runs.js || status=$?
   return "$status"
 }
 

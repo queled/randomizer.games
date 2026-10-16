@@ -16,9 +16,9 @@ const DAY = 24 * 60 * MINUTE;
 const JOBS = [
   { name: 'racetime', label: 'Courses racetime.gg', every: 5 * MINUTE, maxRun: 10 * MINUTE },
   { name: 'tournaments-update', label: 'Tournois actifs et rattachements', every: 15 * MINUTE, maxRun: 20 * MINUTE },
-  { name: 'schedule-sites', label: "Mido's House et Hyrule Town Hall", every: 15 * MINUTE, maxRun: 15 * MINUTE },
+  { name: 'schedule-sites', label: "Mido's House, Hyrule Town Hall et localhorst", every: 15 * MINUTE, maxRun: 15 * MINUTE },
   { name: 'race-vods', label: 'VOD et restreams Twitch', every: 30 * MINUTE, maxRun: 20 * MINUTE },
-  { name: 'tournaments-discover', label: 'Découverte de tournois', every: DAY, maxRun: 15 * MINUTE },
+  { name: 'tournaments-discover', label: 'Découverte de tournois et asyncs ALTTPR', every: DAY, maxRun: 20 * MINUTE },
   { name: 'rando-list', label: 'rando-list', every: DAY, maxRun: 20 * MINUTE },
   { name: 'players', label: 'Joueurs et comptes racetime', every: DAY, maxRun: 70 * MINUTE },
   { name: 'challonge-check', label: 'Quota API Challonge', every: DAY, maxRun: 2 * MINUTE },

@@ -187,6 +187,7 @@ async function loadTournamentDetails(tournamentId) {
     currentTournament = await response.json();
     displayTournamentInfo(currentTournament);
     displayRestreams(currentTournament);
+    displayAsyncSeries(currentTournament);
     displayParticipants(currentTournament.participants || []); // Display without match history first
     
     // Load matches if available
@@ -1145,9 +1146,10 @@ function displayQualifications(races = []) {
   _lastQualificationRaces = races || [];
   const container = document.getElementById('qualifications-list');
   
+  const asyncShown = (currentTournament?.alttprAsyncs || []).some(s => s.qualifier && (s.seeds || []).length);
+  const noQualHtml = asyncShown ? '' : `<p style="color: #9ca3af;">${typeof i18n !== 'undefined' ? i18n.t('common.noResults') : 'No results'}</p>`;
   if (!races || !Array.isArray(races) || races.length === 0) {
-    const noQualText = typeof i18n !== 'undefined' ? i18n.t('common.noResults') : 'No results';
-    container.innerHTML = `<p style="color: #9ca3af;">${noQualText}</p>`;
+    container.innerHTML = noQualHtml;
     return;
   }
 
@@ -1159,8 +1161,7 @@ function displayQualifications(races = []) {
   );
 
   if (qualificationRaces.length === 0) {
-    const noQualText = typeof i18n !== 'undefined' ? i18n.t('common.noResults') : 'No results';
-    container.innerHTML = `<p style="color: #9ca3af;">${noQualText}</p>`;
+    container.innerHTML = noQualHtml;
     return;
   }
 
@@ -1183,6 +1184,70 @@ function displayQualifications(races = []) {
 if (typeof window !== 'undefined' && window.addEventListener) {
   window.addEventListener('spoilerModeChanged', () => {
     try { displayQualifications(_lastQualificationRaces); } catch (e) { /* ignore */ }
+  });
+}
+
+// Async series of the tournament on alttprasyncs.com: one link per series, and the
+// qualifier seeds with their results (live and async finishers together) above the qualification races
+function displayAsyncSeries(tournament) {
+  const series = (tournament && tournament.alttprAsyncs) || [];
+  const t = (key, fallback, params = {}) => i18n.t(`tournamentDetail.${key}`, params, fallback);
+
+  const links = document.getElementById('asyncs-link-container');
+  if (links) {
+    links.innerHTML = series.filter(s => sanitizeExternalUrl(s.url)).map(s => `<a href="${escHtml(sanitizeExternalUrl(s.url))}" target="_blank" rel="noopener noreferrer" class="challonge-btn" title="${escHtml(s.title || '')}">
+        <span>⏱️</span><span>${escHtml(t('asyncsLink', 'Asyncs'))} · ${escHtml(s.title || 'alttprasyncs.com')}</span>
+      </a>`).join('');
+    links.style.display = links.innerHTML ? 'flex' : 'none';
+  }
+
+  const container = document.getElementById('async-qualifiers');
+  if (!container) return;
+  const seeds = series.filter(s => s.qualifier).flatMap(s => (s.seeds || []).map(seed => ({ ...seed, seriesUrl: s.url })));
+  if (!seeds.length) {
+    container.style.display = 'none';
+    return;
+  }
+  const spoilerMode = typeof window.isSpoilerModeEnabled === 'function' && window.isSpoilerModeEnabled();
+  const fmtTime = sec => {
+    const h = Math.floor(sec / 3600);
+    const m = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
+    return `${h}:${m}:${String(sec % 60).padStart(2, '0')}`;
+  };
+  // The site cuts descriptions ("Live Qualifier - ..."): numbered, with the mode ("kaesden/open_ad_tileswap" → "open ad tileswap")
+  const modeLabel = mode => String(mode || '').split('/').pop().replace(/_/g, ' ');
+  const card = (seed, index) => {
+    const room = sanitizeExternalUrl(seed.roomUrl);
+    const resultsUrl = sanitizeExternalUrl(`https://alttprasyncs.com/results/${encodeURIComponent(seed.asyncId)}`);
+    const rows = (seed.results || []).map(r => `<tr>
+        <td style="padding: 0.25rem 0.5rem; color: #9ca3af; text-align: right;">${r.forfeit ? 'FF' : escHtml(r.place || '')}</td>
+        <td style="padding: 0.25rem 0.5rem; color: #e5e7eb;">${escHtml(sanitizeDisplayName(r.name || ''))}</td>
+        <td style="padding: 0.25rem 0.5rem; color: ${r.forfeit ? '#ef4444' : '#e5e7eb'}; font-variant-numeric: tabular-nums;">${r.forfeit ? escHtml(t('forfeit', 'Forfeit')) : escHtml(r.time ? fmtTime(r.time) : '')}</td>
+        <td style="padding: 0.25rem 0.5rem;">${sanitizeExternalUrl(r.vodUrl) ? `<a href="${escHtml(sanitizeExternalUrl(r.vodUrl))}" target="_blank" rel="noopener noreferrer" style="color: #c4b5fd;">${escHtml(t('watchVod', 'VOD'))}</a>` : ''}</td>
+      </tr>`).join('');
+    return `<details style="background-color: #1f2937; padding: 1rem; border-radius: 0.5rem; margin-bottom: 0.75rem;">
+      <summary style="cursor: pointer; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem; align-items: baseline;">
+        <span style="font-weight: bold; color: #fbbf24;">${escHtml(t('qualifier', 'Qualifier'))} ${index + 1}${seed.mode ? ` · ${escHtml(modeLabel(seed.mode))}` : ''}</span>
+        <span style="font-size: 0.875rem; color: #9ca3af;">${escHtml(seed.createdAt ? formatDate(seed.createdAt) : '')} · ${escHtml(t('asyncFinishers', '{finishers}/{participants} finished', { finishers: seed.finishers || 0, participants: seed.participants || 0 }))}</span>
+      </summary>
+      <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin: 0.75rem 0; font-size: 0.875rem;">
+        ${seed.description && !/\.\.\.$/.test(seed.description) ? `<span style="color: #9ca3af;">${escHtml(seed.description)}</span>` : ''}
+        ${room ? `<a href="${escHtml(room)}" target="_blank" rel="noopener noreferrer" style="color: #93c5fd;">${escHtml(t('racetimeRoom', 'Racetime room'))}</a>` : ''}
+        ${resultsUrl ? `<a href="${escHtml(resultsUrl)}" target="_blank" rel="noopener noreferrer" style="color: #93c5fd;">${escHtml(t('fullResults', 'Full results'))}</a>` : ''}
+      </div>
+      ${spoilerMode
+        ? `<p style="color: #9ca3af;">${escHtml(t('asyncResultsHidden', 'Results hidden in spoiler-free mode'))}</p>`
+        : `<div style="overflow-x: auto;"><table style="border-collapse: collapse; font-size: 0.875rem;">${rows}</table></div>`}
+    </details>`;
+  };
+  container.innerHTML = `<h3 style="font-size: 1.1rem; color: #e5e7eb; margin-bottom: 0.75rem;">${escHtml(t('asyncQualifiers', 'Async qualifiers'))}</h3>`
+    + seeds.slice().sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)).map(card).join('');
+  container.style.display = 'block';
+}
+
+if (typeof window !== 'undefined' && window.addEventListener) {
+  window.addEventListener('spoilerModeChanged', () => {
+    try { if (currentTournament) displayAsyncSeries(currentTournament); } catch (e) { /* ignore */ }
   });
 }
 

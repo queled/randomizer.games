@@ -42,6 +42,7 @@ run_schedule_sites() {
   timeout 8m node scripts/sync-schedule-sites.js || status=$?
   timeout 5m node scripts/sync-midos-league.js --current || status=$?
   timeout 2m node scripts/sync-speedrace.js || status=$?
+  timeout 3m node scripts/sync-localhorst.js || status=$?
   return "$status"
 }
 
@@ -55,7 +56,10 @@ run_race_vods() {
 run_tournaments_discover() {
   local since
   since="$(date -u -d '-2 days' +%Y-%m-%d)"
-  timeout 15m node scripts/discover-tournaments.js --since "$since" --max-pages 3
+  local status=0
+  timeout 15m node scripts/discover-tournaments.js --since "$since" --max-pages 3 || status=$?
+  timeout 5m node scripts/sync-alttpr-asyncs.js || status=$?
+  return "$status"
 }
 
 run_rando_list() {

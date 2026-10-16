@@ -103,6 +103,9 @@
                     <span data-i18n="tournamentDetail.viewOnMidosHouse">Voir sur Mido's House</span>
                 </a>
             </div>
+
+            <!-- Séries async (alttprasyncs.com) : un bouton par série -->
+            <div id="asyncs-link-container" class="challonge-container" style="display:none; flex-wrap: wrap; gap: 0.5rem;"></div>
         </div>
 
         <!-- Onglets -->
@@ -149,6 +152,7 @@
 
         <div id="tab-content-qualifications" class="tab-content" style="display: none;">
             <h2 class="tab-content-title" data-i18n="tournamentDetail.qualifications">Qualifications</h2>
+            <div id="async-qualifiers" style="display: none;"></div>
             <div id="qualifications-list">
                 <p class="text-muted" data-i18n="common.loading">Loading...</p>
             </div>

@@ -288,6 +288,39 @@ const tournamentSchema = new mongoose.Schema({
     // Played races that were restreamed, kept once the event is over
     pastRestreams: [midosHouseRaceSchema]
   },
+  // Async series of the tournament on alttprasyncs.com (sync-alttpr-asyncs.js):
+  // practice seeds, or qualifiers with their results (live and async together)
+  alttprAsyncs: [{
+    _id: false,
+    seriesId: Number,
+    title: String,
+    url: String,
+    qualifier: Boolean,
+    // Linked by hand (--link): kept even when the names no longer match
+    manual: Boolean,
+    seedCount: Number,
+    syncedAt: Date,
+    // Qualifier series only
+    seeds: [{
+      _id: false,
+      asyncId: Number,
+      createdAt: Date,
+      mode: String,
+      description: String,
+      roomUrl: String,
+      participants: Number,
+      finishers: Number,
+      results: [{
+        _id: false,
+        place: Number,
+        name: String,
+        // Seconds
+        time: Number,
+        forfeit: Boolean,
+        vodUrl: String
+      }]
+    }]
+  }],
   // optional source metadata for import tracing
   source: {
     type: { type: String },

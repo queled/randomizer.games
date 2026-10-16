@@ -276,10 +276,7 @@ const TWITCH_GAME_NAMES = {
   'tunic': 'TUNIC',
   'wl3': 'Wario Land 3',
   'xc2': 'Xenoblade Chronicles 2',
-  'zexion': 'Zexion',
-  
-  // Standalone Twitch category for multiworld/randomizer content
-  'archipelago': 'Archipelago'
+  'zexion': 'Zexion'
 };
 
 // Categories for which we should include all streams in the Twitch category

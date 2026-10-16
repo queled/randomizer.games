@@ -2587,6 +2587,84 @@ function raceLinkHtml(race) {
   return `<a href="${href}" target="_blank" rel="noopener noreferrer" data-stop-propagation style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.2rem 0.4rem; border-radius:0.25rem; font-size:0.7rem; color:${brandColor}; background:#222222; border:1px solid ${brandColor}; text-decoration:none;">${logo}</a>`;
 }
 
+// Single race without any score from the source (Mido's House): 1-0 from the winner
+function winnerOnlyScore(match) {
+  if (match.state !== 'complete' || !match.winnerId) return null;
+  if (match.winnerId === match.player1Id) return [1, 0];
+  if (match.winnerId === match.player2Id) return [0, 1];
+  return null;
+}
+
+// Times of the match's two players in one of its races
+function matchTimesFromRace(match, race, isMultiRaceSeries = false) {
+  const isTeamMatch = !!(match.player1Members && match.player1Members.length && match.player2Members && match.player2Members.length);
+  const player1Winner = match.winnerId === match.player1Id;
+  const player2Winner = match.winnerId === match.player2Id;
+  let t1 = null, t2 = null;
+  if (!race) return { time1: t1, time2: t2 };
+  if (isTeamMatch) {
+    return { time1: teamTimeFromRace(race, match.player1Members), time2: teamTimeFromRace(race, match.player2Members) };
+  }
+  
+  // Prefer a pairwise mapping so the two players cannot resolve to the same entrant.
+  try {
+    const mapped = computeTimesFromRace(match, race);
+    if (mapped) {
+      if (mapped.time1 !== null && mapped.time1 !== undefined) t1 = mapped.time1;
+      if (mapped.time2 !== null && mapped.time2 !== undefined) t2 = mapped.time2;
+    }
+  } catch (e) {}
+
+  // Fallback to per-name lookup for any still-missing side.
+  if (t1 === null || t1 === undefined) t1 = findEntrantTime(race, match.player1Name);
+  if (t2 === null || t2 === undefined) t2 = findEntrantTime(race, match.player2Name);
+
+  // Sanity check: if both times are identical and non-null, matching likely failed.
+  if (t1 && t2 && t1 === t2 && t1 !== 'DNF' && t1 !== 'DQ') {
+    t1 = null;
+    t2 = null;
+  }
+  
+  // Fallback to place-based mapping
+  if ((t1 === null || t1 === undefined) && (t2 === null || t2 === undefined)) {
+    try {
+      const entrants = race.entrants || [];
+      const winnerEntr = entrants.find(e => e && (e.place === 1 || e.place === '1'));
+      const loserEntr = entrants.find(e => e !== winnerEntr);
+      if (winnerEntr) {
+        const wt = getTimeFromEntrantObj(winnerEntr, race);
+        const lt = loserEntr ? getTimeFromEntrantObj(loserEntr, race) : null;
+        const winnerName = normalizeName(winnerEntr.userName || (winnerEntr.user && winnerEntr.user.name) || winnerEntr.name || winnerEntr.displayName || '');
+        const loserName = normalizeName((loserEntr && (loserEntr.userName || (loserEntr.user && loserEntr.user.name) || loserEntr.name || loserEntr.displayName)) || '');
+        const matchP1 = normalizeName(match.player1Name || '');
+        const matchP2 = normalizeName(match.player2Name || '');
+
+        // Prefer mapping winner/loser by actual entrant names when available.
+        if (winnerName && loserName) {
+          if (winnerName === matchP1 && loserName === matchP2) {
+            t1 = t1 || wt;
+            t2 = t2 || lt;
+          } else if (winnerName === matchP2 && loserName === matchP1) {
+            t2 = t2 || wt;
+            t1 = t1 || lt;
+          }
+        } else if (!isMultiRaceSeries) {
+          // Only use overall set winner as a last resort for single-race matches.
+          if (player1Winner) {
+            t1 = t1 || wt;
+            t2 = t2 || lt;
+          } else if (player2Winner) {
+            t2 = t2 || wt;
+            t1 = t1 || lt;
+          }
+        }
+      }
+    } catch (e) {}
+  }
+  
+  return { time1: t1, time2: t2 };
+}
+
 function createMatchCard(match, races = []) {
   const card = document.createElement('div');
   // Assign stable id so we can scroll to the match from participants
@@ -2660,78 +2738,16 @@ function createMatchCard(match, races = []) {
     }
   }
   
+  if (displayScore1 === null && displayScore2 === null && !isMultiRaceSeries) {
+    [displayScore1, displayScore2] = winnerOnlyScore(match) || [null, null];
+  }
+
   const player1Winner = match.winnerId === match.player1Id;
   const player2Winner = match.winnerId === match.player2Id;
 
   const getRaceLinkHtml = raceLinkHtml;
 
-  // Helper to extract times from a race for this match
-  const isTeamMatch = !!(match.player1Members && match.player1Members.length && match.player2Members && match.player2Members.length);
-  const getTimesFromRace = (race) => {
-    let t1 = null, t2 = null;
-    if (!race) return { time1: t1, time2: t2 };
-    if (isTeamMatch) {
-      return { time1: teamTimeFromRace(race, match.player1Members), time2: teamTimeFromRace(race, match.player2Members) };
-    }
-    
-    // Prefer a pairwise mapping so the two players cannot resolve to the same entrant.
-    try {
-      const mapped = computeTimesFromRace(match, race);
-      if (mapped) {
-        if (mapped.time1 !== null && mapped.time1 !== undefined) t1 = mapped.time1;
-        if (mapped.time2 !== null && mapped.time2 !== undefined) t2 = mapped.time2;
-      }
-    } catch (e) {}
-
-    // Fallback to per-name lookup for any still-missing side.
-    if (t1 === null || t1 === undefined) t1 = findEntrantTime(race, match.player1Name);
-    if (t2 === null || t2 === undefined) t2 = findEntrantTime(race, match.player2Name);
-
-    // Sanity check: if both times are identical and non-null, matching likely failed.
-    if (t1 && t2 && t1 === t2 && t1 !== 'DNF' && t1 !== 'DQ') {
-      t1 = null;
-      t2 = null;
-    }
-    
-    // Fallback to place-based mapping
-    if ((t1 === null || t1 === undefined) && (t2 === null || t2 === undefined)) {
-      try {
-        const entrants = race.entrants || [];
-        const winnerEntr = entrants.find(e => e && (e.place === 1 || e.place === '1'));
-        const loserEntr = entrants.find(e => e !== winnerEntr);
-        if (winnerEntr) {
-          const wt = getTimeFromEntrantObj(winnerEntr, race);
-          const lt = loserEntr ? getTimeFromEntrantObj(loserEntr, race) : null;
-          const winnerName = normalizeName(winnerEntr.userName || (winnerEntr.user && winnerEntr.user.name) || winnerEntr.name || winnerEntr.displayName || '');
-          const loserName = normalizeName((loserEntr && (loserEntr.userName || (loserEntr.user && loserEntr.user.name) || loserEntr.name || loserEntr.displayName)) || '');
-          const matchP1 = normalizeName(match.player1Name || '');
-          const matchP2 = normalizeName(match.player2Name || '');
-
-          // Prefer mapping winner/loser by actual entrant names when available.
-          if (winnerName && loserName) {
-            if (winnerName === matchP1 && loserName === matchP2) {
-              t1 = t1 || wt;
-              t2 = t2 || lt;
-            } else if (winnerName === matchP2 && loserName === matchP1) {
-              t2 = t2 || wt;
-              t1 = t1 || lt;
-            }
-          } else if (!isMultiRaceSeries) {
-            // Only use overall set winner as a last resort for single-race matches.
-            if (player1Winner) {
-              t1 = t1 || wt;
-              t2 = t2 || lt;
-            } else if (player2Winner) {
-              t2 = t2 || wt;
-              t1 = t1 || lt;
-            }
-          }
-        }
-      } catch (e) {}
-    }
-    
-    return { time1: t1, time2: t2 };
-  };
+  const getTimesFromRace = race => matchTimesFromRace(match, race, isMultiRaceSeries);
 
   // Generate manches HTML if multi-race series
   let manchesHtml = '';
@@ -3603,17 +3619,27 @@ function createCompactMatchCard(match, races = []) {
       }
     }
   }
+  if (displayScore1 === null && displayScore2 === null) {
+    [displayScore1, displayScore2] = winnerOnlyScore(match) || [null, null];
+  }
+
+  // Single race: the players' times, as in the matches tab
+  const matchRaces = findRacesForMatch(match, races);
+  const times = matchRaces.length === 1 ? matchTimesFromRace(match, matchRaces[0]) : { time1: null, time2: null };
+  const timeHtml = t => t ? `<span class="spoiler-block" style="color: #10b981; font-family: monospace; margin-left: auto;">${escHtml(t)}</span>` : '';
   
   card.innerHTML = `
     <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.875rem;">
       <div style="flex: 1;">
         <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
           ${match.player1Members && match.player1Members.length ? `<span style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'};" title="${escHtml(teamTitle(match.player1Name, match.player1Members))}">${escHtml(sanitizeDisplayName(match.player1Name))}</span>` : match.player1Name ? `<a href="${playerPageHref(sanitizeDisplayName(match.player1Name))}" style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'}; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player1Name))}</a>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
-          ${displayScore1 !== null ? `<span style="color: #9ca3af; font-family: monospace;">${displayScore1}</span>` : ''}
+          ${timeHtml(times.time1)}
+          ${displayScore1 !== null ? `<span class="spoiler-block" style="color: #9ca3af; font-family: monospace;${times.time1 ? '' : ' margin-left: auto;'}">${displayScore1}</span>` : ''}
         </div>
         <div style="display: flex; align-items: center; gap: 0.5rem;">
           ${match.player2Members && match.player2Members.length ? `<span style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'};" title="${escHtml(teamTitle(match.player2Name, match.player2Members))}">${escHtml(sanitizeDisplayName(match.player2Name))}</span>` : match.player2Name ? `<a href="${playerPageHref(sanitizeDisplayName(match.player2Name))}" style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'}; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player2Name))}</a>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
-          ${displayScore2 !== null ? `<span style="color: #9ca3af; font-family: monospace;">${displayScore2}</span>` : ''}
+          ${timeHtml(times.time2)}
+          ${displayScore2 !== null ? `<span class="spoiler-block" style="color: #9ca3af; font-family: monospace;${times.time2 ? '' : ' margin-left: auto;'}">${displayScore2}</span>` : ''}
         </div>
       </div>
     </div>

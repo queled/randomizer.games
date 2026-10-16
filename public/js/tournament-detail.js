@@ -1445,10 +1445,11 @@ function displayQualifications(races = []) {
     return;
   }
 
-  // Filter qualification races: races without a matchId (not linked to a match)
+  // Filter qualification races: races not linked to a match (by matchId, set or room URL)
   // AND races with tournamentPhase set to 'Qualifications' (for Start.gg tournaments)
+  const matchRaces = new Set((currentMatches || []).flatMap(m => findRacesForMatch(m, races)));
   const qualificationRaces = races.filter(race => 
-    (!race.matchId && !race.tournamentPhase) || 
+    (!race.matchId && !race.tournamentPhase && !matchRaces.has(race)) || 
     race.tournamentPhase === 'Qualifications'
   );
 

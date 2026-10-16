@@ -2130,6 +2130,19 @@ body.spoiler-mode .spoiler-text::before {
     display: none;
 }
 
+/* Bracket, Mido's House and async buttons side by side, wrapping on narrow screens */
+.tournament-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.tournament-links .challonge-container {
+    margin-top: 0;
+}
+
 .challonge-btn {
     display: inline-flex;
     align-items: center;

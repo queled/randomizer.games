@@ -69,7 +69,7 @@ Les workflows de `.github/workflows/` faisaient le même travail depuis les serv
 
 `discover-tournaments.js --source speedgaming` lit la page [speedgaming.org/events](https://speedgaming.org/events/), qui n'a pas d'API, et y prend les liens « Bracket/standings » de chaque événement. Un bracket start.gg passe par l'import start.gg ; un bracket Challonge coûte une requête, aussi n'est-il lu que si le titre de l'événement évoque un randomizer. Un lien écarté (pas un randomizer suivi, bracket privé ou supprimé) est noté dans `discoveryskips`. La source fait partie de la découverte quotidienne.
 
-`helpers/findGameForTournament.js` associe ensuite le tournoi à un jeu du site. Les tournois déjà présents en base ne sont pas réimportés.
+`helpers/find-game-for-tournament.js` associe ensuite le tournoi à un jeu du site. Les tournois déjà présents en base ne sont pas réimportés.
 
 Les courses sont rattachées aux matchs par `services/tournament-autolink.js` (score de confiance) et aux qualifications par `services/tournament-qualifiers.js`. Le panneau admin permet de vérifier ou de corriger ces liens. Sa liste des tournois (« Race ↔ Match ») donne pour chacun la part des matchs joués qui ont leurs courses (`services/link-coverage.js` : matchs terminés entre deux joueurs, forfaits « DQ » exclus) et les courses rattachées au tournoi sans match, qualification ni tie-break. Le filtre « À reprendre » et le tri « Plus de rattachements manquants » mènent aux tournois à compléter ; un tournoi sans aucune course (jeu qui ne se court pas sur racetime.gg, comme Melee) est classé « sans course » et sort du total.
 

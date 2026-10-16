@@ -7,7 +7,7 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env'), quiet: true
 const connectDB = require('../config/database');
 const sanitizeHtml = require('sanitize-html');
 const challonge = require('../services/challonge');
-const findGameForTournament = require('../helpers/findGameForTournament');
+const findGameForTournament = require('../helpers/find-game-for-tournament');
 const { fillMissingFinalRanks } = require('../helpers/bracket-ranks');
 
 function parseChallongeId(input){

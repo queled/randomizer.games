@@ -18,7 +18,7 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env'), quiet: true
 const connectDB = require('../config/database');
 const sanitizeHtml = require('sanitize-html');
 const StartGGAPI = require('../services/startgg');
-const findGameForTournament = require('../helpers/findGameForTournament');
+const findGameForTournament = require('../helpers/find-game-for-tournament');
 
 function parseStartGGSlug(input) {
   if (!input) return null;

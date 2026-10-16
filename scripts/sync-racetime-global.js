@@ -24,6 +24,7 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env'), quiet: true
 const connectDB = require('../config/database');
 const { Game, Race } = require('../models');
 const racetimeAPI = require('../services/racetime');
+const { durationToMs } = racetimeAPI;
 const { loadGoalFilters, isGoalAllowed } = require('../helpers/racetime-goals');
 
 // Configuration
@@ -111,7 +112,8 @@ async function syncActiveRaces() {
           userUrl: e.user?.url || e.userUrl,
           status: e.status?.value || e.status,
           finishTime: e.finish_time || e.finishTime,
-          finishTimeMs: e.finishTimeMs,
+          // Raw racetime.gg entrants only have finish_time
+          finishTimeMs: e.finishTimeMs ?? durationToMs(e.finish_time || e.finishTime),
           finishedAt: e.finished_at || e.finishedAt,
           place: e.place,
           placeOrdinal: e.place_ordinal || e.placeOrdinal,
@@ -223,7 +225,8 @@ async function finalizeCompletedRaces(activeUrls) {
           userUrl: e.user?.url || e.userUrl,
           status: e.status?.value || e.status,
           finishTime: e.finish_time || e.finishTime,
-          finishTimeMs: e.finishTimeMs,
+          // Raw racetime.gg entrants only have finish_time
+          finishTimeMs: e.finishTimeMs ?? durationToMs(e.finish_time || e.finishTime),
           finishedAt: e.finished_at || e.finishedAt,
           place: e.place,
           placeOrdinal: e.place_ordinal || e.placeOrdinal,
@@ -267,7 +270,8 @@ async function upsertPastRace(raceData, gameSlug, stats, goalFilters) {
       userUrl: e.user?.url || e.userUrl,
       status: e.status?.value || e.status,
       finishTime: e.finish_time || e.finishTime,
-      finishTimeMs: e.finishTimeMs,
+      // Raw racetime.gg entrants only have finish_time
+      finishTimeMs: e.finishTimeMs ?? durationToMs(e.finish_time || e.finishTime),
       finishedAt: e.finished_at || e.finishedAt,
       place: e.place,
       placeOrdinal: e.place_ordinal || e.placeOrdinal,

@@ -17,6 +17,7 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env'), quiet: true
 const connectDB = require('../config/database');
 const { Game, Race } = require('../models');
 const racetimeAPI = require('../services/racetime');
+const { durationToMs } = racetimeAPI;
 const { loadGoalFilters, isGoalAllowed } = require('../helpers/racetime-goals');
 
 const RATE_LIMIT_MS = parseInt(process.env.RACETIME_RATE_LIMIT_MS) || 2000;
@@ -115,7 +116,8 @@ async function syncGameRaces(gameId, maxPages = 100) {
                   userUrl: e.user?.url,
                   status: e.status,
                   finishTime: e.finishTime,
-                  finishTimeMs: e.finishTimeMs,
+                  // Raw racetime.gg entrants only have finish_time
+                  finishTimeMs: e.finishTimeMs ?? durationToMs(e.finish_time || e.finishTime),
                   finishedAt: e.finishedAt,
                   place: e.place,
                   placeOrdinal: e.placeOrdinal,
@@ -227,7 +229,8 @@ async function syncDirectFromRacetime(slug, maxPages) {
                   userUrl: e.user?.url,
                   status: e.status,
                   finishTime: e.finishTime,
-                  finishTimeMs: e.finishTimeMs,
+                  // Raw racetime.gg entrants only have finish_time
+                  finishTimeMs: e.finishTimeMs ?? durationToMs(e.finish_time || e.finishTime),
                   finishedAt: e.finishedAt,
                   place: e.place,
                   placeOrdinal: e.placeOrdinal,

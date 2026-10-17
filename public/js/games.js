@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const website = sanitizeExternalUrl(game.randomizer?.website || game.officialWebsite);
       
       return `
-        <div class="game-card" data-game-id="${encodeURIComponent(id)}" role="link" tabindex="0" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;overflow:hidden;">
+        <div class="game-card" data-game-id="${escHtml(id)}" role="link" tabindex="0" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;overflow:hidden;">
           <img src="${escHtml(image)}" alt="${escHtml(game.name)}" width="256" height="360" loading="lazy" decoding="async" style="width:256px;max-width:100%;height:auto;aspect-ratio:256/360;object-fit:cover;border-radius:12px;box-shadow:0 2px 12px #0003;display:block;" 
                data-fallback="hide-show-next">
           <div style="display:none;width:256px;max-width:100%;height:auto;aspect-ratio:256/360;background:#1f2937;border-radius:12px;box-shadow:0 2px 12px #0003;align-items:center;justify-content:center;font-size:2.5rem;font-weight:bold;color:#6b7280;text-transform:uppercase;">${escHtml(id)}</div>

@@ -86,4 +86,89 @@ async function fetchGames(siteKey) {
   return games;
 }
 
-module.exports = { SITES, fetchGames, parseGamesPage, decodeEntities };
+const WIKI = { host: 'archipelago.miraheze.org', api: 'https://archipelago.miraheze.org/w/api.php' };
+
+// "Pokémon Mystery Dungeon: Explorers of Sky" and "Pokemon Mystery Dungeon Explorers of Sky",
+// "Ratchet & Clank: The Odd Couple" and "Ratchet & Clank: Odd Couple"
+const wikiKey = title => String(title || '')
+  .normalize('NFD').replace(/\p{Diacritic}/gu, '')
+  .toLowerCase()
+  .replace(/\bthe\b/g, '')
+  .replace(/[^a-z0-9]/g, '');
+
+const wikiTitle = url => decodeURIComponent(new URL(url).pathname.replace(/^\/wiki\//, '')).replace(/_/g, ' ');
+
+// Same escaping as MediaWiki's own links
+const wikiUrl = title => `https://${WIKI.host}/wiki/${encodeURIComponent(title.replace(/ /g, '_'))
+  .replace(/%(3A|2F|3B|40|24|21|2A|2C|7E)/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)))}`;
+
+async function wikiQuery(params) {
+  const { data } = await axios.get(WIKI.api, {
+    timeout: 30000,
+    headers: { 'User-Agent': 'RandomizerWebsite/1.0' },
+    params: { action: 'query', format: 'json', formatversion: 2, ...params }
+  });
+  return data;
+}
+
+// Titles among `titles` that have a page (redirects included)
+async function existingWikiTitles(titles) {
+  const existing = new Set();
+  for (let i = 0; i < titles.length; i += 50) {
+    const chunk = titles.slice(i, i + 50);
+    const { query } = await wikiQuery({ titles: chunk.join('|') });
+    const normalized = new Map((query.normalized || []).map(n => [n.from, n.to]));
+    const found = new Set((query.pages || []).filter(p => !p.missing && !p.invalid).map(p => p.title));
+    for (const title of chunk) {
+      if (found.has(normalized.get(title) || title)) existing.add(title);
+    }
+  }
+  return existing;
+}
+
+// Every article of the wiki, by wikiKey; articles before redirects
+async function wikiArticles() {
+  const byKey = new Map();
+  const pages = [];
+  let next = {};
+  do {
+    const data = await wikiQuery({ generator: 'allpages', gapnamespace: 0, gaplimit: 500, prop: 'info', ...next });
+    pages.push(...(data.query?.pages || []));
+    next = data.continue || null;
+  } while (next);
+  pages.sort((a, b) => Number(!!a.redirect) - Number(!!b.redirect));
+  for (const page of pages) {
+    const key = wikiKey(page.title);
+    if (!byKey.has(key)) byKey.set(key, page.title);
+  }
+  return byKey;
+}
+
+/**
+ * The sites' wiki links name pages that don't exist ("BKSimulator" for "BK
+ * Simulator", "DOOM II (Beta)"). Each link to a missing page points to the
+ * article of the same name, spelling aside, else the variant's game
+ * ("(Beta)" dropped), else goes. Returns the links changed; a wiki that cannot
+ * be read leaves them as they are.
+ */
+async function resolveWikiLinks(worlds) {
+  const onWiki = worlds.filter(w => w.wiki && new URL(w.wiki).host === WIKI.host);
+  const titles = [...new Set(onWiki.map(w => wikiTitle(w.wiki)))];
+  const existing = await existingWikiTitles(titles);
+  const missing = onWiki.filter(w => !existing.has(wikiTitle(w.wiki)));
+  if (!missing.length) return [];
+
+  const articles = await wikiArticles();
+  const changes = [];
+  for (const world of missing) {
+    const title = wikiTitle(world.wiki);
+    const variant = title.replace(/\s*\(beta\)\s*$|\s+beta$/i, '');
+    const found = articles.get(wikiKey(title)) || articles.get(wikiKey(variant));
+    const wiki = found ? wikiUrl(found) : null;
+    changes.push({ world: world.name, from: world.wiki, to: wiki });
+    world.wiki = wiki;
+  }
+  return changes;
+}
+
+module.exports = { SITES, fetchGames, parseGamesPage, decodeEntities, resolveWikiLinks };

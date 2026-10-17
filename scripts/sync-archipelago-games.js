@@ -18,7 +18,8 @@
  *
  * The sync owns, on each game, the links it adds (source "archipelago"): the
  * game page on each site, the setup guide (archipelago.gg's when it has the
- * world) and the wiki. It drops the game pages of the former manual import,
+ * world) and the wiki (checked on the wiki itself: the sites' links sometimes
+ * name pages that don't exist). It drops the game pages of the former manual import,
  * replaced by its own, and the links of a world that left a site. When the
  * official site was an Archipelago / Multiworld link, it points to the game's
  * page. A site whose page cannot be read is left as it is.
@@ -38,7 +39,7 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env'), quiet: true
 
 const connectDB = require('../config/database');
 const { Game } = require('../models');
-const { SITES, fetchGames } = require('../services/archipelago');
+const { SITES, fetchGames, resolveWikiLinks } = require('../services/archipelago');
 
 const SOURCE = 'archipelago';
 const SITE_HOST_RE = /^https?:\/\/(?:www\.)?(archipelago|multiworld)\.gg(?:\/|$)/i;
@@ -475,6 +476,15 @@ async function main() {
   }
   const fetchedSites = Object.keys(worldsBySiteKey);
   if (!fetchedSites.length) process.exit(1);
+
+  try {
+    const wikiChanges = await resolveWikiLinks(Object.values(worldsBySiteKey).flat());
+    for (const { world, from, to } of wikiChanges) {
+      console.log(`📖 Wiki « ${world} » : ${from} → ${to || 'aucune page, lien retiré'}`);
+    }
+  } catch (error) {
+    console.error(`⚠️ Wiki Archipelago illisible, liens laissés tels quels : ${error.message}`);
+  }
 
   await connectDB();
   const games = await Game.find({}, { id: 1, name: 1, official: 1, randomizer: 1, resources: 1, integrations: 1 }).lean();

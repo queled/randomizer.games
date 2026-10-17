@@ -100,7 +100,7 @@ const COMBO_TWITCH_CATEGORY_IDS = {
   'hodbt': ['16541', '8352'], // Harmony of Dissonance, Bomberman Tournament
   'mpcg': ['14198', '1459'], // Metroid Prime (GC), Metroid Prime 2: Echoes
   'z1m1': ['10979', '19813'], // The Legend of Zelda, Metroid (NES)
-  'z1m1z3m3': ['10979', '19813', '9435', '4327'], // + A Link to the Past, Metroid Prime 3
+  'z1m1z3m3': ['10979', '19813', '9435', '7595'], // + A Link to the Past, Super Metroid
   // Wily Wars has no Twitch category: it is streamed under the games it remakes,
   // the NES originals or the Wily Wars versions Twitch lists apart
   'mmtww': ['4815', '12870', '4133', '1478044090', '1003948618', '1311228706'],
@@ -318,11 +318,11 @@ const RANDOMIZER_ACRONYMS = {
   'Metroid Fusion': ['mfr', 'fusion rando'],
   'Metroid Prime': ['mpr', 'prime rando', 'mp1r'],
   'Metroid Prime 2: Echoes': ['mp2r', 'echoes rando'],
-  'Metroid Prime 3: Corruption': ['mp3r', 'corruption rando', 'quad randomizer', 'quad crossover randomizer'],
+  'Metroid Prime 3: Corruption': ['mp3r', 'corruption rando'],
   'Metroid Prime Remastered': ['mprr', 'remastered rando'],
   'Metroid: Samus Returns': ['msrr', 'sr rando'],
   'Metroid: Zero Mission': ['mzmr', 'zm rando'],
-  'Super Metroid': ['smr', 'sm rando', 'varia'],
+  'Super Metroid': ['smr', 'sm rando', 'varia', 'quad randomizer', 'quad crossover randomizer'],
   
   // === CASTLEVANIA SERIES ===
   'Castlevania: Aria of Sorrow': ['aosr', 'aos rando'],

@@ -4007,6 +4007,20 @@ a.match-player-name.match-winner:hover {
     text-decoration: none;
 }
 
+/* Marathon runs: the default link blue is hard to read on the dark table */
+.data-table a.vod-link {
+    color: #fbbf24;
+    text-decoration: none;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: color 0.2s;
+}
+
+.data-table a.vod-link:hover {
+    color: #fde68a;
+    text-decoration: underline;
+}
+
 .data-table tr.podium td:first-child {
     color: #fbbf24;
     font-weight: 600;

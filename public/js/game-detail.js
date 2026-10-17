@@ -1026,7 +1026,7 @@
       const date = run.startedAt ? new Date(run.startedAt).toLocaleDateString(locale, { year: 'numeric', month: 'short' }) : '';
       const video = (run.videos || []).find(v => sanitizeExternalUrl(v.url));
       const vod = video
-        ? `<a ${buildExternalLinkAttrs(video.url)}>▶ ${escapeHtml(t('gameDetail.marathonWatchVod', 'Watch the VOD'))}</a>`
+        ? `<a class="vod-link" ${buildExternalLinkAttrs(video.url)}>▶ ${escapeHtml(t('gameDetail.marathonWatchVod', 'Watch the VOD'))}</a>`
         : `<span class="text-muted">${escapeHtml(t('gameDetail.marathonNoVod', 'No VOD'))}</span>`;
       return `<tr>
         <td>${escapeHtml(run.event?.name || run.event?.short || '')}<div class="text-muted">${escapeHtml(date)}</div></td>

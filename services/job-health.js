@@ -11,20 +11,54 @@ const path = require('path');
 const MINUTE = 60 * 1000;
 const DAY = 24 * 60 * MINUTE;
 
-// Same tasks and frequencies as the crontab in docs/DEPLOYMENT.md; maxRun is the sum
-// of the timeouts run-job.sh gives the task's steps
+// Same tasks and schedules as the crontab in docs/DEPLOYMENT.md (the server runs on
+// UTC); maxRun is the sum of the timeouts run-job.sh gives the task's steps
 const JOBS = [
-  { name: 'racetime', label: 'Courses racetime.gg', every: 5 * MINUTE, maxRun: 10 * MINUTE },
-  { name: 'tournaments-update', label: 'Tournois actifs et rattachements', every: 15 * MINUTE, maxRun: 20 * MINUTE },
-  { name: 'schedule-sites', label: "Mido's House, Hyrule Town Hall et localhorst", every: 15 * MINUTE, maxRun: 15 * MINUTE },
-  { name: 'race-vods', label: 'VOD et restreams Twitch', every: 30 * MINUTE, maxRun: 20 * MINUTE },
-  { name: 'tournaments-discover', label: 'Découverte de tournois et asyncs ALTTPR', every: DAY, maxRun: 20 * MINUTE },
-  { name: 'rando-list', label: 'rando-list', every: DAY, maxRun: 20 * MINUTE },
-  { name: 'archipelago', label: 'Jeux Archipelago et Multiworld', every: DAY, maxRun: 15 * MINUTE },
-  { name: 'players', label: 'Joueurs et comptes racetime', every: DAY, maxRun: 70 * MINUTE },
-  { name: 'challonge-check', label: 'Quota API Challonge', every: DAY, maxRun: 2 * MINUTE },
-  { name: 'backup', label: 'Sauvegarde de la base', every: DAY, maxRun: 30 * MINUTE }
+  { name: 'racetime', label: 'Courses racetime.gg', cron: '*/5 * * * *', maxRun: 10 * MINUTE },
+  { name: 'tournaments-update', label: 'Tournois actifs et rattachements', cron: '2-59/15 * * * *', maxRun: 20 * MINUTE },
+  { name: 'schedule-sites', label: "Mido's House, Hyrule Town Hall et localhorst", cron: '7-59/15 * * * *', maxRun: 15 * MINUTE },
+  { name: 'race-vods', label: 'VOD et restreams Twitch', cron: '12-59/30 * * * *', maxRun: 20 * MINUTE },
+  { name: 'rando-list', label: 'rando-list', cron: '0 6 * * *', maxRun: 20 * MINUTE },
+  { name: 'archipelago', label: 'Jeux Archipelago et Multiworld', cron: '20 6 * * *', maxRun: 15 * MINUTE },
+  { name: 'tournaments-discover', label: 'Découverte de tournois et asyncs ALTTPR', cron: '0 7 * * *', maxRun: 20 * MINUTE },
+  { name: 'players', label: 'Joueurs et comptes racetime', cron: '30 7 * * *', maxRun: 70 * MINUTE },
+  { name: 'challonge-check', label: 'Quota API Challonge', cron: '45 7 * * *', maxRun: 2 * MINUTE },
+  { name: 'backup', label: 'Sauvegarde de la base', cron: '30 3 * * *', maxRun: 30 * MINUTE }
 ];
+
+// Values of one cron field: *, n, a-b, with an optional /step, comma-separated
+function cronField(field, min, max) {
+  const values = new Set();
+  for (const part of field.split(',')) {
+    const [range, step] = part.split('/');
+    let [from, to] = range === '*' ? [min, max] : range.split('-').map(Number);
+    if (to === undefined) to = step ? max : from;
+    for (let value = from; value <= to; value += Number(step) || 1) values.add(value);
+  }
+  return [...values].sort((a, b) => a - b);
+}
+
+// Minutes and hours (UTC) of a task; the crontab only uses these two fields
+function parseCron(cron) {
+  const [minute, hour] = cron.split(/\s+/);
+  return { minutes: cronField(minute, 0, 59), hours: cronField(hour, 0, 23) };
+}
+
+// Time between two runs, for evenly spaced schedules like the crontab's
+function periodOf({ minutes, hours }) {
+  if (hours.length === 24) return (60 / minutes.length) * MINUTE;
+  return DAY / hours.length;
+}
+
+function nextRun({ minutes, hours }, now) {
+  const next = new Date(now);
+  next.setUTCSeconds(0, 0);
+  for (let i = 0; i < 2 * 24 * 60; i++) {
+    next.setUTCMinutes(next.getUTCMinutes() + 1);
+    if (minutes.includes(next.getUTCMinutes()) && hours.includes(next.getUTCHours())) return next;
+  }
+  return null;
+}
 
 const LOG_TAIL_BYTES = 8 * 1024;
 const LOG_TAIL_LINES = 20;
@@ -78,7 +112,7 @@ function jobState(job, status, now) {
   }
   if (status.exitCode !== 0 && status.exitCode !== null) return 'error';
   const lastSuccessAt = toDate(status.lastSuccessAt);
-  if (!lastSuccessAt || now - lastSuccessAt > 2 * job.every + job.maxRun) return 'late';
+  if (!lastSuccessAt || now - lastSuccessAt > 2 * job.period + job.maxRun) return 'late';
   return 'ok';
 }
 
@@ -126,16 +160,25 @@ async function lastDataByJob({ Game, Tournament, Race }) {
 async function getJobsHealth(models, now = Date.now()) {
   const lastData = await lastDataByJob(models);
   return JOBS.map((job) => {
+    const schedule = parseCron(job.cron);
+    const period = periodOf(schedule);
     const status = readStatus(job.name);
-    const state = jobState(job, status, now);
+    const state = jobState({ ...job, period }, status, now);
+    const startedAt = toDate(status?.startedAt);
+    const endedAt = toDate(status?.endedAt);
     return {
       name: job.name,
       label: job.label,
-      everyMinutes: job.every / MINUTE,
+      cron: job.cron,
+      everyMinutes: period / MINUTE,
+      // Minutes past the hour of sub-daily tasks, start times of daily ones
+      minutes: schedule.minutes,
+      nextRunAt: nextRun(schedule, now),
       state,
-      startedAt: toDate(status?.startedAt),
-      endedAt: toDate(status?.endedAt),
-      // While a run is under way, the code of the previous one
+      startedAt,
+      // While a run is under way, endedAt and exitCode are those of the previous one
+      endedAt,
+      durationMs: status?.state === 'done' && startedAt && endedAt ? endedAt - startedAt : null,
       exitCode: status?.exitCode ?? null,
       lastSuccessAt: toDate(status?.lastSuccessAt),
       consecutiveFailures: status?.consecutiveFailures || 0,

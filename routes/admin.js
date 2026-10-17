@@ -1050,29 +1050,22 @@ router.get('/health', requireAdmin, async (req, res, next) => {
     // Database status
     const dbStatus = mongoose.connection.readyState === 1 ? 'ok' : 'error';
     
-    // Get last sync dates
-    const lastRacetimeSync = await Game.findOne({ 
-      'integrations.racetime.lastSync': { $exists: true } 
-    }).sort({ 'integrations.racetime.lastSync': -1 }).lean();
-    
-    const lastRandoListSync = await Game.findOne({ 
-      'integrations.randoList.lastSync': { $exists: true } 
-    }).sort({ 'integrations.randoList.lastSync': -1 }).lean();
-    
     // System info
     const totalMem = os.totalmem();
     const freeMem = os.freemem();
     const usedMem = totalMem - freeMem;
-    
-    // Check if running under PM2
-    let pm2Info = null;
-    if (process.env.PM2_HOME || process.env.pm_id) {
-      pm2Info = {
-        status: 'online',
-        restarts: parseInt(process.env.restart_time || '0'),
-        cpu: process.cpuUsage ? Math.round(process.cpuUsage().user / 1000000) : 0,
-        memory: formatBytes(process.memoryUsage().heapUsed)
+
+    // Disk holding the app, its logs and the backups
+    let disk = null;
+    try {
+      const stats = await require('fs').promises.statfs(__dirname);
+      disk = {
+        total: formatBytes(stats.blocks * stats.bsize),
+        free: formatBytes(stats.bavail * stats.bsize),
+        usedPercent: Math.round(100 * (1 - stats.bavail / stats.blocks))
       };
+    } catch {
+      // statfs is missing on some platforms
     }
     
     // Test racetime.gg connectivity
@@ -1139,20 +1132,28 @@ router.get('/health', requireAdmin, async (req, res, next) => {
       challonge: { status: challongeStatus },
       startgg: { status: startggStatus },
       system: {
+        now: new Date(),
         uptime: process.uptime(),
+        hostUptime: os.uptime(),
         nodeVersion: process.version,
+        load: os.loadavg().map((value) => Math.round(value * 100) / 100),
+        cpus: os.cpus().length,
         memory: {
           total: formatBytes(totalMem),
           used: formatBytes(usedMem),
-          free: formatBytes(freeMem)
-        }
+          usedPercent: Math.round(100 * usedMem / totalMem),
+          app: formatBytes(process.memoryUsage().rss)
+        },
+        disk
       },
-      pm2: pm2Info,
-      jobs,
-      lastSync: {
-        racetime: lastRacetimeSync?.integrations?.racetime?.lastSync,
-        randoList: lastRandoListSync?.integrations?.randoList?.lastSync
-      }
+      // PM2 runs the app in production and passes its process state in the environment
+      pm2: process.env.pm_id !== undefined ? {
+        name: process.env.name || null,
+        restarts: Number(process.env.restart_time) || 0,
+        unstableRestarts: Number(process.env.unstable_restarts) || 0,
+        memoryLimit: Number(process.env.max_memory_restart) ? formatBytes(Number(process.env.max_memory_restart)) : null
+      } : null,
+      jobs
     });
   } catch (error) {
     next(error);
@@ -1167,67 +1168,6 @@ function formatBytes(bytes) {
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
 }
-
-// ==================== GITHUB WORKFLOWS ====================
-
-/**
- * GET /api/admin/github/workflows
- * Get latest run status for each GitHub Actions workflow
- */
-router.get('/github/workflows', requireAdmin, async (req, res, next) => {
-  try {
-    const githubToken = process.env.GITHUB_TOKEN;
-    const githubRepo = process.env.GITHUB_REPO || 'queled/randomizer.games';
-    
-    if (!githubToken) {
-      return res.status(501).json({ error: 'GITHUB_TOKEN not configured' });
-    }
-    
-    const axios = require('axios');
-    
-    // Fetch the latest runs for each of our 3 workflows
-    const workflowFiles = [
-      'sync-racetime.yml',
-      'sync-rando-list.yml',
-      'sync-racetime-game-full.yml'
-    ];
-    
-    const workflowResults = await Promise.all(
-      workflowFiles.map(async (wfFile) => {
-        try {
-          const resp = await axios.get(
-            `https://api.github.com/repos/${githubRepo}/actions/workflows/${wfFile}/runs?per_page=1`,
-            {
-              headers: {
-                'Authorization': `token ${githubToken}`,
-                'Accept': 'application/vnd.github.v3+json'
-              },
-              timeout: 10000
-            }
-          );
-          
-          const run = resp.data.workflow_runs?.[0];
-          if (!run) return { name: wfFile, status: 'no_runs', conclusion: null, event: null, updated_at: null };
-          
-          return {
-            name: run.name || wfFile,
-            status: run.status,
-            conclusion: run.conclusion,
-            event: run.event,
-            updated_at: run.updated_at,
-            html_url: run.html_url
-          };
-        } catch (e) {
-          return { name: wfFile, status: 'error', conclusion: 'error', event: null, updated_at: null };
-        }
-      })
-    );
-    
-    res.json({ workflows: workflowResults });
-  } catch (error) {
-    next(error);
-  }
-});
 
 // ==================== RACE-MATCH LINKING ====================
 

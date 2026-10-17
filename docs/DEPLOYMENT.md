@@ -157,8 +157,6 @@ TWITCH_CLIENT_ID=
 TWITCH_CLIENT_SECRET=
 ```
 
-`GITHUB_TOKEN` et `GITHUB_REPO` ne servent qu'à afficher l'état des workflows GitHub dans l'admin : inutiles ici, les laisser vides.
-
 ```bash
 chmod 600 .env
 npm run check-security
@@ -226,6 +224,8 @@ PATH=/usr/local/bin:/usr/bin:/bin
 45    7 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh challonge-check
 30    3 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh backup
 ```
+
+Ces horaires sont recopiés dans `services/job-health.js`, qui en tire l'horaire et la prochaine exécution affichés par la page **Monitoring** : les modifier aux deux endroits.
 
 Tester chaque tâche une fois à la main, par exemple `scripts/cron/run-job.sh racetime && tail ~/logs/racetime.log`.
 

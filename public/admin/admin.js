@@ -1969,6 +1969,7 @@ const admin = {
     const seconds = Math.floor(ms / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
+    if (hours >= 24) return `${Math.floor(hours / 24)}j ${hours % 24}h`;
     if (hours > 0) return `${hours}h ${minutes % 60}m`;
     if (minutes > 0) return `${minutes}m ${seconds % 60}s`;
     return `${seconds}s`;
@@ -3326,8 +3327,17 @@ const admin = {
   },
   
   // ==================== MONITORING ====================
-  
+
+  monitoringTimer: null,
+
   async loadMonitoring() {
+    // Refreshed every minute while the page is on screen
+    clearTimeout(this.monitoringTimer);
+    this.monitoringTimer = setTimeout(() => {
+      if (this.currentSection === 'monitoring' && !document.hidden) this.loadMonitoring();
+      else this.monitoringTimer = null;
+    }, 60 * 1000);
+
     try {
       const response = await fetch('/api/admin/health', {
         headers: { 'Authorization': `Bearer ${this.token}` }
@@ -3358,138 +3368,119 @@ const admin = {
       </div>
     `;
   },
+
+  // Browser's time zone, e.g. "Europe/Paris (UTC+2)"
+  timeZoneLabel() {
+    const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const offset = new Intl.DateTimeFormat('fr-FR', { timeZoneName: 'shortOffset' })
+      .formatToParts(new Date()).find(part => part.type === 'timeZoneName')?.value;
+    return [zone, offset && `(${offset})`].filter(Boolean).join(' ');
+  },
+
+  formatClock(date) {
+    return date ? new Date(date).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : '-';
+  },
+
+  // Like formatRelativeTime, for a date to come
+  formatUntil(date) {
+    if (!date) return '-';
+    const minutes = Math.round((new Date(date) - new Date()) / 60000);
+    if (minutes < 1) return 'imminent';
+    if (minutes < 60) return `dans ${minutes} min`;
+    const hours = Math.floor(minutes / 60);
+    return `dans ${hours} h${minutes % 60 ? ` ${String(minutes % 60).padStart(2, '0')}` : ''}`;
+  },
   
   renderMonitoring(data) {
     const container = document.getElementById('monitoring-content');
     if (!container) return;
-    
-    const getStatusClass = (status) => {
-      if (status === 'ok' || status === 'online' || status === true) return 'success';
-      if (status === 'warning') return 'warning';
-      return 'danger';
-    };
-    
-    const getStatusIcon = (status) => {
-      if (status === 'ok' || status === 'online' || status === true) return '✓';
-      if (status === 'warning') return '⚠️';
-      return '✗';
-    };
-    
-    container.innerHTML = `
-      <div class="monitoring-grid">
-        ${this.renderJobsCard(data.jobs)}
 
-        <!-- Services Status -->
-        <div class="monitoring-card">
-          <h3 class="monitoring-card-title">🔌 Services</h3>
-          <div class="monitoring-items">
-            <div class="monitoring-item">
-              <span class="monitoring-label">API Randomizer</span>
-              <span class="badge badge-${getStatusClass(data.api?.status)}">${getStatusIcon(data.api?.status)} ${data.api?.status || 'unknown'}</span>
-            </div>
-            <div class="monitoring-item">
-              <span class="monitoring-label">MongoDB</span>
-              <span class="badge badge-${getStatusClass(data.database?.status)}">${getStatusIcon(data.database?.status)} ${data.database?.status || 'unknown'}</span>
-            </div>
-            <div class="monitoring-item">
-              <span class="monitoring-label">Racetime.gg</span>
-              <span class="badge badge-${getStatusClass(data.racetime?.status)}">${getStatusIcon(data.racetime?.status)} ${data.racetime?.status || 'unknown'}</span>
-            </div>
-            <div class="monitoring-item">
-              <span class="monitoring-label">Twitch API</span>
-              <span class="badge badge-${getStatusClass(data.twitch?.status)}">${getStatusIcon(data.twitch?.status)} ${data.twitch?.status || 'unknown'}</span>
-            </div>
-            <div class="monitoring-item">
-              <span class="monitoring-label">Challonge API</span>
-              <span class="badge badge-${getStatusClass(data.challonge?.status)}">${getStatusIcon(data.challonge?.status)} ${data.challonge?.status || 'unknown'}</span>
-            </div>
-            <div class="monitoring-item">
-              <span class="monitoring-label">start.gg API</span>
-              <span class="badge badge-${getStatusClass(data.startgg?.status)}">${getStatusIcon(data.startgg?.status)} ${data.startgg?.status || 'unknown'}</span>
-            </div>
-          </div>
-        </div>
-        
-        <!-- System Info -->
-        <div class="monitoring-card">
-          <h3 class="monitoring-card-title">💻 Système</h3>
-          <div class="monitoring-items">
-            <div class="monitoring-item">
-              <span class="monitoring-label">Uptime</span>
-              <span class="monitoring-value">${this.formatDuration((data.system?.uptime || 0) * 1000)}</span>
-            </div>
-            <div class="monitoring-item">
-              <span class="monitoring-label">Mémoire</span>
-              <span class="monitoring-value">${data.system?.memory?.used || '-'} / ${data.system?.memory?.total || '-'}</span>
-            </div>
-            <div class="monitoring-item">
-              <span class="monitoring-label">Node.js</span>
-              <span class="monitoring-value">${data.system?.nodeVersion || '-'}</span>
-            </div>
-          </div>
-        </div>
-        
-        <!-- PM2 Status -->
-        <div class="monitoring-card">
-          <h3 class="monitoring-card-title">⚙️ PM2</h3>
-          ${data.pm2 ? `
-            <div class="monitoring-items">
-              <div class="monitoring-item">
-                <span class="monitoring-label">Status</span>
-                <span class="badge badge-${getStatusClass(data.pm2.status)}">${getStatusIcon(data.pm2.status)} ${data.pm2.status}</span>
-              </div>
-              <div class="monitoring-item">
-                <span class="monitoring-label">Restarts</span>
-                <span class="monitoring-value">${data.pm2.restarts || 0}</span>
-              </div>
-              <div class="monitoring-item">
-                <span class="monitoring-label">CPU</span>
-                <span class="monitoring-value">${data.pm2.cpu || 0}%</span>
-              </div>
-              <div class="monitoring-item">
-                <span class="monitoring-label">Mémoire</span>
-                <span class="monitoring-value">${data.pm2.memory || '-'}</span>
-              </div>
-            </div>
-          ` : `
-            <p class="text-muted">PM2 non détecté. Sera disponible en production.</p>
-          `}
-        </div>
-        
-        <!-- Last Syncs -->
-        <div class="monitoring-card">
-          <h3 class="monitoring-card-title">🔄 Dernières Synchros</h3>
-          <div class="monitoring-items">
-            <div class="monitoring-item">
-              <span class="monitoring-label">Racetime (global)</span>
-              <span class="monitoring-value">${this.formatRelativeTime(data.lastSync?.racetime)}</span>
-            </div>
-            <div class="monitoring-item">
-              <span class="monitoring-label">Rando-List</span>
-              <span class="monitoring-value">${this.formatRelativeTime(data.lastSync?.randoList)}</span>
-            </div>
-          </div>
-          <div id="github-workflows-status" class="monitoring-items mt-3" style="border-top: 1px solid var(--admin-border); padding-top: 0.75rem;">
-            <p class="text-muted" style="font-size: 0.8125rem;">Chargement workflows GitHub...</p>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Refresh Button -->
-      <div class="mt-4">
-        <button class="btn btn-outline" data-click="loadMonitoring">
-          🔄 Rafraîchir
-        </button>
+    const updated = document.getElementById('monitoring-updated');
+    if (updated) updated.textContent = `Mis à jour à ${new Date().toLocaleTimeString('fr-FR')}`;
+
+    const isOk = (status) => status === 'ok' || status === 'online' || status === true;
+    const services = [
+      ['API Randomizer', data.api?.status],
+      ['MongoDB', data.database?.status],
+      ['Racetime.gg', data.racetime?.status],
+      ['Twitch API', data.twitch?.status],
+      ['Challonge API', data.challonge?.status],
+      ['start.gg API', data.startgg?.status]
+    ];
+    const jobs = Array.isArray(data.jobs) ? data.jobs : [];
+    const failingJobs = jobs.filter(job => job.state === 'error' || job.state === 'late');
+    const downServices = services.filter(([, status]) => !isOk(status));
+    const problems = [
+      failingJobs.length ? `${failingJobs.length} tâche${failingJobs.length > 1 ? 's' : ''} à vérifier (${failingJobs.map(job => job.name).join(', ')})` : '',
+      downServices.length ? `${downServices.map(([name]) => name).join(', ')} injoignable${downServices.length > 1 ? 's' : ''}` : ''
+    ].filter(Boolean);
+    const next = jobs.filter(job => job.nextRunAt).sort((a, b) => new Date(a.nextRunAt) - new Date(b.nextRunAt))[0];
+    const running = jobs.filter(job => job.state === 'running');
+
+    const system = data.system || {};
+    const pm2 = data.pm2;
+    const row = (label, value, title = '') => `
+      <div class="monitoring-item">
+        <span class="monitoring-label">${label}</span>
+        <span class="monitoring-value"${title ? ` title="${this.escapeHtml(title)}"` : ''}>${value}</span>
       </div>
     `;
     
-    // Load GitHub workflow statuses
-    this.loadGitHubWorkflows();
+    container.innerHTML = `
+      <div class="monitoring-summary monitoring-summary-${problems.length ? 'danger' : 'success'}">
+        <strong>${problems.length ? `⚠️ ${this.escapeHtml(problems.join(' · '))}` : '✓ Tout fonctionne'}</strong>
+        <span class="text-muted">
+          ${running.length ? `En cours : ${running.map(job => this.escapeHtml(job.name)).join(', ')} · ` : ''}
+          ${next ? `Prochaine tâche : <code>${this.escapeHtml(next.name)}</code> à ${this.formatClock(next.nextRunAt)} (${this.formatUntil(next.nextRunAt)})` : ''}
+        </span>
+      </div>
+
+      <div class="monitoring-grid">
+        ${this.renderJobsCard(jobs)}
+
+        <div class="monitoring-card">
+          <h3 class="monitoring-card-title">🔌 Services</h3>
+          <div class="monitoring-items">
+            ${services.map(([name, status]) => row(name, `<span class="badge badge-${isOk(status) ? 'success' : status === 'warning' ? 'warning' : 'danger'}">${isOk(status) ? '✓' : '✗'} ${this.escapeHtml(status || 'unknown')}</span>`)).join('')}
+          </div>
+        </div>
+        
+        <div class="monitoring-card">
+          <h3 class="monitoring-card-title">💻 Serveur</h3>
+          <div class="monitoring-items">
+            ${row('Site en ligne depuis', this.formatDuration((system.uptime || 0) * 1000))}
+            ${row('Machine allumée depuis', this.formatDuration((system.hostUptime || 0) * 1000))}
+            ${row('Charge (1 / 5 / 15 min)', system.load ? `${system.load.join(' / ')} <span class="text-muted">sur ${system.cpus} CPU</span>` : '-')}
+            ${row('Mémoire de la machine', system.memory ? `${system.memory.used} / ${system.memory.total} (${system.memory.usedPercent} %)` : '-')}
+            ${row('Mémoire du site', system.memory ? `${system.memory.app}${pm2?.memoryLimit ? ` <span class="text-muted">/ redémarrage à ${pm2.memoryLimit}</span>` : ''}` : '-')}
+            ${row('Disque', system.disk ? `${system.disk.free} libres sur ${system.disk.total} (${system.disk.usedPercent} % utilisés)` : '-')}
+            ${row('Heure', system.now ? `${this.formatClock(system.now)} <span class="text-muted">chez toi · ${new Date(system.now).toISOString().slice(11, 16)} UTC sur le serveur</span>` : '-')}
+            ${row('Node.js', this.escapeHtml(system.nodeVersion || '-'))}
+          </div>
+        </div>
+
+        <div class="monitoring-card">
+          <h3 class="monitoring-card-title">⚙️ PM2</h3>
+          ${pm2 ? `
+            <div class="monitoring-items">
+              ${row('Processus', `<span class="badge badge-success">✓ en ligne</span> <code>${this.escapeHtml(pm2.name || '-')}</code>`)}
+              ${row('Redémarrages', pm2.restarts
+                ? `<span class="badge badge-warning">${pm2.restarts}</span>${pm2.unstableRestarts ? ` <span class="text-muted">dont ${pm2.unstableRestarts} instable${pm2.unstableRestarts > 1 ? 's' : ''}</span>` : ''}`
+                : '0', 'Plantages, dépassements de la limite mémoire et pm2 restart, depuis le dernier pm2 start')}
+              ${row('Limite mémoire', this.escapeHtml(pm2.memoryLimit || 'aucune'))}
+            </div>
+            <p class="text-muted monitoring-sub mt-3">Journaux : <code>pm2 logs ${this.escapeHtml(pm2.name || 'randomizer')} --lines 50</code></p>
+          ` : `
+            <p class="text-muted monitoring-sub">Le site ne tourne pas sous PM2 ici (normal en local). Sur le VPS, il est lancé par <code>pm2 start server.js --name randomizer</code>.</p>
+          `}
+        </div>
+      </div>
+    `;
   },
   
   // Scheduled tasks of the server's crontab (scripts/cron/run-job.sh)
   renderJobsCard(jobs) {
-    if (!Array.isArray(jobs)) return '';
+    if (!jobs.length) return '';
     const states = {
       ok: { badge: 'success', text: '✓ ok' },
       running: { badge: 'warning', text: '⏳ en cours' },
@@ -3497,13 +3488,86 @@ const admin = {
       error: { badge: 'danger', text: '✗ en échec' },
       unknown: { badge: 'muted', text: '— jamais lancée' }
     };
-    const every = (minutes) => minutes >= 1440 ? 'tous les jours' : `toutes les ${minutes} min`;
     const failure = (job) => {
-      if (job.state === 'running') return job.consecutiveFailures ? `précédente en échec (${job.consecutiveFailures}×)` : '';
-      if (job.exitCode === 124) return 'délai dépassé';
-      if (job.exitCode) return `code ${job.exitCode}${job.consecutiveFailures > 1 ? `, ${job.consecutiveFailures} échecs de suite` : ''}`;
-      return '';
+      const details = [];
+      if (job.state === 'running') {
+        if (job.consecutiveFailures) details.push(`précédente en échec (${job.consecutiveFailures}×)`);
+      } else if (job.exitCode === 124) {
+        details.push('délai dépassé');
+      } else if (job.exitCode) {
+        details.push(`code ${job.exitCode}${job.consecutiveFailures > 1 ? `, ${job.consecutiveFailures} échecs de suite` : ''}`);
+      }
+      if ((job.state === 'error' || job.state === 'late') && job.lastSuccessAt) {
+        details.push(`dernier succès ${this.formatRelativeTime(job.lastSuccessAt)}`);
+      }
+      return details.join(' · ');
     };
+    // Minutes past the hour are the same in every time zone the site cares about,
+    // daily start times are shown in the browser's
+    const schedule = (job) => {
+      if (job.everyMinutes >= 1440) return `Tous les jours à ${this.formatClock(job.nextRunAt)}`;
+      const offset = job.minutes?.[0] ? ` <span class="text-muted">(${job.minutes.map(m => `:${String(m).padStart(2, '0')}`).join(', ')})</span>` : '';
+      return `Toutes les ${job.everyMinutes} min${offset}`;
+    };
+    const lastRun = (job) => {
+      if (!job.startedAt) return '<span class="text-muted">-</span>';
+      const sub = job.state === 'running'
+        ? `depuis ${this.formatDuration(Date.now() - new Date(job.startedAt))}`
+        : `${this.formatClock(job.startedAt)}${job.durationMs !== null ? ` · ${this.formatDuration(job.durationMs || 1000)}` : ''}`;
+      return `
+        <span title="${this.escapeHtml(this.formatDateTime(job.startedAt))}">${this.formatRelativeTime(job.startedAt)}</span>
+        <div class="text-muted monitoring-sub">${sub}</div>
+      `;
+    };
+    const rowsOf = (list) => list.map(job => {
+      const state = states[job.state] || states.unknown;
+      const detail = failure(job);
+      return `
+        <tr>
+          <td>
+            <strong>${this.escapeHtml(job.label)}</strong>
+            <div class="text-muted monitoring-sub"><code>${this.escapeHtml(job.name)}</code></div>
+          </td>
+          <td title="cron ${this.escapeHtml(job.cron || '')} (UTC)">${schedule(job)}</td>
+          <td>
+            <span class="badge badge-${state.badge}">${state.text}</span>
+            ${detail ? `<div class="text-muted monitoring-sub">${this.escapeHtml(detail)}</div>` : ''}
+          </td>
+          <td>${lastRun(job)}</td>
+          <td>
+            ${job.nextRunAt ? `
+              <span title="${this.escapeHtml(this.formatDateTime(job.nextRunAt))}">${this.formatUntil(job.nextRunAt)}</span>
+              <div class="text-muted monitoring-sub">${this.formatClock(job.nextRunAt)}</div>
+            ` : '<span class="text-muted">-</span>'}
+          </td>
+          <td>
+            ${job.lastData ? `
+              <span title="${this.escapeHtml(this.formatDateTime(job.lastData.at))}">${this.formatRelativeTime(job.lastData.at)}</span>
+              <div class="text-muted monitoring-sub">${this.escapeHtml(job.lastData.label)}</div>
+            ` : '<span class="text-muted">-</span>'}
+          </td>
+        </tr>
+        ${job.logTail?.length ? `
+          <tr>
+            <td colspan="6">
+              <details>
+                <summary class="text-muted monitoring-sub" style="cursor: pointer;">Fin du journal <code>~/logs/${this.escapeHtml(job.name)}.log</code></summary>
+                <pre class="monitoring-log">${this.escapeHtml(job.logTail.join('\n'))}</pre>
+              </details>
+            </td>
+          </tr>
+        ` : ''}
+      `;
+    }).join('');
+
+    const frequent = jobs.filter(job => job.everyMinutes < 1440);
+    // Daily tasks in the order they run over the day
+    const minuteOfDay = (job) => {
+      const date = new Date(job.nextRunAt);
+      return date.getHours() * 60 + date.getMinutes();
+    };
+    const daily = jobs.filter(job => job.everyMinutes >= 1440)
+      .sort((a, b) => minuteOfDay(a) - minuteOfDay(b));
     const failing = jobs.filter(job => job.state === 'error' || job.state === 'late').length;
     const neverRan = jobs.every(job => job.state === 'unknown');
 
@@ -3513,103 +3577,23 @@ const admin = {
           ⏱️ Tâches planifiées
           ${failing ? `<span class="badge badge-danger">${failing} à vérifier</span>` : ''}
         </h3>
-        ${neverRan ? '<p class="text-muted" style="font-size: 0.8125rem;">Aucune tâche n\'a encore tourné sur ce serveur (crontab absente ou <code>LOG_DIR</code> différent).</p>' : ''}
+        ${neverRan ? '<p class="text-muted monitoring-sub">Aucune tâche n\'a encore tourné sur ce serveur (crontab absente ou <code>LOG_DIR</code> différent).</p>' : ''}
         <div class="table-container">
-          <table class="table">
+          <table class="table monitoring-jobs">
             <thead>
-              <tr><th>Tâche</th><th>État</th><th>Dernier succès</th><th>Dernière exécution</th><th>En base</th></tr>
+              <tr><th>Tâche</th><th>Horaire</th><th>État</th><th>Dernière exécution</th><th>Prochaine</th><th>En base</th></tr>
             </thead>
             <tbody>
-              ${jobs.map(job => {
-                const state = states[job.state] || states.unknown;
-                const detail = failure(job);
-                return `
-                  <tr>
-                    <td>
-                      <strong>${this.escapeHtml(job.label)}</strong>
-                      <div class="text-muted" style="font-size: 0.75rem;"><code>${this.escapeHtml(job.name)}</code> · ${every(job.everyMinutes)}</div>
-                    </td>
-                    <td>
-                      <span class="badge badge-${state.badge}">${state.text}</span>
-                      ${detail ? `<div class="text-muted" style="font-size: 0.75rem;">${this.escapeHtml(detail)}</div>` : ''}
-                    </td>
-                    <td title="${job.lastSuccessAt ? new Date(job.lastSuccessAt).toLocaleString('fr-FR') : ''}">${this.formatRelativeTime(job.lastSuccessAt)}</td>
-                    <td title="${job.startedAt ? new Date(job.startedAt).toLocaleString('fr-FR') : ''}">${this.formatRelativeTime(job.startedAt)}</td>
-                    <td>
-                      ${job.lastData ? `
-                        <span title="${job.lastData.at ? new Date(job.lastData.at).toLocaleString('fr-FR') : ''}">${this.formatRelativeTime(job.lastData.at)}</span>
-                        <div class="text-muted" style="font-size: 0.75rem;">${this.escapeHtml(job.lastData.label)}</div>
-                      ` : '<span class="text-muted">-</span>'}
-                    </td>
-                  </tr>
-                  ${job.logTail?.length ? `
-                    <tr>
-                      <td colspan="5">
-                        <details>
-                          <summary class="text-muted" style="font-size: 0.8125rem; cursor: pointer;">Fin du journal <code>~/logs/${this.escapeHtml(job.name)}.log</code></summary>
-                          <pre class="monitoring-log">${this.escapeHtml(job.logTail.join('\n'))}</pre>
-                        </details>
-                      </td>
-                    </tr>
-                  ` : ''}
-                `;
-              }).join('')}
+              <tr class="monitoring-group"><td colspan="6">Plusieurs fois par heure</td></tr>
+              ${rowsOf(frequent)}
+              <tr class="monitoring-group"><td colspan="6">Une fois par jour</td></tr>
+              ${rowsOf(daily)}
             </tbody>
           </table>
         </div>
+        <p class="text-muted monitoring-sub mt-3">🕒 Heures à ton heure locale, ${this.escapeHtml(this.timeZoneLabel())}. La crontab du serveur est réglée en UTC : survoler un horaire pour voir son expression cron.</p>
       </div>
     `;
-  },
-
-  async loadGitHubWorkflows() {
-    const container = document.getElementById('github-workflows-status');
-    if (!container) return;
-    
-    const workflows = [
-      { id: 'sync-racetime.yml', name: 'Sync Racetime (5min)', icon: '🏁' },
-      { id: 'sync-rando-list.yml', name: 'Sync Rando-List (quotidien)', icon: '📋' },
-      { id: 'sync-racetime-game-full.yml', name: 'Sync Game Full (manuel)', icon: '🎮' }
-    ];
-    
-    try {
-      const response = await fetch('/api/admin/github/workflows', {
-        headers: { 'Authorization': `Bearer ${this.token}` }
-      });
-      
-      if (!response.ok) {
-        container.innerHTML = '<p class="text-muted" style="font-size: 0.8125rem;">⚠️ API GitHub non configurée</p>';
-        return;
-      }
-      
-      const data = await response.json();
-      
-      if (!data.workflows || data.workflows.length === 0) {
-        container.innerHTML = '<p class="text-muted" style="font-size: 0.8125rem;">Aucun workflow trouvé</p>';
-        return;
-      }
-      
-      container.innerHTML = `
-        <div style="font-size: 0.75rem; color: var(--admin-text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Workflows GitHub Actions</div>
-        ${data.workflows.map(wf => {
-          const statusClass = wf.conclusion === 'success' ? 'success' : wf.conclusion === 'failure' ? 'danger' : wf.status === 'in_progress' ? 'warning' : 'muted';
-          const statusIcon = wf.conclusion === 'success' ? '✓' : wf.conclusion === 'failure' ? '✗' : wf.status === 'in_progress' ? '⏳' : '—';
-          const trigger = wf.event === 'schedule' ? '⏰' : wf.event === 'workflow_dispatch' ? '👤' : '🔗';
-          return `
-            <div class="monitoring-item">
-              <span class="monitoring-label">${trigger} ${this.escapeHtml(wf.name)}</span>
-              <span>
-                <span class="badge badge-${statusClass}">${statusIcon} ${wf.conclusion || wf.status || 'unknown'}</span>
-                <span class="monitoring-value" style="margin-left: 0.5rem; font-size: 0.75rem;">${this.formatRelativeTime(wf.updated_at)}</span>
-              </span>
-            </div>
-          `;
-        }).join('')}
-      `;
-      
-    } catch (error) {
-      console.error('Error loading GitHub workflows:', error);
-      container.innerHTML = '<p class="text-muted" style="font-size: 0.8125rem;">❌ Erreur chargement workflows</p>';
-    }
   },
 
   // ==================== TOURNAMENTS MANAGEMENT ====================

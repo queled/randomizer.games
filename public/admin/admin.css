@@ -1131,6 +1131,53 @@ a:hover {
   grid-column: 1 / -1;
 }
 
+.monitoring-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.8125rem;
+}
+
+.monitoring-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  padding: 0.875rem 1.25rem;
+  border: 1px solid var(--admin-border);
+  border-left-width: 4px;
+  border-radius: 8px;
+  background: var(--admin-surface);
+  font-size: 0.875rem;
+}
+
+.monitoring-summary-success {
+  border-left-color: var(--admin-success);
+}
+
+.monitoring-summary-danger {
+  border-left-color: var(--admin-danger);
+}
+
+.monitoring-sub {
+  font-size: 0.75rem;
+}
+
+.monitoring-jobs td {
+  vertical-align: top;
+}
+
+.monitoring-group td {
+  padding-top: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--admin-text-muted);
+}
+
 .monitoring-log {
   margin-top: 0.5rem;
   padding: 0.75rem;

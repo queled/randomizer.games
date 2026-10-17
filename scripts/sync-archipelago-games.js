@@ -64,7 +64,7 @@ const OVERRIDES = {
     "Luigi's Mansion": 'lm',
     "Majora's Mask Recompiled": 'mm',
     'Final Fantasy IV Free Enterprise': 'ff4',
-    'Pokemon FireRed and LeafGreen': ['pkmnf', 'pkmnl'],
+    'Pokemon FireRed and LeafGreen': 'pkmnfl',
     'Quake 1': 'quake',
     'Metroid Fusion': 'mf',
     'Xenoblade X': 'xcx',

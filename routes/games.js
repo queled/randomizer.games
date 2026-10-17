@@ -129,6 +129,18 @@ async function getGamesWithStatsCached() {
   return refreshGamesWithStats();
 }
 
+// A game edit must show on the list right away, not after the TTL: recompute
+// now, and again if a computation started before the edit is still running.
+function invalidateGamesWithStats() {
+  if (gamesWithStatsInFlight) {
+    gamesWithStatsInFlight.finally(() => { gamesWithStatsCacheExpiresAt = 0; }).catch(() => {});
+  }
+  gamesWithStatsCacheExpiresAt = 0;
+  refreshGamesWithStats().catch(err => {
+    console.warn('Refresh /api/games/with-stats failed:', err?.message || err);
+  });
+}
+
 setTimeout(() => {
   getGamesWithStatsCached().catch(err => {
     console.warn('Warmup /api/games/with-stats failed:', err?.message || err);
@@ -510,3 +522,4 @@ router.patch('/:id/resources', requireAdmin, async (req, res, next) => {
 });
 
 module.exports = router;
+module.exports.invalidateGamesWithStats = invalidateGamesWithStats;

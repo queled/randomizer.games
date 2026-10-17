@@ -21,10 +21,21 @@ const { fillMissingFinalRanks } = require('../helpers/bracket-ranks');
 const { getJobsHealth } = require('../services/job-health');
 const { computeLinkCoverage, summarizeCoverage } = require('../services/link-coverage');
 const { mergeGames, changeGameId } = require('../services/game-merge');
+const { invalidateGamesWithStats } = require('./games');
 
 function escapeRegex(value) {
   return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
+
+// The games list is cached: any successful game edit refreshes it.
+router.use('/games', (req, res, next) => {
+  if (req.method !== 'GET') {
+    res.on('finish', () => {
+      if (res.statusCode < 400) invalidateGamesWithStats();
+    });
+  }
+  next();
+});
 
 // ==================== AUTH ====================
 

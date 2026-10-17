@@ -817,6 +817,12 @@
           }
         } catch (err) { /* ignore */ }
 
+        // Nobody behind the name (a bracket entry such as a co-op team): no empty profile
+        if (!races.length && !racetimeUrl) {
+          window.location.replace('/404.html');
+          return;
+        }
+
         const playerData = {
           name: name,
           racetimeUrl: racetimeUrl || null,

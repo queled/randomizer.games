@@ -1172,9 +1172,11 @@ function displayParticipants(participants, matches = [], options = {}) {
       return badge(isWinner);
     }).filter(h => h !== null).join('');
 
-    const nameHtml = participant.members
+    const nameHtml = participant.unnamedTeam
+      ? `<div style="font-weight: bold; color: white; margin-bottom: 0.125rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${playerNameLinks(participant.displayName || participant.name, 'class="player-link" style="color: inherit; text-decoration: none;"')}</div>`
+      : participant.members
       ? `<div style="font-weight: bold; color: white; margin-bottom: 0.125rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escHtml(participant.name)}</div>${renderTeamMembers(participant.members, 'font-size: 0.875rem;')}`
-      : `<a href="${playerPageHref(participant.displayName || participant.name)}" style="font-weight: bold; color: white; margin-bottom: 0.125rem; cursor: pointer; text-decoration: none; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escHtml(participant.displayName || participant.name)}</a>
+      : `${playerNameLinks(participant.displayName || participant.name, 'style="font-weight: bold; color: white; margin-bottom: 0.125rem; cursor: pointer; text-decoration: none; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"')}
         ${participant.name !== participant.displayName && participant.displayName ? `<div style=\"color: #9ca3af; font-size: 0.875rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;\">${escHtml(participant.name)}</div>` : ''}`;
 
     row.innerHTML = `
@@ -1290,11 +1292,42 @@ function playerPageHref(name) {
   return '/player-detail.html?name=' + encodeURIComponent(participant ? participant.racetimeName : name);
 }
 
+// Challonge co-op brackets name each entrant after its players ("Alice & Bob"), with no team name:
+// when most entrants are named so, each player of the name is a player of its own
+const TEAM_NAME_SEPARATOR = /\s*&\s*|\s+[+/]\s+/;
+let combinedTeamNamesCache = null;
+function hasCombinedTeamNames() {
+  const participants = (currentTournament && currentTournament.participants) || [];
+  if (combinedTeamNamesCache && combinedTeamNamesCache.participants === participants) return combinedTeamNamesCache.value;
+  const solo = participants.filter(p => p && !p.team);
+  const combined = solo.filter(p => String(p.displayName || p.name || '').split(TEAM_NAME_SEPARATOR).filter(s => s.trim()).length >= 2);
+  const value = solo.length >= 2 && solo.length === participants.length && combined.length / solo.length >= 0.8;
+  combinedTeamNamesCache = { participants, value };
+  return value;
+}
+
+function teamNameMembers(name) {
+  if (!name || !hasCombinedTeamNames()) return null;
+  const members = String(name).split(TEAM_NAME_SEPARATOR).map(s => s.trim()).filter(Boolean);
+  return members.length >= 2 ? members : null;
+}
+
+// Link(s) to the player page of a bracket name: one per player when the name joins a team's players
+function playerNameLinks(name, attrs = '') {
+  const members = teamNameMembers(name) || [name];
+  return members.map(m => `<a href="${playerPageHref(m)}" ${attrs}>${escHtml(m)}</a>`).join(' & ');
+}
+
 function groupTeamParticipants(participants) {
   const teams = new Map();
   const grouped = [];
   (participants || []).forEach(p => {
-    if (!p || !p.team) { grouped.push(p); return; }
+    if (p && !p.team) {
+      const members = teamNameMembers(p.displayName || p.name);
+      grouped.push(members ? { ...p, members, unnamedTeam: true } : p);
+      return;
+    }
+    if (!p) { grouped.push(p); return; }
     if (!teams.has(p.team)) {
       const team = { name: p.team, displayName: p.team, finalRank: p.finalRank, seed: p.seed, members: [] };
       teams.set(p.team, team);
@@ -2831,7 +2864,7 @@ function createMatchCard(match, races = []) {
     <div style="display: flex; justify-content: space-between; align-items: center;">
       <div style="flex: 1;">
         <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
-          ${match.player1Members && match.player1Members.length ? `<div style="flex: 1; min-width: 0;"><span class="match-player-name ${player1Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'};">${escHtml(sanitizeDisplayName(match.player1Name))}</span>${renderTeamMembers(match.player1Members)}</div>` : match.player1Name ? `<span style="flex: 1; min-width: 0;"><a href="${playerPageHref(sanitizeDisplayName(match.player1Name))}" class="match-player-name ${player1Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'}; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player1Name))}</a></span>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
+          ${match.player1Members && match.player1Members.length ? `<div style="flex: 1; min-width: 0;"><span class="match-player-name ${player1Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'};">${escHtml(sanitizeDisplayName(match.player1Name))}</span>${renderTeamMembers(match.player1Members)}</div>` : match.player1Name ? `<span style="flex: 1; min-width: 0;">${playerNameLinks(sanitizeDisplayName(match.player1Name), `class="match-player-name ${player1Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'}; text-decoration: none;"`)}</span>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
           ${displayScore1 !== null && displayScore2 !== null ? `
             <span class="spoiler-block match-card-score" style="color: #9ca3af; margin-left: 8rem; display:flex; align-items:center; gap:4rem;">
               ${!isMultiRaceSeries ? `<span>${time1 !== null && time1 !== undefined ? time1 : '-'}</span>` : ''}
@@ -2840,7 +2873,7 @@ function createMatchCard(match, races = []) {
           ` : ''}
         </div>
         <div style="display: flex; align-items: center;">
-          ${match.player2Members && match.player2Members.length ? `<div style="flex: 1; min-width: 0;"><span class="match-player-name ${player2Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'};">${escHtml(sanitizeDisplayName(match.player2Name))}</span>${renderTeamMembers(match.player2Members)}</div>` : match.player2Name ? `<span style="flex: 1; min-width: 0;"><a href="${playerPageHref(sanitizeDisplayName(match.player2Name))}" class="match-player-name ${player2Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'}; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player2Name))}</a></span>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
+          ${match.player2Members && match.player2Members.length ? `<div style="flex: 1; min-width: 0;"><span class="match-player-name ${player2Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'};">${escHtml(sanitizeDisplayName(match.player2Name))}</span>${renderTeamMembers(match.player2Members)}</div>` : match.player2Name ? `<span style="flex: 1; min-width: 0;">${playerNameLinks(sanitizeDisplayName(match.player2Name), `class="match-player-name ${player2Winner ? 'match-winner spoiler-winner' : ''}" style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'}; text-decoration: none;"`)}</span>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
           ${displayScore2 !== null && displayScore1 !== null ? `
             <span class="spoiler-block match-card-score" style="color: #9ca3af; margin-left: 8rem; display:flex; align-items:center; gap:4rem;">
               ${!isMultiRaceSeries ? `<span>${time2 !== null && time2 !== undefined ? time2 : '-'}</span>` : ''}
@@ -3480,7 +3513,7 @@ function displayGroupStages(groupMatches, participants, races = []) {
       sortedNames.forEach(name => {
         const row = document.createElement('div');
         row.style.cssText = 'padding: 0.5rem; background-color: #111827; border-radius: 0.25rem; color: #d1d5db;';
-        row.innerHTML = `<a href="${playerPageHref(sanitizeDisplayName(name))}" style="color: inherit; text-decoration: none;">${escHtml(sanitizeDisplayName(name))}</a>`;
+        row.innerHTML = playerNameLinks(sanitizeDisplayName(name), 'style="color: inherit; text-decoration: none;"');
         namesList.appendChild(row);
       });
       
@@ -3540,7 +3573,7 @@ function displayGroupStages(groupMatches, participants, races = []) {
         const nameStyle = qualified ? 'color: #fbbf24; font-weight: bold;' : 'color: #9ca3af;';
         
         row.innerHTML = `
-          <a href="${playerPageHref(sanitizeDisplayName(standing.name))}" style="${nameStyle} text-decoration: none;">${pos + 1}. ${escHtml(sanitizeDisplayName(standing.name))}</a>
+          <span style="${nameStyle}">${pos + 1}. ${playerNameLinks(sanitizeDisplayName(standing.name), 'style="color: inherit; text-decoration: none;"')}</span>
           <span style="color: #9ca3af; font-size: 0.875rem;">${standing.wins}V - ${standing.losses}D</span>
         `;
         standingsTable.appendChild(row);
@@ -3633,12 +3666,12 @@ function createCompactMatchCard(match, races = []) {
     <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.875rem;">
       <div style="flex: 1;">
         <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
-          ${match.player1Members && match.player1Members.length ? `<span style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'};" title="${escHtml(teamTitle(match.player1Name, match.player1Members))}">${escHtml(sanitizeDisplayName(match.player1Name))}</span>` : match.player1Name ? `<a href="${playerPageHref(sanitizeDisplayName(match.player1Name))}" style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'}; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player1Name))}</a>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
+          ${match.player1Members && match.player1Members.length ? `<span style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'};" title="${escHtml(teamTitle(match.player1Name, match.player1Members))}">${escHtml(sanitizeDisplayName(match.player1Name))}</span>` : match.player1Name ? `${playerNameLinks(sanitizeDisplayName(match.player1Name), `style="font-weight: ${player1Winner ? 'bold' : 'normal'}; color: ${player1Winner ? '#fbbf24' : 'white'}; text-decoration: none;"`)}` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
           ${timeHtml(times.time1)}
           ${displayScore1 !== null ? `<span class="spoiler-block" style="color: #9ca3af; font-family: monospace;${times.time1 ? '' : ' margin-left: auto;'}">${displayScore1}</span>` : ''}
         </div>
         <div style="display: flex; align-items: center; gap: 0.5rem;">
-          ${match.player2Members && match.player2Members.length ? `<span style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'};" title="${escHtml(teamTitle(match.player2Name, match.player2Members))}">${escHtml(sanitizeDisplayName(match.player2Name))}</span>` : match.player2Name ? `<a href="${playerPageHref(sanitizeDisplayName(match.player2Name))}" style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'}; text-decoration: none;">${escHtml(sanitizeDisplayName(match.player2Name))}</a>` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
+          ${match.player2Members && match.player2Members.length ? `<span style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'};" title="${escHtml(teamTitle(match.player2Name, match.player2Members))}">${escHtml(sanitizeDisplayName(match.player2Name))}</span>` : match.player2Name ? `${playerNameLinks(sanitizeDisplayName(match.player2Name), `style="font-weight: ${player2Winner ? 'bold' : 'normal'}; color: ${player2Winner ? '#fbbf24' : 'white'}; text-decoration: none;"`)}` : (i18n.t('tournamentDetail.tbd') || 'TBD')}
           ${timeHtml(times.time2)}
           ${displayScore2 !== null ? `<span class="spoiler-block" style="color: #9ca3af; font-family: monospace;${times.time2 ? '' : ' margin-left: auto;'}">${displayScore2}</span>` : ''}
         </div>
@@ -3854,10 +3887,9 @@ function displayStandingsPhase(phaseMatches, container, isSwiss, phaseName = nul
       .forEach((s, pos) => {
         const row = document.createElement('div');
         row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background-color: #111827; border-radius: 0.25rem; margin-bottom: 0.25rem;';
-        const link = document.createElement('a');
-        link.href = playerPageHref(sanitizeDisplayName(s.name));
-        link.style.cssText = 'color: #e5e7eb; text-decoration: none;';
-        link.textContent = `${pos + 1}. ${sanitizeDisplayName(s.name)}`;
+        const link = document.createElement('span');
+        link.style.cssText = 'color: #e5e7eb;';
+        link.innerHTML = `${pos + 1}. ${playerNameLinks(sanitizeDisplayName(s.name), 'style="color: inherit; text-decoration: none;"')}`;
         const record = document.createElement('span');
         record.style.cssText = 'color: #9ca3af; font-size: 0.875rem;';
         record.textContent = `${s.wins}V - ${s.losses}D`;
@@ -4061,7 +4093,7 @@ function displaySpoilerGroupsOnly(groupMatches, participants, container) {
       const row = document.createElement('div');
       row.style.cssText = 'padding: 0.4rem 0.5rem; background-color: #111827; border-radius: 0.25rem; margin-bottom: 0.25rem; color: #d1d5db; font-size: 0.9rem;';
       
-      row.innerHTML = `<a href="${playerPageHref(name)}" style="color: inherit; text-decoration: none;">${escHtml(name)}</a>`;
+      row.innerHTML = playerNameLinks(name, 'style="color: inherit; text-decoration: none;"');
       namesList.appendChild(row);
     });
     

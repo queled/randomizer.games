@@ -247,6 +247,11 @@ router.get('/:id/stats', async (req, res, next) => {
   }
 });
 
+// "archipelago" / "multiworld" for a link to one of these sites, else null
+function multiworldHost(url) {
+  return (String(url || '').match(/^https?:\/\/(?:www\.)?(archipelago|multiworld)\.gg(?:\/|$)/i) || [])[1]?.toLowerCase() || null;
+}
+
 // Get game resources (sites, trackers, guides)
 router.get('/:id/resources', async (req, res, next) => {
   try {
@@ -280,8 +285,13 @@ router.get('/:id/resources', async (req, res, next) => {
       };
     }
     
-    // Filtrer les sites obsolètes pour l'affichage
-    const activeSites = (resources.sites || []).filter(s => !s.isObsolete);
+    // Filtrer les sites obsolètes pour l'affichage, ainsi que les liens génériques
+    // vers archipelago.gg / multiworld.gg (rando-list) quand le jeu a sa page sur ce site
+    const syncedHosts = new Set((resources.sites || [])
+      .filter(s => s.source === 'archipelago')
+      .map(s => multiworldHost(s.url)));
+    const activeSites = (resources.sites || []).filter(s =>
+      !s.isObsolete && !(s.source !== 'archipelago' && syncedHosts.has(multiworldHost(s.url))));
     
     res.json({
       officialSite,

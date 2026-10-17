@@ -24,6 +24,7 @@ Everything shown is public data, refreshed automatically:
 | [SpeedRunsLive](https://www.speedrunslive.com) | Races from before racetime.gg |
 | [start.gg](https://start.gg) and [Challonge](https://challonge.com) | Tournaments, brackets and matches |
 | [rando-list](https://github.com/video-game-randomizers/rando-list) | The list of games and randomizers |
+| [Archipelago](https://archipelago.gg/games) and [Multiworld](https://multiworld.gg/games) | Games playable in an Archipelago multiworld |
 | [speedrun.com](https://www.speedrun.com) | Game details (platforms, release year) |
 | [Twitch](https://twitch.tv) | Live streams |
 

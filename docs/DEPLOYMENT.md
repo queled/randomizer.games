@@ -9,7 +9,7 @@ Mise en ligne de randomizer.games sur un VPS Hetzner Cloud (Ubuntu 24.04) qui h�
 | MongoDB 8.0 | La base, joignable uniquement depuis le serveur lui-même (`127.0.0.1`) |
 | Node.js + PM2 | L'application (`server.js`), une seule instance |
 | Nginx + Certbot | HTTPS et proxy vers l'application |
-| crontab | Les synchronisations (racetime, tournois, rando-list) et les sauvegardes, via [`scripts/cron/run-job.sh`](../scripts/cron/run-job.sh) |
+| crontab | Les synchronisations (racetime, tournois, rando-list, Archipelago) et les sauvegardes, via [`scripts/cron/run-job.sh`](../scripts/cron/run-job.sh) |
 
 La base n'étant pas exposée sur Internet, les workflows GitHub Actions ne peuvent pas l'atteindre, même lancés à la main : leur travail est repris par la crontab (voir [ARCHITECTURE.md](ARCHITECTURE.md#tâches-planifiées)).
 
@@ -220,6 +220,7 @@ PATH=/usr/local/bin:/usr/bin:/bin
 7-59/15 * * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh schedule-sites
 12-59/30 * * * * /home/randomizer/randomizer-app/scripts/cron/run-job.sh race-vods
 0     6 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh rando-list
+20    6 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh archipelago
 0     7 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh tournaments-discover
 30    7 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh players
 45    7 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh challonge-check

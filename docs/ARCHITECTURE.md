@@ -23,6 +23,7 @@ Comment les données arrivent dans le site, où elles sont stockées, et quels s
 | Source | Ce qu'on en tire |
 |--------|------------------|
 | [rando-list](https://github.com/video-game-randomizers/rando-list) | Liste des jeux et randomizers, sites officiels |
+| [archipelago.gg](https://archipelago.gg/games) / [multiworld.gg](https://multiworld.gg/games) | Jeux jouables en multiworld Archipelago : pages, guides d'installation, wiki |
 | racetime.gg | Courses (en continu) et catégories de jeux |
 | SpeedRunsLive | Historique des courses d'avant racetime.gg (import ponctuel) |
 | start.gg / Challonge | Tournois, participants, matchs |
@@ -49,6 +50,7 @@ En production, la base MongoDB tourne sur le même serveur que le site et n'éco
 | `race-vods` | toutes les 30 min | `sync-race-vods.js` : VOD Twitch des joueurs de chaque race, puis `sync-race-restreams.js` : restreams absents de Mido's House, trouvés par le titre Twitch (voir plus bas) |
 | `schedule-sites` | toutes les 15 min | `sync-schedule-sites.js` : horaires et restreams des races des tournois de Mido's House et Hyrule Town Hall, rattachement des courses par leur room, VOD Twitch des restreams, puis `sync-midos-league.js --current` : saison en cours de l'OoTR League, puis `sync-speedrace.js` : VOD saisies sur Speedrace, puis `sync-localhorst.js` : restreams planifiés sur localhorst, puis `sync-ical-restreams.js` : restreams des calendriers iCal (voir plus bas) |
 | `rando-list` | tous les jours à 6h | met à jour la copie locale de rando-list ; si `check-rando-list-changes.js` signale un nouveau commit, `sync-rando-list.js --detect-new` met à jour le cache et les ressources, puis signale les nouveaux jeux, à créer depuis le panneau admin |
+| `archipelago` | tous les jours à 6h20 | `sync-archipelago-games.js` : jeux listés sur [archipelago.gg](https://archipelago.gg/games) et [multiworld.gg](https://multiworld.gg/games) ; ajoute à chaque jeu sa page sur ces sites, le guide d'installation et le wiki, crée les jeux absents (puis catégorie Twitch et année de sortie) et retire les liens des jeux qui en sont partis (voir plus bas) |
 | `tournaments-discover` | tous les jours à 7h | `discover-tournaments.js --since <il y a 2 jours> --max-pages 3` : nouveaux tournois sur start.gg et Challonge, et ceux liés depuis Mido's House, Hyrule Town Hall et SpeedGaming, puis `sync-alttpr-asyncs.js` : séries async ALTTPR, puis `sync-alttpr-league.js --current` : saison en cours de l'ALTTPR League, puis `sync-gdq-runs.js` : runs randomizer des marathons GDQ (voir plus bas) |
 | `players` | tous les jours à 7h30 | `sync-players-from-races.js` : un joueur par compte racetime.gg (source de vérité), au nom de sa dernière course ; `sync-racetime-profiles.js --stale-days 7 --limit 1200` relit le profil racetime des joueurs (chacun une fois par semaine) : nom actuel, compte supprimé ; puis `link-participant-accounts.js --all --apply` relie chaque participant de tournoi au compte racetime qui a couru ses matchs (voir plus bas) |
 | `challonge-check` | tous les jours à 7h45 | `check-challonge-quota.js` : une seule requête Challonge, en erreur sur la page de santé tant que le quota (500 requêtes sur 30 jours glissants) est épuisé ; à son retour, les imports Challonge en attente se lancent à la main |
@@ -234,8 +236,8 @@ official           { name, releaseDate, releaseYear, website }   — le jeu d'or
 randomizer         { displayName, shortName, tinyName, name, website, opensource, addedDate, updatedDate }
 resources          { officialSite, sites[], trackers[], guides[], other[] }
 platforms[], series, logo, image, categories[]
-integrations       { randoList, racetime, speedrun, twitch, startgg, challonge }
-source             { origin: seed | csv-import | rando-list | manual, importedAt }
+integrations       { randoList, racetime, speedrun, twitch, startgg, challonge, archipelago, multiworld }
+source             { origin: seed | csv-import | rando-list | manual | archipelago, importedAt }
 enabled
 ```
 
@@ -245,6 +247,8 @@ Deux règles protègent les données saisies à la main :
 - **`confidence: 'manual'` n'est jamais écrasé.** Chaque intégration porte un champ `confidence` : `auto` (trouvé par un script, peut être mis à jour) ou `manual` (fixé par un admin, laissé tel quel par les scripts).
 
 **Lien avec rando-list.** `sync-rando-list.js` retrouve les randomizers d'un jeu par ses noms : `name`, `official.name`, `randomizer.name`, `randomizer.shortName` et surtout `integrations.randoList.gameName` et `gameNames`, les noms exacts de rando-list. Chaque nom de rando-list trouvé y est enregistré, pour que le lien survive à un changement de nom ou d'id. Le préfixe de génération de `Pokémon.yml` (« (III) Pokémon Emerald ») est ignoré.
+
+**Lien avec Archipelago et Multiworld.** `sync-archipelago-games.js` lit la page `/games` des deux sites (`services/archipelago.js`) et rattache chaque monde à un jeu : d'abord par `integrations.archipelago.gameName` / `integrations.multiworld.gameName` (enregistré à chaque synchronisation ; avec `confidence: 'manual'`, fixé à la main), puis par la table `OVERRIDES` du script, le monde archipelago.gg du même nom, les liens archipelago.gg / multiworld.gg que le jeu a déjà (rando-list) et enfin ses noms (sans accents, « and »/« & », chiffres romains, parenthèses, sous-titre). Un monde sans jeu devient un jeu (`source.origin: archipelago`, id fait des initiales de son nom) ; un nom qui désigne plusieurs jeux est signalé et laissé de côté. Les liens ajoutés portent `source: 'archipelago'` : la synchronisation les remplace à chaque passage, et `sync-rando-list.js` les conserve. Quand un jeu a sa page sur un de ces sites, l'API masque le lien générique de rando-list vers ce site.
 
 **Fusion de jeux.** Un même jeu peut figurer plusieurs fois dans rando-list (une entrée par plateforme ou par édition) ; sur le site, il n'en fait qu'un. La fusion (panneau admin, ou `node scripts/merge-games.js <cible> <source>... [--rename <id>] [--short-name "<libellé>"]`, code dans `services/game-merge.js`) garde le jeu cible et supprime les sources : leurs ressources s'ajoutent sans doublon d'URL, ce qui manque à la cible (logo, plateformes, intégrations, catégories) est repris, leurs catégories racetime.gg deviennent des catégories supplémentaires de la cible (les courses ne sont pas modifiées) et leurs noms rando-list passent dans `gameNames`. La synchronisation suivante retrouve donc les sites de toutes les versions et ne les signale plus comme nouveaux jeux.
 
@@ -262,6 +266,7 @@ Les scripts qui écrivent en base proposent un mode `--dry-run` (ou n'écrivent 
 | `sync-racetime-game.js` | — | Toutes les courses d'un jeu (à la main, admin) |
 | `sync-rando-list.js` | `sync-rando-list`, `:detect`, `:link` | Cache rando-list, ressources, nouveaux jeux |
 | `check-rando-list-changes.js` | — | Indique à la tâche `rando-list` si rando-list a changé |
+| `sync-archipelago-games.js` | `sync:archipelago` (+ `:dry`) | Jeux d'archipelago.gg et multiworld.gg : liens, nouveaux jeux (tâche `archipelago` ; `--no-create`, `--site`, `--verbose`) |
 | `discover-tournaments.js` | `discover:tournaments` (+ `:dry`, `:startgg`, `:challonge`) | Découverte de tournois |
 | `sync-tournaments.js` | `sync:tournaments` (+ `:dry`, `:update`) | Mise à jour des tournois actifs |
 | `auto-link-tournaments.js` | `link:tournaments:active` | Rattache les courses aux matchs, et les tie-breaks à leur poule (`--all --tiebreaks-only` pour le rattrapage des anciens tournois) |
@@ -293,7 +298,6 @@ Les scripts qui écrivent en base proposent un mode `--dry-run` (ou n'écrivent 
 | `enrich-twitch.js` | — | Associe les jeux à leurs catégories Twitch |
 | `enrich-release-years.js` | — | Renseigne l'année de sortie des jeux depuis IGDB (via leur catégorie Twitch) |
 | `import-games-csv.js` | `import-games <fichier.csv>` | Import de jeux depuis un CSV (modèle : [`data/games-template.csv`](../data/games-template.csv)) |
-| `import-multiworld-manual.js` | `import:multiworld-manual` | Marque les jeux disponibles sur Archipelago / Multiworld |
 
 ### Maintenance
 

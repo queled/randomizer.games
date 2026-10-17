@@ -10,6 +10,7 @@
 #   race-vods             VOD Twitch des joueurs, restreams trouvés sur Twitch (toutes les 30 min)
 #   tournaments-discover  nouveaux tournois des 2 derniers jours, asyncs ALTTPR, saison de l'ALTTPR League, runs GDQ (tous les jours)
 #   rando-list            cache rando-list, si le dépôt a changé    (tous les jours)
+#   archipelago           jeux d'archipelago.gg et multiworld.gg     (tous les jours)
 #   players               joueurs et profils racetime.gg, comptes des participants (tous les jours)
 #   challonge-check       une requête pour savoir si le quota Challonge est revenu (tous les jours)
 #   backup                mongodump avec rotation                   (toutes les nuits)
@@ -91,6 +92,10 @@ run_rando_list() {
   RANDO_LIST_DIR="$dir" timeout 15m node scripts/sync-rando-list.js --detect-new
 }
 
+run_archipelago() {
+  timeout 10m node scripts/sync-archipelago-games.js
+}
+
 run_players() {
   local status=0
   timeout 10m node scripts/sync-players-from-races.js || status=$?
@@ -115,11 +120,12 @@ case "$JOB" in
   race-vods)            fn=run_race_vods ;;
   tournaments-discover) fn=run_tournaments_discover ;;
   rando-list)           fn=run_rando_list ;;
+  archipelago)          fn=run_archipelago ;;
   players)              fn=run_players ;;
   challonge-check)      fn=run_challonge_check ;;
   backup)               fn=run_backup ;;
   *)
-    echo "Usage: $0 <racetime|tournaments-update|schedule-sites|race-vods|tournaments-discover|rando-list|players|challonge-check|backup>" >&2
+    echo "Usage: $0 <racetime|tournaments-update|schedule-sites|race-vods|tournaments-discover|rando-list|archipelago|players|challonge-check|backup>" >&2
     exit 2
     ;;
 esac

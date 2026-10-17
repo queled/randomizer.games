@@ -40,7 +40,7 @@ const gameSchema = new mongoose.Schema({
       url: String,
       name: String,
       description: String,
-      source: { type: String, enum: ['rando-list', 'manual', 'import', 'community'], default: 'manual' },
+      source: { type: String, enum: ['rando-list', 'manual', 'import', 'community', 'archipelago'], default: 'manual' },
       isArchipelago: { type: Boolean, default: false },
       isMultiworld: { type: Boolean, default: false },
       isObsolete: { type: Boolean, default: false }
@@ -51,7 +51,7 @@ const gameSchema = new mongoose.Schema({
       name: String,
       description: String,
       translations: { type: mongoose.Schema.Types.Mixed, default: {} },
-      source: { type: String, enum: ['manual', 'rando-list', 'import', 'community'], default: 'manual' }
+      source: { type: String, enum: ['manual', 'rando-list', 'import', 'community', 'archipelago'], default: 'manual' }
     }],
     // Guides et tutoriels
     guides: [{
@@ -60,7 +60,7 @@ const gameSchema = new mongoose.Schema({
       description: String,
       translations: { type: mongoose.Schema.Types.Mixed, default: {} },
       type: { type: String, enum: ['guide', 'tutorial', 'wiki', 'video'], default: 'guide' },
-      source: { type: String, enum: ['manual', 'rando-list', 'import', 'community'], default: 'manual' }
+      source: { type: String, enum: ['manual', 'rando-list', 'import', 'community', 'archipelago'], default: 'manual' }
     }],
     // Autres ressources (Discord, forums, etc.)
     other: [{
@@ -69,7 +69,7 @@ const gameSchema = new mongoose.Schema({
       description: String,
       translations: { type: mongoose.Schema.Types.Mixed, default: {} },
       type: { type: String, default: 'resource' },
-      source: { type: String, enum: ['manual', 'rando-list', 'import', 'community'], default: 'manual' }
+      source: { type: String, enum: ['manual', 'rando-list', 'import', 'community', 'archipelago'], default: 'manual' }
     }]
   },
   
@@ -148,12 +148,26 @@ const gameSchema = new mongoose.Schema({
       searchKeywords: [String],     // Extra keywords to search for this game's tournaments
       confidence: { type: String, enum: ['manual', 'auto'], default: 'manual' },
       lastSync: Date
+    },
+    // Game lists of the Archipelago (archipelago.gg) and Multiworld (multiworld.gg)
+    // web hosts, kept in sync by scripts/sync-archipelago-games.js
+    archipelago: {
+      enabled: { type: Boolean, default: false },
+      gameName: String,             // name of the world on the site, e.g. "A Link to the Past"
+      confidence: { type: String, enum: ['manual', 'auto'], default: 'manual' },
+      lastSync: Date
+    },
+    multiworld: {
+      enabled: { type: Boolean, default: false },
+      gameName: String,
+      confidence: { type: String, enum: ['manual', 'auto'], default: 'manual' },
+      lastSync: Date
     }
   },
   
   // === METADATA ===
   source: {
-    origin: { type: String, enum: ['seed', 'csv-import', 'rando-list', 'manual'], default: 'manual' },
+    origin: { type: String, enum: ['seed', 'csv-import', 'rando-list', 'manual', 'archipelago'], default: 'manual' },
     importedAt: Date
   },
   enabled: { type: Boolean, default: true }

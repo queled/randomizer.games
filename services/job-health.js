@@ -20,6 +20,7 @@ const JOBS = [
   { name: 'race-vods', label: 'VOD et restreams Twitch', every: 30 * MINUTE, maxRun: 20 * MINUTE },
   { name: 'tournaments-discover', label: 'Découverte de tournois et asyncs ALTTPR', every: DAY, maxRun: 20 * MINUTE },
   { name: 'rando-list', label: 'rando-list', every: DAY, maxRun: 20 * MINUTE },
+  { name: 'archipelago', label: 'Jeux Archipelago et Multiworld', every: DAY, maxRun: 15 * MINUTE },
   { name: 'players', label: 'Joueurs et comptes racetime', every: DAY, maxRun: 70 * MINUTE },
   { name: 'challonge-check', label: 'Quota API Challonge', every: DAY, maxRun: 2 * MINUTE },
   { name: 'backup', label: 'Sauvegarde de la base', every: DAY, maxRun: 30 * MINUTE }

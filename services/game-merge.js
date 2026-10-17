@@ -13,7 +13,7 @@ const { Game, Tournament, Race } = require('../models');
  */
 
 const RESOURCE_LISTS = ['sites', 'trackers', 'guides', 'other'];
-const INTEGRATIONS = ['speedrun', 'twitch', 'startgg', 'challonge'];
+const INTEGRATIONS = ['speedrun', 'twitch', 'startgg', 'challonge', 'archipelago', 'multiworld'];
 
 function isEmpty(value) {
   return value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0);

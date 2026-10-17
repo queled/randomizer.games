@@ -1,0 +1,75 @@
+# Workflow: Synchronisation quotidienne des jeux Archipelago / Multiworld
+# Lit les listes de jeux d'archipelago.gg et multiworld.gg, ajoute à chaque jeu
+# ses liens (page, guide d'installation, wiki) et crée les jeux absents.
+# Repris sur le serveur par la tâche cron `archipelago` (scripts/cron/run-job.sh).
+
+name: Sync Archipelago Games
+
+on:
+  # Exécution quotidienne à 6h20 UTC, après rando-list
+  schedule:
+    - cron: '20 6 * * *'
+
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Mode dry-run (aperçu sans modification)'
+        required: false
+        default: false
+        type: boolean
+      create:
+        description: 'Créer les jeux absents du site'
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: '24'
+
+concurrency:
+  group: sync-archipelago
+  cancel-in-progress: false
+
+jobs:
+  sync-archipelago:
+    name: Synchroniser les jeux Archipelago / Multiworld
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout du projet
+        uses: actions/checkout@v7
+
+      - name: Configuration de Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Synchroniser
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
+          TWITCH_CLIENT_SECRET: ${{ secrets.TWITCH_CLIENT_SECRET }}
+          IN_DRY_RUN: ${{ inputs.dry_run }}
+          IN_CREATE: ${{ inputs.create }}
+        run: |
+          ARGS=""
+          if [[ "$IN_DRY_RUN" == "true" ]]; then ARGS="$ARGS --dry-run"; fi
+          if [[ "$IN_CREATE" == "false" ]]; then ARGS="$ARGS --no-create"; fi
+          node scripts/sync-archipelago-games.js $ARGS 2>&1 | tee /tmp/archipelago.log
+          exit ${PIPESTATUS[0]}
+
+      - name: Résumé
+        if: always()
+        run: |
+          echo "## Synchronisation Archipelago / Multiworld" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          sed -n '/Jeux créés\|Jeux à créer\|^Archipelago :\|^Multiworld :\|=== Résumé ===/,$p' /tmp/archipelago.log >> $GITHUB_STEP_SUMMARY 2>/dev/null || true
+          echo '```' >> $GITHUB_STEP_SUMMARY

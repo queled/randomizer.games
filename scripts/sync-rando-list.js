@@ -322,9 +322,10 @@ async function updateGameResources(seriesData, dryRun = false) {
     // Pour les jeux manuellement liés, on ne met à jour QUE les sites (pas les infos randomizer)
     const updates = {};
     
-    // Toujours mettre à jour les sites (fusion avec les existants pour éviter d'écraser les sites manuels)
+    // Toujours mettre à jour les sites (fusion avec les existants pour éviter d'écraser
+    // les sites manuels et ceux d'Archipelago / Multiworld)
     const existingManualSites = (game.resources?.sites || [])
-      .filter(s => s.source === 'manual');
+      .filter(s => s.source !== 'rando-list');
     const allSites = [...sites];
     // Ajouter les sites manuels qui n'existent pas déjà
     for (const manualSite of existingManualSites) {

@@ -283,6 +283,13 @@ const TWITCH_GAME_NAMES = {
 // (no title/tag 'randomizer' filtering). Lowercase keys.
 const PASS_THROUGH_TWITCH_CATEGORIES = new Set(['archipelago']);
 
+// Catch-all Twitch categories where some streamers put their randomizer runs:
+// not a game of the site, so only queried for the aggregate list, filtered
+// like any category, and shown without a game since the category doesn't tell
+const MULTI_GAME_TWITCH_CATEGORY_IDS = [
+  '27284' // Retro
+];
+
 // Acronymes/diminutifs des randomizers à chercher dans le titre des streams
 // Mappé par Twitch game name (ou array de noms) pour vérifier que c'est la bonne catégorie
 const RANDOMIZER_ACRONYMS = {
@@ -1398,6 +1405,11 @@ async function buildAllStreams() {
       // A multi-game category (Archipelago) doesn't tell which game is played
       return { streams, primaryGameId: includeAll ? null : primary.gameId };
     });
+    const multiGameResults = await mapWithConcurrency(MULTI_GAME_TWITCH_CATEGORY_IDS, 2, async (categoryId) => ({
+      streams: await fetchTwitchStreamsByCategoryId(categoryId, null),
+      primaryGameId: null
+    }));
+    categoryResults.push(...multiGameResults);
 
     for (const result of categoryResults) {
       for (const stream of (result?.streams || [])) {

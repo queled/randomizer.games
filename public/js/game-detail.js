@@ -1160,8 +1160,20 @@
         // Ajouter le / si nécessaire
         image = `/${image}`;
       }
-      posterEl.src = image;
+      // Without a cover the poster shows the id, like on the games list
+      const missingPosterEl = document.getElementById('game-poster-missing');
+      const missingNameEl = document.createElement('span');
+      missingNameEl.className = 'poster-missing-name';
+      missingNameEl.textContent = (game.id || id).toLowerCase();
+      missingPosterEl.replaceChildren(missingNameEl);
       posterEl.alt = game.name;
+      // archipelago.png and multiworld.png are the sites' logos, not covers of these games
+      if (image === '/assets/archipelago.png' || image === '/assets/multiworld.png') {
+        posterEl.style.display = 'none';
+        missingPosterEl.style.display = 'flex';
+      } else {
+        posterEl.src = image;
+      }
 
       // Afficher randomizer.displayName (ex: "A Link to the Past Randomizer") en titre principal (h1)
       // et official.name (ex: "The Legend of Zelda: A Link to the Past") en sous-titre (h2)

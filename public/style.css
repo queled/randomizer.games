@@ -1828,6 +1828,27 @@ body.spoiler-mode .spoiler-text::before {
     flex-shrink: 0;
 }
 
+.game-poster-missing {
+    background: #1f2937;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #6b7280;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+/* The id of a game without a cover stays on one line, cropped if too long */
+.poster-missing-name {
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 .game-info {
     flex: 1;
 }
@@ -2646,7 +2667,8 @@ body.spoiler-mode .spoiler-text::before {
         align-items: center !important;
     }
 
-    #game-poster {
+    #game-poster,
+    #game-poster-missing {
         width: 180px !important;
         height: 250px !important;
     }
@@ -2882,7 +2904,8 @@ body.spoiler-mode .spoiler-text::before {
     }
 
     /* Game poster */
-    #game-poster {
+    #game-poster,
+    #game-poster-missing {
         width: 150px !important;
         height: 210px !important;
     }

@@ -34,6 +34,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     'kh2fmr': 'Kingdom Hearts II Final Mix'
   };
   
+  // Logos of the Archipelago and Multiworld sites, not covers of the games with these ids
+  const SITE_LOGOS = new Set(['/assets/archipelago.png', '/assets/multiworld.png']);
+
   function getGameImage(game) {
     // Utiliser game.image ou game.logo, ou construire depuis l'ID
     let image = game.image || game.logo;
@@ -45,7 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Ajouter le / si nécessaire
       image = `/${image}`;
     }
-    return image;
+    return SITE_LOGOS.has(image) ? '' : image;
   }
 
   function sanitizeExternalUrl(url) {
@@ -163,9 +166,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       
       return `
         <div class="game-card" data-game-id="${escHtml(id)}" role="link" tabindex="0" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;overflow:hidden;">
-          <img src="${escHtml(image)}" alt="${escHtml(game.name)}" width="256" height="360" loading="lazy" decoding="async" style="width:256px;max-width:100%;height:auto;aspect-ratio:256/360;object-fit:cover;border-radius:12px;box-shadow:0 2px 12px #0003;display:block;" 
-               data-fallback="hide-show-next">
-          <div style="display:none;width:256px;max-width:100%;height:auto;aspect-ratio:256/360;background:#1f2937;border-radius:12px;box-shadow:0 2px 12px #0003;align-items:center;justify-content:center;font-size:2.5rem;font-weight:bold;color:#6b7280;text-transform:uppercase;">${escHtml(id)}</div>
+          ${image ? `<img src="${escHtml(image)}" alt="${escHtml(game.name)}" width="256" height="360" loading="lazy" decoding="async" style="width:256px;max-width:100%;height:auto;aspect-ratio:256/360;object-fit:cover;border-radius:12px;box-shadow:0 2px 12px #0003;display:block;" 
+               data-fallback="hide-show-next">` : ''}
+          <div style="display:${image ? 'none' : 'flex'};width:256px;max-width:100%;height:auto;aspect-ratio:256/360;background:#1f2937;border-radius:12px;box-shadow:0 2px 12px #0003;align-items:center;justify-content:center;font-size:2.5rem;font-weight:bold;color:#6b7280;text-transform:uppercase;padding:0 0.5rem;box-sizing:border-box;"><span class="poster-missing-name">${escHtml(id)}</span></div>
           <h2 style="color:#fbbf24;font-size:1.3rem;font-weight:bold;margin:1rem 0 0.5rem 0;text-align:center;">${escHtml(displayTitle)}</h2>
           <p style="color:#d1d5db;font-size:1rem;text-align:center;margin:0 0 0.5rem 0;">${escHtml(gameName)}</p>
           <div style="display:flex;gap:1rem;color:#9ca3af;font-size:0.85rem;margin-bottom:0.5rem;">

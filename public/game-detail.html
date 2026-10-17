@@ -44,7 +44,9 @@
   <main class="main-container detail-page">
     <!-- Header with poster and title -->
     <div class="detail-header game-header">
-      <img id="game-poster" src="" alt="" class="game-poster">
+      <img id="game-poster" alt="" class="game-poster" data-fallback="hide-show-next">
+      <!-- Shown in place of a missing cover, like on the games list -->
+      <div id="game-poster-missing" class="game-poster game-poster-missing" style="display:none;"></div>
       <div class="game-info">
         <h1 id="game-meta" data-i18n="common.loading"></h1>
         <h2 id="game-title"></h2>

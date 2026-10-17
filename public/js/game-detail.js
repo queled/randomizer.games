@@ -1017,6 +1017,12 @@
   // ==================== MARATHON RUNS (GDQ) ====================
   let marathonRuns = null;
 
+  function marathonRunnerCell(runner) {
+    const name = escapeHtml(runner.name || '');
+    if (runner.userId) return `<a class="player-link" href="/player-detail.html?id=${encodeURIComponent(runner.userId)}">${name}</a>`;
+    return name;
+  }
+
   function renderMarathonRuns() {
     const section = document.getElementById('marathon-runs');
     const list = document.getElementById('marathon-runs-list');
@@ -1031,7 +1037,7 @@
       return `<tr>
         <td>${escapeHtml(run.event?.name || run.event?.short || '')}<div class="text-muted">${escapeHtml(date)}</div></td>
         <td>${escapeHtml(run.category || '')}</td>
-        <td class="col-optional">${escapeHtml((run.runners || []).join(', '))}</td>
+        <td class="col-optional">${(run.runners || []).map(marathonRunnerCell).join(', ')}</td>
         <td>${vod}</td>
       </tr>`;
     }).join('');

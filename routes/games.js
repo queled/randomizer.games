@@ -198,12 +198,33 @@ router.get('/:id/tournaments', async (req, res, next) => {
 // Randomizer runs of speedrun marathons (GDQ), newest first
 router.get('/:id/marathon-runs', async (req, res, next) => {
   try {
-    const { MarathonRun } = require('../models');
+    const { MarathonRun, Player } = require('../models');
+    const { exactNameRegex } = require('../helpers/player-races-filter');
     const runs = await MarathonRun.find({ gameSlug: req.params.id })
       .select('-_id source externalId event name category runners startedAt runTime videos')
       .sort({ startedAt: -1 })
       .lean();
-    res.json({ runs });
+
+    // A runner links to the player page whose name or alias it is, when only one player has it
+    const names = [...new Set(runs.flatMap(run => run.runners || []))];
+    const regexes = names.map(exactNameRegex);
+    const players = regexes.length
+      ? await Player.find({ $or: [{ name: { $in: regexes } }, { aliases: { $in: regexes } }], racetimeDeletedAt: null })
+        .select('userId name aliases').lean()
+      : [];
+    const profiles = new Map();
+    for (const name of names) {
+      const re = exactNameRegex(name);
+      const matches = players.filter(p => p.userId && (re.test(p.name) || (p.aliases || []).some(a => re.test(a))));
+      if (matches.length === 1) profiles.set(name, matches[0].userId);
+    }
+
+    res.json({
+      runs: runs.map(run => ({
+        ...run,
+        runners: (run.runners || []).map(name => ({ name, userId: profiles.get(name) || null }))
+      }))
+    });
   } catch (error) {
     next(error);
   }

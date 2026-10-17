@@ -181,7 +181,7 @@ Les marathons Games Done Quick (AGDQ, SGDQ, Frost et Flame Fatales…) accueille
 - sinon par le nom du run, sans « Randomizer » ni « BONUS GAME n - » ;
 - `GAME_HINTS` pour les noms qu'aucun des deux ne trouve (randomizer combo SMZ3).
 
-Un run d'un jeu absent du site est signalé et laissé de côté. En routine, les marathons des 400 derniers jours sont relus (pour les VOD ajoutées après coup) ; `--all` les reprend tous. `GET /api/games/:id/marathon-runs` donne les runs d'un jeu ; l'onglet Streams de la page du jeu les liste sous les streams en direct (marathon, catégorie, joueurs, VOD), et la section reste masquée pour un jeu qui n'en a pas.
+Un run d'un jeu absent du site est signalé et laissé de côté. En routine, les marathons des 400 derniers jours sont relus (pour les VOD ajoutées après coup) ; `--all` les reprend tous. `GET /api/games/:id/marathon-runs` donne les runs d'un jeu ; l'onglet Streams de la page du jeu les liste sous les streams en direct (marathon, catégorie, joueurs, VOD) ; un joueur dont le nom ou un alias est celui d'un seul profil du site renvoie vers sa page, et la section reste masquée pour un jeu qui n'en a pas.
 
 ### VOD des joueurs
 

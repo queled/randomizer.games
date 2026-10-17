@@ -207,7 +207,7 @@ const admin = {
       }
       
       this.showApp();
-      this.loadDashboard();
+      this.initSections();
       
     } catch (error) {
       errorEl.textContent = error.message;
@@ -226,7 +226,7 @@ const admin = {
       
       if (response.ok) {
         this.showApp();
-        this.loadDashboard();
+        this.initSections();
       } else {
         this.logout(false);
       }
@@ -260,7 +260,24 @@ const admin = {
   
   // ==================== NAVIGATION ====================
   
+  // A reload keeps the section open
+  initSections() {
+    if (!this.sections) {
+      this.sections = tabHistory({
+        current: () => this.currentSection,
+        show: (section) => this.showSection(section),
+        isTab: (section) => !!document.getElementById(`section-${section}`)
+      });
+    }
+    this.showSection(history.state.tab);
+  },
+
   navigateTo(section) {
+    if (this.sections) this.sections.select(section);
+    else this.showSection(section);
+  },
+
+  showSection(section) {
     this.currentSection = section;
     
     // Update nav

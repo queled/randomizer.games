@@ -313,8 +313,15 @@
   }
 
   document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => switchTab(btn.getAttribute('data-tab')));
+    btn.addEventListener('click', () => selectTab(btn.getAttribute('data-tab')));
   });
+
+  // The tab clicked is kept by a reload
+  let tabs = null;
+  function selectTab(tabName) {
+    if (tabs) tabs.select(tabName);
+    else switchTab(tabName);
+  }
 
   let streamsLoaded = false;
   let categoriesLoaded = false;
@@ -452,7 +459,7 @@
   }
 
   function showLeaderboard(slug, goal) {
-    switchTab('leaderboards');
+    selectTab('leaderboards');
     loadLeaderboard(slug, goal);
   }
 
@@ -1132,7 +1139,7 @@
     el.querySelectorAll('[data-overview-tab]').forEach(link => {
       link.addEventListener('click', (event) => {
         event.preventDefault();
-        switchTab(link.getAttribute('data-overview-tab'));
+        selectTab(link.getAttribute('data-overview-tab'));
         document.querySelector('.tabs-container')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     });
@@ -1252,6 +1259,12 @@
   if(id) {
     load();
     loadLeaderboard();
+    tabs = tabHistory({
+      current: () => document.querySelector('.tab-btn.active')?.getAttribute('data-tab'),
+      show: switchTab,
+      isTab: (tab) => !!document.getElementById('tab-content-' + tab)
+    });
+    if (tabs.initial !== 'leaderboards') switchTab(tabs.initial);
   }
 
   window.addEventListener('languageChanged', () => {

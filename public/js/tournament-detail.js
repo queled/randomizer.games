@@ -34,47 +34,41 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  // Initialize tab switching (pass tournamentId for per-tournament persistence)
-  initializeTabs(tournamentId);
+  initializeTabs();
 
   await loadTournamentDetails(tournamentId);
 });
 
-function initializeTabs(tournamentId) {
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const tabName = btn.getAttribute('data-tab');
-      switchTab(tabName);
-      try {
-        if (tournamentId) localStorage.setItem(`tournament_active_tab_${tournamentId}`, tabName);
-        else localStorage.setItem('tournament_active_tab', tabName);
-      } catch (e) { /* ignore storage errors */ }
-    });
-  });
+let tabs = null;
 
-  // Restore saved tab for this tournament if available
-  try {
-    // Only restore saved tab when the navigation is a reload or a back/forward navigation.
-    // For a fresh navigation (clicking a tournament link), keep the default (bracket).
-    let navType = 'navigate';
-    try {
-      const ent = performance.getEntriesByType && performance.getEntriesByType('navigation') && performance.getEntriesByType('navigation')[0];
-      if (ent && ent.type) navType = ent.type;
-      else if (performance && performance.navigation && typeof performance.navigation.type !== 'undefined') {
-        // legacy API: 1 = reload, 2 = back_forward
-        navType = performance.navigation.type === 1 ? 'reload' : (performance.navigation.type === 2 ? 'back_forward' : 'navigate');
-      }
-    } catch (e) { /* ignore performance errors */ }
-
-    if (navType === 'reload' || navType === 'back_forward') {
-      const key = tournamentId ? `tournament_active_tab_${tournamentId}` : 'tournament_active_tab';
-      const saved = localStorage.getItem(key);
-      if (saved) {
-        const btn = document.querySelector(`.tab-btn[data-tab="${saved}"]`);
-        if (btn) switchTab(saved);
-      }
+function initializeTabs() {
+  tabs = tabHistory({
+    current: currentTab,
+    show: switchTab,
+    isTab: (tab) => !!document.getElementById(`tab-content-${tab}`),
+    // Where the bracket was scrolled sideways
+    saveSpot: () => Array.from(document.querySelectorAll('.bracket-scroll'), el => el.scrollLeft),
+    restoreSpot: (bracketScroll) => {
+      document.querySelectorAll('.bracket-scroll').forEach((el, i) => {
+        if (typeof bracketScroll[i] === 'number') el.scrollLeft = bracketScroll[i];
+      });
     }
-  } catch (e) { /* ignore restore errors */ }
+  });
+  if (tabs.initial !== currentTab()) switchTab(tabs.initial);
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => selectTab(btn.getAttribute('data-tab')));
+  });
+}
+
+function selectTab(tabName) {
+  if (tabs) tabs.select(tabName);
+  else switchTab(tabName);
+}
+
+function currentTab() {
+  const active = document.querySelector('.tab-btn.active');
+  return active ? active.getAttribute('data-tab') : 'bracket';
 }
 
 function sanitizeExternalUrl(url, { allowRelative = false, allowMailto = false } = {}) {
@@ -809,13 +803,8 @@ function displayTournamentInfo(tournament) {
       // Make accessible: allow focusing the card
       try { participantsCard.tabIndex = 0; } catch (e) {}
 
-      const tid = tournament._id || tournament.id || null;
       const openParticipants = () => {
-        try { switchTab('participants'); } catch (e) {}
-        try {
-          if (tid) localStorage.setItem(`tournament_active_tab_${tid}`, 'participants');
-          else localStorage.setItem('tournament_active_tab', 'participants');
-        } catch (e) {}
+        try { selectTab('participants'); } catch (e) {}
       };
 
       const openAndScroll = () => {
@@ -2900,12 +2889,9 @@ function createMatchCard(match, races = []) {
 
 // Navigate to a match card by its challongeId/id: switch to matches tab and scroll.
 function goToMatchById(id) {
-  // Always switch to matches tab (prefer clicking the tab button so handlers run)
-  try {
-    const tabBtn = document.querySelector('.tab-btn[data-tab="matches"]');
-    if (tabBtn) tabBtn.click();
-    else switchTab('matches');
-  } catch (e) {}
+  // A step in the history: Back returns to the tab and spot left
+  if (tabs) tabs.open('matches');
+  else switchTab('matches');
 
   if (!id) return;
   const elId = 'match-' + id;

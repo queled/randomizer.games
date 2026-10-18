@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Monster Party, de Micheil Skeens, fait partie d'une longue série de randomizers NES et Super Nintendo.",
+    "en": "Micheil Skeens's Monster Party randomizer is part of a long series of NES and Super Nintendo randomizers."
+  },
+  "events": [
+    {
+      "date": "1989",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bandai sort Monster Party sur NES en 1989.",
+        "en": "Bandai releases Monster Party on the NES in 1989."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Micheil Skeens publie le randomizer de la version américaine le 24 août 2020, l'un de ses nombreux randomizers pour la NES et la Super Nintendo.",
+        "en": "Micheil Skeens releases the randomizer for the US version on August 24, 2020, one of many NES and Super Nintendo randomizers by the same author."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Micheil Skeens — Monster Party Randomizer",
+      "url": "https://micheilskeens.com/monster-party-randomizer.php"
+    }
+  ]
+}

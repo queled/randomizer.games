@@ -1,0 +1,29 @@
+{
+  "intro": {
+    "fr": "Metroid: The Blue Plague, romhack de Super Metroid, a son randomizer, réalisé par ironrusty.",
+    "en": "Metroid: The Blue Plague, a Super Metroid romhack, has its randomizer, made by ironrusty."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "En novembre 2023, ironrusty publie un randomizer de Blue Plague : les portes jaunes du début sont retirées pour éviter des blocages, et un objet « Surprise » venu de Super Metroid est ajouté au pool. Ces randomizers de hacks cherchent à préserver le comportement d'origine de chaque hack, avec l'algorithme de remplissage de Subversion, de beauxq.",
+        "en": "In November 2023, ironrusty releases a Blue Plague randomizer: early-game yellow doors are removed to avoid softlocks, and a \"Surprise\" item from Super Metroid is added to the pool. These hack randomizers aim to preserve each hack's original behavior, using beauxq's Subversion fill algorithm."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "randorandy — Blue Plague Rando",
+      "url": "https://randorandy.github.io/BluePlagueRando/"
+    },
+    {
+      "label": "randorandy",
+      "url": "https://randorandy.github.io/"
+    }
+  ]
+}

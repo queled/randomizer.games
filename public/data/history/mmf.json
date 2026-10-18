@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Momodora: Moonlit Farewell se joue en multiworld, avec la prise en charge du DeathLink.",
+    "en": "Momodora: Moonlit Farewell can be played in multiworld, with DeathLink support."
+  },
+  "events": [
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bombservice et PLAYISM sortent Momodora: Moonlit Farewell en 2024.",
+        "en": "Bombservice and PLAYISM release Momodora: Moonlit Farewell in 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Momodora: Moonlit Farewell est jouable en multiworld avec le multiworld (multiworld.gg). Le DeathLink y est proposé en option : mourir fait mourir les autres joueurs qui l'ont activé.",
+        "en": "Momodora: Moonlit Farewell can be played in multiworld with multiworld (multiworld.gg). DeathLink is offered as an option: dying makes the other players who enabled it die too."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Momodora Moonlit Farewell",
+      "url": "https://multiworld.gg/games/Momodora%20Moonlit%20Farewell/info/en"
+    }
+  ]
+}

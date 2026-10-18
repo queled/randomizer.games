@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Mega Man 6 se randomise avec le Weapon Randomizer de Raidenthequick.",
+    "en": "Mega Man 6 is randomized with Raidenthequick's Weapon Randomizer."
+  },
+  "events": [
+    {
+      "date": "1993",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Mega Man 6 (Rockman 6) sur NES en 1993.",
+        "en": "Capcom releases Mega Man 6 (Rockman 6) on the NES in 1993."
+      }
+    },
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Weapon Randomizer",
+        "en": "Weapon Randomizer"
+      },
+      "text": {
+        "fr": "Raidenthequick publie un Weapon Randomizer pour Mega Man 6 (version 0.1), archivé en ligne en 2018, avec notamment une variante « hard ».",
+        "en": "Raidenthequick releases a Weapon Randomizer for Mega Man 6 (version 0.1), archived online in 2018, including a \"hard\" variant."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Weapon Randomizer v0.1 (archive)",
+      "url": "https://web.archive.org/web/20180819085015/http://bin.smwcentral.net/u/24848/mm6-weapon-randomizer-v0.1.zip"
+    }
+  ]
+}

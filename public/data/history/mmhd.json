@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Madou Monogatari: Hanamaru Daiyouchienji se joue en multiworld.",
+    "en": "Madou Monogatari: Hanamaru Daiyouchienji can be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "1996",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Compile sort Madou Monogatari: Hanamaru Daiyouchienji sur Super Famicom au Japon en 1996.",
+        "en": "Compile releases Madou Monogatari: Hanamaru Daiyouchienji on the Super Famicom in Japan in 1996."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Madou Monogatari est jouable en multiworld avec le multiworld (multiworld.gg). Hormis l'association entre objets et emplacements, la plupart des changements sont des améliorations de confort.",
+        "en": "Madou Monogatari can be played in multiworld with multiworld (multiworld.gg). Apart from item/location pairing, most changes are quality-of-life tweaks."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Madou Monogatari Hanamaru Daiyouchienji",
+      "url": "https://multiworld.gg/games/Madou%20Monogatari%20Hanamaru%20Daiyouchienji/info/en"
+    }
+  ]
+}

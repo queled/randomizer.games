@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Le Mike Tyson's Punch-Out!! Randomizer de jeffXvX et authorblues randomise les rounds, les cœurs et les adversaires.",
+    "en": "jeffXvX and authorblues's Mike Tyson's Punch-Out!! Randomizer randomizes rounds, hearts and opponents."
+  },
+  "events": [
+    {
+      "date": "1987",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Mike Tyson's Punch-Out!! sur NES en 1987.",
+        "en": "Nintendo releases Mike Tyson's Punch-Out!! on the NES in 1987."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "jeffXvX et authorblues proposent, en bêta, un randomizer web pour la version américaine : durée des rounds, cœurs, vitesse et schémas d'attaque des adversaires, leur santé et leurs dégâts.",
+        "en": "jeffXvX and authorblues offer, in beta, a web randomizer for the US version: round length, hearts, opponents' speed and patterns, their health and damage."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Mike Tyson's Punch-Out!! Randomizer",
+      "url": "https://authorblues.github.io/mtporandomizer/"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Muse Dash se joue en multiworld avec Archipelago : réussir des chansons rapporte de nouvelles chansons, des pièges ou des partitions.",
+    "en": "Muse Dash can be played in multiworld with Archipelago: completing songs earns new songs, traps or Music Sheets."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "PeroPeroGames sort Muse Dash en 2018.",
+        "en": "PeroPeroGames releases Muse Dash in 2018."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Muse Dash est jouable en multiworld avec Archipelago. On commence avec quelques chansons ; chaque chanson réussie donne une ou deux récompenses, des chansons aux pièges en passant par les partitions (Music Sheets).",
+        "en": "Muse Dash can be played in multiworld with Archipelago. You start with a few songs; each completed song gives one or two rewards, from songs to traps and Music Sheets."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Muse Dash",
+      "url": "https://archipelago.gg/games/Muse%20Dash/info/en"
+    }
+  ]
+}

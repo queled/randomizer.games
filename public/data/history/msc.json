@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Milon's Secret Castle, de Micheil Skeens, fait partie d'une longue série de randomizers NES et Super Nintendo.",
+    "en": "Micheil Skeens's Milon's Secret Castle randomizer is part of a long series of NES and Super Nintendo randomizers."
+  },
+  "events": [
+    {
+      "date": "1986",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Hudson Soft sort Milon's Secret Castle sur Famicom en 1986, puis sur NES.",
+        "en": "Hudson Soft releases Milon's Secret Castle on the Famicom in 1986, then on the NES."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Micheil Skeens publie le randomizer de la version américaine le 29 août 2021, l'un de ses nombreux randomizers pour la NES et la Super Nintendo.",
+        "en": "Micheil Skeens releases the randomizer for the US version on August 29, 2021, one of many NES and Super Nintendo randomizers by the same author."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Micheil Skeens — Milon's Secret Castle Randomizer",
+      "url": "https://micheilskeens.com/milons-secret-castle-randomizer.php"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Darius Twin, de Micheil Skeens, remélange le shoot'em up de Taito sur Super Nintendo.",
+    "en": "Micheil Skeens's Darius Twin randomizer reshuffles Taito's Super Nintendo shoot 'em up."
+  },
+  "events": [
+    {
+      "date": "1991",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Taito sort Darius Twin sur Super Nintendo en 1991.",
+        "en": "Taito releases Darius Twin on the Super Nintendo in 1991."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Micheil Skeens publie le randomizer de la version américaine le 26 septembre 2020, avec plusieurs niveaux de randomisation et une option pour ajouter des bonus.",
+        "en": "Micheil Skeens releases the randomizer for the US version on September 26, 2020, with several randomization levels and an option to add extra power-ups."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Micheil Skeens — Darius Twin Randomizer",
+      "url": "https://micheilskeens.com/darius-twin-randomizer.php"
+    }
+  ]
+}

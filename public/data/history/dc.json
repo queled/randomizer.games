@@ -1,0 +1,29 @@
+{
+  "intro": {
+    "fr": "Digital Cube, romhack de Super Metroid, a son randomizer, réalisé par ironrusty.",
+    "en": "Digital Cube, a Super Metroid romhack, has its randomizer, made by ironrusty."
+  },
+  "events": [
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "En avril 2024, ironrusty publie un randomizer de Digital Cube. Son objectif avec ces randomizers de hacks est de préserver au maximum le comportement d'origine de chaque hack, avec l'algorithme de remplissage de Subversion, de beauxq.",
+        "en": "In April 2024, ironrusty releases a Digital Cube randomizer. The goal of these hack randomizers is to preserve each hack's original behavior as much as possible, using beauxq's Subversion fill algorithm."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "randorandy — Digital Cube Rando",
+      "url": "https://randorandy.github.io/DigitalCubeRando/"
+    },
+    {
+      "label": "randorandy",
+      "url": "https://randorandy.github.io/"
+    }
+  ]
+}

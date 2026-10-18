@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Castlevania sur Nintendo 64 se joue en multiworld avec Archipelago : tous les objets, clés comprises, sont déplacés.",
+    "en": "Castlevania on the Nintendo 64 can be played in multiworld with Archipelago: every item, keys included, is moved around."
+  },
+  "events": [
+    {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Castlevania sur Nintendo 64 en 1999.",
+        "en": "Konami releases Castlevania on the Nintendo 64 in 1999."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Castlevania 64 est jouable en multiworld avec Archipelago. Tous les objets habituellement ramassés, dans les chandelles, les décors cassables ou au sol, sont déplacés, y compris les objets clés nécessaires pour progresser.",
+        "en": "Castlevania 64 can be played in multiworld with Archipelago. All items normally picked up, from candles, breakables or lying out, are moved around, including the key items needed to progress."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Castlevania 64",
+      "url": "https://archipelago.gg/games/Castlevania%2064/info/en"
+    }
+  ]
+}

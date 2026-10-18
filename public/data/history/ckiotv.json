@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Keen 1 Randomiser de David Gow randomise les objets, les niveaux et les ennemis de Commander Keen, et a été récompensé en 2020.",
+    "en": "David Gow's Keen 1 Randomiser randomizes Commander Keen's items, levels and enemies, and won an award in 2020."
+  },
+  "events": [
+    {
+      "date": "1990",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "id Software et Apogee sortent Commander Keen: Invasion of the Vorticons en 1990, en shareware.",
+        "en": "id Software and Apogee release Commander Keen: Invasion of the Vorticons in 1990, as shareware."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le Keen 1 Randomiser",
+        "en": "The Keen 1 Randomiser"
+      },
+      "text": {
+        "fr": "David Gow publie le Keen 1 Randomiser, qui réécrit les fichiers de niveaux pour randomiser objets, niveaux et ennemis, et crée un patch compatible CK1PATCH. Il remporte le Keen Award 2020 du meilleur hommage pour les 30 ans de la série.",
+        "en": "David Gow releases the Keen 1 Randomiser, which rewrites the level files to randomize items, levels and enemies, and creates a CK1PATCH-compatible patch. It wins the 2020 Keen Award for Best 30th Anniversary Tribute."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "davidgow.net — Keen 1 Randomiser",
+      "url": "https://davidgow.net/keen/randomiser.html"
+    }
+  ]
+}

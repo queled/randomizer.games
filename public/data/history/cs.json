@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Cave Story se randomise avec Randovania, qui inclut même le jeu, distribué gratuitement en version freeware.",
+    "en": "Cave Story is randomized with Randovania, which even includes the game, distributed for free as freeware."
+  },
+  "events": [
+    {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Daisuke « Pixel » Amaya sort Cave Story (Doukutsu Monogatari) gratuitement en 2004.",
+        "en": "Daisuke \"Pixel\" Amaya releases Cave Story (Doukutsu Monogatari) for free in 2004."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Dans Randovania",
+        "en": "In Randovania"
+      },
+      "text": {
+        "fr": "La version 4.0 de Randovania, en janvier 2022, ajoute Cave Story avec une prise en charge complète en solo. Tous les objets et le point de départ peuvent être randomisés, et le jeu freeware est fourni avec Randovania.",
+        "en": "Randovania version 4.0, in January 2022, adds Cave Story with full single-player support. All items and the starting location can be randomized, and the freeware game comes bundled with Randovania."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Randovania — Cave Story",
+      "url": "https://randovania.org/games/cave_story/"
+    },
+    {
+      "label": "Randovania — CHANGELOG",
+      "url": "https://github.com/randovania/randovania/blob/main/CHANGELOG.md"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Cuphead se joue en multiworld, avec un randomizer encore en alpha.",
+    "en": "Cuphead can be played in multiworld, with a randomizer still in alpha."
+  },
+  "events": [
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "StudioMDHR sort Cuphead en 2017, un run and gun centré sur les combats de boss, inspiré des dessins animés des années 1930.",
+        "en": "StudioMDHR releases Cuphead in 2017, a run and gun focused on boss battles, inspired by 1930s cartoons."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Cuphead est jouable en multiworld avec le multiworld (multiworld.gg). Son randomizer, encore en alpha, en randomise plusieurs aspects selon les options.",
+        "en": "Cuphead can be played in multiworld with multiworld (multiworld.gg). Its randomizer, still in alpha, randomizes several aspects depending on the options."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Cuphead",
+      "url": "https://multiworld.gg/games/Cuphead/info/en"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "intro": {
+    "fr": "Clique est un jeu-blague créé pour Archipelago en mars 2023, pour montrer combien il est simple d'y ajouter un jeu.",
+    "en": "Clique is a joke game made for Archipelago in March 2023, to show how easy it is to add a game to it."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Un jeu-blague",
+        "en": "A joke game"
+      },
+      "text": {
+        "fr": "Clique est développé pour Archipelago en mars 2023 afin de montrer combien il est facile de créer un monde pour Archipelago. L'objectif : appuyer sur le gros bouton rouge.",
+        "en": "Clique is developed for Archipelago in March 2023 to show how easy it can be to build a world for Archipelago. The goal: press the big red button."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Clique",
+      "url": "https://multiworld.gg/games/Clique/info/en"
+    }
+  ]
+}

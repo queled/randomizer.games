@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Castlevania III, de Micheil Skeens, est sorti en alpha en 2021.",
+    "en": "Micheil Skeens's Castlevania III randomizer came out in alpha in 2021."
+  },
+  "events": [
+    {
+      "date": "1989",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Castlevania III: Dracula's Curse sur Famicom au Japon en 1989, puis sur NES en 1990.",
+        "en": "Konami releases Castlevania III: Dracula's Curse on the Famicom in Japan in 1989, then on the NES in 1990."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Micheil Skeens publie le randomizer, en alpha, le 8 janvier 2021, l'un de ses nombreux randomizers pour la NES et la Super Nintendo.",
+        "en": "Micheil Skeens releases the randomizer, in alpha, on January 8, 2021, one of many NES and Super Nintendo randomizers by the same author."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Micheil Skeens — Castlevania III Randomizer",
+      "url": "https://micheilskeens.com/castlevania-3-randomizer.php"
+    }
+  ]
+}

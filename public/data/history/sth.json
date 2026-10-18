@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "ShadowRando, de MainMemory et dreamsyntax, randomise l'ordre des niveaux et les routes de l'histoire de Shadow the Hedgehog sans impasse.",
+    "en": "MainMemory and dreamsyntax's ShadowRando randomizes the level order and story routes of Shadow the Hedgehog with no dead ends."
+  },
+  "events": [
+    {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sega Studios USA sort Shadow the Hedgehog en 2005.",
+        "en": "Sega Studios USA releases Shadow the Hedgehog in 2005."
+      }
+    },
+    {
+      "date": "2023-2026",
+      "title": {
+        "fr": "ShadowRando",
+        "en": "ShadowRando"
+      },
+      "text": {
+        "fr": "MainMemory commence ShadowRando en octobre 2023 pour la version GameCube américaine, et la version 0.2.0 sort le 4 novembre. dreamsyntax en devient le principal contributeur, avec des versions jusqu'en juillet 2026. Le randomizer mélange l'ordre des niveaux et les routes de l'histoire, sans blocage, et permet d'exclure des niveaux.",
+        "en": "MainMemory starts ShadowRando in October 2023 for the US GameCube version, and version 0.2.0 comes out on November 4. dreamsyntax becomes its main contributor, with releases until July 2026. The randomizer shuffles the level order and story routes, with no deadlocks, and lets you exclude levels."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "ShadowTheHedgehogHacking/ShadowRando (GitHub)",
+      "url": "https://github.com/ShadowTheHedgehogHacking/ShadowRando"
+    }
+  ]
+}

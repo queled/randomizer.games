@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "RandomJK est une version modifiée d'OpenJK qui randomise l'ordre des missions du mode histoire de Jedi Academy.",
+    "en": "RandomJK is a modified version of OpenJK that randomizes the story missions' order in Jedi Academy."
+  },
+  "events": [
+    {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Raven Software et LucasArts sortent Star Wars Jedi Knight: Jedi Academy en 2003.",
+        "en": "Raven Software and LucasArts release Star Wars Jedi Knight: Jedi Academy in 2003."
+      }
+    },
+    {
+      "date": "2018-2021",
+      "title": {
+        "fr": "RandomJK",
+        "en": "RandomJK"
+      },
+      "text": {
+        "fr": "ps1337 publie la version 0.0.1 le 19 janvier 2018, « pour le speedrun et pour le fun », puis la 0.0.7 en mai 2021. Les missions de chaque palier sont randomisées à chaque nouvelle partie, et l'ordre obtenu est enregistré dans un fichier qu'on peut partager.",
+        "en": "ps1337 releases version 0.0.1 on January 19, 2018, \"for speedrunning and fun reasons\", then 0.0.7 in May 2021. The missions of each tier are randomized at every new game, and the resulting order is saved in a file that can be shared."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "ps1337/RandomJK (GitHub)",
+      "url": "https://github.com/ps1337/RandomJK"
+    }
+  ]
+}

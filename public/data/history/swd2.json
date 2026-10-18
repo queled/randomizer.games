@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le SWD2Randomizer de clementgallet mélange les améliorations, les plans secrets et les grottes de SteamWorld Dig 2.",
+    "en": "clementgallet's SWD2Randomizer shuffles the upgrades, secret blueprints and caves of SteamWorld Dig 2."
+  },
+  "events": [
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Image & Form sort SteamWorld Dig 2 en 2017.",
+        "en": "Image & Form releases SteamWorld Dig 2 in 2017."
+      }
+    },
+    {
+      "date": "2017-2021",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "clementgallet, déjà auteur du randomizer du premier SteamWorld Dig, publie la version 1.1 le 8 décembre 2017, puis la 1.5 en février 2021. Il randomise les améliorations des podiums, les trois plans secrets, le lance-grenades triple et les grottes à une entrée.",
+        "en": "clementgallet, already the author of the first SteamWorld Dig randomizer, releases version 1.1 on December 8, 2017, then 1.5 in February 2021. It randomizes upgrade podiums, the three secret blueprints, the triple grenade launcher and single-entry caves."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "clementgallet/SWD2Randomizer (GitHub)",
+      "url": "https://github.com/clementgallet/SWD2Randomizer"
+    }
+  ]
+}

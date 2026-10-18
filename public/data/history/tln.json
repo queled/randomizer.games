@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Ladybug Randomizer de Lakifume randomise les deux metroidvanias de Team Ladybug : Touhou Luna Nights et Deedlit in Wonder Labyrinth.",
+    "en": "Lakifume's Ladybug Randomizer randomizes Team Ladybug's two metroidvanias: Touhou Luna Nights and Deedlit in Wonder Labyrinth."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Team Ladybug sort Touhou Luna Nights en 2019.",
+        "en": "Team Ladybug releases Touhou Luna Nights in 2019."
+      }
+    },
+    {
+      "date": "2023-2024",
+      "title": {
+        "fr": "Le Ladybug Randomizer",
+        "en": "The Ladybug Randomizer"
+      },
+      "text": {
+        "fr": "Lakifume publie une bêta le 15 novembre 2023, puis la version 1.0 le 22 décembre et la 1.1 en janvier 2024. La logique de placement des objets garantit une partie finissable, avec une complexité réglable.",
+        "en": "Lakifume releases a beta on November 15, 2023, then version 1.0 on December 22 and 1.1 in January 2024. The item placement logic guarantees a beatable game, with adjustable complexity."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Lakifume/Ladybug-Randomizer (GitHub)",
+      "url": "https://github.com/Lakifume/Ladybug-Randomizer"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le 7th Saga Randomizer de gameboy9 change la façon de jouer à The 7th Saga, en réduisant aussi le farm pour lequel le jeu est connu.",
+    "en": "gameboy9's 7th Saga Randomizer changes how The 7th Saga is played, while also cutting down the grinding the game is known for."
+  },
+  "events": [
+    {
+      "date": "1993",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Produce et Enix sortent The 7th Saga sur Super Nintendo en 1993.",
+        "en": "Produce and Enix release The 7th Saga on the Super Nintendo in 1993."
+      }
+    },
+    {
+      "date": "2017-2020",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "gameboy9 publie la version 0.1 en septembre 2017, puis la 1.0 en avril 2018, la 2.0 en novembre 2018, la 3.0 en décembre 2018 et la 3.5.2 en novembre 2020. Il randomise notamment les zones de monstres et accélère le jeu.",
+        "en": "gameboy9 releases version 0.1 in September 2017, then 1.0 in April 2018, 2.0 in November 2018, 3.0 in December 2018 and 3.5.2 in November 2020. It notably randomizes monster zones and speeds the game up."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "gameboy9/7thSagaRando (GitHub)",
+      "url": "https://github.com/gameboy9/7thSagaRando"
+    }
+  ]
+}

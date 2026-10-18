@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Bob l'éponge : Bataille pour Bikini Bottom se joue en multiworld grâce au monde Archipelago de Cyb3RGER.",
+    "en": "SpongeBob SquarePants: Battle for Bikini Bottom is played in multiworld thanks to Cyb3RGER's Archipelago world."
+  },
+  "events": [
+    {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Heavy Iron Studios et THQ sortent Bob l'éponge : Bataille pour Bikini Bottom en 2003.",
+        "en": "Heavy Iron Studios and THQ release SpongeBob SquarePants: Battle for Bikini Bottom in 2003."
+      }
+    },
+    {
+      "date": "2023-2026",
+      "title": {
+        "fr": "Le monde Archipelago",
+        "en": "The Archipelago world"
+      },
+      "text": {
+        "fr": "Cyb3RGER commence le monde Archipelago en avril 2023 et publie la version 1.0 le 19 mai 2023, puis la 1.2.5 en avril 2026, avec TheBurgerTV2 parmi les contributeurs. L'éditeur Industrial Park, d'igorseabra4, permet aussi de modifier les fichiers du jeu.",
+        "en": "Cyb3RGER starts the Archipelago world in April 2023 and releases version 1.0 on May 19, 2023, then 1.2.5 in April 2026, with TheBurgerTV2 among the contributors. igorseabra4's Industrial Park editor can also modify the game's files."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Cyb3RGER/bfbb_ap_world (GitHub)",
+      "url": "https://github.com/Cyb3RGER/bfbb_ap_world"
+    },
+    {
+      "label": "igorseabra4/IndustrialPark (GitHub)",
+      "url": "https://github.com/igorseabra4/IndustrialPark"
+    }
+  ]
+}

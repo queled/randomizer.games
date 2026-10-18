@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Sonic '06 Randomiser Suite de Knuxfan24 randomise de nombreux éléments de Sonic the Hedgehog (2006) sur Xbox 360 et PlayStation 3.",
+    "en": "Knuxfan24's Sonic '06 Randomiser Suite randomizes many elements of Sonic the Hedgehog (2006) on Xbox 360 and PlayStation 3."
+  },
+  "events": [
+    {
+      "date": "2006",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sonic Team et Sega sortent Sonic the Hedgehog sur Xbox 360 en 2006, puis sur PlayStation 3.",
+        "en": "Sonic Team and Sega release Sonic the Hedgehog on the Xbox 360 in 2006, then on the PlayStation 3."
+      }
+    },
+    {
+      "date": "2019-2023",
+      "title": {
+        "fr": "Le Randomiser Suite",
+        "en": "The Randomiser Suite"
+      },
+      "text": {
+        "fr": "Knuxfan24 publie une première version le 28 juillet 2019, puis une refonte 1.0 en septembre 2020, la 2.0 en septembre 2021 et la 2.1.22 en juillet 2023.",
+        "en": "Knuxfan24 releases a first version on July 28, 2019, then a reworked 1.0 in September 2020, 2.0 in September 2021 and 2.1.22 in July 2023."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Knuxfan24/Sonic-06-Randomiser-Suite (GitHub)",
+      "url": "https://github.com/Knuxfan24/Sonic-06-Randomiser-Suite"
+    }
+  ]
+}

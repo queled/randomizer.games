@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Streets of Rage se joue en multiworld grâce à l'intégration Archipelago d'UltiNaruto.",
+    "en": "Streets of Rage is played in multiworld thanks to UltiNaruto's Archipelago integration."
+  },
+  "events": [
+    {
+      "date": "1991",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sega sort Streets of Rage (Bare Knuckle) sur Mega Drive en 1991.",
+        "en": "Sega releases Streets of Rage (Bare Knuckle) on the Mega Drive in 1991."
+      }
+    },
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "UltiNaruto publie une première alpha le 28 octobre 2025, puis la version 0.1.5 en décembre 2025. L'intégration s'appuie sur sor_patcher, du même auteur.",
+        "en": "UltiNaruto releases a first alpha on October 28, 2025, then version 0.1.5 in December 2025. The integration relies on sor_patcher, by the same author."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "UltiNaruto/SOR_AP_Randomizer (GitHub)",
+      "url": "https://github.com/UltiNaruto/SOR_AP_Randomizer"
+    }
+  ]
+}

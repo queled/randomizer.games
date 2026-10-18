@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Crazy Castle Randomizer de MaximumLance génère une version randomisée de The Bugs Bunny Crazy Castle.",
+    "en": "MaximumLance's Crazy Castle Randomizer generates a randomized version of The Bugs Bunny Crazy Castle."
+  },
+  "events": [
+    {
+      "date": "1989",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Kemco sort The Bugs Bunny Crazy Castle sur NES en 1989.",
+        "en": "Kemco releases The Bugs Bunny Crazy Castle on the NES in 1989."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "MaximumLance commence le randomizer en octobre 2021 et publie la version 1.02 le 26 novembre 2021, sous forme de patch.",
+        "en": "MaximumLance starts the randomizer in October 2021 and releases version 1.02 on November 26, 2021, as a patch."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "MaximumLance/Crazy-Castle-Randomizer (GitHub)",
+      "url": "https://github.com/MaximumLance/Crazy-Castle-Randomizer"
+    }
+  ]
+}

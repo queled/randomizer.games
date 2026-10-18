@@ -1,0 +1,58 @@
+{
+  "intro": {
+    "fr": "Stardew Valley se randomise avec des mods comme la More Random Edition, et se joue en multiworld avec Archipelago.",
+    "en": "Stardew Valley is randomized with mods such as the More Random Edition, and played in multiworld with Archipelago."
+  },
+  "events": [
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "ConcernedApe sort Stardew Valley en 2016.",
+        "en": "ConcernedApe releases Stardew Valley in 2016."
+      }
+    },
+    {
+      "date": "2018-2024",
+      "title": {
+        "fr": "Le Stardew Valley Randomizer",
+        "en": "The Stardew Valley Randomizer"
+      },
+      "text": {
+        "fr": "cTooshi commence un randomizer pour SMAPI fin 2018 ; chikakoo le reprend en 2019 dans la « More Random Edition » (version 0.1.0 en février 2019), qui corrige des erreurs et rend les options plus aléatoires, jusqu'à la 0.7.10 en novembre 2024. D'autres mods randomisent les lots du Centre communautaire ou les recettes de la Reine de la sauce.",
+        "en": "cTooshi starts a SMAPI randomizer in late 2018; chikakoo takes it over in 2019 in the \"More Random Edition\" (version 0.1.0 in February 2019), which fixes errors and makes options more random, up to 0.7.10 in November 2024. Other mods randomize the Community Center bundles or the Queen of Sauce recipes."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "Stardew Valley est aussi pris en charge par Archipelago pour le multiworld.",
+        "en": "Stardew Valley is also supported by Archipelago for multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "chikakoo/stardew-valley-randomizer (GitHub)",
+      "url": "https://github.com/chikakoo/stardew-valley-randomizer"
+    },
+    {
+      "label": "Nexus Mods — Community Center Bundles Randomizer",
+      "url": "https://www.nexusmods.com/stardewvalley/mods/20425"
+    },
+    {
+      "label": "Archipelago — Stardew Valley",
+      "url": "https://archipelago.gg/games/Stardew%20Valley/info/en"
+    }
+  ]
+}

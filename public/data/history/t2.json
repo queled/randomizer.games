@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Titanfall 2 Randomizer de taskinoz randomise armes, grenades, capacités, classes de Titan et casques à collectionner dans la campagne.",
+    "en": "taskinoz's Titanfall 2 Randomizer randomizes weapons, grenades, abilities, Titan classes and collectible helmets in the campaign."
+  },
+  "events": [
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Respawn Entertainment et Electronic Arts sortent Titanfall 2 en 2016.",
+        "en": "Respawn Entertainment and Electronic Arts release Titanfall 2 in 2016."
+      }
+    },
+    {
+      "date": "2020-2021",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "taskinoz commence le mod en décembre 2020 et publie la version 1.0 le 16 octobre 2021, puis la 1.2 une semaine plus tard. Chaque niveau compte de 15 à 30 emplacements possibles pour les casques.",
+        "en": "taskinoz starts the mod in December 2020 and releases version 1.0 on October 16, 2021, then 1.2 a week later. Each level has 15 to 30 possible helmet locations."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "taskinoz/Titanfall2-Randomizer (GitHub)",
+      "url": "https://github.com/taskinoz/Titanfall2-Randomizer"
+    }
+  ]
+}

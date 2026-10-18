@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "L'éditeur de niveaux de skawo pour Super Paper Mario sait aussi randomiser les ennemis.",
+    "en": "skawo's level editor for Super Paper Mario can also randomize enemies."
+  },
+  "events": [
+    {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Intelligent Systems et Nintendo sortent Super Paper Mario sur Wii en 2007.",
+        "en": "Intelligent Systems and Nintendo release Super Paper Mario on the Wii in 2007."
+      }
+    },
+    {
+      "date": "2020-2022",
+      "title": {
+        "fr": "Level Editor and Randomizer",
+        "en": "Level Editor and Randomizer"
+      },
+      "text": {
+        "fr": "skawo publie la version 0.1 le 4 juin 2020, puis la 0.40 en mai 2022 : un éditeur de niveaux simple, avec randomisation des ennemis.",
+        "en": "skawo releases version 0.1 on June 4, 2020, then 0.40 in May 2022: a simple level editor, with enemy randomization."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "skawo/Super-Paper-Mario-Level-Editor-Randomizer (GitHub)",
+      "url": "https://github.com/skawo/Super-Paper-Mario-Level-Editor-Randomizer"
+    }
+  ]
+}

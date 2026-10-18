@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "The Final Fantasy Legend se randomise avec le FFLRandomizer d'eclipseyy, et avec Chaoseum.",
+    "en": "The Final Fantasy Legend is randomized with eclipseyy's FFLRandomizer, and with Chaoseum."
+  },
+  "events": [
+    {
+      "date": "1989",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square sort Makai Toushi SaGa sur Game Boy au Japon en 1989 ; il arrive en Amérique du Nord sous le nom de The Final Fantasy Legend.",
+        "en": "Square releases Makai Toushi SaGa on the Game Boy in Japan in 1989; it reaches North America as The Final Fantasy Legend."
+      }
+    },
+    {
+      "date": "2022-2023",
+      "title": {
+        "fr": "FFLRandomizer",
+        "en": "FFLRandomizer"
+      },
+      "text": {
+        "fr": "eclipseyy publie une première version le 8 septembre 2022, puis la 0.016 en janvier 2023. Un autre randomizer, Chaoseum, est présenté sur le site towerreversed.",
+        "en": "eclipseyy releases a first version on September 8, 2022, then 0.016 in January 2023. Another randomizer, Chaoseum, is presented on the towerreversed site."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "eclipseyy/FFLRandomizer (GitHub)",
+      "url": "https://github.com/eclipseyy/FFLRandomizer"
+    },
+    {
+      "label": "Chaoseum",
+      "url": "https://towerreversed.neocities.org/projects"
+    }
+  ]
+}

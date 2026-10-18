@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Reverie Randomizer de nnguyen259 randomise The Legend of Heroes: Trails into Reverie : crafts, arts, coffres, quartz et plus encore.",
+    "en": "nnguyen259's Reverie Randomizer randomizes The Legend of Heroes: Trails into Reverie: crafts, arts, chests, quartz and more."
+  },
+  "events": [
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nihon Falcom sort The Legend of Heroes: Hajimari no Kiseki au Japon en 2020 ; il sort en Occident sous le nom de Trails into Reverie en 2023.",
+        "en": "Nihon Falcom releases The Legend of Heroes: Hajimari no Kiseki in Japan in 2020; it comes out in the West as Trails into Reverie in 2023."
+      }
+    },
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "nnguyen259 publie la version 0.1 le 14 août 2023, peu après la sortie occidentale, puis la 1.0 le 18 septembre. Il randomise les crafts, les arts, les Brave Orders, les quartz maîtres, les coffres, les modèles et les lignes d'orbment.",
+        "en": "nnguyen259 releases version 0.1 on August 14, 2023, shortly after the Western release, then 1.0 on September 18. It randomizes crafts, arts, Brave Orders, master quartz, chests, models and orbment lines."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "nnguyen259/ReverieRandomizer (GitHub)",
+      "url": "https://github.com/nnguyen259/ReverieRandomizer"
+    }
+  ]
+}

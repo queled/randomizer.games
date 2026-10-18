@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Resident Evil 2 (2019) se joue en multiworld, sur les quatre scénarios et les trois difficultés.",
+    "en": "Resident Evil 2 (2019) can be played in multiworld, across all four scenarios and three difficulties."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort le remake de Resident Evil 2 en 2019.",
+        "en": "Capcom releases the Resident Evil 2 remake in 2019."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Resident Evil 2 est jouable en multiworld avec le multiworld (multiworld.gg). Les quatre scénarios (Leon et Claire, A/B) et les trois difficultés sont pris en charge. La progression reste proche du jeu d'origine, mais la randomisation des objets change l'itinéraire.",
+        "en": "Resident Evil 2 can be played in multiworld with multiworld (multiworld.gg). All four scenarios (Leon and Claire, A/B) and three difficulties are supported. Progression stays close to the original game, but item randomization changes the route."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Resident Evil 2 Remake",
+      "url": "https://multiworld.gg/games/Resident%20Evil%202%20Remake/info/en"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Rift of the NecroDancer se joue en multiworld : il faut réunir des diamants pour débloquer la chanson finale.",
+    "en": "Rift of the NecroDancer can be played in multiworld: you collect diamonds to unlock the goal song."
+  },
+  "events": [
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Brace Yourself Games sort Rift of the NecroDancer en 2025.",
+        "en": "Brace Yourself Games releases Rift of the NecroDancer in 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Rift of the NecroDancer est jouable en multiworld avec le multiworld (multiworld.gg). On commence avec quelques chansons ; chaque chanson réussie donne deux récompenses, diamants ou chansons. Assez de diamants débloquent la chanson finale.",
+        "en": "Rift of the NecroDancer can be played in multiworld with multiworld (multiworld.gg). You start with a few songs; each completed song gives two rewards, diamonds or songs. Enough diamonds unlock the goal song."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Rift of the Necrodancer",
+      "url": "https://multiworld.gg/games/Rift%20of%20the%20Necrodancer/info/en"
+    }
+  ]
+}

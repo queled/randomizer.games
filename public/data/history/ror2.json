@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Risk of Rain 2 se joue en multiworld avec Archipelago : certains coffres envoient leur objet aux autres joueurs.",
+    "en": "Risk of Rain 2 can be played in multiworld with Archipelago: some chests send their item to other players."
+  },
+  "events": [
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Hopoo Games sort Risk of Rain 2 en 2020.",
+        "en": "Hopoo Games releases Risk of Rain 2 in 2020."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Risk of Rain 2 est jouable en multiworld avec Archipelago. Le jeu étant déjà aléatoire, le mod ajoute surtout le multiworld : certains coffres envoient un objet aux autres mondes. En mode Classic, les emplacements sont communs à tous les environnements ; en mode Explore, chaque environnement a les siens.",
+        "en": "Risk of Rain 2 can be played in multiworld with Archipelago. The game being random already, the mod mostly adds multiworld: some chests send an item to other worlds. In Classic mode, checks are shared across environments; in Explore mode, each environment has its own."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Risk of Rain 2",
+      "url": "https://archipelago.gg/games/Risk%20of%20Rain%202/info/en"
+    }
+  ]
+}

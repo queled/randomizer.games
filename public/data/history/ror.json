@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Risk of Rain se joue en multiworld, sur la version de 2013 comme sur Risk of Rain Returns.",
+    "en": "Risk of Rain can be played in multiworld, on the 2013 version as well as Risk of Rain Returns."
+  },
+  "events": [
+    {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Hopoo Games sort Risk of Rain en 2013 ; le remake Risk of Rain Returns suit en 2023.",
+        "en": "Hopoo Games releases Risk of Rain in 2013; the remake Risk of Rain Returns follows in 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Risk of Rain est jouable en multiworld avec le multiworld (multiworld.gg). Ramasser un objet envoie un emplacement à la place, à un intervalle réglable. Les emplacements sont communs ou propres à chaque carte, et les cartes elles-mêmes doivent être débloquées.",
+        "en": "Risk of Rain can be played in multiworld with multiworld (multiworld.gg). Picking up an item sends a check instead, at an adjustable interval. Checks are shared or per map, and the maps themselves must be unlocked."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Risk of Rain",
+      "url": "https://multiworld.gg/games/Risk%20of%20Rain/info/en"
+    }
+  ]
+}

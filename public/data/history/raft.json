@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Raft se joue en multiworld avec Archipelago : les recherches et plans deviennent des emplacements.",
+    "en": "Raft can be played in multiworld with Archipelago: research and blueprints become checks."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Redbeet Interactive et Axolot Games sortent la version complète de Raft en 2022.",
+        "en": "Redbeet Interactive and Axolot Games release Raft's full version in 2022."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Raft est jouable en multiworld avec Archipelago. Tout ce qui s'obtient à la table de recherche, ainsi que les notes, plans et personnages des îles de l'histoire, devient un emplacement. Le but ne change pas : atteindre et terminer Utopia.",
+        "en": "Raft can be played in multiworld with Archipelago. Everything from the Research Table, plus notes, blueprints and characters on story islands, becomes a check. The goal stays the same: reach and finish Utopia."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Raft",
+      "url": "https://archipelago.gg/games/Raft/info/en"
+    }
+  ]
+}

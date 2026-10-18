@@ -1,0 +1,69 @@
+{
+  "intro": {
+    "fr": "Le Rabi-Ribi Randomizer est un projet collectif de la communauté speedrun du jeu, aujourd'hui aussi jouable en multiworld.",
+    "en": "The Rabi-Ribi Randomizer is a collaborative project of the game's speedrunning community, now also playable in multiworld."
+  },
+  "events": [
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "CreSpirit sortent Rabi-Ribi sur PC en 2016.",
+        "en": "CreSpirit releases Rabi-Ribi on PC in 2016."
+      }
+    },
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le randomizer de la communauté",
+        "en": "The community randomizer"
+      },
+      "text": {
+        "fr": "Le dépôt du Rabi-Ribi Randomizer est créé en juillet 2017 sous le compte wcko87. Le projet se présente comme l'œuvre collective de la communauté speedrun de Rabi-Ribi : il mélange objets et œufs en garantissant que tout reste accessible, et peut aussi randomiser musiques et décors.",
+        "en": "The Rabi-Ribi Randomizer repository is created in July 2017 under the wcko87 account. The project presents itself as the collective work of the Rabi-Ribi speedrunning community: it shuffles items and eggs while ensuring everything stays reachable, and can also randomize music and backgrounds."
+      }
+    },
+    {
+      "date": "V2",
+      "title": {
+        "fr": "Version 2",
+        "en": "Version 2"
+      },
+      "text": {
+        "fr": "La V2 adopte un tout nouvel algorithme de vérification, qui représente le monde du jeu comme un graphe de nœuds. Elle permet des seeds plus complexes, le mélange des transitions entre cartes et la randomisation des obstacles.",
+        "en": "V2 adopts a brand new verification algorithm that represents the game world as a graph of nodes. It allows more complex seeds, map transition shuffle and obstacle randomization."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Rabi-Ribi est jouable en multiworld avec le multiworld (multiworld.gg). Les objets sont déplacés avec une logique qui garantit que la partie peut toujours être terminée.",
+        "en": "Rabi-Ribi can be played in multiworld with multiworld (multiworld.gg). Items are moved around with logic that guarantees the game can always be completed."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Rabi-Ribi Randomizer V2",
+      "url": "https://wcko87.github.io/rabiribi-randomizer/"
+    },
+    {
+      "label": "wcko87/rabiribi-randomizer (GitHub)",
+      "url": "https://github.com/wcko87/rabiribi-randomizer"
+    },
+    {
+      "label": "Multiworld — Rabi-Ribi",
+      "url": "https://multiworld.gg/games/Rabi-Ribi/info/en"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Ratchet & Clank: Size Matters se joue en multiworld : armes, gadgets, armures et infobots sont mélangés.",
+    "en": "Ratchet & Clank: Size Matters can be played in multiworld: weapons, gadgets, armour and infobots are shuffled."
+  },
+  "events": [
+    {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "High Impact Games et Sony sortent Ratchet & Clank: Size Matters sur PSP en 2007.",
+        "en": "High Impact Games and Sony release Ratchet & Clank: Size Matters on the PSP in 2007."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Ratchet & Clank: Size Matters est jouable en multiworld avec le multiworld (multiworld.gg). Armes, gadgets, pièces d'armure et infobots sont mélangés entre boulons de titane, armures et d'autres emplacements activables en option.",
+        "en": "Ratchet & Clank: Size Matters can be played in multiworld with multiworld (multiworld.gg). Weapons, gadgets, armour pieces and infobots are shuffled across titanium bolts, armour pickups and other optional location types."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Ratchet & Clank: Size Matters",
+      "url": "https://multiworld.gg/games/Ratchet%20%26%20Clank%3A%20Size%20Matters/info/en"
+    }
+  ]
+}

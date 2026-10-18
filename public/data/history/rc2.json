@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Ratchet & Clank 2 se joue en multiworld : gadgets, Platinum Bolts et coordonnées de planètes sont mélangés.",
+    "en": "Ratchet & Clank 2 can be played in multiworld: gadgets, Platinum Bolts and planet coordinates are shuffled."
+  },
+  "events": [
+    {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Insomniac Games et Sony sortent Ratchet & Clank 2 (Going Commando) sur PlayStation 2 en 2003.",
+        "en": "Insomniac Games and Sony release Ratchet & Clank 2 (Going Commando) on the PlayStation 2 in 2003."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Ratchet & Clank 2 est jouable en multiworld avec le multiworld (multiworld.gg). Gadgets, Platinum Bolts et coordonnées des planètes sont mélangés, ce qui varie l'itinéraire ; le but est de vaincre le Protopet géant sur Yeedil. Seules les versions PS2 sont prises en charge.",
+        "en": "Ratchet & Clank 2 can be played in multiworld with multiworld (multiworld.gg). Gadgets, Platinum Bolts and planet coordinates are shuffled, which varies the route; the goal is to defeat the giant Protopet on Yeedil. Only the PS2 versions are supported."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Ratchet & Clank 2",
+      "url": "https://multiworld.gg/games/Ratchet%20%26%20Clank%202/info/en"
+    }
+  ]
+}

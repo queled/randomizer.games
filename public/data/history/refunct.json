@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Refunct se joue en multiworld : groupes de plateformes et capacités se débloquent comme objets.",
+    "en": "Refunct can be played in multiworld: platform clusters and abilities unlock as items."
+  },
+  "events": [
+    {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Dominique Grieshofer sort Refunct en 2015.",
+        "en": "Dominique Grieshofer releases Refunct in 2015."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Refunct est jouable en multiworld avec le multiworld (multiworld.gg). Chaque groupe de plateformes doit être débloqué, tout comme nager, s'agripper, rebondir aux murs ou utiliser les tremplins. Rendre une plateforme herbeuse est un emplacement (plus de 200), et des mini-jeux en ajoutent.",
+        "en": "Refunct can be played in multiworld with multiworld (multiworld.gg). Each platform cluster must be unlocked, as must swimming, ledge grabbing, wall kicking and using jump pads. Making a platform grassy is a check (over 200), and minigames add more."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Refunct",
+      "url": "https://multiworld.gg/games/Refunct/info/en"
+    }
+  ]
+}

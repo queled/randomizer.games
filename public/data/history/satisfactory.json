@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Satisfactory se joue en multiworld avec Archipelago : les jalons du HUB et les recherches du MAM sont mélangés.",
+    "en": "Satisfactory can be played in multiworld with Archipelago: HUB milestones and MAM research are shuffled."
+  },
+  "events": [
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Coffee Stain Studios sort la version 1.0 de Satisfactory en 2024.",
+        "en": "Coffee Stain Studios releases Satisfactory 1.0 in 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Satisfactory est jouable en multiworld avec Archipelago. Les jalons du HUB et les recherches du MAM sont mélangés, si bien que les technologies arrivent dans un ordre inhabituel ; les disques durs peuvent aussi contenir des objets. Plusieurs buts existent, dont les phases de l'ascenseur spatial.",
+        "en": "Satisfactory can be played in multiworld with Archipelago. HUB milestones and MAM research nodes are shuffled, so technologies arrive in an unusual order; hard drives can also hold items. Several goals exist, including Space Elevator phases."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Satisfactory",
+      "url": "https://archipelago.gg/games/Satisfactory/info/en"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Ratchet & Clank 3 se joue en multiworld : armes, planètes, gadgets et boulons de titane sont mélangés.",
+    "en": "Ratchet & Clank 3 can be played in multiworld: weapons, planets, gadgets and titanium bolts are shuffled."
+  },
+  "events": [
+    {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Insomniac Games et Sony sortent Ratchet & Clank 3 (Up Your Arsenal) sur PlayStation 2 en 2004.",
+        "en": "Insomniac Games and Sony release Ratchet & Clank 3 (Up Your Arsenal) on the PlayStation 2 in 2004."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Ratchet & Clank 3 est jouable en multiworld avec le multiworld (multiworld.gg). 20 armes et leurs améliorations, 10 gadgets, 17 infobots qui ouvrent les planètes, armures, 35 boulons de titane et 15 trophées sont mélangés, avec des pièges en option.",
+        "en": "Ratchet & Clank 3 can be played in multiworld with multiworld (multiworld.gg). 20 weapons and their upgrades, 10 gadgets, 17 infobots that unlock planets, armors, 35 titanium bolts and 15 trophies are shuffled, with optional traps."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Ratchet and Clank 3",
+      "url": "https://multiworld.gg/games/Ratchet%20and%20Clank%203/info/en"
+    }
+  ]
+}

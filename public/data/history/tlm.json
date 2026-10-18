@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de The Little Mermaid, de Micheil Skeens, fait partie d'une longue série de randomizers NES et Super Nintendo.",
+    "en": "Micheil Skeens's Little Mermaid randomizer is part of a long series of NES and Super Nintendo randomizers."
+  },
+  "events": [
+    {
+      "date": "1991",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort The Little Mermaid sur NES en 1991.",
+        "en": "Capcom releases The Little Mermaid on the NES in 1991."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Micheil Skeens publie le randomizer de la version américaine le 21 février 2021, l'un de ses nombreux randomizers pour la NES et la Super Nintendo.",
+        "en": "Micheil Skeens releases the randomizer for the US version on February 21, 2021, one of many NES and Super Nintendo randomizers by the same author."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Micheil Skeens — Little Mermaid Randomizer",
+      "url": "https://micheilskeens.com/little-mermaid-randomizer.php"
+    }
+  ]
+}

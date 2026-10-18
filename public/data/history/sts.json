@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Slay the Spire se joue en multiworld : reliques et récompenses de cartes deviennent des emplacements.",
+    "en": "Slay the Spire can be played in multiworld: relics and card rewards become checks."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Mega Crit sort la version complète de Slay the Spire en 2019.",
+        "en": "Mega Crit releases Slay the Spire's full version in 2019."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Slay the Spire est jouable en multiworld avec MultiworldGG. Les reliques, reliques de boss et cartes rares, ainsi qu'une récompense de cartes sur deux, sont remplacées par des objets du multiworld. Se reposer ou améliorer une carte peut aussi devoir être débloqué.",
+        "en": "Slay the Spire can be played in multiworld with MultiworldGG. Relics, boss relics and rare cards, plus every other card reward, are replaced with multiworld items. Resting or smithing can also need unlocking."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Slay the Spire",
+      "url": "https://multiworld.gg/games/Slay%20the%20Spire/info/en"
+    }
+  ]
+}

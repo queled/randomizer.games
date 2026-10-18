@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Le Captain Comic randomizer mélange les objets de The Adventures of Captain Comic tout en garantissant une partie gagnable.",
+    "en": "The Captain Comic randomizer shuffles the items of The Adventures of Captain Comic while keeping the game winnable."
+  },
+  "events": [
+    {
+      "date": "1988",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Michael Denio sort The Adventures of Captain Comic sur DOS en 1988.",
+        "en": "Michael Denio releases The Adventures of Captain Comic on DOS in 1988."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Un randomizer web, au code source disponible, mélange l'emplacement des objets en garantissant que la partie reste gagnable. Il propose des seeds quotidiennes, des défis (sans Cola, sans boucliers) et une carte de sa logique.",
+        "en": "A web randomizer, with its source code available, shuffles item locations while ensuring the game remains winnable. It offers daily seeds, challenges (No-Cola, No-Shields) and a map of its logic."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Captain Comic randomizer",
+      "url": "https://www.bamsoftware.com/comicrando/"
+    }
+  ]
+}

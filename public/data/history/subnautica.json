@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Subnautica se joue en multiworld avec Archipelago : les plans des technologies sont mélangés dans le pool d'objets.",
+    "en": "Subnautica can be played in multiworld with Archipelago: technology blueprints are shuffled into the item pool."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Unknown Worlds Entertainment sort la version complète de Subnautica en 2018.",
+        "en": "Unknown Worlds Entertainment releases Subnautica's full version in 2018."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Subnautica est jouable en multiworld avec Archipelago. Les technologies à scanner disparaissent : leurs plans sont mélangés dans le pool d'objets. Quatre buts existent : quitter la planète, guérir l'infection, atteindre l'infection maximale ou réparer le Drive Core de l'Aurora.",
+        "en": "Subnautica can be played in multiworld with Archipelago. Scannable technologies are removed: their blueprints are shuffled into the item pool. Four goals exist: leave the planet, cure the plague, reach maximum infection or repair the Aurora's Drive Core."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Subnautica",
+      "url": "https://archipelago.gg/games/Subnautica/info/en"
+    }
+  ]
+}

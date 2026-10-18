@@ -1,0 +1,32 @@
+{
+  "intro": {
+    "fr": "Subversion, romhack de Super Metroid, a son randomizer, réalisé par ironrusty.",
+    "en": "Subversion, a Super Metroid romhack, has its randomizer, made by ironrusty."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "ironrusty propose un randomizer de Subversion, avec plusieurs options de logique, un mélange des zones et d'autres nouveautés, grâce notamment aux recherches de strotlog. L'algorithme de remplissage écrit par beauxq pour Subversion sert ensuite à tous les randomizers de hacks d'ironrusty.",
+        "en": "ironrusty offers a Subversion randomizer, with several logic options, area rando and other new features, thanks in particular to strotlog's research. The fill algorithm beauxq wrote for Subversion then powers all of ironrusty's hack randomizers."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "randorandy — Subversion Rando",
+      "url": "https://randorandy.github.io/SubversionRando/"
+    },
+    {
+      "label": "randorandy — Super Metroid hack randomizers",
+      "url": "https://randorandy.github.io/"
+    }
+  ]
+}

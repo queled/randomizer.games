@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Le randomizer de ssjtroly mélange notamment l'ordre des niveaux de Sonic the Hedgehog sur Master System.",
+    "en": "ssjtroly's randomizer shuffles, among other things, the level order of Sonic the Hedgehog on the Master System."
+  },
+  "events": [
+    {
+      "date": "1991",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sega sort Sonic the Hedgehog sur Master System en 1991.",
+        "en": "Sega releases Sonic the Hedgehog on the Master System in 1991."
+      }
+    },
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le randomizer de ssjtroly",
+        "en": "ssjtroly's randomizer"
+      },
+      "text": {
+        "fr": "ssjtroly crée en juillet 2018 le dépôt d'un randomizer web pour la version Master System, qui peut entre autres mélanger l'ordre des niveaux. Le dépôt est mis à jour jusqu'en 2023.",
+        "en": "ssjtroly creates in July 2018 the repository of a web randomizer for the Master System version, which can among other things shuffle the level order. The repository is updated until 2023."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Sonic the Hedgehog (SMS) Randomizer",
+      "url": "https://ssjtroly.github.io/sonic1-sms-randomizer/"
+    },
+    {
+      "label": "ssjtroly/sonic1-sms-randomizer (GitHub)",
+      "url": "https://github.com/ssjtroly/sonic1-sms-randomizer"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "intro": {
+    "fr": "Terraria se randomise par ses étapes de progression : défaire un boss peut débloquer l'étape d'un autre.",
+    "en": "Terraria is randomized through its progression flags: defeating one boss can unlock another's milestone."
+  },
+  "events": [
+    {
+      "date": "2011",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Re-Logic sort Terraria en 2011.",
+        "en": "Re-Logic releases Terraria in 2011."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Terraria Flag Randomizer",
+        "en": "Terraria Flag Randomizer"
+      },
+      "text": {
+        "fr": "Le 7 juillet 2022, Cronuswaters présente sur les forums officiels le Terraria Flag Randomizer, un mod tModLoader qui mélange les étapes de progression du jeu.",
+        "en": "On July 7, 2022, Cronuswaters presents on the official forums the Terraria Flag Randomizer, a tModLoader mod that shuffles the game's progression flags."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Terraria est jouable en multiworld avec Archipelago. Les étapes des boss et des événements sont randomisées : vaincre l'Impératrice de la lumière peut par exemple donner l'étape « après Skeletron » et ouvrir le Donjon. Récompenses et succès peuvent aussi entrer dans le pool.",
+        "en": "Terraria can be played in multiworld with Archipelago. Boss and event flags are randomized: defeating the Empress of Light can, for example, give Post-Skeletron and open the Dungeon. Item rewards and achievements can join the pool too."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Terraria Community Forums — Terraria Flag Randomizer",
+      "url": "https://forums.terraria.org/index.php?threads/terraria-flag-randomizer.113407/"
+    },
+    {
+      "label": "Archipelago — Terraria",
+      "url": "https://archipelago.gg/games/Terraria/info/en"
+    }
+  ]
+}

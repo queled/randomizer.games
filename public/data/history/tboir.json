@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "The Binding of Isaac: Repentance se joue en multiworld : les étages au-delà des Depths se débloquent comme objets.",
+    "en": "The Binding of Isaac: Repentance can be played in multiworld: floors beyond the Depths unlock as items."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nicalis sort The Binding of Isaac: Repentance, extension d'Edmund McMillen, en 2021.",
+        "en": "Nicalis releases The Binding of Isaac: Repentance, an expansion of Edmund McMillen's game, in 2021."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "The Binding of Isaac: Repentance est jouable en multiworld avec MultiworldGG. Le jeu étant déjà aléatoire, le mod agit surtout sur la progression : seuls Basement, Caves et Depths sont ouverts au départ, et les autres étages ou zones doivent être trouvés dans le multiworld.",
+        "en": "The Binding of Isaac: Repentance can be played in multiworld with MultiworldGG. The game being random already, the mod mostly acts on progression: only Basement, Caves and Depths are open at first, and other floors or areas must be found in the multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — The Binding of Isaac Repentance",
+      "url": "https://multiworld.gg/games/The%20Binding%20of%20Isaac%20Repentance/info/en"
+    }
+  ]
+}

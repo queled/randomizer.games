@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "The Grinch se joue en multiworld : gadgets, mouvements et pièces du traîneau sont mélangés.",
+    "en": "The Grinch can be played in multiworld: gadgets, moves and sleigh parts are shuffled."
+  },
+  "events": [
+    {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort The Grinch en 2000.",
+        "en": "Konami releases The Grinch in 2000."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "The Grinch est jouable en multiworld avec MultiworldGG. Gadgets, mouvements du Grinch, Hearts of Stone, tubes, clé de la salle du traîneau et pièces du traîneau sont mélangés, avec des pièges. Plans, missions et leurs tâches sont des emplacements.",
+        "en": "The Grinch can be played in multiworld with MultiworldGG. Gadgets, Grinch's moves, Hearts of Stone, vacuum tubes, the sleigh room key and sleigh parts are shuffled, with traps. Blueprints, missions and their tasks are checks."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — The Grinch",
+      "url": "https://multiworld.gg/games/The%20Grinch/info/en"
+    }
+  ]
+}

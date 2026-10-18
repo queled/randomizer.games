@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Star Wars Episode I: Racer se joue en multiworld : pièces de pod, pilotes et circuits se débloquent comme objets.",
+    "en": "Star Wars Episode I: Racer can be played in multiworld: pod parts, racers and circuits unlock as items."
+  },
+  "events": [
+    {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "LucasArts sort Star Wars Episode I: Racer en 1999.",
+        "en": "LucasArts releases Star Wars Episode I: Racer in 1999."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Star Wars Episode I: Racer est jouable en multiworld avec MultiworldGG. La boutique de Watto, celle des droïdes, les courses terminées et certaines victoires sont des emplacements ; on reçoit pièces de pod, pilotes, passes de circuit, courses, droïdes et argent.",
+        "en": "Star Wars Episode I: Racer can be played in multiworld with MultiworldGG. Watto's shop, the pit droid shop, completed races and some first places are checks; you receive pod parts, racers, circuit passes, courses, pit droids and money."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Star Wars Episode I Racer",
+      "url": "https://multiworld.gg/games/Star%20Wars%20Episode%20I%20Racer/info/en"
+    }
+  ]
+}

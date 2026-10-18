@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Skul: The Hero Slayer se joue en multiworld : niveaux de maîtrise, crânes et personnages se débloquent comme objets.",
+    "en": "Skul: The Hero Slayer can be played in multiworld: mastery levels, skulls and characters unlock as items."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "SouthPAW Games sort Skul: The Hero Slayer en 2021.",
+        "en": "SouthPAW Games releases Skul: The Hero Slayer in 2021."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Skul: The Hero Slayer est jouable en multiworld avec MultiworldGG. Chaque niveau de Witch Mastery envoie un emplacement et les améliorations doivent être reçues ; les crânes peuvent être verrouillés, chaque chapitre a ses portes et l'accès aux personnages est randomisé.",
+        "en": "Skul: The Hero Slayer can be played in multiworld with MultiworldGG. Each Witch Mastery level sends a check and upgrades must be received; skulls can be locked, each chapter gets stage gates and access to NPCs is randomized."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Skul: The Hero Slayer",
+      "url": "https://multiworld.gg/games/Skul%3A%20The%20Hero%20Slayer/info/en"
+    }
+  ]
+}

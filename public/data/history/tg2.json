@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Le Goonies 2 Randomizer de Veetorp mélange tous les objets importants de The Goonies II.",
+    "en": "Veetorp's Goonies 2 Randomizer shuffles all the important items in The Goonies II."
+  },
+  "events": [
+    {
+      "date": "1987",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort The Goonies II sur NES en 1987.",
+        "en": "Konami releases The Goonies II on the NES in 1987."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Goonies 2 Randomizer",
+        "en": "Goonies 2 Randomizer"
+      },
+      "text": {
+        "fr": "Veetorp propose un randomizer web qui mélange l'emplacement de tous les objets importants : la combinaison de plongée peut se trouver dans les Green Caves, ou un Goonie dès la première salle.",
+        "en": "Veetorp offers a web randomizer that shuffles the location of all important items: the Diving Suit may be in the Green Caves, or a Goonie in the very first room."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Goonies 2 Randomizer",
+      "url": "https://goonies2r.com/en"
+    }
+  ]
+}

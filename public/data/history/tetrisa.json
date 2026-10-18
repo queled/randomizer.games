@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Tetris Attack se joue en multiworld : manches, niveaux et puzzles se débloquent comme objets.",
+    "en": "Tetris Attack can be played in multiworld: rounds, stages and puzzles unlock as items."
+  },
+  "events": [
+    {
+      "date": "1996",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Intelligent Systems et Nintendo sortent Tetris Attack en 1996.",
+        "en": "Intelligent Systems and Nintendo release Tetris Attack in 1996."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Tetris Attack est jouable en multiworld avec MultiworldGG. Dans les modes Stage Clear et Puzzle, les manches et les niveaux sont verrouillés par des objets à recevoir.",
+        "en": "Tetris Attack can be played in multiworld with MultiworldGG. In Stage Clear and Puzzle modes, rounds and stages are locked behind items to receive."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Tetris Attack",
+      "url": "https://multiworld.gg/games/Tetris%20Attack/info/en"
+    }
+  ]
+}

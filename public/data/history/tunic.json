@@ -1,0 +1,59 @@
+{
+  "intro": {
+    "fr": "Le TUNIC Randomizer de SilentDestroyer, lancé quelques mois après la sortie du jeu en 2022, mélange objets, entrées et ennemis, et sert aussi de client Archipelago pour le multiworld.",
+    "en": "SilentDestroyer's TUNIC Randomizer, started a few months after the game's 2022 release, shuffles items, entrances and enemies, and also serves as the Archipelago client for multiworld."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu et le randomizer",
+        "en": "The game and the randomizer"
+      },
+      "text": {
+        "fr": "Andrew Shouldice et Finji sortent TUNIC en mars 2022. SilentDestroyer commence le randomizer en août 2022 et publie une première bêta le 2 septembre.",
+        "en": "Andrew Shouldice and Finji release TUNIC in March 2022. SilentDestroyer starts the randomizer in August 2022 and releases a first beta on September 2."
+      }
+    },
+    {
+      "date": "2023-2024",
+      "title": {
+        "fr": "Versions 2 à 4",
+        "en": "Versions 2 to 4"
+      },
+      "text": {
+        "fr": "Les versions 2.0 (novembre 2023), 3.0 (février 2024) et 4.0 (septembre 2024) se succèdent, avec ScipioWright parmi les principaux contributeurs. Le mod réunit le randomizer solo et l'intégration au multiworld d'Archipelago. Les premières courses recensées sur ce site ont lieu en août 2023 ; 2024 en compte 39.",
+        "en": "Versions 2.0 (November 2023), 3.0 (February 2024) and 4.0 (September 2024) follow, with ScipioWright among the main contributors. The mod combines the single-player randomizer and the Archipelago multiworld integration. The first races listed on this site take place in August 2023; 2024 counts 39."
+      }
+    },
+    {
+      "date": "2025-2026",
+      "title": {
+        "fr": "Frost Fatales",
+        "en": "Frost Fatales"
+      },
+      "text": {
+        "fr": "Frost Fatales 2025 accueille une course Any% du randomizer, et Frost Fatales 2026 une partie « Lawnmower% ». La version 5.0 sort en juin 2026.",
+        "en": "Frost Fatales 2025 hosts an Any% randomizer race, and Frost Fatales 2026 a \"Lawnmower%\" run. Version 5.0 comes out in June 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "silent-destroyer/tunic-randomizer (GitHub)",
+      "url": "https://github.com/silent-destroyer/tunic-randomizer"
+    },
+    {
+      "label": "TUNIC Randomizer",
+      "url": "https://rando.tunic.run/"
+    },
+    {
+      "label": "Archipelago — TUNIC",
+      "url": "https://archipelago.gg/games/TUNIC/info/en"
+    },
+    {
+      "label": "racetime.gg — TUNIC Randomizer",
+      "url": "https://racetime.gg/tunic-rando"
+    }
+  ]
+}

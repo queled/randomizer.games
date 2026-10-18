@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Le Wario Land 3 Randomizer d'AaronDobbe mélange le contenu des 100 coffres au trésor du jeu et, en option, la carte du monde et l'emplacement des clés, en garantissant que la partie reste finissable.",
+    "en": "AaronDobbe's Wario Land 3 Randomizer shuffles the contents of the game's 100 treasure chests and, optionally, the world map and key locations, while ensuring the game stays beatable."
+  },
+  "events": [
+    {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Wario Land 3 sur Game Boy Color en 2000.",
+        "en": "Nintendo releases Wario Land 3 on the Game Boy Color in 2000."
+      }
+    },
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Version 0.8",
+        "en": "Version 0.8"
+      },
+      "text": {
+        "fr": "AaronDobbe publie la version 0.8 du randomizer le 5 octobre 2018.",
+        "en": "AaronDobbe releases version 0.8 of the randomizer on October 5, 2018."
+      }
+    },
+    {
+      "date": "2023-2025",
+      "title": {
+        "fr": "Les courses",
+        "en": "Races"
+      },
+      "text": {
+        "fr": "Les premières courses recensées sur ce site ont lieu en juillet 2023 sur racetime.gg ; 2024 en compte 33, un record. Eternity-Lotus devient l'un des principaux contributeurs, et la version 0.12 est en préversion en janvier 2025.",
+        "en": "The first races listed on this site take place in July 2023 on racetime.gg; 2024 counts 33, a record. Eternity-Lotus becomes one of the main contributors, and version 0.12 is in pre-release in January 2025."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "AaronDobbe/wl3-randomizer (GitHub)",
+      "url": "https://github.com/AaronDobbe/wl3-randomizer"
+    },
+    {
+      "label": "racetime.gg — WL3R",
+      "url": "https://racetime.gg/wl3r"
+    }
+  ]
+}

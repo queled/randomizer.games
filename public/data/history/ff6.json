@@ -1,0 +1,104 @@
+{
+  "intro": {
+    "fr": "Final Fantasy VI a l'une des plus longues histoires de randomizers : Beyond Chaos d'abyssonym dès 2014, ses forks communautaires, puis Worlds Collide, le randomizer en monde ouvert joué aujourd'hui en course.",
+    "en": "Final Fantasy VI has one of the longest randomizer histories: abyssonym's Beyond Chaos as early as 2014, its community forks, then Worlds Collide, the open-world randomizer raced today."
+  },
+  "events": [
+    {
+      "date": "1994",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square sort Final Fantasy VI sur Super Famicom en 1994 ; il arrive en Amérique du Nord sous le nom de Final Fantasy III la même année.",
+        "en": "Square releases Final Fantasy VI on the Super Famicom in 1994; it reaches North America as Final Fantasy III the same year."
+      }
+    },
+    {
+      "date": "2014",
+      "title": {
+        "fr": "Beyond Chaos",
+        "en": "Beyond Chaos"
+      },
+      "text": {
+        "fr": "abyssonym commence Beyond Chaos en juillet 2014, avec un randomizer de compétences et des coupes de cinématiques. Le projet évolue jusqu'à sa version 63 (janvier 2018), avant d'être repris dans le fork de subtractionsoup, Beyond Chaos EX. Les premières courses de randomizer FF6 recensées sur ce site datent d'octobre 2014, sur SpeedRunsLive ; en 2017 et 2018, on y court en Beyond Chaos, notamment en mode « Kefka at Narshe ».",
+        "en": "abyssonym starts Beyond Chaos in July 2014, with a skill randomizer and cutscene skips. The project evolves up to version 63 (January 2018), before being carried on in subtractionsoup's fork, Beyond Chaos EX. The first FF6 randomizer races listed on this site date from October 2014, on SpeedRunsLive; in 2017 and 2018, they are raced in Beyond Chaos, notably in \"Kefka at Narshe\" mode."
+      }
+    },
+    {
+      "date": "2017-2018",
+      "title": {
+        "fr": "Expériences d'abyssonym",
+        "en": "abyssonym's experiments"
+      },
+      "text": {
+        "fr": "En septembre 2017, abyssonym publie un « FF6 Exit Rando », qui mélange les sorties (« ça craint, mais c'est théoriquement finissable »). En avril 2018 suit Beyond Chaos Gaiden, un deuxième randomizer pour FF6 conçu pour s'adapter à plusieurs versions du jeu, dont la japonaise et le mod Brave New World.",
+        "en": "In September 2017, abyssonym releases an \"FF6 Exit Rando\" that shuffles exits (\"it sucks, but it's theoretically completable\"). In April 2018 comes Beyond Chaos Gaiden, a second FF6 randomizer designed to port to several versions of the game, including the Japanese one and the Brave New World mod."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Worlds Collide",
+        "en": "Worlds Collide"
+      },
+      "text": {
+        "fr": "En janvier 2020, AtmaTek publie sur FF6Hacking.com la première bêta de Worlds Collide, un randomizer en monde ouvert inspiré de Free Enterprise (FF4) et de Career Day (FF5) : on part du pont du dirigeable, on voyage entre les deux mondes pour recruter personnages et Espers, jusqu'à pouvoir atterrir sur la tour de Kefka.",
+        "en": "In January 2020, AtmaTek releases on FF6Hacking.com the first beta of Worlds Collide, an open-world randomizer inspired by Free Enterprise (FF4) and Career Day (FF5): you start on the airship bridge and travel between both worlds to recruit characters and Espers, until you can land on Kefka's Tower."
+      }
+    },
+    {
+      "date": "2021-2022",
+      "title": {
+        "fr": "Beyond Chaos CE et SGDQ",
+        "en": "Beyond Chaos CE and SGDQ"
+      },
+      "text": {
+        "fr": "En 2021, la communauté lance Beyond Chaos CE (« Community Edition »), fork de Beyond Chaos EX, qui revendique plus de 10 milliards de randomisations possibles avec les flags de base. En juin 2022, le Summer Games Done Quick accueille une partie de Worlds Collide.",
+        "en": "In 2021 the community launches Beyond Chaos CE (\"Community Edition\"), a fork of Beyond Chaos EX, which boasts over 10 billion possible randomizations with the basic flags. In June 2022, Summer Games Done Quick hosts a Worlds Collide run."
+      }
+    },
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Toujours actifs",
+        "en": "Still going"
+      },
+      "text": {
+        "fr": "Beyond Chaos CE atteint sa version 6.1.3 en septembre 2024, et ce site recense 16 courses de Worlds Collide dans l'année.",
+        "en": "Beyond Chaos CE reaches version 6.1.3 in September 2024, and this site counts 16 Worlds Collide races that year."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "abyssonym/beyondchaos (GitHub)",
+      "url": "https://github.com/abyssonym/beyondchaos"
+    },
+    {
+      "label": "FF6BeyondChaos/BeyondChaosRandomizer (GitHub)",
+      "url": "https://github.com/FF6BeyondChaos/BeyondChaosRandomizer"
+    },
+    {
+      "label": "Abyssonym — FF6 Exit Rando (2017)",
+      "url": "https://abyssonym.wordpress.com/2017/09/13/ff6-exit-rando/"
+    },
+    {
+      "label": "Abyssonym — Beyond Chaos Gaiden (2018)",
+      "url": "https://abyssonym.wordpress.com/2018/04/02/176/"
+    },
+    {
+      "label": "DualShockers — Final Fantasy 6 Randomizer Hack Worlds Collide (2020)",
+      "url": "https://www.dualshockers.com/final-fantasy-6-randomizer-worlds-collide-impressions/"
+    },
+    {
+      "label": "FF6 Worlds Collide",
+      "url": "https://www.ff6worldscollide.com/"
+    },
+    {
+      "label": "racetime.gg — FF6 Worlds Collide",
+      "url": "https://racetime.gg/ff6wc"
+    }
+  ]
+}

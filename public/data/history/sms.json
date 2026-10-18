@@ -1,0 +1,54 @@
+{
+  "intro": {
+    "fr": "Super Mario Sunshine se randomise en multiworld, et sa scène de courses a démarré en 2026.",
+    "en": "Super Mario Sunshine is randomized in multiworld, and its racing scene started in 2026."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Super Mario Sunshine sur GameCube en 2002.",
+        "en": "Nintendo releases Super Mario Sunshine on the GameCube in 2002."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Premières courses",
+        "en": "First races"
+      },
+      "text": {
+        "fr": "Les premières courses recensées sur ce site ont lieu le 15 février 2026 sur racetime.gg, et l'année en compte déjà 68.",
+        "en": "The first races listed on this site take place on February 15, 2026 on racetime.gg, and the year already counts 68."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Super Mario Sunshine est jouable en multiworld.",
+        "en": "Super Mario Sunshine can be played in multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Super Mario Sunshine",
+      "url": "https://multiworld.gg/games/Super%20Mario%20Sunshine/info/en"
+    },
+    {
+      "label": "racetime.gg — Super Mario Sunshine Randomizer",
+      "url": "https://racetime.gg/smsr"
+    }
+  ]
+}

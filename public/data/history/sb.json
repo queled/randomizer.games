@@ -1,0 +1,69 @@
+{
+  "intro": {
+    "fr": "RandoBlazer remélange Soul Blazer, l'action-RPG de Quintet sur Super Nintendo : contenu des repaires de monstres, objets et plus encore. Commencé en 2017, il se génère aujourd'hui dans le navigateur.",
+    "en": "RandoBlazer reshuffles Soul Blazer, Quintet's action RPG on the Super Nintendo: monster lair contents, items and more. Started in 2017, it is now generated in the browser."
+  },
+  "events": [
+    {
+      "date": "1992",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Quintet et Enix sortent Soul Blazer sur Super Famicom au Japon en 1992, puis sur Super Nintendo.",
+        "en": "Quintet and Enix release Soul Blazer on the Super Famicom in Japan in 1992, then on the Super Nintendo."
+      }
+    },
+    {
+      "date": "2017",
+      "title": {
+        "fr": "RandoBlazer",
+        "en": "RandoBlazer"
+      },
+      "text": {
+        "fr": "LeHulk1 commence RandoBlazer le 23 octobre 2017 : il randomise notamment le type d'ennemis des repaires de monstres et génère un journal des spoilers. TheAxeMan301 et Orphis y contribuent ensuite.",
+        "en": "LeHulk1 starts RandoBlazer on October 23, 2017: it randomizes, among other things, the enemy type of monster lairs and produces a spoiler log. TheAxeMan301 and Orphis contribute later."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Premières courses",
+        "en": "First races"
+      },
+      "text": {
+        "fr": "Les premières courses recensées sur ce site ont lieu en février 2021 sur racetime.gg : 28 dans l'année, un record.",
+        "en": "The first races listed on this site take place in February 2021 on racetime.gg: 28 that year, a record."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Dans le navigateur",
+        "en": "In the browser"
+      },
+      "text": {
+        "fr": "RandoBlazer se génère dans le navigateur, avec un lien partageable et un journal des spoilers.",
+        "en": "RandoBlazer is generated in the browser, with a shareable link and a spoiler log."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "randoblazer/RandoBlazer (GitHub)",
+      "url": "https://github.com/randoblazer/RandoBlazer"
+    },
+    {
+      "label": "RandoBlazer",
+      "url": "https://randoblazer.orphis.net/"
+    },
+    {
+      "label": "racetime.gg — Soul Blazer Randomizer",
+      "url": "https://racetime.gg/soul-blazer-rando"
+    }
+  ]
+}

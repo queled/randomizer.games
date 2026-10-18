@@ -1,0 +1,62 @@
+{
+  "intro": {
+    "fr": "Metroid Prime 3: Corruption se randomise aujourd'hui avec Corruptovania, un fork de Randovania consacré au jeu, publié en 2024.",
+    "en": "Metroid Prime 3: Corruption is now randomized with Corruptovania, a Randovania fork dedicated to the game, released in 2024."
+  },
+  "events": [
+    {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Retro Studios et Nintendo sortent Metroid Prime 3: Corruption sur Wii en 2007.",
+        "en": "Retro Studios and Nintendo release Metroid Prime 3: Corruption on the Wii in 2007."
+      }
+    },
+    {
+      "date": "2020-2023",
+      "title": {
+        "fr": "Premières courses",
+        "en": "First races"
+      },
+      "text": {
+        "fr": "Les premières courses recensées sur ce site ont lieu en décembre 2020 sur racetime.gg, avec pour objectif de finir le jeu.",
+        "en": "The first races listed on this site take place in December 2020 on racetime.gg, with the goal of beating the game."
+      }
+    },
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Corruptovania",
+        "en": "Corruptovania"
+      },
+      "text": {
+        "fr": "Corruptovania, fork de Randovania consacré à Metroid Prime 3, publie sa version 1.0.1 le 31 mai 2024. Comme Randovania, il garantit que chaque seed peut être finie sans glitch. Ce site recense 26 courses dans l'année, un record.",
+        "en": "Corruptovania, a Randovania fork dedicated to Metroid Prime 3, releases version 1.0.1 on May 31, 2024. Like Randovania, it ensures every seed can be beaten without glitches. This site counts 26 races that year, a record."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Version 1.8",
+        "en": "Version 1.8"
+      },
+      "text": {
+        "fr": "La version 1.8.3 de Corruptovania sort en mars 2026.",
+        "en": "Corruptovania version 1.8.3 comes out in March 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Schwork-Corruption/corruptovania (GitHub)",
+      "url": "https://github.com/Schwork-Corruption/corruptovania"
+    },
+    {
+      "label": "racetime.gg — MP3R",
+      "url": "https://racetime.gg/mp3r"
+    }
+  ]
+}

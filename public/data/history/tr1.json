@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "TR Rando, de l'équipe Lost Artefacts, randomise les Tomb Raider classiques et leurs versions Remastered.",
+    "en": "The Lost Artefacts team's TR Rando randomizes the classic Tomb Raider games and their Remastered versions."
+  },
+  "events": [
+    {
+      "date": "1996",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Core Design et Eidos sortent Tomb Raider en 1996 ; il est remasterisé dans Tomb Raider I-III Remastered en 2024.",
+        "en": "Core Design and Eidos release Tomb Raider in 1996; it is remastered in Tomb Raider I-III Remastered in 2024."
+      }
+    },
+    {
+      "date": "2020-2025",
+      "title": {
+        "fr": "TR Rando",
+        "en": "TR Rando"
+      },
+      "text": {
+        "fr": "DanzaG commence TR Rando en mai 2020 et publie une première version candidate le 7 juin 2020 ; lahm86 en devient le principal contributeur. L'outil randomise les objets, les secrets, les ennemis, l'apparence de Lara, l'ordre des niveaux, les textes et bien plus, pour Tomb Raider I à III, leurs extensions et les versions Remastered. La version 1.11 sort en octobre 2025.",
+        "en": "DanzaG starts TR Rando in May 2020 and releases a first release candidate on June 7, 2020; lahm86 becomes its main contributor. The tool randomizes items, secrets, enemies, Lara's appearance, level order, text and much more, for Tomb Raider I to III, their expansions and the Remastered versions. Version 1.11 comes out in October 2025."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "LostArtefacts/TR-Rando (GitHub)",
+      "url": "https://github.com/LostArtefacts/TR-Rando"
+    }
+  ]
+}

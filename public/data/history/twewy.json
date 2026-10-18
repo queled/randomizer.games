@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "« Fractalizon », d'abyssonym, randomise The World Ends with You sur Nintendo DS.",
+    "en": "abyssonym's \"Fractalizon\" randomizes The World Ends with You on the Nintendo DS."
+  },
+  "events": [
+    {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix et Jupiter sortent The World Ends with You sur Nintendo DS en 2007.",
+        "en": "Square Enix and Jupiter release The World Ends with You on the Nintendo DS in 2007."
+      }
+    },
+    {
+      "date": "2019-2020",
+      "title": {
+        "fr": "Fractalizon",
+        "en": "Fractalizon"
+      },
+      "text": {
+        "fr": "abyssonym commence le projet en avril 2019 et publie la version 1 le 3 décembre 2020.",
+        "en": "abyssonym starts the project in April 2019 and releases version 1 on December 3, 2020."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "abyssonym/fractalizon (GitHub)",
+      "url": "https://github.com/abyssonym/fractalizon"
+    }
+  ]
+}

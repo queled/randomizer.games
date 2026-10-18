@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Ultima IV se randomise avec deux outils : le randomizer de la version NES par Gilmok, et celui de la version DOS par Fenyx4, qui génère une nouvelle carte du monde.",
+    "en": "Ultima IV is randomized with two tools: Gilmok's randomizer for the NES version, and Fenyx4's for the DOS version, which generates a new overworld map."
+  },
+  "events": [
+    {
+      "date": "1985",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Origin Systems sort Ultima IV: Quest of the Avatar en 1985.",
+        "en": "Origin Systems releases Ultima IV: Quest of the Avatar in 1985."
+      }
+    },
+    {
+      "date": "2018-2022",
+      "title": {
+        "fr": "Le randomizer NES de Gilmok",
+        "en": "Gilmok's NES randomizer"
+      },
+      "text": {
+        "fr": "Gilmok commence en décembre 2018 un randomizer pour la version NES, mis à jour jusqu'en 2022 ; sa version 2.0 supprime notamment le questionnaire de départ.",
+        "en": "Gilmok starts a randomizer for the NES version in December 2018, updated until 2022; its version 2.0 notably removes the opening questionnaire."
+      }
+    },
+    {
+      "date": "2020-2025",
+      "title": {
+        "fr": "Le randomizer DOS de Fenyx4",
+        "en": "Fenyx4's DOS randomizer"
+      },
+      "text": {
+        "fr": "Fenyx4 publie en août 2020 une alpha d'un randomizer pour la version DOS, gratuite sur GOG, qui génère une nouvelle carte du monde et en gère toutes les conséquences, jusqu'à une bêta 0.4.4 en septembre 2025.",
+        "en": "In August 2020 Fenyx4 releases an alpha of a randomizer for the DOS version, free on GOG, which generates a new overworld map and handles all its consequences, up to a 0.4.4 beta in September 2025."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Gilmok/U4Rando (GitHub)",
+      "url": "https://github.com/Gilmok/U4Rando"
+    },
+    {
+      "label": "Fenyx4/U4DosRandomizer (GitHub)",
+      "url": "https://github.com/Fenyx4/U4DosRandomizer"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Les outils de modding de nnguyen259 pour Trails of Cold Steel III comprennent un randomizer intégré.",
+    "en": "nnguyen259's modding tools for Trails of Cold Steel III include a built-in randomizer."
+  },
+  "events": [
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nihon Falcom sort The Legend of Heroes: Trails of Cold Steel III au Japon en 2017.",
+        "en": "Nihon Falcom releases The Legend of Heroes: Trails of Cold Steel III in Japan in 2017."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Cold Steel 3 Tools",
+        "en": "Cold Steel 3 Tools"
+      },
+      "text": {
+        "fr": "nnguyen259 publie en mai 2021 un outil de modding général pour Trails of Cold Steel III, avec un randomizer intégré (version 1 le 11 mai, version 2 en juillet), avec des contributions de hwjsnc.",
+        "en": "In May 2021 nnguyen259 releases a general modding tool for Trails of Cold Steel III, with a built-in randomizer (version 1 on May 11, version 2 in July), with contributions from hwjsnc."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "nnguyen259/ColdSteel3Tools (GitHub)",
+      "url": "https://github.com/nnguyen259/ColdSteel3Tools"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le TotK Randomizer de MelonSpeedruns reprend le code et l'idée de son randomizer de Breath of the Wild pour Tears of the Kingdom.",
+    "en": "MelonSpeedruns's TotK Randomizer reuses the code and idea of the Breath of the Wild randomizer for Tears of the Kingdom."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort The Legend of Zelda: Tears of the Kingdom sur Nintendo Switch en 2023.",
+        "en": "Nintendo releases The Legend of Zelda: Tears of the Kingdom on the Nintendo Switch in 2023."
+      }
+    },
+    {
+      "date": "2023-2024",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "MelonSpeedruns travaille sur le mod depuis la sortie du jeu, sur le modèle du BotW Randomizer. La version 1.0 sort le 8 avril 2024.",
+        "en": "MelonSpeedruns works on the mod from the game's release, following the BotW Randomizer model. Version 1.0 comes out on April 8, 2024."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "MelonSpeedruns/TotkRandomizer (GitHub)",
+      "url": "https://github.com/MelonSpeedruns/TotkRandomizer"
+    }
+  ]
+}

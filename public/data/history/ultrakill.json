@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "ULTRAKILL se joue en multiworld grâce au client Archipelago de TRPG, qui randomise toutes les armes.",
+    "en": "ULTRAKILL is played in multiworld thanks to TRPG's Archipelago client, which randomizes every weapon."
+  },
+  "events": [
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Arsi « Hakita » Patala et New Blood Interactive sortent ULTRAKILL en accès anticipé en 2020.",
+        "en": "Arsi \"Hakita\" Patala and New Blood Interactive release ULTRAKILL in early access in 2020."
+      }
+    },
+    {
+      "date": "2023-2026",
+      "title": {
+        "fr": "Le client Archipelago",
+        "en": "The Archipelago client"
+      },
+      "text": {
+        "fr": "TRPG publie la version 1.0 le 21 avril 2023, puis la 2.0 en janvier 2024, la 3.0 en janvier 2025 et la 3.5.6 en août 2026.",
+        "en": "TRPG releases version 1.0 on April 21, 2023, then 2.0 in January 2024, 3.0 in January 2025 and 3.5.6 in August 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "TRPG0/ArchipelagoULTRAKILL (GitHub)",
+      "url": "https://github.com/TRPG0/ArchipelagoULTRAKILL"
+    },
+    {
+      "label": "Multiworld — ULTRAKILL",
+      "url": "https://multiworld.gg/games/ULTRAKILL/info/en"
+    }
+  ]
+}

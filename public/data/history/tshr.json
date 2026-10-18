@@ -1,0 +1,54 @@
+{
+  "intro": {
+    "fr": "Le Simpsons Hit & Run Randomiser randomise les véhicules, les personnages et bien plus, et le jeu se joue aussi en multiworld.",
+    "en": "The Simpsons Hit & Run Randomiser randomizes vehicles, characters and much more, and the game can also be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Radical Entertainment et Vivendi Universal Games sortent The Simpsons: Hit & Run en 2003.",
+        "en": "Radical Entertainment and Vivendi Universal Games release The Simpsons: Hit & Run in 2003."
+      }
+    },
+    {
+      "date": "2018-2025",
+      "title": {
+        "fr": "Le randomiser",
+        "en": "The randomiser"
+      },
+      "text": {
+        "fr": "EnAppelsin publie une bêta le 31 mai 2018, puis la version 1.0 le 6 juin 2018, la 2.0 en mai 2019 et la 3.0 en octobre 2025, avec Hampo parmi les principaux contributeurs.",
+        "en": "EnAppelsin releases a beta on May 31, 2018, then version 1.0 on June 6, 2018, 2.0 in May 2019 and 3.0 in October 2025, with Hampo among the main contributors."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "The Simpsons: Hit & Run est aussi jouable en multiworld.",
+        "en": "The Simpsons: Hit & Run can also be played in multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "EnAppelsin/SHARCarRandomiser (GitHub)",
+      "url": "https://github.com/EnAppelsin/SHARCarRandomiser"
+    },
+    {
+      "label": "Multiworld — Simpsons Hit and Run",
+      "url": "https://multiworld.gg/games/Simpsons%20Hit%20and%20Run/info/en"
+    }
+  ]
+}

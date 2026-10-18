@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Gilmok pour Uncharted Waters: New Horizons génère une nouvelle carte du monde sur Super Nintendo.",
+    "en": "Gilmok's randomizer for Uncharted Waters: New Horizons generates a new world map on the Super Nintendo."
+  },
+  "events": [
+    {
+      "date": "1993",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Koei sort Uncharted Waters: New Horizons (Daikoukai Jidai II) en 1993.",
+        "en": "Koei releases Uncharted Waters: New Horizons (Daikoukai Jidai II) in 1993."
+      }
+    },
+    {
+      "date": "2021-2022",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Gilmok, déjà auteur du randomizer NES d'Ultima IV, commence le randomizer en juin 2021 et le met à jour jusqu'en 2022 ; la version 1.1 revoit le stockage de la carte pour que plus de ROM puissent être générées.",
+        "en": "Gilmok, already the author of the Ultima IV NES randomizer, starts the randomizer in June 2021 and updates it until 2022; version 1.1 reworks how the map is stored so more ROMs can be generated."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Gilmok/UWNHRando (GitHub)",
+      "url": "https://github.com/Gilmok/UWNHRando"
+    }
+  ]
+}

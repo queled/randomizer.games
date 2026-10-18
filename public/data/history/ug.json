@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer d'Unreal Gold, de Die4Ever, sert aussi de modèle possible pour d'autres randomizers sur l'Unreal Engine.",
+    "en": "Die4Ever's Unreal Gold randomizer also serves as a possible template for other Unreal Engine randomizers."
+  },
+  "events": [
+    {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Epic Games sort Unreal Gold, réunissant Unreal (1998) et son extension, en 2000.",
+        "en": "Epic Games releases Unreal Gold, bundling Unreal (1998) and its expansion, in 2000."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Die4Ever publie la version 0.3.0 le 18 août 2022.",
+        "en": "Die4Ever releases version 0.3.0 on August 18, 2022."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Die4Ever/unreal-randomizer (GitHub)",
+      "url": "https://github.com/Die4Ever/unreal-randomizer"
+    }
+  ]
+}

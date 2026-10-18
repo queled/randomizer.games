@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Teenage Mutant Ninja Turtles sur NES a deux randomizers : celui d'abyssonym et celui de kavoc.",
+    "en": "Teenage Mutant Ninja Turtles on the NES has two randomizers: abyssonym's and kavoc's."
+  },
+  "events": [
+    {
+      "date": "1989",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Teenage Mutant Ninja Turtles sur NES en 1989.",
+        "en": "Konami releases Teenage Mutant Ninja Turtles on the NES in 1989."
+      }
+    },
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le randomizer d'abyssonym",
+        "en": "abyssonym's randomizer"
+      },
+      "text": {
+        "fr": "abyssonym publie début novembre 2018 un randomizer à trois options : entrées et sorties (non sûr), objets à ramasser et ennemis. kavoc propose aussi un randomizer en ligne.",
+        "en": "In early November 2018 abyssonym releases a randomizer with three flags: entrances and exits (unsafe), item pickups and enemies. kavoc also offers an online randomizer."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "abyssonym/tmnt_rando (GitHub)",
+      "url": "https://github.com/abyssonym/tmnt_rando"
+    },
+    {
+      "label": "kavoc — tmntR",
+      "url": "https://www.kavoc.io/tmntR"
+    }
+  ]
+}

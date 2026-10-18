@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Le Talos Sigil Randomizer d'apple1417 randomise les sigils de The Talos Principle, avec une série impressionnante de versions en 2018.",
+    "en": "apple1417's Talos Sigil Randomizer randomizes the sigils of The Talos Principle, with an impressive run of versions in 2018."
+  },
+  "events": [
+    {
+      "date": "2014",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Croteam et Devolver Digital sortent The Talos Principle en 2014.",
+        "en": "Croteam and Devolver Digital release The Talos Principle in 2014."
+      }
+    },
+    {
+      "date": "2017-2019",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "apple1417 publie la version 1.0 le 25 décembre 2017, puis enchaîne les versions majeures en 2018 (de la 3.0 en janvier à la 13.0 en novembre), jusqu'à la 20.0.9 en septembre 2019. Il est distribué via le Steam Workshop.",
+        "en": "apple1417 releases version 1.0 on December 25, 2017, then a string of major versions in 2018 (from 3.0 in January to 13.0 in November), up to 20.0.9 in September 2019. It is distributed through the Steam Workshop."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "apple1417/Talos-Randomizer (GitHub)",
+      "url": "https://github.com/apple1417/Talos-Randomizer"
+    },
+    {
+      "label": "Steam Workshop — Talos Randomizer",
+      "url": "http://steamcommunity.com/sharedfiles/filedetails/?id=1244163099"
+    }
+  ]
+}

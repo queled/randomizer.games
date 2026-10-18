@@ -1,0 +1,69 @@
+{
+  "intro": {
+    "fr": "The Witness se randomise avec le randomizer de jbzdarkid, le générateur de puzzles aléatoires de sigma144, et en multiworld avec Archipelago.",
+    "en": "The Witness is randomized with jbzdarkid's randomizer, sigma144's random puzzle generator, and in multiworld with Archipelago."
+  },
+  "events": [
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Thekla, Inc. sort The Witness en 2016.",
+        "en": "Thekla, Inc. releases The Witness in 2016."
+      }
+    },
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le randomizer de jbzdarkid",
+        "en": "jbzdarkid's randomizer"
+      },
+      "text": {
+        "fr": "jbzdarkid publie la version 1.0 le 27 octobre 2018, puis cinq versions majeures en un mois, jusqu'à la 7.2 en mai 2021.",
+        "en": "jbzdarkid releases version 1.0 on October 27, 2018, then five major versions within a month, up to 7.2 in May 2021."
+      }
+    },
+    {
+      "date": "2020-2022",
+      "title": {
+        "fr": "Random Puzzle Generator",
+        "en": "Random Puzzle Generator"
+      },
+      "text": {
+        "fr": "sigma144 publie en janvier 2020 la version 1.0 du Witness Random Puzzle Generator, un fork qui génère des puzzles aléatoires ; la version 1.3 ajoute la compatibilité avec le double rando en mode Expert.",
+        "en": "In January 2020 sigma144 releases version 1.0 of the Witness Random Puzzle Generator, a fork that generates random puzzles; version 1.3 adds compatibility with Expert double rando."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "The Witness est aussi pris en charge par Archipelago pour le multiworld.",
+        "en": "The Witness is also supported by Archipelago for multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "jbzdarkid/witness-randomizer (GitHub)",
+      "url": "https://github.com/jbzdarkid/witness-randomizer"
+    },
+    {
+      "label": "sigma144/witness-randomizer (GitHub)",
+      "url": "https://github.com/sigma144/witness-randomizer"
+    },
+    {
+      "label": "Archipelago — The Witness",
+      "url": "https://archipelago.gg/games/The%20Witness/info/en"
+    }
+  ]
+}

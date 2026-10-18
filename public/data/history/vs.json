@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Vagrant Story Randomizer de ChaoticBrave randomise une copie du jeu, testée sur plusieurs émulateurs PlayStation.",
+    "en": "ChaoticBrave's Vagrant Story Randomizer randomizes a copy of the game, tested on several PlayStation emulators."
+  },
+  "events": [
+    {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square sort Vagrant Story sur PlayStation en 2000.",
+        "en": "Square releases Vagrant Story on the PlayStation in 2000."
+      }
+    },
+    {
+      "date": "2022-2026",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "ChaoticBrave commence le randomizer en avril 2022 et le met encore à jour en 2026. Les jeux randomisés fonctionnent notamment sur Beetle PSX, NO$PSX et DuckStation.",
+        "en": "ChaoticBrave starts the randomizer in April 2022 and still updates it in 2026. Randomized games run notably on Beetle PSX, NO$PSX and DuckStation."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "ChaoticBrave/VagrantStoryRandomizer (GitHub)",
+      "url": "https://github.com/ChaoticBrave/VagrantStoryRandomizer"
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "intro": {
+    "fr": "Cas rare, Bloodstained: Ritual of the Night a un mode Randomizer officiel, ajouté par ses développeurs en 2020. Des mods de la communauté l'ont ensuite étendu.",
+    "en": "In a rare case, Bloodstained: Ritual of the Night has an official Randomizer mode, added by its developers in 2020. Community mods have since extended it."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "ArtPlay et 505 Games sortent Bloodstained: Ritual of the Night en 2019, sous la direction de Koji Igarashi.",
+        "en": "ArtPlay and 505 Games release Bloodstained: Ritual of the Night in 2019, directed by Koji Igarashi."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Un mode Randomizer officiel",
+        "en": "An official Randomizer mode"
+      },
+      "text": {
+        "fr": "Le 7 mai 2020, une mise à jour gratuite ajoute Zangetsu comme personnage jouable et un mode Randomizer sur PC, PlayStation 4 et Xbox One, la version Switch suivant plus tard. Il remplace le mode roguelike promis lors du financement participatif, abandonné. Le joueur choisit jusqu'à huit paramètres à randomiser (objets, butins, boutiques…) et obtient une seed qu'il peut partager.",
+        "en": "On May 7, 2020, a free update adds Zangetsu as a playable character and a Randomizer mode on PC, PlayStation 4 and Xbox One, with the Switch version following later. It replaces the roguelike mode promised during crowdfunding, which was dropped. Players choose up to eight parameters to randomize (items, drops, shops…) and get a seed they can share."
+      }
+    },
+    {
+      "date": "2021-2023",
+      "title": {
+        "fr": "Mods et courses",
+        "en": "Mods and races"
+      },
+      "text": {
+        "fr": "Des mods sur Nexus Mods enrichissent le randomizer (« Randomizer Tweaks and True Randomization Script », générateur de randomisation). Les premières courses recensées sur ce site ont lieu en octobre 2021, et 2023 en compte 223, un record.",
+        "en": "Mods on Nexus Mods expand the randomizer (\"Randomizer Tweaks and True Randomization Script\", a randomization generator). The first races listed on this site take place in October 2021, and 2023 counts 223 of them, a record."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Back to Black",
+        "en": "Back to Black"
+      },
+      "text": {
+        "fr": "Le marathon Back to Black 2026 accueille une partie avec le randomizer intégré au jeu.",
+        "en": "The Back to Black 2026 marathon hosts a run with the game's built-in randomizer."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Gematsu — Zangetsu and Randomizer update now available (2020)",
+      "url": "https://gematsu.com/2020/05/bloodstained-ritual-of-the-night-zangetsu-and-randomizer-update-now-available-for-ps4-xbox-one-and-pc"
+    },
+    {
+      "label": "PC Gamer — Bloodstained gets a randomizer and new playable character",
+      "url": "https://www.pcgamer.com/au/bloodstained-gets-a-randomizer-and-new-playable-character-this-week"
+    },
+    {
+      "label": "Checkpoint Gaming — Planned roguelike mode dropped (2020)",
+      "url": "https://checkpointgaming.net/news/2020/03/bloodstained-ritual-of-the-nights-planned-roguelike-mode-dropped/"
+    },
+    {
+      "label": "Nexus Mods — Randomizer Tweaks and True Randomization Script",
+      "url": "https://www.nexusmods.com/bloodstainedritualofthenight/mods/132"
+    },
+    {
+      "label": "racetime.gg — Bloodstained Randomizer",
+      "url": "https://racetime.gg/bsrotnr"
+    }
+  ]
+}

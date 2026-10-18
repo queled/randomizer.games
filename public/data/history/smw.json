@@ -1,0 +1,69 @@
+{
+  "intro": {
+    "fr": "Le Super Mario World Randomizer d'authorblues, lancé en 2015, se génère directement dans le navigateur. Il a été joué en course surtout en 2016, et Super Mario World est aujourd'hui aussi pris en charge par Archipelago.",
+    "en": "authorblues's Super Mario World Randomizer, started in 2015, is generated straight in the browser. It was raced mostly in 2016, and Super Mario World is now also supported by Archipelago."
+  },
+  "events": [
+    {
+      "date": "1990",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Super Mario World sur Super Famicom au Japon en 1990, puis sur Super Nintendo.",
+        "en": "Nintendo releases Super Mario World on the Super Famicom in Japan in 1990, then on the Super Nintendo."
+      }
+    },
+    {
+      "date": "2015",
+      "title": {
+        "fr": "Le randomizer d'authorblues",
+        "en": "authorblues's randomizer"
+      },
+      "text": {
+        "fr": "authorblues crée le 23 février 2015 son générateur de ROM randomisées pour Super Mario World, hébergé sur GitHub Pages. Les premières courses recensées sur ce site ont lieu le 10 mars 2015 sur SpeedRunsLive.",
+        "en": "On February 23, 2015, authorblues creates his randomized ROM generator for Super Mario World, hosted on GitHub Pages. The first races listed on this site take place on March 10, 2015 on SpeedRunsLive."
+      }
+    },
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le pic des courses",
+        "en": "The racing peak"
+      },
+      "text": {
+        "fr": "Ce site recense 144 courses en 2016, un record.",
+        "en": "This site counts 144 races in 2016, a record."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "Super Mario World est aussi pris en charge par Archipelago pour le multiworld.",
+        "en": "Super Mario World is also supported by Archipelago for multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "authorblues/smwrandomizer (GitHub)",
+      "url": "https://github.com/authorblues/smwrandomizer"
+    },
+    {
+      "label": "Super Mario World Randomizer",
+      "url": "https://authorblues.github.io/smwrandomizer/"
+    },
+    {
+      "label": "Archipelago — Super Mario World",
+      "url": "https://archipelago.gg/games/Super%20Mario%20World/info/en"
+    }
+  ]
+}

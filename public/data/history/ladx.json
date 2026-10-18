@@ -1,0 +1,89 @@
+{
+  "intro": {
+    "fr": "Link's Awakening DX se randomise surtout avec LADXR, le randomizer de Daid lancé en 2020, autour duquel s'est construit un écosystème : suivi Magpie, multiworld via Archipelago.",
+    "en": "Link's Awakening DX is mostly randomized with LADXR, Daid's randomizer started in 2020, around which an ecosystem grew: the Magpie tracker, multiworld through Archipelago."
+  },
+  "events": [
+    {
+      "date": "1998",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort The Legend of Zelda: Link's Awakening DX sur Game Boy Color en 1998, version en couleurs du jeu Game Boy de 1993.",
+        "en": "Nintendo releases The Legend of Zelda: Link's Awakening DX on the Game Boy Color in 1998, a color version of the 1993 Game Boy game."
+      }
+    },
+    {
+      "date": "2017-2018",
+      "title": {
+        "fr": "Premières courses",
+        "en": "First races"
+      },
+      "text": {
+        "fr": "Ce site recense déjà quelques courses de randomizer Link's Awakening DX sur SpeedRunsLive en 2017 et 2018.",
+        "en": "This site already lists a few Link's Awakening DX randomizer races on SpeedRunsLive in 2017 and 2018."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Z4Randomizer et LADXR",
+        "en": "Z4Randomizer and LADXR"
+      },
+      "text": {
+        "fr": "En mai 2020, Saver publie sur GitHub le code de son Z4Randomizer, et Daid commence LADXR le 14 mai 2020. LADXR mélange l'emplacement des objets avec de nombreuses options, et propose une interface web.",
+        "en": "In May 2020, Saver publishes his Z4Randomizer's code on GitHub, and Daid starts LADXR on May 14, 2020. LADXR shuffles item locations with many options, and offers a web UI."
+      }
+    },
+    {
+      "date": "2022-2023",
+      "title": {
+        "fr": "Magpie et Flame Fatales",
+        "en": "Magpie and Flame Fatales"
+      },
+      "text": {
+        "fr": "En 2022, kbranch crée Magpie, un suivi web qui embarque une copie de LADXR pour savoir quels lieux sont accessibles plutôt que d'en réimplémenter la logique. Flame Fatales 2023 accueille une partie « 2 Instruments Required », et ce site recense 60 courses cette année-là.",
+        "en": "In 2022, kbranch creates Magpie, a web tracker that embeds a copy of LADXR to know which locations are in logic rather than reimplementing it. Flame Fatales 2023 hosts a \"2 Instruments Required\" run, and this site counts 60 races that year."
+      }
+    },
+    {
+      "date": "2025",
+      "title": {
+        "fr": "LADXR v14",
+        "en": "LADXR v14"
+      },
+      "text": {
+        "fr": "La version 14 de LADXR sort en octobre 2025. Le jeu est aussi pris en charge par Archipelago pour le multiworld.",
+        "en": "LADXR version 14 comes out in October 2025. The game is also supported by Archipelago for multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "daid/LADXR (GitHub)",
+      "url": "https://github.com/daid/LADXR"
+    },
+    {
+      "label": "LADXR",
+      "url": "https://daid.github.io/LADXR/"
+    },
+    {
+      "label": "Z4Randomizer",
+      "url": "https://sites.google.com/view/z4randomizer"
+    },
+    {
+      "label": "kbranch/Magpie (GitHub)",
+      "url": "https://github.com/kbranch/Magpie"
+    },
+    {
+      "label": "Archipelago — Links Awakening DX",
+      "url": "https://archipelago.gg/games/Links%20Awakening%20DX/info/en"
+    },
+    {
+      "label": "racetime.gg — LADXR",
+      "url": "https://racetime.gg/ladxr"
+    }
+  ]
+}

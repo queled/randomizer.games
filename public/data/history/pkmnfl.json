@@ -1,0 +1,66 @@
+{
+  "intro": {
+    "fr": "Pokémon Rouge Feu et Vert Feuille se jouent en randomizer de bien des façons, des défis communautaires jusqu'au multiworld, grâce à l'adaptation Archipelago de vyneras.",
+    "en": "Pokémon FireRed and LeafGreen are played as randomizers in many ways, from community challenges to multiworld, thanks to vyneras's Archipelago adaptation."
+  },
+  "events": [
+    {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo et Game Freak sortent Pokémon Rouge Feu et Vert Feuille, remakes des premiers Pokémon, sur Game Boy Advance en 2004.",
+        "en": "Nintendo and Game Freak release Pokémon FireRed and LeafGreen, remakes of the first Pokémon games, on the Game Boy Advance in 2004."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Un défi francophone",
+        "en": "A French-speaking challenge"
+      },
+      "text": {
+        "fr": "En avril 2020, le « WANTED Challenge by Predator #1 » réunit 40 joueurs sur start.gg pour une épreuve « Pokémon Randomizer Rouge Feu ».",
+        "en": "In April 2020, the \"WANTED Challenge by Predator #1\" gathers 40 players on start.gg for a \"Pokémon Randomizer FireRed\" event."
+      }
+    },
+    {
+      "date": "2024-2025",
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "vyneras adapte Rouge Feu et Vert Feuille à Archipelago : première alpha en juillet 2024, version 1.0 le 1er décembre 2025.",
+        "en": "vyneras adapts FireRed and LeafGreen to Archipelago: first alpha in July 2024, version 1.0 on December 1, 2025."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Sur racetime.gg",
+        "en": "On racetime.gg"
+      },
+      "text": {
+        "fr": "Les premières courses recensées sur ce site ont lieu en mars 2026 sur racetime.gg.",
+        "en": "The first races listed on this site take place in March 2026 on racetime.gg."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "vyneras/Archipelago — Pokémon FRLG (GitHub)",
+      "url": "https://github.com/vyneras/Archipelago/blob/frlg-stable/worlds/pokemon_frlg/docs/setup_en.md"
+    },
+    {
+      "label": "start.gg — WANTED Challenge by Predator #1",
+      "url": "https://start.gg/tournament/wanted-challenge-by-predator-1-pok-mon-en-randomizer/event/pokemon-randomizer-rouge-feu"
+    },
+    {
+      "label": "racetime.gg — Pokémon FireRed/LeafGreen Randomizer",
+      "url": "https://racetime.gg/pkmnfrlgr"
+    }
+  ]
+}

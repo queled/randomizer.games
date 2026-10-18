@@ -1,0 +1,70 @@
+{
+  "intro": {
+    "fr": "Castlevania II: Simon's Quest a eu son premier randomizer en 2017 avec Deadly Curse d'abyssonym, puis CV2R, qui mélange objets, armes, fouets et reliques de Dracula, et dont la scène de courses n'a jamais été aussi active qu'en 2026.",
+    "en": "Castlevania II: Simon's Quest got its first randomizer in 2017 with abyssonym's Deadly Curse, then CV2R, which shuffles items, weapons, whips and Dracula's relics, and whose racing scene has never been as active as in 2026."
+  },
+  "events": [
+    {
+      "date": "1987",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Castlevania II: Simon's Quest sur Famicom Disk System au Japon en 1987, puis sur NES.",
+        "en": "Konami releases Castlevania II: Simon's Quest on the Famicom Disk System in Japan in 1987, then on the NES."
+      }
+    },
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Deadly Curse",
+        "en": "Deadly Curse"
+      },
+      "text": {
+        "fr": "Le 27 octobre 2017, « juste à temps pour Halloween », abyssonym publie Deadly Curse, un randomizer d'objets commandé par DoodSF, qui peut aussi mélanger les monstres et l'ordre des manoirs.",
+        "en": "On October 27, 2017, \"just in time for Halloween\", abyssonym releases Deadly Curse, an item randomizer commissioned by DoodSF, which can also shuffle monsters and the order of the mansions."
+      }
+    },
+    {
+      "date": "2019",
+      "title": {
+        "fr": "CV2R",
+        "en": "CV2R"
+      },
+      "text": {
+        "fr": "BloodSweatAndCode démarre CV2R le 8 mai 2019 : un randomizer qui mélange les objets, les armes, les fouets, les reliques de Dracula et presque tout le reste, jouable sur console NES, NT Mini et émulateurs.",
+        "en": "BloodSweatAndCode starts CV2R on May 8, 2019: a randomizer that shuffles items, weapons, whips, Dracula's relics and nearly everything else, playable on NES console, NT Mini and emulators."
+      }
+    },
+    {
+      "date": "2020-2026",
+      "title": {
+        "fr": "Une scène qui grandit",
+        "en": "A growing scene"
+      },
+      "text": {
+        "fr": "Les premières courses recensées sur ce site ont lieu en décembre 2020 sur racetime.gg. Le site du randomizer est aujourd'hui cv2r.kaelari.tech, et ce site recense déjà 90 courses en 2026, un record.",
+        "en": "The first races listed on this site take place in December 2020 on racetime.gg. The randomizer's site is now cv2r.kaelari.tech, and this site already counts 90 races in 2026, a record."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Abyssonym — Castlevania 2: Deadly Curse (2017)",
+      "url": "https://abyssonym.wordpress.com/2017/10/27/castlevania-2-deadly-curse/"
+    },
+    {
+      "label": "tonylukasavage/cv2r (GitHub)",
+      "url": "https://github.com/tonylukasavage/cv2r"
+    },
+    {
+      "label": "CV2R",
+      "url": "https://cv2r.kaelari.tech/"
+    },
+    {
+      "label": "racetime.gg — CV2R",
+      "url": "https://racetime.gg/cv2r"
+    }
+  ]
+}

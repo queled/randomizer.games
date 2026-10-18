@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Le Solar Jetman Randomizer, écrit à l'origine par Niamek, est aujourd'hui maintenu par akerasi.",
+    "en": "The Solar Jetman Randomizer, originally written by Niamek, is now maintained by akerasi."
+  },
+  "events": [
+    {
+      "date": "1990",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Rare et Tradewest sortent Solar Jetman: Hunt for the Golden Warpship sur NES en 1990.",
+        "en": "Rare and Tradewest release Solar Jetman: Hunt for the Golden Warpship on the NES in 1990."
+      }
+    },
+    {
+      "date": "2020-2026",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Niamek commence le randomizer en avril 2020 ; akerasi le reprend en 2024 et le met encore à jour en 2026 (version 0.1.2).",
+        "en": "Niamek starts the randomizer in April 2020; akerasi takes it over in 2024 and still updates it in 2026 (version 0.1.2)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "akerasi/SJ-rando (GitHub)",
+      "url": "https://github.com/akerasi/SJ-rando"
+    },
+    {
+      "label": "GB127/SJ-rando (GitHub)",
+      "url": "https://github.com/GB127/SJ-rando"
+    }
+  ]
+}

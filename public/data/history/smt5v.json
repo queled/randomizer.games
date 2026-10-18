@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Sjerver pour Shin Megami Tensei V: Vengeance randomise démons, rencontres, boss, objets et miracles sur la version Steam.",
+    "en": "Sjerver's randomizer for Shin Megami Tensei V: Vengeance randomizes demons, encounters, bosses, items and miracles on the Steam version."
+  },
+  "events": [
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Atlus sort Shin Megami Tensei V: Vengeance en 2024.",
+        "en": "Atlus releases Shin Megami Tensei V: Vengeance in 2024."
+      }
+    },
+    {
+      "date": "2024-2026",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Sjerver commence le randomizer en juillet 2024, avec TASallin parmi les principaux contributeurs, et publie la version 1.0 le 6 septembre 2024, puis la 1.06.02 en juillet 2026.",
+        "en": "Sjerver starts the randomizer in July 2024, with TASallin among the main contributors, and releases version 1.0 on September 6, 2024, then 1.06.02 in July 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Sjerver/smtVV-rando (GitHub)",
+      "url": "https://github.com/Sjerver/smtVV-rando"
+    }
+  ]
+}

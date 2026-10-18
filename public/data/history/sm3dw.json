@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Super Mario 3D World se randomise avec un fork de l'éditeur de niveaux Spotlight qui remplace intelligemment les objets des niveaux.",
+    "en": "Super Mario 3D World is randomized with a fork of the Spotlight level editor that intelligently replaces level objects."
+  },
+  "events": [
+    {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Super Mario 3D World sur Wii U en 2013.",
+        "en": "Nintendo releases Super Mario 3D World on the Wii U in 2013."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Spotlight Randomizer",
+        "en": "Spotlight Randomizer"
+      },
+      "text": {
+        "fr": "En septembre 2022, gtiersma (FullmetalHobbit) publie un fork de Spotlight, l'éditeur de niveaux de jupahe64, avec un randomizer intégré qui remplace intelligemment les objets des niveaux.",
+        "en": "In September 2022, gtiersma (FullmetalHobbit) releases a fork of Spotlight, jupahe64's level editor, with a built-in randomizer that intelligently replaces level objects."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "gtiersma/Spotlight-Randomizer (GitHub)",
+      "url": "https://github.com/gtiersma/Spotlight-Randomizer"
+    },
+    {
+      "label": "jupahe64/Spotlight (GitHub)",
+      "url": "https://github.com/jupahe64/Spotlight"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Level-Headed, de Coolcord, génère des niveaux aléatoires pour le premier Super Mario Bros.",
+    "en": "Coolcord's Level-Headed generates random levels for the first Super Mario Bros."
+  },
+  "events": [
+    {
+      "date": "1985",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Super Mario Bros. sur Famicom et NES en 1985.",
+        "en": "Nintendo releases Super Mario Bros. on the Famicom and NES in 1985."
+      }
+    },
+    {
+      "date": "2014-2023",
+      "title": {
+        "fr": "Level-Headed",
+        "en": "Level-Headed"
+      },
+      "text": {
+        "fr": "Coolcord commence Level-Headed en 2014, un générateur de niveaux aléatoires et un compilateur de scripts de niveaux pour Super Mario Bros. La version 0.1 sort en décembre 2017, et la 0.3.10 en août 2023.",
+        "en": "Coolcord starts Level-Headed in 2014, a random level generator and level script compiler for Super Mario Bros. Version 0.1 comes out in December 2017, and 0.3.10 in August 2023."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Coolcord/Level-Headed (GitHub)",
+      "url": "https://github.com/Coolcord/Level-Headed"
+    }
+  ]
+}

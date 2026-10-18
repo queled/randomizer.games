@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Simple SBK Rando de Stingerman06 randomise Snowboard Kids sur Nintendo 64, à l'aide de l'outil Simple Randomizer Maker de Mips64.",
+    "en": "Stingerman06's Simple SBK Rando randomizes Snowboard Kids on the Nintendo 64, using Mips64's Simple Randomizer Maker tool."
+  },
+  "events": [
+    {
+      "date": "1997",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Racdym et Atlus sortent Snowboard Kids sur Nintendo 64 en 1997.",
+        "en": "Racdym and Atlus release Snowboard Kids on the Nintendo 64 in 1997."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Stingerman06 publie en novembre 2021 un randomizer simple pour la version américaine du jeu, réalisé avec le « Simple Randomizer Maker » de Mips64, distribué en l'état en attendant un randomizer plus flexible.",
+        "en": "In November 2021 Stingerman06 publishes a simple randomizer for the US version of the game, made with Mips64's \"Simple Randomizer Maker\", distributed as-is pending a more flexible randomizer."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Stingerman06/A-Simple-SBK-Rando (GitHub)",
+      "url": "https://github.com/Stingerman06/A-Simple-SBK-Rando"
+    }
+  ]
+}

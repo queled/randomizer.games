@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Shadowrun, d'Osteoclave, se génère directement dans le navigateur.",
+    "en": "Osteoclave's Shadowrun randomizer is generated straight in the browser."
+  },
+  "events": [
+    {
+      "date": "1993",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Beam Software et Data East sortent Shadowrun sur Super Nintendo en 1993.",
+        "en": "Beam Software and Data East release Shadowrun on the Super Nintendo in 1993."
+      }
+    },
+    {
+      "date": "2022-2025",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Osteoclave, déjà auteur du randomizer d'ActRaiser, commence le randomizer de Shadowrun en janvier 2022 et le met à jour jusqu'en 2025. Il se génère via une interface web ou localement en Python.",
+        "en": "Osteoclave, already the author of the ActRaiser randomizer, starts the Shadowrun randomizer in January 2022 and updates it until 2025. It can be generated through a web interface or locally in Python."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Osteoclave/shadowrun-randomizer (GitHub)",
+      "url": "https://github.com/Osteoclave/shadowrun-randomizer"
+    },
+    {
+      "label": "Shadowrun Randomizer",
+      "url": "https://osteoclave.github.io/shadowrun-randomizer"
+    }
+  ]
+}

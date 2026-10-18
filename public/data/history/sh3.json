@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "RandomHill, de Jokie, est un randomizer d'ennemis pour Silent Hill 2 et 3, conçu en un après-midi pour un stream.",
+    "en": "Jokie's RandomHill is an enemy randomizer for Silent Hill 2 and 3, put together in an afternoon for a stream."
+  },
+  "events": [
+    {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Silent Hill 3 sur PlayStation 2 en 2003.",
+        "en": "Konami releases Silent Hill 3 on the PlayStation 2 in 2003."
+      }
+    },
+    {
+      "date": "2019",
+      "title": {
+        "fr": "RandomHill",
+        "en": "RandomHill"
+      },
+      "text": {
+        "fr": "Jokie publie RandomHill le 11 mars 2019 : un randomizer d'ennemis pour Silent Hill 2 et 3, « codé en un après-midi pour un stream ».",
+        "en": "Jokie releases RandomHill on March 11, 2019: an enemy randomizer for Silent Hill 2 and 3, \"whipped up in an afternoon for a stream\"."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "JokieW/RandomHill (GitHub)",
+      "url": "https://github.com/JokieW/RandomHill"
+    }
+  ]
+}

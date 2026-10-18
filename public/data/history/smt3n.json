@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Nocturne Randomizer de NMarkro mélange boss, démons, compétences et objets de Shin Megami Tensei III: Nocturne.",
+    "en": "NMarkro's Nocturne Randomizer shuffles the bosses, demons, skills and items of Shin Megami Tensei III: Nocturne."
+  },
+  "events": [
+    {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Atlus sort Shin Megami Tensei III: Nocturne sur PlayStation 2 en 2003 au Japon.",
+        "en": "Atlus releases Shin Megami Tensei III: Nocturne on the PlayStation 2 in 2003 in Japan."
+      }
+    },
+    {
+      "date": "2019-2020",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "NMarkro commence le randomizer en mars 2019, avec ADFairbanks, et publie une bêta 0.1.0 le 14 avril 2020, puis la 0.1.16 en juin. Il mélange les boss, les ennemis et démons, les compétences, les Magatamas et objets clés lâchés par les boss, et les races pour la fusion.",
+        "en": "NMarkro starts the randomizer in March 2019, with ADFairbanks, and releases a 0.1.0 beta on April 14, 2020, then 0.1.16 in June. It shuffles bosses, enemies and demons, skills, the Magatama and key items dropped by bosses, and races for fusion."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "nmarkro/Nocturne-Randomizer (GitHub)",
+      "url": "https://github.com/nmarkro/Nocturne-Randomizer"
+    }
+  ]
+}

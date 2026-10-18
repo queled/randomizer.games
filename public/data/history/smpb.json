@@ -1,0 +1,25 @@
+{
+  "intro": {
+    "fr": "Le Project Base Item Randomizer de Galamoz, fork du randomizer original de Dessyreqt, mélange les objets du romhack Super Metroid: Project Base.",
+    "en": "Galamoz's Project Base Item Randomizer, a fork of Dessyreqt's original randomizer, shuffles the items of the Super Metroid: Project Base romhack."
+  },
+  "events": [
+    {
+      "date": "2017-2018",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Galamoz publie la version 1.3 le 5 mars 2017, puis la 2.0 en mai 2017, avec K-Fitzpatrick parmi les contributeurs. Une version 1.01 adaptée à Project Base 0.7.3 sort en mai 2018.",
+        "en": "Galamoz releases version 1.3 on March 5, 2017, then 2.0 in May 2017, with K-Fitzpatrick among the contributors. A version 1.01 adapted to Project Base 0.7.3 comes out in May 2018."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Galamoz/ProjectBaseRandomizer (GitHub)",
+      "url": "https://github.com/Galamoz/ProjectBaseRandomizer"
+    }
+  ]
+}

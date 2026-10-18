@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le SMBW Randomizer de MH13 randomise Super Mario Bros. Wonder dès sa sortie, avec des seeds partageables pour les compétitions.",
+    "en": "MH13's SMBW Randomizer randomized Super Mario Bros. Wonder from release, with shareable seeds for competitions."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Super Mario Bros. Wonder sur Nintendo Switch en 2023.",
+        "en": "Nintendo releases Super Mario Bros. Wonder on the Nintendo Switch in 2023."
+      }
+    },
+    {
+      "date": "2023-2024",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "MH13 publie la version 1.0 le 19 octobre 2023, la veille de la sortie mondiale du jeu, puis la 1.1.9 en avril 2024. Il repose sur des seeds partageables et des modules que d'autres moddeurs peuvent écrire.",
+        "en": "MH13 releases version 1.0 on October 19, 2023, the day before the game's worldwide release, then 1.1.9 in April 2024. It relies on shareable seeds and modules that other modders can write."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "MH13-YT/SMBW-Randomizer (GitHub)",
+      "url": "https://github.com/MH13-YT/SMBW-Randomizer"
+    }
+  ]
+}

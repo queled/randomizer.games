@@ -1,0 +1,29 @@
+{
+  "intro": {
+    "fr": "Le Hyper Metroid Item Randomizer de Galamoz mélange les objets du romhack Hyper Metroid de Super Metroid.",
+    "en": "Galamoz's Hyper Metroid Item Randomizer shuffles the items of Hyper Metroid, a Super Metroid romhack."
+  },
+  "events": [
+    {
+      "date": "2018-2020",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Galamoz publie la version 1.00 le 21 mai 2018, puis la 1.10 en janvier 2020.",
+        "en": "Galamoz releases version 1.00 on May 21, 2018, then 1.10 in January 2020."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Galamoz/HyperMetroidRandomizer (GitHub)",
+      "url": "https://github.com/Galamoz/HyperMetroidRandomizer"
+    },
+    {
+      "label": "Hyper Metroid",
+      "url": "http://hyper.metroidconstruction.com/"
+    }
+  ]
+}

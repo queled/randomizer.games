@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le premier Shin Megami Tensei a son randomizer, publié par spannerisms en 2022.",
+    "en": "The first Shin Megami Tensei has its randomizer, released by spannerisms in 2022."
+  },
+  "events": [
+    {
+      "date": "1992",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Atlus sort Shin Megami Tensei sur Super Famicom au Japon en 1992.",
+        "en": "Atlus releases Shin Megami Tensei on the Super Famicom in Japan in 1992."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "spannerisms publie la version 0.9 du randomizer le 28 octobre 2022, avec un serveur Discord dédié.",
+        "en": "spannerisms releases version 0.9 of the randomizer on October 28, 2022, with a dedicated Discord server."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "spannerisms/smt1rando (GitHub)",
+      "url": "https://github.com/spannerisms/smt1rando"
+    }
+  ]
+}

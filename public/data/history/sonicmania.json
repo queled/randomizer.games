@@ -1,0 +1,54 @@
+{
+  "intro": {
+    "fr": "Le Sonic Mania Randomizer de junglechief87 permet de créer des ordres de niveaux et de personnages personnalisés ; CodenameGamma en propose aussi un sur GameBanana.",
+    "en": "junglechief87's Sonic Mania Randomizer lets you create custom level and character orders; CodenameGamma also offers one on GameBanana."
+  },
+  "events": [
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sega sort Sonic Mania en 2017.",
+        "en": "Sega releases Sonic Mania in 2017."
+      }
+    },
+    {
+      "date": "2018-2019",
+      "title": {
+        "fr": "Le randomizer de junglechief87",
+        "en": "junglechief87's randomizer"
+      },
+      "text": {
+        "fr": "junglechief87 commence en août 2018 un randomizer et créateur de parties personnalisées, écrit avec Cheat Engine et des scripts Lua : il permet de créer des ordres de niveaux personnalisés en mode Mania, niveaux Encore compris, ainsi que des ordres de personnages.",
+        "en": "In August 2018 junglechief87 starts a randomizer and custom game maker, written with Cheat Engine and Lua scripts: it creates custom level orders in Mania Mode, Encore levels included, as well as character orders."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "GameBanana",
+        "en": "GameBanana"
+      },
+      "text": {
+        "fr": "CodenameGamma propose aussi un randomizer pour Sonic Mania sur GameBanana.",
+        "en": "CodenameGamma also offers a Sonic Mania randomizer on GameBanana."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "junglechief87/Sonic-Mania-Randomizer-Custom-Game-Maker (GitHub)",
+      "url": "https://github.com/junglechief87/Sonic-Mania-Randomizer-Custom-Game-Maker"
+    },
+    {
+      "label": "GameBanana — CodenameGamma",
+      "url": "https://gamebanana.com/mods/609081"
+    }
+  ]
+}

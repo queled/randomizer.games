@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Silent Hill 4 Randomizer de Hunter Stanton crée de nouveaux scénarios de jeu sur la version GOG, et peut restaurer des hantises coupées.",
+    "en": "Hunter Stanton's Silent Hill 4 Randomizer creates new gameplay scenarios on the GOG version, and can restore cut hauntings."
+  },
+  "events": [
+    {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Silent Hill 4: The Room en 2004.",
+        "en": "Konami releases Silent Hill 4: The Room in 2004."
+      }
+    },
+    {
+      "date": "2022-2023",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Hunter Stanton publie une bêta 0.1 le 6 février 2022, puis la 0.3 en janvier 2023. Le plugin, pour la version GOG du jeu, propose aussi de restaurer les hantises « coupées » de la version PS2.",
+        "en": "Hunter Stanton releases a 0.1 beta on February 6, 2022, then 0.3 in January 2023. The plugin, for the GOG version of the game, can also restore the PS2 version's \"cut\" hauntings."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "HunterStanton/SilentHill4Randomizer (GitHub)",
+      "url": "https://github.com/HunterStanton/SilentHill4Randomizer"
+    }
+  ]
+}

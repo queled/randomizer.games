@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le remake Switch de Super Mario RPG a son randomizer, publié par ObsidianMaker quelques semaines après la sortie du jeu.",
+    "en": "The Switch remake of Super Mario RPG has its randomizer, released by ObsidianMaker a few weeks after the game's release."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Super Mario RPG, remake du jeu Super Nintendo de 1996, sur Nintendo Switch en 2023.",
+        "en": "Nintendo releases Super Mario RPG, a remake of the 1996 Super Nintendo game, on the Nintendo Switch in 2023."
+      }
+    },
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "ObsidianMaker publie la version 0.0.1 le 8 décembre 2023, puis la 0.0.5 le 28 décembre.",
+        "en": "ObsidianMaker releases version 0.0.1 on December 8, 2023, then 0.0.5 on December 28."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "ObsidianMakerDevelopment/super-mario-rpg-switch-randomizer (GitHub)",
+      "url": "https://github.com/ObsidianMakerDevelopment/super-mario-rpg-switch-randomizer"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "« Disaster Cycle », d'abyssonym, randomise le compendium de Shin Megami Tensei: Strange Journey.",
+    "en": "abyssonym's \"Disaster Cycle\" randomizes the compendium of Shin Megami Tensei: Strange Journey."
+  },
+  "events": [
+    {
+      "date": "2009",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Atlus sort Shin Megami Tensei: Strange Journey sur Nintendo DS en 2009.",
+        "en": "Atlus releases Shin Megami Tensei: Strange Journey on the Nintendo DS in 2009."
+      }
+    },
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Disaster Cycle",
+        "en": "Disaster Cycle"
+      },
+      "text": {
+        "fr": "abyssonym publie la version 1 de « Disaster Cycle » le 4 mars 2019, un randomizer de la plupart des aspects du compendium des démons.",
+        "en": "abyssonym releases version 1 of \"Disaster Cycle\" on March 4, 2019, a randomizer for most aspects of the demon compendium."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "abyssonym/disastercycle (GitHub)",
+      "url": "https://github.com/abyssonym/disastercycle"
+    }
+  ]
+}

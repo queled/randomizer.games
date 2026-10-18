@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Kartia Randomizer de Meerkov s'utilise avec l'émulateur BizHawk et mélange notamment les coffres du jeu.",
+    "en": "Meerkov's Kartia Randomizer is used with the BizHawk emulator and notably shuffles the game's chests."
+  },
+  "events": [
+    {
+      "date": "1998",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Atlus sort Kartia: The Word of Fate sur PlayStation en 1998.",
+        "en": "Atlus releases Kartia: The Word of Fate on the PlayStation in 1998."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Meerkov publie le randomizer en 2021. Son mode RandomizeLevels mélange les coffres de tout le jeu, ce qui peut donner des sorts de fin de partie très tôt.",
+        "en": "Meerkov releases the randomizer in 2021. Its RandomizeLevels mode shuffles chests across the whole game, which can give endgame spells very early."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Meerkov/Kartia (GitHub)",
+      "url": "https://github.com/Meerkov/Kartia"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le LKrandomizer de Benjamin Wolf randomise les cartes à ramasser dans Lost Kingdoms.",
+    "en": "Benjamin Wolf's LKrandomizer randomizes card pickups in Lost Kingdoms."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "FromSoftware sort Lost Kingdoms (Rune) sur GameCube en 2002.",
+        "en": "FromSoftware releases Lost Kingdoms (Rune) on the GameCube in 2002."
+      }
+    },
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Benjamin Wolf publie une version 0.4 en août 2019, puis la 0.8 le 3 novembre 2019, avec l'aide de Papaya pour l'assembleur et la mémoire. L'outil crée un nouvel ISO où les cartes à ramasser sont randomisées.",
+        "en": "Benjamin Wolf releases a version 0.4 in August 2019, then 0.8 on November 3, 2019, with help from Papaya on assembly and memory. The tool creates a new ISO where card pickups are randomized."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "BenjWolf/LKrandomizer (GitHub)",
+      "url": "https://github.com/BenjWolf/LKrandomizer"
+    }
+  ]
+}

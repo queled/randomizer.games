@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Bas Wijnen mélange les objets de Metal Gear et change quelles cartes ouvrent quelles portes, en garantissant une partie finissable.",
+    "en": "Bas Wijnen's randomizer shuffles Metal Gear's objects and changes which cards open which doors, while ensuring the game can be finished."
+  },
+  "events": [
+    {
+      "date": "1987",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Metal Gear sur MSX2 en 1987.",
+        "en": "Konami releases Metal Gear on the MSX2 in 1987."
+      }
+    },
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Bas Wijnen publie en avril 2017 un randomizer qui modifie la ROM pour mélanger tous les objets et changer les cartes qui ouvrent chaque porte, tout en s'assurant que chaque objet reste accessible. Une instance publique est proposée à la communauté.",
+        "en": "In April 2017 Bas Wijnen releases a randomizer that patches the ROM to shuffle every object and change which cards open each door, while making sure each object can still be found. A public instance is offered to the community."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "wijnen/mg-random (GitHub)",
+      "url": "https://github.com/wijnen/mg-random"
+    }
+  ]
+}

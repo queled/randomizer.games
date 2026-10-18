@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Kirby & The Amazing Mirror a deux randomizers : celui de HeyImTG, qui mélange les salles et les objets, et celui de Mode8fx, centré sur les pouvoirs.",
+    "en": "Kirby & The Amazing Mirror has two randomizers: HeyImTG's, which shuffles rooms and items, and Mode8fx's, focused on abilities."
+  },
+  "events": [
+    {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "HAL Laboratory, Flagship et Nintendo sortent Kirby & The Amazing Mirror sur Game Boy Advance en 2004.",
+        "en": "HAL Laboratory, Flagship and Nintendo release Kirby & The Amazing Mirror on the Game Boy Advance in 2004."
+      }
+    },
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le randomizer de HeyImTG",
+        "en": "HeyImTG's randomizer"
+      },
+      "text": {
+        "fr": "HeyImTG publie la version 1.1 le 19 mai 2019, pour la version japonaise : salles, objets et coffres, palettes, socles de pouvoirs et musique.",
+        "en": "HeyImTG releases version 1.1 on May 19, 2019, for the Japanese version: rooms, items and chests, palettes, ability stands and music."
+      }
+    },
+    {
+      "date": "2020-2021",
+      "title": {
+        "fr": "Le randomizer de Mode8fx",
+        "en": "Mode8fx's randomizer"
+      },
+      "text": {
+        "fr": "Mode8fx publie en juillet 2020 un randomizer des pouvoirs que donnent ennemis et objets, pour la version américaine (0.9), puis la 0.92 en juin 2021.",
+        "en": "In July 2020 Mode8fx releases a randomizer of the abilities given by enemies and objects, for the US version (0.9), then 0.92 in June 2021."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "HeyImTG/Amazing-Mirror-Randomizer (GitHub)",
+      "url": "https://github.com/HeyImTG/Amazing-Mirror-Randomizer"
+    },
+    {
+      "label": "Mode8fx/kamrandomizer (GitHub)",
+      "url": "https://github.com/Mode8fx/kamrandomizer"
+    }
+  ]
+}

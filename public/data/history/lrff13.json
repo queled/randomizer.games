@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Lightning Returns: Final Fantasy XIII, sur PC, se randomise avec les outils de Bartz24, réunis dans FFModdingWPF.",
+    "en": "Lightning Returns: Final Fantasy XIII on PC is randomized with Bartz24's tools, gathered in FFModdingWPF."
+  },
+  "events": [
+    {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Lightning Returns: Final Fantasy XIII en 2013 au Japon ; la version PC arrive sur Steam en 2015.",
+        "en": "Square Enix releases Lightning Returns: Final Fantasy XIII in 2013 in Japan; the PC version reaches Steam in 2015."
+      }
+    },
+    {
+      "date": "2021-2026",
+      "title": {
+        "fr": "FFModdingWPF",
+        "en": "FFModdingWPF"
+      },
+      "text": {
+        "fr": "Après un premier randomizer pour Final Fantasy XIII en 2020, Bartz24 lance en octobre 2021 FFModdingWPF, base de ses randomizers, toujours en développement en 2026.",
+        "en": "After a first Final Fantasy XIII randomizer in 2020, Bartz24 launches FFModdingWPF in October 2021, the base for these randomizers, still in development in 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Bartz24/FFModdingWPF (GitHub)",
+      "url": "https://github.com/Bartz24/FFModdingWPF"
+    }
+  ]
+}

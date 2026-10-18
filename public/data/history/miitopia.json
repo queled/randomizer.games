@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Miitopia Randomizer de Kobazco fonctionne sur les versions Switch et 3DS du jeu.",
+    "en": "Kobazco's Miitopia Randomizer works on the game's Switch and 3DS versions."
+  },
+  "events": [
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Miitopia sur Nintendo 3DS en 2016, puis sur Nintendo Switch en 2021.",
+        "en": "Nintendo releases Miitopia on the Nintendo 3DS in 2016, then on the Nintendo Switch in 2021."
+      }
+    },
+    {
+      "date": "2022-2025",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Kobazco publie la version 1.0 le 7 avril 2022, puis une bêta 2.0 en janvier 2025, avec CommandMC parmi les contributeurs. Il s'installe comme un mod sur console modifiée ou sur émulateur.",
+        "en": "Kobazco releases version 1.0 on April 7, 2022, then a 2.0 beta in January 2025, with CommandMC among the contributors. It installs as a mod on a modded console or emulator."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Kobazco/Miitopia_Randomizer (GitHub)",
+      "url": "https://github.com/Kobazco/Miitopia_Randomizer"
+    }
+  ]
+}

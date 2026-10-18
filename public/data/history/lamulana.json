@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Le La-Mulana Randomizer de thezerothcat, lancé en 2017, a inspiré d'autres randomizers de la série.",
+    "en": "thezerothcat's La-Mulana Randomizer, started in 2017, inspired other randomizers in the series."
+  },
+  "events": [
+    {
+      "date": "2011",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nigoro sort le remake de La-Mulana en 2011.",
+        "en": "Nigoro releases the La-Mulana remake in 2011."
+      }
+    },
+    {
+      "date": "2017-2018",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "thezerothcat publie la version 1.0.3 le 23 juillet 2017, puis la 2.0 le 23 novembre 2018. Un wiki détaille son utilisation.",
+        "en": "thezerothcat releases version 1.0.3 on July 23, 2017, then 2.0 on November 23, 2018. A wiki details how to use it."
+      }
+    },
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Toujours mis à jour",
+        "en": "Still updated"
+      },
+      "text": {
+        "fr": "Le randomizer reçoit encore des mises à jour en 2025, comme une édition de Pâques en avril. Il a inspiré le randomizer de la version originale de La-Mulana, par progre.",
+        "en": "The randomizer still gets updates in 2025, like an Easter edition in April. It inspired progre's randomizer for the original La-Mulana."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "thezerothcat/LaMulanaRandomizer (GitHub)",
+      "url": "https://github.com/thezerothcat/LaMulanaRandomizer"
+    }
+  ]
+}

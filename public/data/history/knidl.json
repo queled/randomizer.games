@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le KNDL-Rando d'Austin Bricker randomise les pouvoirs des ennemis de Kirby: Nightmare in Dream Land.",
+    "en": "Austin Bricker's KNDL-Rando randomizes enemy abilities in Kirby: Nightmare in Dream Land."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "HAL Laboratory et Nintendo sortent Kirby: Nightmare in Dream Land, remake de Kirby's Adventure, sur Game Boy Advance en 2002.",
+        "en": "HAL Laboratory and Nintendo release Kirby: Nightmare in Dream Land, a remake of Kirby's Adventure, on the Game Boy Advance in 2002."
+      }
+    },
+    {
+      "date": "2017-2018",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Austin Bricker (aquova) commence le randomizer en juin 2017 et publie la version 1.0 le 26 février 2018, puis la 1.1 en mars. Il randomise les pouvoirs que donnent les ennemis.",
+        "en": "Austin Bricker (aquova) starts the randomizer in June 2017 and releases version 1.0 on February 26, 2018, then 1.1 in March. It randomizes the abilities enemies give."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "aquova/KNDL-Rando (GitHub)",
+      "url": "https://github.com/aquova/KNDL-Rando"
+    }
+  ]
+}

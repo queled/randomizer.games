@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le MGS2 Randomizer de sagefantasma se présente comme le premier randomizer de Metal Gear Solid 2, dans sa version Master Collection.",
+    "en": "sagefantasma's MGS2 Randomizer bills itself as the first randomizer for Metal Gear Solid 2, in its Master Collection version."
+  },
+  "events": [
+    {
+      "date": "2001",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Metal Gear Solid 2: Sons of Liberty sur PlayStation 2 en 2001 ; il fait partie de la Master Collection sortie en 2023.",
+        "en": "Konami releases Metal Gear Solid 2: Sons of Liberty on the PlayStation 2 in 2001; it is part of the Master Collection released in 2023."
+      }
+    },
+    {
+      "date": "2025-2026",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "sagefantasma commence le randomizer en février 2025 et publie la version 1.0 le 21 avril 2025, puis la 1.4.2 en août 2026, avec des mises à jour automatiques.",
+        "en": "sagefantasma starts the randomizer in February 2025 and releases version 1.0 on April 21, 2025, then 1.4.2 in August 2026, with automatic updates."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "sagefantasma/mgs2mc-randomizer (GitHub)",
+      "url": "https://github.com/sagefantasma/mgs2mc-randomizer"
+    }
+  ]
+}

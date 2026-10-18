@@ -1,0 +1,25 @@
+{
+  "intro": {
+    "fr": "progre a créé un randomizer pour la version originale de La-Mulana, le jeu PC gratuit inspiré de The Maze of Galious.",
+    "en": "progre created a randomizer for the original La-Mulana, the free PC game inspired by The Maze of Galious."
+  },
+  "events": [
+    {
+      "date": "2018-2026",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Inspiré du La-Mulana Randomizer de thezerothcat, progre publie la version 0.0.2 de son randomizer le 25 août 2018, puis le fait évoluer jusqu'à la 0.10.1 en juin 2026. Le jeu original est disponible sur Internet Archive.",
+        "en": "Inspired by thezerothcat's La-Mulana Randomizer, progre releases version 0.0.2 of this randomizer on August 25, 2018, then develops it up to 0.10.1 in June 2026. The original game is available on the Internet Archive."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "progre/lmorandomizer (GitHub)",
+      "url": "https://github.com/progre/lmorandomizer"
+    }
+  ]
+}

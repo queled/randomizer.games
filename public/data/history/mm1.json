@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Mega Man Randomizer d'avvie et JoJoCrusade randomise la palette et les armes données par les boss du premier Mega Man.",
+    "en": "avvie and JoJoCrusade's Mega Man Randomizer randomizes the palette and the weapons bosses give in the first Mega Man."
+  },
+  "events": [
+    {
+      "date": "1987",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Mega Man (Rockman) sur NES en 1987.",
+        "en": "Capcom releases Mega Man (Rockman) on the NES in 1987."
+      }
+    },
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "avvie et JoJoCrusade publient une alpha le 19 janvier 2023, puis la version 1.0 le 10 avril 2023. Ce randomizer « rudimentaire » randomise la palette de Mega Man et ce que donne chaque boss en fin de niveau.",
+        "en": "avvie and JoJoCrusade release an alpha on January 19, 2023, then version 1.0 on April 10, 2023. This \"very rudimentary\" randomizer randomizes Mega Man's palette and what each boss drops at the end of the level."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "avvie/MegamanRandomizer (GitHub)",
+      "url": "https://github.com/avvie/MegamanRandomizer"
+    }
+  ]
+}

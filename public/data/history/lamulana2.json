@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le La-Mulana 2 Randomizer de Coookie93 est né quelques mois après la sortie du jeu.",
+    "en": "Coookie93's La-Mulana 2 Randomizer was born a few months after the game's release."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nigoro sort La-Mulana 2 en 2018.",
+        "en": "Nigoro releases La-Mulana 2 in 2018."
+      }
+    },
+    {
+      "date": "2019-2023",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Coookie93 publie la version 1.0.2 le 27 mars 2019, puis la 2.0 le 20 juin 2020 et la 2.2.4 en mars 2023. Un wiki explique son fonctionnement.",
+        "en": "Coookie93 releases version 1.0.2 on March 27, 2019, then 2.0 on June 20, 2020 and 2.2.4 in March 2023. A wiki explains how it works."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Coookie93/LaMulana2Randomizer (GitHub)",
+      "url": "https://github.com/Coookie93/LaMulana2Randomizer"
+    }
+  ]
+}

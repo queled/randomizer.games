@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Star Allies Randomizer de firubii randomise les pouvoirs de copie de Kirby Star Allies.",
+    "en": "firubii's Star Allies Randomizer randomizes the Copy Abilities in Kirby Star Allies."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "HAL Laboratory et Nintendo sortent Kirby Star Allies sur Nintendo Switch en 2018.",
+        "en": "HAL Laboratory and Nintendo release Kirby Star Allies on the Nintendo Switch in 2018."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "firubii publie la version 0.1 le 15 août 2021, puis la 0.2 trois jours plus tard. L'outil modifie le code du jeu et randomise les pouvoirs de copie de chaque ennemi, mini-boss et boss.",
+        "en": "firubii releases version 0.1 on August 15, 2021, then 0.2 three days later. The tool patches the game's code and randomizes the Copy Abilities of each enemy, mid-boss and boss."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "firubii/StarAlliesRandomizer (GitHub)",
+      "url": "https://github.com/firubii/StarAlliesRandomizer"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Kirby Super Star Randomizer de firubii (FruitMage) randomise les pouvoirs de copie des ennemis, mini-boss et boss.",
+    "en": "firubii's (FruitMage) Kirby Super Star Randomizer randomizes the Copy Abilities of enemies, mid-bosses and bosses."
+  },
+  "events": [
+    {
+      "date": "1996",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "HAL Laboratory et Nintendo sortent Kirby Super Star sur Super Nintendo en 1996.",
+        "en": "HAL Laboratory and Nintendo release Kirby Super Star on the Super Nintendo in 1996."
+      }
+    },
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "firubii (FruitMage) publie la version 1.0 le 7 février 2018. Elle randomise les pouvoirs de copie des ennemis, des mini-boss et des boss, ainsi que leurs éléments.",
+        "en": "firubii (FruitMage) releases version 1.0 on February 7, 2018. It randomizes the Copy Abilities of enemies, mid-bosses and bosses, as well as their elements."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "firubii/kss-randomizer (GitHub)",
+      "url": "https://github.com/firubii/kss-randomizer"
+    }
+  ]
+}

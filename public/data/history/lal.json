@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Live A Live Randomizer de PinkSwitch fonctionne directement dans la ROM, sur la base du patch de traduction anglaise 2.0.",
+    "en": "PinkSwitch's Live A Live Randomizer runs inside the ROM itself, built on the 2.0 English translation patch."
+  },
+  "events": [
+    {
+      "date": "1994",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square sort Live A Live sur Super Famicom au Japon en 1994 ; un remake HD-2D sort en 2022.",
+        "en": "Square releases Live A Live on the Super Famicom in Japan in 1994; an HD-2D remake comes out in 2022."
+      }
+    },
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "PinkSwitch publie la version 1.0 le 10 janvier 2023. La randomisation se fait dans la ROM elle-même, sans programme externe ni ROM générée à l'avance : il suffit d'appliquer un patch BPS.",
+        "en": "PinkSwitch releases version 1.0 on January 10, 2023. Randomization happens inside the ROM itself, with no external program or pre-generated ROM: you just apply a BPS patch."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "PinkSwitch/Live-A-Live-Internal-Randomizer (GitHub)",
+      "url": "https://github.com/PinkSwitch/Live-A-Live-Internal-Randomizer"
+    }
+  ]
+}

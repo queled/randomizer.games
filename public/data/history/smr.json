@@ -1,0 +1,70 @@
+{
+  "intro": {
+    "fr": "Le Super Mario RPG Open World Randomizer mélange personnages jouables, monstres, objets de progression, boutiques, statistiques et même les Star Pieces. Né du randomizer d'abyssonym en 2016, il est devenu un randomizer en monde ouvert inspiré de Free Enterprise.",
+    "en": "The Super Mario RPG Open World Randomizer shuffles playable characters, monsters, progression items, shops, stats and even Star Pieces. Born from abyssonym's randomizer in 2016, it became an open-world randomizer inspired by Free Enterprise."
+  },
+  "events": [
+    {
+      "date": "1996",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square et Nintendo sortent Super Mario RPG: Legend of the Seven Stars sur Super Nintendo en 1996.",
+        "en": "Square and Nintendo release Super Mario RPG: Legend of the Seven Stars on the Super Nintendo in 1996."
+      }
+    },
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Gentle Beauty and Raw Power",
+        "en": "Gentle Beauty and Raw Power"
+      },
+      "text": {
+        "fr": "abyssonym commence en août 2016 « Gentle Beauty and Raw Power », un randomizer en ligne de commande pour Super Mario RPG, dont la version 4 date du 10 décembre 2016. La première course recensée sur ce site a lieu le jour même, sur SpeedRunsLive.",
+        "en": "In August 2016 abyssonym starts \"Gentle Beauty and Raw Power\", a command-line randomizer for Super Mario RPG, whose version 4 dates from December 10, 2016. The first race listed on this site takes place that same day, on SpeedRunsLive."
+      }
+    },
+    {
+      "date": "2018-2019",
+      "title": {
+        "fr": "La version web et le monde ouvert",
+        "en": "The web version and open world"
+      },
+      "text": {
+        "fr": "Avec l'accord d'abyssonym, Dorkmaster Flek adapte le randomizer en version web, à partir de février 2018 (v5 en juin 2018). La version 8.0, en avril 2019, en fait un randomizer en monde ouvert inspiré de Free Enterprise (FF4). Alanim assure l'essentiel du ROM hacking, avec Swinch, Yakibomb et pidgezero_one, et l'équipe remercie Veetorp et la communauté d'A Link to the Past.",
+        "en": "With abyssonym's agreement, Dorkmaster Flek adapts the randomizer into a web version, starting in February 2018 (v5 in June 2018). Version 8.0, in April 2019, turns it into an open-world randomizer inspired by Free Enterprise (FF4). Alanim handles most of the ROM hacking, with Swinch, Yakibomb and pidgezero_one, and the team thanks Veetorp and the A Link to the Past community."
+      }
+    },
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Version 8.2",
+        "en": "Version 8.2"
+      },
+      "text": {
+        "fr": "La version 8.2.10 sort en septembre 2023, et ce site recense 9 courses dans l'année sur racetime.gg.",
+        "en": "Version 8.2.10 comes out in September 2023, and this site counts 9 races that year on racetime.gg."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Super Mario RPG Open World Randomizer",
+      "url": "https://randomizer.smrpgspeedruns.com/"
+    },
+    {
+      "label": "Super-Mario-RPG-Randomizer/smrpg_web_randomizer (GitHub)",
+      "url": "https://github.com/Super-Mario-RPG-Randomizer/smrpg_web_randomizer"
+    },
+    {
+      "label": "abyssonym/smrpg_gbarp (GitHub)",
+      "url": "https://github.com/abyssonym/smrpg_gbarp"
+    },
+    {
+      "label": "racetime.gg — SMRPGR",
+      "url": "https://racetime.gg/smrpgr"
+    }
+  ]
+}

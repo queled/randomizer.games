@@ -1,0 +1,59 @@
+{
+  "intro": {
+    "fr": "Le Circle of the Moon Randomizer remélange le premier Castlevania de la Game Boy Advance. Créé par une petite équipe de la communauté speedrun, il se joue aussi en ligne et en multiworld.",
+    "en": "The Circle of the Moon Randomizer reshuffles the first Game Boy Advance Castlevania. Created by a small team from the speedrunning community, it can also be played online and in multiworld."
+  },
+  "events": [
+    {
+      "date": "2001",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Castlevania: Circle of the Moon sur Game Boy Advance en 2001.",
+        "en": "Konami releases Castlevania: Circle of the Moon on the Game Boy Advance in 2001."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Les débuts",
+        "en": "The beginnings"
+      },
+      "text": {
+        "fr": "Le randomizer sort en version 1.0 le 6 octobre 2021. DevAnj en assure la rétro-ingénierie et le programme, spooky la logique et le patch, Fusecavator et Liquid Cat les options de confort. Les premières courses recensées sur ce site ont lieu en décembre 2021 sur racetime.gg.",
+        "en": "The randomizer comes out as version 1.0 on October 6, 2021. DevAnj handles reverse engineering and the game program, spooky the logic and patching, Fusecavator and Liquid Cat the quality-of-life options. The first races listed on this site take place in December 2021 on racetime.gg."
+      }
+    },
+    {
+      "date": "2023-2024",
+      "title": {
+        "fr": "Nouvelle logique",
+        "en": "New logic"
+      },
+      "text": {
+        "fr": "Malaert64 retravaille la logique des objets et ajoute des fonctions, avec une nouvelle version 1.0 en juin 2023, puis la 1.4 en août 2024. Le randomizer est aussi jouable en ligne, et le jeu est pris en charge par Archipelago pour le multiworld.",
+        "en": "Malaert64 reworks the item logic and adds features, with a new version 1.0 in June 2023, then 1.4 in August 2024. The randomizer can also be played online, and the game is supported by Archipelago for multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "calm-palm/cotm-randomizer (GitHub)",
+      "url": "https://github.com/calm-palm/cotm-randomizer"
+    },
+    {
+      "label": "Circle of the Moon Randomizer",
+      "url": "https://rando.circleofthemoon.com/"
+    },
+    {
+      "label": "Archipelago — Castlevania: Circle of the Moon",
+      "url": "https://archipelago.gg/games/Castlevania%20-%20Circle%20of%20the%20Moon/info/en"
+    },
+    {
+      "label": "racetime.gg — CotMR",
+      "url": "https://racetime.gg/cotmr"
+    }
+  ]
+}

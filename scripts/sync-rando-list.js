@@ -253,11 +253,13 @@ async function updateGameResources(seriesData, dryRun = false) {
     }
     
     // 2. Chercher par nom de jeu
+    // A short name reduced to an abbreviation ("SM Randomizer" → "sm") collides with other games
+    const shortName = game.randomizer?.shortName;
     const namesToTry = [
       game.name,
       game.official?.name,
       game.randomizer?.name,
-      game.randomizer?.shortName,
+      shortName && normalizeGameName(shortName).length > 3 ? shortName : null,
       game.integrations?.randoList?.gameName,
       ...(game.integrations?.randoList?.gameNames || [])
     ].filter(Boolean);

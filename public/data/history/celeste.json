@@ -1,0 +1,58 @@
+{
+  "intro": {
+    "fr": "Le Celeste Randomizer de rhelmot génère des niveaux en assemblant les salles du jeu comme des briques. Celeste se joue aussi en monde ouvert et en multiworld avec Archipelago.",
+    "en": "rhelmot's Celeste Randomizer generates levels by assembling the game's rooms like building blocks. Celeste can also be played as an open world and in multiworld with Archipelago."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Maddy Makes Games sort Celeste en 2018.",
+        "en": "Maddy Makes Games releases Celeste in 2018."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le Celeste Randomizer",
+        "en": "The Celeste Randomizer"
+      },
+      "text": {
+        "fr": "rhelmot commence en mai 2020 un mod pour le chargeur Everest qui génère des cartes aléatoires : chaque salle devient une brique qui peut s'emboîter avec d'autres de façons définies. Le mod se télécharge sur GameBanana.",
+        "en": "In May 2020 rhelmot starts a mod for the Everest loader that generates random maps: each room becomes a building block that can fit against others in set ways. The mod is downloaded from GameBanana."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "Celeste est aussi jouable en monde ouvert et en multiworld avec Archipelago.",
+        "en": "Celeste can also be played as an open world and in multiworld with Archipelago."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "rhelmot/CelesteRandomizer (GitHub)",
+      "url": "https://github.com/rhelmot/CelesteRandomizer"
+    },
+    {
+      "label": "GameBanana — Celeste Randomizer",
+      "url": "https://gamebanana.com/tools/6848"
+    },
+    {
+      "label": "Archipelago — Celeste (Open World)",
+      "url": "https://archipelago.gg/games/Celeste%20(Open%20World)/info/en"
+    }
+  ]
+}

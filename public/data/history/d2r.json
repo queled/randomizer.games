@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Pour Diablo II: Resurrected, le générateur de mods d2modgen de mapron permet notamment de randomiser les objets, en plus d'ajuster l'équilibrage du jeu.",
+    "en": "For Diablo II: Resurrected, mapron's d2modgen mod generator can notably randomize items, on top of tweaking the game's balance."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Blizzard sort Diablo II: Resurrected en 2021, remaster de Diablo II.",
+        "en": "Blizzard releases Diablo II: Resurrected in 2021, a remaster of Diablo II."
+      }
+    },
+    {
+      "date": "2022-2026",
+      "title": {
+        "fr": "d2modgen",
+        "en": "d2modgen"
+      },
+      "text": {
+        "fr": "mapron publie la première version de d2modgen le 5 janvier 2022 : un outil qui génère des fichiers pour changer l'équilibrage du jeu (butin, densité de monstres) ou randomiser les objets. Il prend aussi en charge Diablo II: Lord of Destruction, et la version 0.8 sort en octobre 2026. Il succède au D2 Mod Maker de tlentz, plus maintenu.",
+        "en": "mapron releases the first version of d2modgen on January 5, 2022: a tool that generates files to change the game's balance (drops, monster density) or randomize items. It also supports Diablo II: Lord of Destruction, and version 0.8 comes out in October 2026. It succeeds tlentz's D2 Mod Maker, no longer maintained."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "mapron/d2modgen (GitHub)",
+      "url": "https://github.com/mapron/d2modgen"
+    },
+    {
+      "label": "tlentz/d2modmaker (GitHub)",
+      "url": "https://github.com/tlentz/d2modmaker"
+    }
+  ]
+}

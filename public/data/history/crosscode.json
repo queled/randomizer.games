@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "CrossCode a eu en 2023 un randomizer d'objets, puis un randomizer complet construit sur Archipelago pour le multiworld.",
+    "en": "CrossCode got an item randomizer in 2023, then a full-featured randomizer built on Archipelago for multiworld."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Radical Fish Games sort CrossCode en 2018.",
+        "en": "Radical Fish Games releases CrossCode in 2018."
+      }
+    },
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Deux randomizers",
+        "en": "Two randomizers"
+      },
+      "text": {
+        "fr": "En juillet 2023, 2767mr publie le CCItemRandomizer (version 0.1.0 le 19 juillet), un randomizer d'objets simple. Le mois suivant, CodeTriangle lance le CCMultiworldRandomizer, un randomizer complet bâti sur Archipelago (version 0.1.0 le 25 août 2023).",
+        "en": "In July 2023, 2767mr releases the CCItemRandomizer (version 0.1.0 on July 19), a simple item randomizer. The next month, CodeTriangle launches the CCMultiworldRandomizer, a full-featured randomizer built on Archipelago (version 0.1.0 on August 25, 2023)."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Toujours en développement",
+        "en": "Still in development"
+      },
+      "text": {
+        "fr": "Le CCMultiworldRandomizer, avec buanjautista parmi les principaux contributeurs, prépare sa version 0.10 en octobre 2026.",
+        "en": "The CCMultiworldRandomizer, with buanjautista among the main contributors, is preparing its version 0.10 in October 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "CodeTriangle/CCMultiworldRandomizer (GitHub)",
+      "url": "https://github.com/CodeTriangle/CCMultiworldRandomizer"
+    },
+    {
+      "label": "CCDirectLink/CCItemRandomizer (GitHub)",
+      "url": "https://github.com/CCDirectLink/CCItemRandomizer"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer d'objets de Death's Door, de dpinela, est né en 2024.",
+    "en": "dpinela's item randomizer for Death's Door was born in 2024."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Acid Nerve et Devolver Digital sortent Death's Door en 2021.",
+        "en": "Acid Nerve and Devolver Digital release Death's Door in 2021."
+      }
+    },
+    {
+      "date": "2024-2025",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "dpinela commence le randomizer en février 2024 et publie la version 1.0 le 7 avril 2024, puis la 1.4.1 en mai 2025.",
+        "en": "dpinela starts the randomizer in February 2024 and releases version 1.0 on April 7, 2024, then 1.4.1 in May 2025."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "dpinela/DeathsDoor.Randomizer (GitHub)",
+      "url": "https://github.com/dpinela/DeathsDoor.Randomizer"
+    }
+  ]
+}

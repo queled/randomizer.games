@@ -1,0 +1,54 @@
+{
+  "intro": {
+    "fr": "Le Digimon World Randomizer de meekrhino randomise les données du premier Digimon World sur PlayStation. Le jeu est aussi jouable en multiworld.",
+    "en": "meekrhino's Digimon World Randomizer randomizes the data of the first Digimon World on the PlayStation. The game can also be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bandai sort Digimon World sur PlayStation en 1999.",
+        "en": "Bandai releases Digimon World on the PlayStation in 1999."
+      }
+    },
+    {
+      "date": "2018-2021",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "meekrhino commence le randomizer en juin 2018 et publie une bêta 0.4 en juillet, puis la version 1.0 le 18 avril 2019 et la 1.1.2 en février 2021, avec SydMontague parmi les contributeurs.",
+        "en": "meekrhino starts the randomizer in June 2018 and releases a 0.4 beta in July, then version 1.0 on April 18, 2019 and 1.1.2 in February 2021, with SydMontague among the contributors."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Digimon World est aussi jouable en multiworld.",
+        "en": "Digimon World can also be played in multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "meekrhino/digimon_world_randomizer (GitHub)",
+      "url": "https://github.com/meekrhino/digimon_world_randomizer"
+    },
+    {
+      "label": "Multiworld — Digimon World",
+      "url": "https://multiworld.gg/games/Digimon%20World/info/en"
+    }
+  ]
+}

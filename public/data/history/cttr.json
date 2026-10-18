@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Crash Tag Team Racing a son propre randomizer, celui de CDRomatron, et figure aussi parmi les jeux de Crate Mod Loader.",
+    "en": "Crash Tag Team Racing has its own randomizer, CDRomatron's, and is also among Crate Mod Loader's games."
+  },
+  "events": [
+    {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Radical Entertainment et Vivendi Universal Games sortent Crash Tag Team Racing en 2005.",
+        "en": "Radical Entertainment and Vivendi Universal Games release Crash Tag Team Racing in 2005."
+      }
+    },
+    {
+      "date": "2019-2020",
+      "title": {
+        "fr": "CTTRRando et Crate Mod Loader",
+        "en": "CTTRRando and Crate Mod Loader"
+      },
+      "text": {
+        "fr": "CDRomatron commence CTTRRando fin décembre 2019 et publie la version 1 le 5 janvier 2020, puis la 1.1.1 en février. Au même moment, BetaM lance Crate Mod Loader, randomizer tout-en-un pour de nombreux jeux de console (version 1.0 le 3 février 2020).",
+        "en": "CDRomatron starts CTTRRando in late December 2019 and releases version 1 on January 5, 2020, then 1.1.1 in February. At the same time, BetaM launches Crate Mod Loader, an all-in-one randomizer for many console games (version 1.0 on February 3, 2020)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "CDRomatron/CTTRRando (GitHub)",
+      "url": "https://github.com/CDRomatron/CTTRRando"
+    },
+    {
+      "label": "TheBetaM/CrateModLoader (GitHub)",
+      "url": "https://github.com/TheBetaM/CrateModLoader"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer d'IhorChornyi314 pour Clair Obscur: Expedition 33 donne un contrôle total sur le placement de chaque ennemi du jeu.",
+    "en": "IhorChornyi314's randomizer for Clair Obscur: Expedition 33 gives complete control over every enemy placement in the game."
+  },
+  "events": [
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sandfall Interactive et Kepler Interactive sortent Clair Obscur: Expedition 33 en 2025.",
+        "en": "Sandfall Interactive and Kepler Interactive release Clair Obscur: Expedition 33 in 2025."
+      }
+    },
+    {
+      "date": "2025-2026",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "IhorChornyi314 commence le randomizer en juillet 2025, quelques semaines après la sortie du jeu, et publie la version 1.0 le 4 août 2025, puis la 2.0 le 30 août. iamwyza en est l'autre grand contributeur, et la version 4.0 sort en juin 2026.",
+        "en": "IhorChornyi314 starts the randomizer in July 2025, a few weeks after the game's release, and releases version 1.0 on August 4, 2025, then 2.0 on August 30. iamwyza is its other main contributor, and version 4.0 comes out in June 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IhorChornyi314/E33-Randomizer (GitHub)",
+      "url": "https://github.com/IhorChornyi314/E33-Randomizer"
+    }
+  ]
+}

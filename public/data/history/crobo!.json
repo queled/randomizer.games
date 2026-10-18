@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Chibi-Robo Randomizer de JBDdev mélange l'emplacement de l'équipement, des objets de quête, des déchets et plus encore.",
+    "en": "JBDdev's Chibi-Robo Randomizer shuffles the locations of equipment, quest items, trash and more."
+  },
+  "events": [
+    {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Skip Ltd. et Nintendo sortent Chibi-Robo! sur GameCube en 2005.",
+        "en": "Skip Ltd. and Nintendo release Chibi-Robo! on the GameCube in 2005."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "JBDdev commence le randomizer en mai 2022 et publie la version 1.0a le 16 juin 2022, puis la 1.1a deux jours plus tard. Seule la logique sans glitch est proposée.",
+        "en": "JBDdev starts the randomizer in May 2022 and releases version 1.0a on June 16, 2022, then 1.1a two days later. Only glitchless logic is offered."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "JBDdev/Chibi-Robo-Randomizer (GitHub)",
+      "url": "https://github.com/JBDdev/Chibi-Robo-Randomizer"
+    }
+  ]
+}

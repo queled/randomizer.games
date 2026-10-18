@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Darkest Dungeon a son randomizer, créé par TheUnlocked en 2020.",
+    "en": "Darkest Dungeon has its randomizer, created by TheUnlocked in 2020."
+  },
+  "events": [
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Red Hook Studios sort Darkest Dungeon en 2016.",
+        "en": "Red Hook Studios releases Darkest Dungeon in 2016."
+      }
+    },
+    {
+      "date": "2020-2021",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "TheUnlocked publie la version 0.1 du Darkest Dungeon Randomizer le 23 août 2020, puis la 0.9 en août 2021.",
+        "en": "TheUnlocked releases version 0.1 of the Darkest Dungeon Randomizer on August 23, 2020, then 0.9 in August 2021."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "TheUnlocked/DarkestDungeonRandomizer (GitHub)",
+      "url": "https://github.com/TheUnlocked/DarkestDungeonRandomizer"
+    }
+  ]
+}

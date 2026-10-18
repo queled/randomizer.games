@@ -1,0 +1,62 @@
+{
+  "intro": {
+    "fr": "Le Dragon Warrior 4 RandoHacker de gameboy9 ajuste et randomise le quatrième Dragon Quest : expérience, or, rencontres, monstres, équipement, et même l'ordre des héros dans les chapitres.",
+    "en": "gameboy9's Dragon Warrior 4 RandoHacker tweaks and randomizes the fourth Dragon Quest: experience, gold, encounters, monsters, equipment, and even which heroes play which chapters."
+  },
+  "events": [
+    {
+      "date": "1990",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Enix sort Dragon Quest IV sur Famicom au Japon en 1990 ; il arrive en Amérique du Nord sous le nom de Dragon Warrior IV en 1992.",
+        "en": "Enix releases Dragon Quest IV on the Famicom in Japan in 1990; it reaches North America as Dragon Warrior IV in 1992."
+      }
+    },
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le RandoHacker",
+        "en": "The RandoHacker"
+      },
+      "text": {
+        "fr": "gameboy9 publie la première version (0.1.0) du Dragon Warrior 4 RandoHacker le 22 avril 2016. Il permet d'ajuster et randomiser les gains d'expérience et d'or, le taux de rencontres, les monstres et les combats de boss, qui peut porter quel équipement, les statistiques, et quel héros joue quel chapitre.",
+        "en": "gameboy9 releases the first version (0.1.0) of the Dragon Warrior 4 RandoHacker on April 22, 2016. It can adjust and randomize experience and gold gains, the encounter rate, monsters and boss fights, who can equip what, stat gains, and which hero plays which chapter."
+      }
+    },
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Versions 1 à 3 et courses",
+        "en": "Versions 1 to 3 and races"
+      },
+      "text": {
+        "fr": "Les versions 1.0 (7 mai 2019), 2.0 (26 mai) et 3.0 (18 septembre) se succèdent. Les premières courses recensées sur ce site ont lieu le 30 avril 2019 sur SpeedRunsLive, souvent jusqu'à la fin du chapitre 4 : 79 dans l'année, un record.",
+        "en": "Versions 1.0 (May 7, 2019), 2.0 (May 26) and 3.0 (September 18) follow one another. The first races listed on this site take place on April 30, 2019 on SpeedRunsLive, often up to the end of chapter 4: 79 that year, a record."
+      }
+    },
+    {
+      "date": "2020-2021",
+      "title": {
+        "fr": "Dernières versions",
+        "en": "Last versions"
+      },
+      "text": {
+        "fr": "La version 3.4.1 sort en septembre 2020. Les courses passent ensuite de SpeedRunsLive à racetime.gg, en nombre plus réduit.",
+        "en": "Version 3.4.1 comes out in September 2020. Races then move from SpeedRunsLive to racetime.gg, in smaller numbers."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "gameboy9/DW4RandoHacker (GitHub)",
+      "url": "https://github.com/gameboy9/DW4RandoHacker"
+    },
+    {
+      "label": "racetime.gg — DW4R",
+      "url": "https://racetime.gg/dw4r"
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "intro": {
+    "fr": "Le Timespinner Randomizer mélange l'équipement, les reliques, les familiers et les objets du jeu, en modifiant le jeu en mémoire plutôt que son exécutable. Il fait partie des premiers jeux pris en charge par Archipelago.",
+    "en": "The Timespinner Randomizer shuffles the game's equipment, relics, familiars and items, modifying the game in memory rather than its executable. It is among the first games supported by Archipelago."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Lunar Ray Games sort Timespinner en 2018.",
+        "en": "Lunar Ray Games releases Timespinner in 2018."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le randomizer de Jarno458",
+        "en": "Jarno458's randomizer"
+      },
+      "text": {
+        "fr": "Jarno458 publie la version 0.9 du Timespinner Randomizer le 8 août 2020. La logique garantit que chaque partie peut être finie : il faut réunir les cinq pièces du Timespinner et traverser l'Ancient Pyramid jusqu'à Nightmare. Les premières courses recensées sur ce site ont lieu fin août 2020.",
+        "en": "Jarno458 releases version 0.9 of the Timespinner Randomizer on August 8, 2020. The logic ensures every game can be beaten: you collect the five pieces of the Timespinner and go through the Ancient Pyramid to Nightmare. The first races listed on this site take place in late August 2020."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "Timespinner figure parmi les premiers jeux pris en charge par Archipelago pour le multiworld. Jarno458 et TriumphantBass sont les principaux contributeurs du randomizer.",
+        "en": "Timespinner is among the first games supported by Archipelago for multiworld. Jarno458 and TriumphantBass are the randomizer's main contributors."
+      }
+    },
+    {
+      "date": "2023-2024",
+      "title": {
+        "fr": "Les courses",
+        "en": "Races"
+      },
+      "text": {
+        "fr": "Ce site recense 47 courses en 2023 et 54 en 2024, un record. La version 1.38.6 sort en mars 2026.",
+        "en": "This site counts 47 races in 2023 and 54 in 2024, a record. Version 1.38.6 comes out in March 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Jarno458/TsRandomizer (GitHub)",
+      "url": "https://github.com/Jarno458/TsRandomizer"
+    },
+    {
+      "label": "Archipelago — Timespinner",
+      "url": "https://archipelago.gg/games/Timespinner/info/en"
+    },
+    {
+      "label": "racetime.gg — Timespinner Randomizer",
+      "url": "https://racetime.gg/timespinner-rando"
+    }
+  ]
+}

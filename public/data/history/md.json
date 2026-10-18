@@ -1,0 +1,66 @@
+{
+  "intro": {
+    "fr": "Metroid Dread se randomise avec Randovania, qui l'a ajouté en 2022, moins d'un an après la sortie du jeu, puis l'a ouvert au multiworld en 2023.",
+    "en": "Metroid Dread is randomized with Randovania, which added it in 2022, less than a year after the game's release, then opened it to multiworld in 2023."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "MercurySteam et Nintendo sortent Metroid Dread sur Nintendo Switch en 2021.",
+        "en": "MercurySteam and Nintendo release Metroid Dread on the Nintendo Switch in 2021."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Dans Randovania",
+        "en": "In Randovania"
+      },
+      "text": {
+        "fr": "Le 10 septembre 2022, la version 5.0 de Randovania ajoute Metroid Dread avec une prise en charge complète en solo. Les premières courses recensées sur ce site ont lieu dix jours plus tard, le 20 septembre, sur racetime.gg.",
+        "en": "On September 10, 2022, Randovania version 5.0 adds Metroid Dread with full single-player support. The first races listed on this site take place ten days later, on September 20, on racetime.gg."
+      }
+    },
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Le 2 août 2023, la version 6.1 de Randovania ajoute le multiworld pour Metroid Dread.",
+        "en": "On August 2, 2023, Randovania version 6.1 adds multiworld support for Metroid Dread."
+      }
+    },
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le pic des courses",
+        "en": "The racing peak"
+      },
+      "text": {
+        "fr": "Ce site recense 59 courses en 2024, un record.",
+        "en": "This site counts 59 races in 2024, a record."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Randovania — CHANGELOG",
+      "url": "https://github.com/randovania/randovania/blob/main/CHANGELOG.md"
+    },
+    {
+      "label": "Randovania",
+      "url": "https://randovania.org/"
+    },
+    {
+      "label": "racetime.gg — Metroid Dread Randomizer",
+      "url": "https://racetime.gg/dread-rando"
+    }
+  ]
+}

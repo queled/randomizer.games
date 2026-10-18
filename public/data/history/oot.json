@@ -16,8 +16,8 @@
       "date": "2018",
       "title": { "fr": "AmazingAmpharos se lance", "en": "AmazingAmpharos gets started" },
       "text": {
-        "fr": "Après avoir vu le randomizer d'A Link to the Past, AmazingAmpharos juge Ocarina of Time idéal pour l'exercice, tant sa progression par objets lui ressemble. Il reprend la base de code et l'algorithme de mélange du randomizer d'ALTTP, « un défi personnel », et publie le projet sur GitHub le 12 mars 2018. Avec le moddeur Wulfy, il rend aussi aléatoires les objets posés au sol, puis ouvre le code à la communauté, qui s'organise sur Discord.",
-        "en": "After seeing the A Link to the Past Randomizer, AmazingAmpharos finds Ocarina of Time ideal for the exercise, its item progression being so similar. He reuses the ALTTP randomizer's code base and shuffling algorithm, \"a bit of a self challenge\", and publishes the project on GitHub on March 12, 2018. With modder Wulfy he also randomizes freestanding items, then opens the code to the community, which organizes on Discord."
+        "fr": "Après avoir vu le randomizer d'A Link to the Past, AmazingAmpharos juge Ocarina of Time idéal pour l'exercice, tant sa progression par objets lui ressemble. AmazingAmpharos reprend la base de code et l'algorithme de mélange du randomizer d'ALTTP, « un défi personnel », et publie le projet sur GitHub le 12 mars 2018. Avec l'aide de Wulfy, AmazingAmpharos rend aussi aléatoires les objets posés au sol, puis ouvre le code à la communauté, qui s'organise sur Discord.",
+        "en": "After seeing the A Link to the Past Randomizer, AmazingAmpharos finds Ocarina of Time ideal for the exercise, its item progression being so similar. AmazingAmpharos reuses the ALTTP randomizer's code base and shuffling algorithm, \"a bit of a self challenge\", and publishes the project on GitHub on March 12, 2018. With modder Wulfy, AmazingAmpharos also randomizes freestanding items, then opens the code to the community, which organizes on Discord."
       }
     },
     {
@@ -32,8 +32,8 @@
       "date": "2018",
       "title": { "fr": "La version de TestRunner", "en": "TestRunner's version" },
       "text": {
-        "fr": "TestRunner, speedrunner et directeur technique des Games Done Quick, crée l'un des forks les plus populaires et enrichit les options de personnalisation. Sa version, hébergée sur ootrandomizer.com, devient la référence, tandis que celle d'AmazingAmpharos n'évolue plus après 2018. Le site crédite aujourd'hui « TestRunner, AmazingAmpharos et bien d'autres ».",
-        "en": "TestRunner, speedrunner and Games Done Quick technical director, creates one of the most popular forks and expands the customization options. His version, hosted on ootrandomizer.com, becomes the reference, while AmazingAmpharos's stops evolving after 2018. The site now credits \"TestRunner, AmazingAmpharos & many others\"."
+        "fr": "TestRunner, speedrunner et à la direction technique des Games Done Quick, crée l'un des forks les plus populaires et enrichit les options de personnalisation. La version de TestRunner, hébergée sur ootrandomizer.com, devient la référence, tandis que celle d'AmazingAmpharos n'évolue plus après 2018. Le site crédite aujourd'hui « TestRunner, AmazingAmpharos et bien d'autres ».",
+        "en": "TestRunner, speedrunner and Games Done Quick technical director, creates one of the most popular forks and expands the customization options. TestRunner's version, hosted on ootrandomizer.com, becomes the reference, while AmazingAmpharos's stops evolving after 2018. The site now credits \"TestRunner, AmazingAmpharos & many others\"."
       }
     },
     {

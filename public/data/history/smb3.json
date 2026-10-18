@@ -16,8 +16,8 @@
       "date": "2016",
       "title": { "fr": "La version 1.0 de fcoughlin", "en": "fcoughlin's version 1.0" },
       "text": {
-        "fr": "Après le Zelda Randomizer, fcoughlin (Fred Coughlin) publie la version 1.0 de son SMB3 Randomizer le 23 octobre 2016. L'outil sert aussi à d'autres usages : il peut générer une ROM presque identique à l'originale où seul le défilement automatique des niveaux est supprimé, une option reprise ensuite dans un patch IPS indépendant par narfman0.",
-        "en": "After the Zelda Randomizer, fcoughlin (Fred Coughlin) releases version 1.0 of his SMB3 Randomizer on October 23, 2016. The tool has other uses too: it can generate a near-original ROM where only the autoscrolling is removed, an option later turned into a standalone IPS patch by narfman0."
+        "fr": "Après le Zelda Randomizer, fcoughlin (Fred Coughlin) publie la version 1.0 du SMB3 Randomizer le 23 octobre 2016. L'outil sert aussi à d'autres usages : il peut générer une ROM presque identique à l'originale où seul le défilement automatique des niveaux est supprimé, une option reprise ensuite dans un patch IPS indépendant par narfman0.",
+        "en": "After the Zelda Randomizer, fcoughlin (Fred Coughlin) releases version 1.0 of the SMB3 Randomizer on October 23, 2016. The tool has other uses too: it can generate a near-original ROM where only the autoscrolling is removed, an option later turned into a standalone IPS patch by narfman0."
       }
     },
     {
@@ -40,8 +40,8 @@
       "date": "2024",
       "title": { "fr": "SMB3 Randomizer Deluxe", "en": "SMB3 Randomizer Deluxe" },
       "text": {
-        "fr": "macobra52 publie SMB3 Randomizer Deluxe (anciennement « Mac Patcher »), une extension du randomizer de fcoughlin réalisée avec sa bénédiction. Elle ajoute notamment le mélange des chemins, des portes et des tuyaux, le choix du nombre de mondes, Luigi, Toad ou Peach jouables, et un mode Open World.",
-        "en": "macobra52 releases SMB3 Randomizer Deluxe (formerly the \"Mac Patcher\"), an expansion of fcoughlin's randomizer made with his blessing. It adds, among other things, shuffled paths, doors and pipes, a choice of the number of worlds, playable Luigi, Toad or Peach, and an Open World mode."
+        "fr": "macobra52 publie SMB3 Randomizer Deluxe (anciennement « Mac Patcher »), une extension du randomizer de fcoughlin réalisée avec la bénédiction de fcoughlin. Elle ajoute notamment le mélange des chemins, des portes et des tuyaux, le choix du nombre de mondes, Luigi, Toad ou Peach jouables, et un mode Open World.",
+        "en": "macobra52 releases SMB3 Randomizer Deluxe (formerly the \"Mac Patcher\"), an expansion of fcoughlin's randomizer made with fcoughlin's blessing. It adds, among other things, shuffled paths, doors and pipes, a choice of the number of worlds, playable Luigi, Toad or Peach, and an Open World mode."
       }
     },
     {

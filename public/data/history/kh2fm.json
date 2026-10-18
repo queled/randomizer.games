@@ -16,7 +16,7 @@
       "date": "2020",
       "title": { "fr": "Le randomizer de Valaxor", "en": "Valaxor's randomizer" },
       "text": {
-        "fr": "Début 2020, le streamer Twitch Valaxor publie un randomizer pour Kingdom Hearts II Final Mix. Il mélange les armes, les capacités, les rencontres d'ennemis, les objets et les coffres, et ajoute même deux armes auparavant impossibles à obtenir. Le générateur actuel crédite Bizkit047, Valaxor et Desa3579 comme créateurs du randomizer original. Les premières courses recensées sur ce site datent de décembre 2020.",
+        "fr": "Début 2020, Valaxor, qui diffuse sur Twitch, publie un randomizer pour Kingdom Hearts II Final Mix. Il mélange les armes, les capacités, les rencontres d'ennemis, les objets et les coffres, et ajoute même deux armes auparavant impossibles à obtenir. Le générateur actuel crédite Bizkit047, Valaxor et Desa3579 comme créateurs du randomizer original. Les premières courses recensées sur ce site datent de décembre 2020.",
         "en": "In early 2020, Twitch streamer Valaxor releases a randomizer for Kingdom Hearts II Final Mix. It shuffles weapons, abilities, enemy encounters, items and chests, and even adds two weapons that could not be obtained before. Today's generator credits Bizkit047, Valaxor and Desa3579 as the creators of the original randomizer. The first races listed on this site date from December 2020."
       }
     },
@@ -32,7 +32,7 @@
       "date": "2021",
       "title": { "fr": "Un randomizer pour Kingdom Hearts 1", "en": "A randomizer for Kingdom Hearts 1" },
       "text": {
-        "fr": "Inspiré par celui de KH2, le développeur Denho crée un randomizer pour Kingdom Hearts Final Mix, plus axé sur l'exploration, qui modifie la mémoire du jeu grâce au LuaBackend de TopazTK.",
+        "fr": "Inspiré par celui de KH2, Denho crée un randomizer pour Kingdom Hearts Final Mix, plus axé sur l'exploration, qui modifie la mémoire du jeu grâce au LuaBackend de TopazTK.",
         "en": "Inspired by the KH2 one, developer Denho creates a randomizer for Kingdom Hearts Final Mix, more exploration-based, which modifies the game's memory through TopazTK's LuaBackend."
       }
     },

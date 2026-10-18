@@ -1,6 +1,6 @@
 {
   "intro": {
-    "fr": "Majora's Mask a été randomisé très tôt : dès 2013, le speedrunner DeathBasket mélangeait déjà ses objets. Le randomizer actuel (MMR), né en 2019, mélange objets, musiques et ennemis, et a sa propre scène de tournois.",
+    "fr": "Majora's Mask a été randomisé très tôt : dès 2013, DeathBasket, de la communauté speedrun, mélangeait déjà ses objets. Le randomizer actuel (MMR), né en 2019, mélange objets, musiques et ennemis, et a sa propre scène de tournois.",
     "en": "Majora's Mask was randomized very early: as soon as 2013, speedrunner DeathBasket was already shuffling its items. Today's randomizer (MMR), born in 2019, shuffles items, music and enemies, and has its own tournament scene."
   },
   "events": [
@@ -16,7 +16,7 @@
       "date": "2013",
       "title": { "fr": "Le randomiser de DeathBasket", "en": "DeathBasket's randomiser" },
       "text": {
-        "fr": "En juillet 2013, le speedrunner DeathBasket présente sur le forum ZeldaSpeedRuns un hack qui randomise les objets donnés par les personnages, les coffres et d'autres sources, la seed dépendant du nom du fichier de sauvegarde. Une version datée du 25 octobre 2013 circule ensuite. Ce site recense 99 courses sur SpeedRunsLive dès 2013.",
+        "fr": "En juillet 2013, DeathBasket, de la communauté speedrun, présente sur le forum ZeldaSpeedRuns un hack qui randomise les objets donnés par les personnages, les coffres et d'autres sources, la seed dépendant du nom du fichier de sauvegarde. Une version datée du 25 octobre 2013 circule ensuite. Ce site recense 99 courses sur SpeedRunsLive dès 2013.",
         "en": "In July 2013, speedrunner DeathBasket presents on the ZeldaSpeedRuns forum a hack that randomizes items given by characters, chests and other sources, the seed depending on the save file name. A version dated October 25, 2013 then circulates. This site counts 99 races on SpeedRunsLive as early as 2013."
       }
     },
@@ -24,8 +24,8 @@
       "date": "2019",
       "title": { "fr": "Naissance de MMR", "en": "MMR is born" },
       "text": {
-        "fr": "Le 14 février 2019 démarre le dépôt az64/mm-rando, un randomizer d'objets, de musiques et d'ennemis pour Majora's Mask. Sa version maintenue aujourd'hui est celle de ZoeyZolotova. DeathBasket publie la même année une nouvelle version de son randomiser, aujourd'hui introuvable.",
-        "en": "On February 14, 2019, the az64/mm-rando repository starts: an item, music and enemy randomizer for Majora's Mask. Its version maintained today is ZoeyZolotova's. The same year, DeathBasket releases a new version of his randomiser, now lost."
+        "fr": "Le 14 février 2019 démarre le dépôt az64/mm-rando, un randomizer d'objets, de musiques et d'ennemis pour Majora's Mask. Sa version maintenue aujourd'hui est celle de ZoeyZolotova. DeathBasket publie la même année une nouvelle version du randomiser, aujourd'hui introuvable.",
+        "en": "On February 14, 2019, the az64/mm-rando repository starts: an item, music and enemy randomizer for Majora's Mask. Its version maintained today is ZoeyZolotova's. The same year, DeathBasket releases a new version of the randomiser, now lost."
       }
     },
     {

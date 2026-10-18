@@ -1,0 +1,74 @@
+{
+  "intro": {
+    "fr": "OoTMM réunit Ocarina of Time et Majora's Mask, les deux Zelda de la Nintendo 64, en une seule ROM et mélange les objets des deux jeux. Commencé par Nax en 2020, il a atteint sa version 1.0 en 2023.",
+    "en": "OoTMM combines Ocarina of Time and Majora's Mask, the two Nintendo 64 Zeldas, into a single ROM and shuffles the items of both games. Started by Nax in 2020, it reached version 1.0 in 2023."
+  },
+  "events": [
+    {
+      "date": "1998-2000",
+      "title": {
+        "fr": "Les jeux d'origine",
+        "en": "The original games"
+      },
+      "text": {
+        "fr": "Nintendo sort Ocarina of Time (1998) et Majora's Mask (2000) sur Nintendo 64. Chacun a son propre randomizer avant d'être réuni dans OoTMM.",
+        "en": "Nintendo releases Ocarina of Time (1998) and Majora's Mask (2000) on the Nintendo 64. Each has its own randomizer before being combined in OoTMM."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Les débuts",
+        "en": "The beginnings"
+      },
+      "text": {
+        "fr": "Nax commence OoTMM en mai 2020. Nax en reste de très loin le principal auteur, rejoint notamment par CelestialKitsune, XenoWars et ZoeyZolotova, qui maintient aussi le randomizer de Majora's Mask.",
+        "en": "Nax starts OoTMM in May 2020. Nax remains by far its main author, joined notably by CelestialKitsune, XenoWars and ZoeyZolotova, who also maintains the Majora's Mask Randomizer."
+      }
+    },
+    {
+      "date": "2023",
+      "title": {
+        "fr": "La version 1.0",
+        "en": "Version 1.0"
+      },
+      "text": {
+        "fr": "La version 1.0 sort le 22 janvier 2023, avec un générateur web sur ootmm.com. Les premières courses recensées sur ce site ont lieu un mois plus tard, le 24 février 2023.",
+        "en": "Version 1.0 comes out on January 22, 2023, with a web generator on ootmm.com. The first races listed on this site take place a month later, on February 24, 2023."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Version 33",
+        "en": "Version 33"
+      },
+      "text": {
+        "fr": "OoTMM enchaîne les versions majeures : la 33.0 sort en octobre 2026. Le projet a aussi son wiki et son Discord.",
+        "en": "OoTMM releases major versions in quick succession: 33.0 comes out in October 2026. The project also has its wiki and Discord."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "OoTMM/OoTMM (GitHub)",
+      "url": "https://github.com/OoTMM/OoTMM"
+    },
+    {
+      "label": "OoTMM — CHANGELOG",
+      "url": "https://github.com/OoTMM/OoTMM/blob/master/CHANGELOG.md"
+    },
+    {
+      "label": "OoTMM",
+      "url": "https://ootmm.com/"
+    },
+    {
+      "label": "OoTMM Wiki",
+      "url": "https://ootmm.wiki.gg/"
+    },
+    {
+      "label": "racetime.gg — OoTMM",
+      "url": "https://racetime.gg/ootmm"
+    }
+  ]
+}

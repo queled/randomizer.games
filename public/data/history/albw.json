@@ -1,0 +1,69 @@
+{
+  "intro": {
+    "fr": "A Link Between Worlds se randomise avec le randomizer de Rick Fay, développé depuis fin 2021, qui mélange les objets et, dans ses dernières versions, les failles entre Hyrule et Lorule.",
+    "en": "A Link Between Worlds is randomized with Rick Fay's randomizer, developed since late 2021, which shuffles items and, in its latest versions, the cracks between Hyrule and Lorule."
+  },
+  "events": [
+    {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort The Legend of Zelda: A Link Between Worlds sur Nintendo 3DS en 2013.",
+        "en": "Nintendo releases The Legend of Zelda: A Link Between Worlds on the Nintendo 3DS in 2013."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Premières courses et randomizer de Rick Fay",
+        "en": "First races and Rick Fay's randomizer"
+      },
+      "text": {
+        "fr": "Les premières courses recensées sur ce site ont lieu en avril 2021 sur racetime.gg. Le 2 décembre 2021, Rick Fay démarre le dépôt z17-randomizer, avec une première alpha le 11 décembre.",
+        "en": "The first races listed on this site take place in April 2021 on racetime.gg. On December 2, 2021, Rick Fay starts the z17-randomizer repository, with a first alpha on December 11."
+      }
+    },
+    {
+      "date": "2023-2025",
+      "title": {
+        "fr": "Version 0.4 et regain",
+        "en": "Version 0.4 and a revival"
+      },
+      "text": {
+        "fr": "Après les préversions 0.3 (fin 2022-2023), la version 0.4 ajoute Quake, un nouvel objet qui ouvre les failles, fermées au départ, ainsi que le « Cracksanity », le mélange des failles entre Hyrule et Lorule. Les courses repartent : 29 en 2024, 43 en 2025, un record sur ce site.",
+        "en": "After the 0.3 pre-releases (late 2022-2023), version 0.4 adds Quake, a new item that opens the cracks, initially closed, as well as \"Cracksanity\", which shuffles the cracks between Hyrule and Lorule. Races pick up again: 29 in 2024, 43 in 2025, a record on this site."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Le jeu est aussi jouable en multiworld.",
+        "en": "The game can also be played in multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "rickfay/z17-randomizer (GitHub)",
+      "url": "https://github.com/rickfay/z17-randomizer"
+    },
+    {
+      "label": "ALBW Randomizer",
+      "url": "https://albwrandomizer.com/"
+    },
+    {
+      "label": "racetime.gg — ALBW Randomizer",
+      "url": "https://racetime.gg/albwr"
+    }
+  ]
+}

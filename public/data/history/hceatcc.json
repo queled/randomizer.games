@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "CEER, le Halo CE Enemy Randomiser de Burnt-o, randomise les ennemis de Halo: Combat Evolved dans la Master Chief Collection.",
+    "en": "Burnt-o's CEER, the Halo CE Enemy Randomiser, randomizes the enemies of Halo: Combat Evolved in the Master Chief Collection."
+  },
+  "events": [
+    {
+      "date": "2001",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bungie et Microsoft sortent Halo: Combat Evolved sur Xbox en 2001 ; sa version Anniversary fait partie de la Master Chief Collection.",
+        "en": "Bungie and Microsoft release Halo: Combat Evolved on the Xbox in 2001; its Anniversary version is part of the Master Chief Collection."
+      }
+    },
+    {
+      "date": "2022-2023",
+      "title": {
+        "fr": "CEER",
+        "en": "CEER"
+      },
+      "text": {
+        "fr": "Burnt-o publie la version 1.0 de CEER le 19 août 2022, puis la 2.0 en juin 2023 et la 2.0.4 en juillet. Le mod randomise les ennemis, peut les multiplier, et randomise aussi les textures et les sons.",
+        "en": "Burnt-o releases CEER version 1.0 on August 19, 2022, then 2.0 in June 2023 and 2.0.4 in July. The mod randomizes enemies, can multiply them, and also randomizes textures and sounds."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Burnt-o/CEER (GitHub)",
+      "url": "https://github.com/Burnt-o/CEER"
+    }
+  ]
+}

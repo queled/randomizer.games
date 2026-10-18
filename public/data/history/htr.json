@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Haiku.Rando, le randomizer de Haiku, the Robot, a été lancé par Jarlyk puis largement développé par dpinela.",
+    "en": "Haiku.Rando, the Haiku, the Robot randomizer, was started by Jarlyk then largely developed by dpinela."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Mister Morris Games sort Haiku, the Robot en 2022.",
+        "en": "Mister Morris Games releases Haiku, the Robot in 2022."
+      }
+    },
+    {
+      "date": "2022-2024",
+      "title": {
+        "fr": "Haiku.Rando",
+        "en": "Haiku.Rando"
+      },
+      "text": {
+        "fr": "Jarlyk commence le mod en mai 2022 et publie la version 0.1 en juillet 2022. dpinela en devient le principal contributeur : version 1.0 en avril 2023, 2.0 en juin 2023, 2.4.2 en août 2024.",
+        "en": "Jarlyk starts the mod in May 2022 and releases version 0.1 in July 2022. dpinela becomes its main contributor: version 1.0 in April 2023, 2.0 in June 2023, 2.4.2 in August 2024."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Jarlyk/Haiku.Rando (GitHub)",
+      "url": "https://github.com/Jarlyk/Haiku.Rando"
+    }
+  ]
+}

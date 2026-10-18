@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Le Jurassic Park de la Super Nintendo a son randomizer, écrit en Go par Halderim en 2025.",
+    "en": "The Super Nintendo Jurassic Park has its randomizer, written in Go by Halderim in 2025."
+  },
+  "events": [
+    {
+      "date": "1993",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Ocean sort Jurassic Park sur Super Nintendo en 1993.",
+        "en": "Ocean releases Jurassic Park on the Super Nintendo in 1993."
+      }
+    },
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Halderim publie la version 0.1.1 du randomizer le 14 octobre 2025, puis la 0.3 en novembre. Il fonctionne avec la version 1.0 américaine du jeu, y compris celle de la Jurassic Park Classic Games Collection. Yoshifanatic1 a aussi présenté un randomizer en vidéo.",
+        "en": "Halderim releases version 0.1.1 of the randomizer on October 14, 2025, then 0.3 in November. It works with the US 1.0 version of the game, including the one in the Jurassic Park Classic Games Collection. Yoshifanatic1 has also shown a randomizer in a video."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Halderim/jp_snes_randomizer (GitHub)",
+      "url": "https://github.com/Halderim/jp_snes_randomizer"
+    },
+    {
+      "label": "YouTube — Yoshifanatic1",
+      "url": "https://www.youtube.com/watch?v=Rq20h5S-KGE"
+    }
+  ]
+}

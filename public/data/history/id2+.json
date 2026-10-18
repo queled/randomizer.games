@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Extra 2 Dew est un mod pour Ittle Dew 2 qui ajoute du contenu, des modes de jeu et des outils.",
+    "en": "Extra 2 Dew is a mod for Ittle Dew 2 that adds content, game modes and tools."
+  },
+  "events": [
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Ludosity sort Ittle Dew 2 en 2016.",
+        "en": "Ludosity releases Ittle Dew 2 in 2016."
+      }
+    },
+    {
+      "date": "2020-2022",
+      "title": {
+        "fr": "Extra 2 Dew",
+        "en": "Extra 2 Dew"
+      },
+      "text": {
+        "fr": "Chris is Awesome, Matra et GameWyrm publient Extra 2 Dew : version 2.0 bêta en septembre 2020, 3.0 en juillet 2021, 3.3 en avril 2022. Le mod ajoute des commandes de debug, de nouveaux modes de jeu et d'autres contenus.",
+        "en": "Chris is Awesome, Matra and GameWyrm release Extra 2 Dew: version 2.0 beta in September 2020, 3.0 in July 2021, 3.3 in April 2022. The mod adds debug commands, new game modes and other content."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Chris-Is-Awesome/Extra2DewMod (GitHub)",
+      "url": "https://github.com/Chris-Is-Awesome/Extra2DewMod"
+    }
+  ]
+}

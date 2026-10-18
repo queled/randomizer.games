@@ -1,0 +1,54 @@
+{
+  "intro": {
+    "fr": "ZHM5Randomizer, de pawREP, est un randomizer d'objets « intelligent » pour la trilogie Hitman, et le jeu se joue aussi en multiworld.",
+    "en": "pawREP's ZHM5Randomizer is a \"smart\" item randomizer for the Hitman trilogy, and the game can also be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "IO Interactive réunit en 2023 sa trilogie Hitman (2016-2021) sous le nom de Hitman World of Assassination.",
+        "en": "IO Interactive brings its Hitman trilogy (2016-2021) together in 2023 under the name Hitman World of Assassination."
+      }
+    },
+    {
+      "date": "2019-2021",
+      "title": {
+        "fr": "ZHM5Randomizer",
+        "en": "ZHM5Randomizer"
+      },
+      "text": {
+        "fr": "pawREP publie la version 1.0 le 30 octobre 2019, puis la 1.45 en juin 2021. Le randomizer mélange les inventaires du monde, du héros, des PNJ et des cachettes, sur toutes les missions principales de Hitman 1, 2 et 3.",
+        "en": "pawREP releases version 1.0 on October 30, 2019, then 1.45 in June 2021. The randomizer shuffles world, hero, NPC and stash inventories, across all main missions of Hitman 1, 2 and 3."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Hitman World of Assassination est aussi jouable en multiworld.",
+        "en": "Hitman World of Assassination can also be played in multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "pawREP/ZHM5Randomizer (GitHub)",
+      "url": "https://github.com/pawREP/ZHM5Randomizer"
+    },
+    {
+      "label": "Multiworld — HITMAN World of Assassination",
+      "url": "https://multiworld.gg/games/HITMAN%20World%20of%20Assassination/info/en"
+    }
+  ]
+}

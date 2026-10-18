@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Le Kirby's Adventure Randomizer d'Austin Bricker mélange l'ordre des niveaux, les pouvoirs des ennemis et la couleur de Kirby, depuis une interface web.",
+    "en": "Austin Bricker's Kirby's Adventure Randomizer shuffles the level order, enemy abilities and Kirby's color, from a web interface."
+  },
+  "events": [
+    {
+      "date": "1993",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "HAL Laboratory et Nintendo sortent Kirby's Adventure sur NES en 1993.",
+        "en": "HAL Laboratory and Nintendo release Kirby's Adventure on the NES in 1993."
+      }
+    },
+    {
+      "date": "2017-2018",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Austin Bricker (aquova) publie la version 1.0 le 24 mai 2017, puis la 3.0.3 en février 2018. Il randomise l'ordre des niveaux, les pouvoirs des ennemis et la couleur de Kirby.",
+        "en": "Austin Bricker (aquova) releases version 1.0 on May 24, 2017, then 3.0.3 in February 2018. It randomizes the level order, enemy abilities and Kirby's color."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "aquova/KA-Rando (GitHub)",
+      "url": "https://github.com/aquova/KA-Rando"
+    },
+    {
+      "label": "KA-Rando",
+      "url": "https://aquova.net/KA-Rando"
+    }
+  ]
+}

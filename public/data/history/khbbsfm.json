@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Kingdom Hearts Birth by Sleep Final Mix se randomise sur PC avec le randomizer de Keytotruth, et en multiworld avec l'intégration Archipelago de gaithern.",
+    "en": "Kingdom Hearts Birth by Sleep Final Mix is randomized on PC with Keytotruth's randomizer, and in multiworld with gaithern's Archipelago integration."
+  },
+  "events": [
+    {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Kingdom Hearts Birth by Sleep sur PSP en 2010 ; sa version Final Mix est remasterisée dans Kingdom Hearts HD 2.5 ReMIX en 2014.",
+        "en": "Square Enix releases Kingdom Hearts Birth by Sleep on the PSP in 2010; its Final Mix version is remastered in Kingdom Hearts HD 2.5 ReMIX in 2014."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le randomizer de Keytotruth",
+        "en": "Keytotruth's randomizer"
+      },
+      "text": {
+        "fr": "Keytotruth publie en mai 2022 un randomizer pour la version PC (Steam) du jeu.",
+        "en": "In May 2022 Keytotruth publishes a randomizer for the game's PC (Steam) version."
+      }
+    },
+    {
+      "date": "2024-2026",
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "gaithern publie en juillet 2024 une intégration Archipelago pour Birth by Sleep (version 0.0.1), mise à jour jusqu'à la 0.2.0 en septembre 2026.",
+        "en": "gaithern releases an Archipelago integration for Birth by Sleep in July 2024 (version 0.0.1), updated up to 0.2.0 in September 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Truthkey/Birth-by-Sleep-Randomizer (GitHub)",
+      "url": "https://github.com/Truthkey/Birth-by-Sleep-Randomizer"
+    },
+    {
+      "label": "gaithernOrg/ArchipelagoKHBBS (GitHub)",
+      "url": "https://github.com/gaithernOrg/ArchipelagoKHBBS"
+    }
+  ]
+}

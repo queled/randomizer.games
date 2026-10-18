@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le KuruKuruKurandomizer de GirambQuamb randomise Kuru Kuru Kururin à l'aide de scripts Lua pour l'émulateur BizHawk.",
+    "en": "GirambQuamb's KuruKuruKurandomizer randomizes Kuru Kuru Kururin using Lua scripts for the BizHawk emulator."
+  },
+  "events": [
+    {
+      "date": "2001",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Eighting et Nintendo sortent Kuru Kuru Kururin sur Game Boy Advance en 2001.",
+        "en": "Eighting and Nintendo release Kuru Kuru Kururin on the Game Boy Advance in 2001."
+      }
+    },
+    {
+      "date": "2023-2024",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "GirambQuamb commence le randomizer en décembre 2023 et publie la version 1.0 le 7 janvier 2024. Il s'utilise avec la version européenne du jeu sur BizHawk.",
+        "en": "GirambQuamb starts the randomizer in December 2023 and releases version 1.0 on January 7, 2024. It is used with the European version of the game on BizHawk."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GirambQuamb/KuruKuruKurandomizer (GitHub)",
+      "url": "https://github.com/GirambQuamb/KuruKuruKurandomizer"
+    }
+  ]
+}

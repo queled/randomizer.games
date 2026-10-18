@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Kingdom Hearts: Chain of Memories se joue en multiworld grâce à l'intégration Archipelago de gaithern.",
+    "en": "Kingdom Hearts: Chain of Memories is played in multiworld thanks to gaithern's Archipelago integration."
+  },
+  "events": [
+    {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Kingdom Hearts: Chain of Memories sur Game Boy Advance en 2004.",
+        "en": "Square Enix releases Kingdom Hearts: Chain of Memories on the Game Boy Advance in 2004."
+      }
+    },
+    {
+      "date": "2023-2024",
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "gaithern commence en février 2023 une intégration Archipelago de Chain of Memories et de son remake Re:Chain of Memories, avec une version 0.1 en octobre 2023.",
+        "en": "In February 2023 gaithern starts an Archipelago integration of Chain of Memories and its remake Re:Chain of Memories, with a version 0.1 in October 2023."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "gaithern/BACKUPOLDAPCOMANDRECOM (GitHub)",
+      "url": "https://github.com/gaithern/BACKUPOLDAPCOMANDRECOM"
+    }
+  ]
+}

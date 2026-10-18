@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Skill Tree Randomizer de GeorgieH génère des arbres de compétences aléatoires pour les héros de King Arthur: Knight's Tale.",
+    "en": "GeorgieH's Skill Tree Randomizer generates randomized skill trees for the heroes of King Arthur: Knight's Tale."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "NeocoreGames sort King Arthur: Knight's Tale en 2022.",
+        "en": "NeocoreGames releases King Arthur: Knight's Tale in 2022."
+      }
+    },
+    {
+      "date": "2023-2024",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "GeorgieH publie la version 1.0 le 29 décembre 2023, puis la 1.2 en avril 2024, pour la version 2.0 du jeu.",
+        "en": "GeorgieH releases version 1.0 on December 29, 2023, then 1.2 in April 2024, for version 2.0 of the game."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GeorgieH/kakt-skill-tree-randomizer (GitHub)",
+      "url": "https://github.com/GeorgieH/kakt-skill-tree-randomizer"
+    }
+  ]
+}

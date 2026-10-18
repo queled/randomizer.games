@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "L'Ultimate Galaxy Randomizer de Tiniifan randomise Inazuma Eleven GO Galaxy.",
+    "en": "Tiniifan's Ultimate Galaxy Randomizer randomizes Inazuma Eleven GO Galaxy."
+  },
+  "events": [
+    {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Level-5 sort Inazuma Eleven GO Galaxy sur Nintendo 3DS au Japon en 2013.",
+        "en": "Level-5 releases Inazuma Eleven GO Galaxy on the Nintendo 3DS in Japan in 2013."
+      }
+    },
+    {
+      "date": "2022-2024",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Tiniifan publie la version 1.0 le 26 novembre 2022, puis la 1.2 en mars 2024, avec LorisC93 parmi les contributeurs.",
+        "en": "Tiniifan releases version 1.0 on November 26, 2022, then 1.2 in March 2024, with LorisC93 among the contributors."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Tiniifan/UltimateGalaxyRandomizer (GitHub)",
+      "url": "https://github.com/Tiniifan/UltimateGalaxyRandomizer"
+    }
+  ]
+}

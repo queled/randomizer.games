@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Reach Visual Randomizer de NateRFrost randomise Halo: Reach dans la Master Chief Collection, avec une interface simple.",
+    "en": "NateRFrost's Reach Visual Randomizer randomizes Halo: Reach in the Master Chief Collection, with a simple interface."
+  },
+  "events": [
+    {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bungie et Microsoft sortent Halo: Reach sur Xbox 360 en 2010 ; il rejoint ensuite la Master Chief Collection.",
+        "en": "Bungie and Microsoft release Halo: Reach on the Xbox 360 in 2010; it later joins the Master Chief Collection."
+      }
+    },
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "NateRFrost publie la version 1.0 le 20 janvier 2025, puis la 1.2 en mars. L'outil s'appuie sur les outils de modding officiels de Halo: Reach (HREK).",
+        "en": "NateRFrost releases version 1.0 on January 20, 2025, then 1.2 in March. The tool relies on Halo: Reach's official mod tools (HREK)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "NateRFrost/ReachVisualRandomizer (GitHub)",
+      "url": "https://github.com/NateRFrost/ReachVisualRandomizer"
+    }
+  ]
+}

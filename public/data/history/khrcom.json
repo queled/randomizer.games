@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Kingdom Hearts Re:Chain of Memories se joue en multiworld grâce à l'intégration Archipelago de gaithern.",
+    "en": "Kingdom Hearts Re:Chain of Memories is played in multiworld thanks to gaithern's Archipelago integration."
+  },
+  "events": [
+    {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Kingdom Hearts Re:Chain of Memories, remake 3D de Chain of Memories, sur PlayStation 2 au Japon en 2007.",
+        "en": "Square Enix releases Kingdom Hearts Re:Chain of Memories, a 3D remake of Chain of Memories, on the PlayStation 2 in Japan in 2007."
+      }
+    },
+    {
+      "date": "2024-2025",
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "Après une première intégration commune avec Chain of Memories en 2023, gaithern publie la version 1.0 de l'intégration Archipelago de Re:Chain of Memories le 30 janvier 2024, jusqu'à la 1.4.3 en août 2025.",
+        "en": "After a first integration shared with Chain of Memories in 2023, gaithern releases version 1.0 of the Re:Chain of Memories Archipelago integration on January 30, 2024, up to 1.4.3 in August 2025."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "gaithernOrg/ArchipelagoKHRECOM (GitHub)",
+      "url": "https://github.com/gaithernOrg/ArchipelagoKHRECOM"
+    }
+  ]
+}

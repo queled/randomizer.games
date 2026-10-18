@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "Les versions secondaires et remakes de la quatrième génération de Pokémon se randomisent notamment avec l'Universal Warp Randomizer, conçu à l'origine pour le streamer PointCrow.",
+    "en": "Fourth-generation secondary versions and remakes of Pokémon are randomized notably with the Universal Warp Randomizer, originally made for streamer PointCrow."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Universal Warp Randomizer",
+        "en": "Universal Warp Randomizer"
+      },
+      "text": {
+        "fr": "L'Universal Warp Randomizer mélange les passages entre les zones des jeux Pokémon GBA et DS. Conçu à l'origine pour le streamer PointCrow, il existe en version web, créée pour corriger les problèmes des versions autonomes.",
+        "en": "The Universal Warp Randomizer shuffles the warps between areas of GBA and DS Pokémon games. Originally made for streamer PointCrow, it exists as a web version, built to fix issues with the standalone builds."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Universal Warp Randomizer",
+      "url": "https://warprandomizer.com/"
+    }
+  ]
+}

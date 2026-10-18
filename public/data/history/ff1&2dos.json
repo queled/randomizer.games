@@ -1,0 +1,54 @@
+{
+  "intro": {
+    "fr": "Final Fantasy I & II: Dawn of Souls se randomise avec « Approaching Chaos » d'abyssonym, et avec le randomizer web HMS Jayne.",
+    "en": "Final Fantasy I & II: Dawn of Souls is randomized with abyssonym's \"Approaching Chaos\", and with the HMS Jayne web randomizer."
+  },
+  "events": [
+    {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Final Fantasy I & II: Dawn of Souls sur Game Boy Advance en 2004.",
+        "en": "Square Enix releases Final Fantasy I & II: Dawn of Souls on the Game Boy Advance in 2004."
+      }
+    },
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Approaching Chaos",
+        "en": "Approaching Chaos"
+      },
+      "text": {
+        "fr": "Le 12 octobre 2017, abyssonym publie « Approaching Chaos », un randomizer commandé par DoodSF : IA et statistiques des monstres, classes, rencontres, butins, boutiques, objets et équipement.",
+        "en": "On October 12, 2017, abyssonym releases \"Approaching Chaos\", a randomizer commissioned by DoodSF: monster AI and stats, classes, encounters, drops, shops, items and equipment."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "HMS Jayne",
+        "en": "HMS Jayne"
+      },
+      "text": {
+        "fr": "Le randomizer web HMS Jayne propose aussi des seeds de défi pour la ROM Dawn of Souls, avec son code publié sur GitHub.",
+        "en": "The HMS Jayne web randomizer also offers challenge seeds for the Dawn of Souls ROM, with its code published on GitHub."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Abyssonym — FF: Dawn of Souls Approaching Chaos (2017)",
+      "url": "https://abyssonym.wordpress.com/2017/10/12/ff-dawn-of-souls-approaching-chaos-randomizer/"
+    },
+    {
+      "label": "HMS Jayne",
+      "url": "https://hmsjayne.com/"
+    }
+  ]
+}

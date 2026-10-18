@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Pokémon Diamant Étincelant et Perle Scintillante se randomisent notamment avec l'outil Imposter's Ordeal, publié sur GameBanana.",
+    "en": "Pokémon Brilliant Diamond and Shining Pearl are randomized notably with the Imposter's Ordeal tool, released on GameBanana."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "ILCA et Nintendo sortent Pokémon Diamant Étincelant et Perle Scintillante sur Nintendo Switch en 2021.",
+        "en": "ILCA and Nintendo release Pokémon Brilliant Diamond and Shining Pearl on the Nintendo Switch in 2021."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Imposter's Ordeal",
+        "en": "Imposter's Ordeal"
+      },
+      "text": {
+        "fr": "L'outil de modding Imposter's Ordeal, pour Diamant Étincelant et Perle Scintillante, est disponible sur GameBanana.",
+        "en": "The Imposter's Ordeal modding tool, for Brilliant Diamond and Shining Pearl, is available on GameBanana."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GameBanana — Imposter's Ordeal",
+      "url": "https://gamebanana.com/tools/8385"
+    }
+  ]
+}

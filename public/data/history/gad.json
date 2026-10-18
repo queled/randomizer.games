@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "Glass Animals Discography transforme la discographie du groupe en jeu multiworld : écouter les morceaux envoie des checks.",
+    "en": "Glass Animals Discography turns the band's discography into a multiworld game: listening to songs sends checks."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Les albums de Glass Animals y sont découpés en régions, et écouter les morceaux du groupe sert de checks.",
+        "en": "Glass Animals' albums are divided into regions, and listening to the band's songs acts as checks."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Glass Animals Discography",
+      "url": "https://multiworld.gg/games/Glass%20Animals%20Discography/info/en"
+    }
+  ]
+}

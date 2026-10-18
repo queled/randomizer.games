@@ -1,0 +1,25 @@
+{
+  "intro": {
+    "fr": "Les remakes de la septième génération (Pokémon Let's Go Pikachu et Évoli) se randomisent notamment avec pkNX, l'éditeur et randomizer de ROM Switch présenté sur Project Pokémon.",
+    "en": "Seventh-generation remakes (Pokémon Let's Go Pikachu and Eevee) are randomized notably with pkNX, the Switch ROM editor and randomizer presented on Project Pokémon."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "pkNX",
+        "en": "pkNX"
+      },
+      "text": {
+        "fr": "pkNX, éditeur et randomizer de ROM pour les jeux Pokémon de la Switch, est présenté sur le forum Project Pokémon, où il est mis à jour dès novembre 2018.",
+        "en": "pkNX, a ROM editor and randomizer for the Switch Pokémon games, is presented on the Project Pokémon forum, where it is updated from November 2018."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Project Pokémon — pkNX",
+      "url": "https://projectpokemon.org/home/forums/topic/48647-pknx-nintendo-switch-rom-editor-randomizer/"
+    }
+  ]
+}

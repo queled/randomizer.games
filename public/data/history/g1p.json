@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Les Pokémon de première génération se randomisent notamment avec le Key Item Randomizer de stump pour Pokémon Rouge et Bleu.",
+    "en": "First-generation Pokémon games are randomized notably with stump's Key Item Randomizer for Pokémon Red and Blue."
+  },
+  "events": [
+    {
+      "date": "1996",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Game Freak et Nintendo sortent Pokémon Rouge et Vert sur Game Boy au Japon en 1996.",
+        "en": "Game Freak and Nintendo release Pokémon Red and Green on the Game Boy in Japan in 1996."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Le Key Item Randomizer de stump",
+        "en": "stump's Key Item Randomizer"
+      },
+      "text": {
+        "fr": "stump propose un randomizer d'objets clés pour Pokémon Rouge et Bleu, qui assouplit plusieurs conditions de progression (la Tour Pokémon n'est plus obligatoire, par exemple).",
+        "en": "stump offers a key item randomizer for Pokémon Red and Blue, which relaxes several progression requirements (Pokémon Tower is no longer required, for example)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "stump.io — Pokémon Red/Blue Key Item Randomizer",
+      "url": "https://stump.io/itemrando/"
+    }
+  ]
+}

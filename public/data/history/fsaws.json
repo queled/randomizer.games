@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "Factorio - Space Age Without Space se joue en multiworld, avec un arbre de recherche mélangé comme dans Factorio.",
+    "en": "Factorio - Space Age Without Space can be played in multiworld, with a shuffled research tree as in Factorio."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Factorio - Space Age Without Space est jouable en multiworld avec le multiworld (multiworld.gg). Comme pour Factorio, l'arbre de recherche est mélangé, si bien que certaines technologies s'obtiennent dans un ordre inhabituel.",
+        "en": "Factorio - Space Age Without Space can be played in multiworld with multiworld (multiworld.gg). As with Factorio, the research tree is shuffled, so some technologies are obtained in a non-standard order."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Factorio - Space Age Without Space",
+      "url": "https://multiworld.gg/games/Factorio%20-%20Space%20Age%20Without%20Space/info/en"
+    }
+  ]
+}

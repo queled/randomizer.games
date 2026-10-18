@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Fire Emblem Engage se randomise avec « A Little Secret Ingredient », un outil de randomisation publié sur GameBanana.",
+    "en": "Fire Emblem Engage is randomized with \"A Little Secret Ingredient\", a randomizer tool released on GameBanana."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Intelligent Systems et Nintendo sortent Fire Emblem Engage sur Nintendo Switch en 2023.",
+        "en": "Intelligent Systems and Nintendo release Fire Emblem Engage on the Nintendo Switch in 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "A Little Secret Ingredient",
+        "en": "A Little Secret Ingredient"
+      },
+      "text": {
+        "fr": "L'outil « A Little *Secret* Ingredient - FEE Randomizer » est disponible sur GameBanana.",
+        "en": "The \"A Little *Secret* Ingredient - FEE Randomizer\" tool is available on GameBanana."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GameBanana — FEE Randomizer",
+      "url": "https://gamebanana.com/tools/13023"
+    }
+  ]
+}

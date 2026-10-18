@@ -1,0 +1,32 @@
+{
+  "intro": {
+    "fr": "Final Fantasy V Career Day, la version randomisée en monde ouvert de FFV, se joue aussi en multiworld.",
+    "en": "Final Fantasy V Career Day, the open-world randomized version of FFV, can also be played in multiworld."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Final Fantasy V Career Day est jouable en multiworld avec le multiworld (multiworld.gg). Cette version randomisée de FFV abstrait la progression : on commence avec un dirigeable, on peut visiter de nombreux lieux tout de suite, et la plupart des cinématiques sont retirées.",
+        "en": "Final Fantasy V Career Day can be played in multiworld with multiworld (multiworld.gg). This randomized version of FFV abstracts progress: you start with an airship, can check many locations right away, and most cutscenes are removed."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Final Fantasy V Career Day",
+      "url": "https://multiworld.gg/games/Final%20Fantasy%20V%20Career%20Day/info/en"
+    },
+    {
+      "label": "Career Day — Studio Big Bridge",
+      "url": "https://bigbridge.studio/careerday/"
+    }
+  ]
+}

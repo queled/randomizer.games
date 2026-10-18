@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Game Dev Tycoon se randomise avec le Platform Randomiser de Macha, puis le TotalRandomiser de Darkly.",
+    "en": "Game Dev Tycoon is randomized with Macha's Platform Randomiser, then Darkly's TotalRandomiser."
+  },
+  "events": [
+    {
+      "date": "2012",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Greenheart Games sort Game Dev Tycoon en 2012.",
+        "en": "Greenheart Games releases Game Dev Tycoon in 2012."
+      }
+    },
+    {
+      "date": "2013",
+      "title": {
+        "fr": "Platform Randomiser",
+        "en": "Platform Randomiser"
+      },
+      "text": {
+        "fr": "Le 24 novembre 2013, Macha présente sur le forum de Greenheart Games le Platform Randomiser, en alpha : il randomise le succès ou l'échec des consoles du jeu.",
+        "en": "On November 24, 2013, Macha presents the Platform Randomiser on the Greenheart Games forum, in alpha: it randomizes the success or failure of the game's consoles."
+      }
+    },
+    {
+      "date": "2014",
+      "title": {
+        "fr": "TotalRandomiser",
+        "en": "TotalRandomiser"
+      },
+      "text": {
+        "fr": "Le 27 juin 2014, Darkly publie TotalRandomiser, une modification du mod de Macha qui randomise aussi les combinaisons de thèmes et les bons réglages de développement.",
+        "en": "On June 27, 2014, Darkly releases TotalRandomiser, a modification of Macha's mod that also randomizes topic combinations and the correct development slider values."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Greenheart Games — Platform Randomiser",
+      "url": "https://forum.greenheartgames.com/t/wip-platform-randomiser-alpha-0-0-5/9021"
+    },
+    {
+      "label": "Greenheart Games — TotalRandomiser",
+      "url": "https://forum.greenheartgames.com/t/rel-totalrandomiser-1-0-0/13359"
+    }
+  ]
+}

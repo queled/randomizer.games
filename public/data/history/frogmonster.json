@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Frogmonster se joue en multiworld : coffres, objets des PNJ, récompenses de boss et insectes y sont randomisés.",
+    "en": "Frogmonster can be played in multiworld: chests, NPC items, boss rewards and bugs are randomized."
+  },
+  "events": [
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Frogmonster sort en 2024.",
+        "en": "Frogmonster comes out in 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Frogmonster est jouable en multiworld avec le multiworld (multiworld.gg). Par défaut, tous les coffres, les objets donnés par les PNJ et les récompenses de boss sont randomisés ; chaque insecte mangé pour la première fois donne aussi un objet aléatoire.",
+        "en": "Frogmonster can be played in multiworld with multiworld (multiworld.gg). By default, every chest, every item given by NPCs and every boss reward is randomized; each bug eaten for the first time also gives a random item."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Frogmonster",
+      "url": "https://multiworld.gg/games/Frogmonster/info/en"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Medabots Randomizer de STulling randomise les deux versions de Medabots sur Game Boy Advance, dont Medabots: Rokusho.",
+    "en": "STulling's Medabots Randomizer randomizes both versions of Medabots on the Game Boy Advance, including Medabots: Rokusho."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Natsume sort Medabots: Rokusho et Medabots: Metabee sur Game Boy Advance en 2002 en Amérique du Nord.",
+        "en": "Natsume releases Medabots: Rokusho and Medabots: Metabee on the Game Boy Advance in 2002 in North America."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "STulling publie la version 1.0 du Medabots Randomizer le 10 septembre 2020, puis la 1.5 en octobre, avec YaibaToKen parmi les contributeurs. Un Discord est dédié au projet.",
+        "en": "STulling releases version 1.0 of the Medabots Randomizer on September 10, 2020, then 1.5 in October, with YaibaToKen among the contributors. A Discord server is dedicated to the project."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "STulling/Medabots-Randomizer (GitHub)",
+      "url": "https://github.com/STulling/Medabots-Randomizer"
+    }
+  ]
+}

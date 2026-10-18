@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Momodora Randomizer d'axelkarlsson prend la forme d'un composant LiveSplit pour Momodora: Reverie Under the Moonlight.",
+    "en": "axelkarlsson's Momodora Randomizer takes the form of a LiveSplit component for Momodora: Reverie Under the Moonlight."
+  },
+  "events": [
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bombservice sort Momodora: Reverie Under the Moonlight en 2016.",
+        "en": "Bombservice releases Momodora: Reverie Under the Moonlight in 2016."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "axelkarlsson commence le randomizer en janvier 2022, avec Ladnok parmi les contributeurs, et publie la version 1.0.3 le 19 février 2022. Il fonctionne avec les versions 1.05b et 1.07 du jeu.",
+        "en": "axelkarlsson starts the randomizer in January 2022, with Ladnok among the contributors, and releases version 1.0.3 on February 19, 2022. It works with versions 1.05b and 1.07 of the game."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "axelkarlsson/MomodoraRandomizer (GitHub)",
+      "url": "https://github.com/axelkarlsson/MomodoraRandomizer"
+    }
+  ]
+}

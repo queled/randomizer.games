@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Mega Man X3 se randomise notamment avec le Route MatriX Randomizer, et se joue aussi en multiworld.",
+    "en": "Mega Man X3 is notably randomized with the Route MatriX Randomizer, and can also be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "1995",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Mega Man X3 sur Super Nintendo en 1995.",
+        "en": "Capcom releases Mega Man X3 on the Super Nintendo in 1995."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Randomizers et multiworld",
+        "en": "Randomizers and multiworld"
+      },
+      "text": {
+        "fr": "Le Route MatriX Randomizer, publié sur le site borokobo, randomise le jeu, qui est aussi jouable en multiworld.",
+        "en": "The Route MatriX Randomizer, published on the borokobo site, randomizes the game, which can also be played in multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Route MatriX Randomizer",
+      "url": "https://borokobo.web.fc2.com/#RockC"
+    },
+    {
+      "label": "Multiworld — Mega Man X3",
+      "url": "https://multiworld.gg/games/Mega%20Man%20X3/info/en"
+    }
+  ]
+}

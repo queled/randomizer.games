@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Order of Ecclesia se randomise avec le DSVania Randomizer de LagoLunatic, qui couvre les trois Castlevania de la DS et mélange même les villageois.",
+    "en": "Order of Ecclesia is randomized with LagoLunatic's DSVania Randomizer, which covers all three DS Castlevanias and even shuffles the villagers."
+  },
+  "events": [
+    {
+      "date": "2008",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Castlevania: Order of Ecclesia sur Nintendo DS en 2008.",
+        "en": "Konami releases Castlevania: Order of Ecclesia on the Nintendo DS in 2008."
+      }
+    },
+    {
+      "date": "2017",
+      "title": {
+        "fr": "DSVania Randomizer",
+        "en": "DSVania Randomizer"
+      },
+      "text": {
+        "fr": "LagoLunatic sépare en avril 2017 le DSVania Randomizer de son éditeur DSVEdit, et publie la version 1.0 le 27 juin 2017. Il randomise les trois Castlevania de la DS : objets et compétences, ennemis et boss, âmes et glyphes des boss, nouvelles cartes, et dans Order of Ecclesia l'emplacement des villageois.",
+        "en": "LagoLunatic splits the DSVania Randomizer from the DSVEdit editor in April 2017, and releases version 1.0 on June 27, 2017. It randomizes the three DS Castlevanias: items and skills, enemies and bosses, boss souls and glyphs, new maps, and in Order of Ecclesia the villagers' locations."
+      }
+    },
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Version 1.4.8",
+        "en": "Version 1.4.8"
+      },
+      "text": {
+        "fr": "La version 1.4.8 sort en octobre 2024.",
+        "en": "Version 1.4.8 comes out in October 2024."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "LagoLunatic/dsvrandom (GitHub)",
+      "url": "https://github.com/LagoLunatic/dsvrandom"
+    }
+  ]
+}

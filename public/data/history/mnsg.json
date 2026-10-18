@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "« Ancient Cave Starring Goemon », d'abyssonym, est un randomizer de portes pour Mystical Ninja Starring Goemon.",
+    "en": "abyssonym's \"Ancient Cave Starring Goemon\" is a door randomizer for Mystical Ninja Starring Goemon."
+  },
+  "events": [
+    {
+      "date": "1997",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Mystical Ninja Starring Goemon sur Nintendo 64 en 1997.",
+        "en": "Konami releases Mystical Ninja Starring Goemon on the Nintendo 64 in 1997."
+      }
+    },
+    {
+      "date": "2023-2024",
+      "title": {
+        "fr": "Ancient Cave Starring Goemon",
+        "en": "Ancient Cave Starring Goemon"
+      },
+      "text": {
+        "fr": "abyssonym commence le projet en septembre 2023 et publie la version 1 le 17 février 2024, puis la 2.0 en avril 2024.",
+        "en": "abyssonym starts the project in September 2023 and releases version 1 on February 17, 2024, then 2.0 in April 2024."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "abyssonym/mn64rando (GitHub)",
+      "url": "https://github.com/abyssonym/mn64rando"
+    }
+  ]
+}

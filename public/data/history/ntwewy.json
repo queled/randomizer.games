@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le NEO-TWEWY Randomizer de SaltContainer randomise NEO: The World Ends with You, y compris sur PC.",
+    "en": "SaltContainer's NEO-TWEWY Randomizer randomizes NEO: The World Ends with You, PC version included."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort NEO: The World Ends with You en 2021.",
+        "en": "Square Enix releases NEO: The World Ends with You in 2021."
+      }
+    },
+    {
+      "date": "2021-2024",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "SaltContainer publie la version 0.1 le 30 octobre 2021, puis la 0.5 en novembre 2024, qui prend en charge la version PC malgré le chiffrement de ses fichiers.",
+        "en": "SaltContainer releases version 0.1 on October 30, 2021, then 0.5 in November 2024, which supports the PC version despite its encrypted files."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "SaltContainer/NEO-TWEWY-Randomizer (GitHub)",
+      "url": "https://github.com/SaltContainer/NEO-TWEWY-Randomizer"
+    }
+  ]
+}

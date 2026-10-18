@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Undernet Trader randomise le premier Mega Man Battle Network dans la Legacy Collection Vol. 1.",
+    "en": "Undernet Trader randomizes the first Mega Man Battle Network in the Legacy Collection Vol. 1."
+  },
+  "events": [
+    {
+      "date": "2001",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Mega Man Battle Network sur Game Boy Advance en 2001 ; il fait partie de la Mega Man Battle Network Legacy Collection sortie en 2023.",
+        "en": "Capcom releases Mega Man Battle Network on the Game Boy Advance in 2001; it is part of the Mega Man Battle Network Legacy Collection released in 2023."
+      }
+    },
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Undernet Trader",
+        "en": "Undernet Trader"
+      },
+      "text": {
+        "fr": "NecroCorey publie Undernet Trader le 9 mai 2023. Il randomise notamment les codes des puces de combat.",
+        "en": "NecroCorey releases Undernet Trader on May 9, 2023. It notably randomizes Battle Chip codes."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "NecroCorey/Undernet-Trader (GitHub)",
+      "url": "https://github.com/NecroCorey/Undernet-Trader"
+    }
+  ]
+}

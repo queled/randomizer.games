@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Le MM3D Randomizer apporte à Majora's Mask 3D un randomizer d'objets, sur le modèle de celui d'Ocarina of Time 3D.",
+    "en": "The MM3D Randomizer brings an item randomizer to Majora's Mask 3D, following the model of the Ocarina of Time 3D one."
+  },
+  "events": [
+    {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Grezzo et Nintendo sortent The Legend of Zelda: Majora's Mask 3D sur Nintendo 3DS en 2015.",
+        "en": "Grezzo and Nintendo release The Legend of Zelda: Majora's Mask 3D on the Nintendo 3DS in 2015."
+      }
+    },
+    {
+      "date": "2022-2024",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Tacoman369 commence le randomizer en septembre 2022, rejoint notamment par PhlexPlexico. Le projet passe sous l'organisation Z3DR, et la version 1.0 sort le 19 janvier 2024. Il se joue sur 3DS avec Luma3DS ou sur l'émulateur Citra.",
+        "en": "Tacoman369 starts the randomizer in September 2022, joined notably by PhlexPlexico. The project moves under the Z3DR organization, and version 1.0 comes out on January 19, 2024. It plays on 3DS with Luma3DS or on the Citra emulator."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Toujours en développement",
+        "en": "Still in development"
+      },
+      "text": {
+        "fr": "Des versions de développement sortent encore régulièrement en 2026.",
+        "en": "Development builds are still released regularly in 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Z3DR/MM3D_Randomizer (GitHub)",
+      "url": "https://github.com/Z3DR/MM3D_Randomizer"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "intro": {
+    "fr": "Metroid Prime Hunters a eu son randomizer, celui de toiletman74, avant d'être pris en charge par Randovania.",
+    "en": "Metroid Prime Hunters had its randomizer, toiletman74's, before being supported by Randovania."
+  },
+  "events": [
+    {
+      "date": "2006",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Metroid Prime Hunters sur Nintendo DS en 2006.",
+        "en": "Nintendo releases Metroid Prime Hunters on the Nintendo DS in 2006."
+      }
+    },
+    {
+      "date": "2022-2025",
+      "title": {
+        "fr": "Le randomizer de toiletman74",
+        "en": "toiletman74's randomizer"
+      },
+      "text": {
+        "fr": "toiletman74 publie la version 0.1.3 le 28 septembre 2022, puis la 0.2.8 en janvier 2025, avec des contributions de muffinjets.",
+        "en": "toiletman74 releases version 0.1.3 on September 28, 2022, then 0.2.8 in January 2025, with contributions from muffinjets."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Randovania",
+        "en": "Randovania"
+      },
+      "text": {
+        "fr": "Le projet n'est plus maintenu : son auteur recommande désormais Randovania, qui prend en charge Metroid Prime Hunters.",
+        "en": "The project is no longer maintained: its author now recommends Randovania, which supports Metroid Prime Hunters."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "toiletman74/MPHrandomizer (GitHub)",
+      "url": "https://github.com/toiletman74/MPHrandomizer"
+    },
+    {
+      "label": "Randovania",
+      "url": "https://randovania.org/"
+    }
+  ]
+}

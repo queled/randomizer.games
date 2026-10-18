@@ -1,0 +1,54 @@
+{
+  "intro": {
+    "fr": "Monster Sanctuary se randomise avec les mods de garfieldbanks, et se joue aussi en multiworld.",
+    "en": "Monster Sanctuary is randomized with garfieldbanks's mods, and can also be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Moi Rai Games et Team17 sortent Monster Sanctuary en 2020.",
+        "en": "Moi Rai Games and Team17 release Monster Sanctuary in 2020."
+      }
+    },
+    {
+      "date": "2023-2026",
+      "title": {
+        "fr": "Les mods de garfieldbanks",
+        "en": "garfieldbanks's mods"
+      },
+      "text": {
+        "fr": "garfieldbanks publie en avril 2023 une collection de mods pour BepInEx, dont des randomizers (« Lucky Randomizer » et « Random Randomizer »), avec les versions 1.0 à 3.0 en mai 2023 et des mises à jour jusqu'en 2026.",
+        "en": "In April 2023 garfieldbanks releases a collection of BepInEx mods, including randomizers (\"Lucky Randomizer\" and \"Random Randomizer\"), with versions 1.0 to 3.0 in May 2023 and updates until 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Monster Sanctuary est aussi jouable en multiworld.",
+        "en": "Monster Sanctuary can also be played in multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "garfieldbanks/MonsterSanctuaryMods (GitHub)",
+      "url": "https://github.com/garfieldbanks/MonsterSanctuaryMods"
+    },
+    {
+      "label": "Multiworld — Monster Sanctuary",
+      "url": "https://multiworld.gg/games/Monster%20Sanctuary/info/en"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "intro": {
+    "fr": "Le MTTNE Randomiser de DodoBirby randomise tous les objets de Metroid: The Threat Never Ends, fangame de Kelly Crystal.",
+    "en": "DodoBirby's MTTNE Randomiser randomizes every item in Metroid: The Threat Never Ends, Kelly Crystal's fangame."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "DodoBirby publie la version 0.1 le 20 juin 2022, puis la 1.0 le 9 juillet. Tous les emplacements d'objets sont randomisés, cartes d'accès et engrenages compris.",
+        "en": "DodoBirby releases version 0.1 on June 20, 2022, then 1.0 on July 9. Every item location is randomized, keycards and gears included."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "DodoBirby/MTTNE-Randomiser (GitHub)",
+      "url": "https://github.com/DodoBirby/MTTNE-Randomiser"
+    }
+  ]
+}

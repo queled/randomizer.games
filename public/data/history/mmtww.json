@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Wily Wars Randomizer de MaximumLance randomise Mega Man: The Wily Wars sur Mega Drive, et son auteur prépare une suite plus complète, The Genesis Paradox.",
+    "en": "MaximumLance's Wily Wars Randomizer randomizes Mega Man: The Wily Wars on the Mega Drive, and its author is preparing a fuller follow-up, The Genesis Paradox."
+  },
+  "events": [
+    {
+      "date": "1994",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Mega Man: The Wily Wars, compilation des trois premiers Mega Man, sur Mega Drive en 1994.",
+        "en": "Capcom releases Mega Man: The Wily Wars, a compilation of the first three Mega Man games, on the Mega Drive in 1994."
+      }
+    },
+    {
+      "date": "2021-2026",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "MaximumLance commence le randomizer en avril 2021 et le met encore à jour en 2026. Une nouvelle version, The Genesis Paradox, avec plus de fonctions, est en bêta.",
+        "en": "MaximumLance starts the randomizer in April 2021 and still updates it in 2026. A new version, The Genesis Paradox, with more features, is in beta."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "MaximumLance/Wily-Wars-Randomizer (GitHub)",
+      "url": "https://github.com/MaximumLance/Wily-Wars-Randomizer"
+    }
+  ]
+}

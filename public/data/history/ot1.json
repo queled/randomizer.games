@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Octopath Traveler a deux randomizers complémentaires : le Boss Randomizer de mastermind1919 et le Job Randomizer de MarvinXLII.",
+    "en": "Octopath Traveler has two complementary randomizers: mastermind1919's Boss Randomizer and MarvinXLII's Job Randomizer."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Octopath Traveler sur Nintendo Switch en 2018, puis sur PC.",
+        "en": "Square Enix releases Octopath Traveler on the Nintendo Switch in 2018, then on PC."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Boss et jobs",
+        "en": "Bosses and jobs"
+      },
+      "text": {
+        "fr": "En octobre 2020, mastermind1919 publie le Boss Randomizer pour la version Steam, qui change l'ordre des boss de l'histoire (version 3.1 en août 2021). En novembre, MarvinXLII publie le Job Randomizer, compatible Steam et Switch (version 0.2.1 en mars 2021), ainsi qu'un fork du Boss Randomizer compatible Switch.",
+        "en": "In October 2020, mastermind1919 releases the Boss Randomizer for the Steam version, which changes the story bosses (version 3.1 in August 2021). In November, MarvinXLII releases the Job Randomizer, compatible with Steam and Switch (version 0.2.1 in March 2021), as well as a Switch-compatible fork of the Boss Randomizer."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "mastermind1919/OctopathBossRandomizer (GitHub)",
+      "url": "https://github.com/mastermind1919/OctopathBossRandomizer"
+    },
+    {
+      "label": "MarvinXLII/OctopathTravelerJobRandomizer (GitHub)",
+      "url": "https://github.com/MarvinXLII/OctopathTravelerJobRandomizer"
+    }
+  ]
+}

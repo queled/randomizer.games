@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Palworld se randomise avec des mods qui mélangent les apparitions de Pals dans le monde.",
+    "en": "Palworld is randomized with mods that shuffle Pal spawns across the world."
+  },
+  "events": [
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Pocketpair sort Palworld en accès anticipé en 2024.",
+        "en": "Pocketpair releases Palworld in early access in 2024."
+      }
+    },
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Les randomizers",
+        "en": "The randomizers"
+      },
+      "text": {
+        "fr": "Quelques jours après la sortie du jeu, fin janvier 2024, DavidEMorales publie un Overworld Spawn Randomizer, un script Python qui génère un mod d'apparitions aléatoires. ComplexRobot propose aussi un randomizer sur Nexus Mods.",
+        "en": "A few days after the game's release, in late January 2024, DavidEMorales publishes an Overworld Spawn Randomizer, a Python script that generates a random spawn mod. ComplexRobot also offers a randomizer on Nexus Mods."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "DavidEMorales/PalworldOverworldSpawnRandomizer (GitHub)",
+      "url": "https://github.com/DavidEMorales/PalworldOverworldSpawnRandomizer"
+    },
+    {
+      "label": "Nexus Mods — ComplexRobot",
+      "url": "https://www.nexusmods.com/palworld/mods/1706"
+    }
+  ]
+}

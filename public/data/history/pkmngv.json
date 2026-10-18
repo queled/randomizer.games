@@ -1,0 +1,29 @@
+{
+  "intro": {
+    "fr": "Pokémon Gaia Version, hack de Rouge Feu, se randomise avec un fork de l'Universal Pokémon Randomizer créé par Spherical Ice.",
+    "en": "Pokémon Gaia Version, a FireRed hack, is randomized with a fork of the Universal Pokémon Randomizer created by Spherical Ice."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le fork Gaia",
+        "en": "The Gaia fork"
+      },
+      "text": {
+        "fr": "Spherical Ice adapte en juin 2019 l'Universal Pokémon Randomizer de Dabomstew au hack Pokémon Gaia Version (version gaia-1.7.3), jusqu'à la gaia-1.7.7 en juillet 2019.",
+        "en": "In June 2019 Spherical Ice adapts Dabomstew's Universal Pokémon Randomizer to the Pokémon Gaia Version hack (version gaia-1.7.3), up to gaia-1.7.7 in July 2019."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "sphericalice/universal-pokemon-randomizer (GitHub)",
+      "url": "https://github.com/sphericalice/universal-pokemon-randomizer"
+    },
+    {
+      "label": "PokéCommunity — Pokémon Gaia Version",
+      "url": "https://www.pokecommunity.com/showthread.php?t=326118"
+    }
+  ]
+}

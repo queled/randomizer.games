@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de MarvinXLII pour Octopath Traveler II mélange compétences, armes et statistiques des jobs, objets clés et chapitres.",
+    "en": "MarvinXLII's randomizer for Octopath Traveler II shuffles job skills, weapons and stats, key items and chapters."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Octopath Traveler II en 2023.",
+        "en": "Square Enix releases Octopath Traveler II in 2023."
+      }
+    },
+    {
+      "date": "2023-2026",
+      "title": {
+        "fr": "OT2R",
+        "en": "OT2R"
+      },
+      "text": {
+        "fr": "MarvinXLII publie le randomizer en août 2023 pour la version Steam : compétences et armes des jobs, coûts et puissance des compétences, statistiques, objets clés, licences de guilde et chapitres. La version 0.5.5 sort en août 2026.",
+        "en": "MarvinXLII releases the randomizer in August 2023 for the Steam version: job skills and weapons, skill costs and power, stats, key items, guild licenses and chapters. Version 0.5.5 comes out in August 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "MarvinXLII/OT2R (GitHub)",
+      "url": "https://github.com/MarvinXLII/OT2R"
+    }
+  ]
+}

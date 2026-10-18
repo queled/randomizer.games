@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Pokémon Noir 2 et Blanc 2 se randomisent notamment avec l'Universal Warp Randomizer, conçu à l'origine pour le streamer PointCrow.",
+    "en": "Pokémon Black 2 and White 2 are notably randomized with the Universal Warp Randomizer, originally made for streamer PointCrow."
+  },
+  "events": [
+    {
+      "date": "2012",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Game Freak et Nintendo sortent Pokémon Noir 2 et Blanc 2 sur Nintendo DS en 2012.",
+        "en": "Game Freak and Nintendo release Pokémon Black 2 and White 2 on the Nintendo DS in 2012."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Universal Warp Randomizer",
+        "en": "Universal Warp Randomizer"
+      },
+      "text": {
+        "fr": "L'Universal Warp Randomizer mélange les passages entre les zones des jeux Pokémon GBA et DS. Conçu à l'origine pour le streamer PointCrow, il existe en version web, créée pour corriger les problèmes des versions autonomes.",
+        "en": "The Universal Warp Randomizer shuffles the warps between areas of GBA and DS Pokémon games. Originally made for streamer PointCrow, it exists as a web version, built to fix issues with the standalone builds."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Universal Warp Randomizer",
+      "url": "https://warprandomizer.com/"
+    }
+  ]
+}

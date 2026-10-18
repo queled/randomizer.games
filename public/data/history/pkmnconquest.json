@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Pokémon Conquest se randomise avec RanseiLink, l'éditeur de ROM de Deijin27, qui comprend un randomizer.",
+    "en": "Pokémon Conquest is randomized with RanseiLink, Deijin27's ROM editor, which includes a randomizer."
+  },
+  "events": [
+    {
+      "date": "2012",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Koei Tecmo et The Pokémon Company sortent Pokémon Conquest sur Nintendo DS en 2012.",
+        "en": "Koei Tecmo and The Pokémon Company release Pokémon Conquest on the Nintendo DS in 2012."
+      }
+    },
+    {
+      "date": "2021-2025",
+      "title": {
+        "fr": "RanseiLink",
+        "en": "RanseiLink"
+      },
+      "text": {
+        "fr": "Deijin27 publie la version 1.0 de RanseiLink le 5 septembre 2021, puis enchaîne les versions majeures jusqu'à la 7.0 le 25 décembre 2025. L'outil comprend notamment un randomizer et un vérificateur de mods.",
+        "en": "Deijin27 releases RanseiLink version 1.0 on September 5, 2021, then major versions up to 7.0 on December 25, 2025. The tool notably includes a randomizer and a mod checker."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Deijin27/RanseiLink (GitHub)",
+      "url": "https://github.com/Deijin27/RanseiLink"
+    }
+  ]
+}

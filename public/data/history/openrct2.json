@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Le RollerCoaster Tycoon Randomizer de Die4Ever randomise RollerCoaster Tycoon 1 et 2 dans OpenRCT2, avec la prise en charge d'Archipelago.",
+    "en": "Die4Ever's RollerCoaster Tycoon Randomizer randomizes RollerCoaster Tycoon 1 and 2 in OpenRCT2, with Archipelago support."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Chris Sawyer sort RollerCoaster Tycoon 2 en 2002 ; OpenRCT2 en est une recréation libre par des fans.",
+        "en": "Chris Sawyer releases RollerCoaster Tycoon 2 in 2002; OpenRCT2 is an open-source fan recreation of it."
+      }
+    },
+    {
+      "date": "2021-2025",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Die4Ever commence le mod fin décembre 2021 et publie la version 0.1 en mars 2022. Crazycolbster en devient le principal contributeur, et le mod gagne la prise en charge d'Archipelago, jusqu'à la version 0.9.3 en août 2025.",
+        "en": "Die4Ever starts the mod in late December 2021 and releases version 0.1 in March 2022. Crazycolbster becomes its main contributor, and the mod gains Archipelago support, up to version 0.9.3 in August 2025."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Die4Ever/rollercoaster-tycoon-randomizer (GitHub)",
+      "url": "https://github.com/Die4Ever/rollercoaster-tycoon-randomizer"
+    },
+    {
+      "label": "Multiworld — OpenRCT2",
+      "url": "https://multiworld.gg/games/OpenRCT2/info/en"
+    }
+  ]
+}

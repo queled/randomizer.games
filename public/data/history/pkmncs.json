@@ -1,0 +1,44 @@
+{
+  "intro": {
+    "fr": "Pokémon Crystal Speedchoice, version de Crystal pensée pour le speedrun, sert de base à plusieurs randomizers : objets, carte, table des types.",
+    "en": "Pokémon Crystal Speedchoice, a speedrun-oriented version of Crystal, is the base for several randomizers: items, map, type chart."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "L'Item Randomizer",
+        "en": "The Item Randomizer"
+      },
+      "text": {
+        "fr": "ERC conçoit en 2018 son Pokémon Crystal Item Randomizer pour le mod Speedchoice : il mélange objets et badges, et sert aux courses sur racetime.gg.",
+        "en": "In 2018 ERC builds the Pokémon Crystal Item Randomizer for the Speedchoice mod: it shuffles items and badges, and is used for races on racetime.gg."
+      }
+    },
+    {
+      "date": "2021-2024",
+      "title": {
+        "fr": "Table des types et carte",
+        "en": "Type chart and map"
+      },
+      "text": {
+        "fr": "Le Type Chart Randomizer de NPO-197 (2021) randomise la table des types, et le Map Randomizer d'iFatRain (2022), repris par choatix, prend en charge les versions 7.2 et 7.31 de Speedchoice.",
+        "en": "NPO-197's Type Chart Randomizer (2021) randomizes the type chart, and iFatRain's Map Randomizer (2022), carried on by choatix, supports Speedchoice versions 7.2 and 7.31."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "erudnick-cohen/Pokemon-Crystal-Item-Randomizer (GitHub)",
+      "url": "https://github.com/erudnick-cohen/Pokemon-Crystal-Item-Randomizer"
+    },
+    {
+      "label": "NPO-197/PokemonTypeChartRandomizer (GitHub)",
+      "url": "https://github.com/NPO-197/PokemonTypeChartRandomizer"
+    },
+    {
+      "label": "choatix/pokemon-crystal-map-randomizer (GitHub)",
+      "url": "https://github.com/choatix/pokemon-crystal-map-randomizer"
+    }
+  ]
+}

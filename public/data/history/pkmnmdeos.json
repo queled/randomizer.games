@@ -1,0 +1,58 @@
+{
+  "intro": {
+    "fr": "Pokémon Donjon Mystère : Explorateurs du Ciel se randomise depuis 2015, d'abord avec mdrngzer, puis avec le SkyTemple Randomizer, et se joue aussi en multiworld.",
+    "en": "Pokémon Mystery Dungeon: Explorers of Sky has been randomized since 2015, first with mdrngzer, then with the SkyTemple Randomizer, and can also be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "2009",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Chunsoft et The Pokémon Company sortent Pokémon Donjon Mystère : Explorateurs du Ciel sur Nintendo DS en 2009.",
+        "en": "Chunsoft and The Pokémon Company release Pokémon Mystery Dungeon: Explorers of Sky on the Nintendo DS in 2009."
+      }
+    },
+    {
+      "date": "2015-2016",
+      "title": {
+        "fr": "mdrngzer",
+        "en": "mdrngzer"
+      },
+      "text": {
+        "fr": "Aissurteivos commence mdrngzer en août 2015 et publie la version 0.9.0 le 24 septembre 2015, puis la 0.10.1 en septembre 2016, avec vadixidav parmi les contributeurs.",
+        "en": "Aissurteivos starts mdrngzer in August 2015 and releases version 0.9.0 on September 24, 2015, then 0.10.1 in September 2016, with vadixidav among the contributors."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "SkyTemple et multiworld",
+        "en": "SkyTemple and multiworld"
+      },
+      "text": {
+        "fr": "Le SkyTemple Randomizer, distribué sur Project Pokémon, a pris la relève, et le jeu est aussi jouable en multiworld.",
+        "en": "The SkyTemple Randomizer, distributed on Project Pokémon, has taken over, and the game can also be played in multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Aissurteivos/mdrngzer (GitHub)",
+      "url": "https://github.com/Aissurteivos/mdrngzer"
+    },
+    {
+      "label": "Project Pokémon — SkyTemple Randomizer",
+      "url": "https://projectpokemon.org/home/files/file/4235-skytemple-randomizer/"
+    },
+    {
+      "label": "Multiworld — Pokémon Mystery Dungeon: Explorers of Sky",
+      "url": "https://multiworld.gg/games/Pokemon%20Mystery%20Dungeon%20Explorers%20of%20Sky/info/en"
+    }
+  ]
+}

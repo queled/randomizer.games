@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "L'Outer Wilds Archipelago Randomizer d'Ixrec rend Outer Wilds jouable en multiworld, avec un suivi intégré et des points de départ alternatifs.",
+    "en": "Ixrec's Outer Wilds Archipelago Randomizer makes Outer Wilds playable in multiworld, with a built-in tracker and alternate spawns."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Mobius Digital et Annapurna Interactive sortent Outer Wilds en 2019.",
+        "en": "Mobius Digital and Annapurna Interactive release Outer Wilds in 2019."
+      }
+    },
+    {
+      "date": "2023-2024",
+      "title": {
+        "fr": "Le mod Archipelago",
+        "en": "The Archipelago mod"
+      },
+      "text": {
+        "fr": "Ixrec commence le mod en décembre 2023 et publie une première version le 2 janvier 2024. En octobre 2024, le projet est déclaré complet : suivi en jeu, points de départ alternatifs, intégration du DLC et plusieurs récits possibles.",
+        "en": "Ixrec starts the mod in December 2023 and releases a first version on January 2, 2024. In October 2024, the project is declared feature complete: in-game tracker, alternate spawns, DLC integration and multiple story options."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Version 1.0",
+        "en": "Version 1.0"
+      },
+      "text": {
+        "fr": "La version 1.0 sort le 19 janvier 2026, puis la 1.3.1 en octobre 2026.",
+        "en": "Version 1.0 comes out on January 19, 2026, then 1.3.1 in October 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Ixrec/OuterWildsArchipelagoRandomizer (GitHub)",
+      "url": "https://github.com/Ixrec/OuterWildsArchipelagoRandomizer"
+    }
+  ]
+}

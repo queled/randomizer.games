@@ -1,0 +1,44 @@
+{
+  "intro": {
+    "fr": "Pour les Pokémon de la septième génération, on trouve l'Universal Pokémon Randomizer ZX et ses descendants, dont la version modifiée d'IronhideIvan et le fork FVX.",
+    "en": "For seventh-generation Pokémon, there is the Universal Pokémon Randomizer ZX and its descendants, including IronhideIvan's edit and the FVX fork."
+  },
+  "events": [
+    {
+      "date": "2014-2020",
+      "title": {
+        "fr": "De l'UPR à ZX",
+        "en": "From UPR to ZX"
+      },
+      "text": {
+        "fr": "Après l'Universal Pokémon Randomizer de Dabomstew (2014-2016), Ajarmar le reprend avec le fork ZX (version 1.0 en mai 2019), qui ajoute notamment les jeux 3DS en 2020.",
+        "en": "After Dabomstew's Universal Pokémon Randomizer (2014-2016), Ajarmar takes it over with the ZX fork (version 1.0 in May 2019), which notably adds 3DS games in 2020."
+      }
+    },
+    {
+      "date": "2024",
+      "title": {
+        "fr": "IronhideIvan et FVX",
+        "en": "IronhideIvan and FVX"
+      },
+      "text": {
+        "fr": "En 2024, IronhideIvan publie une version modifiée de ZX avec de nouvelles options de randomisation, et le fork FVX (version 1.0 en août 2024) prend la suite de ZX.",
+        "en": "In 2024, IronhideIvan releases an edit of ZX with new randomization options, and the FVX fork (version 1.0 in August 2024) succeeds ZX."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IronhideIvan/universal-pokemon-randomizer-zx (GitHub)",
+      "url": "https://github.com/IronhideIvan/universal-pokemon-randomizer-zx"
+    },
+    {
+      "label": "Ajarmar/universal-pokemon-randomizer-zx (GitHub)",
+      "url": "https://github.com/Ajarmar/universal-pokemon-randomizer-zx"
+    },
+    {
+      "label": "Universal Pokémon Randomizer FVX",
+      "url": "https://upr-fvx.github.io/universal-pokemon-randomizer-fvx/"
+    }
+  ]
+}

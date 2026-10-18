@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Final Fantasy X-2 HD Remaster se randomise avec le randomizer de shea093, qui mélange les vêtisphères et ajoute un mode difficile.",
+    "en": "Final Fantasy X-2 HD Remaster is randomized with shea093's randomizer, which shuffles dresspheres and adds a hard mode."
+  },
+  "events": [
+    {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Final Fantasy X/X-2 HD Remaster en 2013 ; Final Fantasy X-2 était sorti sur PlayStation 2 en 2003.",
+        "en": "Square Enix releases Final Fantasy X/X-2 HD Remaster in 2013; Final Fantasy X-2 had come out on the PlayStation 2 in 2003."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le randomizer de shea093",
+        "en": "shea093's randomizer"
+      },
+      "text": {
+        "fr": "shea093 publie en juin 2022 un randomizer pour Final Fantasy X-2 (version 0.1.0 le 8 juin), qui randomise les vêtisphères et propose un mode difficile. En septembre 2022, Stingerman06 publie aussi un pack de randomizers pour Final Fantasy X.",
+        "en": "In June 2022 shea093 releases a Final Fantasy X-2 randomizer (version 0.1.0 on June 8), which randomizes dresspheres and offers a hard mode. In September 2022, Stingerman06 also releases a randomizer pack for Final Fantasy X."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "shea093/FFX-2-Remaster-Randomizer (GitHub)",
+      "url": "https://github.com/shea093/FFX-2-Remaster-Randomizer"
+    },
+    {
+      "label": "Stingerman06/Stingerman06_FFXRandomizerPack (GitHub)",
+      "url": "https://github.com/Stingerman06/Stingerman06_FFXRandomizerPack"
+    }
+  ]
+}

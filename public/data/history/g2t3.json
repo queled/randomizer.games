@@ -1,0 +1,25 @@
+{
+  "intro": {
+    "fr": "Le Type Chart Randomizer de NPO-197 randomise la table des forces et faiblesses des types dans les premiers jeux Pokémon.",
+    "en": "NPO-197's Type Chart Randomizer randomizes the type matchup table in the early Pokémon games."
+  },
+  "events": [
+    {
+      "date": "2021-2024",
+      "title": {
+        "fr": "Le Type Chart Randomizer",
+        "en": "The Type Chart Randomizer"
+      },
+      "text": {
+        "fr": "NPO-197 publie la version 1.0.1 le 8 août 2021, puis la 1.6 en septembre 2024. L'outil prend en charge notamment Pokémon Rouge, Bleu, Jaune et Or.",
+        "en": "NPO-197 releases version 1.0.1 on August 8, 2021, then 1.6 in September 2024. The tool notably supports Pokémon Red, Blue, Yellow and Gold."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "NPO-197/PokemonTypeChartRandomizer (GitHub)",
+      "url": "https://github.com/NPO-197/PokemonTypeChartRandomizer"
+    }
+  ]
+}

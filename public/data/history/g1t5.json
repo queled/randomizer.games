@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Pour les Pokémon des générations I à V, le fork de brentspector prolonge l'Universal Pokémon Randomizer de Dabomstew en réunissant les apports de plusieurs autres forks.",
+    "en": "For Pokémon generations I to V, brentspector's fork carries on Dabomstew's Universal Pokémon Randomizer by gathering contributions from several other forks."
+  },
+  "events": [
+    {
+      "date": "2014-2016",
+      "title": {
+        "fr": "L'Universal Pokémon Randomizer",
+        "en": "The Universal Pokémon Randomizer"
+      },
+      "text": {
+        "fr": "Dabomstew publie l'Universal Pokémon Randomizer sur GitHub en mai 2014 ; son développement actif s'arrête en 2016.",
+        "en": "Dabomstew publishes the Universal Pokémon Randomizer on GitHub in May 2014; active development stops in 2016."
+      }
+    },
+    {
+      "date": "2019-2022",
+      "title": {
+        "fr": "Le fork de brentspector",
+        "en": "brentspector's fork"
+      },
+      "text": {
+        "fr": "brentspector reprend le randomizer en 2019 en intégrant des forks de 0xhexrobot, Ajarmar, challenert, Hejsil et d'autres : version 1.8.0 en octobre 2019, 1.10.3 en avril 2022.",
+        "en": "brentspector picks the randomizer up in 2019, merging forks by 0xhexrobot, Ajarmar, challenert, Hejsil and others: version 1.8.0 in October 2019, 1.10.3 in April 2022."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "brentspector/universal-pokemon-randomizer (GitHub)",
+      "url": "https://github.com/brentspector/universal-pokemon-randomizer"
+    },
+    {
+      "label": "Dabomstew/universal-pokemon-randomizer (GitHub)",
+      "url": "https://github.com/Dabomstew/universal-pokemon-randomizer"
+    }
+  ]
+}

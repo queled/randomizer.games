@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Gato Roboto Randomizer de CaptainDapper remélange les données de carte du jeu.",
+    "en": "CaptainDapper's Gato Roboto Randomizer reshuffles the game's map data."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "doinksoft et Devolver Digital sortent Gato Roboto en 2019.",
+        "en": "doinksoft and Devolver Digital release Gato Roboto in 2019."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "CaptainDapper publie la version 0.4 du randomizer en février 2020, puis la 0.4a en juin. Il s'utilise à côté de l'exécutable du jeu, après une sauvegarde des données de carte.",
+        "en": "CaptainDapper releases version 0.4 of the randomizer in February 2020, then 0.4a in June. It runs next to the game's executable, after backing up the map data."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "CaptainDapper/GatoRobotoRandomizer (GitHub)",
+      "url": "https://github.com/CaptainDapper/GatoRobotoRandomizer"
+    }
+  ]
+}

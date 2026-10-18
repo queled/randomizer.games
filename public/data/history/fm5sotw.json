@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Front Mission 5 a son randomizer, une application en console de KhalidSA réglée par un fichier de paramètres.",
+    "en": "Front Mission 5 has its randomizer, a console app by KhalidSA configured through a settings file."
+  },
+  "events": [
+    {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Front Mission 5: Scars of the War sur PlayStation 2 au Japon en 2005.",
+        "en": "Square Enix releases Front Mission 5: Scars of the War on the PlayStation 2 in Japan in 2005."
+      }
+    },
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "KhalidSA publie la version 1.0 du randomizer le 4 juillet 2023, puis la 1.2.3 en août. La difficulté de la randomisation se règle dans un fichier XML.",
+        "en": "KhalidSA releases version 1.0 of the randomizer on July 4, 2023, then 1.2.3 in August. The randomization difficulty is set in an XML file."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "KhaleedSA/FM5RandomizerApp (GitHub)",
+      "url": "https://github.com/KhaleedSA/FM5RandomizerApp"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Map Randomizer d'adrienntindall randomise les warps de Pokémon Or HeartGold et Argent SoulSilver.",
+    "en": "adrienntindall's Map Randomizer randomizes the warps in Pokémon HeartGold and SoulSilver."
+  },
+  "events": [
+    {
+      "date": "2009",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Game Freak et Nintendo sortent Pokémon Or HeartGold et Argent SoulSilver, remakes des jeux de la deuxième génération, sur Nintendo DS en 2009 au Japon.",
+        "en": "Game Freak and Nintendo release Pokémon HeartGold and SoulSilver, remakes of the second-generation games, on the Nintendo DS in 2009 in Japan."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le Map Randomizer",
+        "en": "The Map Randomizer"
+      },
+      "text": {
+        "fr": "adrienntindall commence le randomizer en mai 2022 et publie la version 1.2.7 le 22 mai, puis la 1.4.8 en juillet 2022.",
+        "en": "adrienntindall starts the randomizer in May 2022 and releases version 1.2.7 on May 22, then 1.4.8 in July 2022."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "adrienntindall/hgss-map-randomizer (GitHub)",
+      "url": "https://github.com/adrienntindall/hgss-map-randomizer"
+    }
+  ]
+}

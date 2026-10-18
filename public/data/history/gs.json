@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Golden Sun, créé par MarvinXLII, a été repris et enrichi par Valyssa.",
+    "en": "The Golden Sun randomizer, created by MarvinXLII, was taken over and expanded by Valyssa."
+  },
+  "events": [
+    {
+      "date": "2001",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Camelot et Nintendo sortent Golden Sun sur Game Boy Advance en 2001.",
+        "en": "Camelot and Nintendo release Golden Sun on the Game Boy Advance in 2001."
+      }
+    },
+    {
+      "date": "2023",
+      "title": {
+        "fr": "La version 2.0",
+        "en": "Version 2.0"
+      },
+      "text": {
+        "fr": "Avec l'accord de MarvinXLII, auteur du randomizer original, Valyssa publie le 27 février 2023 une version 2.0 qui ajoute surtout des options.",
+        "en": "With the agreement of MarvinXLII, the original randomizer's author, Valyssa releases a version 2.0 on February 27, 2023 that mostly adds options."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Valyssa/GS-Randomizer (GitHub)",
+      "url": "https://github.com/Valyssa/GS-Randomizer"
+    }
+  ]
+}

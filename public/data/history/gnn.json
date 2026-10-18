@@ -1,0 +1,25 @@
+{
+  "intro": {
+    "fr": "Le Mystery of Gensokyo Randomizer de Ryason55 randomise ce fangame inspiré d'Atlantis no Nazo.",
+    "en": "Ryason55's Mystery of Gensokyo Randomizer randomizes this fangame inspired by Atlantis no Nazo."
+  },
+  "events": [
+    {
+      "date": "2016-2023",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Ryason55 crée le dépôt du randomizer en novembre 2016 pour la version 1.01e du jeu, et publie la version 3.9 en juin 2023.",
+        "en": "Ryason55 creates the randomizer's repository in November 2016 for version 1.01e of the game, and releases version 3.9 in June 2023."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Ryason55/gnazo_randomizer (GitHub)",
+      "url": "https://github.com/Ryason55/gnazo_randomizer"
+    }
+  ]
+}

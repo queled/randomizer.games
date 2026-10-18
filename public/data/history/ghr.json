@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Grandia Randomizer d'Etsuna randomise la version PC de Grandia HD Remaster.",
+    "en": "Etsuna's Grandia Randomizer randomizes the PC version of Grandia HD Remaster."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Game Arts sort Grandia HD Remaster en 2019 ; Grandia était sorti à l'origine sur Saturn en 1997.",
+        "en": "Game Arts releases Grandia HD Remaster in 2019; Grandia originally came out on the Saturn in 1997."
+      }
+    },
+    {
+      "date": "2021-2022",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Etsuna publie une première bêta le 1er octobre 2021, puis la version 1.6 en novembre 2022. Le randomizer s'installe dans le dossier Steam du jeu et propose ses instructions en français comme en anglais.",
+        "en": "Etsuna releases a first beta on October 1, 2021, then version 1.6 in November 2022. The randomizer goes into the game's Steam folder and comes with instructions in both French and English."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Etsuna/GrandiaRandomizer (GitHub)",
+      "url": "https://github.com/Etsuna/GrandiaRandomizer"
+    }
+  ]
+}

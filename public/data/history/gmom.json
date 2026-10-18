@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Godzilla Randomizer de MaybeDatapod mélange les cartes et les quartiers généraux de Godzilla: Monster of Monsters sur NES.",
+    "en": "MaybeDatapod's Godzilla Randomizer shuffles the maps and base headquarters of Godzilla: Monster of Monsters on the NES."
+  },
+  "events": [
+    {
+      "date": "1988",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Toho sort Godzilla: Monster of Monsters sur NES en 1988.",
+        "en": "Toho releases Godzilla: Monster of Monsters on the NES in 1988."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "MaybeDatapod publie une première alpha le 15 août 2020, puis la 0.3 à la fin du mois. Il mélange la disposition des niveaux de chaque monde et l'emplacement des quartiers généraux.",
+        "en": "MaybeDatapod releases a first alpha on August 15, 2020, then 0.3 at the end of the month. It shuffles each world's stage layout and the base headquarters' locations."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "MaybeDatapod/godzilla-randomizer (GitHub)",
+      "url": "https://github.com/MaybeDatapod/godzilla-randomizer"
+    }
+  ]
+}

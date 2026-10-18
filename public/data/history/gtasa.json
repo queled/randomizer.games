@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Rainbomizer randomise Grand Theft Auto: San Andreas : couleurs, apparence du monde, et bien plus.",
+    "en": "Rainbomizer randomizes Grand Theft Auto: San Andreas: colors, the look of the world, and much more."
+  },
+  "events": [
+    {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Rockstar Games sort Grand Theft Auto: San Andreas sur PlayStation 2 en 2004.",
+        "en": "Rockstar Games releases Grand Theft Auto: San Andreas on the PlayStation 2 in 2004."
+      }
+    },
+    {
+      "date": "2019-2021",
+      "title": {
+        "fr": "Rainbomizer",
+        "en": "Rainbomizer"
+      },
+      "text": {
+        "fr": "Parik27 commence Rainbomizer en juillet 2019 et publie la version 1.0 le 29 septembre 2019, puis la 2.0 en février 2020, la 3.0 en juillet 2021 et la 3.2 en août 2021, avec The123robot parmi les principaux contributeurs. Il randomise notamment les couleurs des voitures et de l'interface, et l'apparence du monde (ciel, eau, éclairage, météo).",
+        "en": "Parik27 starts Rainbomizer in July 2019 and releases version 1.0 on September 29, 2019, then 2.0 in February 2020, 3.0 in July 2021 and 3.2 in August 2021, with The123robot among the main contributors. It randomizes, among other things, car and HUD colors, and the look of the world (sky, water, lighting, weather)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Parik27/SA.Rainbomizer (GitHub)",
+      "url": "https://github.com/Parik27/SA.Rainbomizer"
+    }
+  ]
+}

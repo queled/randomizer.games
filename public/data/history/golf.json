@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Golf Randomizer de gameboy9 remélange le Golf de la NES.",
+    "en": "gameboy9's Golf Randomizer reshuffles NES Golf."
+  },
+  "events": [
+    {
+      "date": "1984",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Golf sur Famicom en 1984, puis sur NES.",
+        "en": "Nintendo releases Golf on the Famicom in 1984, then on the NES."
+      }
+    },
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "gameboy9 publie la version 1.0 du Golf Randomizer le 10 février 2018, puis la 1.1.1 en avril.",
+        "en": "gameboy9 releases version 1.0 of the Golf Randomizer on February 10, 2018, then 1.1.1 in April."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "gameboy9/golfRando (GitHub)",
+      "url": "https://github.com/gameboy9/golfRando"
+    }
+  ]
+}

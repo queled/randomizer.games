@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Pokémon Écarlate et Violet se randomisent avec le randomizer créé par xLuma et repris par Gonzalo, qui couvre l'histoire principale et les DLC.",
+    "en": "Pokémon Scarlet and Violet are randomized with the randomizer created by xLuma and taken over by Gonzalo, which covers the main story and the DLC."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Game Freak et Nintendo sortent Pokémon Écarlate et Violet sur Nintendo Switch en 2022.",
+        "en": "Game Freak and Nintendo release Pokémon Scarlet and Violet on the Nintendo Switch in 2022."
+      }
+    },
+    {
+      "date": "2024-2025",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Le randomizer de xLuma, mis à jour par Gonzalo, est recréé le 3 octobre 2024 pour Windows, Mac et Linux, puis une version avec interface sort en février 2025.",
+        "en": "xLuma's randomizer, updated by Gonzalo, is re-created on October 3, 2024 for Windows, Mac and Linux, then a version with a user interface comes out in February 2025."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Gonzalooo/Scarlet-and-Violet-Randomizer (GitHub)",
+      "url": "https://github.com/Gonzalooo/Scarlet-and-Violet-Randomizer"
+    }
+  ]
+}

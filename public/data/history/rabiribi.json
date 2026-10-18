@@ -22,19 +22,8 @@
         "en": "The community randomizer"
       },
       "text": {
-        "fr": "Le dépôt du Rabi-Ribi Randomizer est créé en juillet 2017 sous le compte wcko87. Le projet se présente comme l'œuvre collective de la communauté speedrun de Rabi-Ribi : il mélange objets et œufs en garantissant que tout reste accessible, et peut aussi randomiser musiques et décors.",
-        "en": "The Rabi-Ribi Randomizer repository is created in July 2017 under the wcko87 account. The project presents itself as the collective work of the Rabi-Ribi speedrunning community: it shuffles items and eggs while ensuring everything stays reachable, and can also randomize music and backgrounds."
-      }
-    },
-    {
-      "date": "V2",
-      "title": {
-        "fr": "Version 2",
-        "en": "Version 2"
-      },
-      "text": {
-        "fr": "La V2 adopte un tout nouvel algorithme de vérification, qui représente le monde du jeu comme un graphe de nœuds. Elle permet des seeds plus complexes, le mélange des transitions entre cartes et la randomisation des obstacles.",
-        "en": "V2 adopts a brand new verification algorithm that represents the game world as a graph of nodes. It allows more complex seeds, map transition shuffle and obstacle randomization."
+        "fr": "Le dépôt du Rabi-Ribi Randomizer est créé en juillet 2017 sous le compte wcko87. Le projet se présente comme l'œuvre collective de la communauté speedrun de Rabi-Ribi : il mélange objets et œufs en garantissant que tout reste accessible, et peut aussi randomiser musiques et décors. Sa version 2 adopte ensuite un nouvel algorithme qui représente le monde du jeu comme un graphe de nœuds, ce qui permet le mélange des transitions entre cartes et la randomisation des obstacles.",
+        "en": "The Rabi-Ribi Randomizer repository is created in July 2017 under the wcko87 account. The project presents itself as the collective work of the Rabi-Ribi speedrunning community: it shuffles items and eggs while ensuring everything stays reachable, and can also randomize music and backgrounds. Its version 2 then adopts a new algorithm that represents the game world as a graph of nodes, enabling map transition shuffle and obstacle randomization."
       }
     },
     {

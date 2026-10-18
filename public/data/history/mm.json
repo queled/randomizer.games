@@ -1,0 +1,66 @@
+{
+  "intro": {
+    "fr": "Majora's Mask a été randomisé très tôt : dès 2013, le speedrunner DeathBasket mélangeait déjà ses objets. Le randomizer actuel (MMR), né en 2019, mélange objets, musiques et ennemis, et a sa propre scène de tournois.",
+    "en": "Majora's Mask was randomized very early: as soon as 2013, speedrunner DeathBasket was already shuffling its items. Today's randomizer (MMR), born in 2019, shuffles items, music and enemies, and has its own tournament scene."
+  },
+  "events": [
+    {
+      "date": "2000",
+      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "text": {
+        "fr": "Nintendo sort The Legend of Zelda: Majora's Mask sur Nintendo 64 en 2000.",
+        "en": "Nintendo releases The Legend of Zelda: Majora's Mask on the Nintendo 64 in 2000."
+      }
+    },
+    {
+      "date": "2013",
+      "title": { "fr": "Le randomiser de DeathBasket", "en": "DeathBasket's randomiser" },
+      "text": {
+        "fr": "En juillet 2013, le speedrunner DeathBasket présente sur le forum ZeldaSpeedRuns un hack qui randomise les objets donnés par les personnages, les coffres et d'autres sources, la seed dépendant du nom du fichier de sauvegarde. Une version datée du 25 octobre 2013 circule ensuite. Ce site recense 99 courses sur SpeedRunsLive dès 2013.",
+        "en": "In July 2013, speedrunner DeathBasket presents on the ZeldaSpeedRuns forum a hack that randomizes items given by characters, chests and other sources, the seed depending on the save file name. A version dated October 25, 2013 then circulates. This site counts 99 races on SpeedRunsLive as early as 2013."
+      }
+    },
+    {
+      "date": "2019",
+      "title": { "fr": "Naissance de MMR", "en": "MMR is born" },
+      "text": {
+        "fr": "Le 14 février 2019 démarre le dépôt az64/mm-rando, un randomizer d'objets, de musiques et d'ennemis pour Majora's Mask. Sa version maintenue aujourd'hui est celle de ZoeyZolotova. DeathBasket publie la même année une nouvelle version de son randomiser, aujourd'hui introuvable.",
+        "en": "On February 14, 2019, the az64/mm-rando repository starts: an item, music and enemy randomizer for Majora's Mask. Its version maintained today is ZoeyZolotova's. The same year, DeathBasket releases a new version of his randomiser, now lost."
+      }
+    },
+    {
+      "date": "2020",
+      "title": { "fr": "L'élan sur racetime.gg", "en": "Momentum on racetime.gg" },
+      "text": {
+        "fr": "Les courses passent sur racetime.gg et bondissent : 62 en 2019, 457 en 2020 sur ce site.",
+        "en": "Races move to racetime.gg and jump: 62 in 2019, 457 in 2020 on this site."
+      }
+    },
+    {
+      "date": "2023",
+      "title": { "fr": "Blitz, du SGDQ aux tournois", "en": "Blitz, from SGDQ to tournaments" },
+      "text": {
+        "fr": "En février 2023 démarre la saison 1 du Majora's Mask Randomizer Blitz Tournament (31 joueurs), un format plus court. Le Summer Games Done Quick 2023 accueille une partie Blitz, et ce site recense 765 courses dans l'année, un record.",
+        "en": "In February 2023 season 1 of the Majora's Mask Randomizer Blitz Tournament begins (31 players), a shorter format. Summer Games Done Quick 2023 hosts a Blitz run, and this site counts 765 races that year, a record."
+      }
+    },
+    {
+      "date": "2025",
+      "title": { "fr": "Saison 6 et nouveaux horizons", "en": "Season 6 and new horizons" },
+      "text": {
+        "fr": "La saison 6 du tournoi Majora's Mask Randomizer réunit 32 joueurs en septembre 2025. Le jeu se randomise aussi avec OoTMM, qui fusionne les versions Nintendo 64 d'Ocarina of Time et de Majora's Mask, et en multiworld avec Majora's Mask: Recompiled.",
+        "en": "Season 6 of the Majora's Mask Randomizer tournament gathers 32 players in September 2025. The game can also be randomized with OoTMM, which merges the Nintendo 64 versions of Ocarina of Time and Majora's Mask, and in multiworld with Majora's Mask: Recompiled."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "ZeldaSpeedRuns forum — Majora's Mask Randomiser (2013)", "url": "https://forums.zeldaspeedruns.com/index.php?topic=1319.0" },
+    { "label": "Pastebin — MM Randomiser 2013-10-25", "url": "https://pastebin.com/M0asDmXy" },
+    { "label": "Zelda64 Wiki — Majora's Mask Randomizer", "url": "https://zelda64.miraheze.org/wiki/Majora's_Mask_Randomizer" },
+    { "label": "az64/mm-rando (GitHub)", "url": "https://github.com/az64/mm-rando" },
+    { "label": "ZoeyZolotova/mm-rando (GitHub)", "url": "https://github.com/ZoeyZolotova/mm-rando" },
+    { "label": "start.gg — Majora's Mask Randomizer Blitz Tournament Season 1", "url": "https://start.gg/tournament/majora-s-mask-randomizer-blitz-tournament-season-1/event/main-tournament" },
+    { "label": "Challonge — Majora's Mask Randomizer Season 6", "url": "https://challonge.com/MMRSeason6" },
+    { "label": "racetime.gg — MMR", "url": "https://racetime.gg/mmr" }
+  ]
+}

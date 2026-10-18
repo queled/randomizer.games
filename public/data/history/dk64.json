@@ -1,0 +1,55 @@
+{
+  "intro": {
+    "fr": "Le DK64 Randomizer mélange les objets, les Kongs, les ennemis et bien plus dans Donkey Kong 64, entièrement depuis le navigateur. Lancé en 2021, il a connu une croissance rapide, jusqu'aux Games Done Quick.",
+    "en": "The DK64 Randomizer shuffles items, Kongs, enemies and much more in Donkey Kong 64, entirely from the browser. Started in 2021, it grew quickly, all the way to Games Done Quick."
+  },
+  "events": [
+    {
+      "date": "1999",
+      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "text": {
+        "fr": "Rare et Nintendo sortent Donkey Kong 64 sur Nintendo 64 en 1999.",
+        "en": "Rare and Nintendo release Donkey Kong 64 on the Nintendo 64 in 1999."
+      }
+    },
+    {
+      "date": "2021",
+      "title": { "fr": "Les débuts", "en": "The beginnings" },
+      "text": {
+        "fr": "2dos crée le dépôt du DK64 Randomizer le 24 janvier 2021 : un système de patch en Python et en C qui randomise le jeu sans quitter le navigateur. La première version publiée, la 0.1, sort le 27 avril 2021, suivie de la 0.2 en mai.",
+        "en": "2dos creates the DK64 Randomizer repository on January 24, 2021: a Python and C patching system that randomizes the game without leaving the browser. The first published version, 0.1, comes out on April 27, 2021, followed by 0.2 in May."
+      }
+    },
+    {
+      "date": "2022-2023",
+      "title": { "fr": "Premières courses et version 1.0", "en": "First races and version 1.0" },
+      "text": {
+        "fr": "Les premières courses recensées sur ce site, sur racetime.gg, datent de juin 2022. La version 1.0 est publiée le 23 juin 2023. theballaam96 est de loin le premier contributeur du projet, devant AlmostSeagull, Killklli et Lrauq.",
+        "en": "The first races listed on this site, on racetime.gg, date from June 2022. Version 1.0 is published on June 23, 2023. theballaam96 is by far the project's top contributor, ahead of AlmostSeagull, Killklli and Lrauq."
+      }
+    },
+    {
+      "date": "2024",
+      "title": { "fr": "L'envol", "en": "Taking off" },
+      "text": {
+        "fr": "Les courses passent de 319 en 2023 à 1 078 en 2024 sur ce site. En août, Flame Fatales 2024 accueille une partie « Season 3 Randomizer ».",
+        "en": "Races go from 319 in 2023 to 1,078 in 2024 on this site. In August, Flame Fatales 2024 hosts a \"Season 3 Randomizer\" run."
+      }
+    },
+    {
+      "date": "2025-2026",
+      "title": { "fr": "PAX East et AGDQ", "en": "PAX East and AGDQ" },
+      "text": {
+        "fr": "Le randomizer passe sur le Speedrun Stage de PAX East 2025, puis fait une course « Season 4 » à l'Awesome Games Done Quick 2026. Le projet, désormais en version 5, intègre aussi Archipelago, Crowd Control et un bot racetime.gg. Depuis le 25 septembre 2026, les qualifications du tournoi de la saison 5 se jouent sur racetime.gg.",
+        "en": "The randomizer appears on the PAX East 2025 Speedrun Stage, then gets a \"Season 4\" race at Awesome Games Done Quick 2026. The project, now at version 5, also integrates Archipelago, Crowd Control and a racetime.gg bot. Since September 25, 2026, qualifiers for the season 5 tournament are being played on racetime.gg."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "2dos/DK64-Randomizer (GitHub)", "url": "https://github.com/2dos/DK64-Randomizer" },
+    { "label": "DK64-Randomizer — Releases", "url": "https://github.com/2dos/DK64-Randomizer/releases" },
+    { "label": "DK64 Randomizer", "url": "https://dk64randomizer.com/" },
+    { "label": "Crowd Control — Donkey Kong 64 Randomizer", "url": "https://crowdcontrol.live/guides/donkeykong64randomizer/" },
+    { "label": "racetime.gg — DK64R", "url": "https://racetime.gg/dk64r" }
+  ]
+}

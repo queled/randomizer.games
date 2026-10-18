@@ -1,0 +1,63 @@
+{
+  "intro": {
+    "fr": "Le Final Fantasy Randomizer (FFR) mélange les objets, les boutiques, les sorts et les ennemis du premier Final Fantasy sur NES. Commencé par Entroper en 2016, il est développé en open source et tourne aujourd'hui directement dans le navigateur.",
+    "en": "The Final Fantasy Randomizer (FFR) shuffles the items, shops, spells and enemies of the first Final Fantasy on the NES. Started by Entroper in 2016, it is developed as open source and now runs straight in the browser."
+  },
+  "events": [
+    {
+      "date": "1987",
+      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "text": {
+        "fr": "Final Fantasy sort sur Famicom au Japon en 1987, puis sur NES en Amérique du Nord en 1990.",
+        "en": "Final Fantasy comes out on the Famicom in Japan in 1987, then on the NES in North America in 1990."
+      }
+    },
+    {
+      "date": "2016",
+      "title": { "fr": "Entroper se lance", "en": "Entroper gets started" },
+      "text": {
+        "fr": "Entroper crée le FF1 Randomizer : son premier commit date du 12 février 2016. Ce site recense 103 courses sur l'année 2016, sur SpeedRunsLive.",
+        "en": "Entroper creates the FF1 Randomizer: his first commit dates from February 12, 2016. This site counts 103 races over 2016, on SpeedRunsLive."
+      }
+    },
+    {
+      "date": "2017",
+      "title": { "fr": "La version 1.0", "en": "Version 1.0" },
+      "text": {
+        "fr": "La version 1.0 sort le 22 janvier 2017, suivie de cinq versions mineures dans l'année. Les courses s'envolent : 704 en 2017.",
+        "en": "Version 1.0 comes out on January 22, 2017, followed by five minor versions during the year. Races soar: 704 in 2017."
+      }
+    },
+    {
+      "date": "2018",
+      "title": { "fr": "La version 2.0 et un record", "en": "Version 2.0 and a record" },
+      "text": {
+        "fr": "La version 2.0 sort le 8 avril 2018. Avec 880 courses recensées, 2018 reste l'année la plus active du randomizer sur ce site.",
+        "en": "Version 2.0 comes out on April 8, 2018. With 880 listed races, 2018 remains the randomizer's busiest year on this site."
+      }
+    },
+    {
+      "date": "2020-2021",
+      "title": { "fr": "Version 3.0, navigateur et racetime.gg", "en": "Version 3.0, browser and racetime.gg" },
+      "text": {
+        "fr": "La version 3.0 sort le 19 janvier 2020. Écrit en C#, le randomizer tourne entièrement dans le navigateur grâce à Blazor, sans rien à installer, et chaque version garde sa propre adresse. En 2021, les courses passent de SpeedRunsLive à racetime.gg. Parmi les principaux contributeurs du projet figurent wildham0, Entroper et latzio.",
+        "en": "Version 3.0 comes out on January 19, 2020. Written in C#, the randomizer runs entirely in the browser thanks to Blazor, with nothing to install, and each version keeps its own address. In 2021, races move from SpeedRunsLive to racetime.gg. The project's main contributors include wildham0, Entroper and latzio."
+      }
+    },
+    {
+      "date": "2023",
+      "title": { "fr": "Flame Fatales et Archipelago", "en": "Flame Fatales and Archipelago" },
+      "text": {
+        "fr": "Flame Fatales 2023 accueille une partie Any% du randomizer. Final Fantasy est aussi jouable en multiworld sur Archipelago, dont les options sont entièrement gérées par FFR.",
+        "en": "Flame Fatales 2023 hosts an Any% run of the randomizer. Final Fantasy can also be played in multiworld on Archipelago, whose options are entirely handled by FFR."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "FiendsOfTheElements/FF1Randomizer (GitHub)", "url": "https://github.com/FiendsOfTheElements/FF1Randomizer" },
+    { "label": "FF1Randomizer — Releases", "url": "https://github.com/FiendsOfTheElements/FF1Randomizer/releases" },
+    { "label": "Final Fantasy Randomizer", "url": "https://finalfantasyrandomizer.com/" },
+    { "label": "Archipelago — Final Fantasy", "url": "https://archipelago.gg/games/Final%20Fantasy/info/en" },
+    { "label": "racetime.gg — FF1R", "url": "https://racetime.gg/ff1r" }
+  ]
+}

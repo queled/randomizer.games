@@ -1,0 +1,57 @@
+{
+  "intro": {
+    "fr": "SMZ3 réunit Super Metroid et A Link to the Past en une seule partie : les objets des deux jeux sont mélangés entre eux, et il faut finir les deux jeux pour gagner.",
+    "en": "SMZ3 combines Super Metroid and A Link to the Past into a single game: items from both are shuffled together, and you have to beat both games to win."
+  },
+  "events": [
+    {
+      "date": "1991-1994",
+      "title": { "fr": "Les jeux d'origine", "en": "The original games" },
+      "text": {
+        "fr": "A Link to the Past (1991) et Super Metroid (1994) sortent tous deux sur Super Nintendo, et ont chacun leur propre randomizer depuis le milieu des années 2010.",
+        "en": "A Link to the Past (1991) and Super Metroid (1994) both come out on the Super Nintendo, and each has had its own randomizer since the mid-2010s."
+      }
+    },
+    {
+      "date": "2018",
+      "title": { "fr": "Premières courses et GDQ Express", "en": "First races and GDQ Express" },
+      "text": {
+        "fr": "Les premières courses SMZ3 recensées sur ce site datent du 18 mai 2018, sur SpeedRunsLive : 417 dans l'année. En octobre 2018, la Games Done Quick Express accueille une partie à deux joueurs.",
+        "en": "The first SMZ3 races listed on this site date from May 18, 2018, on SpeedRunsLive: 417 that year. In October 2018, Games Done Quick Express hosts a two-player run."
+      }
+    },
+    {
+      "date": "2019",
+      "title": { "fr": "La V11 et le SGDQ", "en": "V11 and SGDQ" },
+      "text": {
+        "fr": "Le dépôt tewtal/SMZ3Randomizer, « Super Metroid & A Link to the Past Crossover Item Randomizer V11 », est créé en avril 2019 ; le site du randomizer est samus.link. Le podcast Go Mode parle de SMZ3 dès avril, et le Summer Games Done Quick 2019 accueille une partie en co-op, « Beat the games (but also a race) ».",
+        "en": "The tewtal/SMZ3Randomizer repository, \"Super Metroid & A Link to the Past Crossover Item Randomizer V11\", is created in April 2019; the randomizer's site is samus.link. The Go Mode podcast discusses SMZ3 as early as April, and Summer Games Done Quick 2019 hosts a co-op run, \"Beat the games (but also a race)\"."
+      }
+    },
+    {
+      "date": "2020-2021",
+      "title": { "fr": "racetime.gg et multiworld", "en": "racetime.gg and multiworld" },
+      "text": {
+        "fr": "Les courses passent de SpeedRunsLive à racetime.gg entre 2020 et 2021. SMZ3 se joue aussi en multiworld, et il est pris en charge par Archipelago.",
+        "en": "Races move from SpeedRunsLive to racetime.gg between 2020 and 2021. SMZ3 can also be played in multiworld, and it is supported by Archipelago."
+      }
+    },
+    {
+      "date": "2026",
+      "title": { "fr": "Les variantes", "en": "Variants" },
+      "text": {
+        "fr": "SMZ3 Cas' Randomizer, de Vivelin, est un fork de la version originale pensé pour une expérience plus décontractée. De 2021 à 2025, ce site recense entre 184 et 346 courses SMZ3 par an sur racetime.gg.",
+        "en": "Vivelin's SMZ3 Cas' Randomizer is a fork of the original version designed for a more casual experience. From 2021 to 2025, this site counts between 184 and 346 SMZ3 races a year on racetime.gg."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "tewtal/SMZ3Randomizer (GitHub)", "url": "https://github.com/tewtal/SMZ3Randomizer" },
+    { "label": "samus.link", "url": "https://samus.link/" },
+    { "label": "Vivelin/SMZ3Randomizer (GitHub)", "url": "https://github.com/Vivelin/SMZ3Randomizer" },
+    { "label": "Go Mode podcast — 18: Ganon's Tower Part 2 and Ganon + SMZ3R (2019)", "url": "https://go-mode-a-link-to-the-past-randomizer-podcast.castos.com/episodes/18-ganons-tower-part-2-and-ganon-smz3r-alttp-rumors" },
+    { "label": "Super Metroid speedrunning wiki — Randomizers", "url": "https://wiki.supermetroid.run/Randomizers" },
+    { "label": "Archipelago — SMZ3", "url": "https://archipelago.gg/games/SMZ3/info/en" },
+    { "label": "racetime.gg — SMZ3", "url": "https://racetime.gg/smz3" }
+  ]
+}

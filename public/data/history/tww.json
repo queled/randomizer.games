@@ -1,0 +1,64 @@
+{
+  "intro": {
+    "fr": "Le Wind Waker Randomizer de LagoLunatic mélange tous les objets de The Wind Waker et ouvre le monde dès le départ, en supprimant au passage les cinématiques et en accélérant la navigation. Sorti en 2018, il a sa propre scène de tournois, saison après saison.",
+    "en": "LagoLunatic's Wind Waker Randomizer shuffles every item in The Wind Waker and opens the world from the start, removing cutscenes and speeding up sailing along the way. Released in 2018, it has its own tournament scene, season after season."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "text": {
+        "fr": "The Legend of Zelda: The Wind Waker sort sur GameCube au Japon en décembre 2002, puis en 2003 en Amérique du Nord et en Europe.",
+        "en": "The Legend of Zelda: The Wind Waker comes out on the GameCube in Japan in December 2002, then in 2003 in North America and Europe."
+      }
+    },
+    {
+      "date": "2018",
+      "title": { "fr": "La version 1.0", "en": "Version 1.0" },
+      "text": {
+        "fr": "LagoLunatic publie la première version du Wind Waker Randomizer le 5 juillet 2018 : tous les objets mélangés, un monde ouvert dès le début, des cinématiques supprimées, une navigation et des dialogues accélérés, le choix des types de lieux pouvant contenir des objets de progression, et en option le mélange des entrées de donjons et des clés hors de leur donjon. Les premières courses recensées sur ce site ont lieu deux jours plus tard, et quatre versions suivent avant la fin de l'année.",
+        "en": "LagoLunatic releases the first version of the Wind Waker Randomizer on July 5, 2018: every item shuffled, an open world from the start, cutscenes removed, faster sailing and dialogue, a choice of which kinds of locations can hold progress items, and optionally shuffled dungeon entrances and keys outside their dungeon. The first races listed on this site take place two days later, and four versions follow before the end of the year."
+      }
+    },
+    {
+      "date": "2019",
+      "title": { "fr": "À la GDQ Express", "en": "At GDQ Express" },
+      "text": {
+        "fr": "La Games Done Quick Express 2019 accueille une partie du randomizer, en septembre.",
+        "en": "Games Done Quick Express 2019 hosts a randomizer run, in September."
+      }
+    },
+    {
+      "date": "2020-2021",
+      "title": { "fr": "racetime.gg et un pic d'activité", "en": "racetime.gg and a peak of activity" },
+      "text": {
+        "fr": "Les courses passent sur racetime.gg en 2020. La version 1.9.0 sort en février 2021, et cette année-là ce site recense 846 courses, un record.",
+        "en": "Races move to racetime.gg in 2020. Version 1.9.0 comes out in February 2021, and that year this site counts 846 races, a record."
+      }
+    },
+    {
+      "date": "2023",
+      "title": { "fr": "La version 1.10", "en": "Version 1.10" },
+      "text": {
+        "fr": "La version 1.10.0 sort le 6 janvier 2023. Le jeu est aussi pris en charge par Archipelago pour le multiworld.",
+        "en": "Version 1.10.0 comes out on January 6, 2023. The game is also supported by Archipelago for multiworld."
+      }
+    },
+    {
+      "date": "2026",
+      "title": { "fr": "Saison 9 et co-op au SGDQ", "en": "Season 9 and co-op at SGDQ" },
+      "text": {
+        "fr": "La saison 9 du tournoi TWW Randomizer réunit 23 joueurs en bracket, et le Miniblins Tournament 2026 en réunit 28. Le Summer Games Done Quick 2026 accueille une partie en co-op.",
+        "en": "Season 9 of the TWW Randomizer tournament gathers 23 players in its bracket, and the 2026 Miniblins Tournament 28. Summer Games Done Quick 2026 hosts a co-op run."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "LagoLunatic/wwrando (GitHub)", "url": "https://github.com/LagoLunatic/wwrando" },
+    { "label": "wwrando — Releases", "url": "https://github.com/LagoLunatic/wwrando/releases" },
+    { "label": "Wind Waker Randomizer — site officiel", "url": "https://lagolunatic.github.io/wwrando/" },
+    { "label": "start.gg — TWW Randomizer Season 9", "url": "https://start.gg/tournament/tww-randomizer-season-9/event/brackets" },
+    { "label": "Archipelago — The Wind Waker", "url": "https://archipelago.gg/games/The%20Wind%20Waker/info/en" },
+    { "label": "racetime.gg — TWWR", "url": "https://racetime.gg/twwr" }
+  ]
+}

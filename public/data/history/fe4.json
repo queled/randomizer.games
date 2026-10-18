@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Fire Emblem: Genealogy of the Holy War se randomise avec Yune, le randomizer universel de Fire Emblem de lushen124.",
+    "en": "Fire Emblem: Genealogy of the Holy War is randomized with Yune, lushen124's universal Fire Emblem randomizer."
+  },
+  "events": [
+    {
+      "date": "1996",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Intelligent Systems et Nintendo sortent Fire Emblem: Genealogy of the Holy War sur Super Famicom au Japon en 1996.",
+        "en": "Intelligent Systems and Nintendo release Fire Emblem: Genealogy of the Holy War on the Super Famicom in Japan in 1996."
+      }
+    },
+    {
+      "date": "2018-2021",
+      "title": {
+        "fr": "Yune",
+        "en": "Yune"
+      },
+      "text": {
+        "fr": "lushen124 recommence en mars 2018 son randomizer universel de Fire Emblem, Yune : l'original, écrit en Visual Basic, couvrait tous les épisodes GBA mais seulement sous Windows ; la nouvelle version, multiplateforme, ajoute les jeux un par un. La version 0.8 sort en mars 2019, la 0.9.3 en juin 2021.",
+        "en": "In March 2018 lushen124 restarts the universal Fire Emblem randomizer, Yune: the original, written in Visual Basic, covered all GBA games but only on Windows; the new, cross-platform version adds the games one by one. Version 0.8 comes out in March 2019, 0.9.3 in June 2021."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "lushen124/Universal-FE-Randomizer (GitHub)",
+      "url": "https://github.com/lushen124/Universal-FE-Randomizer"
+    }
+  ]
+}

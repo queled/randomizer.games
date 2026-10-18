@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Le randomizer d'Ender Lilies, de Trexounay, est sorti quelques semaines après le jeu, et se joue aussi en multiworld.",
+    "en": "Trexounay's Ender Lilies randomizer came out a few weeks after the game, and can also be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Live Wire, Adglobe et Binary Haze Interactive sortent Ender Lilies: Quietus of the Knights en 2021.",
+        "en": "Live Wire, Adglobe and Binary Haze Interactive release Ender Lilies: Quietus of the Knights in 2021."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Trexounay publie la version 1.0 du randomizer le 17 août 2021. Lurch9229 en propose un suivi d'objets et de carte pour EmoTracker et PopTracker.",
+        "en": "Trexounay releases version 1.0 of the randomizer on August 17, 2021. Lurch9229 provides an item and map tracker for EmoTracker and PopTracker."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Version 2.4",
+        "en": "Version 2.4"
+      },
+      "text": {
+        "fr": "La version 2.4.4 sort en janvier 2026. Le jeu est aussi jouable en multiworld.",
+        "en": "Version 2.4.4 comes out in January 2026. The game can also be played in multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Trexounay/EnderLilies.Randomizer (GitHub)",
+      "url": "https://github.com/Trexounay/EnderLilies.Randomizer"
+    },
+    {
+      "label": "Multiworld — Ender Lilies",
+      "url": "https://multiworld.gg/games/Ender%20Lilies/info/en"
+    }
+  ]
+}

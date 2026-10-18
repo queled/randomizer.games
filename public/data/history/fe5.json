@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Fire Emblem: Thracia 776 se randomise avec le FE5 Randomiser de dD_ShockTrooper, reconstruit à partir du randomizer original de NNadnerd.",
+    "en": "Fire Emblem: Thracia 776 is randomized with dD_ShockTrooper's FE5 Randomiser, rebuilt from NNadnerd's original randomizer."
+  },
+  "events": [
+    {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Intelligent Systems et Nintendo sortent Fire Emblem: Thracia 776 sur Super Famicom au Japon en 1999.",
+        "en": "Intelligent Systems and Nintendo release Fire Emblem: Thracia 776 on the Super Famicom in Japan in 1999."
+      }
+    },
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le FE5 Randomiser",
+        "en": "The FE5 Randomiser"
+      },
+      "text": {
+        "fr": "dD_ShockTrooper publie le FE5 Randomiser en 2019 (version 1.04 en octobre), reconstruit de zéro en s'appuyant sur la documentation de Zane Avernathy, le design de Klokinator et le code du randomizer original de NNadnerd. Kalieum en présente aussi un sur FEUniverse.",
+        "en": "dD_ShockTrooper releases the FE5 Randomiser in 2019 (version 1.04 in October), rebuilt from scratch using Zane Avernathy's documentation, Klokinator's design and the code of NNadnerd's original randomizer. Kalieum also presents one on FEUniverse."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "dDShockTrooper/FE5-Randomiser-Releases (GitHub)",
+      "url": "https://github.com/dDShockTrooper/FE5-Randomiser-Releases"
+    },
+    {
+      "label": "FEUniverse — Fire Emblem 5 Randomiser",
+      "url": "https://feuniverse.us/t/fire-emblem-5-randomiser/13003"
+    }
+  ]
+}

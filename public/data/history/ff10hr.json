@@ -1,0 +1,55 @@
+{
+  "intro": {
+    "fr": "Final Fantasy X HD Remaster se randomise avec plusieurs outils de la communauté, du pack de Stingerman06 à FFXRando de nyterage.",
+    "en": "Final Fantasy X HD Remaster is randomized with several community tools, from Stingerman06's pack to nyterage's FFXRando."
+  },
+  "events": [
+    {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Final Fantasy X/X-2 HD Remaster en 2013, remaster des jeux PlayStation 2 de 2001 et 2003.",
+        "en": "Square Enix releases Final Fantasy X/X-2 HD Remaster in 2013, a remaster of the 2001 and 2003 PlayStation 2 games."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Premiers outils",
+        "en": "First tools"
+      },
+      "text": {
+        "fr": "En juin 2022, shea093 publie un randomizer pour Final Fantasy X-2 (vêtisphères) doublé d'un mode difficile. En septembre 2022, Stingerman06 propose un pack de randomizers pour la version Steam de Final Fantasy X, dont un randomizer de statistiques des chimères.",
+        "en": "In June 2022, shea093 releases a Final Fantasy X-2 randomizer (dresspheres) with a hard mode. In September 2022, Stingerman06 offers a randomizer pack for the Steam version of Final Fantasy X, including an aeon stat randomizer."
+      }
+    },
+    {
+      "date": "2025",
+      "title": {
+        "fr": "FFXRando",
+        "en": "FFXRando"
+      },
+      "text": {
+        "fr": "nyterage lance FFXRando en mars 2025, un randomizer pour de nombreux éléments de Final Fantasy X, jusqu'à la version 1.3.1 en août 2025.",
+        "en": "nyterage launches FFXRando in March 2025, a randomizer for many elements of Final Fantasy X, up to version 1.3.1 in August 2025."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Stingerman06/Stingerman06_FFXRandomizerPack (GitHub)",
+      "url": "https://github.com/Stingerman06/Stingerman06_FFXRandomizerPack"
+    },
+    {
+      "label": "nyterage/FFXRando (GitHub)",
+      "url": "https://github.com/nyterage/FFXRando"
+    },
+    {
+      "label": "shea093/FFX-2-Remaster-Randomizer (GitHub)",
+      "url": "https://github.com/shea093/FFX-2-Remaster-Randomizer"
+    }
+  ]
+}

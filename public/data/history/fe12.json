@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Raddomizer randomise Fire Emblem: New Mystery of the Emblem avec une interface simple et des instructions intégrées.",
+    "en": "Raddomizer randomizes Fire Emblem: New Mystery of the Emblem with a simple interface and built-in instructions."
+  },
+  "events": [
+    {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Intelligent Systems et Nintendo sortent Fire Emblem: New Mystery of the Emblem sur Nintendo DS au Japon en 2010.",
+        "en": "Intelligent Systems and Nintendo release Fire Emblem: New Mystery of the Emblem on the Nintendo DS in Japan in 2010."
+      }
+    },
+    {
+      "date": "2022-2023",
+      "title": {
+        "fr": "Raddomizer",
+        "en": "Raddomizer"
+      },
+      "text": {
+        "fr": "Errant (errantSquam) et Radd publient Raddomizer en juillet 2022 (version 0.9.1), puis la 0.9.8 en octobre 2023, avec Vennobennu parmi les contributeurs. Il suffit de déposer le dossier de la ROM décompressée dans le programme.",
+        "en": "Errant (errantSquam) and Radd release Raddomizer in July 2022 (version 0.9.1), then 0.9.8 in October 2023, with Vennobennu among the contributors. You just drop the unpacked ROM folder into the program."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "errantSquam/Raddomizer (GitHub)",
+      "url": "https://github.com/errantSquam/Raddomizer"
+    }
+  ]
+}

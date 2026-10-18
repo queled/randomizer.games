@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Odd Rhythm, de rambon99, randomise Fire Emblem Awakening à partir des fichiers du jeu, sans programme externe.",
+    "en": "rambon99's Odd Rhythm randomizes Fire Emblem Awakening from the game's files, with no external program."
+  },
+  "events": [
+    {
+      "date": "2012",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Intelligent Systems et Nintendo sortent Fire Emblem Awakening sur Nintendo 3DS en 2012 au Japon, puis en Occident en 2013.",
+        "en": "Intelligent Systems and Nintendo release Fire Emblem Awakening on the Nintendo 3DS in 2012 in Japan, then in the West in 2013."
+      }
+    },
+    {
+      "date": "2018-2024",
+      "title": {
+        "fr": "Odd Rhythm",
+        "en": "Odd Rhythm"
+      },
+      "text": {
+        "fr": "rambon99 crée le dépôt en avril 2018 et publie une version en avril 2024, puis la 0.7 en mai 2024.",
+        "en": "rambon99 creates the repository in April 2018 and publishes a release in April 2024, then 0.7 in May 2024."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "rambon99/Fire-Emblem-Awakening-Randomizer (GitHub)",
+      "url": "https://github.com/rambon99/Fire-Emblem-Awakening-Randomizer"
+    }
+  ]
+}

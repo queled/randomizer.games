@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de joaomlsantos pour Digimon World Dawn et Dusk ajoute aussi de nombreuses améliorations de confort.",
+    "en": "joaomlsantos's randomizer for Digimon World Dawn and Dusk also adds many quality-of-life improvements."
+  },
+  "events": [
+    {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bandai Namco sort Digimon World Dawn et Digimon World Dusk sur Nintendo DS en 2007.",
+        "en": "Bandai Namco releases Digimon World Dawn and Digimon World Dusk on the Nintendo DS in 2007."
+      }
+    },
+    {
+      "date": "2024-2026",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "joaomlsantos commence en août 2024 un randomizer doublé d'un patch de confort pour les versions américaines des deux jeux. La version 0.1.0 sort en novembre 2024, puis la 0.2.1 en mai 2026.",
+        "en": "In August 2024 joaomlsantos starts a randomizer that doubles as a quality-of-life patcher for the US versions of both games. Version 0.1.0 comes out in November 2024, then 0.2.1 in May 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "joaomlsantos/DWDDRandomizer (GitHub)",
+      "url": "https://github.com/joaomlsantos/DWDDRandomizer"
+    }
+  ]
+}

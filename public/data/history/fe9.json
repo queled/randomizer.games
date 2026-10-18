@@ -1,0 +1,54 @@
+{
+  "intro": {
+    "fr": "Fire Emblem: Path of Radiance se randomise avec Yune, le randomizer universel de lushen124, et avec l'éditeur-randomizer de personnages de jespoke.",
+    "en": "Fire Emblem: Path of Radiance is randomized with lushen124's universal randomizer Yune, and with jespoke's character editor and randomizer."
+  },
+  "events": [
+    {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Intelligent Systems et Nintendo sortent Fire Emblem: Path of Radiance sur GameCube en 2005.",
+        "en": "Intelligent Systems and Nintendo release Fire Emblem: Path of Radiance on the GameCube in 2005."
+      }
+    },
+    {
+      "date": "2018-2021",
+      "title": {
+        "fr": "Yune",
+        "en": "Yune"
+      },
+      "text": {
+        "fr": "lushen124 recommence en mars 2018 son randomizer universel de Fire Emblem, Yune : l'original, écrit en Visual Basic, couvrait tous les épisodes GBA mais seulement sous Windows ; la nouvelle version, multiplateforme, ajoute les jeux un par un. La version 0.8 sort en mars 2019, la 0.9.3 en juin 2021.",
+        "en": "In March 2018 lushen124 restarts the universal Fire Emblem randomizer, Yune: the original, written in Visual Basic, covered all GBA games but only on Windows; the new, cross-platform version adds the games one by one. Version 0.8 comes out in March 2019, 0.9.3 in June 2021."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "L'outil de jespoke",
+        "en": "jespoke's tool"
+      },
+      "text": {
+        "fr": "jespoke propose sur FEUniverse un éditeur de personnages et randomizer pour Path of Radiance, en version 1.3.2.",
+        "en": "jespoke offers on FEUniverse a character editor and randomizer for Path of Radiance, at version 1.3.2."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "lushen124/Universal-FE-Randomizer (GitHub)",
+      "url": "https://github.com/lushen124/Universal-FE-Randomizer"
+    },
+    {
+      "label": "FEUniverse — FE9 Character Editor and Randomizer",
+      "url": "https://feuniverse.us/t/fe9-character-editor-and-randomizer-v1-3-2/4979"
+    }
+  ]
+}

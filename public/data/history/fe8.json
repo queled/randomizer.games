@@ -1,0 +1,58 @@
+{
+  "intro": {
+    "fr": "Fire Emblem: The Sacred Stones se randomise avec Yune, le randomizer universel de lushen124, avec des ROM qui se randomisent elles-mêmes, et a même son donjon roguelike.",
+    "en": "Fire Emblem: The Sacred Stones is randomized with lushen124's universal randomizer Yune, with self-randomizing ROMs, and even has its roguelike dungeon."
+  },
+  "events": [
+    {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Intelligent Systems et Nintendo sortent Fire Emblem: The Sacred Stones sur Game Boy Advance en 2004.",
+        "en": "Intelligent Systems and Nintendo release Fire Emblem: The Sacred Stones on the Game Boy Advance in 2004."
+      }
+    },
+    {
+      "date": "2018-2021",
+      "title": {
+        "fr": "Yune",
+        "en": "Yune"
+      },
+      "text": {
+        "fr": "lushen124 recommence en mars 2018 son randomizer universel de Fire Emblem, Yune : l'original, écrit en Visual Basic, couvrait tous les épisodes GBA mais seulement sous Windows ; la nouvelle version, multiplateforme, ajoute les jeux un par un. La version 0.8 sort en mars 2019, la 0.9.3 en juin 2021.",
+        "en": "In March 2018 lushen124 restarts the universal Fire Emblem randomizer, Yune: the original, written in Visual Basic, covered all GBA games but only on Windows; the new, cross-platform version adds the games one by one. Version 0.8 comes out in March 2019, 0.9.3 in June 2021."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "ROM auto-randomisées et roguelike",
+        "en": "Self-randomizing ROMs and a roguelike"
+      },
+      "text": {
+        "fr": "La communauté propose aussi des ROM de The Sacred Stones qui se randomisent elles-mêmes, dont une version 2024 de Vesly, ainsi que Fire Emblem: Illusory Dungeon, un roguelike construit sur le jeu.",
+        "en": "The community also offers self-randomizing ROMs of The Sacred Stones, including Vesly's 2024 version, as well as Fire Emblem: Illusory Dungeon, a roguelike built on the game."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "lushen124/Universal-FE-Randomizer (GitHub)",
+      "url": "https://github.com/lushen124/Universal-FE-Randomizer"
+    },
+    {
+      "label": "FEUniverse — FE8 Self-Randomizing ROM (Vesly)",
+      "url": "https://feuniverse.us/t/fe8-self-randomizing-rom-vesly-2024-version/25713"
+    },
+    {
+      "label": "FEUniverse — Fire Emblem: Illusory Dungeon",
+      "url": "https://feuniverse.us/t/fire-emblem-illusory-dungeon-a-fire-emblem-rogue-like-fe8/20754"
+    }
+  ]
+}

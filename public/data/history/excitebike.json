@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le ExciteBike Randomizer de gameboy9 remélange les obstacles, les couleurs des pistes et la vitesse des motos du classique de la NES.",
+    "en": "gameboy9's ExciteBike Randomizer reshuffles the obstacles, track colors and bike speeds of the NES classic."
+  },
+  "events": [
+    {
+      "date": "1984",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Excitebike sur Famicom en 1984, puis sur NES.",
+        "en": "Nintendo releases Excitebike on the Famicom in 1984, then on the NES."
+      }
+    },
+    {
+      "date": "2018-2020",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "gameboy9 publie la version 1.0 le 31 mars 2018, puis la 2.0 en juin 2018 et la 3.0 en avril 2020. Obstacles, couleurs des pistes et vitesse des motos peuvent être randomisés, et le randomizer renvoie vers un Discord de courses de randomizers.",
+        "en": "gameboy9 releases version 1.0 on March 31, 2018, then 2.0 in June 2018 and 3.0 in April 2020. Obstacles, track colors and bike speed can be randomized, and the randomizer points to a racing randomizer Discord."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "gameboy9/ExciteBikeRando (GitHub)",
+      "url": "https://github.com/gameboy9/ExciteBikeRando"
+    }
+  ]
+}

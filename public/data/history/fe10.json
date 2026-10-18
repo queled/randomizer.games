@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Fire Emblem: Radiant Dawn est l'œuvre de LordMewtwo, qui le distribue via son Discord.",
+    "en": "The Fire Emblem: Radiant Dawn randomizer is the work of LordMewtwo, who distributes it through a Discord server."
+  },
+  "events": [
+    {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Intelligent Systems et Nintendo sortent Fire Emblem: Radiant Dawn sur Wii en 2007.",
+        "en": "Intelligent Systems and Nintendo release Fire Emblem: Radiant Dawn on the Wii in 2007."
+      }
+    },
+    {
+      "date": "2020-2024",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "LordMewtwo publie le code du randomizer sur GitHub à partir de mai 2020 ; le téléchargement et le support passent par le Discord du projet. Le dépôt est mis à jour jusqu'en 2024.",
+        "en": "LordMewtwo publishes the randomizer's code on GitHub starting in May 2020; downloads and support go through the project's Discord. The repository is updated until 2024."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "LordMewtwo73/fe10-randomizer (GitHub)",
+      "url": "https://github.com/LordMewtwo73/fe10-randomizer"
+    }
+  ]
+}

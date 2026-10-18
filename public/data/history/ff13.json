@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Final Fantasy XIII, sur PC, se randomise avec les outils de Bartz24.",
+    "en": "Final Fantasy XIII on PC is randomized with Bartz24's tools."
+  },
+  "events": [
+    {
+      "date": "2009",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Final Fantasy XIII en 2009 au Japon ; la version PC arrive sur Steam en 2014.",
+        "en": "Square Enix releases Final Fantasy XIII in 2009 in Japan; the PC version reaches Steam in 2014."
+      }
+    },
+    {
+      "date": "2020-2021",
+      "title": {
+        "fr": "Le FF13 Randomizer",
+        "en": "The FF13 Randomizer"
+      },
+      "text": {
+        "fr": "Bartz24 publie le FF13 Randomizer en février 2020, avec la version 1.4.2 en mars 2020 et la 1.9.0 en septembre 2021.",
+        "en": "Bartz24 releases the FF13 Randomizer in February 2020, with version 1.4.2 in March 2020 and 1.9.0 in September 2021."
+      }
+    },
+    {
+      "date": "2021-2026",
+      "title": {
+        "fr": "FFModdingWPF",
+        "en": "FFModdingWPF"
+      },
+      "text": {
+        "fr": "En octobre 2021, Bartz24 lance FFModdingWPF, nouvelle base de ses outils, toujours en développement en 2026.",
+        "en": "In October 2021, Bartz24 launches FFModdingWPF, the new base for these tools, still in development in 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Bartz24/FF13Randomizer (GitHub)",
+      "url": "https://github.com/Bartz24/FF13Randomizer"
+    },
+    {
+      "label": "Bartz24/FFModdingWPF (GitHub)",
+      "url": "https://github.com/Bartz24/FFModdingWPF"
+    }
+  ]
+}

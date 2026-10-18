@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Maelstrom, de sleepeybunney, randomise Final Fantasy VIII sur PC : boss, boutiques, capacités des G-Force, points de magie, cartes Triple Triad…",
+    "en": "sleepeybunney's Maelstrom randomizes Final Fantasy VIII on PC: bosses, shops, GF abilities, draw points, Triple Triad cards…"
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Final Fantasy VIII Remastered en 2019, vingt ans après le jeu original.",
+        "en": "Square Enix releases Final Fantasy VIII Remastered in 2019, twenty years after the original game."
+      }
+    },
+    {
+      "date": "2019-2023",
+      "title": {
+        "fr": "Maelstrom",
+        "en": "Maelstrom"
+      },
+      "text": {
+        "fr": "sleepeybunney commence Maelstrom en août 2019 et publie la version 0.1 le 8 septembre 2019, puis la 0.6.6 en mai 2023. Un mode « Free Roam » inspiré de Free Enterprise (FF4) est en pré-alpha.",
+        "en": "sleepeybunney starts Maelstrom in August 2019 and releases version 0.1 on September 8, 2019, then 0.6.6 in May 2023. A \"Free Roam\" mode inspired by Free Enterprise (FF4) is in pre-alpha."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "sleepeybunney/maelstrom (GitHub)",
+      "url": "https://github.com/sleepeybunney/maelstrom"
+    }
+  ]
+}

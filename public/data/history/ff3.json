@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Final Fantasy III Randomizer de Nacho Yacopu est une application web pour la version NES du jeu.",
+    "en": "Nacho Yacopu's Final Fantasy III Randomizer is a web app for the NES version of the game."
+  },
+  "events": [
+    {
+      "date": "1990",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square sort Final Fantasy III sur Famicom au Japon en 1990, puis un remake sur Nintendo DS en 2006.",
+        "en": "Square releases Final Fantasy III on the Famicom in Japan in 1990, then a Nintendo DS remake in 2006."
+      }
+    },
+    {
+      "date": "2016-2021",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Nacho Yacopu commence en août 2016 une application web qui randomise la ROM Famicom de Final Fantasy III, en version 0.61 ; le dépôt est mis à jour jusqu'en 2021.",
+        "en": "Nacho Yacopu starts a web app in August 2016 that randomizes the Famicom ROM of Final Fantasy III, at version 0.61; the repository is updated until 2021."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "nachoyacopu/ff3-randomizer (GitHub)",
+      "url": "https://github.com/nachoyacopu/ff3-randomizer"
+    }
+  ]
+}

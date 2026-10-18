@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Final Fantasy II se randomise avec le randomizer de PheonixMMKC777 et le Fast Food Tour Randomizer.",
+    "en": "Final Fantasy II is randomized with PheonixMMKC777's randomizer and the Fast Food Tour Randomizer."
+  },
+  "events": [
+    {
+      "date": "1988",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square sort Final Fantasy II sur Famicom au Japon en 1988.",
+        "en": "Square releases Final Fantasy II on the Famicom in Japan in 1988."
+      }
+    },
+    {
+      "date": "2021-2022",
+      "title": {
+        "fr": "Le randomizer de PheonixMMKC777",
+        "en": "PheonixMMKC777's randomizer"
+      },
+      "text": {
+        "fr": "PheonixMMKC777 commence le randomizer en septembre 2021 et publie une première version en décembre, puis la 1.4.8 en mars 2022. Il randomise les boutiques, le groupe, les statistiques de base, les armes, les trésors et propose des modes fantaisistes.",
+        "en": "PheonixMMKC777 starts the randomizer in September 2021 and releases a first version in December, then 1.4.8 in March 2022. It randomizes shops, the party, base stats, weapons, treasures and offers fun modes."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "PheonixMMKC777/Final_Fantasy_2_Randomizer (GitHub)",
+      "url": "https://github.com/PheonixMMKC777/Final_Fantasy_2_Randomizer"
+    },
+    {
+      "label": "Fast Food Tour Randomizer",
+      "url": "https://borokobo.web.fc2.com/#FF2"
+    }
+  ]
+}

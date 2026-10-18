@@ -1,0 +1,44 @@
+{
+  "intro": {
+    "fr": "Final Fantasy IX se randomise avec plusieurs outils de la communauté, dont Stiltzkin's Bag pour la version PC.",
+    "en": "Final Fantasy IX is randomized with several community tools, including Stiltzkin's Bag for the PC version."
+  },
+  "events": [
+    {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square sort Final Fantasy IX sur PlayStation en 2000.",
+        "en": "Square releases Final Fantasy IX on the PlayStation in 2000."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Stiltzkin's Bag",
+        "en": "Stiltzkin's Bag"
+      },
+      "text": {
+        "fr": "Druthulu publie Stiltzkin's Bag, un randomizer pour la version PC, en version 1.0 le 23 août 2021. D'autres randomizers existent aussi, comme Meteor on Final Fantasy IX (forum Qhimm) et le VVs Randomizer (Nexus Mods).",
+        "en": "Druthulu releases Stiltzkin's Bag, a randomizer for the PC version, as version 1.0 on August 23, 2021. Other randomizers exist too, such as Meteor on Final Fantasy IX (Qhimm forum) and the VVs Randomizer (Nexus Mods)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Druthulu/Stiltzkins-Bag (GitHub)",
+      "url": "https://github.com/Druthulu/Stiltzkins-Bag"
+    },
+    {
+      "label": "Qhimm — Meteor On Final Fantasy IX",
+      "url": "https://forums.qhimm.com/index.php?topic=16285.0"
+    },
+    {
+      "label": "Nexus Mods — VVs Randomizer",
+      "url": "https://www.nexusmods.com/finalfantasy9/mods/30"
+    }
+  ]
+}

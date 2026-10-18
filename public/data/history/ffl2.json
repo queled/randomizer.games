@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Final Fantasy Legend II a eu le randomizer « Mighty Power » d'abyssonym en 2020, puis celui de Taeveril en 2025.",
+    "en": "Final Fantasy Legend II got abyssonym's \"Mighty Power\" randomizer in 2020, then Taeveril's in 2025."
+  },
+  "events": [
+    {
+      "date": "1990",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square sort SaGa 2 sur Game Boy au Japon en 1990 ; il arrive en Amérique du Nord sous le nom de Final Fantasy Legend II.",
+        "en": "Square releases SaGa 2 on the Game Boy in Japan in 1990; it reaches North America as Final Fantasy Legend II."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Mighty Power",
+        "en": "Mighty Power"
+      },
+      "text": {
+        "fr": "abyssonym publie la version 1 de « Mighty Power » le 17 décembre 2020.",
+        "en": "abyssonym releases version 1 of \"Mighty Power\" on December 17, 2020."
+      }
+    },
+    {
+      "date": "2025-2026",
+      "title": {
+        "fr": "Le randomizer de Taeveril",
+        "en": "Taeveril's randomizer"
+      },
+      "text": {
+        "fr": "Taeveril commence en mai 2025 un nouveau randomizer, publié en version 1.0 le 27 décembre 2025, puis 3.2 en juin 2026 : trésors, MAGI, boutiques, monstres de départ et mélange des mondes, avec de nombreuses améliorations de confort.",
+        "en": "In May 2025 Taeveril starts a new randomizer, released as version 1.0 on December 27, 2025, then 3.2 in June 2026: treasures, MAGI, shops, starting monsters and world shuffle, with many quality-of-life improvements."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "abyssonym/mighty_power (GitHub)",
+      "url": "https://github.com/abyssonym/mighty_power"
+    },
+    {
+      "label": "Taeveril/FFL2-Randomizer (GitHub)",
+      "url": "https://github.com/Taeveril/FFL2-Randomizer"
+    }
+  ]
+}

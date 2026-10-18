@@ -1,0 +1,58 @@
+{
+  "intro": {
+    "fr": "Final Fantasy Tactics Advance se randomise avec le randomizer de TojiKitten et fgkeiji, et se joue aussi en multiworld.",
+    "en": "Final Fantasy Tactics Advance is randomized with TojiKitten and fgkeiji's randomizer, and can also be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square sort Final Fantasy Tactics Advance sur Game Boy Advance en 2003.",
+        "en": "Square releases Final Fantasy Tactics Advance on the Game Boy Advance in 2003."
+      }
+    },
+    {
+      "date": "2021-2022",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "TojiKitten ouvre le dépôt en avril 2021 et publie la version 2.0 le 29 avril, puis la 3.0 en octobre 2021 et la 3.2.6 en décembre 2022 ; fgkeiji en est le principal contributeur. Leonarth en présente aussi un sur le forum FFHacktics.",
+        "en": "TojiKitten opens the repository in April 2021 and releases version 2.0 on April 29, then 3.0 in October 2021 and 3.2.6 in December 2022; fgkeiji is its main contributor. Leonarth also presents one on the FFHacktics forum."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Final Fantasy Tactics Advance est aussi jouable en multiworld.",
+        "en": "Final Fantasy Tactics Advance can also be played in multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "TojiKitten/FFTA-randomizer (GitHub)",
+      "url": "https://github.com/TojiKitten/FFTA-randomizer"
+    },
+    {
+      "label": "FFHacktics — Leonarth's randomizer",
+      "url": "https://ffhacktics.com/smf/index.php?topic=12184.0"
+    },
+    {
+      "label": "Multiworld — Final Fantasy Tactics Advance",
+      "url": "https://multiworld.gg/games/Final%20Fantasy%20Tactics%20Advance/info/en"
+    }
+  ]
+}

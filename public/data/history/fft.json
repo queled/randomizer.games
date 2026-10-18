@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Final Fantasy Tactics se randomise avec « Rumble: Chaos: >>The Crashdown<< REMAKE », d'abyssonym.",
+    "en": "Final Fantasy Tactics is randomized with abyssonym's \"Rumble: Chaos: >>The Crashdown<< REMAKE\"."
+  },
+  "events": [
+    {
+      "date": "1997",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square sort Final Fantasy Tactics sur PlayStation en 1997.",
+        "en": "Square releases Final Fantasy Tactics on the PlayStation in 1997."
+      }
+    },
+    {
+      "date": "2021-2022",
+      "title": {
+        "fr": "Le remake de RCC",
+        "en": "The RCC remake"
+      },
+      "text": {
+        "fr": "abyssonym commence fin avril 2021 un remake de son randomizer « Rumble Chaos Crashdown » (RCC), en repartant des randomisations simples de l'original. La version 1 sort le 24 mai 2021, la 3 en juin 2021 et la 4 en juin 2022.",
+        "en": "In late April 2021 abyssonym starts a remake of the \"Rumble Chaos Crashdown\" (RCC) randomizer, starting from the original's simple randomizations. Version 1 comes out on May 24, 2021, version 3 in June 2021 and version 4 in June 2022."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "abyssonym/fftrctcr (GitHub)",
+      "url": "https://github.com/abyssonym/fftrctcr"
+    }
+  ]
+}

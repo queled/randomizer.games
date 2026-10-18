@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Final Fantasy Randomizer for PSP de gameboy9 randomise la version PSP du premier Final Fantasy et réduit le farm.",
+    "en": "gameboy9's Final Fantasy Randomizer for PSP randomizes the PSP version of the first Final Fantasy and reduces grinding."
+  },
+  "events": [
+    {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Final Fantasy sur PSP en 2007, pour les 20 ans de la série.",
+        "en": "Square Enix releases Final Fantasy on the PSP in 2007, for the series' 20th anniversary."
+      }
+    },
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "gameboy9 publie la version 0.1 le 12 mars 2017, puis la 0.6.2 en juillet. Il réduit l'or et l'expérience nécessaires, randomise qui peut porter quelles armes et armures, les zones de monstres et leurs attaques.",
+        "en": "gameboy9 releases version 0.1 on March 12, 2017, then 0.6.2 in July. It reduces the gold and experience needed, and randomizes who can equip which weapons and armor, monster zones and their attacks."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "gameboy9/FFRPSP (GitHub)",
+      "url": "https://github.com/gameboy9/FFRPSP"
+    }
+  ]
+}

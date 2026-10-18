@@ -1,0 +1,62 @@
+{
+  "intro": {
+    "fr": "Final Fantasy IV compte plusieurs randomizers, dont Free Enterprise, un randomizer en monde ouvert qui a inspiré de nombreux autres jeux.",
+    "en": "Final Fantasy IV has several randomizers, including Free Enterprise, an open-world randomizer that inspired many other games."
+  },
+  "events": [
+    {
+      "date": "1991",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square sort Final Fantasy IV sur Super Famicom en 1991 ; il arrive en Amérique du Nord sous le nom de Final Fantasy II.",
+        "en": "Square releases Final Fantasy IV on the Super Famicom in 1991; it reaches North America as Final Fantasy II."
+      }
+    },
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Beyond Babil",
+        "en": "Beyond Babil"
+      },
+      "text": {
+        "fr": "abyssonym publie Beyond Babil au printemps 2017 (version 5 le 19 avril) : un randomizer de type « Ancient Cave », qui retire toute l'histoire pour faire du jeu un pur dungeon crawler.",
+        "en": "abyssonym releases Beyond Babil in spring 2017 (version 5 on April 19): an \"Ancient Cave\" style randomizer that removes the whole story to turn the game into a pure dungeon crawler."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Free Enterprise et les autres",
+        "en": "Free Enterprise and others"
+      },
+      "text": {
+        "fr": "Free Enterprise est un romhack en monde ouvert et une chasse au trésor randomisée : on reçoit le dirigeable dès le début, on fait les quêtes dans l'ordre qu'on veut, et le Pass ouvre un passage direct vers Zeromus. De nombreux randomizers d'autres jeux s'en sont inspirés (FF6 Worlds Collide, Super Mario RPG, Final Fantasy VIII…). Il existe aussi The Lunarian Shuffle de Crow, qui mélange personnages, boutiques, coffres et sorts, et un Roguelikeifyer.",
+        "en": "Free Enterprise is an open-world romhack and scavenger hunt randomizer: you get the airship from the start, do quests in any order, and the Pass opens a direct passage to Zeromus. Many randomizers for other games drew inspiration from it (FF6 Worlds Collide, Super Mario RPG, Final Fantasy VIII…). There is also Crow's The Lunarian Shuffle, which shuffles characters, shops, chests and spells, and a Roguelikeifyer."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Free Enterprise",
+      "url": "http://ff4fe.com/"
+    },
+    {
+      "label": "abyssonym/beyond_babil (GitHub)",
+      "url": "https://github.com/abyssonym/beyond_babil"
+    },
+    {
+      "label": "The Lunarian Shuffle",
+      "url": "https://ff4-lunarianshuffle.blogspot.com/"
+    },
+    {
+      "label": "Romhacking.net — Roguelikeifyer",
+      "url": "https://www.romhacking.net/forum/index.php?topic=23126.0"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "FF5 Abridged, de gameboy9, transforme la version Pixel Remaster de Final Fantasy V en un très long Big Bridge randomisé.",
+    "en": "gameboy9's FF5 Abridged turns the Pixel Remaster of Final Fantasy V into a very long randomized Big Bridge."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort la version Pixel Remaster de Final Fantasy V en 2021.",
+        "en": "Square Enix releases the Pixel Remaster of Final Fantasy V in 2021."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "FF5 Abridged",
+        "en": "FF5 Abridged"
+      },
+      "text": {
+        "fr": "« Mon onzième randomizer » : gameboy9 publie FF5 Abridged le 15 mai 2022. Le jeu devient un immense Big Bridge de 12 segments remplis de monstres, chacun conclu par un boss de plus en plus difficile.",
+        "en": "\"My eleventh randomizer\": gameboy9 releases FF5 Abridged on May 15, 2022. The game becomes a huge Big Bridge of 12 segments full of monsters, each ending with an increasingly difficult boss."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "gameboy9/FF5Abridged (GitHub)",
+      "url": "https://github.com/gameboy9/FF5Abridged"
+    }
+  ]
+}

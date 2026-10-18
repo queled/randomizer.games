@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Final Fantasy Legend III se randomise avec le randomizer d'abyssonym, publié en 2025.",
+    "en": "Final Fantasy Legend III is randomized with abyssonym's randomizer, released in 2025."
+  },
+  "events": [
+    {
+      "date": "1991",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square sort SaGa 3 sur Game Boy au Japon en 1991 ; il arrive en Amérique du Nord sous le nom de Final Fantasy Legend III.",
+        "en": "Square releases SaGa 3 on the Game Boy in Japan in 1991; it reaches North America as Final Fantasy Legend III."
+      }
+    },
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le randomizer d'abyssonym",
+        "en": "abyssonym's randomizer"
+      },
+      "text": {
+        "fr": "abyssonym publie la version 1 du Final Fantasy Legend III Randomizer le 26 mai 2025. Romhacking.net propose aussi le hack « Lunacy ».",
+        "en": "abyssonym releases version 1 of the Final Fantasy Legend III Randomizer on May 26, 2025. Romhacking.net also offers the \"Lunacy\" hack."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "abyssonym/ffl3rando (GitHub)",
+      "url": "https://github.com/abyssonym/ffl3rando"
+    },
+    {
+      "label": "Romhacking.net — Lunacy",
+      "url": "https://www.romhacking.net/hacks/4351/"
+    }
+  ]
+}

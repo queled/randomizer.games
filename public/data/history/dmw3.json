@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Digimon World 3 a son randomizer, signé markisha64 et distribué sur Romhacking.net, avec une petite scène de courses depuis 2023.",
+    "en": "Digimon World 3 has its randomizer, by markisha64 and distributed on Romhacking.net, with a small racing scene since 2023."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bandai sort Digimon World 3 sur PlayStation en 2002.",
+        "en": "Bandai releases Digimon World 3 on the PlayStation in 2002."
+      }
+    },
+    {
+      "date": "2023-2024",
+      "title": {
+        "fr": "Les courses",
+        "en": "Races"
+      },
+      "text": {
+        "fr": "Les premières courses recensées sur ce site ont lieu en octobre 2023 sur racetime.gg, et 2024 en compte 14.",
+        "en": "The first races listed on this site take place in October 2023 on racetime.gg, and 2024 counts 14."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Romhacking.net — Digimon World 3 Randomizer",
+      "url": "https://www.romhacking.net/utilities/1788/"
+    },
+    {
+      "label": "racetime.gg — DMW3R",
+      "url": "https://racetime.gg/dmw3r"
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Hollow Knight mélange objets et transitions entre salles. Né en 2017, il a connu plusieurs versions majeures jusqu'au Randomizer 4, et ses extensions ItemSync et MultiWorld permettent de jouer à plusieurs.",
+    "en": "The Hollow Knight Randomizer shuffles items and room transitions. Born in 2017, it went through several major versions up to Randomizer 4, and its ItemSync and MultiWorld add-ons let several people play together."
+  },
+  "events": [
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu et les premières courses",
+        "en": "The game and first races"
+      },
+      "text": {
+        "fr": "Team Cherry sort Hollow Knight en février 2017. Les premières courses de randomizer recensées sur ce site ont lieu dès octobre 2017, sur SpeedRunsLive.",
+        "en": "Team Cherry releases Hollow Knight in February 2017. The first randomizer races listed on this site take place as early as October 2017, on SpeedRunsLive."
+      }
+    },
+    {
+      "date": "2018-2020",
+      "title": {
+        "fr": "Les premières versions",
+        "en": "Early versions"
+      },
+      "text": {
+        "fr": "Le dépôt du RandomizerMod de seresharp démarre en mai 2018, puis le Randomizer 3.0, dont le dépôt de référence est celui de JasonILTG, propose notamment le mélange des zones et des salles. Fin 2020, CallumMoseley adapte le multiworld à toutes les fonctions de cette version.",
+        "en": "seresharp's RandomizerMod repository starts in May 2018, then Randomizer 3.0, whose reference repository is JasonILTG's, offers area and room shuffle among other things. In late 2020, CallumMoseley adapts multiworld to all of that version's features."
+      }
+    },
+    {
+      "date": "2021-2022",
+      "title": {
+        "fr": "Randomizer 4",
+        "en": "Randomizer 4"
+      },
+      "text": {
+        "fr": "Pour la mise à jour 1.5 du jeu, homothetyhk développe Randomizer 4, dont la version 1.0 sort le 8 janvier 2022. Shadudev publie en 2021 les extensions ItemSync, qui partage les objets entre joueurs, et MultiWorld, qui répartit les objets entre plusieurs parties liées.",
+        "en": "For the game's 1.5 update, homothetyhk develops Randomizer 4, whose version 1.0 comes out on January 8, 2022. In 2021 Shadudev releases the ItemSync add-on, which shares items between players, and MultiWorld, which spreads items across several linked games."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "Hollow Knight est aussi pris en charge par Archipelago pour le multiworld.",
+        "en": "Hollow Knight is also supported by Archipelago for multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "homothetyhk/RandomizerMod (GitHub)",
+      "url": "https://github.com/homothetyhk/RandomizerMod"
+    },
+    {
+      "label": "seresharp/HollowKnight.RandomizerMod (GitHub)",
+      "url": "https://github.com/seresharp/HollowKnight.RandomizerMod"
+    },
+    {
+      "label": "CallumMoseley/HollowKnight.RandomizerMod (GitHub)",
+      "url": "https://github.com/CallumMoseley/HollowKnight.RandomizerMod"
+    },
+    {
+      "label": "Shadudev/HollowKnight.MultiWorld (GitHub)",
+      "url": "https://github.com/Shadudev/HollowKnight.MultiWorld"
+    },
+    {
+      "label": "Archipelago — Hollow Knight",
+      "url": "https://archipelago.gg/games/Hollow%20Knight/info/en"
+    }
+  ]
+}

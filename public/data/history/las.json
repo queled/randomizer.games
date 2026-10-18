@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Le LAS-Randomizer d'Owen-Splat mélange tous les objets du remake de Link's Awakening sur Switch et ajoute des options de confort, comme le saut des cinématiques ou un monde plus ouvert.",
+    "en": "Owen-Splat's LAS-Randomizer shuffles every item in the Link's Awakening remake on Switch and adds quality-of-life options, such as skipping cutscenes or a more open world."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Grezzo et Nintendo sortent le remake de The Legend of Zelda: Link's Awakening sur Nintendo Switch en 2019.",
+        "en": "Grezzo and Nintendo release the remake of The Legend of Zelda: Link's Awakening on the Nintendo Switch in 2019."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le LAS-Randomizer",
+        "en": "The LAS-Randomizer"
+      },
+      "text": {
+        "fr": "Owen-Splat commence le randomizer en juin 2022 et publie la version 0.1 le 21 juin. Plusieurs niveaux de logique sont proposés, de « Basic » (sans glitch) à « Hell », en passant par Advanced et Glitched. ProfessorLaw en devient l'un des principaux contributeurs.",
+        "en": "Owen-Splat starts the randomizer in June 2022 and releases version 0.1 on June 21. Several logic levels are offered, from \"Basic\" (no glitches) to \"Hell\", through Advanced and Glitched. ProfessorLaw becomes one of its main contributors."
+      }
+    },
+    {
+      "date": "2023-2025",
+      "title": {
+        "fr": "Les courses",
+        "en": "Races"
+      },
+      "text": {
+        "fr": "Les premières courses recensées sur ce site ont lieu en novembre 2023 sur racetime.gg. La version 0.41 sort en novembre 2024, et 2025 compte 24 courses, un record.",
+        "en": "The first races listed on this site take place in November 2023 on racetime.gg. Version 0.41 comes out in November 2024, and 2025 counts 24 races, a record."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Owen-Splat/LAS-Randomizer (GitHub)",
+      "url": "https://github.com/Owen-Splat/LAS-Randomizer"
+    },
+    {
+      "label": "racetime.gg — LASR",
+      "url": "https://racetime.gg/lasr"
+    }
+  ]
+}

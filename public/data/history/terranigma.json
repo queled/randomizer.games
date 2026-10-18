@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "TerraFluky est le randomizer de Terranigma : il mélange les objets, rééquilibre le jeu, retire des cinématiques et peut, en option, mélanger les entrées du monde.",
+    "en": "TerraFluky is the Terranigma randomizer: it shuffles items, rebalances the game, removes cutscenes and can optionally shuffle overworld entrances."
+  },
+  "events": [
+    {
+      "date": "1995",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Quintet et Enix sortent Terranigma (Tenchi Sōzō) sur Super Famicom au Japon en 1995 ; le jeu sort ensuite en Europe, mais jamais en Amérique du Nord.",
+        "en": "Quintet and Enix release Terranigma (Tenchi Sōzō) on the Super Famicom in Japan in 1995; the game then comes out in Europe, but never in North America."
+      }
+    },
+    {
+      "date": "2023",
+      "title": {
+        "fr": "TerraFluky",
+        "en": "TerraFluky"
+      },
+      "text": {
+        "fr": "Le wiki Terranigma documente TerraFluky de ses versions publiques 0.6 jusqu'à la 0.14c : rééquilibrage, cinématiques supprimées, contenu ajouté, ennemis adaptés au niveau du joueur et mélange optionnel des entrées. Les premières courses recensées sur ce site ont lieu en octobre 2023 sur racetime.gg.",
+        "en": "The Terranigma wiki documents TerraFluky from its public versions 0.6 up to 0.14c: rebalancing, removed cutscenes, added content, enemies scaled to the player's level and optional entrance shuffle. The first races listed on this site take place in October 2023 on racetime.gg."
+      }
+    },
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le pic des courses",
+        "en": "The racing peak"
+      },
+      "text": {
+        "fr": "Ce site recense 24 courses en 2024, un record.",
+        "en": "This site counts 24 races in 2024, a record."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Terranigma Wiki — TerraFluky",
+      "url": "https://www.terranigma.be/index.php?title=TerraFluky"
+    },
+    {
+      "label": "racetime.gg — TerraFluky",
+      "url": "https://racetime.gg/terrafluky"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Le TWWHD Randomizer adapte à The Wind Waker HD l'esprit du randomizer de la version GameCube : tous les objets mélangés, monde ouvert dès le départ, cinématiques supprimées. Il se joue sur Wii U ou sur émulateur.",
+    "en": "The TWWHD Randomizer brings the spirit of the GameCube randomizer to The Wind Waker HD: every item shuffled, an open world from the start, cutscenes removed. It plays on Wii U or on emulator."
+  },
+  "events": [
+    {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort The Legend of Zelda: The Wind Waker HD sur Wii U en 2013.",
+        "en": "Nintendo releases The Legend of Zelda: The Wind Waker HD on the Wii U in 2013."
+      }
+    },
+    {
+      "date": "2021-2024",
+      "title": {
+        "fr": "Trois ans de développement",
+        "en": "Three years of development"
+      },
+      "text": {
+        "fr": "SuperDude88 commence le randomizer le 20 avril 2021, rejoint par gymnast86, l'autre grand contributeur. La version 1.0 sort le 17 juin 2024.",
+        "en": "SuperDude88 starts the randomizer on April 20, 2021, joined by gymnast86, the other main contributor. Version 1.0 comes out on June 17, 2024."
+      }
+    },
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Les courses",
+        "en": "Races"
+      },
+      "text": {
+        "fr": "Les premières courses recensées sur ce site ont lieu le 21 janvier 2025 sur racetime.gg : 32 dans l'année. La version 1.2 sort en juillet 2026.",
+        "en": "The first races listed on this site take place on January 21, 2025 on racetime.gg: 32 that year. Version 1.2 comes out in July 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "SuperDude88/TWWHD-Randomizer (GitHub)",
+      "url": "https://github.com/SuperDude88/TWWHD-Randomizer"
+    },
+    {
+      "label": "racetime.gg — TWWHDR",
+      "url": "https://racetime.gg/twwhdr"
+    }
+  ]
+}

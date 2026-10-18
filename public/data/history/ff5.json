@@ -1,0 +1,66 @@
+{
+  "intro": {
+    "fr": "Final Fantasy V se randomise depuis 2016, d'abord avec Grand Cross d'abyssonym, puis avec Career Day, un randomizer en monde ouvert du Studio Big Bridge, joué en course sur racetime.gg.",
+    "en": "Final Fantasy V has been randomized since 2016, first with abyssonym's Grand Cross, then with Career Day, an open-world randomizer by Studio Big Bridge, raced on racetime.gg."
+  },
+  "events": [
+    {
+      "date": "1992",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square sort Final Fantasy V sur Super Famicom au Japon en 1992. Le jeu ne sort pas en Occident sur Super Nintendo, et les randomizers s'appuient sur la version japonaise ou sur la traduction amateur RPGe.",
+        "en": "Square releases Final Fantasy V on the Super Famicom in Japan in 1992. The game does not come out in the West on the Super Nintendo, and randomizers rely on the Japanese version or the RPGe fan translation."
+      }
+    },
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Grand Cross",
+        "en": "Grand Cross"
+      },
+      "text": {
+        "fr": "abyssonym commence Grand Cross, un randomizer pour Final Fantasy V, fin août 2016 ; sa version 4 date du 2 septembre 2016.",
+        "en": "abyssonym starts Grand Cross, a Final Fantasy V randomizer, in late August 2016; its version 4 dates from September 2, 2016."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Career Day",
+        "en": "Career Day"
+      },
+      "text": {
+        "fr": "Career Day, un randomizer en monde ouvert pour Final Fantasy V du Studio Big Bridge, se génère dans le navigateur, avec un wiki dédié et de nombreux modes (mondes verrouillés ou ouverts, quatre jobs, chaos total…). Les premières courses recensées sur ce site ont lieu le 12 janvier 2021 sur racetime.gg.",
+        "en": "Career Day, an open-world Final Fantasy V randomizer by Studio Big Bridge, is generated in the browser, with its own wiki and many modes (locked or open worlds, four jobs, pure chaos…). The first races listed on this site take place on January 12, 2021 on racetime.gg."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le pic des courses",
+        "en": "The racing peak"
+      },
+      "text": {
+        "fr": "Ce site recense 96 courses Career Day en 2022, un record.",
+        "en": "This site counts 96 Career Day races in 2022, a record."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "abyssonym/grand_cross (GitHub)",
+      "url": "https://github.com/abyssonym/grand_cross"
+    },
+    {
+      "label": "Career Day — Studio Big Bridge",
+      "url": "https://bigbridge.studio/careerday/"
+    },
+    {
+      "label": "racetime.gg — FFV Career Day",
+      "url": "https://racetime.gg/ffvcd"
+    }
+  ]
+}

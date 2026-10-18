@@ -1,0 +1,62 @@
+{
+  "intro": {
+    "fr": "Le Zelda 1 / Metroid 1 Combo Randomizer réunit les deux classiques de la NES en une seule partie : des portails relient les deux jeux, et l'équipement de chacun est mélangé dans les deux mondes.",
+    "en": "The Zelda 1 / Metroid 1 Combo Randomizer merges the two NES classics into a single game: portals connect both games, and each one's equipment is shuffled across both worlds."
+  },
+  "events": [
+    {
+      "date": "1986",
+      "title": {
+        "fr": "Les jeux d'origine",
+        "en": "The original games"
+      },
+      "text": {
+        "fr": "The Legend of Zelda et Metroid sortent tous deux en 1986 au Japon, sur Famicom Disk System, avant d'arriver sur NES.",
+        "en": "The Legend of Zelda and Metroid both come out in 1986 in Japan, on the Famicom Disk System, before reaching the NES."
+      }
+    },
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le crossover",
+        "en": "The crossover"
+      },
+      "text": {
+        "fr": "Le projet crossover Zelda 1 / Metroid 1 relie les deux jeux par des portails spéciaux, si bien qu'on ne finit pas un jeu puis l'autre, mais les deux en même temps. Les premières courses recensées sur ce site ont lieu le 24 novembre 2018 sur SpeedRunsLive, avec pour objectif de vaincre Mother Brain et Ganon.",
+        "en": "The Zelda 1 / Metroid 1 crossover project connects both games through special portals, so you don't finish one game then the other, but both at once. The first races listed on this site take place on November 24, 2018 on SpeedRunsLive, with the goal of defeating Mother Brain and Ganon."
+      }
+    },
+    {
+      "date": "2019-2020",
+      "title": {
+        "fr": "Les années SpeedRunsLive",
+        "en": "The SpeedRunsLive years"
+      },
+      "text": {
+        "fr": "Ce site recense 75 courses en 2019, un record, puis 61 en 2020.",
+        "en": "This site counts 75 races in 2019, a record, then 61 in 2020."
+      }
+    },
+    {
+      "date": "2021-2026",
+      "title": {
+        "fr": "Sur racetime.gg",
+        "en": "On racetime.gg"
+      },
+      "text": {
+        "fr": "Les courses passent de SpeedRunsLive à racetime.gg en 2021, et reprennent de l'élan en 2026 (31 courses).",
+        "en": "Races move from SpeedRunsLive to racetime.gg in 2021, and pick up again in 2026 (31 races)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Zelda 1 / Metroid 1 crossover project",
+      "url": "https://z1m1.info/"
+    },
+    {
+      "label": "racetime.gg — Z1M1",
+      "url": "https://racetime.gg/z1m1"
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "intro": {
+    "fr": "Le randomizer des Oracles, créé par jangler en 2018, mélange les objets d'Oracle of Seasons et d'Oracle of Ages, et randomise même les saisons dans Seasons. Il a ensuite connu plusieurs forks et une refonte.",
+    "en": "The Oracles randomizer, created by jangler in 2018, shuffles the items of Oracle of Seasons and Oracle of Ages, and even randomizes the seasons in Seasons. It later saw several forks and an overhaul."
+  },
+  "events": [
+    {
+      "date": "2001",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom et Nintendo sortent The Legend of Zelda: Oracle of Seasons sur Game Boy Color en 2001, en même temps que son jeu jumeau, Oracle of Ages.",
+        "en": "Capcom and Nintendo release The Legend of Zelda: Oracle of Seasons on the Game Boy Color in 2001, alongside its twin game, Oracle of Ages."
+      }
+    },
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le randomizer de jangler",
+        "en": "jangler's randomizer"
+      },
+      "text": {
+        "fr": "jangler commence l'Oracles Randomizer en juillet 2018 et publie la version 1.0 le 27 juillet, puis la 2.0 en septembre et la 3.0 le 20 novembre 2018. Il mélange l'emplacement de la plupart des objets et des graines mystiques, retire la plupart des conditions arbitraires pour que les donjons se fassent dans n'importe quel ordre, et dans Seasons il randomise aussi la saison par défaut de chaque zone. Il faut toujours réunir les 8 essences pour finir le jeu.",
+        "en": "jangler starts the Oracles Randomizer in July 2018 and releases version 1.0 on July 27, then 2.0 in September and 3.0 on November 20, 2018. It shuffles the locations of most items and mystical seeds, removes most arbitrary checks so dungeons can be done in any order, and in Seasons it also randomizes each area's default season. You still need all 8 essences to finish the game."
+      }
+    },
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Premières courses",
+        "en": "First races"
+      },
+      "text": {
+        "fr": "Les premières courses Oracle of Seasons recensées sur ce site ont lieu le 10 août 2018 sur SpeedRunsLive.",
+        "en": "The first Oracle of Seasons races listed on this site take place on August 10, 2018 on SpeedRunsLive."
+      }
+    },
+    {
+      "date": "2019-2021",
+      "title": {
+        "fr": "Versions 4 et variantes",
+        "en": "Version 4 and variants"
+      },
+      "text": {
+        "fr": "La version 4.0 sort en juillet 2019. Des forks ajoutent le mélange des entrées (vinheim3, 2019-2020) et le keysanity, et cemulate publie en 2021 une interface web qui fait tourner le randomizer dans le navigateur, y compris en multiworld entre les deux Oracles. Ce site recense 101 courses Seasons en 2019, un record.",
+        "en": "Version 4.0 comes out in July 2019. Forks add entrance shuffle (vinheim3, 2019-2020) and keysanity, and in 2021 cemulate publishes a web interface that runs the randomizer in the browser, including multiworld between both Oracles. This site counts 101 Seasons races in 2019, a record."
+      }
+    },
+    {
+      "date": "2021-2025",
+      "title": {
+        "fr": "La relève",
+        "en": "Carrying on"
+      },
+      "text": {
+        "fr": "Stewmath lance en 2021 oracles-randomizer-ng, une refonte du randomizer de jangler avec son interface web (oosarando.zeldahacking.net). Fin 2025, jangler déplace le développement du projet original hors de GitHub, sur jangle.dev.",
+        "en": "In 2021 Stewmath launches oracles-randomizer-ng, an overhaul of jangler's randomizer with its own web UI (oosarando.zeldahacking.net). In late 2025, jangler moves the original project's development off GitHub, to jangle.dev."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "jangle.dev — oracles-randomizer",
+      "url": "https://jangle.dev/oracles-randomizer/"
+    },
+    {
+      "label": "jangler/oracles-randomizer (GitHub)",
+      "url": "https://github.com/jangler/oracles-randomizer"
+    },
+    {
+      "label": "Stewmath/oracles-randomizer-ng (GitHub)",
+      "url": "https://github.com/Stewmath/oracles-randomizer-ng"
+    },
+    {
+      "label": "cemulate/oracles-randomizer-web (GitHub)",
+      "url": "https://github.com/cemulate/oracles-randomizer-web"
+    },
+    {
+      "label": "vinheim3/oracles-randomizer (GitHub)",
+      "url": "https://github.com/vinheim3/oracles-randomizer"
+    },
+    {
+      "label": "racetime.gg — Oracle of Seasons Randomizer",
+      "url": "https://racetime.gg/oosr"
+    }
+  ]
+}

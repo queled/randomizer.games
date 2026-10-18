@@ -1,0 +1,74 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Kingdom Hearts Final Mix est né en 2021, quelques jours après la sortie PC du jeu, inspiré par celui de Kingdom Hearts II. Il est aujourd'hui aussi jouable en multiworld.",
+    "en": "The Kingdom Hearts Final Mix Randomizer was born in 2021, days after the game's PC release, inspired by the Kingdom Hearts II one. It can now also be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square sort Kingdom Hearts sur PlayStation 2 en 2002, suivi au Japon de sa version Final Mix.",
+        "en": "Square releases Kingdom Hearts on the PlayStation 2 in 2002, followed in Japan by its Final Mix version."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le randomizer de Denho",
+        "en": "Denho's randomizer"
+      },
+      "text": {
+        "fr": "Après la sortie PC de la compilation le 30 mars 2021, Denho (Denhonator) crée le 6 avril ses KHPCSpeedrunTools, qui accueillent le randomizer de Kingdom Hearts Final Mix. Inspiré par le randomizer de KH2, il se veut plus axé sur l'exploration et modifie la mémoire du jeu grâce au LuaBackend de TopazTK, sans toucher aux fichiers. Les premières courses recensées sur ce site ont lieu le 3 mai 2021.",
+        "en": "After the collection's PC release on March 30, 2021, Denho (Denhonator) creates his KHPCSpeedrunTools on April 6, which host the Kingdom Hearts Final Mix randomizer. Inspired by the KH2 randomizer, it is more exploration-based and modifies the game's memory through TopazTK's LuaBackend, without touching the files. The first races listed on this site take place on May 3, 2021."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le pic des courses",
+        "en": "The racing peak"
+      },
+      "text": {
+        "fr": "Ce site recense 146 courses en 2022, un record.",
+        "en": "This site counts 146 races in 2022, a record."
+      }
+    },
+    {
+      "date": "2023-2024",
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "gaithern adapte Kingdom Hearts Final Mix à Archipelago, avec une version 1.0 en avril 2024 : le jeu devient jouable en multiworld.",
+        "en": "gaithern adapts Kingdom Hearts Final Mix to Archipelago, with a version 1.0 in April 2024: the game becomes playable in multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Denhonator/KHPCSpeedrunTools (GitHub)",
+      "url": "https://github.com/Denhonator/KHPCSpeedrunTools"
+    },
+    {
+      "label": "Raider Rumbler — Randomization in Kingdom Hearts 1 (2021)",
+      "url": "https://rhsrumbler.com/archives/20711"
+    },
+    {
+      "label": "gaithernOrg/KH1FM-AP (GitHub)",
+      "url": "https://github.com/gaithernOrg/KH1FM-AP/"
+    },
+    {
+      "label": "Wikipedia — Kingdom Hearts HD 1.5 Remix",
+      "url": "https://en.wikipedia.org/wiki/Kingdom_Hearts_HD_1.5_Remix"
+    },
+    {
+      "label": "racetime.gg — KH1FM Randomizer",
+      "url": "https://racetime.gg/khfmr"
+    }
+  ]
+}

@@ -601,6 +601,50 @@
     }
   }
 
+  // ==================== HISTORY SECTION ====================
+  // Written by hand in public/data/history/<id>.json; the tab stays hidden for games without one
+  let historyData = null;
+
+  async function loadHistory(gameId) {
+    try {
+      historyData = await fetchJson(`/data/history/${encodeURIComponent(gameId.toLowerCase())}.json`);
+    } catch {
+      return;
+    }
+    const btn = document.querySelector('.tab-btn[data-tab="history"]');
+    if (btn) btn.style.display = '';
+    renderHistory();
+  }
+
+  // English is the fallback for languages the history is not written in
+  function historyText(value) {
+    if (!value || typeof value === 'string') return value || '';
+    return value[getCurrentLanguage()] || value.en || value.fr || '';
+  }
+
+  function renderHistory() {
+    const el = document.getElementById('history-content');
+    if (!el || !historyData) return;
+    const events = (historyData.events || []).map(ev => `
+      <li class="history-event">
+        <span class="history-date">${escapeHtml(ev.date)}</span>
+        <h3 class="history-title">${escapeHtml(historyText(ev.title))}</h3>
+        <p class="history-text">${escapeHtml(historyText(ev.text))}</p>
+      </li>
+    `).join('');
+    const sources = (historyData.sources || [])
+      .map(s => {
+        const attrs = buildExternalLinkAttrs(s.url);
+        return attrs ? `<li><a ${attrs}>${escapeHtml(s.label)}</a></li>` : '';
+      })
+      .join('');
+    el.innerHTML = `
+      <p class="history-intro">${escapeHtml(historyText(historyData.intro))}</p>
+      <ol class="history-timeline">${events}</ol>
+      ${sources ? `<h3 class="history-sources-title">${escapeHtml(t('gameDetail.historySources', 'Sources'))}</h3><ul class="history-sources">${sources}</ul>` : ''}
+    `;
+  }
+
   // ==================== RESOURCES SECTION ====================
   let resourcesLoaded = false;
 
@@ -1277,6 +1321,7 @@
   if(id) {
     load();
     loadLeaderboard();
+    loadHistory(id);
     tabs = tabHistory({
       current: () => document.querySelector('.tab-btn.active')?.getAttribute('data-tab'),
       show: switchTab,
@@ -1289,5 +1334,6 @@
     rerenderLocalizedResources();
     renderLeaderboard();
     renderCategories();
+    renderHistory();
   });
 })();

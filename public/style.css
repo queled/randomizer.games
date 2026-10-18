@@ -1986,6 +1986,86 @@ body.spoiler-mode .spoiler-text::before {
     color: #fbbf24;
 }
 
+/* Game history tab: a vertical timeline */
+.history-intro {
+    color: #d1d5db;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    max-width: 52rem;
+    margin-bottom: 2rem;
+}
+
+.history-timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 1.75rem;
+    border-left: 2px solid #374151;
+    max-width: 52rem;
+}
+
+.history-event {
+    position: relative;
+    padding-bottom: 1.75rem;
+}
+
+.history-event::before {
+    content: '';
+    position: absolute;
+    left: calc(-1.75rem - 7px);
+    top: 0.35rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #fbbf24;
+    box-shadow: 0 0 0 4px #111827;
+}
+
+.history-date {
+    color: #fbbf24;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+}
+
+.history-title {
+    margin: 0.2rem 0 0.4rem;
+    font-size: 1.15rem;
+    color: #f3f4f6;
+}
+
+.history-text {
+    margin: 0;
+    color: #9ca3af;
+    line-height: 1.65;
+}
+
+.history-sources-title {
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: #d1d5db;
+}
+
+.history-sources {
+    padding-left: 1.25rem;
+    color: #9ca3af;
+    font-size: 0.875rem;
+    line-height: 1.8;
+}
+
+.history-sources a {
+    color: #60a5fa;
+}
+
+@media (max-width: 640px) {
+    .history-timeline {
+        padding-left: 1.25rem;
+    }
+
+    .history-event::before {
+        left: calc(-1.25rem - 7px);
+    }
+}
+
 /* Utility classes */
 .text-muted {
     color: #9ca3af;

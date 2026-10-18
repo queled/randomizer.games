@@ -64,6 +64,8 @@
       <button class="tab-btn" data-tab="community" data-i18n="gameDetail.tabCommunity">👥 Community</button>
       <button class="tab-btn" data-tab="resources" data-i18n="gameDetail.tabResources">📚 Resources</button>
       <button class="tab-btn" data-tab="stats" data-i18n="gameDetail.tabStats">📊 Stats</button>
+      <!-- Shown only for games that have a history file (public/data/history/<id>.json) -->
+      <button class="tab-btn" data-tab="history" data-i18n="gameDetail.tabHistory" style="display:none;">📜 History</button>
     </div>
 
     <!-- Tab contents (Leaderboards visible par défaut) -->
@@ -123,6 +125,11 @@
           <div id="game-tournaments" class="card-list"></div>
         </div>
       </div>
+    </div>
+
+    <div id="tab-content-history" class="tab-content" style="display:none;">
+      <h2 data-i18n="gameDetail.history"></h2>
+      <div id="history-content"></div>
     </div>
   </main>
 

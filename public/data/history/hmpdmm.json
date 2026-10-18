@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Hatsune Miku: Project DIVA Mega Mix+ se joue en multiworld : réussir des chansons rapporte des poireaux, de nouvelles chansons ou des pièges.",
+    "en": "Hatsune Miku: Project DIVA Mega Mix+ can be played in multiworld: completing songs earns leeks, new songs or traps."
+  },
+  "events": [
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sega sort Hatsune Miku: Project DIVA Mega Mix en 2020 ; la version Mega Mix+ sort sur PC en 2022.",
+        "en": "Sega releases Hatsune Miku: Project DIVA Mega Mix in 2020; the Mega Mix+ version comes out on PC in 2022."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Hatsune Miku: Project DIVA Mega Mix+ est jouable en multiworld avec le multiworld (multiworld.gg). On commence avec quelques chansons ; chaque chanson réussie donne deux récompenses : poireaux, chansons, PV, doublons, pièges ou remplissage.",
+        "en": "Hatsune Miku: Project DIVA Mega Mix+ can be played in multiworld with multiworld (multiworld.gg). You start with a few songs; each completed song gives two rewards: leeks, songs, HP, duplicate songs, traps or filler."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Hatsune Miku Project Diva Mega Mix+",
+      "url": "https://multiworld.gg/games/Hatsune%20Miku%20Project%20Diva%20Mega%20Mix%2B/info/en"
+    }
+  ]
+}

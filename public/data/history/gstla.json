@@ -1,0 +1,57 @@
+{
+  "intro": {
+    "fr": "Golden Sun: L'Âge perdu se randomise avec le randomiser web de Karanum, basé sur celui de MarvinXLII, et se joue aussi en multiworld.",
+    "en": "Golden Sun: The Lost Age is randomized with Karanum's web randomiser, based on MarvinXLII's, and can also be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Camelot et Nintendo sortent Golden Sun: L'Âge perdu sur Game Boy Advance en 2002.",
+        "en": "Camelot and Nintendo release Golden Sun: The Lost Age on the Game Boy Advance in 2002."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Le randomiser de Karanum",
+        "en": "Karanum's randomiser"
+      },
+      "text": {
+        "fr": "Karanum propose sur gs2randomiser.com un randomiser web, en plusieurs langues dont le français, basé sur le « GS2 Randomizer » original de MarvinXLII (version 1.2.11).",
+        "en": "Karanum offers a web randomiser on gs2randomiser.com, in several languages including French, based on MarvinXLII's original \"GS2 Randomizer\" (version 1.2.11)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Golden Sun: L'Âge perdu est jouable en multiworld avec le multiworld (multiworld.gg). Le multiworld randomise les objets, les psynergies, les personnages, les invocations et les djinns.",
+        "en": "Golden Sun: The Lost Age can be played in multiworld with multiworld (multiworld.gg). The multiworld randomizes items, psynergy, characters, summons and djinn."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Golden Sun: The Lost Age Randomiser",
+      "url": "https://gs2randomiser.com/"
+    },
+    {
+      "label": "Multiworld — Golden Sun The Lost Age",
+      "url": "https://multiworld.gg/games/Golden%20Sun%20The%20Lost%20Age/info/en"
+    }
+  ]
+}

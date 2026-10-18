@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Hylics 2 se joue en multiworld avec Archipelago : tous les objets uniques, l'équipement et les compétences y sont randomisés.",
+    "en": "Hylics 2 can be played in multiworld with Archipelago: every unique item, equipment and skill is randomized."
+  },
+  "events": [
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Mason Lindroth sort Hylics 2 en 2020.",
+        "en": "Mason Lindroth releases Hylics 2 in 2020."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Hylics 2 est jouable en multiworld avec Archipelago. Tous les objets uniques, l'équipement et les compétences sont randomisés : coffres, objets au sol, objets donnés par certains personnages, gestes appris devant les télévisions…",
+        "en": "Hylics 2 can be played in multiworld with Archipelago. All unique items, equipment and skills are randomized: chests, freestanding items, items received from certain characters, gestures learned from TVs…"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Hylics 2",
+      "url": "https://archipelago.gg/games/Hylics%202/info/en"
+    }
+  ]
+}

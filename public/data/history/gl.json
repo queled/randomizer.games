@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Gauntlet Legends se joue en multiworld avec Archipelago : les objets sont déplacés, avec une logique qui garantit une partie finissable.",
+    "en": "Gauntlet Legends can be played in multiworld with Archipelago: items are moved around, with logic that keeps the game beatable."
+  },
+  "events": [
+    {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Atari Games et Midway sortent Gauntlet Legends sur Nintendo 64 en 1999-2000, après la version arcade de 1998.",
+        "en": "Atari Games and Midway release Gauntlet Legends on the Nintendo 64 in 1999-2000, after the 1998 arcade version."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Gauntlet Legends est jouable en multiworld avec Archipelago. Les objets que le joueur obtient normalement sont déplacés ; la logique garantit que la partie reste finissable, quitte à devoir accéder à certains niveaux plus tôt ou plus tard.",
+        "en": "Gauntlet Legends can be played in multiworld with Archipelago. Items the player would normally acquire are moved around; logic keeps the game beatable, even if some levels must be accessed earlier or later."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Gauntlet Legends",
+      "url": "https://archipelago.gg/games/Gauntlet%20Legends/info/en"
+    }
+  ]
+}

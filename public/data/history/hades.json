@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Hades se joue en multiworld : souvenirs, armes, aspects et niveaux de Pacte peuvent rejoindre le pool d'objets.",
+    "en": "Hades can be played in multiworld: keepsakes, weapons, aspects and Pact levels can join the item pool."
+  },
+  "events": [
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Supergiant Games sort Hades en 2020.",
+        "en": "Supergiant Games releases Hades in 2020."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Hades est jouable en multiworld avec le multiworld (multiworld.gg). Les souvenirs, les armes et leurs aspects cachés, les objets importants du Contractor et des « niveaux de Pacte » imposés peuvent rejoindre le pool d'objets.",
+        "en": "Hades can be played in multiworld with multiworld (multiworld.gg). Keepsakes, weapons and their hidden aspects, important items from the Contractor and forced \"Pact levels\" can join the item pool."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Hades",
+      "url": "https://multiworld.gg/games/Hades/info/en"
+    }
+  ]
+}

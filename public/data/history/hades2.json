@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Hades II se joue en multiworld avec « Hades 2 Rogue », qui remplace l'essentiel de la méta-progression par de la randomisation.",
+    "en": "Hades II can be played in multiworld with \"Hades 2 Rogue\", which replaces most of the meta-progression with randomization."
+  },
+  "events": [
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Supergiant Games sort Hades II en 2025, après un accès anticipé lancé en 2024.",
+        "en": "Supergiant Games releases Hades II in 2025, after an early access launched in 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Hades II est jouable en multiworld avec le multiworld (multiworld.gg). Hades 2 Rogue retire l'essentiel de la méta-progression du jeu pour la remplacer par de la randomisation : selon les réglages, toute progression significative peut être randomisée.",
+        "en": "Hades II can be played in multiworld with multiworld (multiworld.gg). Hades 2 Rogue strips away most of the game's meta-progression and replaces it with randomization: depending on settings, every meaningful form of progression can be randomized."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Hades2Rogue",
+      "url": "https://multiworld.gg/games/Hades2Rogue/info/en"
+    }
+  ]
+}

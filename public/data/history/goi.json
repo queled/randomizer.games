@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Getting Over It with Bennett Foddy se joue aussi en multiworld.",
+    "en": "Getting Over It with Bennett Foddy can also be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bennett Foddy sort Getting Over It with Bennett Foddy en 2017 : il faut gravir une montagne faite d'objets hétéroclites avec un simple marteau, sans point de sauvegarde.",
+        "en": "Bennett Foddy releases Getting Over It with Bennett Foddy in 2017: you climb a mountain made of random objects with nothing but a hammer, with no save points."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Getting Over It est jouable en multiworld avec le multiworld (multiworld.gg).",
+        "en": "Getting Over It can be played in multiworld with multiworld (multiworld.gg)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Getting Over It",
+      "url": "https://multiworld.gg/games/Getting%20Over%20It/info/en"
+    }
+  ]
+}

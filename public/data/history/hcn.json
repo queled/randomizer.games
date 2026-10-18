@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Here Comes Niko! se joue en multiworld : toutes les récompenses, grenouilles comprises, sont randomisées.",
+    "en": "Here Comes Niko! can be played in multiworld: every reward, frogs included, is randomized."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Frog Vibes sort Here Comes Niko! en 2021.",
+        "en": "Frog Vibes releases Here Comes Niko! in 2021."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Here Comes Niko! est jouable en multiworld avec le multiworld (multiworld.gg). Toutes les récompenses du jeu, grenouilles comprises, sont randomisées, et de nouveaux objets débloquent des zones et des lieux.",
+        "en": "Here Comes Niko! can be played in multiworld with multiworld (multiworld.gg). Every reward in the game, frogs included, is randomized, and new items unlock areas and locations."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Here Comes Niko!",
+      "url": "https://multiworld.gg/games/Here%20Comes%20Niko%21/info/en"
+    }
+  ]
+}

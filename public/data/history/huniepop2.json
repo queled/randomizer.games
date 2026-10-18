@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "HuniePop 2: Double Date se joue en multiworld.",
+    "en": "HuniePop 2: Double Date can be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "HuniePot sort HuniePop 2: Double Date en 2021.",
+        "en": "HuniePot releases HuniePop 2: Double Date in 2021."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "HuniePop 2: Double Date est jouable en multiworld avec le multiworld (multiworld.gg).",
+        "en": "HuniePop 2: Double Date can be played in multiworld with multiworld (multiworld.gg)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Hunie Pop 2",
+      "url": "https://multiworld.gg/games/Hunie%20Pop%202/info/en"
+    }
+  ]
+}

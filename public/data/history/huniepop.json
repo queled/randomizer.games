@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "HuniePop se joue en multiworld.",
+    "en": "HuniePop can be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "HuniePot sort HuniePop en 2015.",
+        "en": "HuniePot releases HuniePop in 2015."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "HuniePop est jouable en multiworld avec le multiworld (multiworld.gg).",
+        "en": "HuniePop can be played in multiworld with multiworld (multiworld.gg)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Hunie Pop",
+      "url": "https://multiworld.gg/games/Hunie%20Pop/info/en"
+    }
+  ]
+}

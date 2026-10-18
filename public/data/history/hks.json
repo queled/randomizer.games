@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Hollow Knight: Silksong se joue en multiworld : capacités de mouvement, outils, emblèmes, cartes et fragments de masque peuvent être randomisés.",
+    "en": "Hollow Knight: Silksong can be played in multiworld: movement abilities, tools, crests, maps and mask shards can be randomized."
+  },
+  "events": [
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Team Cherry sort Hollow Knight: Silksong en 2025.",
+        "en": "Team Cherry releases Hollow Knight: Silksong in 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Hollow Knight: Silksong est jouable en multiworld avec le multiworld (multiworld.gg). Les checks et objets de progression peuvent être randomisés : capacités de mouvement, outils, emblèmes, cartes, fragments de masque… Le projet repose sur une équipe de cartographie de la logique, des testeurs et des développeurs de mods.",
+        "en": "Hollow Knight: Silksong can be played in multiworld with multiworld (multiworld.gg). Silksong checks and progression items can be randomized: movement abilities, tools, crests, maps, mask shards… The project relies on a logic mapping team, playtesters and mod developers."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Hollow Knight: Silksong",
+      "url": "https://multiworld.gg/games/Hollow%20Knight%3A%20Silksong/info/en"
+    }
+  ]
+}

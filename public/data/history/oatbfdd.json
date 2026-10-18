@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Le randomizer d'Ori and the Blind Forest: Definitive Edition, né en 2017 du travail de sigmasin, mélange les pouvoirs et les objets d'Ori. Son site, orirando.com, propose aussi un générateur, un suivi en ligne, un plandomizer et du bingo.",
+    "en": "The Ori and the Blind Forest: Definitive Edition Randomizer, born in 2017 from sigmasin's work, shuffles Ori's abilities and pickups. Its website, orirando.com, also offers a generator, online tracking, a plandomizer and bingo."
+  },
+  "events": [
+    {
+      "date": "2015-2016",
+      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "text": {
+        "fr": "Moon Studios et Microsoft sortent Ori and the Blind Forest en 2015, puis sa Definitive Edition en 2016.",
+        "en": "Moon Studios and Microsoft release Ori and the Blind Forest in 2015, then its Definitive Edition in 2016."
+      }
+    },
+    {
+      "date": "2017",
+      "title": { "fr": "Les débuts", "en": "The beginnings" },
+      "text": {
+        "fr": "Le randomizer s'appuie sur le travail de sigmasin : son dépôt démarre le 6 mai 2017, avec une version 0.4 le jour même. La version 1.0 sort le 19 juin 2017, la 2.0 le 25 septembre 2017. Le randomizer prend la forme d'une modification du code du jeu sur PC.",
+        "en": "The randomizer builds on sigmasin's work: its repository starts on May 6, 2017, with a version 0.4 the same day. Version 1.0 comes out on June 19, 2017, and 2.0 on September 25, 2017. The randomizer takes the form of a modification of the game's code on PC."
+      }
+    },
+    {
+      "date": "2018",
+      "title": { "fr": "orirando.com et la version 3.0", "en": "orirando.com and version 3.0" },
+      "text": {
+        "fr": "Eiko lance en mars 2018 le serveur du site orirando.com : générateur de seeds, aide à la logique, carte de suivi en ligne, plandomizer et bingo multijoueur. La version 3.0 du randomizer sort le 24 décembre 2018. tksstepan, Vulajin et Eiko (sparkle-preference) figurent parmi les principaux contributeurs.",
+        "en": "In March 2018, Eiko launches the orirando.com website server: seed generator, logic helper, online tracking map, plandomizer and multiplayer bingo. Version 3.0 of the randomizer comes out on December 24, 2018. tksstepan, Vulajin and Eiko (sparkle-preference) are among the main contributors."
+      }
+    },
+    {
+      "date": "2021",
+      "title": { "fr": "Sur racetime.gg", "en": "On racetime.gg" },
+      "text": {
+        "fr": "Ce site recense 199 courses sur racetime.gg en 2021. Le jeu est aussi jouable en multiworld grâce à un mod Archipelago apparu en 2024.",
+        "en": "This site counts 199 races on racetime.gg in 2021. The game can also be played in multiworld thanks to an Archipelago mod that appeared in 2024."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "tksstepan/OriDERandomizer (GitHub)", "url": "https://github.com/tksstepan/OriDERandomizer" },
+    { "label": "sparkle-preference/ori_rando_server (GitHub)", "url": "https://github.com/sparkle-preference/ori_rando_server" },
+    { "label": "Ori DE Randomizer", "url": "https://orirando.com/" },
+    { "label": "c-ostic/OriBFArchipelago (GitHub)", "url": "https://github.com/c-ostic/OriBFArchipelago" },
+    { "label": "racetime.gg — Ori and the Blind Forest", "url": "https://racetime.gg/ori-bf" }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "intro": {
+    "fr": "Le randomizer d'Ori and the Will of the Wisps, développé par la communauté Ori, est né quelques jours après la sortie du jeu en 2020. Il comprend un client qui modifie le jeu, un générateur de seeds, un lanceur et un serveur.",
+    "en": "The Ori and the Will of the Wisps Randomizer, developed by the Ori community, was born a few days after the game's release in 2020. It includes a client that modifies the game, a seed generator, a launcher and a server."
+  },
+  "events": [
+    {
+      "date": "2020",
+      "title": { "fr": "Le jeu et le randomizer", "en": "The game and the randomizer" },
+      "text": {
+        "fr": "Moon Studios et Xbox Game Studios sortent Ori and the Will of the Wisps le 11 mars 2020. Dès le 22 mars, Eiko commence le client du randomizer. Les premières courses recensées sur ce site ont lieu le 21 juillet 2020 sur racetime.gg.",
+        "en": "Moon Studios and Xbox Game Studios release Ori and the Will of the Wisps on March 11, 2020. As early as March 22, Eiko starts the randomizer client. The first races listed on this site take place on July 21, 2020 on racetime.gg."
+      }
+    },
+    {
+      "date": "2021",
+      "title": { "fr": "L'écosystème ori-community", "en": "The ori-community ecosystem" },
+      "text": {
+        "fr": "En 2021, l'organisation ori-community met en place un lanceur et une interface web, un serveur et un nouveau générateur de seeds. Eiko (sparkle-preference), MunWolf et timoschwarzer sont les principaux contributeurs du client.",
+        "en": "In 2021, the ori-community organization sets up a launcher and web UI, a server and a new seed generator. Eiko (sparkle-preference), MunWolf and timoschwarzer are the client's main contributors."
+      }
+    },
+    {
+      "date": "2022",
+      "title": { "fr": "Le pic des courses", "en": "The racing peak" },
+      "text": {
+        "fr": "Ce site recense 116 courses en 2022, un record. Le jeu est aussi jouable en multiworld.",
+        "en": "This site counts 116 races in 2022, a record. The game can also be played in multiworld."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "ori-community/wotw-rando-client (GitHub)", "url": "https://github.com/ori-community/wotw-rando-client" },
+    { "label": "ori-community/wotw-seedgen (GitHub)", "url": "https://github.com/ori-community/wotw-seedgen" },
+    { "label": "Ori and the Will of the Wisps Randomizer", "url": "https://wotw.orirando.com/" },
+    { "label": "racetime.gg — Ori and the Will of the Wisps", "url": "https://racetime.gg/ori-wotw" }
+  ]
+}

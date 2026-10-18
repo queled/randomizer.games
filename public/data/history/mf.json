@@ -1,0 +1,49 @@
+{
+  "intro": {
+    "fr": "Depuis 2025, Metroid Fusion se randomise aussi avec Randovania, grâce au Metroid Advance Randomizer System (MARS), qui modifie le jeu pour accueillir un randomizer moderne.",
+    "en": "Since 2025, Metroid Fusion can also be randomized with Randovania, thanks to the Metroid Advance Randomizer System (MARS), which modifies the game to support a modern randomizer."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "text": {
+        "fr": "Nintendo sort Metroid Fusion sur Game Boy Advance en 2002. Un premier randomizer, le Metroid Fusion Open Randomizer de Kazuto, se joue en course dès 2021.",
+        "en": "Nintendo releases Metroid Fusion on the Game Boy Advance in 2002. An earlier randomizer, Kazuto's Metroid Fusion Open Randomizer, has been raced since 2021."
+      }
+    },
+    {
+      "date": "2024",
+      "title": { "fr": "MARS", "en": "MARS" },
+      "text": {
+        "fr": "Le projet Metroid Advance Randomizer System démarre le 24 janvier 2024 : un ensemble de modifications en assembleur qui rendent Metroid Fusion randomisable, accompagné d'un patcher en Python. AntyMew, Miepee, cluekitty et zarakava en sont les principaux contributeurs.",
+        "en": "The Metroid Advance Randomizer System project starts on January 24, 2024: a set of assembly changes that make Metroid Fusion randomizable, alongside a Python patcher. AntyMew, Miepee, cluekitty and zarakava are its main contributors."
+      }
+    },
+    {
+      "date": "2025",
+      "title": { "fr": "Dans Randovania", "en": "In Randovania" },
+      "text": {
+        "fr": "Le 1er août 2025, la version 10.0 de Randovania ajoute Metroid Fusion en solo, avec des points de départ aléatoires et plusieurs options. Les premières courses recensées sur ce site ont lieu le 29 août 2025 : 108 dans l'année.",
+        "en": "On August 1, 2025, Randovania version 10.0 adds Metroid Fusion in single player, with random starting locations and several options. The first races listed on this site take place on August 29, 2025: 108 that year."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": { "fr": "Multiworld", "en": "Multiworld" },
+      "text": {
+        "fr": "Metroid Fusion est aussi jouable en multiworld.",
+        "en": "Metroid Fusion can also be played in multiworld."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "MetroidAdvRandomizerSystem/mars-fusion-asm (GitHub)", "url": "https://github.com/MetroidAdvRandomizerSystem/mars-fusion-asm" },
+    { "label": "Randovania — CHANGELOG", "url": "https://github.com/randovania/randovania/blob/main/CHANGELOG.md" },
+    { "label": "Kazuto88/MFOR (GitHub)", "url": "https://github.com/Kazuto88/MFOR" },
+    { "label": "racetime.gg — Metroid Fusion Randomizer (Randovania)", "url": "https://racetime.gg/mfr-rdv" }
+  ]
+}

@@ -52,7 +52,10 @@
       }
     },
     {
-      "date": "2026",
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
       "title": {
         "fr": "Multiworld",
         "en": "Multiworld"

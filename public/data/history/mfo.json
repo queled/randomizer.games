@@ -1,0 +1,66 @@
+{
+  "intro": {
+    "fr": "Le Metroid Fusion Open Randomizer (MFOR) de Kazuto mélange les objets de Samus dans Metroid Fusion. Il a été le randomizer de Fusion le plus joué en course jusqu'à l'arrivée de la version Randovania en 2025.",
+    "en": "Kazuto's Metroid Fusion Open Randomizer (MFOR) shuffles Samus's items in Metroid Fusion. It was the most raced Fusion randomizer until the Randovania version arrived in 2025."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Metroid Fusion sur Game Boy Advance en 2002.",
+        "en": "Nintendo releases Metroid Fusion on the Game Boy Advance in 2002."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "MFOR",
+        "en": "MFOR"
+      },
+      "text": {
+        "fr": "Le Metroid Fusion Open Randomizer, « MFOR » ou « Fusion Rando », est une application Windows de Kazuto, présentée sur le forum Metroid Construction. Les premières courses recensées sur ce site ont lieu le 29 août 2021 sur racetime.gg, et Kazuto publie son dépôt GitHub officiel en octobre 2021, alors en version 0.9.7. Pour finir une seed, il faut notamment un objet de saut en plus de l'équipement nécessaire contre le SA-X.",
+        "en": "The Metroid Fusion Open Randomizer, \"MFOR\" or \"Fusion Rando\", is a Windows application by Kazuto, presented on the Metroid Construction forum. The first races listed on this site take place on August 29, 2021 on racetime.gg, and Kazuto publishes his official GitHub repository in October 2021, then at version 0.9.7. To finish a seed, you notably need a jump item on top of the equipment required against the SA-X."
+      }
+    },
+    {
+      "date": "2021-2022",
+      "title": {
+        "fr": "L'âge d'or",
+        "en": "The golden age"
+      },
+      "text": {
+        "fr": "Ce site recense 183 courses MFOR en 2021 et 131 en 2022.",
+        "en": "This site counts 183 MFOR races in 2021 and 131 in 2022."
+      }
+    },
+    {
+      "date": "2025",
+      "title": {
+        "fr": "La relève Randovania",
+        "en": "Randovania takes over"
+      },
+      "text": {
+        "fr": "En août 2025, Randovania ajoute Metroid Fusion, sur la base du Metroid Advance Randomizer System (MARS). Les courses se déplacent vers cette nouvelle version.",
+        "en": "In August 2025, Randovania adds Metroid Fusion, built on the Metroid Advance Randomizer System (MARS). Races move to this new version."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Kazuto88/MFOR (GitHub)",
+      "url": "https://github.com/Kazuto88/MFOR"
+    },
+    {
+      "label": "Metroid Construction — Metroid Fusion Open Randomizer",
+      "url": "https://forum.metroidconstruction.com/index.php?topic=5376.0"
+    },
+    {
+      "label": "racetime.gg — Metroid Fusion Randomizer",
+      "url": "https://racetime.gg/mfr"
+    }
+  ]
+}

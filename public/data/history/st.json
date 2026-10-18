@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "The Legend of Zelda: Spirit Tracks se joue en multiworld : tout ce qui donne un objet devient un emplacement.",
+    "en": "The Legend of Zelda: Spirit Tracks can be played in multiworld: everything that gives an item becomes a check."
+  },
+  "events": [
+    {
+      "date": "2009",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort The Legend of Zelda: Spirit Tracks sur Nintendo DS en 2009.",
+        "en": "Nintendo releases The Legend of Zelda: Spirit Tracks on the Nintendo DS in 2009."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "The Legend of Zelda: Spirit Tracks est jouable en multiworld avec MultiworldGG. Tout ce qui donne un objet dans le jeu d'origine devient un emplacement, et certaines cinématiques sont retirées. Le but est soit un emplacement précis, soit le boss final. Il repose sur le même système que le randomizer de Phantom Hourglass.",
+        "en": "The Legend of Zelda: Spirit Tracks can be played in multiworld with MultiworldGG. Anything that gives an item in the original game becomes a check, and some cutscenes are removed. The goal is either a given check or the final boss. It uses the same system as the Phantom Hourglass randomizer."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Spirit Tracks",
+      "url": "https://multiworld.gg/games/Spirit%20Tracks/info/en"
+    }
+  ]
+}

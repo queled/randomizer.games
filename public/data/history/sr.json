@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Slime Rancher se joue en multiworld : améliorations, fragments de carte et capsules au trésor deviennent des emplacements.",
+    "en": "Slime Rancher can be played in multiworld: upgrades, map fragments and treasure pods become checks."
+  },
+  "events": [
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Monomi Park sort Slime Rancher en 2017.",
+        "en": "Monomi Park releases Slime Rancher in 2017."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Slime Rancher est jouable en multiworld avec MultiworldGG. Améliorations personnelles, fragments de carte, capsules au trésor et notes de Hobson sont des emplacements, avec en option les récompenses 7Zee. Les marqueurs de carte indiquent ce qui est dans la logique.",
+        "en": "Slime Rancher can be played in multiworld with MultiworldGG. Personal upgrades, map fragments, treasure pods and Hobson's notes are checks, with 7Zee rewards as an option. Map markers show what is in logic."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Slime Rancher",
+      "url": "https://multiworld.gg/games/Slime%20Rancher/info/en"
+    }
+  ]
+}

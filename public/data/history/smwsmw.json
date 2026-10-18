@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Spicy Mycena Waffles est une version multiworld remaniée de Super Mario World, riche en options de mélange.",
+    "en": "Spicy Mycena Waffles is a reworked multiworld take on Super Mario World, packed with shuffle options."
+  },
+  "events": [
+    {
+      "date": "1990",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Super Mario World sur Super Famicom en 1990.",
+        "en": "Nintendo releases Super Mario World on the Super Famicom in 1990."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Spicy Mycena Waffles est jouable en multiworld avec MultiworldGG. Il reprend et remanie l'implémentation d'origine de Super Mario World : mélange des niveaux, des ennemis, des boss, des transitions, des tuyaux et des sorties, capacités à retrouver et effets de niveau aléatoires.",
+        "en": "Spicy Mycena Waffles can be played in multiworld with MultiworldGG. It takes up and reworks the original Super Mario World implementation: shuffles of levels, enemies, bosses, transitions, pipes and exits, abilities to find and random level effects."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — SMW: Spicy Mycena Waffles",
+      "url": "https://multiworld.gg/games/SMW%3A%20Spicy%20Mycena%20Waffles/info/en"
+    }
+  ]
+}

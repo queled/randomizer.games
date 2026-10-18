@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Super Mario Odyssey se joue en multiworld : lunes et captures sont randomisées.",
+    "en": "Super Mario Odyssey can be played in multiworld: Power Moons and captures are randomized."
+  },
+  "events": [
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Super Mario Odyssey sur Switch en 2017.",
+        "en": "Nintendo releases Super Mario Odyssey on the Switch in 2017."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Super Mario Odyssey est jouable en multiworld avec MultiworldGG. Le mod randomise les Power Moons et les captures, avec tenues, autocollants et souvenirs, et laisse choisir le royaume final. Il ne fonctionne qu'avec la version 1.0.0 du jeu et s'appuie sur le code serveur de Sanae et sur SMO Online de CraftyBoss.",
+        "en": "Super Mario Odyssey can be played in multiworld with MultiworldGG. The mod randomizes Power Moons and captures, plus outfits, stickers and souvenirs, and lets you pick the goal kingdom. It only works on version 1.0.0 of the game and builds on Sanae's server code and CraftyBoss's SMO Online."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Super Mario Odyssey",
+      "url": "https://multiworld.gg/games/Super%20Mario%20Odyssey/info/en"
+    }
+  ]
+}

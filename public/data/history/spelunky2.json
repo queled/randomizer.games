@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "The Randomizer de Dregu, l'auteur d'Overlunky, chamboule tout Spelunky 2 : boutiques, niveaux, ennemis et pièges.",
+    "en": "Dregu's The Randomizer, from the author of Overlunky, turns Spelunky 2 upside down: shops, levels, enemies and traps."
+  },
+  "events": [
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Mossmouth sort Spelunky 2 en 2020.",
+        "en": "Mossmouth releases Spelunky 2 in 2020."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "The Randomizer",
+        "en": "The Randomizer"
+      },
+      "text": {
+        "fr": "Dregu publie The Randomizer sur spelunky.fyi, en mod script issu d'Overlunky. Sa seconde version change la progression, rend les boutiques aléatoires, génère des niveaux déroutants, avec plusieurs fins et des secrets ; contenus des conteneurs, ennemis et pièges sont randomisés.",
+        "en": "Dregu releases The Randomizer on spelunky.fyi, as a script mod from Overlunky. Its second incarnation changes progression, randomizes shops, generates wild levels, with multiple endings and secrets; container contents, enemies and traps are randomized."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "spelunky.fyi — The Randomizer",
+      "url": "https://spelunky.fyi/mods/m/randomizer/"
+    }
+  ]
+}

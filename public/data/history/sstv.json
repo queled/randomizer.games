@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Super Smash T.V., de Micheil Skeens, fait partie d'une longue série de randomizers NES et Super Nintendo.",
+    "en": "Micheil Skeens's Super Smash T.V. randomizer is part of a long series of NES and Super Nintendo randomizers."
+  },
+  "events": [
+    {
+      "date": "1992",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Super Smash T.V., adaptation de la borne Smash T.V. (1990), sort sur Super Nintendo en 1992.",
+        "en": "Super Smash T.V., a port of the Smash T.V. arcade game (1990), comes out on the Super Nintendo in 1992."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Micheil Skeens publie le randomizer de la version américaine le 21 février 2021, l'un de ses nombreux randomizers pour la NES et la Super Nintendo.",
+        "en": "Micheil Skeens releases the randomizer for the US version on February 21, 2021, one of many NES and Super Nintendo randomizers by the same author."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Micheil Skeens — Super Smash TV Randomizer",
+      "url": "https://micheilskeens.com/super-smash-tv-randomizer.php"
+    }
+  ]
+}

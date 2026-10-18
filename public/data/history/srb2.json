@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Sonic Robo Blast 2 se joue en multiworld, avec la prise en charge de 16 personnages modés.",
+    "en": "Sonic Robo Blast 2 can be played in multiworld, with support for 16 modded characters."
+  },
+  "events": [
+    {
+      "date": "1998",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sonic Team Junior lance Sonic Robo Blast 2, jeu amateur, en 1998.",
+        "en": "Sonic Team Junior starts Sonic Robo Blast 2, a fan game, in 1998."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Sonic Robo Blast 2 est jouable en multiworld avec MultiworldGG. Seize personnages modés sont pris en charge et peuvent être activés dans les réglages ; les packs de niveaux modés ne le sont pas.",
+        "en": "Sonic Robo Blast 2 can be played in multiworld with MultiworldGG. Sixteen modded characters are supported and can be enabled in the settings; modded level packs are not."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Sonic Robo Blast 2",
+      "url": "https://multiworld.gg/games/Sonic%20Robo%20Blast%202/info/en"
+    }
+  ]
+}

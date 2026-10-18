@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Spyro: Year of the Dragon se joue en multiworld : chaque tâche accomplie envoie un objet.",
+    "en": "Spyro: Year of the Dragon can be played in multiworld: each completed task sends an item."
+  },
+  "events": [
+    {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Insomniac Games et Sony sortent Spyro: Year of the Dragon sur PlayStation en 2000.",
+        "en": "Insomniac Games and Sony release Spyro: Year of the Dragon on the PlayStation in 2000."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Spyro: Year of the Dragon est jouable en multiworld avec MultiworldGG. Chaque tâche accomplie, comme récupérer un œuf, envoie un objet, et le compteur d'œufs peut avancer grâce aux autres joueurs. La version PS1 américaine est requise ; la Reignited Trilogy n'est pas prise en charge.",
+        "en": "Spyro: Year of the Dragon can be played in multiworld with MultiworldGG. Each completed task, such as collecting an egg, sends an item, and the egg counter can go up thanks to other players. The US PS1 version is required; the Reignited Trilogy isn't supported."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Spyro 3",
+      "url": "https://multiworld.gg/games/Spyro%203/info/en"
+    }
+  ]
+}

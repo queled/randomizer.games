@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le WoL Randomizer de Lakifume randomise le mode aventure World of Light de Super Smash Bros. Ultimate.",
+    "en": "Lakifume's WoL Randomizer randomizes Super Smash Bros. Ultimate's World of Light adventure mode."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Super Smash Bros. Ultimate sur Switch en 2018.",
+        "en": "Nintendo releases Super Smash Bros. Ultimate on the Switch in 2018."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "WoL Randomizer",
+        "en": "WoL Randomizer"
+      },
+      "text": {
+        "fr": "Le 14 mai 2022, Lakifume publie sur GameBanana le WoL Randomizer, qui mélange la place des combats d'esprits dans World of Light : Kirby reste le personnage de départ, mais les combattants débloqués changent à chaque partie, DLC compris. Les règles des combats ne sont jamais randomisées, pour garder les références des esprits.",
+        "en": "On May 14, 2022, Lakifume releases the WoL Randomizer on GameBanana, which shuffles where spirit battles sit in World of Light: Kirby stays the starting character, but unlocked fighters change every run, DLC included. Battle rules are never randomized, to keep the spirits' references."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GameBanana — WoL Randomizer",
+      "url": "https://gamebanana.com/tools/9313"
+    }
+  ]
+}

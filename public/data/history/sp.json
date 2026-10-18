@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Saving Princess se joue en multiworld avec Archipelago : contenus des coffres et armes spéciales sont mélangés.",
+    "en": "Saving Princess can be played in multiworld with Archipelago: chest contents and special weapons are shuffled."
+  },
+  "events": [
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Saving Princess, jeu gratuit, sort en 2016.",
+        "en": "Saving Princess, a free game, comes out in 2016."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Saving Princess est jouable en multiworld avec Archipelago. Le contenu des coffres et les armes spéciales sont mélangés, avec de nouveaux objets de remplissage et des pièges. Le jeu gagne un menu de connexion, un suivi automatique et une sauvegarde par seed.",
+        "en": "Saving Princess can be played in multiworld with Archipelago. Chest contents and special weapons are shuffled, with new filler items and traps. The game gains a connection menu, an autotracker and a save per seed."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Saving Princess",
+      "url": "https://archipelago.gg/games/Saving%20Princess/info/en"
+    }
+  ]
+}

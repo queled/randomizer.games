@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Old School RuneScape se joue en multiworld avec Archipelago, avec les restrictions Ironman et des zones de la carte à débloquer.",
+    "en": "Old School RuneScape can be played in multiworld with Archipelago, under Ironman restrictions with map regions to unlock."
+  },
+  "events": [
+    {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Jagex lance Old School RuneScape en 2013.",
+        "en": "Jagex launches Old School RuneScape in 2013."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Old School RuneScape est jouable en multiworld avec Archipelago. Le but est d'accomplir la quête « Dragon Slayer I » sur un nouveau compte gratuit, avec un accès limité à l'équipement et aux zones de la carte, en respectant les règles Ironman.",
+        "en": "Old School RuneScape can be played in multiworld with Archipelago. The goal is to complete the \"Dragon Slayer I\" quest on a fresh free-to-play account, with limited access to gear and map chunks, following Ironman rules."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Old School Runescape",
+      "url": "https://archipelago.gg/games/Old%20School%20Runescape/info/en"
+    }
+  ]
+}

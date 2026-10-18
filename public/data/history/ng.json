@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Ninja Gaiden, de Micheil Skeens, fait partie d'une longue série de randomizers NES et Super Nintendo.",
+    "en": "Micheil Skeens's Ninja Gaiden randomizer is part of a long series of NES and Super Nintendo randomizers."
+  },
+  "events": [
+    {
+      "date": "1988",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Tecmo sort Ninja Gaiden (Ninja Ryūkenden) sur Famicom en 1988, puis sur NES.",
+        "en": "Tecmo releases Ninja Gaiden (Ninja Ryūkenden) on the Famicom in 1988, then on the NES."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Micheil Skeens publie le randomizer de la version américaine le 30 août 2020, l'un de ses nombreux randomizers pour la NES et la Super Nintendo.",
+        "en": "Micheil Skeens releases the randomizer for the US version on August 30, 2020, one of many NES and Super Nintendo randomizers by the same author."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Micheil Skeens — Ninja Gaiden Randomizer",
+      "url": "https://micheilskeens.com/ninja-gaiden-randomizer.php"
+    }
+  ]
+}

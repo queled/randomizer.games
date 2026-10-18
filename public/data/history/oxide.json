@@ -1,0 +1,29 @@
+{
+  "intro": {
+    "fr": "Oxide, romhack de Super Metroid, a son randomizer, réalisé par ironrusty.",
+    "en": "Oxide, a Super Metroid romhack, has its randomizer, made by ironrusty."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "En novembre 2023, ironrusty publie un randomizer d'Oxide. Ces randomizers de hacks cherchent à préserver au maximum le comportement d'origine de chaque hack, avec l'algorithme de remplissage de Subversion, de beauxq.",
+        "en": "In November 2023, ironrusty releases an Oxide randomizer. These hack randomizers aim to preserve each hack's original behavior as much as possible, using beauxq's Subversion fill algorithm."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "randorandy — Oxide Rando",
+      "url": "https://randorandy.github.io/OxideRando/"
+    },
+    {
+      "label": "randorandy — Super Metroid hack randomizers",
+      "url": "https://randorandy.github.io/"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Noita se joue en multiworld avec Archipelago : objets de boutique, coffres et piédestaux deviennent des emplacements à vérifier.",
+    "en": "Noita can be played in multiworld with Archipelago: shop items, chests and pedestals become location checks."
+  },
+  "events": [
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nolla Games sort Noita en 2020.",
+        "en": "Nolla Games releases Noita in 2020."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Noita est jouable en multiworld avec Archipelago. Les objets des boutiques, les coffres et cœurs cachés et les objets sur piédestal deviennent des emplacements ; les orbes et les butins de boss peuvent l'être aussi en option. On y reçoit perks, orbes, baguettes, cœurs, or ou potions, et parfois des pièges.",
+        "en": "Noita can be played in multiworld with Archipelago. Shop items, hidden chests and hearts and pedestal items become locations; orbs and boss drops can too, as options. You receive perks, orbs, wands, hearts, gold or potions, and sometimes traps."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Noita",
+      "url": "https://archipelago.gg/games/Noita/info/en"
+    }
+  ]
+}

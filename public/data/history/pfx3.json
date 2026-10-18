@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Pinball FX3 se joue en multiworld, sur une campagne de tables générée selon les réglages.",
+    "en": "Pinball FX3 can be played in multiworld, on a table campaign generated from your settings."
+  },
+  "events": [
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Zen Studios sort Pinball FX3 en 2017.",
+        "en": "Zen Studios releases Pinball FX3 in 2017."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Pinball FX3 est jouable en multiworld avec le multiworld (multiworld.gg). Les 100 tables de la collection sont prises en charge, avec des scores cibles adaptés à chaque table. Aucun mod n'est nécessaire : le client se contente de lire la mémoire du jeu.",
+        "en": "Pinball FX3 can be played in multiworld with multiworld (multiworld.gg). All 100 tables in the collection are supported, with target scores scaled per table. No modding is needed: the client only reads the game's memory."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Pinball FX3",
+      "url": "https://multiworld.gg/games/Pinball%20FX3/info/en"
+    }
+  ]
+}

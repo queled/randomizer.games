@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le NFS Carbon Randomizer de RaTT mélange les courses, les récompenses et les voitures de la carrière.",
+    "en": "RaTT's NFS Carbon Randomizer shuffles career races, rewards and cars."
+  },
+  "events": [
+    {
+      "date": "2006",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "EA Black Box et Electronic Arts sortent Need for Speed: Carbon en 2006.",
+        "en": "EA Black Box and Electronic Arts release Need for Speed: Carbon in 2006."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le randomizer de RaTT",
+        "en": "RaTT's randomizer"
+      },
+      "text": {
+        "fr": "Le 11 mars 2020, RaTT publie sur NFSMods un randomizer qui génère un script à importer avec NFS VLT-Ed (de nfsu360). Il randomise les courses et récompenses de la carrière, les voitures des boss et des séries de défis, les recrues de l'équipe et les voitures de départ. La version 1.0.2.0 suit le 15 mars 2020.",
+        "en": "On March 11, 2020, RaTT releases on NFSMods a randomizer that generates a script to import with NFS VLT-Ed (by nfsu360). It randomizes career races and rewards, boss and challenge series cars, crew acquisitions and starter cars. Version 1.0.2.0 follows on March 15, 2020."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "NFSMods — NFS Carbon - Randomizer",
+      "url": "https://nfsmods.xyz/mod/1568"
+    }
+  ]
+}

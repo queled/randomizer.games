@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Royal Randomizer de Screenments randomise les ennemis de presque tous les combats de Persona 5 Royal.",
+    "en": "Screenments's Royal Randomizer randomizes the enemies in almost every encounter of Persona 5 Royal."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Atlus sort Persona 5 Royal au Japon en 2019, puis sur PC en 2022.",
+        "en": "Atlus releases Persona 5 Royal in Japan in 2019, then on PC in 2022."
+      }
+    },
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Royal Randomizer",
+        "en": "Royal Randomizer"
+      },
+      "text": {
+        "fr": "Le 23 mars 2024, Screenments publie sur GameBanana le Royal Randomizer pour la version PC : un script Python qui remplace les ennemis de presque toutes les rencontres par n'importe quel ennemi, en option avec le décor du combat. Il remercie ShrineFox, auteur du Persona Randomizer original qui couvrait déjà Persona 5.",
+        "en": "On March 23, 2024, Screenments releases the Royal Randomizer for the PC version on GameBanana: a Python script that replaces the enemies in almost every encounter with any enemy, optionally with the battlefield too. It thanks ShrineFox, author of the original Persona Randomizer that already covered Persona 5."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GameBanana — Royal Randomizer",
+      "url": "https://gamebanana.com/mods/502477"
+    }
+  ]
+}

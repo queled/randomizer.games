@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Nine Sols se joue en multiworld : la partie commence directement au Four Seasons Pavilion, avec la téléportation débloquée.",
+    "en": "Nine Sols can be played in multiworld: the game starts right at the Four Seasons Pavilion, with Teleport unlocked."
+  },
+  "events": [
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Red Candle Games sort Nine Sols en 2024.",
+        "en": "Red Candle Games releases Nine Sols in 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Nine Sols est jouable en multiworld avec le multiworld (multiworld.gg). À la place de l'introduction, on démarre au Four Seasons Pavilion, porte d'entrée bloquée, avec la téléportation et un autre point de téléportation débloqués. Atteindre Eigong ne demande que des objets Sol Seal.",
+        "en": "Nine Sols can be played in multiworld with multiworld (multiworld.gg). Instead of the intro, you start at the Four Seasons Pavilion, its front door jammed, with Teleport and one other teleport node unlocked. Reaching Eigong only requires Sol Seal items."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Nine Sols",
+      "url": "https://multiworld.gg/games/Nine%20Sols/info/en"
+    }
+  ]
+}

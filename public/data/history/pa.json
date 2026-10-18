@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Phoenotopia: Awakening se joue en multiworld : les objets sont mélangés entre coffres, cadeaux de personnages et butins d'ennemis.",
+    "en": "Phoenotopia: Awakening can be played in multiworld: items are shuffled between chests, character gifts and enemy drops."
+  },
+  "events": [
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Cape Cosmic sort Phoenotopia: Awakening en 2020.",
+        "en": "Cape Cosmic releases Phoenotopia: Awakening in 2020."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Phoenotopia: Awakening est jouable en multiworld avec le multiworld (multiworld.gg). Les objets clés, coffres, cadeaux de personnages et butins d'ennemis sont mélangés. Présenté comme une preuve de concept, le randomizer a pour but de vaincre Birdy et le Sand Drake au bout de l'Ouroboros Hideout.",
+        "en": "Phoenotopia: Awakening can be played in multiworld with multiworld (multiworld.gg). Key items, chests, character gifts and enemy drops are shuffled. Presented as a proof of concept, the randomizer's goal is to defeat Birdy and the Sand Drake at the end of the Ouroboros Hideout."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Phoenotopia: Awakening",
+      "url": "https://multiworld.gg/games/Phoenotopia%3A%20Awakening/info/en"
+    }
+  ]
+}

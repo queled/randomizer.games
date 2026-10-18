@@ -1,0 +1,32 @@
+{
+  "intro": {
+    "fr": "Paint devient un jeu multiworld avec Archipelago : on reproduit une image cible avec des outils et des couleurs à débloquer.",
+    "en": "Paint becomes a multiworld game with Archipelago: you reproduce a target image with tools and colors to unlock."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Paint est jouable en multiworld avec Archipelago. Basé sur JS Paint, un remake libre de Microsoft Paint, il verrouille la plupart des outils, la taille du canevas et les couleurs. Chaque point de ressemblance avec l'image cible envoie un emplacement, jusqu'au pourcentage visé.",
+        "en": "Paint can be played in multiworld with Archipelago. Based on JS Paint, an open-source remake of Microsoft Paint, it locks most tools, the canvas size and colors. Every percentage point of similarity to the target image sends a check, up to the target percentage."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Paint",
+      "url": "https://archipelago.gg/games/Paint/info/en"
+    },
+    {
+      "label": "JS Paint",
+      "url": "https://jspaint.app/"
+    }
+  ]
+}

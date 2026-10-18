@@ -1,0 +1,29 @@
+{
+  "intro": {
+    "fr": "NATURE, romhack de Super Metroid, a son randomizer, réalisé par ironrusty.",
+    "en": "NATURE, a Super Metroid romhack, has its randomizer, made by ironrusty."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "En juin 2023, ironrusty publie un randomizer de NATURE, enrichi depuis d'une option Major/Minor et de réglages de techniques grâce à badatmetroid. Ces randomizers de hacks cherchent à préserver au maximum le comportement d'origine de chaque hack, avec l'algorithme de remplissage de Subversion, de beauxq.",
+        "en": "In June 2023, ironrusty releases a NATURE randomizer, since extended with a Major/Minor option and skill settings thanks to badatmetroid. These hack randomizers aim to preserve each hack's original behavior as much as possible, using beauxq's Subversion fill algorithm."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "randorandy — NATURE Rando",
+      "url": "https://randorandy.github.io/natureRando/"
+    },
+    {
+      "label": "randorandy — Super Metroid hack randomizers",
+      "url": "https://randorandy.github.io/"
+    }
+  ]
+}

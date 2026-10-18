@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "PEAK se joue en multiworld : les ascensions se débloquent par des objets reçus des autres joueurs.",
+    "en": "PEAK can be played in multiworld: ascents unlock through items received from other players."
+  },
+  "events": [
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Aggro Crab et Landfall sortent PEAK en 2025.",
+        "en": "Aggro Crab and Landfall release PEAK in 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "PEAK est jouable en multiworld avec le multiworld (multiworld.gg). Les ascensions 1 à 7 se débloquent par des objets, avec DeathLink et RingLink en option. Le mod est l'œuvre d'ArchipelagoBrad, ManNamedGarbo, Mickemoose et Dmonet.",
+        "en": "PEAK can be played in multiworld with multiworld (multiworld.gg). Ascents 1 to 7 unlock through items, with optional DeathLink and RingLink. The mod is by ArchipelagoBrad, ManNamedGarbo, Mickemoose and Dmonet."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — PEAK",
+      "url": "https://multiworld.gg/games/PEAK/info/en"
+    }
+  ]
+}

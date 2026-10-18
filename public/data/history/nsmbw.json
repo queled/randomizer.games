@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Le New Super Mario Randomizer Wii de Hammer Bro Hei remanie au hasard les 135 niveaux du jeu.",
+    "en": "Hammer Bro Hei's New Super Mario Randomizer Wii randomly remixes the game's 135 levels."
+  },
+  "events": [
+    {
+      "date": "2009",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort New Super Mario Bros. Wii en 2009.",
+        "en": "Nintendo releases New Super Mario Bros. Wii in 2009."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Hammer Bro Hei propose le New Super Mario Randomizer Wii (version 2.0), qui randomise niveaux, objets et ennemis : les 135 niveaux sont modifiés au hasard, avec une configuration détaillée.",
+        "en": "Hammer Bro Hei offers the New Super Mario Randomizer Wii (version 2.0), which randomizes levels, items and enemies: all 135 levels are randomly altered, with detailed configuration."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "NSMRW — New Super Mario Randomizer Wii",
+      "url": "https://hbrohei.github.io/NSMRWii/"
+    }
+  ]
+}

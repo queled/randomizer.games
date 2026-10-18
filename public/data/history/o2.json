@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Le randomizer d'Overcooked! 2 transforme le jeu en metroidvania de cuisine, jouable en multiworld avec Archipelago.",
+    "en": "The Overcooked! 2 Randomizer turns the game into a kitchen metroidvania, playable in multiworld with Archipelago."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Ghost Town Games et Team17 sortent Overcooked! 2 en 2018.",
+        "en": "Ghost Town Games and Team17 release Overcooked! 2 in 2018."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Overcooked! 2 est jouable en multiworld avec Archipelago. Les chefs perdent une partie de leurs capacités et les retrouvent comme objets ; chaque premier passage d'un niveau en donne un. Le but est de terminer le niveau 6-6, seul ou jusqu'à quatre joueurs.",
+        "en": "Overcooked! 2 can be played in multiworld with Archipelago. The chefs lose some of their abilities and get them back as items; each level's first completion gives one. The goal is to complete level 6-6, alone or with up to four players."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Overcooked! 2",
+      "url": "https://archipelago.gg/games/Overcooked%21%202/info/en"
+    }
+  ]
+}

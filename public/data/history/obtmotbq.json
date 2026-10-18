@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Un randomizer web existe pour Ogre Battle: The March of the Black Queen.",
+    "en": "A web randomizer exists for Ogre Battle: The March of the Black Queen."
+  },
+  "events": [
+    {
+      "date": "1993",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Quest sort Ogre Battle: The March of the Black Queen sur Super Famicom en 1993.",
+        "en": "Quest releases Ogre Battle: The March of the Black Queen on the Super Famicom in 1993."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Ogre Battle Randomizer",
+        "en": "Ogre Battle Randomizer"
+      },
+      "text": {
+        "fr": "L'Ogre Battle Randomizer (version 0.6.3) propose un mode d'exploration ouvert, le mélange des armées de départ et des réglages du nombre d'ennemis, de l'expérience nécessaire et du coût des unités. Il remercie la communauté (zen0bian) et AtmaTek.",
+        "en": "The Ogre Battle Randomizer (version 0.6.3) offers an open exploration mode, starting army shuffle and settings for enemy count, required experience and unit cost. It thanks the community (zen0bian) and AtmaTek."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Ogre Battle Randomizer",
+      "url": "https://shrekconflict.pythonanywhere.com/"
+    }
+  ]
+}

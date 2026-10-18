@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Ce randomizer adapte à la version Game Boy Advance d'A Link to the Past le randomizer d'origine de Dessyreqt.",
+    "en": "This randomizer adapts Dessyreqt's original randomizer to the Game Boy Advance version of A Link to the Past."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort A Link to the Past & Four Swords sur Game Boy Advance en 2002, portage du jeu Super Nintendo accompagné d'un mode multijoueur inédit.",
+        "en": "Nintendo releases A Link to the Past & Four Swords on the Game Boy Advance in 2002, a port of the Super Nintendo game with a new multiplayer mode."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le randomizer GBA",
+        "en": "The GBA randomizer"
+      },
+      "text": {
+        "fr": "Mian-K (MichaelK__) reprend le randomizer d'ALTTP de Dessyreqt pour la version GBA et publie la version 0.1 le 1er avril 2021, puis la 0.3.2 en octobre. Les coffres et les objets donnés par les personnages sont mélangés, avec une difficulté « Casual » (sans glitch) et une « No Logic ».",
+        "en": "Mian-K (MichaelK__) adapts Dessyreqt's ALTTP randomizer to the GBA version and releases version 0.1 on April 1, 2021, then 0.3.2 in October. Chests and items given by characters are shuffled, with a \"Casual\" (no glitches) difficulty and a \"No Logic\" one."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Mian-K/alttprandomizer_GBA (GitHub)",
+      "url": "https://github.com/Mian-K/alttprandomizer_GBA"
+    },
+    {
+      "label": "Dessyreqt/alttprandomizer (GitHub)",
+      "url": "https://github.com/Dessyreqt/alttprandomizer"
+    }
+  ]
+}

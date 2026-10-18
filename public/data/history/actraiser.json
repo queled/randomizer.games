@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Le randomizer d'ActRaiser, d'Osteoclave, remélange le mode Professional du jeu de Quintet et se génère directement dans le navigateur.",
+    "en": "Osteoclave's ActRaiser randomizer reshuffles the Professional Mode of Quintet's game and is generated straight in the browser."
+  },
+  "events": [
+    {
+      "date": "1990",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Quintet et Enix sortent ActRaiser sur Super Famicom au Japon en 1990, puis sur Super Nintendo.",
+        "en": "Quintet and Enix release ActRaiser on the Super Famicom in Japan in 1990, then on the Super Nintendo."
+      }
+    },
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Osteoclave publie le 25 octobre 2019 un randomizer pour le mode Professional d'ActRaiser. Il se génère sans rien installer grâce à une interface web, ou localement en Python.",
+        "en": "On October 25, 2019, Osteoclave releases a randomizer for ActRaiser's Professional Mode. It can be generated without installing anything through a web interface, or locally in Python."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Osteoclave/actraiser-randomizer (GitHub)",
+      "url": "https://github.com/Osteoclave/actraiser-randomizer"
+    },
+    {
+      "label": "ActRaiser Randomizer",
+      "url": "https://osteoclave.github.io/actraiser-randomizer"
+    }
+  ]
+}

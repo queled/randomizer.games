@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Civilization VI peut se jouer en multiworld grâce à un mod Archipelago.",
+    "en": "Civilization VI can be played in multiworld thanks to an Archipelago mod."
+  },
+  "events": [
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Firaxis Games et 2K sortent Sid Meier's Civilization VI en 2016.",
+        "en": "Firaxis Games and 2K release Sid Meier's Civilization VI in 2016."
+      }
+    },
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le mod Archipelago",
+        "en": "The Archipelago mod"
+      },
+      "text": {
+        "fr": "hesto2 publie en mai 2024 le mod qui relie Civilization VI à Archipelago (version 0.0.1 le 2 mai), jusqu'à la version 0.4 en juin 2024.",
+        "en": "hesto2 releases the mod that connects Civilization VI to Archipelago in May 2024 (version 0.0.1 on May 2), up to version 0.4 in June 2024."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "hesto2/civilization_archipelago_mod (GitHub)",
+      "url": "https://github.com/hesto2/civilization_archipelago_mod"
+    }
+  ]
+}

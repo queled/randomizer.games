@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de MarvinXLII couvre Bravely Second et son prédécesseur Bravely Default : capacités, spécialités et statistiques des jobs, équipement…",
+    "en": "MarvinXLII's randomizer covers Bravely Second and its predecessor Bravely Default: job abilities, specialties and stats, equipment…"
+  },
+  "events": [
+    {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Bravely Second: End Layer sur Nintendo 3DS en 2015 au Japon, puis en Occident.",
+        "en": "Square Enix releases Bravely Second: End Layer on the Nintendo 3DS in 2015 in Japan, then in the West."
+      }
+    },
+    {
+      "date": "2021-2023",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "MarvinXLII publie en janvier 2021 un randomizer pour Bravely Default et Bravely Second (version 0.1.0 bêta). Il mélange les capacités des jobs, leurs spécialités et leurs statistiques, ajuste l'expérience gagnée et, dans Bravely Second, mélange les aptitudes d'équipement des jobs. La version 0.2.3 sort en mai 2023.",
+        "en": "In January 2021 MarvinXLII releases a randomizer for Bravely Default and Bravely Second (version 0.1.0 beta). It shuffles job abilities, specialties and stats, scales the experience earned and, in Bravely Second, shuffles the jobs' equipment aptitudes. Version 0.2.3 comes out in May 2023."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "MarvinXLII/BravelyRandomize (GitHub)",
+      "url": "https://github.com/MarvinXLII/BravelyRandomize"
+    }
+  ]
+}

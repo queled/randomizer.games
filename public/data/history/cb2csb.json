@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Crash Bandicoot 2 se randomise avec Crate Mod Loader, le chargeur de mods et randomizer tout-en-un de BetaM pour de nombreux jeux de console.",
+    "en": "Crash Bandicoot 2 is randomized with Crate Mod Loader, BetaM's all-in-one mod loader and randomizer for many console games."
+  },
+  "events": [
+    {
+      "date": "1997",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Naughty Dog et Sony sortent Crash Bandicoot 2: Cortex Strikes Back sur PlayStation en 1997.",
+        "en": "Naughty Dog and Sony release Crash Bandicoot 2: Cortex Strikes Back on the PlayStation in 1997."
+      }
+    },
+    {
+      "date": "2019-2020",
+      "title": {
+        "fr": "Crate Mod Loader",
+        "en": "Crate Mod Loader"
+      },
+      "text": {
+        "fr": "BetaM commence Crate Mod Loader en décembre 2019 et publie la version 1.0 le 3 février 2020, puis la 1.3 le 25 décembre 2020, avec ManDude parmi les contributeurs. L'outil détecte, extrait, modifie et reconstruit les jeux, et permet d'installer des « Mod Crates ».",
+        "en": "BetaM starts Crate Mod Loader in December 2019 and releases version 1.0 on February 3, 2020, then 1.3 on December 25, 2020, with ManDude among the contributors. The tool detects, extracts, modifies and rebuilds games, and lets you install \"Mod Crates\"."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "TheBetaM/CrateModLoader (GitHub)",
+      "url": "https://github.com/TheBetaM/CrateModLoader"
+    }
+  ]
+}

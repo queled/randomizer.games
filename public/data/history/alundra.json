@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer d'Alundra, de Dinopony, mélange les sources d'objets de l'action-RPG de la PlayStation et retire la plupart des cinématiques pour se concentrer sur l'exploration.",
+    "en": "Dinopony's Alundra randomizer shuffles item sources in the PlayStation action RPG and removes most cutscenes to focus on exploration."
+  },
+  "events": [
+    {
+      "date": "1997",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Matrix Software sort Alundra sur PlayStation en 1997.",
+        "en": "Matrix Software releases Alundra on the PlayStation in 1997."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Dinopony, déjà auteur de Randstalker, commence le randomizer en septembre 2022 et publie la version 1.0 le 25 septembre, puis la 1.2 en octobre. Il faut trouver les 7 emblèmes pour ouvrir le Lake Shrine et vaincre Melzas ; les clés ne sont pas mélangées, pour garder le déroulement des donjons.",
+        "en": "Dinopony, already the author of Randstalker, starts the randomizer in September 2022 and releases version 1.0 on September 25, then 1.2 in October. You must find the 7 crests to open Lake Shrine and beat Melzas; keys are not shuffled, to keep the dungeons' flow."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Dinopony/alundra-randomizer (GitHub)",
+      "url": "https://github.com/Dinopony/alundra-randomizer"
+    }
+  ]
+}

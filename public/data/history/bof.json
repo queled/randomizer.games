@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Breath of Fire, le premier RPG de la série de Capcom, a son randomizer d'objets, créé par pelador en 2023.",
+    "en": "Breath of Fire, the first RPG in Capcom's series, has its item randomizer, created by pelador in 2023."
+  },
+  "events": [
+    {
+      "date": "1993",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Breath of Fire sur Super Famicom au Japon en 1993, puis sur Super Nintendo.",
+        "en": "Capcom releases Breath of Fire on the Super Famicom in Japan in 1993, then on the Super Nintendo."
+      }
+    },
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le randomizer de pelador",
+        "en": "pelador's randomizer"
+      },
+      "text": {
+        "fr": "pelador publie le 4 juillet 2023 un randomizer pour la version américaine de Breath of Fire, qui mélange tous les objets, puis une version 1.1 trois jours plus tard.",
+        "en": "On July 4, 2023, pelador releases a randomizer for the US version of Breath of Fire that shuffles all items, then a version 1.1 three days later."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "pelador/Breath-of-Fire-Rando (GitHub)",
+      "url": "https://github.com/pelador/Breath-of-Fire-Rando"
+    }
+  ]
+}

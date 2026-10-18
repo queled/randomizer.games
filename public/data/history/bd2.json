@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Bravely Default II, de MarvinXLII, fonctionne sur les versions Switch et Steam : capacités et statistiques des jobs, objets, faiblesses des ennemis…",
+    "en": "MarvinXLII's Bravely Default II randomizer works on the Switch and Steam versions: job abilities and stats, items, enemy weaknesses…"
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Bravely Default II sur Nintendo Switch en 2021, puis sur PC.",
+        "en": "Square Enix releases Bravely Default II on the Nintendo Switch in 2021, then on PC."
+      }
+    },
+    {
+      "date": "2021-2022",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "MarvinXLII commence le randomizer en mars 2021, juste après la sortie du jeu, et publie une version 0.0.1 en juin 2021, puis la 0.1.0 en octobre 2022. Il randomise les capacités des jobs et leurs coûts, les statistiques, les objets (coffres, quêtes, butins) et les faiblesses des ennemis.",
+        "en": "MarvinXLII starts the randomizer in March 2021, right after the game's release, and releases a version 0.0.1 in June 2021, then 0.1.0 in October 2022. It randomizes job abilities and their costs, stats, items (chests, quests, drops) and enemy weaknesses."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "MarvinXLII/BravelyRandomize2 (GitHub)",
+      "url": "https://github.com/MarvinXLII/BravelyRandomize2"
+    }
+  ]
+}

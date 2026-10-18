@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Breath of Fire II a été l'un des tout premiers jeux randomisés par abyssonym, avec Painsong en 2015.",
+    "en": "Breath of Fire II was one of the very first games randomized by abyssonym, with Painsong in 2015."
+  },
+  "events": [
+    {
+      "date": "1994",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Breath of Fire II sur Super Famicom au Japon en 1994, puis sur Super Nintendo.",
+        "en": "Capcom releases Breath of Fire II on the Super Famicom in Japan in 1994, then on the Super Nintendo."
+      }
+    },
+    {
+      "date": "2015",
+      "title": {
+        "fr": "Painsong",
+        "en": "Painsong"
+      },
+      "text": {
+        "fr": "abyssonym commence fin juillet 2015 « Painsong », un randomizer pour la version nord-américaine de Breath of Fire II, dont la version 2 date du 6 septembre 2015.",
+        "en": "In late July 2015 abyssonym starts \"Painsong\", a randomizer for the North American version of Breath of Fire II, whose version 2 dates from September 6, 2015."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "abyssonym/painsong (GitHub)",
+      "url": "https://github.com/abyssonym/painsong"
+    }
+  ]
+}

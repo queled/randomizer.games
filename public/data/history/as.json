@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "AeroBonkers, de stochaztic, randomise Aerobiz Supersonic. C'est avant tout un exemple d'utilisation de randomtools-js, une bibliothèque pour écrire des randomizers en JavaScript.",
+    "en": "stochaztic's AeroBonkers randomizes Aerobiz Supersonic. It is first and foremost an example of using randomtools-js, a library for writing randomizers in JavaScript."
+  },
+  "events": [
+    {
+      "date": "1993",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Koei sort Aerobiz Supersonic sur Super Nintendo en 1993.",
+        "en": "Koei releases Aerobiz Supersonic on the Super Nintendo in 1993."
+      }
+    },
+    {
+      "date": "2019",
+      "title": {
+        "fr": "AeroBonkers",
+        "en": "AeroBonkers"
+      },
+      "text": {
+        "fr": "stochaztic publie AeroBonkers en juillet 2019. Outil avant tout pédagogique, il ne randomise que deux choses : les statistiques des avions de chaque scénario et les noms de compagnies suggérés en début de partie.",
+        "en": "stochaztic releases AeroBonkers in July 2019. Mainly an educational tool, it randomizes only two things: the stats of the planes in each scenario and the airline names suggested at the start of the game."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "stochaztic/aerobonkers (GitHub)",
+      "url": "https://github.com/stochaztic/aerobonkers"
+    },
+    {
+      "label": "stochaztic/randomtools-js (GitHub)",
+      "url": "https://github.com/stochaztic/randomtools-js"
+    }
+  ]
+}

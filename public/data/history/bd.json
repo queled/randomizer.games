@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de MarvinXLII couvre Bravely Default et sa suite Bravely Second : capacités et statistiques des jobs, coffres, expérience…",
+    "en": "MarvinXLII's randomizer covers Bravely Default and its sequel Bravely Second: job abilities and stats, chests, experience…"
+  },
+  "events": [
+    {
+      "date": "2012",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Bravely Default sur Nintendo 3DS en 2012 au Japon, puis en Occident.",
+        "en": "Square Enix releases Bravely Default on the Nintendo 3DS in 2012 in Japan, then in the West."
+      }
+    },
+    {
+      "date": "2021-2023",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "MarvinXLII publie en janvier 2021 un randomizer pour Bravely Default et Bravely Second (version 0.1.0 bêta). Il mélange les capacités des jobs, leurs spécialités et leurs statistiques, ajuste l'expérience gagnée et, dans Bravely Default, mélange les coffres et les objets cachés. La version 0.2.3 sort en mai 2023.",
+        "en": "In January 2021 MarvinXLII releases a randomizer for Bravely Default and Bravely Second (version 0.1.0 beta). It shuffles job abilities, specialties and stats, scales the experience earned and, in Bravely Default, shuffles chests and hidden items. Version 0.2.3 comes out in May 2023."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "MarvinXLII/BravelyRandomize (GitHub)",
+      "url": "https://github.com/MarvinXLII/BravelyRandomize"
+    }
+  ]
+}

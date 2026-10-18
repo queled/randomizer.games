@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Bat Boy a été rendu jouable en multiworld avant même sa sortie, grâce à une intégration Archipelago de sa démo.",
+    "en": "Bat Boy was made playable in multiworld even before its release, thanks to an Archipelago integration of its demo."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "La démo dans Archipelago",
+        "en": "The demo in Archipelago"
+      },
+      "text": {
+        "fr": "En août 2022, alwaysintreble publie un mod qui relie la démo de Bat Boy, pas encore sorti, à Archipelago (version 0.1.0 le 24 août). Il fonctionne entièrement à distance : un serveur héberge les données de la partie randomisée, même en solo.",
+        "en": "In August 2022, alwaysintreble releases a mod that connects the demo of Bat Boy, not yet released, to Archipelago (version 0.1.0 on August 24). It works fully remotely: a server hosts the randomized game's data, even when playing alone."
+      }
+    },
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sonzai Games sort Bat Boy en 2023.",
+        "en": "Sonzai Games releases Bat Boy in 2023."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "alwaysintreble/Archipelago.BatBoy (GitHub)",
+      "url": "https://github.com/alwaysintreble/Archipelago.BatBoy"
+    }
+  ]
+}

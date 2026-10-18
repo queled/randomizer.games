@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Breath of the Wild se randomise avec des mods pour l'émulateur Cemu, dont le BotW Randomizer de MelonSpeedruns.",
+    "en": "Breath of the Wild is randomized with mods for the Cemu emulator, including MelonSpeedruns's BotW Randomizer."
+  },
+  "events": [
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort The Legend of Zelda: Breath of the Wild sur Wii U et Nintendo Switch en 2017.",
+        "en": "Nintendo releases The Legend of Zelda: Breath of the Wild on the Wii U and Nintendo Switch in 2017."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le BotW Randomizer",
+        "en": "The BotW Randomizer"
+      },
+      "text": {
+        "fr": "MelonSpeedruns publie la version 1.0 du BotW Randomizer le 20 novembre 2021, puis la 2.0 le 9 décembre. L'outil crée un pack graphique pour l'émulateur Cemu, qu'il suffit d'activer.",
+        "en": "MelonSpeedruns releases version 1.0 of the BotW Randomizer on November 20, 2021, then 2.0 on December 9. The tool creates a graphic pack for the Cemu emulator, which you just enable."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "MelonSpeedruns/BotwRandomizer (GitHub)",
+      "url": "https://github.com/MelonSpeedruns/BotwRandomizer"
+    },
+    {
+      "label": "GameBanana — Waikuteru",
+      "url": "https://gamebanana.com/mods/345673"
+    }
+  ]
+}

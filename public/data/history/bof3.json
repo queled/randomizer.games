@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "« The Vast and the Violent », d'abyssonym, randomise Breath of Fire III sur PlayStation.",
+    "en": "abyssonym's \"The Vast and the Violent\" randomizes Breath of Fire III on the PlayStation."
+  },
+  "events": [
+    {
+      "date": "1997",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Breath of Fire III sur PlayStation en 1997.",
+        "en": "Capcom releases Breath of Fire III on the PlayStation in 1997."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "The Vast and the Violent",
+        "en": "The Vast and the Violent"
+      },
+      "text": {
+        "fr": "abyssonym commence le randomizer début avril 2021 et publie la version 1 le 11 avril, puis la 3.2 le 28 avril 2021.",
+        "en": "abyssonym starts the randomizer in early April 2021 and releases version 1 on April 11, then 3.2 on April 28, 2021."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "abyssonym/vast_violence (GitHub)",
+      "url": "https://github.com/abyssonym/vast_violence"
+    }
+  ]
+}

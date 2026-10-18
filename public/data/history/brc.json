@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Bomb Rush Cyberfunk se joue en multiworld avec Archipelago : il faut battre les crews rivaux de chaque quartier de New Amsterdam.",
+    "en": "Bomb Rush Cyberfunk can be played in multiworld with Archipelago: you must defeat the rival crews in each borough of New Amsterdam."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Team Reptile sort Bomb Rush Cyberfunk en 2023.",
+        "en": "Team Reptile releases Bomb Rush Cyberfunk in 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Bomb Rush Cyberfunk est jouable en multiworld avec Archipelago. L'objectif est de battre tous les crews rivaux de chaque quartier de New Amsterdam ; la REP ne s'obtient plus en faisant des graffitis, mais en la trouvant dans le multiworld.",
+        "en": "Bomb Rush Cyberfunk can be played in multiworld with Archipelago. The goal is to defeat all rival crews in each borough of New Amsterdam; REP is no longer earned from graffiti, but found in the multiworld instead."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Bomb Rush Cyberfunk",
+      "url": "https://archipelago.gg/games/Bomb%20Rush%20Cyberfunk/info/en"
+    }
+  ]
+}

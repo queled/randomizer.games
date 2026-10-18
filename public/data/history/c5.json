@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Civilization V a son « Civ Randomizer » sur le Steam Workshop, publié en 2012.",
+    "en": "Civilization V has its \"Civ Randomizer\" on the Steam Workshop, released in 2012."
+  },
+  "events": [
+    {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Firaxis Games et 2K sortent Sid Meier's Civilization V en 2010.",
+        "en": "Firaxis Games and 2K release Sid Meier's Civilization V in 2010."
+      }
+    },
+    {
+      "date": "2012",
+      "title": {
+        "fr": "Civ Randomizer",
+        "en": "Civ Randomizer"
+      },
+      "text": {
+        "fr": "Le mod « Civ Randomizer » est publié sur le Steam Workshop le 1er septembre 2012. Des scripts de cartes, comme celui de HellBlazers, et des mods de capacités uniques aléatoires existent aussi.",
+        "en": "The \"Civ Randomizer\" mod is published on the Steam Workshop on September 1, 2012. Map scripts, such as HellBlazers', and randomized unique ability mods also exist."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Steam Workshop — Civ Randomizer",
+      "url": "https://steamcommunity.com/sharedfiles/filedetails/?id=93509365"
+    }
+  ]
+}

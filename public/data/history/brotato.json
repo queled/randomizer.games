@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Brotato se joue en multiworld : les personnages et d'autres déblocages sont reçus depuis le multiworld.",
+    "en": "Brotato can be played in multiworld: characters and other unlocks are received from the multiworld."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Blobfish sort Brotato en 2023.",
+        "en": "Blobfish releases Brotato in 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Brotato est jouable en multiworld avec le multiworld (multiworld.gg). Une fois connecté, tous les personnages sont débloqués sauf ceux reçus depuis le multiworld, qui peut aussi en envoyer qui n'ont pas encore été débloqués dans le jeu d'origine.",
+        "en": "Brotato can be played in multiworld with multiworld (multiworld.gg). Once connected, all characters are unlocked except those received from the multiworld, which can also send characters not yet unlocked in the original game."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Brotato",
+      "url": "https://multiworld.gg/games/Brotato/info/en"
+    }
+  ]
+}

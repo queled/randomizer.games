@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Berwick Saga a son éditeur et randomizer, présenté en bêta sur FEUniverse.",
+    "en": "Berwick Saga has its editor and randomizer, presented in beta on FEUniverse."
+  },
+  "events": [
+    {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Tear Ring Saga Production et Enterbrain sortent Berwick Saga: Lazberia Chronicle Chapter 174 sur PlayStation 2 au Japon en 2005.",
+        "en": "Tear Ring Saga Production and Enterbrain release Berwick Saga: Lazberia Chronicle Chapter 174 on the PlayStation 2 in Japan in 2005."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Editor & Randomizer",
+        "en": "Editor & Randomizer"
+      },
+      "text": {
+        "fr": "Un éditeur et randomizer pour Berwick Saga est présenté sur FEUniverse, en bêta.",
+        "en": "An editor and randomizer for Berwick Saga is presented on FEUniverse, in beta."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "FEUniverse — Berwick Saga Editor & Randomizer",
+      "url": "https://feuniverse.us/t/berwick-saga-berwick-saga-editor-randomizer-early-beta/11256"
+    }
+  ]
+}

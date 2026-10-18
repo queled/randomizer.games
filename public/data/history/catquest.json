@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Cat Quest se joue en multiworld : toutes les quêtes sont disponibles dès le départ, sans gain d'expérience ni d'or.",
+    "en": "Cat Quest can be played in multiworld: all questlines are available from the start, with no experience or gold gained."
+  },
+  "events": [
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "The Gentlebros sort Cat Quest en 2017.",
+        "en": "The Gentlebros releases Cat Quest in 2017."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Cat Quest est jouable en multiworld avec le multiworld (multiworld.gg). Toutes les quêtes y sont disponibles dès le départ et ne rapportent plus d'expérience ni d'or ; les arts royaux, les compétences ou la clé d'or ne s'obtiennent plus par les quêtes habituelles.",
+        "en": "Cat Quest can be played in multiworld with multiworld (multiworld.gg). All questlines are available from the start and no longer give experience or gold; Royal Arts, skills or the Golden Key can no longer be obtained through their usual quests."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Cat Quest",
+      "url": "https://multiworld.gg/games/Cat%20Quest/info/en"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Choo-Choo Charles se joue en multiworld avec Archipelago : ferraille, objets au sol et récompenses de missions deviennent des emplacements.",
+    "en": "Choo-Choo Charles can be played in multiworld with Archipelago: scrap, ground items and mission rewards become locations."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Two Star Games sort Choo-Choo Charles en 2022.",
+        "en": "Two Star Games releases Choo-Choo Charles in 2022."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Choo-Choo Charles est jouable en multiworld avec Archipelago. La ferraille, les objets au sol (hors caisses de butin) et les récompenses des missions des PNJ deviennent des emplacements à vérifier.",
+        "en": "Choo-Choo Charles can be played in multiworld with Archipelago. Scrap, items on the ground (except loot crates) and rewards from NPC missions become locations to check."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Choo-Choo Charles",
+      "url": "https://archipelago.gg/games/Choo-Choo%20Charles/info/en"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "Bumper Stickers se joue en multiworld avec Archipelago, dans une version très différente du mode Classique : le plateau grandit à mesure que l'on accomplit des tâches.",
+    "en": "Bumper Stickers can be played in multiworld with Archipelago, in a version very different from Classic mode: the board grows as you complete tasks."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Bumper Stickers est jouable en multiworld avec Archipelago. On commence sur un tout petit plateau avec quelques tâches ; les réussir agrandit le plateau et en débloque de plus difficiles.",
+        "en": "Bumper Stickers can be played in multiworld with Archipelago. You start on a very small board with a set of tasks; completing them gives a larger board and harder tasks."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Bumper Stickers",
+      "url": "https://archipelago.gg/games/Bumper%20Stickers/info/en"
+    }
+  ]
+}

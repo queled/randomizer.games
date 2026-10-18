@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Clash at Demonhead, de Micheil Skeens, est sorti en 2020.",
+    "en": "Micheil Skeens's Clash at Demonhead randomizer came out in 2020."
+  },
+  "events": [
+    {
+      "date": "1989",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Vic Tokai sort Clash at Demonhead sur NES en 1989.",
+        "en": "Vic Tokai releases Clash at Demonhead on the NES in 1989."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Micheil Skeens publie le randomizer de la version américaine le 28 juillet 2020, l'un de ses nombreux randomizers pour la NES et la Super Nintendo.",
+        "en": "Micheil Skeens releases the randomizer for the US version on July 28, 2020, one of many NES and Super Nintendo randomizers by the same author."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Micheil Skeens — Clash at Demonhead Randomizer",
+      "url": "https://micheilskeens.com/clash-at-demonhead-randomizer.php"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Castle Crashers Remastered a son Enemy Randomizer, publié sur GameBanana.",
+    "en": "Castle Crashers Remastered has its Enemy Randomizer, released on GameBanana."
+  },
+  "events": [
+    {
+      "date": "2008",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "The Behemoth sort Castle Crashers en 2008 ; la version Remastered sort en 2015.",
+        "en": "The Behemoth releases Castle Crashers in 2008; the Remastered version comes out in 2015."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Enemy Randomizer",
+        "en": "Enemy Randomizer"
+      },
+      "text": {
+        "fr": "Un mod « Enemy Randomizer » pour Castle Crashers Remastered est disponible sur GameBanana.",
+        "en": "An \"Enemy Randomizer\" mod for Castle Crashers Remastered is available on GameBanana."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GameBanana — Enemy Randomizer",
+      "url": "https://gamebanana.com/mods/516811"
+    }
+  ]
+}

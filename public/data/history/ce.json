@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Chained Echoes se joue en multiworld, et Samupo propose aussi un randomizer sur Nexus Mods.",
+    "en": "Chained Echoes can be played in multiworld, and Samupo also offers a randomizer on Nexus Mods."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Matthias Linda et Deck13 Spotlight sortent Chained Echoes en 2022, un RPG inspiré des RPG japonais des années 1990.",
+        "en": "Matthias Linda and Deck13 Spotlight release Chained Echoes in 2022, an RPG inspired by 1990s Japanese RPGs."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Chained Echoes est jouable en multiworld avec le multiworld (multiworld.gg). Samupo propose aussi un randomizer pour le jeu sur Nexus Mods.",
+        "en": "Chained Echoes can be played in multiworld with multiworld (multiworld.gg). Samupo also offers a randomizer for the game on Nexus Mods."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Chained Echoes",
+      "url": "https://multiworld.gg/games/Chained%20Echoes/info/en"
+    },
+    {
+      "label": "Nexus Mods — Samupo's randomizer",
+      "url": "https://www.nexusmods.com/chainedechoes/mods/5"
+    }
+  ]
+}

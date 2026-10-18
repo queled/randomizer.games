@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Celeste 64 se joue en multiworld avec Archipelago, adapté en une semaine environ par PoryGone.",
+    "en": "Celeste 64 can be played in multiworld with Archipelago, ported in about a week by PoryGone."
+  },
+  "events": [
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "L'équipe de Celeste crée Celeste 64: Fragments of the Mountain en une semaine environ, pour les six ans du jeu, en 2024.",
+        "en": "The Celeste team creates Celeste 64: Fragments of the Mountain in about a week, for the game's sixth anniversary, in 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Celeste 64 est jouable en multiworld avec Archipelago. PoryGone l'a adapté à Archipelago en une semaine environ : fraises, recharges de dash, plumes, pièces, cassettes, ressorts ou blocs cassables deviennent des objets à débloquer.",
+        "en": "Celeste 64 can be played in multiworld with Archipelago. PoryGone ported it to Archipelago in about a week: strawberries, dash refills, feathers, coins, cassettes, springs or breakable blocks become unlockable items."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Celeste 64",
+      "url": "https://archipelago.gg/games/Celeste%2064/info/en"
+    }
+  ]
+}

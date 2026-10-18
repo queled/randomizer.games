@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Candy Box 2, le RPG textuel qui tourne dans le navigateur, se joue aussi en multiworld.",
+    "en": "Candy Box 2, the text-based RPG that runs in the browser, can also be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "aniwey sort Candy Box 2 en 2013, un RPG textuel jouable dans le navigateur.",
+        "en": "aniwey releases Candy Box 2 in 2013, a text-based RPG playable in the browser."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Candy Box 2 est jouable en multiworld avec le multiworld (multiworld.gg). Le jeu d'origine reste jouable, sans multiworld, sur candybox2.github.io.",
+        "en": "Candy Box 2 can be played in multiworld with multiworld (multiworld.gg). The original game remains playable, without multiworld, at candybox2.github.io."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Candy Box 2",
+      "url": "https://multiworld.gg/games/Candy%20Box%202/info/en"
+    }
+  ]
+}

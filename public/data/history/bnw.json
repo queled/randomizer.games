@@ -1,0 +1,25 @@
+{
+  "intro": {
+    "fr": "Brave New World, mod de Final Fantasy VI, se randomise avec Beyond Chaos Gaiden d'abyssonym.",
+    "en": "Brave New World, a Final Fantasy VI mod, is randomized with abyssonym's Beyond Chaos Gaiden."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Beyond Chaos Gaiden",
+        "en": "Beyond Chaos Gaiden"
+      },
+      "text": {
+        "fr": "Le 2 avril 2018, abyssonym publie Beyond Chaos Gaiden, son deuxième randomizer pour Final Fantasy VI, conçu pour s'adapter à plusieurs versions du jeu, dont la japonaise et le mod Brave New World.",
+        "en": "On April 2, 2018, abyssonym releases Beyond Chaos Gaiden, a second Final Fantasy VI randomizer, designed to port to several versions of the game, including the Japanese one and the Brave New World mod."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Abyssonym — Beyond Chaos Gaiden (2018)",
+      "url": "https://abyssonym.wordpress.com/2018/04/02/176/"
+    }
+  ]
+}

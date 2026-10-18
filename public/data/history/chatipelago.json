@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "Chatipelago fait participer le chat d'un stream à une partie multiworld.",
+    "en": "Chatipelago gets a stream's chat to take part in a multiworld game."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Un jeu pour le chat",
+        "en": "A game for chat"
+      },
+      "text": {
+        "fr": "Chatipelago oblige le chat à participer à la partie multiworld en lui confiant dix objets de progression dans la sphère 3.",
+        "en": "Chatipelago forces chat to take part in the multiworld game by giving it ten progression items in sphere 3."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Chatipelago",
+      "url": "https://multiworld.gg/games/Chatipelago/info/en"
+    }
+  ]
+}

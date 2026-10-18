@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "ChecksFinder est un jeu façon démineur pensé pour Archipelago : vider une grille envoie des checks.",
+    "en": "ChecksFinder is a Minesweeper-like game built for Archipelago: clearing a board sends checks."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Un jeu pour Archipelago",
+        "en": "A game for Archipelago"
+      },
+      "text": {
+        "fr": "Dans ChecksFinder, les checks se libèrent en ouvrant toutes les cases sans bombe d'une grille ; un compteur indique combien de checks il reste à envoyer avec l'inventaire actuel.",
+        "en": "In ChecksFinder, location checks are cleared by opening all non-bomb cells of a board; a counter shows how many checks are left to send with the current inventory."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — ChecksFinder",
+      "url": "https://archipelago.gg/games/ChecksFinder/info/en"
+    }
+  ]
+}

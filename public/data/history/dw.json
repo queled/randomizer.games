@@ -1,0 +1,70 @@
+{
+  "intro": {
+    "fr": "Le Dragon Warrior Randomizer de mcgrew mélange la carte, les objets, les sorts et les monstres du premier Dragon Quest. Créé fin 2015, il compte une communauté fidèle depuis dix ans.",
+    "en": "mcgrew's Dragon Warrior Randomizer shuffles the map, items, spells and monsters of the first Dragon Quest. Created in late 2015, it has had a loyal community for ten years."
+  },
+  "events": [
+    {
+      "date": "1986",
+      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "text": {
+        "fr": "Dragon Quest sort sur Famicom au Japon en 1986. Il arrive en Amérique du Nord sous le nom de Dragon Warrior en 1989.",
+        "en": "Dragon Quest comes out on the Famicom in Japan in 1986. It reaches North America as Dragon Warrior in 1989."
+      }
+    },
+    {
+      "date": "2015",
+      "title": { "fr": "Les débuts", "en": "The beginnings" },
+      "text": {
+        "fr": "mcgrew crée le dépôt du Dragon Warrior Randomizer le 30 novembre 2015, et les premières courses recensées sur ce site ont lieu dès le 8 décembre, sur SpeedRunsLive. Le randomizer augmente l'expérience et l'or des monstres et le coût en MP des sorts comme dans le remake Super Nintendo.",
+        "en": "mcgrew creates the Dragon Warrior Randomizer repository on November 30, 2015, and the first races listed on this site take place as early as December 8, on SpeedRunsLive. The randomizer boosts monster XP and gold and adjusts spell MP costs like the Super Nintendo remake."
+      }
+    },
+    {
+      "date": "2016",
+      "title": { "fr": "La version 1.0", "en": "Version 1.0" },
+      "text": {
+        "fr": "La version 1.0 sort le 26 avril 2016 (« We're stable boyz! »). Suivent des améliorations de la durée des parties (1.1, juin 2016), puis des cartes plus aléatoires et des accélérations (1.2, août 2016).",
+        "en": "Version 1.0 comes out on April 26, 2016 (\"We're stable boyz!\"). Then come improvements to game length (1.1, June 2016), then more random maps and speed hacks (1.2, August 2016)."
+      }
+    },
+    {
+      "date": "2017",
+      "title": { "fr": "La version 2.0, une réécriture", "en": "Version 2.0, a rewrite" },
+      "text": {
+        "fr": "Le 7 octobre 2017, la version 2.0 est une réécriture complète, qui introduit notamment des continents séparés.",
+        "en": "On October 7, 2017, version 2.0 is a complete rewrite, introducing split continents among other things."
+      }
+    },
+    {
+      "date": "2019-2020",
+      "title": { "fr": "L'âge d'or sur SpeedRunsLive", "en": "The golden age on SpeedRunsLive" },
+      "text": {
+        "fr": "La version 2.1 (juillet 2019) ajoute de nouvelles conditions de victoire. Ce site recense 1 034 courses en 2019, l'année la plus active. En février 2020, Frost Fatales accueille une partie avec les réglages standard.",
+        "en": "Version 2.1 (July 2019) adds new win conditions. This site counts 1,034 races in 2019, the busiest year. In February 2020, Frost Fatales hosts a run with the standard flags."
+      }
+    },
+    {
+      "date": "2021",
+      "title": { "fr": "racetime.gg et la version 3.0", "en": "racetime.gg and version 3.0" },
+      "text": {
+        "fr": "Les courses passent de SpeedRunsLive à racetime.gg en 2021. La version 3.0, aux changements nombreux, sort le 30 novembre 2021. Le randomizer est jouable directement dans le navigateur sur dwrandomizer.com, et existe en application pour Windows, Linux et macOS.",
+        "en": "Races move from SpeedRunsLive to racetime.gg in 2021. Version 3.0, with many changes, comes out on November 30, 2021. The randomizer can be played straight in the browser on dwrandomizer.com, and exists as an app for Windows, Linux and macOS."
+      }
+    },
+    {
+      "date": "2026",
+      "title": { "fr": "Une communauté fidèle", "en": "A loyal community" },
+      "text": {
+        "fr": "De 2022 à 2025, ce site recense entre 611 et 812 courses par an sur racetime.gg.",
+        "en": "From 2022 to 2025, this site counts between 611 and 812 races a year on racetime.gg."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "mcgrew/dwrandomizer (GitHub)", "url": "https://github.com/mcgrew/dwrandomizer" },
+    { "label": "dwrandomizer — CHANGELOG", "url": "https://github.com/mcgrew/dwrandomizer/blob/master/CHANGELOG.md" },
+    { "label": "Wikipedia — Dragon Quest (video game)", "url": "https://en.wikipedia.org/wiki/Dragon_Quest_(video_game)" },
+    { "label": "racetime.gg — Dragon Warrior Randomizer", "url": "https://racetime.gg/dwr" }
+  ]
+}

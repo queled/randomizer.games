@@ -1,0 +1,65 @@
+{
+  "intro": {
+    "fr": "Le SMB3 Randomizer remélange Super Mario Bros. 3 à chaque partie. Créé par fcoughlin, l'auteur du randomizer de Zelda 1, il a connu un vrai essor ces dernières années, avec une version Deluxe et ses propres tournois.",
+    "en": "The SMB3 Randomizer reshuffles Super Mario Bros. 3 with every seed. Created by fcoughlin, the author of the Zelda 1 Randomizer, it has grown a lot in recent years, with a Deluxe version and its own tournaments."
+  },
+  "events": [
+    {
+      "date": "1988",
+      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "text": {
+        "fr": "Super Mario Bros. 3 sort sur Famicom au Japon en 1988, puis sur NES en Amérique du Nord et en Europe.",
+        "en": "Super Mario Bros. 3 comes out on the Famicom in Japan in 1988, then on the NES in North America and Europe."
+      }
+    },
+    {
+      "date": "2016",
+      "title": { "fr": "La version 1.0 de fcoughlin", "en": "fcoughlin's version 1.0" },
+      "text": {
+        "fr": "Après le Zelda Randomizer, fcoughlin (Fred Coughlin) publie la version 1.0 de son SMB3 Randomizer le 23 octobre 2016. L'outil sert aussi à d'autres usages : il peut générer une ROM presque identique à l'originale où seul le défilement automatique des niveaux est supprimé, une option reprise ensuite dans un patch IPS indépendant par narfman0.",
+        "en": "After the Zelda Randomizer, fcoughlin (Fred Coughlin) releases version 1.0 of his SMB3 Randomizer on October 23, 2016. The tool has other uses too: it can generate a near-original ROM where only the autoscrolling is removed, an option later turned into a standalone IPS patch by narfman0."
+      }
+    },
+    {
+      "date": "2018",
+      "title": { "fr": "Les courses décollent", "en": "Races take off" },
+      "text": {
+        "fr": "Sur ce site, les courses de SMB3 Randomizer passent de quelques-unes par an à 425 en 2018, puis 552 en 2019, encore sur SpeedRunsLive. Un randomizer web pour SMB3, celui de ssjtroly, voit aussi le jour en 2018.",
+        "en": "On this site, SMB3 Randomizer races go from a handful a year to 425 in 2018, then 552 in 2019, still on SpeedRunsLive. A web randomizer for SMB3, ssjtroly's, also appears in 2018."
+      }
+    },
+    {
+      "date": "2020-2021",
+      "title": { "fr": "racetime.gg et un public plus large", "en": "racetime.gg and a wider audience" },
+      "text": {
+        "fr": "Les courses passent sur racetime.gg à partir de 2020. En septembre 2020, les Game Grumps consacrent une série de vidéos au SMB3 Randomizer. En août 2021, fcoughlin parle du randomizer dans le podcast Go Mode.",
+        "en": "Races move to racetime.gg starting in 2020. In September 2020, the Game Grumps make a video series about the SMB3 Randomizer. In August 2021, fcoughlin talks about the randomizer on the Go Mode podcast."
+      }
+    },
+    {
+      "date": "2024",
+      "title": { "fr": "SMB3 Randomizer Deluxe", "en": "SMB3 Randomizer Deluxe" },
+      "text": {
+        "fr": "macobra52 publie SMB3 Randomizer Deluxe (anciennement « Mac Patcher »), une extension du randomizer de fcoughlin réalisée avec sa bénédiction. Elle ajoute notamment le mélange des chemins, des portes et des tuyaux, le choix du nombre de mondes, Luigi, Toad ou Peach jouables, et un mode Open World.",
+        "en": "macobra52 releases SMB3 Randomizer Deluxe (formerly the \"Mac Patcher\"), an expansion of fcoughlin's randomizer made with his blessing. It adds, among other things, shuffled paths, doors and pipes, a choice of the number of worlds, playable Luigi, Toad or Peach, and an Open World mode."
+      }
+    },
+    {
+      "date": "2025-2026",
+      "title": { "fr": "Record de courses et premiers tournois", "en": "Record races and tournaments" },
+      "text": {
+        "fr": "Ce site recense 1 546 courses en 2025, un record, deux fois plus qu'en 2024. En 2026, le 2026 Super Mario Bros. 3 Randomizer Tournament réunit 20 joueurs, et le randomizer a son tournoi à la SpeedGaming Live 2026 (12 joueurs).",
+        "en": "This site counts 1,546 races in 2025, a record, twice as many as in 2024. In 2026, the 2026 Super Mario Bros. 3 Randomizer Tournament gathers 20 players, and the randomizer has its tournament at SpeedGaming Live 2026 (12 players)."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "SMB3 Randomizer — site officiel", "url": "https://sites.google.com/site/smb3randomizer/home" },
+    { "label": "speedrun.com — Any% (No WW)/100% with autoscrolling removed", "url": "https://www.speedrun.com/posts/3pdbt" },
+    { "label": "Go Mode podcast — Zelda 1 Randomizer w/ fcoughlin Part 2 (2021)", "url": "https://go-mode-a-link-to-the-past-randomizer-podcast.castos.com/episodes/zelda-1-randomizer-w-fcoughlin-part-2-three-years-of-gmp-sans-timp" },
+    { "label": "macobra52/SMB3-Randomizer-Deluxe (GitHub)", "url": "https://github.com/macobra52/SMB3-Randomizer-Deluxe" },
+    { "label": "ssjtroly — SMB3 NES web randomizer", "url": "https://ssjtroly.github.io/smb3-nes-web-randomizer/" },
+    { "label": "Challonge — 2026 Super Mario Bros. 3 Randomizer Tournament", "url": "https://challonge.com/smb3r2026" },
+    { "label": "racetime.gg — SMB3R", "url": "https://racetime.gg/smb3r" }
+  ]
+}

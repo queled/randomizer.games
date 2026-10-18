@@ -1,0 +1,115 @@
+{
+  "intro": {
+    "fr": "Super Metroid est l'un des tout premiers jeux randomisés : c'est en travaillant dessus que Dessyreqt a trouvé l'algorithme qui a mené au randomizer d'A Link to the Past. Depuis, plusieurs générations d'outils se sont succédé, du simple mélange d'objets jusqu'à Map Rando, qui réorganise toute la carte.",
+    "en": "Super Metroid is one of the very first randomized games: it was while working on it that Dessyreqt found the algorithm that led to the A Link to the Past Randomizer. Since then, several generations of tools have followed, from simple item shuffling to Map Rando, which rearranges the whole map."
+  },
+  "events": [
+    {
+      "date": "1994",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Super Metroid sur Super Nintendo en 1994.",
+        "en": "Nintendo releases Super Metroid on the Super Nintendo in 1994."
+      }
+    },
+    {
+      "date": "2014",
+      "title": {
+        "fr": "Le randomizer de Dessyreqt",
+        "en": "Dessyreqt's randomizer"
+      },
+      "text": {
+        "fr": "David « Dessyreqt » Carroll crée un randomizer d'objets pour Super Metroid, un outil à télécharger qui se contente de déplacer les objets, avec trois difficultés (Casual, Speedrunner, Masochist). C'est en y travaillant qu'il trouve, vers le milieu de 2014, l'algorithme de mélange qui donnera le randomizer d'A Link to the Past.",
+        "en": "David \"Dessyreqt\" Carroll creates an item randomizer for Super Metroid, a downloadable tool that only moves items, with three difficulties (Casual, Speedrunner, Masochist). While working on it, around mid-2014, he finds the shuffling algorithm that will become the A Link to the Past Randomizer."
+      }
+    },
+    {
+      "date": "2018",
+      "title": {
+        "fr": "VARIA",
+        "en": "VARIA"
+      },
+      "text": {
+        "fr": "Les hackers et speedrunners ouichegeante et theonlydude lancent VARIA, un randomizer dans le navigateur, annoncé sur le forum Metroid Construction le 27 juin 2018. Ses préréglages de difficulté le rendent accessible à tous les niveaux, et il peut aussi mélanger les zones entre elles. En décembre 2021, la revue universitaire ROMchip lui consacre une analyse.",
+        "en": "Hackers and speedrunners ouichegeante and theonlydude launch VARIA, a browser-based randomizer, announced on the Metroid Construction forum on June 27, 2018. Its difficulty presets make it accessible to every skill level, and it can also shuffle areas. In December 2021, the academic journal ROMchip publishes an analysis of it."
+      }
+    },
+    {
+      "date": "2018",
+      "title": {
+        "fr": "La version de total et SMZ3",
+        "en": "total's version and SMZ3"
+      },
+      "text": {
+        "fr": "total, avec foosda et Leodox, adapte le randomizer de Dessyreqt : il sépare les objets majeurs et mineurs et ajoute des difficultés, dont une difficulté « Tournament ». total est aussi à l'origine du multiworld Super Metroid. En octobre 2018, la GDQ Express accueille SMZ3, le randomizer qui mélange Super Metroid et A Link to the Past.",
+        "en": "total, with foosda and Leodox, adapts Dessyreqt's randomizer: it splits major and minor items and adds difficulties, including a \"Tournament\" one. total is also behind the Super Metroid multiworld. In October 2018, GDQ Express hosts SMZ3, the randomizer that mixes Super Metroid and A Link to the Past."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Map Rando",
+        "en": "Map Rando"
+      },
+      "text": {
+        "fr": "Maddo et kyleb publient Map Rando, le premier randomizer à réorganiser toutes les salles en une nouvelle carte géographiquement cohérente. Le modèle qui génère les cartes a demandé environ un an de développement, et le site compte aujourd'hui des centaines de milliers de cartes et plus de 8 500 vidéos de techniques.",
+        "en": "Maddo and kyleb release Map Rando, the first randomizer to rearrange every room into a geographically consistent new map. The model that generates the maps took about a year to develop, and the site now holds hundreds of thousands of maps and over 8,500 technique videos."
+      }
+    },
+    {
+      "date": "2023-2025",
+      "title": {
+        "fr": "Sur la scène des GDQ",
+        "en": "On the GDQ stage"
+      },
+      "text": {
+        "fr": "Flame Fatales 2023 propose une partie VARIA avec mélange complet des zones. Map Rando fait ensuite une course à l'Awesome Games Done Quick 2025, puis revient à la GDQ Express 2025.",
+        "en": "Flame Fatales 2023 features a VARIA run with full area shuffle. Map Rando then gets a race at Awesome Games Done Quick 2025, and comes back at GDQ Express 2025."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Une croissance continue",
+        "en": "Steady growth"
+      },
+      "text": {
+        "fr": "Les courses de randomizer Super Metroid recensées sur ce site passent de 275 en 2021 à 2 695 en 2025, et dépassent déjà 3 200 en 2026. Map Rando a ses tournois : le Mentor Tournament 2026 (35 joueurs) et un tournoi en Bo3 « Ammo Balanced » (16 joueurs).",
+        "en": "Super Metroid randomizer races listed on this site go from 275 in 2021 to 2,695 in 2025, and already exceed 3,200 in 2026. Map Rando has its own tournaments: the 2026 Mentor Tournament (35 players) and an \"Ammo Balanced\" Bo3 tournament (16 players)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Super Metroid speedrunning wiki — Randomizers",
+      "url": "https://wiki.supermetroid.run/Randomizers"
+    },
+    {
+      "label": "Destructoid — Infinite Remix: The Story of the Link to the Past Randomizer (2017)",
+      "url": "https://www.destructoid.com/infinite-remix-the-story-of-the-link-to-the-past-randomizer/"
+    },
+    {
+      "label": "Metroid Construction — annonce de VARIA (2018)",
+      "url": "https://forum.metroidconstruction.com/index.php/topic,4743.0.html"
+    },
+    {
+      "label": "ROMchip — See You Next Mission: An Analysis of the Super Metroid VARIA Randomizer (2021)",
+      "url": "https://romchip.org/index.php/romchip-journal/article/view/116"
+    },
+    {
+      "label": "Map Rando — About",
+      "url": "https://maprando.com/about"
+    },
+    {
+      "label": "theonlydude/RandomMetroidSolver (GitHub)",
+      "url": "https://github.com/theonlydude/RandomMetroidSolver"
+    },
+    {
+      "label": "racetime.gg — Super Metroid Randomizer",
+      "url": "https://racetime.gg/smr"
+    }
+  ]
+}

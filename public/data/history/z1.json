@@ -1,0 +1,104 @@
+{
+  "intro": {
+    "fr": "Le Zelda Randomizer (Z1R) de Fred Coughlin mélange les objets, les donjons et les boutiques du tout premier Zelda, sans toucher à la forme de la carte. Sorti en 2015, c'est l'un des plus anciens randomizers encore très joués en course.",
+    "en": "Fred Coughlin's Zelda Randomizer (Z1R) shuffles the items, dungeons and shops of the very first Zelda, without changing the shape of the map. Released in 2015, it is one of the oldest randomizers still widely raced."
+  },
+  "events": [
+    {
+      "date": "1986",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "The Legend of Zelda sort en 1986 au Japon, sur Famicom Disk System, puis sur NES en Amérique du Nord et en Europe.",
+        "en": "The Legend of Zelda comes out in 1986 in Japan on the Famicom Disk System, then on the NES in North America and Europe."
+      }
+    },
+    {
+      "date": "2015",
+      "title": {
+        "fr": "La sortie, avec une course",
+        "en": "The release, with a race"
+      },
+      "text": {
+        "fr": "Fred Coughlin annonce le 23 février 2015 la date de sortie de son Zelda Randomizer, accompagnée d'une course de lancement. USgamer lui consacre un article le 13 mars, et le randomizer sort le 14 mars 2015. Les versions 1.1 et 1.2 suivent avant la fin du mois. Il mélange les objets, l'emplacement des donjons, les boutiques et même certains sprites, mais garde le tracé de la carte et la forme des donjons.",
+        "en": "On February 23, 2015, Fred Coughlin announces the release date of his Zelda Randomizer, along with a launch race. USgamer covers it on March 13, and the randomizer comes out on March 14, 2015. Versions 1.1 and 1.2 follow before the end of the month. It shuffles items, dungeon locations, shops and even some sprites, but keeps the map layout and the dungeons' shapes."
+      }
+    },
+    {
+      "date": "2015",
+      "title": {
+        "fr": "La version 2.0",
+        "en": "Version 2.0"
+      },
+      "text": {
+        "fr": "La version 2.0 sort officiellement le 17 août 2015, avec une interface revue, des indices, des tutoriels et le « Link Shuffle », suivie d'une course de lancement le 19 août. Ce site recense déjà près de 1 000 courses Z1R sur l'année 2015.",
+        "en": "Version 2.0 is officially released on August 17, 2015, with a reworked interface, hints, tutorials and \"Link Shuffle\", followed by a release race on August 19. This site already counts nearly 1,000 Z1R races over 2015."
+      }
+    },
+    {
+      "date": "2016-2019",
+      "title": {
+        "fr": "La version 3 et un tournoi annoncé",
+        "en": "Version 3 and an announced tournament"
+      },
+      "text": {
+        "fr": "La version 3.0 sort le 20 décembre 2016. Le 25 octobre 2017, l'annonce de la 3.1.1 promet aussi un tournoi du randomizer. Suivent la 3.2 (juillet 2018) et la 3.3.2 (juin 2019).",
+        "en": "Version 3.0 comes out on December 20, 2016. On October 25, 2017, the 3.1.1 announcement also promises a randomizer tournament. Then come 3.2 (July 2018) and 3.3.2 (June 2019)."
+      }
+    },
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Aux Games Done Quick",
+        "en": "At Games Done Quick"
+      },
+      "text": {
+        "fr": "Le Summer Games Done Quick 2019 accueille une course Z1R avec le jeu de réglages « LITE ». Frost Fatales 2020 propose une course avec les réglages « Consternation », qu'on retrouve à Frost Fatales 2025.",
+        "en": "Summer Games Done Quick 2019 hosts a Z1R race with the \"LITE\" flagset. Frost Fatales 2020 features a race with the \"Consternation\" flags, which come back at Frost Fatales 2025."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Une scène en pleine forme",
+        "en": "A thriving scene"
+      },
+      "text": {
+        "fr": "D'autres outils sont nés autour du jeu : Infinite Hyrule, compatible avec le randomizer de Fred Coughlin, le randomizer open source de tetraly, le combo Z1M1 avec Metroid, et la prise en charge par Archipelago. En 2022, les courses passent de SpeedRunsLive à racetime.gg. Ce site recense 2 461 courses Z1R en 2025, un record, et deux tournois en 2026 : le main bracket de l'ABNS3 (32 joueurs) et la Rookie Rumble 2026 (RR5, 36 joueurs).",
+        "en": "Other tools have grown around the game: Infinite Hyrule, compatible with Fred Coughlin's randomizer, tetraly's open-source randomizer, the Z1M1 combo with Metroid, and Archipelago support. In 2022, races move from SpeedRunsLive to racetime.gg. This site counts 2,461 Z1R races in 2025, a record, and two tournaments in 2026: the ABNS3 main bracket (32 players) and the 2026 Rookie Rumble (RR5, 36 players)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Zelda Randomizer — site officiel (actualités 2015-2019)",
+      "url": "https://sites.google.com/site/zeldarandomizer/"
+    },
+    {
+      "label": "Sprites and Dice — Something Shiny: Zelda Randomizer (2017)",
+      "url": "https://spritesanddice.com/posts/something-shiny-zelda-randomizer/"
+    },
+    {
+      "label": "Infinite Hyrule (Bitbucket)",
+      "url": "https://bitbucket.org/Garmichael/infinite-hyrule/src/master/"
+    },
+    {
+      "label": "tetraly/zelda-randomizer (GitHub)",
+      "url": "https://github.com/tetraly/zelda-randomizer"
+    },
+    {
+      "label": "Archipelago — The Legend of Zelda",
+      "url": "https://archipelago.gg/games/The%20Legend%20of%20Zelda/info/en"
+    },
+    {
+      "label": "Challonge — Zelda 1 Randomizer Rookie Rumble 2026",
+      "url": "https://challonge.com/RR2026"
+    },
+    {
+      "label": "racetime.gg — Z1R",
+      "url": "https://racetime.gg/z1r"
+    }
+  ]
+}

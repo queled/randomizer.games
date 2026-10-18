@@ -1,0 +1,73 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Kingdom Hearts II Final Mix mélange armes, capacités, coffres, récompenses et ennemis. Apparu en 2020, il a profité de la sortie PC du jeu pour devenir l'un des randomizers les plus joués hors des jeux Nintendo, avec sa propre League.",
+    "en": "The Kingdom Hearts II Final Mix Randomizer shuffles weapons, abilities, chests, rewards and enemies. Released in 2020, it rode the game's PC release to become one of the most played randomizers outside Nintendo games, with its own League."
+  },
+  "events": [
+    {
+      "date": "2005-2007",
+      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "text": {
+        "fr": "Kingdom Hearts II sort sur PlayStation 2 en 2005. Sa version enrichie, Final Mix, sort en 2007. En 2014, la compilation HD 2.5 ReMIX l'amène sur PlayStation 3, puis sur PlayStation 4 en 2017.",
+        "en": "Kingdom Hearts II comes out on PlayStation 2 in 2005. Its expanded version, Final Mix, comes out in 2007. In 2014, the HD 2.5 ReMIX collection brings it to PlayStation 3, then to PlayStation 4 in 2017."
+      }
+    },
+    {
+      "date": "2020",
+      "title": { "fr": "Le randomizer de Valaxor", "en": "Valaxor's randomizer" },
+      "text": {
+        "fr": "Début 2020, le streamer Twitch Valaxor publie un randomizer pour Kingdom Hearts II Final Mix. Il mélange les armes, les capacités, les rencontres d'ennemis, les objets et les coffres, et ajoute même deux armes auparavant impossibles à obtenir. Le générateur actuel crédite Bizkit047, Valaxor et Desa3579 comme créateurs du randomizer original. Les premières courses recensées sur ce site datent de décembre 2020.",
+        "en": "In early 2020, Twitch streamer Valaxor releases a randomizer for Kingdom Hearts II Final Mix. It shuffles weapons, abilities, enemy encounters, items and chests, and even adds two weapons that could not be obtained before. Today's generator credits Bizkit047, Valaxor and Desa3579 as the creators of the original randomizer. The first races listed on this site date from December 2020."
+      }
+    },
+    {
+      "date": "2021",
+      "title": { "fr": "La sortie PC", "en": "The PC release" },
+      "text": {
+        "fr": "Le 30 mars 2021, la compilation HD 2.5 ReMIX sort sur PC, en exclusivité sur l'Epic Games Store. Le randomizer y arrive grâce aux outils de l'équipe OpenKH (rétro-ingénierie et OpenKH Mods Manager), au mod Garden of Assemblage de Sonicshadowsilver2 et à l'aide de 1234567890num pour le portage. Le générateur est développé par tommadness (kh2rando.com). Ce site recense 1 801 courses sur l'année 2021.",
+        "en": "On March 30, 2021, the HD 2.5 ReMIX collection comes out on PC, exclusively on the Epic Games Store. The randomizer gets there thanks to the OpenKH team's tools (reverse engineering and the OpenKH Mods Manager), Sonicshadowsilver2's Garden of Assemblage mod and 1234567890num's help with the port. The generator is developed by tommadness (kh2rando.com). This site counts 1,801 races over 2021."
+      }
+    },
+    {
+      "date": "2021",
+      "title": { "fr": "Un randomizer pour Kingdom Hearts 1", "en": "A randomizer for Kingdom Hearts 1" },
+      "text": {
+        "fr": "Inspiré par celui de KH2, le développeur Denho crée un randomizer pour Kingdom Hearts Final Mix, plus axé sur l'exploration, qui modifie la mémoire du jeu grâce au LuaBackend de TopazTK.",
+        "en": "Inspired by the KH2 one, developer Denho creates a randomizer for Kingdom Hearts Final Mix, more exploration-based, which modifies the game's memory through TopazTK's LuaBackend."
+      }
+    },
+    {
+      "date": "2022",
+      "title": { "fr": "Aux Games Done Quick", "en": "At Games Done Quick" },
+      "text": {
+        "fr": "L'Awesome Games Done Quick 2022 Online accueille une course de randomizer en co-op, puis Frost Fatales 2022 une partie « All Blue Numbers ».",
+        "en": "Awesome Games Done Quick 2022 Online hosts a co-op randomizer race, then Frost Fatales 2022 an \"All Blue Numbers\" run."
+      }
+    },
+    {
+      "date": "2023-2025",
+      "title": { "fr": "La Randomizer League", "en": "The Randomizer League" },
+      "text": {
+        "fr": "La Kingdom Hearts 2.5 HD Randomizer League s'installe : 32 joueurs dans le bracket du printemps 2023, 45 joueurs au printemps 2024, 32 en 2025. Le 13 juin 2024, le jeu sort aussi sur Steam, à la fin de l'exclusivité Epic.",
+        "en": "The Kingdom Hearts 2.5 HD Randomizer League takes hold: 32 players in the spring 2023 bracket, 45 players in spring 2024, 32 in 2025. On June 13, 2024, the game also comes out on Steam, as the Epic exclusivity ends."
+      }
+    },
+    {
+      "date": "2026",
+      "title": { "fr": "Hitlist au SGDQ", "en": "Hitlist at SGDQ" },
+      "text": {
+        "fr": "Le Summer Games Done Quick 2026 accueille une partie co-op « Hitlist ». Le jeu est aussi pris en charge par Archipelago, et un Door Randomizer existe sous forme de mod.",
+        "en": "Summer Games Done Quick 2026 hosts a \"Hitlist\" co-op run. The game is also supported by Archipelago, and a Door Randomizer exists as a mod."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "Raider Rumbler — Randomization in Kingdom Hearts 1 (2021)", "url": "https://rhsrumbler.com/archives/20711" },
+    { "label": "tommadness/KH2Randomizer (GitHub)", "url": "https://github.com/tommadness/KH2Randomizer" },
+    { "label": "KH2 Randomizer — documentation", "url": "https://tommadness.github.io/KH2Randomizer/" },
+    { "label": "Wikipedia — Kingdom Hearts HD 2.5 Remix", "url": "https://en.wikipedia.org/wiki/Kingdom_Hearts_HD_2.5_Remix" },
+    { "label": "start.gg — Kingdom Hearts 2.5 HD Randomizer League Spring 2024", "url": "https://start.gg/tournament/kingdom-hearts-2-5-hd-randomizer-league-spring-2024/event/spring-league-2024" },
+    { "label": "Archipelago — Kingdom Hearts 2", "url": "https://archipelago.gg/games/Kingdom%20Hearts%202/info/en" },
+    { "label": "Nexus Mods — KH2 Door Randomizer", "url": "https://www.nexusmods.com/kingdomhearts2finalmix/mods/116" }
+  ]
+}

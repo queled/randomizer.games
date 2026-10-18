@@ -1,0 +1,71 @@
+{
+  "intro": {
+    "fr": "Le Zelda II Randomizer mélange les objets, les sorts, la carte et même les palais de The Adventure of Link. Lancé par digshake début 2016 et repris depuis par Ellendar, il génère aujourd'hui des palais entiers à partir de salles créées par la communauté.",
+    "en": "The Zelda II Randomizer shuffles the items, spells, map and even the palaces of The Adventure of Link. Started by digshake in early 2016 and since taken over by Ellendar, it now builds whole palaces out of rooms designed by the community."
+  },
+  "events": [
+    {
+      "date": "1987",
+      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "text": {
+        "fr": "Zelda II: The Adventure of Link sort sur Famicom Disk System au Japon en 1987, puis sur NES en Europe et en Amérique du Nord.",
+        "en": "Zelda II: The Adventure of Link comes out on the Famicom Disk System in Japan in 1987, then on the NES in Europe and North America."
+      }
+    },
+    {
+      "date": "2016",
+      "title": { "fr": "digshake et la version 1.0", "en": "digshake and version 1.0" },
+      "text": {
+        "fr": "Inspiré par le Zelda Randomizer de Fred Coughlin, digshake lance un randomizer pour Zelda II. Les premières courses recensées sur ce site datent du 18 janvier 2016, et la version 1.0 est fêtée par une course le 13 février 2016.",
+        "en": "Inspired by Fred Coughlin's Zelda Randomizer, digshake starts a randomizer for Zelda II. The first races listed on this site date from January 18, 2016, and version 1.0 is celebrated with a race on February 13, 2016."
+      }
+    },
+    {
+      "date": "2017",
+      "title": { "fr": "La version 3.0", "en": "Version 3.0" },
+      "text": {
+        "fr": "Le 17 mai 2017, la version 3.0 permet aux objets et aux sorts d'apparaître n'importe où, en vérifiant ce qui bloque l'accès à chaque palais. Ce site recense 629 courses en 2018.",
+        "en": "On May 17, 2017, version 3.0 lets items and spells appear anywhere, checking what blocks access to each palace. This site counts 629 races in 2018."
+      }
+    },
+    {
+      "date": "2020",
+      "title": { "fr": "La version 4.0 et les salles de la communauté", "en": "Version 4.0 and community rooms" },
+      "text": {
+        "fr": "La version 4.0 sort le 28 novembre 2020 : nouveaux biomes sur la carte, continents reliés aléatoirement, création de nouveaux palais et, surtout, palais construits avec des salles imaginées par la communauté lors de la première « Room Jam ». Les courses passent sur racetime.gg la même année.",
+        "en": "Version 4.0 comes out on November 28, 2020: new overworld biomes, randomly connected continents, newly generated palaces and, above all, palaces built from rooms designed by the community during the first \"Room Jam\". Races move to racetime.gg the same year."
+      }
+    },
+    {
+      "date": "2022-2024",
+      "title": { "fr": "Ellendar reprend le flambeau", "en": "Ellendar takes over" },
+      "text": {
+        "fr": "Le randomizer est désormais un fork maintenu par Ellendar. Les versions 4.1 (avril 2023), 4.2 (juillet 2023) et 4.3 (mars 2024) se succèdent, et une nouvelle Room Jam est lancée en 2024.",
+        "en": "The randomizer is now a fork maintained by Ellendar. Versions 4.1 (April 2023), 4.2 (July 2023) and 4.3 (March 2024) follow, and a new Room Jam is launched in 2024."
+      }
+    },
+    {
+      "date": "2025",
+      "title": { "fr": "La version 5.0", "en": "Version 5.0" },
+      "text": {
+        "fr": "Le 9 octobre 2025, la version 5.0 refait l'interface, ouvre une version web (z2r.app), ajoute plus de 100 salles issues de la Room Jam et de nouveaux styles de palais, dont « Chaos », où chaque sortie peut mener n'importe où. Les réglages par défaut intègrent ceux du Standard Tournament 2025.",
+        "en": "On October 9, 2025, version 5.0 rebuilds the interface, opens a web version (z2r.app), adds over 100 rooms from the Room Jam and new palace styles, including \"Chaos\", where any exit can lead anywhere. The default presets include those of the 2025 Standard Tournament."
+      }
+    },
+    {
+      "date": "2026",
+      "title": { "fr": "Upstarts et SpeedGaming Live", "en": "Upstarts and SpeedGaming Live" },
+      "text": {
+        "fr": "La version 5.2 ajoute les réglages du tournoi Upstarts 2026, et le randomizer a son tournoi à la SpeedGaming Live 2026 (16 joueurs). Ce site recense déjà près de 800 courses en 2026, plus que toute année précédente.",
+        "en": "Version 5.2 adds the settings for the 2026 Upstarts tournament, and the randomizer has its tournament at SpeedGaming Live 2026 (16 players). This site already counts nearly 800 races in 2026, more than any previous year."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "Ellendar/Z2Randomizer (GitHub)", "url": "https://github.com/Ellendar/Z2Randomizer" },
+    { "label": "Z2Randomizer — Patch notes", "url": "https://github.com/Ellendar/Z2Randomizer/blob/main/PatchNotes.md" },
+    { "label": "digshake/z2randomizer — Thanks (Bitbucket)", "url": "https://bitbucket.org/digshake/z2randomizer/wiki/Thanks.md" },
+    { "label": "Challonge — The 2026 Z2R SpeedGaming Live Online Tournament", "url": "https://z2r.challonge.com/sgl26" },
+    { "label": "racetime.gg — Z2R", "url": "https://racetime.gg/z2r" }
+  ]
+}

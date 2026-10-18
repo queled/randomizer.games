@@ -1,0 +1,54 @@
+{
+  "intro": {
+    "fr": "Ici, pas de course contre la montre : le randomizer de Super Smash Bros. Melee modifie les données des personnages selon un jeu de réglages, et les joueurs s'affrontent en tournoi sur la même seed. À côté existe un randomizer du mode Break the Targets.",
+    "en": "No race against the clock here: the Super Smash Bros. Melee Randomizer changes the fighters' data according to a flagset, and players face off in tournaments on the same seed. Alongside it, there is a randomizer for the Break the Targets mode."
+  },
+  "events": [
+    {
+      "date": "2001",
+      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "text": {
+        "fr": "Nintendo sort Super Smash Bros. Melee sur GameCube en 2001.",
+        "en": "Nintendo releases Super Smash Bros. Melee on the GameCube in 2001."
+      }
+    },
+    {
+      "date": "2022",
+      "title": { "fr": "Le Melee Randomizer et la « Seed of the Week »", "en": "The Melee Randomizer and the \"Seed of the Week\"" },
+      "text": {
+        "fr": "Le Melee Randomizer de drewlith lit l'ISO du jeu et en randomise les données des personnages selon un « flag-set » : réglages simples pour les joueurs occasionnels, flags personnalisés et partageables pour les autres. Le résultat se joue sur console ou sur émulateur, y compris en ligne. Le 28 août 2022 a lieu la première « SSBM Randomizer: Seed of the Week », un tournoi hebdomadaire sur start.gg ; la série dépasse les 20 éditions jusqu'en mai 2023.",
+        "en": "drewlith's Melee Randomizer reads the game's ISO and randomizes the fighters' data according to a \"flag-set\": simple settings for casual players, custom shareable flags for others. The result plays on console or emulator, online included. On August 28, 2022 the first \"SSBM Randomizer: Seed of the Week\" takes place, a weekly tournament on start.gg; the series passes 20 editions by May 2023."
+      }
+    },
+    {
+      "date": "2022-2023",
+      "title": { "fr": "L'Europe et les vitrines", "en": "Europe and showcases" },
+      "text": {
+        "fr": "En décembre 2022 démarre une « EU Seed of the Week » pour les joueurs européens (16 joueurs à la première), suivie d'un « SSBM Randomizer Showcase », puis en janvier 2023 du « Randomelee », un bracket improvisé.",
+        "en": "In December 2022 an \"EU Seed of the Week\" begins for European players (16 players at the first one), followed by an \"SSBM Randomizer Showcase\", then in January 2023 by \"Randomelee\", a pop-up bracket."
+      }
+    },
+    {
+      "date": "2025",
+      "title": { "fr": "Le retour de la série", "en": "The series returns" },
+      "text": {
+        "fr": "En novembre 2025, la « Melee Randomizer Seed of the Week Tournament Series » relance les tournois hebdomadaires, qui se poursuivent en 2026.",
+        "en": "In November 2025, the \"Melee Randomizer Seed of the Week Tournament Series\" brings the weekly tournaments back, and they continue into 2026."
+      }
+    },
+    {
+      "date": "—",
+      "title": { "fr": "Break the Targets Randomizer", "en": "Break the Targets Randomizer" },
+      "text": {
+        "fr": "Conçu par djwang88, avec megaqwertification pour la correspondance des stages et Punkline pour le code Gecko, le Break the Targets Randomizer génère des positions de cibles aléatoires, jouables sur Dolphin ou sur Wii. La communauté Smash Stadium a participé aux tests.",
+        "en": "Designed by djwang88, with megaqwertification for the stage mappings and Punkline for the Gecko code, the Break the Targets Randomizer generates random target positions, playable on Dolphin or on Wii. The Smash Stadium community helped with playtesting."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "drewlith/ssbmr (GitHub)", "url": "https://github.com/drewlith/ssbmr" },
+    { "label": "start.gg — SSBM Randomizer: Seed of the Week #1", "url": "https://start.gg/tournament/ssbm-randomizer-seed-of-the-week-legacy/event/sotw-1" },
+    { "label": "start.gg — Melee Randomizer Seed of the Week Tournament Series #1", "url": "https://start.gg/tournament/melee-randomizer-seed-of-the-week-tournament-series-1/event/melee-randomizer-singles" },
+    { "label": "Break the Targets Randomizer", "url": "https://bttrandomizer.com/" }
+  ]
+}

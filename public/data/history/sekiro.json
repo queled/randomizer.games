@@ -1,0 +1,44 @@
+{
+  "intro": {
+    "fr": "Le Sekiro Enemy and Item Randomizer est l'œuvre de thefifthmatt, qui a aussi randomisé Dark Souls III et Elden Ring.",
+    "en": "The Sekiro Enemy and Item Randomizer is the work of thefifthmatt, who also randomized Dark Souls III and Elden Ring."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "FromSoftware et Activision sortent Sekiro: Shadows Die Twice en 2019.",
+        "en": "FromSoftware and Activision release Sekiro: Shadows Die Twice in 2019."
+      }
+    },
+    {
+      "date": "2019-2020",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "thefifthmatt publie à partir de 2019 les SoulsRandomizers, qui randomisent Dark Souls III, Sekiro et plus tard Elden Ring. Pour Sekiro, le mod « Enemy and Item Randomizer » est distribué sur Nexus Mods. Le code est en source disponible : librement utilisable, mais sans redistribution. Les premières courses recensées sur ce site ont lieu en août 2020.",
+        "en": "Starting in 2019, thefifthmatt releases the SoulsRandomizers, which randomize Dark Souls III, Sekiro and later Elden Ring. For Sekiro, the \"Enemy and Item Randomizer\" mod is distributed on Nexus Mods. The code is source-available: free to use, but not to redistribute. The first races listed on this site take place in August 2020."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "thefifthmatt/SoulsRandomizers (GitHub)",
+      "url": "https://github.com/thefifthmatt/SoulsRandomizers"
+    },
+    {
+      "label": "Nexus Mods — Sekiro Enemy and Item Randomizer",
+      "url": "https://www.nexusmods.com/sekiro/mods/543"
+    },
+    {
+      "label": "racetime.gg — Sekiro Randomizer",
+      "url": "https://racetime.gg/sekirando"
+    }
+  ]
+}

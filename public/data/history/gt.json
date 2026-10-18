@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Goof Troop, le jeu coopératif de Capcom sur Super Nintendo, a son randomizer depuis 2020.",
+    "en": "Goof Troop, Capcom's cooperative game on the Super Nintendo, has had its randomizer since 2020."
+  },
+  "events": [
+    {
+      "date": "1993",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Goof Troop sur Super Nintendo en 1993.",
+        "en": "Capcom releases Goof Troop on the Super Nintendo in 1993."
+      }
+    },
+    {
+      "date": "2020-2021",
+      "title": {
+        "fr": "GT-Rando",
+        "en": "GT-Rando"
+      },
+      "text": {
+        "fr": "Le dépôt GT-Rando démarre en mai 2020 ; la version 1.1 sort le 1er décembre 2020 et la 2.3 le 3 avril 2021. charles3429 en est le principal contributeur. Les premières courses recensées sur ce site ont lieu en mars 2021 sur racetime.gg.",
+        "en": "The GT-Rando repository starts in May 2020; version 1.1 comes out on December 1, 2020 and 2.3 on April 3, 2021. charles3429 is its main contributor. The first races listed on this site take place in March 2021 on racetime.gg."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GB127/GT-Rando (GitHub)",
+      "url": "https://github.com/GB127/GT-Rando"
+    },
+    {
+      "label": "racetime.gg — Goof Troop",
+      "url": "https://racetime.gg/goof-troop"
+    }
+  ]
+}

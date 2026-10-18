@@ -1,0 +1,59 @@
+{
+  "intro": {
+    "fr": "Evermizer est le randomizer communautaire de Secret of Evermore. Écrit par black_sliver, il transforme le jeu en monde ouvert tout en restant le plus proche possible de l'original, et Secret of Evermore figure parmi les premiers jeux d'Archipelago.",
+    "en": "Evermizer is the community randomizer for Secret of Evermore. Written by black_sliver, it turns the game into an open world while staying as close as possible to the original, and Secret of Evermore is among Archipelago's first games."
+  },
+  "events": [
+    {
+      "date": "1995",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square sort Secret of Evermore sur Super Nintendo en 1995, en Amérique du Nord puis en Europe.",
+        "en": "Square releases Secret of Evermore on the Super Nintendo in 1995, in North America then in Europe."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Evermizer",
+        "en": "Evermizer"
+      },
+      "text": {
+        "fr": "black_sliver publie le code d'Evermizer en avril 2020. Sa philosophie : un Evermore en monde ouvert, qui demande un routage plus complexe, en restant aussi proche que possible du jeu d'origine. Certains patchs viennent d'assassin17. Le randomizer fonctionne directement dans le navigateur.",
+        "en": "black_sliver publishes Evermizer's code in April 2020. Its philosophy: an open-world Evermore that calls for more complex routing, while staying as close as possible to the original game. Some patches come from assassin17. The randomizer runs straight in the browser."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "Secret of Evermore figure parmi les premiers jeux pris en charge par Archipelago pour le multiworld.",
+        "en": "Secret of Evermore is among the first games supported by Archipelago for multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Evermizer",
+      "url": "https://evermizer.com/"
+    },
+    {
+      "label": "black-sliver/evermizer (GitHub)",
+      "url": "https://github.com/black-sliver/evermizer"
+    },
+    {
+      "label": "Archipelago — Secret of Evermore",
+      "url": "https://archipelago.gg/games/Secret%20of%20Evermore/info/en"
+    },
+    {
+      "label": "racetime.gg — Evermizer",
+      "url": "https://racetime.gg/evermizer"
+    }
+  ]
+}

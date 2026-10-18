@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Le Xenoblade Randomizer de SonahSofern randomise les jeux Xenoblade Chronicles de la Switch en modifiant leurs fichiers de données : ennemis, équipement, personnages, statistiques…",
+    "en": "SonahSofern's Xenoblade Randomizer randomizes the Switch Xenoblade Chronicles games by editing their data files: enemies, equipment, characters, stats…"
+  },
+  "events": [
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Monolith Soft et Nintendo sortent Xenoblade Chronicles 2 sur Nintendo Switch en 2017.",
+        "en": "Monolith Soft and Nintendo release Xenoblade Chronicles 2 on the Nintendo Switch in 2017."
+      }
+    },
+    {
+      "date": "2024-2025",
+      "title": {
+        "fr": "Le Xenoblade Randomizer",
+        "en": "The Xenoblade Randomizer"
+      },
+      "text": {
+        "fr": "SonahSofern commence le projet en octobre 2024 et publie la version 1.0 le 27 décembre 2024, avec ofc2000alex parmi les principaux contributeurs. Les premières courses recensées sur ce site ont lieu en février 2025.",
+        "en": "SonahSofern starts the project in October 2024 and releases version 1.0 on December 27, 2024, with ofc2000alex among the main contributors. The first races listed on this site take place in February 2025."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Version 1.4",
+        "en": "Version 1.4"
+      },
+      "text": {
+        "fr": "La version 1.4.2 sort en juillet 2026.",
+        "en": "Version 1.4.2 comes out in July 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "SonahSofern/Xenoblade-Series-Randomizer (GitHub)",
+      "url": "https://github.com/SonahSofern/Xenoblade-Series-Randomizer"
+    },
+    {
+      "label": "racetime.gg — XC2R",
+      "url": "https://racetime.gg/xc2r"
+    }
+  ]
+}

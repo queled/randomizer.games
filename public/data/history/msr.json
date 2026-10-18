@@ -1,0 +1,44 @@
+{
+  "intro": {
+    "fr": "Metroid: Samus Returns, le remake 3DS de Metroid II, se randomise avec Randovania depuis 2024.",
+    "en": "Metroid: Samus Returns, the 3DS remake of Metroid II, has been randomized with Randovania since 2024."
+  },
+  "events": [
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "MercurySteam et Nintendo sortent Metroid: Samus Returns sur Nintendo 3DS en 2017.",
+        "en": "MercurySteam and Nintendo release Metroid: Samus Returns on the Nintendo 3DS in 2017."
+      }
+    },
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Dans Randovania",
+        "en": "In Randovania"
+      },
+      "text": {
+        "fr": "Le 1er mai 2024, la version 8.0 de Randovania ajoute Metroid: Samus Returns. Les premières courses recensées sur ce site ont lieu en juillet 2024 sur racetime.gg.",
+        "en": "On May 1, 2024, Randovania version 8.0 adds Metroid: Samus Returns. The first races listed on this site take place in July 2024 on racetime.gg."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Randovania — CHANGELOG",
+      "url": "https://github.com/randovania/randovania/blob/main/CHANGELOG.md"
+    },
+    {
+      "label": "Randovania",
+      "url": "https://randovania.org/"
+    },
+    {
+      "label": "racetime.gg — MSRR",
+      "url": "https://racetime.gg/msrr"
+    }
+  ]
+}

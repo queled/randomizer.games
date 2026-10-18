@@ -25,8 +25,8 @@
         "en": "Multiworld"
       },
       "text": {
-        "fr": "2048 est jouable en multiworld avec le multiworld (multiworld.gg). L'interface proposée y est minimale : pas d'annulation, pas de graphismes élaborés ni de son.",
-        "en": "2048 can be played in multiworld with multiworld (multiworld.gg). The interface is minimal: no undo button, no fancy graphics, no sound."
+        "fr": "2048 est jouable en multiworld avec MultiworldGG. L'interface proposée y est minimale : pas d'annulation, pas de graphismes élaborés ni de son.",
+        "en": "2048 can be played in multiworld with MultiworldGG. The interface is minimal: no undo button, no fancy graphics, no sound."
       }
     }
   ],

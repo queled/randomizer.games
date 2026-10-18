@@ -25,8 +25,8 @@
         "en": "Multiworld"
       },
       "text": {
-        "fr": "Quake est jouable en multiworld avec le multiworld (multiworld.gg). Toutes les armes et objets ramassables deviennent des emplacements, et les secrets en option. En option aussi, sauter, s'accroupir, plonger, ouvrir les portes ou utiliser les interrupteurs doit être débloqué. Il s'appuie sur Ironwail_AP, qui ajoute un inventaire au jeu.",
-        "en": "Quake can be played in multiworld with multiworld (multiworld.gg). All weapon and inventory pickups become checks, and secrets optionally. Also optionally, jumping, crouching, diving, opening doors or using switches must be unlocked. It relies on Ironwail_AP, which adds an inventory to the game."
+        "fr": "Quake est jouable en multiworld avec MultiworldGG. Toutes les armes et objets ramassables deviennent des emplacements, et les secrets en option. En option aussi, sauter, s'accroupir, plonger, ouvrir les portes ou utiliser les interrupteurs doit être débloqué. Il s'appuie sur Ironwail_AP, qui ajoute un inventaire au jeu.",
+        "en": "Quake can be played in multiworld with MultiworldGG. All weapon and inventory pickups become checks, and secrets optionally. Also optionally, jumping, crouching, diving, opening doors or using switches must be unlocked. It relies on Ironwail_AP, which adds an inventory to the game."
       }
     }
   ],

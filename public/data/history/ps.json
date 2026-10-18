@@ -25,8 +25,8 @@
         "en": "Multiworld"
       },
       "text": {
-        "fr": "PowerWash Simulator est jouable en multiworld avec le multiworld (multiworld.gg). On ne joue qu'en mode libre ; chaque niveau demande un objet de déblocage, et le niveau de départ est tiré au hasard. En option, nettoyer chaque pièce donne un emplacement ; le but est une chasse aux McGuffins.",
-        "en": "PowerWash Simulator can be played in multiworld with multiworld (multiworld.gg). You only play Free Play; each level needs an unlock item, and the starting level is random. Optionally, cleaning each part gives a check; the goal is a McGuffin hunt."
+        "fr": "PowerWash Simulator est jouable en multiworld avec MultiworldGG. On ne joue qu'en mode libre ; chaque niveau demande un objet de déblocage, et le niveau de départ est tiré au hasard. En option, nettoyer chaque pièce donne un emplacement ; le but est une chasse aux McGuffins.",
+        "en": "PowerWash Simulator can be played in multiworld with MultiworldGG. You only play Free Play; each level needs an unlock item, and the starting level is random. Optionally, cleaning each part gives a check; the goal is a McGuffin hunt."
       }
     }
   ],

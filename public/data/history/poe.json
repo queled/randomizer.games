@@ -25,8 +25,8 @@
         "en": "Multiworld"
       },
       "text": {
-        "fr": "Path of Exile est jouable en multiworld avec le multiworld (multiworld.gg). Le jeu n'est pas modifié : le client lit le personnage via l'API de GGG et le journal du jeu, écrit un filtre d'objets qui signale les emplacements restants et vérifie qu'on n'utilise que les objets et capacités débloqués. Les emplacements sont envoyés à chaque changement de zone.",
-        "en": "Path of Exile can be played in multiworld with multiworld (multiworld.gg). The game isn't modified: the client reads your character through GGG's API and the game log, writes an item filter highlighting remaining locations and checks you only use unlocked items and abilities. Checks are sent on each zone change."
+        "fr": "Path of Exile est jouable en multiworld avec MultiworldGG. Le jeu n'est pas modifié : le client lit le personnage via l'API de GGG et le journal du jeu, écrit un filtre d'objets qui signale les emplacements restants et vérifie qu'on n'utilise que les objets et capacités débloqués. Les emplacements sont envoyés à chaque changement de zone.",
+        "en": "Path of Exile can be played in multiworld with MultiworldGG. The game isn't modified: the client reads your character through GGG's API and the game log, writes an item filter highlighting remaining locations and checks you only use unlocked items and abilities. Checks are sent on each zone change."
       }
     }
   ],

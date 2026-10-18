@@ -25,8 +25,8 @@
         "en": "Multiworld"
       },
       "text": {
-        "fr": "Pinball FX3 est jouable en multiworld avec le multiworld (multiworld.gg). Les 100 tables de la collection sont prises en charge, avec des scores cibles adaptés à chaque table. Aucun mod n'est nécessaire : le client se contente de lire la mémoire du jeu.",
-        "en": "Pinball FX3 can be played in multiworld with multiworld (multiworld.gg). All 100 tables in the collection are supported, with target scores scaled per table. No modding is needed: the client only reads the game's memory."
+        "fr": "Pinball FX3 est jouable en multiworld avec MultiworldGG. Les 100 tables de la collection sont prises en charge, avec des scores cibles adaptés à chaque table. Aucun mod n'est nécessaire : le client se contente de lire la mémoire du jeu.",
+        "en": "Pinball FX3 can be played in multiworld with MultiworldGG. All 100 tables in the collection are supported, with target scores scaled per table. No modding is needed: the client only reads the game's memory."
       }
     }
   ],

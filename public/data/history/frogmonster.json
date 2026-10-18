@@ -25,8 +25,8 @@
         "en": "Multiworld"
       },
       "text": {
-        "fr": "Frogmonster est jouable en multiworld avec le multiworld (multiworld.gg). Par défaut, tous les coffres, les objets donnés par les PNJ et les récompenses de boss sont randomisés ; chaque insecte mangé pour la première fois donne aussi un objet aléatoire.",
-        "en": "Frogmonster can be played in multiworld with multiworld (multiworld.gg). By default, every chest, every item given by NPCs and every boss reward is randomized; each bug eaten for the first time also gives a random item."
+        "fr": "Frogmonster est jouable en multiworld avec MultiworldGG. Par défaut, tous les coffres, les objets donnés par les PNJ et les récompenses de boss sont randomisés ; chaque insecte mangé pour la première fois donne aussi un objet aléatoire.",
+        "en": "Frogmonster can be played in multiworld with MultiworldGG. By default, every chest, every item given by NPCs and every boss reward is randomized; each bug eaten for the first time also gives a random item."
       }
     }
   ],

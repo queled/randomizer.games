@@ -25,8 +25,8 @@
         "en": "Multiworld"
       },
       "text": {
-        "fr": "The Legend of Zelda: Phantom Hourglass est jouable en multiworld avec le multiworld (multiworld.gg). Réalisé par Carrotinator, ce randomizer ne modifie pas la ROM : un script Lua relié au client lit et écrit la mémoire du jeu. Il succède à un « Manual » abandonné du même auteur, et le même système sert à Spirit Tracks.",
-        "en": "The Legend of Zelda: Phantom Hourglass can be played in multiworld with multiworld (multiworld.gg). Made by Carrotinator, this randomizer doesn't modify the ROM: a Lua script connected to the client reads and writes the game's memory. It succeeds a discontinued \"Manual\" by the same author, and the same system powers Spirit Tracks."
+        "fr": "The Legend of Zelda: Phantom Hourglass est jouable en multiworld avec MultiworldGG. Réalisé par Carrotinator, ce randomizer ne modifie pas la ROM : un script Lua relié au client lit et écrit la mémoire du jeu. Il succède à un « Manual » abandonné du même auteur, et le même système sert à Spirit Tracks.",
+        "en": "The Legend of Zelda: Phantom Hourglass can be played in multiworld with MultiworldGG. Made by Carrotinator, this randomizer doesn't modify the ROM: a Lua script connected to the client reads and writes the game's memory. It succeeds a discontinued \"Manual\" by the same author, and the same system powers Spirit Tracks."
       }
     }
   ],

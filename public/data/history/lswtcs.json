@@ -25,8 +25,8 @@
         "en": "Multiworld"
       },
       "text": {
-        "fr": "LEGO Star Wars: La Saga complète est jouable en multiworld avec le multiworld (multiworld.gg). L'implémentation est jouable mais encore en développement, en attendant une réécriture de sa logique.",
-        "en": "LEGO Star Wars: The Complete Saga can be played in multiworld with multiworld (multiworld.gg). The implementation is playable but still a work in progress, pending a rewrite of its logic."
+        "fr": "LEGO Star Wars: La Saga complète est jouable en multiworld avec MultiworldGG. L'implémentation est jouable mais encore en développement, en attendant une réécriture de sa logique.",
+        "en": "LEGO Star Wars: The Complete Saga can be played in multiworld with MultiworldGG. The implementation is playable but still a work in progress, pending a rewrite of its logic."
       }
     }
   ],

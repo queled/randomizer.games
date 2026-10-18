@@ -1,0 +1,55 @@
+{
+  "intro": {
+    "fr": "Le Pokémon Trading Card Game de la Game Boy Color a plusieurs randomizers, dont celui de xCrystal, prolongé par pokepress, et l'Universal Card Game Randomizer d'anmart.",
+    "en": "Pokémon Trading Card Game on the Game Boy Color has several randomizers, including xCrystal's, carried on by pokepress, and anmart's Universal Card Game Randomizer."
+  },
+  "events": [
+    {
+      "date": "1998",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Hudson Soft et Nintendo sortent Pokémon Trading Card Game sur Game Boy Color en 1998 au Japon.",
+        "en": "Hudson Soft and Nintendo release Pokémon Trading Card Game on the Game Boy Color in 1998 in Japan."
+      }
+    },
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Les premiers randomizers",
+        "en": "The first randomizers"
+      },
+      "text": {
+        "fr": "En janvier 2016, xCrystal commence un randomizer de base en Java. En juin 2016, anmart lance l'Universal Card Game Randomizer, censé couvrir tous les jeux de cartes, mais qui ne randomisera finalement que Pokémon TCG (version 1.1 en juillet 2016).",
+        "en": "In January 2016, xCrystal starts a basic randomizer in Java. In June 2016, anmart launches the Universal Card Game Randomizer, meant to cover every card game, but which ends up randomizing only Pokémon TCG (version 1.1 in July 2016)."
+      }
+    },
+    {
+      "date": "2020-2022",
+      "title": {
+        "fr": "La reprise de pokepress",
+        "en": "pokepress takes over"
+      },
+      "text": {
+        "fr": "pokepress reprend le randomizer de xCrystal en 2020 et le développe jusqu'en 2022. Sanqui propose aussi un randomizer en ligne.",
+        "en": "pokepress takes over xCrystal's randomizer in 2020 and develops it until 2022. Sanqui also offers an online randomizer."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "pokepress/TCGRandomizer (GitHub)",
+      "url": "https://github.com/pokepress/TCGRandomizer"
+    },
+    {
+      "label": "anmart/UniversalCardGameRandomizer (GitHub)",
+      "url": "https://github.com/anmart/UniversalCardGameRandomizer"
+    },
+    {
+      "label": "Sanqui — Pokémon TCG randomizer",
+      "url": "https://sanqui.net/randomizer/#poketcg"
+    }
+  ]
+}

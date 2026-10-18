@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Phantasy Star II Randomizer de MrStarbird remélange le RPG de Sega sur Mega Drive.",
+    "en": "MrStarbird's Phantasy Star II Randomizer reshuffles Sega's RPG on the Mega Drive."
+  },
+  "events": [
+    {
+      "date": "1989",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sega sort Phantasy Star II sur Mega Drive en 1989 au Japon.",
+        "en": "Sega releases Phantasy Star II on the Mega Drive in 1989 in Japan."
+      }
+    },
+    {
+      "date": "2017-2018",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "MrStarbird publie la version 0.1 le 15 novembre 2017, avec des contributions de Lory_90, puis la 0.3 en août 2018.",
+        "en": "MrStarbird releases version 0.1 on November 15, 2017, with contributions from Lory_90, then 0.3 in August 2018."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "MrStarbird/PSII-Randomizer (GitHub)",
+      "url": "https://github.com/MrStarbird/PSII-Randomizer"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Pokémon Stadium 2 se randomise avec le randomizer de RainbowSprinklez, qui mélange la Gym Leader Castle et les Pokémon de location.",
+    "en": "Pokémon Stadium 2 is randomized with RainbowSprinklez's randomizer, which shuffles the Gym Leader Castle and rental Pokémon."
+  },
+  "events": [
+    {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Pokémon Stadium 2 sur Nintendo 64 en 2000.",
+        "en": "Nintendo releases Pokémon Stadium 2 on the Nintendo 64 in 2000."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "RainbowSprinklez commence le randomizer en février 2021 : il randomise les attaques de tous les Pokémon de location, ainsi que les Pokémon des dresseurs de la Gym Leader Castle. Un « Rental Moveset Randomizer » est aussi présenté sur speedrun.com.",
+        "en": "RainbowSprinklez starts the randomizer in February 2021: it randomizes the movesets of all rental Pokémon, as well as the Gym Leader Castle trainers' Pokémon. A \"Rental Moveset Randomizer\" is also presented on speedrun.com."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "mike19283/Pokemon-Stadium-2-Randomizer (GitHub)",
+      "url": "https://github.com/mike19283/Pokemon-Stadium-2-Randomizer"
+    },
+    {
+      "label": "speedrun.com — Rental Moveset Randomizer",
+      "url": "https://www.speedrun.com/pkmnstadium2/thread/9febd"
+    }
+  ]
+}

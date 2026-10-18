@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Rainault pour Quest for Glory I (version EGA) randomise l'emplacement de la plupart des objets, sans modifier les fichiers d'origine.",
+    "en": "Rainault's randomizer for Quest for Glory I (EGA version) randomizes most item locations, without modifying the original files."
+  },
+  "events": [
+    {
+      "date": "1989",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sierra On-Line sort Hero's Quest: So You Want to Be a Hero en 1989, renommé ensuite Quest for Glory I.",
+        "en": "Sierra On-Line releases Hero's Quest: So You Want to Be a Hero in 1989, later renamed Quest for Glory I."
+      }
+    },
+    {
+      "date": "2022-2023",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Rainault publie la version 1.0 le 5 août 2022, puis la 1.3 en mars 2023. Le programme génère des fichiers de script et de texte que le jeu charge à la place des siens, si bien que le jeu d'origine reste intact.",
+        "en": "Rainault releases version 1.0 on August 5, 2022, then 1.3 in March 2023. The program generates script and text patch files that the game loads instead of its own, so the original game stays intact."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Rainault/qfg1-randomizer (GitHub)",
+      "url": "https://github.com/Rainault/qfg1-randomizer"
+    }
+  ]
+}

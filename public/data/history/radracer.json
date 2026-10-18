@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Rad Racer Randomizer de gameboy9 remélange le jeu de course de Square sur NES.",
+    "en": "gameboy9's Rad Racer Randomizer reshuffles Square's NES racing game."
+  },
+  "events": [
+    {
+      "date": "1987",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square sort Rad Racer sur NES en 1987.",
+        "en": "Square releases Rad Racer on the NES in 1987."
+      }
+    },
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "gameboy9 publie la version 1.0 le 15 juin 2018, puis la 1.0.1 quatre jours plus tard.",
+        "en": "gameboy9 releases version 1.0 on June 15, 2018, then 1.0.1 four days later."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "gameboy9/RadRacerRando (GitHub)",
+      "url": "https://github.com/gameboy9/RadRacerRando"
+    }
+  ]
+}

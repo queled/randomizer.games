@@ -1,0 +1,25 @@
+{
+  "intro": {
+    "fr": "Le PVZ1 Randomizer d'Andree12 est un mod pour PlantsVsZombies.NET, portage PC non officiel de Plants vs. Zombies.",
+    "en": "Andree12's PVZ1 Randomizer is a mod for PlantsVsZombies.NET, an unofficial PC port of Plants vs. Zombies."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Andree12 publie le mod en juin 2022. Il randomise notamment les paquets de graines obtenus en mode Aventure.",
+        "en": "Andree12 releases the mod in June 2022. It notably randomizes the seed packets earned in Adventure mode."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Andree12/PVZ1-Randomizer (GitHub)",
+      "url": "https://github.com/Andree12/PVZ1-Randomizer"
+    }
+  ]
+}

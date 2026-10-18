@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Pokemon NGC Rando de rotobash randomise Pokémon XD et Pokémon Colosseum, les jeux Pokémon de la GameCube.",
+    "en": "rotobash's Pokemon NGC Rando randomizes Pokémon XD and Pokémon Colosseum, the GameCube Pokémon games."
+  },
+  "events": [
+    {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Genius Sonority et Nintendo sortent Pokémon XD : Le Souffle des Ténèbres sur GameCube en 2005.",
+        "en": "Genius Sonority and Nintendo release Pokémon XD: Gale of Darkness on the GameCube in 2005."
+      }
+    },
+    {
+      "date": "2021-2024",
+      "title": {
+        "fr": "Pokemon NGC Rando",
+        "en": "Pokemon NGC Rando"
+      },
+      "text": {
+        "fr": "rotobash commence le randomizer en janvier 2021, à partir du GoD Tool de Stars, et publie une bêta 1.0.1 en février 2021, puis la version 1.4.0 en décembre 2024.",
+        "en": "rotobash starts the randomizer in January 2021, based on Stars's GoD Tool, and releases a 1.0.1 beta in February 2021, then version 1.4.0 in December 2024."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "rotobash/pokemon-ngc-rando (GitHub)",
+      "url": "https://github.com/rotobash/pokemon-ngc-rando"
+    }
+  ]
+}

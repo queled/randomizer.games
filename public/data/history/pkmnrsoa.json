@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de ronitsinha pour Pokémon Ranger : Nuit sur Almia change les rencontres de Pokémon, en garantissant que le jeu reste finissable.",
+    "en": "ronitsinha's randomizer for Pokémon Ranger: Shadows of Almia changes Pokémon encounters, while ensuring the game stays beatable."
+  },
+  "events": [
+    {
+      "date": "2008",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Creatures et Nintendo sortent Pokémon Ranger : Nuit sur Almia sur Nintendo DS en 2008.",
+        "en": "Creatures and Nintendo release Pokémon Ranger: Shadows of Almia on the Nintendo DS in 2008."
+      }
+    },
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "ronitsinha commence le randomizer en juin 2023 et publie des versions de juillet à octobre 2023.",
+        "en": "ronitsinha starts the randomizer in June 2023 and publishes releases from July to October 2023."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "ronitsinha/almia-randomizer (GitHub)",
+      "url": "https://github.com/ronitsinha/almia-randomizer"
+    }
+  ]
+}

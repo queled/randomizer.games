@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Blue587 pour Pokémon Donjon Mystère : Les Portes de l'Infini randomise les données des Pokémon.",
+    "en": "Blue587's randomizer for Pokémon Mystery Dungeon: Gates to Infinity randomizes Pokémon data."
+  },
+  "events": [
+    {
+      "date": "2012",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Spike Chunsoft et The Pokémon Company sortent Pokémon Donjon Mystère : Les Portes de l'Infini sur Nintendo 3DS en 2012.",
+        "en": "Spike Chunsoft and The Pokémon Company release Pokémon Mystery Dungeon: Gates to Infinity on the Nintendo 3DS in 2012."
+      }
+    },
+    {
+      "date": "2020-2021",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Blue587 travaille sur le randomizer jusqu'en mai 2020 et en publie le code fin décembre 2021. Il randomise les CT apprises, les attaques par niveau, les types, les talents, les évolutions et les permissions de déplacement.",
+        "en": "Blue587 works on the randomizer until May 2020 and publishes its code in late December 2021. It randomizes learnable TMs, level-up moves, types, abilities, evolutions and movement permissions."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Blue587/gti_pokemon_data_randomizer (GitHub)",
+      "url": "https://github.com/Blue587/gti_pokemon_data_randomizer"
+    }
+  ]
+}

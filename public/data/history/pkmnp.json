@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Pokemon Entrance Randomizer de SilverstarStream ajoute le mélange des entrées à l'Universal Pokémon Randomizer ZX, pour Pokémon Platine.",
+    "en": "SilverstarStream's Pokemon Entrance Randomizer adds entrance shuffling to the Universal Pokémon Randomizer ZX, for Pokémon Platinum."
+  },
+  "events": [
+    {
+      "date": "2008",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Game Freak et Nintendo sortent Pokémon Platine sur Nintendo DS en 2008 au Japon.",
+        "en": "Game Freak and Nintendo release Pokémon Platinum on the Nintendo DS in 2008 in Japan."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "SilverstarStream publie la version 0.1.0 le 29 octobre 2021, puis la 0.1.1b en décembre. Ce fork de l'Universal Pokémon Randomizer ZX ajoute plusieurs réglages de mélange des entrées, pour l'instant seulement pour Pokémon Platine.",
+        "en": "SilverstarStream releases version 0.1.0 on October 29, 2021, then 0.1.1b in December. This fork of the Universal Pokémon Randomizer ZX adds several entrance randomization settings, for now only for Pokémon Platinum."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "SilverstarStream/pokemon-entrance-randomizer (GitHub)",
+      "url": "https://github.com/SilverstarStream/pokemon-entrance-randomizer"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "PowerSlave se randomise avec le Build Engine Randomizer de Die4Ever, qui couvre plusieurs jeux du moteur Build.",
+    "en": "PowerSlave is randomized with Die4Ever's Build Engine Randomizer, which covers several Build engine games."
+  },
+  "events": [
+    {
+      "date": "1996",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Lobotomy Software sort PowerSlave (Exhumed en Europe) en 1996 ; la version PC utilise le moteur Build.",
+        "en": "Lobotomy Software releases PowerSlave (Exhumed in Europe) in 1996; the PC version uses the Build engine."
+      }
+    },
+    {
+      "date": "2022-2024",
+      "title": {
+        "fr": "Le Build Engine Randomizer",
+        "en": "The Build Engine Randomizer"
+      },
+      "text": {
+        "fr": "Die4Ever lance le Build Engine Randomizer en juillet 2022. Il prend en charge Duke Nukem 3D, Ion Fury, Shadow Warrior, Blood et PowerSlave, et génère de nouvelles cartes qu'on joue normalement depuis le jeu. La version 0.9.6 sort en mars 2024.",
+        "en": "Die4Ever launches the Build Engine Randomizer in July 2022. It supports Duke Nukem 3D, Ion Fury, Shadow Warrior, Blood and PowerSlave, and generates new maps that are played normally from the game. Version 0.9.6 comes out in March 2024."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Die4Ever/build-engine-randomizer (GitHub)",
+      "url": "https://github.com/Die4Ever/build-engine-randomizer"
+    }
+  ]
+}

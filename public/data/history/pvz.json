@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Plants Vs. Zombies 1 Randomiser de Cyber-Gon fonctionne sur l'édition originale du jeu, et a atteint sa version 1.0 en 2026.",
+    "en": "Cyber-Gon's Plants Vs. Zombies 1 Randomiser works on the game's original edition, and reached version 1.0 in 2026."
+  },
+  "events": [
+    {
+      "date": "2009",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "PopCap Games sort Plants vs. Zombies en 2009.",
+        "en": "PopCap Games releases Plants vs. Zombies in 2009."
+      }
+    },
+    {
+      "date": "2024-2026",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Cyber-Gon commence le randomizer en juillet 2024, avec lunarblessing et vsoupdotvx parmi les principaux contributeurs, et publie la version 1.0 le 29 septembre 2026. Il demande l'édition originale du jeu (hors GOTY), qu'on peut obtenir en rétrogradant la version Steam.",
+        "en": "Cyber-Gon starts the randomizer in July 2024, with lunarblessing and vsoupdotvx among the main contributors, and releases version 1.0 on September 29, 2026. It requires the game's original edition (not GOTY), which can be obtained by downpatching the Steam version."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Cyber-Gon/pvz-randomiser (GitHub)",
+      "url": "https://github.com/Cyber-Gon/pvz-randomiser"
+    }
+  ]
+}

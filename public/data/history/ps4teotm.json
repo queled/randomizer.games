@@ -1,0 +1,54 @@
+{
+  "intro": {
+    "fr": "Le Phantasy Star IV Randomizer de MrStarbird remélange le dernier épisode Mega Drive de la série ; un autre projet, Profound Disorder, existe aussi.",
+    "en": "MrStarbird's Phantasy Star IV Randomizer reshuffles the series' last Mega Drive game; another project, Profound Disorder, also exists."
+  },
+  "events": [
+    {
+      "date": "1993",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sega sort Phantasy Star IV sur Mega Drive en 1993 au Japon.",
+        "en": "Sega releases Phantasy Star IV on the Mega Drive in 1993 in Japan."
+      }
+    },
+    {
+      "date": "2017-2018",
+      "title": {
+        "fr": "Le randomizer de MrStarbird",
+        "en": "MrStarbird's randomizer"
+      },
+      "text": {
+        "fr": "MrStarbird commence le randomizer en avril 2017, avec des contributions de Lory_90 : version 1.2.1 en novembre 2017, 1.3.1 le 20 mars 2018, puis 2.0 en août 2018.",
+        "en": "MrStarbird starts the randomizer in April 2017, with contributions from Lory_90: version 1.2.1 in November 2017, 1.3.1 on March 20, 2018, then 2.0 in August 2018."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Profound Disorder",
+        "en": "Profound Disorder"
+      },
+      "text": {
+        "fr": "Profound Disorder est un autre randomizer pour Phantasy Star IV, présenté sur son propre site.",
+        "en": "Profound Disorder is another randomizer for Phantasy Star IV, presented on its own site."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "MrStarbird/PStar4-Randomizer (GitHub)",
+      "url": "https://github.com/MrStarbird/PStar4-Randomizer"
+    },
+    {
+      "label": "Profound Disorder",
+      "url": "https://sites.google.com/view/ps4-pd/home"
+    }
+  ]
+}

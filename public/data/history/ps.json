@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "PowerWash Simulator se joue en multiworld : les niveaux du mode libre se débloquent comme objets.",
+    "en": "PowerWash Simulator can be played in multiworld: Free Play levels unlock as items."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "FuturLab sort PowerWash Simulator en 2022.",
+        "en": "FuturLab releases PowerWash Simulator in 2022."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "PowerWash Simulator est jouable en multiworld avec le multiworld (multiworld.gg). On ne joue qu'en mode libre ; chaque niveau demande un objet de déblocage, et le niveau de départ est tiré au hasard. En option, nettoyer chaque pièce donne un emplacement ; le but est une chasse aux McGuffins.",
+        "en": "PowerWash Simulator can be played in multiworld with multiworld (multiworld.gg). You only play Free Play; each level needs an unlock item, and the starting level is random. Optionally, cleaning each part gives a check; the goal is a McGuffin hunt."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Powerwash Simulator",
+      "url": "https://multiworld.gg/games/Powerwash%20Simulator/info/en"
+    }
+  ]
+}

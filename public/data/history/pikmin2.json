@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Un randomizer japonais existe pour Pikmin 2, distribué sous forme de tableur LibreOffice.",
+    "en": "A Japanese randomizer exists for Pikmin 2, distributed as a LibreOffice spreadsheet."
+  },
+  "events": [
+    {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Pikmin 2 sur GameCube en 2004.",
+        "en": "Nintendo releases Pikmin 2 on the GameCube in 2004."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Pikmin2 Randomizer",
+        "en": "Pikmin2 Randomizer"
+      },
+      "text": {
+        "fr": "Le blog japonais 白色夜景 publie le 22 mars 2021 le Pikmin2 Randomizer (version 6.61), pour les versions GameCube et Wii de toutes les régions. Il se présente comme un tableur LibreOffice qui génère les fichiers modifiés, à lancer avec Dolphin.",
+        "en": "The Japanese blog 白色夜景 publishes the Pikmin2 Randomizer on March 22, 2021 (version 6.61), for the GameCube and Wii versions of all regions. It comes as a LibreOffice spreadsheet that generates the modified files, to run with Dolphin."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "白色夜景 — Pikmin2 Randomizer",
+      "url": "https://uckuiy4gtnjwosehfomppag.blogspot.com/2021/03/pikmin2-randomizer-v36.html"
+    }
+  ]
+}

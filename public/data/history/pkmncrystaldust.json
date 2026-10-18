@@ -1,0 +1,25 @@
+{
+  "intro": {
+    "fr": "Pokémon CrystalDust fait partie de GBAXG, un randomizer de carte qui relie trois jeux Pokémon.",
+    "en": "Pokémon CrystalDust is part of GBAXG, a map randomizer that links three Pokémon games."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "GBAXG",
+        "en": "GBAXG"
+      },
+      "text": {
+        "fr": "GBAXG, un mod d'émulateur, randomise les zones de chargement à travers Fire Red, Emerald et Crystal Dust : on passe de Kanto à Johto et Hoenn en gardant équipe, objets et argent. Une version majeure, sur le cœur d'émulation SkyEmu, sort en août 2023.",
+        "en": "GBAXG, an emulator mod, randomizes loading zones across Fire Red, Emerald and Crystal Dust: you move between Kanto, Johto and Hoenn while keeping your team, items and money. A major release, on the SkyEmu emulation core, comes out in August 2023."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GBAXG",
+      "url": "https://kittypboxx.github.io/GBAXG/"
+    }
+  ]
+}

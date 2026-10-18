@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Portal 2 se joue en multiworld : les éléments de puzzle des salles de test deviennent des objets à retrouver.",
+    "en": "Portal 2 can be played in multiworld: test chamber puzzle elements become items to find."
+  },
+  "events": [
+    {
+      "date": "2011",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Valve sort Portal 2 en 2011.",
+        "en": "Valve releases Portal 2 in 2011."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Portal 2 est jouable en multiworld avec le multiworld (multiworld.gg). On parcourt des chapitres randomisés ; boutons, gels, cubes ou PotatOS sont d'abord indisponibles et arrivent comme objets, ce qui ouvre de nouvelles cartes. Chaque carte terminée est un emplacement, et le but est de finir le dernier niveau.",
+        "en": "Portal 2 can be played in multiworld with multiworld (multiworld.gg). You play through randomized chapters; buttons, gels, cubes or PotatOS start out unavailable and arrive as items, opening new maps. Each completed map is a check, and the goal is to finish the final level."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Portal 2",
+      "url": "https://multiworld.gg/games/Portal%202/info/en"
+    }
+  ]
+}

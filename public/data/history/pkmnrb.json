@@ -1,0 +1,54 @@
+{
+  "intro": {
+    "fr": "Pokémon Rouge et Bleu se randomisent avec l'Online Randomizer de sanqui.net et, en multiworld, avec Archipelago.",
+    "en": "Pokémon Red and Blue are randomized with sanqui.net's Online Randomizer and, in multiworld, with Archipelago."
+  },
+  "events": [
+    {
+      "date": "1996",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Game Freak et Nintendo sortent Pokémon Rouge et Vert au Japon en 1996, puis Rouge et Bleu en Occident.",
+        "en": "Game Freak and Nintendo release Pokémon Red and Green in Japan in 1996, then Red and Blue in the West."
+      }
+    },
+    {
+      "date": "2017-2019",
+      "title": {
+        "fr": "Online Randomizer",
+        "en": "Online Randomizer"
+      },
+      "text": {
+        "fr": "L'Online Randomizer de sanqui.net, qui couvre Pokémon Rouge, Pokémon TCG et Telefang, tient un journal des modifications de novembre 2017 à juin 2019. Il peut inclure des Pokémon de générations ultérieures, avec des sprites dessinés par la communauté.",
+        "en": "sanqui.net's Online Randomizer, which covers Pokémon Red, Pokémon TCG and Telefang, keeps a changelog from November 2017 to June 2019. It can include Pokémon from later generations, with community-drawn sprites."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Pokémon Rouge et Bleu est jouable en multiworld avec Archipelago. Les objets sont mélangés avec une logique qui garantit la fin de partie, et Pokémon, stats et types peuvent aussi être randomisés. Le jeu gagne des améliorations de confort : sac de 128 places, course avec B, retour à Bourg Palette au chargement.",
+        "en": "Pokémon Red and Blue can be played in multiworld with Archipelago. Items are shuffled with logic that guarantees completion, and Pokémon, stats and types can be randomized too. The game gets quality-of-life changes: a 128-slot bag, running with B, a Pallet Town warp on load."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "sanqui.net — Online Randomizer",
+      "url": "https://sanqui.net/randomizer/"
+    },
+    {
+      "label": "Archipelago — Pokemon Red and Blue",
+      "url": "https://archipelago.gg/games/Pokemon%20Red%20and%20Blue/info/en"
+    }
+  ]
+}

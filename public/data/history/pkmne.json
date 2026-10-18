@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Pokémon Émeraude se joue en multiworld avec Archipelago, qui randomise à la fois les objets et les Pokémon.",
+    "en": "Pokémon Emerald can be played in multiworld with Archipelago, which randomizes both items and Pokémon."
+  },
+  "events": [
+    {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Game Freak et Nintendo sortent Pokémon Émeraude sur Game Boy Advance en 2004.",
+        "en": "Game Freak and Nintendo release Pokémon Emerald on the Game Boy Advance in 2004."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Pokémon Émeraude est jouable en multiworld avec Archipelago. Badges, CS, cadeaux et objets au sol peuvent être mélangés, tout comme les Pokémon sauvages, les starters, les équipes adverses, les talents et les types. Une part des combats simples peut même devenir des combats en duo.",
+        "en": "Pokémon Emerald can be played in multiworld with Archipelago. Badges, HMs, gifts and ground items can be shuffled, as can wild Pokémon, starters, opponents' teams, abilities and types. A share of single battles can even become double battles."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Pokemon Emerald",
+      "url": "https://archipelago.gg/games/Pokemon%20Emerald/info/en"
+    }
+  ]
+}

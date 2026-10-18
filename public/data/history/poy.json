@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Peaks of Yore se joue en multiworld : livres, outils et artefacts deviennent des objets, les sommets des emplacements.",
+    "en": "Peaks of Yore can be played in multiworld: books, tools and artefacts become items, summits become checks."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Peaks of Yore, jeu d'escalade, sort en 2023.",
+        "en": "Peaks of Yore, a climbing game, comes out in 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Peaks of Yore est jouable en multiworld avec le multiworld (multiworld.gg). Livres, artefacts du chalet et outils deviennent des objets ; sommets et artefacts sur les pics deviennent des emplacements. Plusieurs buts sont possibles, de tous les sommets à tous les artefacts.",
+        "en": "Peaks of Yore can be played in multiworld with multiworld (multiworld.gg). Books, cabin artefacts and tools become items; peaks and on-peak artefacts become checks. Several goals are available, from every summit to every artefact."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Peaks of Yore",
+      "url": "https://multiworld.gg/games/Peaks%20of%20Yore/info/en"
+    }
+  ]
+}

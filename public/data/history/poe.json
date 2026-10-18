@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Path of Exile se joue en multiworld sans modifier le jeu : le client suit le personnage et vérifie qu'on ne joue qu'avec ce qui est débloqué.",
+    "en": "Path of Exile can be played in multiworld without modifying the game: the client tracks your character and checks you only use what you've unlocked."
+  },
+  "events": [
+    {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Grinding Gear Games sort Path of Exile en 2013.",
+        "en": "Grinding Gear Games releases Path of Exile in 2013."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Path of Exile est jouable en multiworld avec le multiworld (multiworld.gg). Le jeu n'est pas modifié : le client lit le personnage via l'API de GGG et le journal du jeu, écrit un filtre d'objets qui signale les emplacements restants et vérifie qu'on n'utilise que les objets et capacités débloqués. Les emplacements sont envoyés à chaque changement de zone.",
+        "en": "Path of Exile can be played in multiworld with multiworld (multiworld.gg). The game isn't modified: the client reads your character through GGG's API and the game log, writes an item filter highlighting remaining locations and checks you only use unlocked items and abilities. Checks are sent on each zone change."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Path of Exile",
+      "url": "https://multiworld.gg/games/Path%20of%20Exile/info/en"
+    }
+  ]
+}

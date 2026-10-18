@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Pikuniku se joue en multiworld : chapeaux, objets clés et trophées sont mélangés.",
+    "en": "Pikuniku can be played in multiworld: hats, key items and trophies are shuffled."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sectordub et Devolver Digital sortent Pikuniku en 2019.",
+        "en": "Sectordub and Devolver Digital release Pikuniku in 2019."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Pikuniku est jouable en multiworld avec le multiworld (multiworld.gg). Chapeaux, objets clés et trophées sont mélangés ; le but est de vaincre Mr. Sunshine au Sunshine HQ. En option, chaque pièce posée dans le monde devient un emplacement.",
+        "en": "Pikuniku can be played in multiworld with multiworld (multiworld.gg). Hats, key items and trophies are shuffled; the goal is to defeat Mr. Sunshine at Sunshine HQ. Optionally, every freestanding coin becomes a check."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Pikuniku",
+      "url": "https://multiworld.gg/games/Pikuniku/info/en"
+    }
+  ]
+}

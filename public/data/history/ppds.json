@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Placid Plastic Duck Simulator se joue en multiworld : il faut retrouver les 46 canards de la première page de la collection.",
+    "en": "Placid Plastic Duck Simulator can be played in multiworld: you must find the 46 ducks on the collection's first page."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Turbolento Games sort Placid Plastic Duck Simulator en 2022.",
+        "en": "Turbolento Games releases Placid Plastic Duck Simulator in 2022."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Placid Plastic Duck Simulator est jouable en multiworld avec le multiworld (multiworld.gg). L'apparition des canards est remplacée : seules les colonnes débloquées de la collection peuvent apparaître, et des objets accélèrent leur arrivée. Le but est de trouver les 46 canards de la première page.",
+        "en": "Placid Plastic Duck Simulator can be played in multiworld with multiworld (multiworld.gg). Duck spawning is replaced: only unlocked collection columns can spawn, and items speed up spawning. The goal is to find the 46 ducks on the first page."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Placid Plastic Duck Simulator",
+      "url": "https://multiworld.gg/games/Placid%20Plastic%20Duck%20Simulator/info/en"
+    }
+  ]
+}

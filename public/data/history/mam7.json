@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Might and Magic VII se randomise avec le Might and Magic randomizer de rekurs.io, qui couvre les épisodes VI et VII.",
+    "en": "Might and Magic VII is randomized with rekurs.io's Might and Magic randomizer, which covers games VI and VII."
+  },
+  "events": [
+    {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "New World Computing et 3DO sortent Might and Magic VII: For Blood and Honor en 1999.",
+        "en": "New World Computing and 3DO release Might and Magic VII: For Blood and Honor in 1999."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Le Might and Magic randomizer de rekurs.io, en version 2.6.2, mélange les objets, les monstres et certains PNJ de Might and Magic VI et VII.",
+        "en": "rekurs.io's Might and Magic randomizer, at version 2.6.2, shuffles items, monsters and certain NPCs in Might and Magic VI and VII."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "rekurs.io — Might and Magic randomizer",
+      "url": "https://rekurs.io/mmrandomizer/"
+    }
+  ]
+}

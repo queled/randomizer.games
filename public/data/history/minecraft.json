@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Minecraft figure parmi les premiers jeux d'Archipelago : des recettes y sont verrouillées et mélangées dans le multiworld.",
+    "en": "Minecraft is among Archipelago's first games: some recipes are locked and shuffled into the multiworld."
+  },
+  "events": [
+    {
+      "date": "2011",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Mojang sort Minecraft en version finale en 2011.",
+        "en": "Mojang releases the full version of Minecraft in 2011."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Minecraft est jouable en multiworld avec le multiworld (multiworld.gg). Certaines recettes sont verrouillées et mélangées dans le pool d'objets, et les structures présentes dans chaque dimension peuvent changer. Minecraft figure parmi les premiers jeux pris en charge par Archipelago.",
+        "en": "Minecraft can be played in multiworld with multiworld (multiworld.gg). Some recipes are locked and shuffled into the item pool, and the structures in each dimension can change. Minecraft is among the first games supported by Archipelago."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Minecraft",
+      "url": "https://multiworld.gg/games/Minecraft/info/en"
+    }
+  ]
+}

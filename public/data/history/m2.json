@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Le Metroid 2 Randomizer de liamnajor se génère dans le navigateur et rend le jeu non linéaire en supprimant les dégâts de la lave.",
+    "en": "liamnajor's Metroid 2 Randomizer is generated in the browser and makes the game non-linear by removing lava damage."
+  },
+  "events": [
+    {
+      "date": "1991",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Metroid II: Return of Samus sur Game Boy en 1991.",
+        "en": "Nintendo releases Metroid II: Return of Samus on the Game Boy in 1991."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "liamnajor propose un randomizer web pour Metroid II : les ROM générées n'ont plus de dégâts de lave, si bien que le jeu devient non linéaire, et les rayons, bombes, combinaisons et autres améliorations sont mélangés selon une seed.",
+        "en": "liamnajor offers a web randomizer for Metroid II: generated ROMs have no lava damage, so the game becomes non-linear, and beams, bombs, suits and other upgrades are shuffled according to a seed."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Metroid 2 Randomizer",
+      "url": "https://liamnajor.github.io/Metroid-2-Randomizer/"
+    }
+  ]
+}

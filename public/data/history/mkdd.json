@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Mario Kart: Double Dash!! se joue en multiworld : personnages, karts, objets, coupes et circuits y sont mélangés.",
+    "en": "Mario Kart: Double Dash!! can be played in multiworld: characters, karts, items, cups and courses are shuffled."
+  },
+  "events": [
+    {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Mario Kart: Double Dash!! sur GameCube en 2003.",
+        "en": "Nintendo releases Mario Kart: Double Dash!! on the GameCube in 2003."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Mario Kart: Double Dash!! est jouable en multiworld avec le multiworld (multiworld.gg). Les personnages, les karts, les objets, les coupes et l'accès aux contre-la-montre rejoignent le pool d'objets, avec des améliorations de karts ; les circuits des coupes peuvent aussi être mélangés.",
+        "en": "Mario Kart: Double Dash!! can be played in multiworld with multiworld (multiworld.gg). Characters, karts, items, cups and access to time trial courses join the item pool, with kart upgrades; the courses in each cup can also be shuffled."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Mario Kart Double Dash",
+      "url": "https://multiworld.gg/games/Mario%20Kart%20Double%20Dash/info/en"
+    }
+  ]
+}

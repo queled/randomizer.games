@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "LEGO Star Wars: La Saga complète se joue en multiworld, avec une implémentation encore en cours de développement.",
+    "en": "LEGO Star Wars: The Complete Saga can be played in multiworld, with an implementation still in progress."
+  },
+  "events": [
+    {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Traveller's Tales et LucasArts sortent LEGO Star Wars: La Saga complète en 2007.",
+        "en": "Traveller's Tales and LucasArts release LEGO Star Wars: The Complete Saga in 2007."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "LEGO Star Wars: La Saga complète est jouable en multiworld avec le multiworld (multiworld.gg). L'implémentation est jouable mais encore en développement, en attendant une réécriture de sa logique.",
+        "en": "LEGO Star Wars: The Complete Saga can be played in multiworld with multiworld (multiworld.gg). The implementation is playable but still a work in progress, pending a rewrite of its logic."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Lego Star Wars: The Complete Saga",
+      "url": "https://multiworld.gg/games/Lego%20Star%20Wars%3A%20The%20Complete%20Saga/info/en"
+    }
+  ]
+}

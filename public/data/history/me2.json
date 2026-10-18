@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Mass Effect 2 a son randomizer, proposé par ME3Tweaks.",
+    "en": "Mass Effect 2 has its randomizer, offered by ME3Tweaks."
+  },
+  "events": [
+    {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "BioWare et Electronic Arts sortent Mass Effect 2 en 2010.",
+        "en": "BioWare and Electronic Arts release Mass Effect 2 in 2010."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Mass Effect 2 Randomizer",
+        "en": "Mass Effect 2 Randomizer"
+      },
+      "text": {
+        "fr": "ME3Tweaks, un projet de modding non officiel autour de Mass Effect, propose un Mass Effect 2 Randomizer.",
+        "en": "ME3Tweaks, an unofficial Mass Effect modding project, offers a Mass Effect 2 Randomizer."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "ME3Tweaks — Mass Effect 2 Randomizer",
+      "url": "https://me3tweaks.com/masseffect2randomizer/"
+    }
+  ]
+}

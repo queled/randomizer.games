@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Mario Kart 64 se joue en multiworld, via BizHawk.",
+    "en": "Mario Kart 64 can be played in multiworld, through BizHawk."
+  },
+  "events": [
+    {
+      "date": "1996",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Mario Kart 64 sur Nintendo 64 en 1996.",
+        "en": "Nintendo releases Mario Kart 64 on the Nintendo 64 in 1996."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Mario Kart 64 est jouable en multiworld avec le multiworld (multiworld.gg). Le client passe par l'émulateur BizHawk, et un réglage de logique « généreux » est conseillé pour une première partie.",
+        "en": "Mario Kart 64 can be played in multiworld with multiworld (multiworld.gg). The client goes through the BizHawk emulator, and a \"generous\" logic setting is recommended for a first playthrough."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Mario Kart 64",
+      "url": "https://multiworld.gg/games/Mario%20Kart%2064/info/en"
+    }
+  ]
+}

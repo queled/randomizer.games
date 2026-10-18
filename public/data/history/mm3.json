@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Mega Man 3 se joue en multiworld avec Archipelago : armes des Robot Masters, accès aux niveaux et objets du Dr Light y sont randomisés.",
+    "en": "Mega Man 3 can be played in multiworld with Archipelago: Robot Master weapons, stage access and Dr. Light's items are randomized."
+  },
+  "events": [
+    {
+      "date": "1990",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Mega Man 3 (Rockman 3) sur NES en 1990.",
+        "en": "Capcom releases Mega Man 3 (Rockman 3) on the NES in 1990."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Mega Man 3 est jouable en multiworld avec Archipelago. Les armes des Robot Masters, l'accès à chaque niveau (niveaux Doc Robot compris) et les objets du Dr Light sont randomisés dans le multiworld.",
+        "en": "Mega Man 3 can be played in multiworld with Archipelago. Weapons from Robot Masters, access to each stage (Doc Robot stages included) and items from Dr. Light are randomized into the multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Mega Man 3",
+      "url": "https://archipelago.gg/games/Mega%20Man%203/info/en"
+    }
+  ]
+}

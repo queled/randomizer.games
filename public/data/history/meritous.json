@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Meritous se joue en multiworld avec Archipelago : ses dalles PSI deviennent des caches d'objets.",
+    "en": "Meritous can be played in multiworld with Archipelago: its PSI tiles become item caches."
+  },
+  "events": [
+    {
+      "date": "2008",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Lancer-X (Asceai) sort Meritous, un jeu libre, en 2008.",
+        "en": "Lancer-X (Asceai) releases Meritous, a free game, in 2008."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Meritous est jouable en multiworld avec Archipelago. Les dalles d'amélioration PSI deviennent des caches d'objets générales, et toutes les améliorations et tous les artefacts rejoignent le pool d'objets du multiworld.",
+        "en": "Meritous can be played in multiworld with Archipelago. The PSI Enhancement Tiles become general-purpose item caches, and all upgrades and artifacts join the multiworld item pool."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Meritous",
+      "url": "https://archipelago.gg/games/Meritous/info/en"
+    }
+  ]
+}

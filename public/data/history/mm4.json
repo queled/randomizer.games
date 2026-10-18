@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Mega Man 4 se randomise notamment avec le Route MatriX Randomizer du site japonais Neoぼろくず工房.",
+    "en": "Mega Man 4 is randomized notably with the Route MatriX Randomizer from the Japanese site Neoぼろくず工房."
+  },
+  "events": [
+    {
+      "date": "1991",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Mega Man 4 (Rockman 4) sur NES en 1991.",
+        "en": "Capcom releases Mega Man 4 (Rockman 4) on the NES in 1991."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Route MatriX Randomizer",
+        "en": "Route MatriX Randomizer"
+      },
+      "text": {
+        "fr": "Le site Neoぼろくず工房 publie le Route MatriX Randomizer, mis à jour en version 205 le 11 août 2026, en vue de la fermeture du site.",
+        "en": "The Neoぼろくず工房 site publishes the Route MatriX Randomizer, updated to version 205 on August 11, 2026, ahead of the site's closure."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Neoぼろくず工房 — Route MatriX Randomizer",
+      "url": "https://borokobo.web.fc2.com/#Rock4"
+    }
+  ]
+}

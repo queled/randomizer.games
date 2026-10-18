@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Lunacid se joue en multiworld : la barrière initiale disparaît, et la classe et l'arme de départ sont mélangées.",
+    "en": "Lunacid can be played in multiworld: the initial barrier is removed, and the starting class and weapon are shuffled."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "KIRA sort Lunacid en 2023.",
+        "en": "KIRA releases Lunacid in 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Lunacid est jouable en multiworld avec le multiworld (multiworld.gg). La randomisation retire la barrière du début de partie et mélange la classe et l'arme de départ, entre autres.",
+        "en": "Lunacid can be played in multiworld with multiworld (multiworld.gg). Randomization removes the barrier at the start of the game and shuffles the starting class and weapon, among other things."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Lunacid",
+      "url": "https://multiworld.gg/games/Lunacid/info/en"
+    }
+  ]
+}

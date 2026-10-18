@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le DQ8 Rando de playinful randomise la version 3DS de Dragon Quest VIII : monstres, trésors et plus encore.",
+    "en": "playinful's DQ8 Rando randomizes the 3DS version of Dragon Quest VIII: monsters, treasures and more."
+  },
+  "events": [
+    {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Dragon Quest VIII: Journey of the Cursed King sur Nintendo 3DS en 2015 au Japon, puis en Occident en 2017.",
+        "en": "Square Enix releases Dragon Quest VIII: Journey of the Cursed King on the Nintendo 3DS in 2015 in Japan, then in the West in 2017."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "playinful publie la version 0.1 du randomizer le 20 avril 2021, puis la 0.4 fin mai. Il crée un patch pour la version anglaise du jeu qui randomise l'emplacement des monstres, des trésors et d'autres éléments.",
+        "en": "playinful releases version 0.1 of the randomizer on April 20, 2021, then 0.4 in late May. It creates a patch for the English version of the game that randomizes the locations of monsters, treasures and more."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "playinful/DQ8-Rando (GitHub)",
+      "url": "https://github.com/playinful/DQ8-Rando"
+    }
+  ]
+}

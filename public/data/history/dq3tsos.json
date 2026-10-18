@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Dragon Quest III se randomise avec le Dragon Warrior 3 Randomizer, créé par gameboy9 et repris en 2023 par Endymionls.",
+    "en": "Dragon Quest III is randomized with the Dragon Warrior 3 Randomizer, created by gameboy9 and taken over in 2023 by Endymionls."
+  },
+  "events": [
+    {
+      "date": "1988",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Enix sort Dragon Quest III sur Famicom au Japon en 1988 ; « The Seeds of Salvation » est le sous-titre de ses versions occidentales récentes.",
+        "en": "Enix releases Dragon Quest III on the Famicom in Japan in 1988; \"The Seeds of Salvation\" is the subtitle of its recent Western versions."
+      }
+    },
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le randomizer de gameboy9",
+        "en": "gameboy9's randomizer"
+      },
+      "text": {
+        "fr": "gameboy9 crée le Dragon Warrior 3 Randomizer en février 2016.",
+        "en": "gameboy9 creates the Dragon Warrior 3 Randomizer in February 2016."
+      }
+    },
+    {
+      "date": "2023",
+      "title": {
+        "fr": "La reprise d'Endymionls",
+        "en": "Endymionls takes over"
+      },
+      "text": {
+        "fr": "En février 2023, Endymionls reprend le randomizer dans un fork pour corriger les bugs repérés en jouant et en regardant des seeds, puis y ajoute des options et des fonctions, jusqu'à la version 2.5.4.2 en novembre 2023.",
+        "en": "In February 2023, Endymionls takes the randomizer over in a fork to fix bugs spotted while playing and watching seeds, then adds options and features, up to version 2.5.4.2 in November 2023."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Endymionls/DW3Randomizer (GitHub)",
+      "url": "https://github.com/Endymionls/DW3Randomizer"
+    },
+    {
+      "label": "gameboy9/DW3Randomizer (GitHub)",
+      "url": "https://github.com/gameboy9/DW3Randomizer"
+    }
+  ]
+}

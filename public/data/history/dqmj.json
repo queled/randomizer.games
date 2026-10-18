@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le DQMJ1 Unofficial Randomizer d'ExcaliburZero randomise Dragon Quest Monsters: Joker sur Nintendo DS.",
+    "en": "ExcaliburZero's DQMJ1 Unofficial Randomizer randomizes Dragon Quest Monsters: Joker on the Nintendo DS."
+  },
+  "events": [
+    {
+      "date": "2006",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Dragon Quest Monsters: Joker sur Nintendo DS en 2006 au Japon, puis en Occident.",
+        "en": "Square Enix releases Dragon Quest Monsters: Joker on the Nintendo DS in 2006 in Japan, then in the West."
+      }
+    },
+    {
+      "date": "2024-2025",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "ExcaliburZero publie la version 0.1 du randomizer le 13 octobre 2024, pour Windows et Linux, puis la 0.6 en mai 2025.",
+        "en": "ExcaliburZero releases version 0.1 of the randomizer on October 13, 2024, for Windows and Linux, then 0.6 in May 2025."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "ExcaliburZero/dqmj1_randomizer (GitHub)",
+      "url": "https://github.com/ExcaliburZero/dqmj1_randomizer"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "intro": {
+    "fr": "Duke Nukem 3D se randomise avec le Build Engine Randomizer de Die4Ever, et se joue aussi en multiworld.",
+    "en": "Duke Nukem 3D is randomized with Die4Ever's Build Engine Randomizer, and can also be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "1996",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "3D Realms sort Duke Nukem 3D en 1996.",
+        "en": "3D Realms releases Duke Nukem 3D in 1996."
+      }
+    },
+    {
+      "date": "2022-2024",
+      "title": {
+        "fr": "Le Build Engine Randomizer",
+        "en": "The Build Engine Randomizer"
+      },
+      "text": {
+        "fr": "Die4Ever lance le Build Engine Randomizer en juillet 2022. Il prend en charge Duke Nukem 3D, Ion Fury, Shadow Warrior, Blood et PowerSlave, et génère de nouvelles cartes qu'on joue normalement depuis le jeu. La version 0.9.6 sort en mars 2024.",
+        "en": "Die4Ever launches the Build Engine Randomizer in July 2022. It supports Duke Nukem 3D, Ion Fury, Shadow Warrior, Blood and PowerSlave, and generates new maps that are played normally from the game. Version 0.9.6 comes out in March 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Duke Nukem 3D est aussi jouable en multiworld.",
+        "en": "Duke Nukem 3D can also be played in multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Die4Ever/build-engine-randomizer (GitHub)",
+      "url": "https://github.com/Die4Ever/build-engine-randomizer"
+    },
+    {
+      "label": "Multiworld — Duke Nukem 3D",
+      "url": "https://multiworld.gg/games/Duke%20Nukem%203D/info/en"
+    }
+  ]
+}

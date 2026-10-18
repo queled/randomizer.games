@@ -1,0 +1,59 @@
+{
+  "intro": {
+    "fr": "Dark Souls se randomise avec plusieurs outils de la communauté : l'Item Randomizer de HotPocketRemix, Paramdomizer, et des randomizers d'ennemis et de portes de brume sur Nexus Mods.",
+    "en": "Dark Souls is randomized with several community tools: HotPocketRemix's Item Randomizer, Paramdomizer, and enemy and fog gate randomizers on Nexus Mods."
+  },
+  "events": [
+    {
+      "date": "2012",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "FromSoftware sort Dark Souls en 2011 ; la Prepare to Die Edition l'amène sur PC en 2012.",
+        "en": "FromSoftware releases Dark Souls in 2011; the Prepare to Die Edition brings it to PC in 2012."
+      }
+    },
+    {
+      "date": "2017-2018",
+      "title": {
+        "fr": "L'Item Randomizer",
+        "en": "The Item Randomizer"
+      },
+      "text": {
+        "fr": "HotPocketRemix commence en juillet 2017 le Dark Souls Item Randomizer, qui mélange objets et boutiques sur la Prepare to Die Edition comme sur Remastered, avec l'outil UnpackDarkSoulsForModding pour la version PC d'origine. La version 0.3 sort en août 2018.",
+        "en": "HotPocketRemix starts the Dark Souls Item Randomizer in July 2017; it shuffles items and shops on both the Prepare to Die Edition and Remastered, with the UnpackDarkSoulsForModding tool for the original PC version. Version 0.3 comes out in August 2018."
+      }
+    },
+    {
+      "date": "2018-2020",
+      "title": {
+        "fr": "Paramdomizer",
+        "en": "Paramdomizer"
+      },
+      "text": {
+        "fr": "Mechapope crée en 2018 Paramdomizer, qui randomise les paramètres du jeu, repris en 2020 par Poppyanimal. Des randomizers d'ennemis et de portes de brume sont aussi proposés sur Nexus Mods.",
+        "en": "In 2018 Mechapope creates Paramdomizer, which randomizes the game's parameters, taken over in 2020 by Poppyanimal. Enemy and fog gate randomizers are also available on Nexus Mods."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "HotPocketRemix/DarkSoulsItemRandomizer (GitHub)",
+      "url": "https://github.com/HotPocketRemix/DarkSoulsItemRandomizer"
+    },
+    {
+      "label": "Poppyanimal/Paramdomizer (GitHub)",
+      "url": "https://github.com/Poppyanimal/Paramdomizer"
+    },
+    {
+      "label": "Nexus Mods — Enemy Randomizer",
+      "url": "https://www.nexusmods.com/darksouls/mods/1407"
+    },
+    {
+      "label": "Nexus Mods — Fog Gate Randomizer",
+      "url": "https://www.nexusmods.com/darksoulsremastered/mods/165"
+    }
+  ]
+}

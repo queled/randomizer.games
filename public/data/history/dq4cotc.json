@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Dragon Quest IV se randomise avec le Dragon Warrior 4 RandoHacker de gameboy9, sur la version NES : expérience, monstres, équipement, et même l'ordre des héros.",
+    "en": "Dragon Quest IV is randomized with gameboy9's Dragon Warrior 4 RandoHacker, on the NES version: experience, monsters, equipment, and even the heroes' order."
+  },
+  "events": [
+    {
+      "date": "1990",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Enix sort Dragon Quest IV sur Famicom au Japon en 1990 ; « Chapters of the Chosen » est le sous-titre de son remake Nintendo DS en Occident.",
+        "en": "Enix releases Dragon Quest IV on the Famicom in Japan in 1990; \"Chapters of the Chosen\" is the subtitle of its Nintendo DS remake in the West."
+      }
+    },
+    {
+      "date": "2016-2020",
+      "title": {
+        "fr": "Le RandoHacker",
+        "en": "The RandoHacker"
+      },
+      "text": {
+        "fr": "gameboy9 publie la première version (0.1.0) du RandoHacker le 22 avril 2016, puis les versions 1.0, 2.0 et 3.0 en 2019 et la 3.4.1 en septembre 2020. Il ajuste et randomise l'expérience, l'or, les rencontres, les monstres, l'équipement, les statistiques et quel héros joue quel chapitre.",
+        "en": "gameboy9 releases the RandoHacker's first version (0.1.0) on April 22, 2016, then versions 1.0, 2.0 and 3.0 in 2019 and 3.4.1 in September 2020. It adjusts and randomizes experience, gold, encounters, monsters, equipment, stats and which hero plays which chapter."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "gameboy9/DW4RandoHacker (GitHub)",
+      "url": "https://github.com/gameboy9/DW4RandoHacker"
+    }
+  ]
+}

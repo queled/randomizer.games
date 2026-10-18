@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le remake HD-2D de Dragon Quest III a eu son randomizer en bêta dès sa sortie, pour la version Steam.",
+    "en": "The HD-2D remake of Dragon Quest III got a beta randomizer right after its release, for the Steam version."
+  },
+  "events": [
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Dragon Quest III HD-2D Remake en 2024.",
+        "en": "Square Enix releases Dragon Quest III HD-2D Remake in 2024."
+      }
+    },
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "GoldieLeGenie publie une bêta 0.1 du randomizer le 27 novembre 2024, puis la 0.5 le 9 décembre. Il randomise les boutiques, le butin des zones, les récompenses des mini-médailles, les objets de départ, les monstres et leurs butins.",
+        "en": "GoldieLeGenie releases a 0.1 beta of the randomizer on November 27, 2024, then 0.5 on December 9. It randomizes shops, area loot, mini medal rewards, starting items, monsters and their drops."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GoldieLeGenie/Dragon-quest-3HD2D-Randomizer (GitHub)",
+      "url": "https://github.com/GoldieLeGenie/Dragon-quest-3HD2D-Randomizer"
+    }
+  ]
+}

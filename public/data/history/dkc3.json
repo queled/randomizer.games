@@ -1,0 +1,54 @@
+{
+  "intro": {
+    "fr": "Donkey Kong Country 3 a connu un randomizer d'ennemis en 2019, et il est aujourd'hui pris en charge par Archipelago pour le multiworld.",
+    "en": "Donkey Kong Country 3 got an enemy randomizer in 2019, and it is now supported by Archipelago for multiworld."
+  },
+  "events": [
+    {
+      "date": "1996",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Rare et Nintendo sortent Donkey Kong Country 3: Dixie Kong's Double Trouble! sur Super Nintendo en 1996.",
+        "en": "Rare and Nintendo release Donkey Kong Country 3: Dixie Kong's Double Trouble! on the Super Nintendo in 1996."
+      }
+    },
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le randomizer d'ennemis",
+        "en": "The enemy randomizer"
+      },
+      "text": {
+        "fr": "Pozzum publie en mai 2019 un randomizer d'ennemis pour Donkey Kong Country 3 (version 0.1.0.0 le 26 mai).",
+        "en": "In May 2019 Pozzum releases an enemy randomizer for Donkey Kong Country 3 (version 0.1.0.0 on May 26)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "Donkey Kong Country 3 est aussi pris en charge par Archipelago pour le multiworld.",
+        "en": "Donkey Kong Country 3 is also supported by Archipelago for multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "pozzum/DKC3Randomizer (GitHub)",
+      "url": "https://github.com/pozzum/DKC3Randomizer"
+    },
+    {
+      "label": "Archipelago — Donkey Kong Country 3",
+      "url": "https://archipelago.gg/games/Donkey%20Kong%20Country%203/info/en"
+    }
+  ]
+}

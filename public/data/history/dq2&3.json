@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Dragon Quest 1+2 SFC Randomizer de gameboy9 randomise le remake Super Famicom des deux premiers Dragon Quest.",
+    "en": "gameboy9's Dragon Quest 1+2 SFC Randomizer randomizes the Super Famicom remake of the first two Dragon Quest games."
+  },
+  "events": [
+    {
+      "date": "1993",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Enix sort Dragon Quest I & II, remake des deux premiers épisodes, sur Super Famicom au Japon en 1993.",
+        "en": "Enix releases Dragon Quest I & II, a remake of the first two games, on the Super Famicom in Japan in 1993."
+      }
+    },
+    {
+      "date": "2017-2018",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "gameboy9 commence le randomizer en mai 2017 et publie la version 1.0 le 10 juin 2017, puis la 1.3 en janvier 2018. Il ajuste et randomise l'expérience, l'or, les prix des boutiques, les zones de monstres et les statistiques, en remerciant mcgrew pour son Dragon Warrior Randomizer.",
+        "en": "gameboy9 starts the randomizer in May 2017 and releases version 1.0 on June 10, 2017, then 1.3 in January 2018. It adjusts and randomizes experience, gold, shop prices, monster zones and stat gains, with thanks to mcgrew for the Dragon Warrior Randomizer."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "gameboy9/DQ12SFCRando (GitHub)",
+      "url": "https://github.com/gameboy9/DQ12SFCRando"
+    }
+  ]
+}

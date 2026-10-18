@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Le Capsule Monster Coliseum Randomizer de MajinWamu permet de mélanger et modifier de nombreux éléments du jeu.",
+    "en": "MajinWamu's Capsule Monster Coliseum Randomizer lets you shuffle and modify many elements of the game."
+  },
+  "events": [
+    {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Yu-Gi-Oh! Capsule Monster Coliseum sur PlayStation 2 en 2004.",
+        "en": "Konami releases Yu-Gi-Oh! Capsule Monster Coliseum on the PlayStation 2 in 2004."
+      }
+    },
+    {
+      "date": "2025-2026",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "MajinWamu commence le randomizer en avril 2025 et publie la version 1.5 le 28 avril, puis la 2.0 en mai 2025, qui ajoute des onglets de modification, et la 2.3.5 en octobre 2026.",
+        "en": "MajinWamu starts the randomizer in April 2025 and releases version 1.5 on April 28, then 2.0 in May 2025, which adds modifier tabs, and 2.3.5 in October 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "MajinWamu/CMCRandomizer (GitHub)",
+      "url": "https://github.com/MajinWamu/CMCRandomizer"
+    },
+    {
+      "label": "Capsule Monster Coliseum Randomizer",
+      "url": "https://majinwamu.github.io/CMCRandomizer/"
+    }
+  ]
+}

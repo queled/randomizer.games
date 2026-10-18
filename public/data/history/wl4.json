@@ -1,0 +1,54 @@
+{
+  "intro": {
+    "fr": "Wario Land 4 se randomise avec le randomizer d'IsaGoodFriend, et se joue aussi en multiworld.",
+    "en": "Wario Land 4 is randomized with IsaGoodFriend's randomizer, and can also be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "2001",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Wario Land 4 sur Game Boy Advance en 2001.",
+        "en": "Nintendo releases Wario Land 4 on the Game Boy Advance in 2001."
+      }
+    },
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "IsaGoodFriend publie la version 1.0 le 1er septembre 2018 : un programme en ligne de commande qui randomise l'emplacement des diamants, des coffres (morceaux de joyaux, CD) et d'autres éléments.",
+        "en": "IsaGoodFriend releases version 1.0 on September 1, 2018: a command-line program that randomizes the locations of diamonds, chests (jewel pieces, CDs) and other elements."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Wario Land 4 est aussi jouable en multiworld.",
+        "en": "Wario Land 4 can also be played in multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IsaGoodFriend/WL4-Randomizer (GitHub)",
+      "url": "https://github.com/IsaGoodFriend/WL4-Randomizer"
+    },
+    {
+      "label": "Multiworld — Wario Land 4",
+      "url": "https://multiworld.gg/games/Wario%20Land%204/info/en"
+    }
+  ]
+}

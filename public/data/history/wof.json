@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Wheel Randomizer de macobra52 randomise la roue de toutes les versions NES de Wheel of Fortune développées par Rare.",
+    "en": "macobra52's Wheel Randomizer randomizes the wheel in every NES version of Wheel of Fortune developed by Rare."
+  },
+  "events": [
+    {
+      "date": "1988",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Rare développe Wheel of Fortune sur NES, sorti en 1988, suivi des éditions Family et Junior.",
+        "en": "Rare develops Wheel of Fortune on the NES, released in 1988, followed by the Family and Junior editions."
+      }
+    },
+    {
+      "date": "2024-2025",
+      "title": {
+        "fr": "Le Wheel Randomizer",
+        "en": "The Wheel Randomizer"
+      },
+      "text": {
+        "fr": "macobra52 publie en décembre 2024 un script Lua qui randomise la roue, compatible avec Wheel of Fortune, ses éditions Family et Junior, et le romhack Gamer Edition.",
+        "en": "In December 2024 macobra52 releases a Lua script that randomizes the wheel, compatible with Wheel of Fortune, its Family and Junior editions, and the Gamer Edition romhack."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "macobra52/Wheel-of-Fortune-NES-Wheel-Randomizer (GitHub)",
+      "url": "https://github.com/macobra52/Wheel-of-Fortune-NES-Wheel-Randomizer"
+    }
+  ]
+}

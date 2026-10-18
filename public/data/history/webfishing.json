@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "WEBFISHING se joue en multiworld grâce à l'intégration Archipelago de mwoiii.",
+    "en": "WEBFISHING is played in multiworld thanks to mwoiii's Archipelago integration."
+  },
+  "events": [
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "lamedeveloper sort WEBFISHING en 2024.",
+        "en": "lamedeveloper releases WEBFISHING in 2024."
+      }
+    },
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "mwoiii publie une première alpha le 19 janvier 2025, puis la 1.2.2 en octobre 2025.",
+        "en": "mwoiii releases a first alpha on January 19, 2025, then 1.2.2 in October 2025."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "mwoiii/webfishing-ap (GitHub)",
+      "url": "https://github.com/mwoiii/webfishing-ap"
+    }
+  ]
+}

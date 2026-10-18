@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le DotR Randomiser de GenericMadScientist randomise Yu-Gi-Oh! The Duelists of the Roses ; le projet est aujourd'hui archivé.",
+    "en": "GenericMadScientist's DotR Randomiser randomizes Yu-Gi-Oh! The Duelists of the Roses; the project is now archived."
+  },
+  "events": [
+    {
+      "date": "2001",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Yu-Gi-Oh! The Duelists of the Roses sur PlayStation 2 en 2001 au Japon.",
+        "en": "Konami releases Yu-Gi-Oh! The Duelists of the Roses on the PlayStation 2 in 2001 in Japan."
+      }
+    },
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "GenericMadScientist publie une alpha 0.2 le 1er juin 2017. Le dépôt est ensuite archivé.",
+        "en": "GenericMadScientist releases a 0.2 alpha on June 1, 2017. The repository is later archived."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GenericMadScientist/DotR-Randomiser (GitHub)",
+      "url": "https://github.com/GenericMadScientist/DotR-Randomiser"
+    }
+  ]
+}

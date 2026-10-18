@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Yu-Gi-Oh! 5D's Stardust Accelerator: World Championship 2009 se randomise avec le YgoNdsRandomizer, qui mélange le contenu des boosters et des decks de structure.",
+    "en": "Yu-Gi-Oh! 5D's Stardust Accelerator: World Championship 2009 is randomized with the YgoNdsRandomizer, which shuffles the contents of card packs and structure decks."
+  },
+  "events": [
+    {
+      "date": "2009",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Yu-Gi-Oh! 5D's Stardust Accelerator: World Championship 2009 sur Nintendo DS en 2009.",
+        "en": "Konami releases Yu-Gi-Oh! 5D's Stardust Accelerator: World Championship 2009 on the Nintendo DS in 2009."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "YgoNdsRandomizer",
+        "en": "YgoNdsRandomizer"
+      },
+      "text": {
+        "fr": "kathanaddaeus (mSpoeth) publie en 2021 un randomizer pour les Yu-Gi-Oh! de la Nintendo DS (version 1.1 le 12 juillet 2021) : il randomise le contenu des boosters et des decks de structure, avec des seeds et des réglages qu'on peut sauvegarder. Conçu pour World Championship 2011, il fonctionne aussi avec les épisodes depuis 2008.",
+        "en": "In 2021 kathanaddaeus (mSpoeth) releases a randomizer for the Nintendo DS Yu-Gi-Oh! games (version 1.1 on July 12, 2021): it randomizes the contents of card packs and structure decks, with seeds and settings that can be saved. Built for World Championship 2011, it also works with the games since 2008."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "kathanaddaeus/YgoNdsRandomizer (GitHub)",
+      "url": "https://github.com/kathanaddaeus/YgoNdsRandomizer"
+    }
+  ]
+}

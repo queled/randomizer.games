@@ -1,0 +1,54 @@
+{
+  "intro": {
+    "fr": "Zilliandomizer, de beauxq, randomise Zillion sur Master System, et le jeu se joue aussi en multiworld avec Archipelago.",
+    "en": "beauxq's Zilliandomizer randomizes Zillion on the Master System, and the game can also be played in multiworld with Archipelago."
+  },
+  "events": [
+    {
+      "date": "1987",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sega sort Zillion sur Master System en 1987, d'après l'anime du même nom.",
+        "en": "Sega releases Zillion on the Master System in 1987, based on the anime of the same name."
+      }
+    },
+    {
+      "date": "2022-2025",
+      "title": {
+        "fr": "Zilliandomizer",
+        "en": "Zilliandomizer"
+      },
+      "text": {
+        "fr": "beauxq commence Zilliandomizer en avril 2022 et le met à jour jusqu'en 2025.",
+        "en": "beauxq starts Zilliandomizer in April 2022 and updates it until 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "Zillion est aussi pris en charge par Archipelago pour le multiworld.",
+        "en": "Zillion is also supported by Archipelago for multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "beauxq/zilliandomizer (GitHub)",
+      "url": "https://github.com/beauxq/zilliandomizer"
+    },
+    {
+      "label": "Archipelago — Zillion",
+      "url": "https://archipelago.gg/games/Zillion/info/en"
+    }
+  ]
+}

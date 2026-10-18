@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Yo-kai Watch Randomizer de Tiniifan randomise le premier Yo-kai Watch.",
+    "en": "Tiniifan's Yo-kai Watch Randomizer randomizes the first Yo-kai Watch."
+  },
+  "events": [
+    {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Level-5 sort Yo-kai Watch sur Nintendo 3DS en 2013 au Japon.",
+        "en": "Level-5 releases Yo-kai Watch on the Nintendo 3DS in 2013 in Japan."
+      }
+    },
+    {
+      "date": "2022-2023",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Tiniifan publie la version 1.0 le 3 octobre 2022, puis la 1.4 en juin 2023.",
+        "en": "Tiniifan releases version 1.0 on October 3, 2022, then 1.4 in June 2023."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Tiniifan/YKWrandomizer (GitHub)",
+      "url": "https://github.com/Tiniifan/YKWrandomizer"
+    }
+  ]
+}

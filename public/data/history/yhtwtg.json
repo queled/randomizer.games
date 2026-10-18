@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de ZZKer pour You Have to Win the Game remélange ce jeu gratuit.",
+    "en": "ZZKer's randomizer for You Have to Win the Game reshuffles this free game."
+  },
+  "events": [
+    {
+      "date": "2012",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "J. Kyle Pittman (Minor Key Games) sort You Have to Win the Game gratuitement en 2012.",
+        "en": "J. Kyle Pittman (Minor Key Games) releases You Have to Win the Game for free in 2012."
+      }
+    },
+    {
+      "date": "2020-2023",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "ZZKer commence le randomizer en février 2020 et le met à jour jusqu'en 2023 (version 1.2.08).",
+        "en": "ZZKer starts the randomizer in February 2020 and updates it until 2023 (version 1.2.08)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "ZZKer/YHtWtG-Randomizer (GitHub)",
+      "url": "https://github.com/ZZKer/YHtWtG-Randomizer"
+    }
+  ]
+}

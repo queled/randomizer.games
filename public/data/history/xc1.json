@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Xenoblade Chronicles se randomise avec le Xenoblade Randomizer de SonahSofern, sur la version Definitive Edition de la Switch.",
+    "en": "Xenoblade Chronicles is randomized with SonahSofern's Xenoblade Randomizer, on the Switch Definitive Edition."
+  },
+  "events": [
+    {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Monolith Soft et Nintendo sortent Xenoblade Chronicles sur Wii en 2010 au Japon ; la Definitive Edition sort sur Switch en 2020.",
+        "en": "Monolith Soft and Nintendo release Xenoblade Chronicles on the Wii in 2010 in Japan; the Definitive Edition comes out on Switch in 2020."
+      }
+    },
+    {
+      "date": "2024-2026",
+      "title": {
+        "fr": "Le Xenoblade Randomizer",
+        "en": "The Xenoblade Randomizer"
+      },
+      "text": {
+        "fr": "SonahSofern commence en octobre 2024 un randomizer pour les jeux Xenoblade Chronicles de la Switch et publie la version 1.0 le 27 décembre 2024, avec ofc2000alex parmi les principaux contributeurs. Il modifie les fichiers de données du jeu pour randomiser ennemis, équipement, personnages, statistiques… La version 1.4.2 sort en juillet 2026.",
+        "en": "In October 2024 SonahSofern starts a randomizer for the Switch Xenoblade Chronicles games and releases version 1.0 on December 27, 2024, with ofc2000alex among the main contributors. It edits the game's data files to randomize enemies, equipment, characters, stats… Version 1.4.2 comes out in July 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "SonahSofern/Xenoblade-Series-Randomizer (GitHub)",
+      "url": "https://github.com/SonahSofern/Xenoblade-Series-Randomizer"
+    }
+  ]
+}

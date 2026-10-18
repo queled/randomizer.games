@@ -1,0 +1,25 @@
+{
+  "intro": {
+    "fr": "Le Z-Factor Item Randomizer de Galamoz mélange les objets du romhack Z-Factor de Super Metroid.",
+    "en": "Galamoz's Z-Factor Item Randomizer shuffles the items of the Super Metroid romhack Z-Factor."
+  },
+  "events": [
+    {
+      "date": "2018-2020",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Galamoz publie la version 1.0 le 25 décembre 2018, « un cadeau de Noël pour Leodox et Foosda », puis la 1.11 en janvier 2020.",
+        "en": "Galamoz releases version 1.0 on December 25, 2018, \"a Christmas present for Leodox and Foosda\", then 1.11 in January 2020."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Galamoz/Z-Factor-ItemRandomizer (GitHub)",
+      "url": "https://github.com/Galamoz/Z-Factor-ItemRandomizer"
+    }
+  ]
+}

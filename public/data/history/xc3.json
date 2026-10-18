@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Xenoblade Chronicles 3 se randomise avec le Xenoblade Randomizer de SonahSofern ; RoccoDev propose aussi un outil pour son extension Future Redeemed.",
+    "en": "Xenoblade Chronicles 3 is randomized with SonahSofern's Xenoblade Randomizer; RoccoDev also offers a tool for its Future Redeemed expansion."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Monolith Soft et Nintendo sortent Xenoblade Chronicles 3 sur Nintendo Switch en 2022.",
+        "en": "Monolith Soft and Nintendo release Xenoblade Chronicles 3 on the Nintendo Switch in 2022."
+      }
+    },
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Future Redeemed",
+        "en": "Future Redeemed"
+      },
+      "text": {
+        "fr": "En mars 2024, RoccoDev publie un outil qui modifie la répartition des kits de déblocage dans l'extension Future Redeemed et les rend propres à chaque personnage.",
+        "en": "In March 2024, RoccoDev releases a tool that changes the distribution of unlock kits in the Future Redeemed expansion and makes them character-specific."
+      }
+    },
+    {
+      "date": "2024-2026",
+      "title": {
+        "fr": "Le Xenoblade Randomizer",
+        "en": "The Xenoblade Randomizer"
+      },
+      "text": {
+        "fr": "SonahSofern commence en octobre 2024 un randomizer pour les jeux Xenoblade Chronicles de la Switch et publie la version 1.0 le 27 décembre 2024, avec ofc2000alex parmi les principaux contributeurs. Il modifie les fichiers de données du jeu pour randomiser ennemis, équipement, personnages, statistiques… La version 1.4.2 sort en juillet 2026.",
+        "en": "In October 2024 SonahSofern starts a randomizer for the Switch Xenoblade Chronicles games and releases version 1.0 on December 27, 2024, with ofc2000alex among the main contributors. It edits the game's data files to randomize enemies, equipment, characters, stats… Version 1.4.2 comes out in July 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "SonahSofern/Xenoblade-Series-Randomizer (GitHub)",
+      "url": "https://github.com/SonahSofern/Xenoblade-Series-Randomizer"
+    },
+    {
+      "label": "roccodev/xc3fr-unlock-kit-balance (GitHub)",
+      "url": "https://github.com/roccodev/xc3fr-unlock-kit-balance"
+    }
+  ]
+}

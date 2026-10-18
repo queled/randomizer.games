@@ -1,0 +1,70 @@
+{
+  "intro": {
+    "fr": "Super Mario Bros. 2 se randomise avec plusieurs outils : celui de tetraly (2018), le Door Randomizer de Pepperpow et le randomizer de MaCobra52 (2021), qui mélangent niveaux, portes, personnages et ennemis.",
+    "en": "Super Mario Bros. 2 is randomized with several tools: tetraly's (2018), Pepperpow's Door Randomizer and MaCobra52's randomizer (2021), which shuffle levels, doors, characters and enemies."
+  },
+  "events": [
+    {
+      "date": "1988",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Super Mario Bros. 2 sur NES en Amérique du Nord en 1988.",
+        "en": "Nintendo releases Super Mario Bros. 2 on the NES in North America in 1988."
+      }
+    },
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le randomizer de tetraly",
+        "en": "tetraly's randomizer"
+      },
+      "text": {
+        "fr": "tetraly publie le 2 septembre 2018 une version 0.4 bêta d'un Super Mario Bros. 2 (US) Randomizer, dont le développement se poursuit dans un dépôt privé, avec un Discord SMB2R.",
+        "en": "On September 2, 2018, tetraly releases a 0.4 beta of a Super Mario Bros. 2 (US) Randomizer, whose development continues in a private repository, with an SMB2R Discord."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Door Randomizer et randomizer de MaCobra52",
+        "en": "Door Randomizer and MaCobra52's randomizer"
+      },
+      "text": {
+        "fr": "En août 2021 apparaissent deux nouveaux outils : le Super Mario Bros 2 Door Randomizer de Pepperpow, qui peut enchaîner les niveaux en une grande carte, et le randomizer de MaCobra52, qui impose un personnage aléatoire par niveau, mélange l'ordre des niveaux, les portes et les lianes, et randomise ennemis et boss. Les premières courses recensées sur ce site ont lieu en octobre 2021 : 62 dans l'année.",
+        "en": "In August 2021 two new tools appear: Pepperpow's Super Mario Bros 2 Door Randomizer, which can string levels together into a large map, and MaCobra52's randomizer, which locks a random character per level, shuffles the level order, doors and vines, and randomizes enemies and bosses. The first races listed on this site take place in October 2021: 62 that year."
+      }
+    },
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Version 2.4",
+        "en": "Version 2.4"
+      },
+      "text": {
+        "fr": "Le randomizer de MaCobra52 atteint sa version 2.4 en janvier 2024.",
+        "en": "MaCobra52's randomizer reaches version 2.4 in January 2024."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "tetraly/smb2r (GitHub)",
+      "url": "https://github.com/tetraly/smb2r"
+    },
+    {
+      "label": "pepperpow/smb2-door-randomizer (GitHub)",
+      "url": "https://github.com/pepperpow/smb2-door-randomizer"
+    },
+    {
+      "label": "macobra52/SMB2-Randomizer (GitHub)",
+      "url": "https://github.com/macobra52/SMB2-Randomizer"
+    },
+    {
+      "label": "racetime.gg — SMB2R",
+      "url": "https://racetime.gg/smb2r"
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "intro": {
+    "fr": "AM2R, remake amateur de Metroid II, se randomise avec Randovania depuis 2023, en solo puis en multiworld.",
+    "en": "AM2R, the fan remake of Metroid II, has been randomized with Randovania since 2023, in single player then in multiworld."
+  },
+  "events": [
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "AM2R (Another Metroid 2 Remake), remake amateur de Metroid II: Return of Samus, sort en août 2016 après des années de développement, avant d'être visé par une demande de retrait de Nintendo.",
+        "en": "AM2R (Another Metroid 2 Remake), a fan remake of Metroid II: Return of Samus, comes out in August 2016 after years of development, before being targeted by a takedown request from Nintendo."
+      }
+    },
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Dans Randovania",
+        "en": "In Randovania"
+      },
+      "text": {
+        "fr": "Les premières courses recensées sur ce site ont lieu le 20 août 2023 sur racetime.gg. Le 3 novembre 2023, la version 7.0 de Randovania ajoute officiellement AM2R en solo, avec notamment le mélange des verrous de portes.",
+        "en": "The first races listed on this site take place on August 20, 2023 on racetime.gg. On November 3, 2023, Randovania version 7.0 officially adds AM2R in single player, including door lock shuffle."
+      }
+    },
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Le 7 février 2024, la version 7.3 de Randovania ajoute le multiworld pour AM2R. Ce site recense 56 courses dans l'année.",
+        "en": "On February 7, 2024, Randovania version 7.3 adds multiworld support for AM2R. This site counts 56 races that year."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Randovania — CHANGELOG",
+      "url": "https://github.com/randovania/randovania/blob/main/CHANGELOG.md"
+    },
+    {
+      "label": "Wikipedia — AM2R",
+      "url": "https://en.wikipedia.org/wiki/AM2R"
+    },
+    {
+      "label": "r/AM2R",
+      "url": "https://www.reddit.com/r/AM2R/"
+    },
+    {
+      "label": "racetime.gg — AM2R Randomizer",
+      "url": "https://racetime.gg/am2r-rdv"
+    }
+  ]
+}

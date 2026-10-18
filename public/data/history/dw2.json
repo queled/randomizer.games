@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Le Dragon Warrior II Randomizer remélange le deuxième Dragon Quest. Joué ponctuellement en course depuis 2016, il connaît un regain depuis 2024.",
+    "en": "The Dragon Warrior II Randomizer reshuffles the second Dragon Quest. Raced now and then since 2016, it has seen a revival since 2024."
+  },
+  "events": [
+    {
+      "date": "1987",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Enix sort Dragon Quest II sur Famicom au Japon en 1987 ; il arrive en Amérique du Nord sous le nom de Dragon Warrior II en 1990.",
+        "en": "Enix releases Dragon Quest II on the Famicom in Japan in 1987; it reaches North America as Dragon Warrior II in 1990."
+      }
+    },
+    {
+      "date": "2016-2019",
+      "title": {
+        "fr": "Premières courses",
+        "en": "First races"
+      },
+      "text": {
+        "fr": "Les premières courses recensées sur ce site ont lieu en novembre 2016 sur SpeedRunsLive. 2019 en compte 15.",
+        "en": "The first races listed on this site take place in November 2016 on SpeedRunsLive. 2019 counts 15 of them."
+      }
+    },
+    {
+      "date": "2024-2026",
+      "title": {
+        "fr": "Le renouveau",
+        "en": "The revival"
+      },
+      "text": {
+        "fr": "Sur racetime.gg, les courses « Beat The Game » reprennent : 12 en 2024, 31 en 2025 et déjà 39 en 2026, un record. La communauté du randomizer de GlorySeeker se retrouve sur Discord.",
+        "en": "On racetime.gg, \"Beat The Game\" races pick up again: 12 in 2024, 31 in 2025 and already 39 in 2026, a record. The community of GlorySeeker's randomizer gathers on Discord."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Discord — Dragon Warrior II Randomizer",
+      "url": "https://discord.com/invite/rtFMVyZkbY"
+    },
+    {
+      "label": "racetime.gg — DW2R",
+      "url": "https://racetime.gg/dw2r"
+    }
+  ]
+}

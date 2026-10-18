@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Le Quad Randomizer réunit quatre jeux en une partie : Zelda 1, Metroid, A Link to the Past et Super Metroid. Les objets de tous les jeux sont mélangés, et il faut vaincre le boss final de chacun.",
+    "en": "The Quad Randomizer brings four games into a single run: Zelda 1, Metroid, A Link to the Past and Super Metroid. Items from every game are shuffled, and you must defeat each one's final boss."
+  },
+  "events": [
+    {
+      "date": "1986-1994",
+      "title": {
+        "fr": "Les jeux d'origine",
+        "en": "The original games"
+      },
+      "text": {
+        "fr": "The Legend of Zelda et Metroid (1986, NES), puis A Link to the Past (1991) et Super Metroid (1994) sur Super Nintendo. Les combos Z1M1 et SMZ3 les réunissaient déjà deux par deux.",
+        "en": "The Legend of Zelda and Metroid (1986, NES), then A Link to the Past (1991) and Super Metroid (1994) on the Super Nintendo. The Z1M1 and SMZ3 combos already paired them two by two."
+      }
+    },
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le Quad Randomizer",
+        "en": "The Quad Randomizer"
+      },
+      "text": {
+        "fr": "Le Quad Randomizer, sur quad.samus.link, mélange les objets des quatre jeux, qu'on traverse par certaines portes et entrées. Les premières courses recensées sur ce site ont lieu le 21 novembre 2024 sur racetime.gg.",
+        "en": "The Quad Randomizer, on quad.samus.link, shuffles the items of all four games, which you travel between through certain doors and entrances. The first races listed on this site take place on November 21, 2024 on racetime.gg."
+      }
+    },
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Une année pleine",
+        "en": "A full year"
+      },
+      "text": {
+        "fr": "Ce site recense 40 courses en 2025.",
+        "en": "This site counts 40 races in 2025."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Quad Randomizer",
+      "url": "https://quad.samus.link/"
+    },
+    {
+      "label": "racetime.gg — Z1M1Z3M3",
+      "url": "https://racetime.gg/z1m1z3m3"
+    }
+  ]
+}

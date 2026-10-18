@@ -1,0 +1,88 @@
+{
+  "intro": {
+    "fr": "Super Mario 64 se randomise depuis 2019 : entrées des niveaux et tableaux du château, puis étoiles et objets. Le randomizer est passé plusieurs fois par les Games Done Quick.",
+    "en": "Super Mario 64 has been randomized since 2019: level entrances and castle paintings, then stars and objects. The randomizer has been to Games Done Quick several times."
+  },
+  "events": [
+    {
+      "date": "1996",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Super Mario 64 sur Nintendo 64 en 1996.",
+        "en": "Nintendo releases Super Mario 64 on the Nintendo 64 in 1996."
+      }
+    },
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Deux randomizers",
+        "en": "Two randomizers"
+      },
+      "text": {
+        "fr": "En mars 2019 démarrent deux projets : le Mario 64 Randomizer d'aGlitch (version 1.0 le 6 avril), qui randomise les warps, les objets, la musique et même les vêtements de Mario, et le Super Mario 64 Randomizer d'Andre Meyer (version 0.1 le 7 avril), pensé « dans le style d'OoT Randomizer », qui mélange les entrées des niveaux et adapte les tableaux du château.",
+        "en": "In March 2019 two projects start: aGlitch's Mario 64 Randomizer (version 1.0 on April 6), which randomizes warps, objects, music and even Mario's clothes, and Andre Meyer's Super Mario 64 Randomizer (version 0.1 on April 7), designed \"in the style of OoT Randomizer\", which shuffles level entrances and matches the castle paintings."
+      }
+    },
+    {
+      "date": "2019-2020",
+      "title": {
+        "fr": "Aux Games Done Quick",
+        "en": "At Games Done Quick"
+      },
+      "text": {
+        "fr": "La GDQ Express 2019, puis l'Awesome Games Done Quick 2020, accueillent une partie du randomizer en 70 étoiles.",
+        "en": "GDQ Express 2019, then Awesome Games Done Quick 2020, host a 70-star randomizer run."
+      }
+    },
+    {
+      "date": "2022-2024",
+      "title": {
+        "fr": "Relève et nouveaux défis",
+        "en": "A successor and new challenges"
+      },
+      "text": {
+        "fr": "Le projet d'Andre Meyer, dont la dernière version sort en juin 2022, est mis à la retraite et renvoie vers le randomizer d'Arthurtilly. Le Summer Games Done Quick 2023 accueille une partie « 70 Star Non-Stop », et celui de 2024 une partie 10 étoiles les yeux bandés.",
+        "en": "Andre Meyer's project, whose last version comes out in June 2022, is retired and points to Arthurtilly's randomizer. Summer Games Done Quick 2023 hosts a \"70 Star Non-Stop\" run, and 2024's a blindfolded 10-star run."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "Super Mario 64 est aussi pris en charge par Archipelago pour le multiworld.",
+        "en": "Super Mario 64 is also supported by Archipelago for multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "aGlitch/Mario-64-Randomizer (GitHub)",
+      "url": "https://github.com/aGlitch/Mario-64-Randomizer"
+    },
+    {
+      "label": "andrebarks/sm64-randomizer (GitHub)",
+      "url": "https://github.com/andrebarks/sm64-randomizer"
+    },
+    {
+      "label": "Romhacking.com — Arthurtilly's SM64 Randomizer",
+      "url": "https://romhacking.com/hack/sm64-randomizer"
+    },
+    {
+      "label": "Archipelago — Super Mario 64",
+      "url": "https://archipelago.gg/games/Super%20Mario%2064/info/en"
+    },
+    {
+      "label": "racetime.gg — SM64 Randomizer",
+      "url": "https://racetime.gg/sm64r"
+    }
+  ]
+}

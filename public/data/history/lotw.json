@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Le Legacy of the Wizard Randomizer de MrStarbird remélange le jeu de Falcom sur NES : trésors, boutiques, statistiques des personnages et des ennemis, et même les sprites.",
+    "en": "MrStarbird's Legacy of the Wizard Randomizer reshuffles Falcom's NES game: treasures, shops, character and enemy stats, and even sprites."
+  },
+  "events": [
+    {
+      "date": "1987",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nihon Falcom sort Dragon Slayer IV au Japon en 1987 ; il arrive sur NES en Amérique du Nord sous le nom de Legacy of the Wizard.",
+        "en": "Nihon Falcom releases Dragon Slayer IV in Japan in 1987; it reaches the NES in North America as Legacy of the Wizard."
+      }
+    },
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Les versions 1.x",
+        "en": "Versions 1.x"
+      },
+      "text": {
+        "fr": "MrStarbird commence le randomizer en avril 2017 et publie de nombreuses versions en novembre et décembre 2017 : trésors et boutiques randomisés avec un journal des spoilers, statistiques des personnages et des ennemis, sprites inspirés de Zelda, Link's Awakening ou Final Fantasy, préréglages, puis téléportations des portraits mélangées (version 1.5.0, 6 décembre 2017).",
+        "en": "MrStarbird starts the randomizer in April 2017 and releases many versions in November and December 2017: randomized treasures and shops with a spoiler log, character and enemy stats, sprites inspired by Zelda, Link's Awakening or Final Fantasy, presets, then shuffled portrait teleports (version 1.5.0, December 6, 2017)."
+      }
+    },
+    {
+      "date": "2019-2022",
+      "title": {
+        "fr": "Version 2 et courses",
+        "en": "Version 2 and races"
+      },
+      "text": {
+        "fr": "La version 2.0 sort en février 2019. Les premières courses recensées sur ce site ont lieu en avril 2022 sur racetime.gg.",
+        "en": "Version 2.0 comes out in February 2019. The first races listed on this site take place in April 2022 on racetime.gg."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "MrStarbird/LotW-Randomizer (GitHub)",
+      "url": "https://github.com/MrStarbird/LotW-Randomizer"
+    },
+    {
+      "label": "racetime.gg — Legacy of the Wizard",
+      "url": "https://racetime.gg/legacy-of-the-wizard"
+    }
+  ]
+}

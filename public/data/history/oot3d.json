@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Le randomizer d'Ocarina of Time 3D, de gamestabled, transpose sur 3DS l'esprit du randomizer de la version Nintendo 64. Il se joue sur console modifiée ou sur émulateur.",
+    "en": "gamestabled's Ocarina of Time 3D Randomizer brings the spirit of the Nintendo 64 randomizer to the 3DS. It plays on a modded console or on emulator."
+  },
+  "events": [
+    {
+      "date": "2011",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Grezzo et Nintendo sortent The Legend of Zelda: Ocarina of Time 3D sur Nintendo 3DS en 2011.",
+        "en": "Grezzo and Nintendo release The Legend of Zelda: Ocarina of Time 3D on the Nintendo 3DS in 2011."
+      }
+    },
+    {
+      "date": "2020-2021",
+      "title": {
+        "fr": "Les débuts et la version 1.0",
+        "en": "Beginnings and version 1.0"
+      },
+      "text": {
+        "fr": "gamestabled ouvre le dépôt du randomizer le 13 novembre 2020 et publie la version 1.0 le 19 mars 2021. Il se joue sur 3DS avec Luma3DS ou sur l'émulateur Citra. Les premières courses recensées sur ce site ont lieu une semaine plus tard.",
+        "en": "gamestabled opens the randomizer's repository on November 13, 2020 and releases version 1.0 on March 19, 2021. It plays on 3DS with Luma3DS or on the Citra emulator. The first races listed on this site take place a week later."
+      }
+    },
+    {
+      "date": "2022-2024",
+      "title": {
+        "fr": "Versions 3 et 4",
+        "en": "Versions 3 and 4"
+      },
+      "text": {
+        "fr": "La version 3.0 sort le 1er janvier 2022, puis la 4.0 le 1er août 2024. gymnast86, gamestabled, HylianFreddy, cjohnson57, Roberto-Nessy et Kewlan figurent parmi les principaux contributeurs.",
+        "en": "Version 3.0 comes out on January 1, 2022, then 4.0 on August 1, 2024. gymnast86, gamestabled, HylianFreddy, cjohnson57, Roberto-Nessy and Kewlan are among the main contributors."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "gamestabled/OoT3D_Randomizer (GitHub)",
+      "url": "https://github.com/gamestabled/OoT3D_Randomizer"
+    },
+    {
+      "label": "racetime.gg — OoT3DR",
+      "url": "https://racetime.gg/oot3dr"
+    }
+  ]
+}

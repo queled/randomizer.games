@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Le Super Meat Boy Randomizer de negative-seven mélange tous les niveaux du jeu, hors niveaux de warp et de boss. L'effet disparaît au redémarrage du jeu.",
+    "en": "negative-seven's Super Meat Boy Randomizer shuffles all of the game's levels, except warp zone and boss levels. The effect goes away when the game restarts."
+  },
+  "events": [
+    {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Team Meat sort Super Meat Boy en 2010.",
+        "en": "Team Meat releases Super Meat Boy in 2010."
+      }
+    },
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Inspiré des randomizers de Pokémon ou de Super Mario World, negative-seven publie la première version (0.01) du Super Meat Boy Randomizer le 9 septembre 2016.",
+        "en": "Inspired by randomizers for games like Pokémon or Super Mario World, negative-seven releases the first version (0.01) of the Super Meat Boy Randomizer on September 9, 2016."
+      }
+    },
+    {
+      "date": "2021-2023",
+      "title": {
+        "fr": "Dernière version et courses",
+        "en": "Last version and races"
+      },
+      "text": {
+        "fr": "La version 0.05 sort en décembre 2021. Les premières courses recensées sur ce site ont lieu en juillet 2023 sur racetime.gg.",
+        "en": "Version 0.05 comes out in December 2021. The first races listed on this site take place in July 2023 on racetime.gg."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "negative-seven/smb-randomizer (GitHub)",
+      "url": "https://github.com/negative-seven/smb-randomizer"
+    },
+    {
+      "label": "racetime.gg — Super Meat Boy",
+      "url": "https://racetime.gg/smb"
+    }
+  ]
+}

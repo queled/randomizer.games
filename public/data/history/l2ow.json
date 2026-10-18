@@ -1,0 +1,55 @@
+{
+  "intro": {
+    "fr": "Lufia II se randomise depuis 2017, d'abord avec Terror Wave d'abyssonym. Le jeu est aussi pris en charge par Archipelago avec son mode Ancient Cave, et un randomizer en monde ouvert a fait son apparition sur racetime.gg en 2026.",
+    "en": "Lufia II has been randomized since 2017, first with abyssonym's Terror Wave. The game is also supported by Archipelago through its Ancient Cave mode, and an open-world randomizer showed up on racetime.gg in 2026."
+  },
+  "events": [
+    {
+      "date": "1995",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Neverland et Taito sortent Lufia II: Rise of the Sinistrals sur Super Famicom au Japon en 1995, puis sur Super Nintendo.",
+        "en": "Neverland and Taito release Lufia II: Rise of the Sinistrals on the Super Famicom in Japan in 1995, then on the Super Nintendo."
+      }
+    },
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Terror Wave",
+        "en": "Terror Wave"
+      },
+      "text": {
+        "fr": "Le 12 septembre 2017, abyssonym publie Terror Wave, « enfin un randomizer pour Lufia 2 » : personnages, objets et équipement, sorts, monstres, Capsule Monsters, boutiques et coffres, avec un curseur de « niveau d'aléatoire ».",
+        "en": "On September 12, 2017, abyssonym releases Terror Wave, \"finally, a randomizer for Lufia 2\": characters, items and equipment, spells, monsters, Capsule Monsters, shops and chests, with a \"randomness\" slider."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Le monde ouvert",
+        "en": "Open world"
+      },
+      "text": {
+        "fr": "Le jeu est aussi jouable en multiworld avec Archipelago (Lufia II Ancient Cave), et la première course du Lufia II Open World Randomizer recensée sur ce site a lieu le 12 septembre 2026.",
+        "en": "The game can also be played in multiworld with Archipelago (Lufia II Ancient Cave), and the first Lufia II Open World Randomizer race listed on this site takes place on September 12, 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Abyssonym — Lufia 2: Terror Wave (2017)",
+      "url": "https://abyssonym.wordpress.com/2017/09/12/lufia-2-terror-wave-new-randomizer/"
+    },
+    {
+      "label": "Archipelago — Lufia II Ancient Cave",
+      "url": "https://archipelago.gg/tutorial/#Lufia%20II%20Ancient%20Cave"
+    },
+    {
+      "label": "racetime.gg — Lufia II Open World",
+      "url": "https://racetime.gg/lufia2ow"
+    }
+  ]
+}

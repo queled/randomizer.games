@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Le Messenger Randomizer de Minous27 a commencé comme « le début du rando pour The Messenger », avant de devenir aussi jouable en multiworld via Archipelago.",
+    "en": "Minous27's Messenger Randomizer started as \"the beginning of rando for The Messenger\", before also becoming playable in multiworld through Archipelago."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sabotage Studio sort The Messenger en 2018.",
+        "en": "Sabotage Studio releases The Messenger in 2018."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Les débuts",
+        "en": "The beginnings"
+      },
+      "text": {
+        "fr": "Minous27 commence le randomizer fin mars 2020 et publie une première alpha le 12 mai 2020. Il s'appuie sur le chargeur de mods Courier. Les premières courses recensées sur ce site ont lieu en juillet 2020.",
+        "en": "Minous27 starts the randomizer in late March 2020 and releases a first alpha on May 12, 2020. It relies on the Courier mod loader. The first races listed on this site take place in July 2020."
+      }
+    },
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Version 1.0 et Archipelago",
+        "en": "Version 1.0 and Archipelago"
+      },
+      "text": {
+        "fr": "La version 1.0 sort le 2 avril 2023. The Messenger est aussi pris en charge par Archipelago pour le multiworld.",
+        "en": "Version 1.0 comes out on April 2, 2023. The Messenger is also supported by Archipelago for multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "minous27/TheMessengerRandomizerMod (GitHub)",
+      "url": "https://github.com/minous27/TheMessengerRandomizerMod"
+    },
+    {
+      "label": "Archipelago — The Messenger",
+      "url": "https://archipelago.gg/games/The%20Messenger/info/en"
+    }
+  ]
+}

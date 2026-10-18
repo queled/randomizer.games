@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Le randomizer d'Arzette: The Jewel of Faramore, de nicolasberube, a d'abord été un randomizer autonome, avant de devenir un randomizer Archipelago.",
+    "en": "nicolasberube's Arzette: The Jewel of Faramore randomizer started as a standalone randomizer, before becoming an Archipelago randomizer."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Seedy Eye Software et Limited Run Games sortent Arzette: The Jewel of Faramore en 2023, hommage aux jeux Zelda du CD-i.",
+        "en": "Seedy Eye Software and Limited Run Games release Arzette: The Jewel of Faramore in 2023, a tribute to the CD-i Zelda games."
+      }
+    },
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "nicolasberube commence le randomizer en juillet 2024 et publie la version 1.0 le 9 août 2024, pour la version Steam Windows du jeu. La première course recensée sur ce site a lieu le 15 août 2024.",
+        "en": "nicolasberube starts the randomizer in July 2024 and releases version 1.0 on August 9, 2024, for the game's Windows Steam version. The first race listed on this site takes place on August 15, 2024."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "Le randomizer autonome est désormais abandonné au profit de la version Archipelago, en 1.0 depuis août 2026.",
+        "en": "The standalone randomizer is now deprecated in favor of the Archipelago version, at 1.0 since August 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "nicolasberube/Arzette_Randomizer (GitHub)",
+      "url": "https://github.com/nicolasberube/Arzette_Randomizer"
+    },
+    {
+      "label": "racetime.gg — Arzette Randomizer",
+      "url": "https://racetime.gg/arzette-rando"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "intro": {
+    "fr": "Le Skyward Sword Randomizer mélange les objets du Zelda de 2011 sur Wii. Lancé par lepelog en 2020, il se joue sur émulateur ou sur Wii modifiée, et a sa communauté de courses sur racetime.gg.",
+    "en": "The Skyward Sword Randomizer shuffles the items of the 2011 Wii Zelda. Started by lepelog in 2020, it plays on emulator or on a homebrewed Wii, and has its racing community on racetime.gg."
+  },
+  "events": [
+    {
+      "date": "2011",
+      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "text": {
+        "fr": "Nintendo sort The Legend of Zelda: Skyward Sword sur Wii en 2011. Le randomizer s'appuie sur la version Wii américaine (NTSC-U 1.00).",
+        "en": "Nintendo releases The Legend of Zelda: Skyward Sword on the Wii in 2011. The randomizer is built on the US Wii version (NTSC-U 1.00)."
+      }
+    },
+    {
+      "date": "2020",
+      "title": { "fr": "lepelog se lance", "en": "lepelog gets started" },
+      "text": {
+        "fr": "lepelog démarre le randomizer le 24 mai 2020. La version 1.0.1 est publiée le 30 octobre 2020, et les premières courses recensées sur ce site ont lieu en novembre.",
+        "en": "lepelog starts the randomizer on May 24, 2020. Version 1.0.1 is published on October 30, 2020, and the first races listed on this site take place in November."
+      }
+    },
+    {
+      "date": "2021-2023",
+      "title": { "fr": "Une équipe et la version 2.0", "en": "A team and version 2.0" },
+      "text": {
+        "fr": "Autour de lepelog, Peppernicus2000, cjs8487 et CovenEsme deviennent les principaux contributeurs. La version 2.0 sort le 5 septembre 2023, avec le site ssrando.com et un Discord dédié au randomizer et au modding.",
+        "en": "Around lepelog, Peppernicus2000, cjs8487 and CovenEsme become the main contributors. Version 2.0 comes out on September 5, 2023, with the ssrando.com website and a Discord for the randomizer and modding."
+      }
+    },
+    {
+      "date": "2024",
+      "title": { "fr": "Un record de courses", "en": "A racing record" },
+      "text": {
+        "fr": "Ce site recense 391 courses en 2024, l'année la plus active du randomizer.",
+        "en": "This site counts 391 races in 2024, the randomizer's busiest year."
+      }
+    },
+    {
+      "date": "2026",
+      "title": { "fr": "Co-op à Frost Fatales", "en": "Co-op at Frost Fatales" },
+      "text": {
+        "fr": "Frost Fatales 2026 accueille une partie en co-op. La version 2.3 sort en juin 2026.",
+        "en": "Frost Fatales 2026 hosts a co-op run. Version 2.3 comes out in June 2026."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "ssrando/ssrando (GitHub)", "url": "https://github.com/ssrando/ssrando" },
+    { "label": "ssrando — Releases", "url": "https://github.com/ssrando/ssrando/releases" },
+    { "label": "Skyward Sword Randomizer", "url": "https://ssrando.com/" },
+    { "label": "racetime.gg — Skyward Sword Randomizer", "url": "https://racetime.gg/lozssr" }
+  ]
+}

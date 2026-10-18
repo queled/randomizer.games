@@ -1,0 +1,37 @@
+{
+  "intro": {
+    "fr": "Le randomizer « cross-game » réunit Metroid Prime et Metroid Prime 2: Echoes dans une même partie multiworld : les objets d'un jeu peuvent se trouver dans l'autre. Il repose sur Randovania, qui prend en charge les deux jeux depuis 2021.",
+    "en": "The cross-game randomizer brings Metroid Prime and Metroid Prime 2: Echoes into one multiworld game: one game's items can be found in the other. It relies on Randovania, which has supported both games since 2021."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": { "fr": "Les deux Prime réunis", "en": "Both Primes together" },
+      "text": {
+        "fr": "Le 30 juillet 2021, la version 3.0 de Randovania prend entièrement en charge Metroid Prime, multiworld compris, à côté de Metroid Prime 2: Echoes. Les premières courses cross-game recensées sur ce site ont lieu dès le 8 août 2021, notamment en « 2v2 multiworld », et la communauté s'organise autour de la « CGC » (Cross-Game Cup).",
+        "en": "On July 30, 2021, Randovania version 3.0 fully supports Metroid Prime, multiworld included, alongside Metroid Prime 2: Echoes. The first cross-game races listed on this site take place as early as August 8, 2021, notably as \"2v2 multiworld\", and the community gathers around the \"CGC\" (Cross-Game Cup)."
+      }
+    },
+    {
+      "date": "2022-2023",
+      "title": { "fr": "Record et AGDQ", "en": "Record and AGDQ" },
+      "text": {
+        "fr": "Ce site recense 118 courses en 2022, un record. En janvier 2023, l'Awesome Games Done Quick accueille une partie en co-op multiworld réunissant Metroid Prime et Metroid Prime 2: Echoes.",
+        "en": "This site counts 118 races in 2022, a record. In January 2023, Awesome Games Done Quick hosts a multiworld co-op run combining Metroid Prime and Metroid Prime 2: Echoes."
+      }
+    },
+    {
+      "date": "2026",
+      "title": { "fr": "La Cross-Game Cup 2026", "en": "The 2026 Cross-Game Cup" },
+      "text": {
+        "fr": "La « Metroid Prime Cross-Game Cup 2026 » se dispute sur racetime.gg.",
+        "en": "The \"Metroid Prime Cross-Game Cup 2026\" is played on racetime.gg."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "Randovania — CHANGELOG", "url": "https://github.com/randovania/randovania/blob/main/CHANGELOG.md" },
+    { "label": "Randovania", "url": "https://randovania.org/" },
+    { "label": "racetime.gg — Metroid Prime Cross-Game", "url": "https://racetime.gg/mpcgr" }
+  ]
+}

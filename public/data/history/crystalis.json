@@ -1,0 +1,46 @@
+{
+  "intro": {
+    "fr": "Le Crystalis Randomizer remélange le RPG d'action post-apocalyptique de SNK. Développé surtout par shicks depuis 2018, il se joue directement dans le navigateur sur crystalisrandomizer.com.",
+    "en": "The Crystalis Randomizer reshuffles SNK's post-apocalyptic action RPG. Developed mostly by shicks since 2018, it plays straight in the browser on crystalisrandomizer.com."
+  },
+  "events": [
+    {
+      "date": "1990",
+      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "text": {
+        "fr": "SNK sort Crystalis (« God Slayer » au Japon) sur NES en 1990, un jeu souvent considéré comme une perle méconnue.",
+        "en": "SNK releases Crystalis (\"God Slayer\" in Japan) on the NES in 1990, a game widely praised as an underrated gem."
+      }
+    },
+    {
+      "date": "2018-2019",
+      "title": { "fr": "Les débuts", "en": "The beginnings" },
+      "text": {
+        "fr": "Le dépôt du randomizer est créé en juillet 2018, et shicks en devient de loin le principal auteur, aidé notamment par jroweboy. Les premières courses recensées sur ce site ont lieu le 14 février 2019 sur SpeedRunsLive, et la version 1.0.1 sort le 11 mars 2019.",
+        "en": "The randomizer's repository is created in July 2018, and shicks becomes by far its main author, helped notably by jroweboy. The first races listed on this site take place on February 14, 2019 on SpeedRunsLive, and version 1.0.1 comes out on March 11, 2019."
+      }
+    },
+    {
+      "date": "2022",
+      "title": { "fr": "Sur racetime.gg", "en": "On racetime.gg" },
+      "text": {
+        "fr": "Après une version 1.2.4 en avril 2020, les courses passent sur racetime.gg, et ce site en recense 171 en 2022, un record.",
+        "en": "After version 1.2.4 in April 2020, races move to racetime.gg, and this site counts 171 of them in 2022, a record."
+      }
+    },
+    {
+      "date": "2026",
+      "title": { "fr": "Un tournoi Archipelago", "en": "An Archipelago tournament" },
+      "text": {
+        "fr": "Le Crystalis 2026 Summer 2v2 Archipelago Tournament fait s'affronter des équipes de deux joueurs en multiworld.",
+        "en": "The Crystalis 2026 Summer 2v2 Archipelago Tournament pits teams of two players against each other in multiworld."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "crystalis-randomizer/crystalis-randomizer (GitHub)", "url": "https://github.com/crystalis-randomizer/crystalis-randomizer" },
+    { "label": "Crystalis Randomizer", "url": "https://crystalisrandomizer.com/" },
+    { "label": "Challonge — Crystalis 2026 Summer 2v2 Archipelago Tournament", "url": "https://challonge.com/Crys2026" },
+    { "label": "racetime.gg — Crystalis Randomizer", "url": "https://racetime.gg/crystalis-rando" }
+  ]
+}

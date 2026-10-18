@@ -1,0 +1,45 @@
+{
+  "intro": {
+    "fr": "Le Minish Cap Randomizer, porté par l'équipe Minish Maker, mélange les objets de The Minish Cap sur Game Boy Advance. Né en 2019, il approche de sa version 1.0.",
+    "en": "The Minish Cap Randomizer, driven by the Minish Maker team, shuffles the items of The Minish Cap on the Game Boy Advance. Born in 2019, it is nearing its version 1.0."
+  },
+  "events": [
+    {
+      "date": "2004",
+      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "text": {
+        "fr": "Capcom et Nintendo sortent The Legend of Zelda: The Minish Cap sur Game Boy Advance en 2004, puis début 2005 en Amérique du Nord.",
+        "en": "Capcom and Nintendo release The Legend of Zelda: The Minish Cap on the Game Boy Advance in 2004, then in early 2005 in North America."
+      }
+    },
+    {
+      "date": "2019",
+      "title": { "fr": "Minish Maker", "en": "Minish Maker" },
+      "text": {
+        "fr": "Le dépôt du randomizer démarre le 25 mars 2019, et sa première version publique (0.1.0 alpha) sort le 4 août 2019. Les premières courses recensées sur ce site ont lieu en septembre 2019, sur SpeedRunsLive.",
+        "en": "The randomizer's repository starts on March 25, 2019, and its first public version (0.1.0 alpha) comes out on August 4, 2019. The first races listed on this site take place in September 2019, on SpeedRunsLive."
+      }
+    },
+    {
+      "date": "2021",
+      "title": { "fr": "Le pic des courses", "en": "The racing peak" },
+      "text": {
+        "fr": "Passées sur racetime.gg, les courses atteignent 215 en 2021 sur ce site, un record. LeonarthCG, Catobat, wjg999, Myth197 et Dreamie-TMC figurent parmi les principaux contributeurs du projet.",
+        "en": "Now on racetime.gg, races reach 215 in 2021 on this site, a record. LeonarthCG, Catobat, wjg999, Myth197 and Dreamie-TMC are among the project's main contributors."
+      }
+    },
+    {
+      "date": "2025",
+      "title": { "fr": "Vers la 1.0", "en": "Toward 1.0" },
+      "text": {
+        "fr": "La version 1.0.0-rc2.1, dernière préversion avant la 1.0, sort en mars 2025. Le jeu est aussi jouable en multiworld.",
+        "en": "Version 1.0.0-rc2.1, the last pre-release before 1.0, comes out in March 2025. The game can also be played in multiworld."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "minishmaker/randomizer (GitHub)", "url": "https://github.com/minishmaker/randomizer" },
+    { "label": "Minish Maker", "url": "https://minishmaker.com/" },
+    { "label": "racetime.gg — TMCR", "url": "https://racetime.gg/tmcr" }
+  ]
+}

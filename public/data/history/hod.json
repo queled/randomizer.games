@@ -1,0 +1,37 @@
+{
+  "intro": {
+    "fr": "Le Harmony of Dissonance Randomizer remélange le Castlevania de 2002 sur Game Boy Advance. Il se génère dans le navigateur, et sa scène de courses s'est développée à partir de 2022.",
+    "en": "The Harmony of Dissonance Randomizer reshuffles the 2002 Castlevania on the Game Boy Advance. It is generated in the browser, and its racing scene grew from 2022 on."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "text": {
+        "fr": "Konami sort Castlevania: Harmony of Dissonance sur Game Boy Advance en 2002.",
+        "en": "Konami releases Castlevania: Harmony of Dissonance on the Game Boy Advance in 2002."
+      }
+    },
+    {
+      "date": "2022",
+      "title": { "fr": "Premières courses", "en": "First races" },
+      "text": {
+        "fr": "Le randomizer de fusecv se génère sur hodrando.surge.sh. Les premières courses recensées sur ce site ont lieu le 28 février 2022 sur racetime.gg, avec pour objectif de vaincre Dracula Wraith.",
+        "en": "fusecv's randomizer is generated on hodrando.surge.sh. The first races listed on this site take place on February 28, 2022 on racetime.gg, with the goal of defeating Dracula Wraith."
+      }
+    },
+    {
+      "date": "2023-2024",
+      "title": { "fr": "L'essor", "en": "The rise" },
+      "text": {
+        "fr": "Un suivi d'objets dédié apparaît en 2023, et les courses passent de 96 en 2023 à 176 en 2024, un record sur ce site. Un autre randomizer, HoDBT, se génère sur hodbt.surge.sh.",
+        "en": "A dedicated item tracker appears in 2023, and races go from 96 in 2023 to 176 in 2024, a record on this site. Another randomizer, HoDBT, is generated on hodbt.surge.sh."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "Harmony of Dissonance Randomizer", "url": "https://hodrando.surge.sh/" },
+    { "label": "Malaert64/hodr-item-tracker (GitHub)", "url": "https://github.com/Malaert64/hodr-item-tracker" },
+    { "label": "racetime.gg — HoDR", "url": "https://racetime.gg/hodr" }
+  ]
+}

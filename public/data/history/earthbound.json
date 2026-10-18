@@ -1,0 +1,92 @@
+{
+  "intro": {
+    "fr": "EarthBound a une longue histoire de remélange, du Reshuffler de la communauté Starmen.Net jusqu'à l'EarthBound Randomizer, qui tourne dans le navigateur, et PK Scramble, qui mélange les objets clés.",
+    "en": "EarthBound has a long history of reshuffling, from the Starmen.Net community's Reshuffler to the EarthBound Randomizer, which runs in the browser, and PK Scramble, which shuffles key items."
+  },
+  "events": [
+    {
+      "date": "1994",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "EarthBound (Mother 2 au Japon) sort sur Super Famicom en 1994, puis sur Super Nintendo en Amérique du Nord en 1995.",
+        "en": "EarthBound (Mother 2 in Japan) comes out on the Super Famicom in 1994, then on the Super Nintendo in North America in 1995."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avant 2018",
+        "en": "Before 2018"
+      },
+      "title": {
+        "fr": "Les précurseurs",
+        "en": "The forerunners"
+      },
+      "text": {
+        "fr": "Avant les randomizers actuels existait l'EarthBound Reshuffler, dans sa version 1.5 par Tomato puis 2.1 par Rydel. En janvier 2018, abyssonym crée Bizarre Dimension, un randomizer « Ancient Cave » pour EarthBound.",
+        "en": "Before today's randomizers there was the EarthBound Reshuffler, in version 1.5 by Tomato then 2.1 by Rydel. In January 2018, abyssonym creates Bizarre Dimension, an \"Ancient Cave\" randomizer for EarthBound."
+      }
+    },
+    {
+      "date": "2018",
+      "title": {
+        "fr": "L'EarthBound Randomizer",
+        "en": "The EarthBound Randomizer"
+      },
+      "text": {
+        "fr": "pickfifteen et stochaztic publient l'EarthBound Randomizer le 2 juin 2018. D'abord basé sur Bizarre Dimension, il tourne entièrement dans le navigateur sur earthbound.app, propose plusieurs modes, et une carte des spoilers sur map.earthbound.app. Ses auteurs remercient les communautés Starmen.Net, PK Hack et EarthBound Speedrunning.",
+        "en": "pickfifteen and stochaztic release the EarthBound Randomizer on June 2, 2018. Originally based on Bizarre Dimension, it runs entirely in the browser on earthbound.app, offers several modes, and a spoiler map at map.earthbound.app. Its authors thank the Starmen.Net, PK Hack and EarthBound Speedrunning communities."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "PK Scramble et les courses",
+        "en": "PK Scramble and races"
+      },
+      "text": {
+        "fr": "PK Scramble mélange les objets clés, les lieux où rejoignent les personnages et les destinations de téléportation, et adapte les ennemis, les coffres et les boutiques à un chemin possible. En 2022, ce site recense 99 courses, partagées entre PK Scramble et le mode Ancient Cave de l'EarthBound Randomizer.",
+        "en": "PK Scramble shuffles key items, where characters join and teleport destinations, and scales enemies, chests and shops to a possible path. In 2022, this site counts 99 races, split between PK Scramble and the EarthBound Randomizer's Ancient Cave mode."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "EarthBound est aussi pris en charge par Archipelago pour le multiworld.",
+        "en": "EarthBound is also supported by Archipelago for multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "stochaztic/eb-randomizer (GitHub)",
+      "url": "https://github.com/stochaztic/eb-randomizer"
+    },
+    {
+      "label": "EarthBound Randomizer",
+      "url": "https://earthbound.app/"
+    },
+    {
+      "label": "abyssonym/bizarre_dimension (GitHub)",
+      "url": "https://github.com/abyssonym/bizarre_dimension"
+    },
+    {
+      "label": "PK Scramble",
+      "url": "https://pkscramble.com/"
+    },
+    {
+      "label": "Archipelago — EarthBound",
+      "url": "https://archipelago.gg/games/EarthBound/info/en"
+    },
+    {
+      "label": "racetime.gg — EarthBound",
+      "url": "https://racetime.gg/earthbound"
+    }
+  ]
+}

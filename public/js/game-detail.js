@@ -627,7 +627,7 @@
     if (!el || !historyData) return;
     const events = (historyData.events || []).map(ev => `
       <li class="history-event">
-        <span class="history-date">${escapeHtml(ev.date)}</span>
+        <span class="history-date">${escapeHtml(historyText(ev.date))}</span>
         <h3 class="history-title">${escapeHtml(historyText(ev.title))}</h3>
         <p class="history-text">${escapeHtml(historyText(ev.text))}</p>
       </li>

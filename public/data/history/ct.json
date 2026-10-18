@@ -1,0 +1,57 @@
+{
+  "intro": {
+    "fr": "Jets of Time transforme Chrono Trigger en monde ouvert : on voyage dans le temps avec l'Epoch pour trouver personnages et objets clés, jusqu'à vaincre Lavos. Il est l'héritier d'une lignée de randomizers commencée par abyssonym en 2016.",
+    "en": "Jets of Time turns Chrono Trigger into an open world: you travel through time with the Epoch to find characters and key items, until you defeat Lavos. It is the heir of a line of randomizers started by abyssonym in 2016."
+  },
+  "events": [
+    {
+      "date": "1995",
+      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "text": {
+        "fr": "Square sort Chrono Trigger sur Super Famicom et Super Nintendo en 1995.",
+        "en": "Square releases Chrono Trigger on the Super Famicom and Super Nintendo in 1995."
+      }
+    },
+    {
+      "date": "2016",
+      "title": { "fr": "Eternal Nightmare", "en": "Eternal Nightmare" },
+      "text": {
+        "fr": "abyssonym publie Eternal Nightmare, un premier randomizer pour Chrono Trigger (version 5 datée du 30 juillet 2016). Son auteur le décrit lui-même comme « plutôt un randomize-ish qu'un randomizer » : le jeu étant difficile à randomiser, les changements restent prudents. abyssonym travaille ensuite sur Wings of Time, un randomizer en monde ouvert.",
+        "en": "abyssonym releases Eternal Nightmare, an early Chrono Trigger randomizer (version 5 dated July 30, 2016). Its author himself calls it \"more like a randomize-ish than a randomizer\": the game being hard to randomize, the changes stay conservative. abyssonym then works on Wings of Time, an open-world randomizer."
+      }
+    },
+    {
+      "date": "2019",
+      "title": { "fr": "Anskiy invente Jets of Time", "en": "Anskiy invents Jets of Time" },
+      "text": {
+        "fr": "Jets of Time est un remake de Wings of Time, imaginé par Anskiy, qui en écrit les premiers scripts d'événements en monde ouvert. Son dépôt démarre le 31 juillet 2019. Pour raccourcir les parties, le randomizer prend quelques libertés avec le jeu, tout en restant « essentiellement du Chrono Trigger classique ».",
+        "en": "Jets of Time is a remake of Wings of Time, invented by Anskiy, who writes its first open-world event scripts. Its repository starts on July 31, 2019. To shorten games, the randomizer takes some liberties with the gameplay, while staying \"mostly classic Chrono Trigger\"."
+      }
+    },
+    {
+      "date": "2021-2023",
+      "title": { "fr": "Pseudoarc et le générateur web", "en": "Pseudoarc and the web generator" },
+      "text": {
+        "fr": "Pseudoarc devient le principal développeur de Jets of Time, avec l'aide notamment de Mauron, Myself086 et LagoLunatic. Anguirel ouvre en 2022 un générateur web, ctjot.com, et la version 3.2.0 sort en janvier 2023. Les premières courses recensées sur ce site datent de juillet 2020.",
+        "en": "Pseudoarc becomes Jets of Time's main developer, with help from Mauron, Myself086 and LagoLunatic among others. In 2022 Anguirel opens a web generator, ctjot.com, and version 3.2.0 comes out in January 2023. The first races listed on this site date from July 2020."
+      }
+    },
+    {
+      "date": "2025-2026",
+      "title": { "fr": "CTRando et SpeedGaming Live", "en": "CTRando and SpeedGaming Live" },
+      "text": {
+        "fr": "En 2025, Pseudoarc lance CTRando, un autre randomizer en monde ouvert qui cherche au contraire à préserver au maximum le jeu d'origine. Flame Fatales 2026 en accueille une partie. Jets of Time a son tournoi à la SpeedGaming Live 2026 (16 joueurs), et ce site recense déjà 104 courses en 2026, un record.",
+        "en": "In 2025, Pseudoarc launches CTRando, another open-world randomizer that instead aims to preserve the original game as much as possible. Flame Fatales 2026 hosts a run of it. Jets of Time has its tournament at SpeedGaming Live 2026 (16 players), and this site already counts 104 races in 2026, a record."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "abyssonym/eternalnightmare (GitHub)", "url": "https://github.com/abyssonym/eternalnightmare" },
+    { "label": "Pseudoarc/jetsoftime (GitHub)", "url": "https://github.com/Pseudoarc/jetsoftime" },
+    { "label": "Anguirel86/ctjot_web_generator (GitHub)", "url": "https://github.com/Anguirel86/ctjot_web_generator" },
+    { "label": "Pseudoarc/ctrando (GitHub)", "url": "https://github.com/Pseudoarc/ctrando" },
+    { "label": "Jets of Time", "url": "https://ctjot.com/" },
+    { "label": "Challonge — Jets of Time: SpeedGaming Live 2026", "url": "https://challonge.com/ctjot2026" },
+    { "label": "racetime.gg — Jets of Time", "url": "https://racetime.gg/ct-jets" }
+  ]
+}

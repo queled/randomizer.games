@@ -1,0 +1,56 @@
+{
+  "intro": {
+    "fr": "Final Fantasy Mystic Quest a connu deux randomizers : « A Terrible Secret » d'abyssonym en 2016, puis le FFMQ Randomizer de wildham, lancé en 2022 et joué aujourd'hui en course et en multiworld.",
+    "en": "Final Fantasy Mystic Quest has had two randomizers: abyssonym's \"A Terrible Secret\" in 2016, then wildham's FFMQ Randomizer, started in 2022 and now played in races and multiworld."
+  },
+  "events": [
+    {
+      "date": "1992",
+      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "text": {
+        "fr": "Square sort Final Fantasy Mystic Quest sur Super Nintendo en 1992 en Amérique du Nord.",
+        "en": "Square releases Final Fantasy Mystic Quest on the Super Nintendo in 1992 in North America."
+      }
+    },
+    {
+      "date": "2016",
+      "title": { "fr": "A Terrible Secret", "en": "A Terrible Secret" },
+      "text": {
+        "fr": "abyssonym commence en juillet 2016 « A Terrible Secret », un randomizer pour Final Fantasy Mystic Quest, dont la version 8 date du 25 août 2016.",
+        "en": "In July 2016 abyssonym starts \"A Terrible Secret\", a randomizer for Final Fantasy Mystic Quest, whose version 8 dates from August 25, 2016."
+      }
+    },
+    {
+      "date": "2022",
+      "title": { "fr": "Le FFMQ Randomizer de wildham", "en": "wildham's FFMQ Randomizer" },
+      "text": {
+        "fr": "wildham, déjà l'un des principaux contributeurs du Final Fantasy Randomizer, lance le FFMQ Randomizer le 3 janvier 2022, avec une première bêta le jour même, sur ffmqrando.net. Les premières courses recensées sur ce site ont lieu le 20 mars 2022 sur racetime.gg.",
+        "en": "wildham, already one of the main contributors to the Final Fantasy Randomizer, starts the FFMQ Randomizer on January 3, 2022, with a first beta the same day, on ffmqrando.net. The first races listed on this site take place on March 20, 2022 on racetime.gg."
+      }
+    },
+    {
+      "date": "2023",
+      "title": { "fr": "Multiworld", "en": "Multiworld" },
+      "text": {
+        "fr": "wildham publie en 2023 l'adaptation du FFMQ Randomizer pour Archipelago, qui permet de jouer le jeu en multiworld.",
+        "en": "In 2023 wildham publishes the FFMQ Randomizer's Archipelago adaptation, which lets the game be played in multiworld."
+      }
+    },
+    {
+      "date": "2025-2026",
+      "title": { "fr": "Record et SpeedGaming Live", "en": "Record and SpeedGaming Live" },
+      "text": {
+        "fr": "Ce site recense 110 courses en 2025, un record. La version 1.6.2 sort en janvier 2026, et le randomizer a son tournoi à la SpeedGaming Live 2026 (8 joueurs).",
+        "en": "This site counts 110 races in 2025, a record. Version 1.6.2 comes out in January 2026, and the randomizer has its tournament at SpeedGaming Live 2026 (8 players)."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "abyssonym/terriblesecret (GitHub)", "url": "https://github.com/abyssonym/terriblesecret" },
+    { "label": "wildham0/FFMQRando (GitHub)", "url": "https://github.com/wildham0/FFMQRando" },
+    { "label": "wildham0/FFMQRApWorld (GitHub)", "url": "https://github.com/wildham0/FFMQRApWorld" },
+    { "label": "FFMQ Randomizer", "url": "https://www.ffmqrando.net/" },
+    { "label": "Challonge — Final Fantasy Mystic Quest Randomizer - SGL2026", "url": "https://challonge.com/b6ko5vnv" },
+    { "label": "racetime.gg — FFMQ", "url": "https://racetime.gg/ffmq" }
+  ]
+}

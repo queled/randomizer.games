@@ -1,0 +1,54 @@
+{
+  "intro": {
+    "fr": "SA2 Randomizer, de Ngolinvaux, mélange personnages, niveaux et ordre de jeu dans Sonic Adventure 2: Battle sur PC, qui se joue aussi en multiworld avec Archipelago.",
+    "en": "Ngolinvaux's SA2 Randomizer shuffles characters, stages and order in Sonic Adventure 2: Battle on PC, which can also be played in multiworld with Archipelago."
+  },
+  "events": [
+    {
+      "date": "2001",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sonic Team et Sega sortent Sonic Adventure 2 sur Dreamcast en 2001, puis Sonic Adventure 2: Battle sur GameCube ; la version PC sort sur Steam en 2012.",
+        "en": "Sonic Team and Sega release Sonic Adventure 2 on the Dreamcast in 2001, then Sonic Adventure 2: Battle on the GameCube; the PC version comes out on Steam in 2012."
+      }
+    },
+    {
+      "date": "2019-2023",
+      "title": {
+        "fr": "SA2 Randomizer",
+        "en": "SA2 Randomizer"
+      },
+      "text": {
+        "fr": "Ngolinvaux publie la version 1.0 le 8 janvier 2019 : au départ, il s'agit de charger des personnages au hasard dans des niveaux au hasard, avec une logique pour rester jouable. Les versions majeures s'enchaînent (3.0 en juillet 2019, 4.0 en août, 5.0 en décembre, 6.0 en mars 2021), avec MainMemory parmi les contributeurs, jusqu'à la 6.0.4 en avril 2023.",
+        "en": "Ngolinvaux releases version 1.0 on January 8, 2019: at first, the idea is to load random characters into random stages, with logic to stay playable. Major versions follow (3.0 in July 2019, 4.0 in August, 5.0 in December, 6.0 in March 2021), with MainMemory among the contributors, up to 6.0.4 in April 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "Sonic Adventure 2: Battle est aussi pris en charge par Archipelago pour le multiworld.",
+        "en": "Sonic Adventure 2: Battle is also supported by Archipelago for multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Ngolinvaux/SA2Randomizer (GitHub)",
+      "url": "https://github.com/Ngolinvaux/SA2Randomizer"
+    },
+    {
+      "label": "Archipelago — Sonic Adventure 2 Battle",
+      "url": "https://archipelago.gg/games/Sonic%20Adventure%202%20Battle/info/en"
+    }
+  ]
+}

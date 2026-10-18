@@ -1,0 +1,62 @@
+{
+  "intro": {
+    "fr": "Resident Evil 3: Nemesis se randomise notamment avec BioRand, le randomizer d'IntelOrca pour les Resident Evil classiques sur PC.",
+    "en": "Resident Evil 3: Nemesis is notably randomized with BioRand, IntelOrca's randomizer for the classic Resident Evil games on PC."
+  },
+  "events": [
+    {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Resident Evil 3: Nemesis sur PlayStation en 1999.",
+        "en": "Capcom releases Resident Evil 3: Nemesis on the PlayStation in 1999."
+      }
+    },
+    {
+      "date": "2022-2026",
+      "title": {
+        "fr": "BioRand",
+        "en": "BioRand"
+      },
+      "text": {
+        "fr": "IntelOrca commence BioRand en octobre 2022 et publie la version 1.0 le 3 novembre 2022, puis la 2.0 en décembre 2022 et la 3.0 en mars 2023, jusqu'à la 3.3.2 en janvier 2026. Ce randomizer pour les Resident Evil classiques sur PC gère le placement des objets clés, les objets, les ennemis et leurs apparences, les PNJ avec des voix assorties et la musique.",
+        "en": "IntelOrca starts BioRand in October 2022 and releases version 1.0 on November 3, 2022, then 2.0 in December 2022 and 3.0 in March 2023, up to 3.3.2 in January 2026. This randomizer for the classic Resident Evil games on PC handles key item placement, items, enemies and their skins, NPCs with matching voices and music."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Autres randomizers",
+        "en": "Other randomizers"
+      },
+      "text": {
+        "fr": "D'autres outils existent : un « New RE3 Randomizer » sur ModDB, un outil pour la version PlayStation présenté en vidéo, et un randomizer de PyramidK et re_fan_2236.",
+        "en": "Other tools exist: a \"New RE3 Randomizer\" on ModDB, a tool for the PlayStation version shown in a video, and a randomizer by PyramidK and re_fan_2236."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "biorand/classic (GitHub)",
+      "url": "https://github.com/biorand/classic"
+    },
+    {
+      "label": "BioRand",
+      "url": "https://biorand.net"
+    },
+    {
+      "label": "ModDB — RE3 Randomizer",
+      "url": "https://www.moddb.com/mods/re3-randomizer"
+    },
+    {
+      "label": "YouTube — PS Resident Evil 3 Tool",
+      "url": "https://www.youtube.com/watch?v=znhyPqqveJg"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "intro": {
+    "fr": "StarCraft II se randomise de deux façons : le Balance Patch Randomizer de Die4Ever pour le multijoueur, et la campagne en multiworld avec Archipelago.",
+    "en": "StarCraft II is randomized in two ways: Die4Ever's Balance Patch Randomizer for multiplayer, and the campaign in multiworld with Archipelago."
+  },
+  "events": [
+    {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Blizzard sort StarCraft II: Wings of Liberty en 2010.",
+        "en": "Blizzard releases StarCraft II: Wings of Liberty in 2010."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Balance Patch Randomizer",
+        "en": "Balance Patch Randomizer"
+      },
+      "text": {
+        "fr": "Die4Ever lance en juin 2021 une extension qui randomise les statistiques des unités en multijoueur, « comme un générateur de patchs d'équilibrage aléatoires », compatible avec Crowd Control.",
+        "en": "In June 2021 Die4Ever launches an extension mod that randomizes unit stats in multiplayer, \"like a random balance patch generator\", compatible with Crowd Control."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "StarCraft II est aussi pris en charge par Archipelago pour le multiworld.",
+        "en": "StarCraft II is also supported by Archipelago for multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Die4Ever/starcraft-2-randomizer (GitHub)",
+      "url": "https://github.com/Die4Ever/starcraft-2-randomizer"
+    },
+    {
+      "label": "Archipelago — Starcraft 2",
+      "url": "https://archipelago.gg/games/Starcraft%202/info/en"
+    }
+  ]
+}

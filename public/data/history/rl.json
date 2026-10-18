@@ -1,0 +1,55 @@
+{
+  "intro": {
+    "fr": "Le Rogue Legacy Randomizer de Phar s'appuie sur le code source du jeu et se joue en multiworld avec Archipelago.",
+    "en": "Phar's Rogue Legacy Randomizer builds on the game's source code and is played in multiworld with Archipelago."
+  },
+  "events": [
+    {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Cellar Door Games sort Rogue Legacy en 2013.",
+        "en": "Cellar Door Games releases Rogue Legacy in 2013."
+      }
+    },
+    {
+      "date": "2022-2025",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Phar publie la version 0.8.2 en février 2022, construite sur le code décompilé du jeu, puis la 1.1.0 en mai 2025. Le jeu est aussi pris en charge par Archipelago.",
+        "en": "Phar releases version 0.8.2 in February 2022, built on the game's decompiled code, then 1.1.0 in May 2025. The game is also supported by Archipelago."
+      }
+    },
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Rogue Legacy Randomizer Redux",
+        "en": "Rogue Legacy Randomizer Redux"
+      },
+      "text": {
+        "fr": "Le 11 octobre 2024, Cellar Door Games rend public le code source de Rogue Legacy ; Phar annonce une réécriture du randomizer, Rogue Legacy Randomizer Redux.",
+        "en": "On October 11, 2024, Cellar Door Games makes Rogue Legacy's source code available; Phar announces a rewrite of the randomizer, Rogue Legacy Randomizer Redux."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "ThePhar/RogueLegacyRandomizer (GitHub)",
+      "url": "https://github.com/ThePhar/RogueLegacyRandomizer"
+    },
+    {
+      "label": "ThePhar/RogueLegacyRandomizerRedux (GitHub)",
+      "url": "https://github.com/ThePhar/RogueLegacyRandomizerRedux"
+    },
+    {
+      "label": "Multiworld — Rogue Legacy",
+      "url": "https://multiworld.gg/games/Rogue%20Legacy/info/en"
+    }
+  ]
+}

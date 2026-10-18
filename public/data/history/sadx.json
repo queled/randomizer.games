@@ -1,0 +1,54 @@
+{
+  "intro": {
+    "fr": "Le SADX Randomizer de Sora place des personnages au hasard dans des niveaux au hasard dans Sonic Adventure DX sur PC, qui se joue aussi en multiworld.",
+    "en": "Sora's SADX Randomizer puts random characters into random stages in Sonic Adventure DX on PC, which can also be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sonic Team et Sega sortent Sonic Adventure DX sur GameCube en 2003, version enrichie du Sonic Adventure de 1998.",
+        "en": "Sonic Team and Sega release Sonic Adventure DX on the GameCube in 2003, an expanded version of 1998's Sonic Adventure."
+      }
+    },
+    {
+      "date": "2019-2023",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Sora publie la version 1.0 en avril 2019, puis la 2.0 en décembre 2019, la 3.0 en octobre 2021 et la 3.1 en avril 2023. Il randomise les personnages, les niveaux, l'IA des courses et du partenaire, la musique et les voix, avec des dispositions adaptées pour que les niveaux restent finissables.",
+        "en": "Sora releases version 1.0 in April 2019, then 2.0 in December 2019, 3.0 in October 2021 and 3.1 in April 2023. It randomizes characters, stages, race and partner AI, music and voices, with custom layouts so the stages stay beatable."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Sonic Adventure DX est aussi jouable en multiworld.",
+        "en": "Sonic Adventure DX can also be played in multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Sora-yx/SADX-Randomizer (GitHub)",
+      "url": "https://github.com/Sora-yx/SADX-Randomizer"
+    },
+    {
+      "label": "Multiworld — Sonic Adventure DX",
+      "url": "https://multiworld.gg/games/Sonic%20Adventure%20DX/info/en"
+    }
+  ]
+}

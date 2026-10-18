@@ -1,0 +1,54 @@
+{
+  "intro": {
+    "fr": "Le Star Fox 64 Randomizer de punk7890 est écrit entièrement en assembleur et fonctionne sur console, avec de nombreuses options. Le jeu se joue aussi en multiworld.",
+    "en": "punk7890's Star Fox 64 Randomizer is written entirely in assembly and works on real hardware, with many options. The game can also be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "1997",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Star Fox 64 sur Nintendo 64 en 1997.",
+        "en": "Nintendo releases Star Fox 64 on the Nintendo 64 in 1997."
+      }
+    },
+    {
+      "date": "2021-2024",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "punk7890 publie une première bêta en septembre 2021, puis enchaîne les bêtas jusqu'à la 49 en novembre 2024. Le randomizer demande l'Expansion Pak (ou 8 Mo sur émulateur).",
+        "en": "punk7890 releases a first beta in September 2021, then a string of betas up to the 49th in November 2024. The randomizer requires the Expansion Pak (or 8 MB on emulators)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Star Fox 64 est aussi jouable en multiworld.",
+        "en": "Star Fox 64 can also be played in multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "punk7890/Star-Fox-64-Randomizer (GitHub)",
+      "url": "https://github.com/punk7890/Star-Fox-64-Randomizer"
+    },
+    {
+      "label": "Multiworld — Star Fox 64",
+      "url": "https://multiworld.gg/games/Star%20Fox%2064/info/en"
+    }
+  ]
+}

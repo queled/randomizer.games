@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Super Adventure Island II Randomizer d'abyssonym, commandé par backintheday200, mélange les objets du jeu.",
+    "en": "abyssonym's Super Adventure Island II Randomizer, commissioned by backintheday200, shuffles the game's items."
+  },
+  "events": [
+    {
+      "date": "1994",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Hudson Soft sort Super Adventure Island II sur Super Nintendo en 1994.",
+        "en": "Hudson Soft releases Super Adventure Island II on the Super Nintendo in 1994."
+      }
+    },
+    {
+      "date": "2019-2021",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "abyssonym commence le projet en février 2019, à la demande de backintheday200, et publie la version 3 le 24 mars 2021, puis la 4 en mai 2021.",
+        "en": "abyssonym starts the project in February 2019, commissioned by backintheday200, and releases version 3 on March 24, 2021, then version 4 in May 2021."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "abyssonym/sai2_rando (GitHub)",
+      "url": "https://github.com/abyssonym/sai2_rando"
+    }
+  ]
+}

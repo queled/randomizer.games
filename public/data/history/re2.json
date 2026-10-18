@@ -1,0 +1,58 @@
+{
+  "intro": {
+    "fr": "Resident Evil 2 se randomise notamment avec BioRand, le randomizer d'IntelOrca pour les Resident Evil classiques sur PC.",
+    "en": "Resident Evil 2 is notably randomized with BioRand, IntelOrca's randomizer for the classic Resident Evil games on PC."
+  },
+  "events": [
+    {
+      "date": "1998",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Resident Evil 2 sur PlayStation en 1998, puis sur PC en 1999.",
+        "en": "Capcom releases Resident Evil 2 on the PlayStation in 1998, then on PC in 1999."
+      }
+    },
+    {
+      "date": "2022-2026",
+      "title": {
+        "fr": "BioRand",
+        "en": "BioRand"
+      },
+      "text": {
+        "fr": "IntelOrca commence BioRand en octobre 2022 et publie la version 1.0 le 3 novembre 2022, puis la 2.0 en décembre 2022 et la 3.0 en mars 2023, jusqu'à la 3.3.2 en janvier 2026. Ce randomizer pour les Resident Evil classiques sur PC gère le placement des objets clés, les objets, les ennemis et leurs apparences, les PNJ avec des voix assorties et la musique.",
+        "en": "IntelOrca starts BioRand in October 2022 and releases version 1.0 on November 3, 2022, then 2.0 in December 2022 and 3.0 in March 2023, up to 3.3.2 in January 2026. This randomizer for the classic Resident Evil games on PC handles key item placement, items, enemies and their skins, NPCs with matching voices and music."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Autres randomizers",
+        "en": "Other randomizers"
+      },
+      "text": {
+        "fr": "D'autres randomizers existent, comme BIO2 RNDX et un randomizer « Claire A - Leon B » sur ModDB.",
+        "en": "Other randomizers exist, such as BIO2 RNDX and a \"Claire A - Leon B\" randomizer on ModDB."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "biorand/classic (GitHub)",
+      "url": "https://github.com/biorand/classic"
+    },
+    {
+      "label": "BioRand",
+      "url": "https://biorand.net"
+    },
+    {
+      "label": "ModDB — RE2 Randomizer",
+      "url": "https://www.moddb.com/mods/re2randomizer"
+    }
+  ]
+}

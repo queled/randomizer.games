@@ -1,0 +1,58 @@
+{
+  "intro": {
+    "fr": "Le premier Resident Evil se randomise notamment avec BioRand, le randomizer d'IntelOrca pour les Resident Evil classiques sur PC.",
+    "en": "The first Resident Evil is notably randomized with BioRand, IntelOrca's randomizer for the classic Resident Evil games on PC."
+  },
+  "events": [
+    {
+      "date": "1996",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Resident Evil sur PlayStation en 1996, puis sur PC en 1997.",
+        "en": "Capcom releases Resident Evil on the PlayStation in 1996, then on PC in 1997."
+      }
+    },
+    {
+      "date": "2022-2026",
+      "title": {
+        "fr": "BioRand",
+        "en": "BioRand"
+      },
+      "text": {
+        "fr": "IntelOrca commence BioRand en octobre 2022 et publie la version 1.0 le 3 novembre 2022, puis la 2.0 en décembre 2022 et la 3.0 en mars 2023, jusqu'à la 3.3.2 en janvier 2026. Ce randomizer pour les Resident Evil classiques sur PC gère le placement des objets clés, les objets, les ennemis et leurs apparences, les PNJ avec des voix assorties et la musique.",
+        "en": "IntelOrca starts BioRand in October 2022 and releases version 1.0 on November 3, 2022, then 2.0 in December 2022 and 3.0 in March 2023, up to 3.3.2 in January 2026. This randomizer for the classic Resident Evil games on PC handles key item placement, items, enemies and their skins, NPCs with matching voices and music."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Autres randomizers",
+        "en": "Other randomizers"
+      },
+      "text": {
+        "fr": "re_duke propose aussi un RE Randomizer sur ModDB.",
+        "en": "re_duke also offers an RE Randomizer on ModDB."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "biorand/classic (GitHub)",
+      "url": "https://github.com/biorand/classic"
+    },
+    {
+      "label": "BioRand",
+      "url": "https://biorand.net"
+    },
+    {
+      "label": "ModDB — RE Randomizer",
+      "url": "https://www.moddb.com/mods/re-randomizer"
+    }
+  ]
+}

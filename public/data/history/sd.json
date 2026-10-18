@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le SteamWorld Dig Randomizer de clementgallet, un composant LiveSplit, mélange les améliorations et les grottes du jeu.",
+    "en": "clementgallet's SteamWorld Dig Randomizer, a LiveSplit component, shuffles the game's upgrades and caves."
+  },
+  "events": [
+    {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Image & Form sort SteamWorld Dig en 2013.",
+        "en": "Image & Form releases SteamWorld Dig in 2013."
+      }
+    },
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "clementgallet publie la version 1.0 le 5 septembre 2017, puis la 1.3 en décembre. Il randomise toutes les améliorations des podiums et toutes les grottes, sorties secondaires comprises, en garantissant une partie finissable, avec deux difficultés : Casual et Speedrunner.",
+        "en": "clementgallet releases version 1.0 on September 5, 2017, then 1.3 in December. It randomizes every upgrade podium and every cave, second exits included, while ensuring the game can be finished, with two difficulties: Casual and Speedrunner."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "clementgallet/LiveSplit.SteamWorldDig.Randomizer (GitHub)",
+      "url": "https://github.com/clementgallet/LiveSplit.SteamWorldDig.Randomizer"
+    }
+  ]
+}

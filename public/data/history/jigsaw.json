@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "Jigsaw transforme les puzzles en jeu multiworld : les pièces arrivent depuis les autres joueurs.",
+    "en": "Jigsaw turns jigsaw puzzles into a multiworld game: pieces arrive from the other players."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Un jeu pour Archipelago",
+        "en": "A game for Archipelago"
+      },
+      "text": {
+        "fr": "Dans Jigsaw Puzzles for Archipelago, on reçoit les pièces du puzzle depuis le multiworld, et les assembler fait progresser la partie.",
+        "en": "In Jigsaw Puzzles for Archipelago, you receive puzzle pieces from the multiworld, and connecting them advances the game."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Jigsaw",
+      "url": "https://multiworld.gg/games/Jigsaw/info/en"
+    }
+  ]
+}

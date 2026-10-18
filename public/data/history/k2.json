@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Kindergarten 2 se joue en multiworld : argent de départ, cartes Monstermon, tenues et notes y sont mélangés.",
+    "en": "Kindergarten 2 can be played in multiworld: starting money, Monstermon cards, outfits and notes are shuffled."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "SmashGames sort Kindergarten 2 en 2019.",
+        "en": "SmashGames releases Kindergarten 2 in 2019."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Kindergarten 2 est jouable en multiworld avec le multiworld (multiworld.gg). Sont mélangés l'argent de départ, les cartes Monstermon, les tenues et les notes.",
+        "en": "Kindergarten 2 can be played in multiworld with multiworld (multiworld.gg). Starting money, Monstermon cards, outfits and notes are shuffled."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Kindergarten 2",
+      "url": "https://multiworld.gg/games/Kindergarten%202/info/en"
+    }
+  ]
+}

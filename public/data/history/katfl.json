@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Kirby et le monde oublié a son randomizer, le KFL Randomizer, publié sur GameBanana.",
+    "en": "Kirby and the Forgotten Land has its randomizer, the KFL Randomizer, released on GameBanana."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "HAL Laboratory et Nintendo sortent Kirby et le monde oublié sur Nintendo Switch en 2022.",
+        "en": "HAL Laboratory and Nintendo release Kirby and the Forgotten Land on the Nintendo Switch in 2022."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "KFL Randomizer",
+        "en": "KFL Randomizer"
+      },
+      "text": {
+        "fr": "Un mod « KFL Randomizer » pour le jeu est disponible sur GameBanana.",
+        "en": "A \"KFL Randomizer\" mod for the game is available on GameBanana."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GameBanana — KFL Randomizer",
+      "url": "https://gamebanana.com/mods/390471"
+    }
+  ]
+}

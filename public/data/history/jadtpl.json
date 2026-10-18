@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Jak and Daxter: The Precursor Legacy se joue en multiworld avec ArchipelaGOAL, son intégration Archipelago.",
+    "en": "Jak and Daxter: The Precursor Legacy can be played in multiworld with ArchipelaGOAL, its Archipelago integration."
+  },
+  "events": [
+    {
+      "date": "2001",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Naughty Dog et Sony sortent Jak and Daxter: The Precursor Legacy sur PlayStation 2 en 2001.",
+        "en": "Naughty Dog and Sony release Jak and Daxter: The Precursor Legacy on the PlayStation 2 in 2001."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Jak and Daxter est jouable en multiworld avec Archipelago. L'intégration s'appelle ArchipelaGOAL, avec des checks et des objets spéciaux qui débloquent la progression.",
+        "en": "Jak and Daxter can be played in multiworld with Archipelago. The integration is called ArchipelaGOAL, with special checks and special items that unlock progression."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Jak and Daxter: The Precursor Legacy",
+      "url": "https://archipelago.gg/games/Jak%20and%20Daxter%3A%20The%20Precursor%20Legacy/info/en"
+    }
+  ]
+}

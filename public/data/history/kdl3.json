@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Kirby's Dream Land 3 se joue en multiworld avec Archipelago : les pouvoirs et les amis animaux arrivent depuis le multiworld.",
+    "en": "Kirby's Dream Land 3 can be played in multiworld with Archipelago: Copy Abilities and animal friends arrive from the multiworld."
+  },
+  "events": [
+    {
+      "date": "1997",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "HAL Laboratory et Nintendo sortent Kirby's Dream Land 3 sur Super Nintendo en 1997.",
+        "en": "HAL Laboratory and Nintendo release Kirby's Dream Land 3 on the Super Nintendo in 1997."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Kirby's Dream Land 3 est jouable en multiworld avec Archipelago. Kirby ne peut plus absorber de pouvoirs ni retrouver ses amis animaux tant qu'ils ne sont pas reçus ; Heart Stars, vies et bonbons d'invincibilité rejoignent le pool d'objets.",
+        "en": "Kirby's Dream Land 3 can be played in multiworld with Archipelago. Kirby cannot absorb Copy Abilities or meet up with the animal friends until they are received; Heart Stars, 1-Ups and Invincibility Candy join the item pool."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Kirby's Dream Land 3",
+      "url": "https://archipelago.gg/games/Kirby%27s%20Dream%20Land%203/info/en"
+    }
+  ]
+}

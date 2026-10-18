@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Lethal Company se joue en multiworld : entrées du journal et autres lieux deviennent des checks.",
+    "en": "Lethal Company can be played in multiworld: log entries and other locations become checks."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Zeekerss sort Lethal Company en accès anticipé en 2023.",
+        "en": "Zeekerss releases Lethal Company in early access in 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Lethal Company est jouable en multiworld avec le multiworld (multiworld.gg). Les entrées du journal, entre autres, servent d'emplacements à débloquer.",
+        "en": "Lethal Company can be played in multiworld with multiworld (multiworld.gg). Log entries, among others, serve as locations to unlock."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Lethal Company",
+      "url": "https://multiworld.gg/games/Lethal%20Company/info/en"
+    }
+  ]
+}

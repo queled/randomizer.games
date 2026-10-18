@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Lingo se joue en multiworld avec Archipelago, avec notamment le mélange des portes.",
+    "en": "Lingo can be played in multiworld with Archipelago, notably with door shuffle."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Brenton Wildes sort Lingo en 2021.",
+        "en": "Brenton Wildes releases Lingo in 2021."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Lingo est jouable en multiworld avec Archipelago. Plusieurs modes de randomisation sont proposés, dont le « door shuffle », qui verrouille de nombreuses portes jusqu'à la réception de l'objet correspondant.",
+        "en": "Lingo can be played in multiworld with Archipelago. Several randomization modes are offered, including \"door shuffle\", which locks many doors until the matching item is received."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Lingo",
+      "url": "https://archipelago.gg/games/Lingo/info/en"
+    }
+  ]
+}

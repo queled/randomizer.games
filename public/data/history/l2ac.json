@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Le mode Ancient Cave de Lufia II, déjà aléatoire par nature, se joue en multiworld avec Archipelago.",
+    "en": "Lufia II's Ancient Cave mode, already random by nature, can be played in multiworld with Archipelago."
+  },
+  "events": [
+    {
+      "date": "1995",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Neverland et Taito sortent Lufia II: Rise of the Sinistrals sur Super Famicom en 1995 ; son Ancient Cave est un donjon généré aléatoirement.",
+        "en": "Neverland and Taito release Lufia II: Rise of the Sinistrals on the Super Famicom in 1995; its Ancient Cave is a randomly generated dungeon."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Lufia II Ancient Cave est jouable en multiworld avec Archipelago. Comme le souligne la page du jeu, la randomisation est déjà au cœur de l'Ancient Cave, qui forme presque un jeu à part entière dans Lufia II.",
+        "en": "Lufia II Ancient Cave can be played in multiworld with Archipelago. As the game's page points out, randomization was already a core feature of the Ancient Cave, almost a whole game of its own within Lufia II."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Lufia II Ancient Cave",
+      "url": "https://archipelago.gg/games/Lufia%20II%20Ancient%20Cave/info/en"
+    }
+  ]
+}

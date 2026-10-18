@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Keitai Denjū Telefang: Power Version se randomise avec le randomizer en ligne de Sanqui, qui couvre aussi Pokémon Rouge et Pokémon TCG.",
+    "en": "Keitai Denjū Telefang: Power Version is randomized with Sanqui's online randomizer, which also covers Pokémon Red and Pokémon TCG."
+  },
+  "events": [
+    {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Smilesoft sort Keitai Denjū Telefang sur Game Boy Color au Japon en 2000.",
+        "en": "Smilesoft releases Keitai Denjū Telefang on the Game Boy Color in Japan in 2000."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Le randomizer de Sanqui",
+        "en": "Sanqui's randomizer"
+      },
+      "text": {
+        "fr": "Le randomizer en ligne de Sanqui propose Pokémon Rouge, Pokémon TCG et Telefang Power, avec des préréglages (course, casual, classique) ; son journal des modifications remonte au moins à juin 2019.",
+        "en": "Sanqui's online randomizer offers Pokémon Red, Pokémon TCG and Telefang Power, with presets (race, casual, classic); its changelog goes back at least to June 2019."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Sanqui — Online Randomizer",
+      "url": "https://sanqui.net/randomizer/#telefang"
+    }
+  ]
+}

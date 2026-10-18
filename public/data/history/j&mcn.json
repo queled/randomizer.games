@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Joe & Mac, de Micheil Skeens, est sorti en 2020.",
+    "en": "Micheil Skeens's Joe & Mac randomizer came out in 2020."
+  },
+  "events": [
+    {
+      "date": "1991",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Data East sort Joe & Mac: Caveman Ninja sur Super Nintendo en 1991, après la version arcade.",
+        "en": "Data East releases Joe & Mac: Caveman Ninja on the Super Nintendo in 1991, after the arcade version."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Micheil Skeens publie le randomizer de la version américaine le 29 septembre 2020, l'un de ses nombreux randomizers pour la NES et la Super Nintendo.",
+        "en": "Micheil Skeens releases the randomizer for the US version on September 29, 2020, one of many NES and Super Nintendo randomizers by the same author."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Micheil Skeens — Joe and Mac Randomizer",
+      "url": "https://micheilskeens.com/joe-and-mac-randomizer.php"
+    }
+  ]
+}

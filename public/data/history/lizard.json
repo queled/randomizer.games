@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "« Lizard of Random », de Brad Smith, randomise Lizard, son propre jeu homebrew pour la NES.",
+    "en": "Brad Smith's \"Lizard of Random\" randomizes Lizard, Brad Smith's own homebrew NES game."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Brad Smith (rainwarrior) sort Lizard, un jeu homebrew pour la NES, en 2018.",
+        "en": "Brad Smith (rainwarrior) releases Lizard, a homebrew NES game, in 2018."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Lizard of Random",
+        "en": "Lizard of Random"
+      },
+      "text": {
+        "fr": "Brad Smith propose « Lizard of Random », un randomizer web pour Lizard, dont la version 4 date du 17 septembre 2022. Il randomise notamment l'emplacement des lézards, avec une seed hexadécimale sur 64 bits.",
+        "en": "Brad Smith offers \"Lizard of Random\", a web randomizer for Lizard, whose version 4 dates from September 17, 2022. It notably randomizes the lizards' locations, with a 64-bit hexadecimal seed."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "rainwarrior.ca — Lizard of Random",
+      "url": "https://rainwarrior.ca/lizard/lizard_of_random.html"
+    }
+  ]
+}

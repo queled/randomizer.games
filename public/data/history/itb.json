@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Into the Breach se joue en multiworld : les succès d'escouade et les îles terminées deviennent des checks.",
+    "en": "Into the Breach can be played in multiworld: squad achievements and cleared islands become checks."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Subset Games sort Into the Breach en 2018.",
+        "en": "Subset Games releases Into the Breach in 2018."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Into the Breach est jouable en multiworld avec le multiworld (multiworld.gg). L'objectif est de finir le jeu avec n'importe quelle escouade après avoir obtenu le nombre requis de succès ; les succès d'escouade et le fait de terminer une à quatre îles servent de checks.",
+        "en": "Into the Breach can be played in multiworld with multiworld (multiworld.gg). The goal is to beat the game with any squad after getting the required number of achievements; squad achievements and clearing one to four islands serve as checks."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Into the Breach",
+      "url": "https://multiworld.gg/games/Into%20the%20Breach/info/en"
+    }
+  ]
+}

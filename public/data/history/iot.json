@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "Isles of Trials se joue en multiworld : il faut ouvrir le coffre-objectif en haut à gauche de l'île.",
+    "en": "Isles of Trials can be played in multiworld: you must open the goal chest at the top left of the island."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Isles of Trials est jouable en multiworld avec le multiworld (multiworld.gg). L'objectif est d'ouvrir le coffre situé en haut à gauche de l'île.",
+        "en": "Isles of Trials can be played in multiworld with multiworld (multiworld.gg). The goal is to open the chest at the top left corner of the island."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Isles of Trials",
+      "url": "https://multiworld.gg/games/Isles%20of%20Trials/info/en"
+    }
+  ]
+}

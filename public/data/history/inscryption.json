@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Inscryption se joue en multiworld avec Archipelago : on peut revenir aux actes précédents pour récupérer les checks manqués.",
+    "en": "Inscryption can be played in multiworld with Archipelago: you can go back to previous acts to collect missed checks."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Daniel Mullins Games et Devolver Digital sortent Inscryption en 2021.",
+        "en": "Daniel Mullins Games and Devolver Digital release Inscryption in 2021."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Inscryption est jouable en multiworld avec Archipelago. Tous les objets trouvés au sol, dans des contenants ou grâce aux énigmes sont randomisés, et les combats de boss comptent comme des checks. L'option « Nouvelle partie » devient une sélection de chapitre, pour revenir aux actes déjà terminés.",
+        "en": "Inscryption can be played in multiworld with Archipelago. All items found lying around, in containers or from puzzles are randomized, and boss fights count as checks. The \"New Game\" option becomes a chapter select, to return to completed acts."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Inscryption",
+      "url": "https://archipelago.gg/games/Inscryption/info/en"
+    }
+  ]
+}

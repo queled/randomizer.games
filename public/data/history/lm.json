@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Luigi's Mansion se joue en multiworld : objets de Mario, clés de portes et médaillons élémentaires y sont randomisés.",
+    "en": "Luigi's Mansion can be played in multiworld: Mario's items, door keys and element medallions are randomized."
+  },
+  "events": [
+    {
+      "date": "2001",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Luigi's Mansion sur GameCube en 2001.",
+        "en": "Nintendo releases Luigi's Mansion on the GameCube in 2001."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Luigi's Mansion est jouable en multiworld avec le multiworld (multiworld.gg). La randomisation change l'emplacement des objets de Mario, des clés de portes et des médaillons élémentaires, entre autres ; le DeathLink est pris en charge.",
+        "en": "Luigi's Mansion can be played in multiworld with multiworld (multiworld.gg). Randomization changes the locations of Mario's items, door keys and element medallions, among others; DeathLink is supported."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Luigi's Mansion",
+      "url": "https://multiworld.gg/games/Luigi%27s%20Mansion/info/en"
+    }
+  ]
+}

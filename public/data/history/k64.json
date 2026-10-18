@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Kirby 64: The Crystal Shards se joue en multiworld : les pouvoirs, les combinaisons et les rencontres avec les amis arrivent depuis le multiworld.",
+    "en": "Kirby 64: The Crystal Shards can be played in multiworld: abilities, combos and friend meetups arrive from the multiworld."
+  },
+  "events": [
+    {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "HAL Laboratory et Nintendo sortent Kirby 64: The Crystal Shards sur Nintendo 64 en 2000.",
+        "en": "HAL Laboratory and Nintendo release Kirby 64: The Crystal Shards on the Nintendo 64 in 2000."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Kirby 64 est jouable en multiworld avec le multiworld (multiworld.gg). Kirby ne peut plus absorber de pouvoirs, créer de combinaisons ni retrouver ses amis tant que ces objets ne sont pas reçus.",
+        "en": "Kirby 64 can be played in multiworld with multiworld (multiworld.gg). Kirby cannot absorb Copy Abilities, create Power Combos or meet up with friends until those items are received."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Kirby 64 - The Crystal Shards",
+      "url": "https://multiworld.gg/games/Kirby%2064%20-%20The%20Crystal%20Shards/info/en"
+    }
+  ]
+}

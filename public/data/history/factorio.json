@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Factorio figure parmi les premiers jeux d'Archipelago : son arbre de recherche y est mélangé.",
+    "en": "Factorio is among Archipelago's first games: its research tree is shuffled."
+  },
+  "events": [
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Wube Software sort Factorio en version 1.0 en 2020, après des années d'accès anticipé.",
+        "en": "Wube Software releases Factorio 1.0 in 2020, after years of early access."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Factorio est jouable en multiworld avec Archipelago. L'arbre de recherche est mélangé, si bien que certaines technologies s'obtiennent dans un ordre inhabituel ; les coûts des recettes et les besoins en technologies et en packs de science peuvent aussi être mélangés. Factorio figure parmi les premiers jeux pris en charge par Archipelago.",
+        "en": "Factorio can be played in multiworld with Archipelago. The research tree is shuffled, so some technologies are obtained in a non-standard order; recipe costs and technology and science pack requirements can also be shuffled. Factorio is among the first games supported by Archipelago."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Factorio",
+      "url": "https://archipelago.gg/games/Factorio/info/en"
+    }
+  ]
+}

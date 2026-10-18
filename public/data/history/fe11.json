@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Fire Emblem: Shadow Dragon se randomise avec le JesRandomizer de Jespoke, présenté sur FEUniverse.",
+    "en": "Fire Emblem: Shadow Dragon is randomized with Jespoke's JesRandomizer, presented on FEUniverse."
+  },
+  "events": [
+    {
+      "date": "2008",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Intelligent Systems et Nintendo sortent Fire Emblem: Shadow Dragon sur Nintendo DS en 2008.",
+        "en": "Intelligent Systems and Nintendo release Fire Emblem: Shadow Dragon on the Nintendo DS in 2008."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "JesRandomizer",
+        "en": "JesRandomizer"
+      },
+      "text": {
+        "fr": "Le 27 février 2020, Jespoke publie sur FEUniverse la version 1.3 du FE11 JesRandomizer.",
+        "en": "On February 27, 2020, Jespoke publishes version 1.3 of the FE11 JesRandomizer on FEUniverse."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "FEUniverse — FE11 JesRandomizer",
+      "url": "https://feuniverse.us/t/fe11-fe11-jesrandomizer-1-3/7253"
+    }
+  ]
+}

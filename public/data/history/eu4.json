@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Europa Universalis IV se randomise avec des générateurs de cartes et des mods du Steam Workshop, comme un randomizer de religions.",
+    "en": "Europa Universalis IV is randomized with map generators and Steam Workshop mods, such as a religion randomizer."
+  },
+  "events": [
+    {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Paradox Development Studio sort Europa Universalis IV en 2013.",
+        "en": "Paradox Development Studio releases Europa Universalis IV in 2013."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Cartes et religions",
+        "en": "Maps and religions"
+      },
+      "text": {
+        "fr": "Les joueurs disposent d'un EUIV Map Generator, du mod « Randomizable World » et du mod « Religion Randomizer », publié sur le Steam Workshop en septembre 2019.",
+        "en": "Players can use an EUIV Map Generator, the \"Randomizable World\" mod and the \"Religion Randomizer\" mod, published on the Steam Workshop in September 2019."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Steam Workshop — Religion Randomizer",
+      "url": "https://steamcommunity.com/sharedfiles/filedetails/?id=1852796430"
+    },
+    {
+      "label": "Steam Workshop — Randomizable World",
+      "url": "https://steamcommunity.com/sharedfiles/filedetails/?id=2484562172"
+    }
+  ]
+}

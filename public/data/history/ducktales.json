@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de DuckTales, de Micheil Skeens, est sorti en 2020.",
+    "en": "Micheil Skeens's DuckTales randomizer came out in 2020."
+  },
+  "events": [
+    {
+      "date": "1989",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort DuckTales sur NES en 1989.",
+        "en": "Capcom releases DuckTales on the NES in 1989."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Micheil Skeens publie le randomizer de la version américaine le 22 juillet 2020, le premier d'une série de randomizers pour la NES et la Super Nintendo.",
+        "en": "Micheil Skeens releases the randomizer for the US version on July 22, 2020, the first of a series of NES and Super Nintendo randomizers."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Micheil Skeens — Duck Tales Randomizer",
+      "url": "https://micheilskeens.com/duck-tales-randomizer.php"
+    }
+  ]
+}

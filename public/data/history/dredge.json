@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "DREDGE se joue en multiworld : les reliques sont randomisées, et il faut les réunir toutes les cinq.",
+    "en": "DREDGE can be played in multiworld: the relics are randomized, and you must collect all five."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Black Salt Games et Team17 sortent DREDGE en 2023.",
+        "en": "Black Salt Games and Team17 release DREDGE in 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "DREDGE est jouable en multiworld avec le multiworld (multiworld.gg). Pour l'instant, toutes les reliques sont randomisées, et l'objectif est de les réunir toutes les cinq ; l'équipement et les améliorations du bateau sont prévus.",
+        "en": "DREDGE can be played in multiworld with multiworld (multiworld.gg). For now, all the relics are randomized, and the goal is to collect all five; boat equipment and upgrades are planned."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — DREDGE",
+      "url": "https://multiworld.gg/games/DREDGE/info/en"
+    }
+  ]
+}

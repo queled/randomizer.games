@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Digimon Story Cyber Sleuth: Complete Edition a son randomizer, publié sur GameBanana.",
+    "en": "Digimon Story Cyber Sleuth: Complete Edition has its randomizer, released on GameBanana."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bandai Namco sort Digimon Story Cyber Sleuth: Complete Edition en 2019.",
+        "en": "Bandai Namco releases Digimon Story Cyber Sleuth: Complete Edition in 2019."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Un mod « Randomizer » pour le jeu est disponible sur GameBanana.",
+        "en": "A \"Randomizer\" mod for the game is available on GameBanana."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GameBanana — Randomizer",
+      "url": "https://gamebanana.com/mods/369682"
+    }
+  ]
+}

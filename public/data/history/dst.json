@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Don't Starve Together se joue en multiworld : les recettes ne s'apprennent plus à la station de prototypage, mais en accomplissant des tâches.",
+    "en": "Don't Starve Together can be played in multiworld: recipes are no longer learned at the prototyping station, but earned by doing tasks."
+  },
+  "events": [
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Klei Entertainment sort Don't Starve Together en 2016.",
+        "en": "Klei Entertainment releases Don't Starve Together in 2016."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Don't Starve Together est jouable en multiworld avec le multiworld (multiworld.gg). Au lieu d'apprendre les recettes à la station de prototypage, on les gagne en accomplissant des tâches.",
+        "en": "Don't Starve Together can be played in multiworld with multiworld (multiworld.gg). Instead of learning recipes from a prototyping station, you earn them by doing tasks."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Don't Starve Together",
+      "url": "https://multiworld.gg/games/Don%27t%20Starve%20Together/info/en"
+    }
+  ]
+}

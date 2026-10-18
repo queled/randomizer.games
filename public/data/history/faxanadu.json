@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Faxanadu se joue en multiworld avec Archipelago : objets, boutiques et butins des boss y sont randomisés.",
+    "en": "Faxanadu can be played in multiworld with Archipelago: items, shops and boss drops are randomized."
+  },
+  "events": [
+    {
+      "date": "1987",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Hudson Soft sort Faxanadu sur Famicom en 1987.",
+        "en": "Hudson Soft releases Faxanadu on the Famicom in 1987."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Faxanadu est jouable en multiworld avec Archipelago. Tous les objets de la carte, des boutiques et des boss sont randomisés ; les clés sont uniques et les Wingboots ne sont mélangées qu'entre les boutiques.",
+        "en": "Faxanadu can be played in multiworld with Archipelago. All items on the map, in shops and from bosses are randomized; keys are unique and the Wingboots are only shuffled across shops."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Faxanadu",
+      "url": "https://archipelago.gg/games/Faxanadu/info/en"
+    }
+  ]
+}

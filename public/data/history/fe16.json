@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Fire Emblem: Three Houses se randomise avec le randomizer de Blyvern, sorti moins d'un mois après le jeu, et sa version personnalisée par Nifyr.",
+    "en": "Fire Emblem: Three Houses is randomized with Blyvern's randomizer, released less than a month after the game, and Nifyr's custom build of it."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Intelligent Systems, Koei Tecmo et Nintendo sortent Fire Emblem: Three Houses sur Nintendo Switch en 2019.",
+        "en": "Intelligent Systems, Koei Tecmo and Nintendo release Fire Emblem: Three Houses on the Nintendo Switch in 2019."
+      }
+    },
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le randomizer de Blyvern",
+        "en": "Blyvern's randomizer"
+      },
+      "text": {
+        "fr": "Le 22 août 2019, Blyvern publie sur FEUniverse la version 1.0.1 de son randomizer, qui s'appuie sur les modèles binaires de DeathChaos25, TildeHat, Moonling et Puddles.",
+        "en": "On August 22, 2019, Blyvern publishes version 1.0.1 of the randomizer on FEUniverse, built on binary templates by DeathChaos25, TildeHat, Moonling and Puddles."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "La version de Nifyr",
+        "en": "Nifyr's build"
+      },
+      "text": {
+        "fr": "Le 14 octobre 2020, avec l'accord de Blyvern, Nifyr publie une version personnalisée du randomizer.",
+        "en": "On October 14, 2020, with Blyvern's agreement, Nifyr publishes a custom build of the randomizer."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "FEUniverse — Fire Emblem Three Houses Randomizer",
+      "url": "https://feuniverse.us/t/fire-emblem-three-houses-randomizer/6043"
+    },
+    {
+      "label": "FEUniverse — Randomizer Custom Build",
+      "url": "https://feuniverse.us/t/fire-emblem-three-houses-randomizer-custom-build/9774"
+    }
+  ]
+}

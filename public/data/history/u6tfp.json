@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "L'Ultima 6 SNES Randomizer de squibbons randomise la version Super Nintendo d'Ultima VI.",
+    "en": "squibbons's Ultima 6 SNES Randomizer randomizes the Super Nintendo version of Ultima VI."
+  },
+  "events": [
+    {
+      "date": "1994",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Ultima VI: The False Prophet sort sur Super Nintendo en 1994.",
+        "en": "Ultima VI: The False Prophet comes out on the Super Nintendo in 1994."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Le randomizer de squibbons",
+        "en": "squibbons's randomizer"
+      },
+      "text": {
+        "fr": "squibbons propose un randomizer web pour la ROM américaine, avec des préréglages selon les lieux concernés (surface, souterrains ou tous) et trois difficultés.",
+        "en": "squibbons offers a web randomizer for the US ROM, with presets by the locations involved (overworld, underworld or all) and three difficulties."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Ultima 6 SNES Randomizer",
+      "url": "https://arya-iwakura.github.io/Ultima6Randomizer/"
+    }
+  ]
+}

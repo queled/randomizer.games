@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "Wordipelago réinvente le jeu de mots à deviner pour le multiworld : lettres et aides se débloquent peu à peu.",
+    "en": "Wordipelago reimagines the word-guessing game for multiworld: letters and aids unlock bit by bit."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Wordipelago est jouable en multiworld avec MultiworldGG. Inspiré du jeu de mots créé par Josh Wardle, il commence avec peu de lettres, moins d'essais et sans indications de couleur, qui se débloquent au fil de la partie.",
+        "en": "Wordipelago can be played in multiworld with MultiworldGG. Inspired by the word game created by Josh Wardle, it starts with few letters, fewer guesses and no colour hints, which unlock as you play."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Wordipelago",
+      "url": "https://multiworld.gg/games/Wordipelago/info/en"
+    }
+  ]
+}

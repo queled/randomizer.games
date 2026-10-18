@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Toontown se joue en multiworld, dans une version modifiée pensée pour des parties plus rapides et jouables en solo.",
+    "en": "Toontown can be played in multiworld, in a modified version designed for quicker, solo-friendly games."
+  },
+  "events": [
+    {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Disney lance Toontown Online en 2003.",
+        "en": "Disney launches Toontown Online in 2003."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Toontown est jouable en multiworld avec MultiworldGG. Cette version modifie le jeu pour le multiworld et le rend plus rapide et plus adapté au solo ; on peut aussi héberger ou rejoindre de petits serveurs pour jouer entre amis.",
+        "en": "Toontown can be played in multiworld with MultiworldGG. This version modifies the game for multiworld and makes it quicker and more solo-friendly; you can also host or join mini-servers to play with friends."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Toontown",
+      "url": "https://multiworld.gg/games/Toontown/info/en"
+    }
+  ]
+}

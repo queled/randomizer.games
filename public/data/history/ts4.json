@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Les Sims 4 se jouent en multiworld : les compétences ne progressent qu'avec les objets reçus.",
+    "en": "The Sims 4 can be played in multiworld: skills only progress with received items."
+  },
+  "events": [
+    {
+      "date": "2014",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Maxis et Electronic Arts sortent Les Sims 4 en 2014.",
+        "en": "Maxis and Electronic Arts release The Sims 4 in 2014."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Les Sims 4 sont jouables en multiworld avec MultiworldGG. Une compétence ne peut pas dépasser le nombre d'objets reçus pour elle ; le but est d'accomplir une aspiration choisie avec un Sim.",
+        "en": "The Sims 4 can be played in multiworld with MultiworldGG. A skill can't go past the number of items received for it; the goal is to complete a chosen aspiration with one Sim."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — The Sims 4",
+      "url": "https://multiworld.gg/games/The%20Sims%204/info/en"
+    }
+  ]
+}

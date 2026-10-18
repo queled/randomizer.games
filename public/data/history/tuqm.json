@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Infinite Ur Quan Masters rend The Ur-Quan Masters rejouable grâce à un univers généré à chaque partie.",
+    "en": "Infinite Ur Quan Masters makes The Ur-Quan Masters replayable with a universe generated each game."
+  },
+  "events": [
+    {
+      "date": "1992",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Toys for Bob sort Star Control II en 1992 ; son code, libéré, donne le portage open source The Ur-Quan Masters.",
+        "en": "Toys for Bob releases Star Control II in 1992; its released code became the open-source port The Ur-Quan Masters."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Infinite Ur Quan Masters",
+        "en": "Infinite Ur Quan Masters"
+      },
+      "text": {
+        "fr": "John Battagline propose Infinite Ur Quan Masters, projet open source qui génère un univers différent à chaque partie : étoiles, mondes d'origine et points d'intérêt randomisés, pour résoudre à nouveau les énigmes du jeu.",
+        "en": "John Battagline offers Infinite Ur Quan Masters, an open-source project that generates a different universe each game: randomized stars, homeworlds and points of interest, to solve the game's puzzles all over again."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Infinite Ur Quan Masters",
+      "url": "https://www.infiniteurquanmasters.com/"
+    }
+  ]
+}

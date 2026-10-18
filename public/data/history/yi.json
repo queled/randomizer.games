@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Yoshi's Island se joue en multiworld avec Archipelago : ressorts, interrupteurs, pastèques et autres objets des niveaux doivent être débloqués.",
+    "en": "Yoshi's Island can be played in multiworld with Archipelago: springs, switches, watermelons and other level objects must be unlocked."
+  },
+  "events": [
+    {
+      "date": "1995",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Super Mario World 2: Yoshi's Island sur Super Nintendo en 1995.",
+        "en": "Nintendo releases Super Mario World 2: Yoshi's Island on the Super Nintendo in 1995."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Yoshi's Island est jouable en multiworld avec Archipelago. Certains objets des niveaux (Spring Ball, interrupteurs !, plateformes, haricots magiques, pastèques, Chomp Rock, Poochy…) clignotent et ne fonctionnent pas tant que l'objet correspondant n'a pas été trouvé.",
+        "en": "Yoshi's Island can be played in multiworld with Archipelago. Some level objects (Spring Ball, ! Switch, platforms, beanstalks, watermelons, Chomp Rock, Poochy…) flash and don't work until the matching item is found."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Yoshi's Island",
+      "url": "https://archipelago.gg/games/Yoshi%27s%20Island/info/en"
+    }
+  ]
+}

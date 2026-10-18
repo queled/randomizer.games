@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "Yacht Dice est un jeu de dés conçu pour Archipelago : atteindre des scores envoie des emplacements.",
+    "en": "Yacht Dice is a dice game built for Archipelago: reaching scores sends checks."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Yacht Dice est jouable en multiworld avec Archipelago. Atteindre un score pour la première fois envoie un emplacement ; on reçoit dés, relances, multiplicateurs et nouvelles catégories, jusqu'au score cible.",
+        "en": "Yacht Dice can be played in multiworld with Archipelago. Reaching a score for the first time sends a check; you receive dice, rerolls, multipliers and new categories, up to the target score."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Yacht Dice",
+      "url": "https://archipelago.gg/games/Yacht%20Dice/info/en"
+    }
+  ]
+}

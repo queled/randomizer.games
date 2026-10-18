@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "La discographie de Taylor Swift devient un « jeu » multiworld : écouter les albums envoie des emplacements.",
+    "en": "Taylor Swift's discography becomes a multiworld \"game\": listening to albums sends checks."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Taylor Swift Discography est jouable en multiworld avec MultiworldGG. Écouter les grands albums de Taylor Swift constitue les emplacements, et le but est d'écouter toutes les chansons des albums activés.",
+        "en": "Taylor Swift Discography can be played in multiworld with MultiworldGG. Listening to Taylor Swift's major albums makes up the checks, and the goal is to listen to every song on the enabled albums."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Taylor Swift Discography",
+      "url": "https://multiworld.gg/games/Taylor%20Swift%20Discography/info/en"
+    }
+  ]
+}

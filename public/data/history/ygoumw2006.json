@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Yu-Gi-Oh! Ultimate Masters: WCT 2006 se joue en multiworld avec Archipelago : boosters et adversaires se débloquent comme objets.",
+    "en": "Yu-Gi-Oh! Ultimate Masters: WCT 2006 can be played in multiworld with Archipelago: booster packs and opponents unlock as items."
+  },
+  "events": [
+    {
+      "date": "2006",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Yu-Gi-Oh! Ultimate Masters: World Championship Tournament 2006 sur Game Boy Advance en 2006.",
+        "en": "Konami releases Yu-Gi-Oh! Ultimate Masters: World Championship Tournament 2006 on the Game Boy Advance in 2006."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Yu-Gi-Oh! Ultimate Masters 2006 est jouable en multiworld avec Archipelago. Le déblocage des boosters et des adversaires (campagne, Limited, Theme Duel) est modifié, et chaque adversaire de campagne n'a besoin d'être battu qu'une fois.",
+        "en": "Yu-Gi-Oh! Ultimate Masters 2006 can be played in multiworld with Archipelago. Unlocking booster packs and opponents (campaign, Limited, Theme Duel) is changed, and each campaign opponent only needs to be beaten once."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Yu-Gi-Oh! 2006",
+      "url": "https://archipelago.gg/games/Yu-Gi-Oh%21%202006/info/en"
+    }
+  ]
+}

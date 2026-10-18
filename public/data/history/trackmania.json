@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Trackmania se joue en multiworld : il faut battre un temps cible sur des circuits tirés de Trackmania Exchange.",
+    "en": "Trackmania can be played in multiworld: you beat a target time on tracks drawn from Trackmania Exchange."
+  },
+  "events": [
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nadeo et Ubisoft sortent Trackmania en 2020.",
+        "en": "Nadeo and Ubisoft release Trackmania in 2020."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Trackmania est jouable en multiworld avec MultiworldGG. Proche du Random Map Challenge de Flink, le mode donne accès à des circuits aléatoires de Trackmania Exchange, sur lesquels il faut battre un temps cible choisi entre les médailles.",
+        "en": "Trackmania can be played in multiworld with MultiworldGG. Similar to Flink's Random Map Challenge, the mode gives access to random Trackmania Exchange tracks, where you beat a target time chosen between medals."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Trackmania",
+      "url": "https://multiworld.gg/games/Trackmania/info/en"
+    }
+  ]
+}

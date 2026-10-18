@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "VVVVVV se joue en multiworld avec Archipelago : ses 20 Trinkets deviennent des emplacements.",
+    "en": "VVVVVV can be played in multiworld with Archipelago: its 20 Trinkets become checks."
+  },
+  "events": [
+    {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Terry Cavanagh sort VVVVVV en 2010.",
+        "en": "Terry Cavanagh releases VVVVVV in 2010."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "VVVVVV est jouable en multiworld avec Archipelago. Les 20 Trinkets sont des emplacements qui peuvent contenir des objets d'autres jeux. En option, certaines zones (Laboratory, The Tower, Space Station 2, Warp Zone) demandent un nombre de Trinkets.",
+        "en": "VVVVVV can be played in multiworld with Archipelago. The 20 Trinkets are checks that may hold items for other games. Optionally, some areas (Laboratory, The Tower, Space Station 2, Warp Zone) require a number of Trinkets."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — VVVVVV",
+      "url": "https://archipelago.gg/games/VVVVVV/info/en"
+    }
+  ]
+}

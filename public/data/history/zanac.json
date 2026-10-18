@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Le ZANAC Randomizer, en bêta, offre de nouveaux scénarios au shoot'em up de la NES.",
+    "en": "The ZANAC Randomizer, in beta, brings new scenarios to the NES shoot'em up."
+  },
+  "events": [
+    {
+      "date": "1986",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Compile sort Zanac en 1986.",
+        "en": "Compile releases Zanac in 1986."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "ZANAC Randomizer",
+        "en": "ZANAC Randomizer"
+      },
+      "text": {
+        "fr": "Le ZANAC Randomizer, en bêta, est l'œuvre d'une personne pour qui ZANAC était l'un des jeux NES préférés d'enfance ; partie d'une documentation technique incomplète, elle l'a conçu pour revivre le jeu avec des scénarios inédits.",
+        "en": "The ZANAC Randomizer, in beta, is the work of someone for whom ZANAC was a favorite childhood NES game; starting from incomplete technical documentation, they built it to replay the game with brand new scenarios."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "ZANAC Randomizer",
+      "url": "https://www.zanacga.me/"
+    }
+  ]
+}

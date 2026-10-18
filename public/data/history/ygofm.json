@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Yu-Gi-Oh! Forbidden Memories se joue en multiworld : les duellistes se débloquent progressivement jusqu'aux Final 6.",
+    "en": "Yu-Gi-Oh! Forbidden Memories can be played in multiworld: duelists unlock gradually up to the Final 6."
+  },
+  "events": [
+    {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Yu-Gi-Oh! Forbidden Memories sur PlayStation en 1999.",
+        "en": "Konami releases Yu-Gi-Oh! Forbidden Memories on the PlayStation in 1999."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Yu-Gi-Oh! Forbidden Memories est jouable en multiworld avec MultiworldGG. Tout se joue en Duel libre : vaincre un duelliste pour la première fois ou obtenir une nouvelle carte envoie un emplacement, et des objets débloquent les duellistes jusqu'aux Final 6.",
+        "en": "Yu-Gi-Oh! Forbidden Memories can be played in multiworld with MultiworldGG. Everything is played in Free Duel: beating a duelist for the first time or getting a new card sends a check, and items unlock duelists up to the Final 6."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Yu-Gi-Oh! Forbidden Memories",
+      "url": "https://multiworld.gg/games/Yu-Gi-Oh%21%20Forbidden%20Memories/info/en"
+    }
+  ]
+}

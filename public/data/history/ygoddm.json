@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Yu-Gi-Oh! Dungeon Dice Monsters se joue en multiworld : tournois ou duellistes se débloquent comme objets.",
+    "en": "Yu-Gi-Oh! Dungeon Dice Monsters can be played in multiworld: tournaments or duelists unlock as items."
+  },
+  "events": [
+    {
+      "date": "2001",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Yu-Gi-Oh! Dungeon Dice Monsters sur Game Boy Advance en 2001.",
+        "en": "Konami releases Yu-Gi-Oh! Dungeon Dice Monsters on the Game Boy Advance in 2001."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Yu-Gi-Oh! Dungeon Dice Monsters est jouable en multiworld avec MultiworldGG. En mode Tournoi, les divisions se débloquent peu à peu jusqu'à The Last Judgment ; en mode Duel libre, on commence avec quelques duellistes.",
+        "en": "Yu-Gi-Oh! Dungeon Dice Monsters can be played in multiworld with MultiworldGG. In Tournament mode, divisions unlock gradually up to The Last Judgment; in Free Duel mode, you start with a few duelists."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Yu-Gi-Oh! Dungeon Dice Monsters",
+      "url": "https://multiworld.gg/games/Yu-Gi-Oh%21%20Dungeon%20Dice%20Monsters/info/en"
+    }
+  ]
+}

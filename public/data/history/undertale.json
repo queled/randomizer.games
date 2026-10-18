@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Undertale se joue en multiworld avec Archipelago : chaque endroit où l'on obtient un objet devient un emplacement.",
+    "en": "Undertale can be played in multiworld with Archipelago: every spot that gives an item becomes a check."
+  },
+  "events": [
+    {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Toby Fox sort Undertale en 2015.",
+        "en": "Toby Fox releases Undertale in 2015."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Undertale est jouable en multiworld avec Archipelago. Presque tous les endroits où l'on reçoit un objet sont des emplacements, sauf quelques exceptions et ce qui est hors de la route choisie.",
+        "en": "Undertale can be played in multiworld with Archipelago. Almost every spot where you get an item is a check, apart from a few exceptions and anything off your chosen route."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Undertale",
+      "url": "https://archipelago.gg/games/Undertale/info/en"
+    }
+  ]
+}

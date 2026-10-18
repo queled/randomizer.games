@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Tyrian se joue en multiworld : armes mélangées et niveaux verrouillés derrière des objets.",
+    "en": "Tyrian can be played in multiworld: shuffled weapons and levels locked behind items."
+  },
+  "events": [
+    {
+      "date": "1995",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Tyrian sort sur DOS en 1995.",
+        "en": "Tyrian comes out on DOS in 1995."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Tyrian est jouable en multiworld avec MultiworldGG. Toutes les armes sont mélangées et tous les niveaux, sauf le premier du premier épisode, demandent un objet ; il faut s'équiper assez pour vaincre le boss de chaque épisode.",
+        "en": "Tyrian can be played in multiworld with MultiworldGG. All weapons are shuffled and every level except the first of episode one needs an item; you must build up enough to beat each episode's boss."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Tyrian",
+      "url": "https://multiworld.gg/games/Tyrian/info/en"
+    }
+  ]
+}

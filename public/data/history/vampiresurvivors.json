@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Vampire Survivors se joue en multiworld, avec DeathLink en option ; le but est de boucler tous les niveaux.",
+    "en": "Vampire Survivors can be played in multiworld, with optional DeathLink; the goal is to loop every stage."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "poncle sort la version complète de Vampire Survivors en 2022.",
+        "en": "poncle releases Vampire Survivors's full version in 2022."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Vampire Survivors est jouable en multiworld avec MultiworldGG. Le but est de boucler tous les niveaux, et le DeathLink peut être activé depuis le menu.",
+        "en": "Vampire Survivors can be played in multiworld with MultiworldGG. The goal is to loop every stage, and DeathLink can be toggled from the main menu."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Vampire Survivors",
+      "url": "https://multiworld.gg/games/Vampire%20Survivors/info/en"
+    }
+  ]
+}

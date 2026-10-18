@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "UFO 50 se joue en multiworld : chaque jeu de la collection se débloque avec son propre objet.",
+    "en": "UFO 50 can be played in multiworld: each game in the collection unlocks with its own item."
+  },
+  "events": [
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Mossmouth sort UFO 50 en 2024.",
+        "en": "Mossmouth releases UFO 50 in 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "UFO 50 est jouable en multiworld avec MultiworldGG. Chaque jeu de la collection doit être débloqué par un objet ; obtenir le Garden Gift, l'or ou la cerise devient un emplacement, et les objets et améliorations de certains jeux sont mélangés.",
+        "en": "UFO 50 can be played in multiworld with MultiworldGG. Each game in the collection must be unlocked by an item; getting the Garden Gift, Gold or Cherry becomes a check, and some games' items and upgrades are shuffled."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — UFO 50",
+      "url": "https://multiworld.gg/games/UFO%2050/info/en"
+    }
+  ]
+}

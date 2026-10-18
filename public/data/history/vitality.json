@@ -1,0 +1,29 @@
+{
+  "intro": {
+    "fr": "VITALITY, romhack de Super Metroid, a son randomizer, réalisé par ironrusty.",
+    "en": "VITALITY, a Super Metroid romhack, has its randomizer, made by ironrusty."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "En juillet 2023, ironrusty publie un randomizer de VITALITY, enrichi depuis d'une option Major/Minor grâce à badatmetroid. Ces randomizers de hacks cherchent à préserver au maximum le comportement d'origine de chaque hack, avec l'algorithme de remplissage de Subversion, de beauxq.",
+        "en": "In July 2023, ironrusty releases a VITALITY randomizer, since extended with a Major/Minor option thanks to badatmetroid. These hack randomizers aim to preserve each hack's original behavior as much as possible, using beauxq's Subversion fill algorithm."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "randorandy — VITALITY Rando",
+      "url": "https://randorandy.github.io/VitalityRando/"
+    },
+    {
+      "label": "randorandy — Super Metroid hack randomizers",
+      "url": "https://randorandy.github.io/"
+    }
+  ]
+}

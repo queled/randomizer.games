@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Zork: Grand Inquisitor se joue en multiworld : la plupart des objets d'inventaire sont retirés du jeu et dispersés dans le multiworld.",
+    "en": "Zork: Grand Inquisitor can be played in multiworld: most inventory items are removed from the game and spread across the multiworld."
+  },
+  "events": [
+    {
+      "date": "1997",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Activision sort Zork: Grand Inquisitor en 1997.",
+        "en": "Activision releases Zork: Grand Inquisitor in 1997."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Zork: Grand Inquisitor est jouable en multiworld avec MultiworldGG. La plupart des objets d'inventaire sont retirés de leur place et envoyés dans le multiworld, et les destinations du métro, du téléporteur et du totémiseur sont à débloquer, ce qui change l'ordre des énigmes.",
+        "en": "Zork: Grand Inquisitor can be played in multiworld with MultiworldGG. Most inventory items are removed from their spots and sent into the multiworld, and subway, teleporter and totemizer destinations must be unlocked, changing the order of puzzles."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Zork Grand Inquisitor",
+      "url": "https://multiworld.gg/games/Zork%20Grand%20Inquisitor/info/en"
+    }
+  ]
+}

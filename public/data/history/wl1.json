@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Wario Land: Super Mario Land 3 se joue en multiworld, avec des mondes verrouillés à débloquer.",
+    "en": "Wario Land: Super Mario Land 3 can be played in multiworld, with locked worlds to unlock."
+  },
+  "events": [
+    {
+      "date": "1994",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Wario Land: Super Mario Land 3 sur Game Boy en 1994.",
+        "en": "Nintendo releases Wario Land: Super Mario Land 3 on the Game Boy in 1994."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Wario Land est jouable en multiworld avec MultiworldGG. Les mondes sont verrouillés et certaines capacités, comme la charge, deviennent des objets à recevoir.",
+        "en": "Wario Land can be played in multiworld with MultiworldGG. Worlds are locked and some abilities, such as the dash, become items to receive."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Wario Land",
+      "url": "https://multiworld.gg/games/Wario%20Land/info/en"
+    }
+  ]
+}

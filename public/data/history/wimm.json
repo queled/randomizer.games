@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "WarioWare, Inc.: Mega Microgame$! se joue en multiworld : il faut réunir assez de fleurs pour débloquer le générique.",
+    "en": "WarioWare, Inc.: Mega Microgame$! can be played in multiworld: you collect enough flowers to unlock the credits."
+  },
+  "events": [
+    {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort WarioWare, Inc.: Mega Microgame$! sur Game Boy Advance en 2003.",
+        "en": "Nintendo releases WarioWare, Inc.: Mega Microgame$! on the Game Boy Advance in 2003."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "WarioWare, Inc.: Mega Microgame$! est jouable en multiworld avec MultiworldGG. Les niveaux et les micro-jeux se débloquent par des objets, seuls ou en lots ; réunir assez de fleurs ouvre le niveau du générique, qui marque la victoire.",
+        "en": "WarioWare, Inc.: Mega Microgame$! can be played in multiworld with MultiworldGG. Stages and microgames unlock through items, alone or in bundles; enough flowers open the credits level, which marks victory."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — WarioWare, Inc. - Mega Microgame$!",
+      "url": "https://multiworld.gg/games/WarioWare%2C%20Inc.%20-%20Mega%20Microgame%24%21/info/en"
+    }
+  ]
+}

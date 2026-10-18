@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "REM-9, de vgperson, est le randomizer de Yume Nikki.",
+    "en": "REM-9, by vgperson, is the Yume Nikki randomizer."
+  },
+  "events": [
+    {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Kikiyama publie Yume Nikki en 2004.",
+        "en": "Kikiyama releases Yume Nikki in 2004."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "REM-9",
+        "en": "REM-9"
+      },
+      "text": {
+        "fr": "vgperson crée REM-9: The Yume Nikki Randomizer, fourni avec le jeu de base. Son contenu reste fondamentalement celui de Yume Nikki, avec une fin alternative possible ; il s'adresse plutôt à qui connaît déjà le monde des rêves.",
+        "en": "vgperson creates REM-9: The Yume Nikki Randomizer, bundled with the base game. Its content stays fundamentally that of Yume Nikki, with a possible alternate ending; it's best for those who already know the dream world."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "vgperson — REM-9: The Yume Nikki Randomizer",
+      "url": "https://vgperson.com/games/rem9.htm"
+    }
+  ]
+}

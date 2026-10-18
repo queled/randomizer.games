@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "Uncanny Cat Golf se joue en multiworld : niveaux, mécaniques et mini-jeux se débloquent comme objets.",
+    "en": "Uncanny Cat Golf can be played in multiworld: levels, mechanics and minigames unlock as items."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Uncanny Cat Golf est jouable en multiworld avec MultiworldGG. On commence avec les seuls niveaux du tutoriel ; niveaux ou mondes, mécaniques (dalles cassables, clés, interrupteurs…) et accès aux mini-jeux sont mélangés dans le multiworld.",
+        "en": "Uncanny Cat Golf can be played in multiworld with MultiworldGG. You start with only the tutorial levels; levels or worlds, mechanics (breakable tiles, keys, switches…) and minigame access are shuffled into the multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Uncanny Cat Golf",
+      "url": "https://multiworld.gg/games/Uncanny%20Cat%20Golf/info/en"
+    }
+  ]
+}

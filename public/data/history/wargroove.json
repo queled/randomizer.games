@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Wargroove se joue en multiworld avec Archipelago, sur une campagne non linéaire où unités et factions sont mélangées.",
+    "en": "Wargroove can be played in multiworld with Archipelago, on a non-linear campaign where units and factions are shuffled."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Chucklefish sort Wargroove en 2019.",
+        "en": "Chucklefish releases Wargroove in 2019."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Wargroove est jouable en multiworld avec Archipelago. Unités, événements de carte, factions et bonus sont mélangés, dans une campagne non linéaire : le niveau final et trois chemins sont ouverts dès le départ, mais il faut des objets trouvés sur ces chemins pour gagner.",
+        "en": "Wargroove can be played in multiworld with Archipelago. Units, map events, factions and boosts are shuffled, in a non-linear campaign: the final level and three paths are open from the start, but winning takes items found along those paths."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Wargroove",
+      "url": "https://archipelago.gg/games/Wargroove/info/en"
+    }
+  ]
+}

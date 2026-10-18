@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Wargroove 2 se joue en multiworld, sur une campagne non linéaire à quatre niveaux finaux.",
+    "en": "Wargroove 2 can be played in multiworld, on a non-linear campaign with four final levels."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Robotality et Chucklefish sortent Wargroove 2 en 2023.",
+        "en": "Robotality and Chucklefish release Wargroove 2 in 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Wargroove 2 est jouable en multiworld avec MultiworldGG. Unités, événements de carte, factions et bonus sont mélangés, dans une campagne non linéaire à quatre niveaux finaux et quatre chemins, dont l'ordre des niveaux est randomisé.",
+        "en": "Wargroove 2 can be played in multiworld with MultiworldGG. Units, map events, factions and boosts are shuffled, in a non-linear campaign with four final levels and four paths, whose level order is randomized."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Wargroove 2",
+      "url": "https://multiworld.gg/games/Wargroove%202/info/en"
+    }
+  ]
+}

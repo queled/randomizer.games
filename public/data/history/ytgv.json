@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Yellow Taxi Goes Vroom se joue en multiworld : engrenages et mouvements du Flip-O-Will sont mélangés.",
+    "en": "Yellow Taxi Goes Vroom can be played in multiworld: gears and Flip-O-Will moves are shuffled."
+  },
+  "events": [
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Panik Arcade sort Yellow Taxi Goes Vroom en 2024.",
+        "en": "Panik Arcade releases Yellow Taxi Goes Vroom in 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Yellow Taxi Goes Vroom est jouable en multiworld avec MultiworldGG. Tous les engrenages vont dans le pool, et le Flip-O-Will est découpé en mouvements nécessaires pour progresser ; coffres, sacs de pièces ou fromages peuvent être des emplacements.",
+        "en": "Yellow Taxi Goes Vroom can be played in multiworld with MultiworldGG. All gears go into the pool, and the Flip-O-Will is split into moves needed to progress; chests, coin bags or cheeses can be checks."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Yellow Taxi Goes Vroom",
+      "url": "https://multiworld.gg/games/Yellow%20Taxi%20Goes%20Vroom/info/en"
+    }
+  ]
+}

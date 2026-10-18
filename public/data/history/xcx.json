@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Xenoblade Chronicles X se joue en multiworld : segments de carte, missions et trésors deviennent des emplacements.",
+    "en": "Xenoblade Chronicles X can be played in multiworld: map segments, missions and treasures become checks."
+  },
+  "events": [
+    {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Monolith Soft et Nintendo sortent Xenoblade Chronicles X sur Wii U en 2015.",
+        "en": "Monolith Soft and Nintendo release Xenoblade Chronicles X on the Wii U in 2015."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Xenoblade Chronicles X est jouable en multiworld avec MultiworldGG. Segments de carte, missions, trésors, FN-Sites, tyrans et recherches sur les monstres sont des emplacements ; on reçoit classes, arts, compétences, sondes et équipement de Skell.",
+        "en": "Xenoblade Chronicles X can be played in multiworld with MultiworldGG. Map segments, missions, treasures, FN-Sites, tyrants and monster research are checks; you receive classes, arts, skills, probes and Skell gear."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Xenoblade X",
+      "url": "https://multiworld.gg/games/Xenoblade%20X/info/en"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "intro": {
+    "fr": "Dopply a créé un randomizer pour les remasters de Faces of Evil et Wand of Gamelon.",
+    "en": "Dopply created a randomizer for the Faces of Evil and Wand of Gamelon remasters."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le mod de Dopply",
+        "en": "Dopply's mod"
+      },
+      "text": {
+        "fr": "Le 8 avril 2021, Dopply met en ligne sur Internet Archive un mod randomizer pour les remasters de Faces of Evil et Wand of Gamelon (version Windows), réalisé sur son temps libre. Un configurateur règle la randomisation, et la seed s'affiche au menu pour être partagée.",
+        "en": "On April 8, 2021, Dopply uploads to the Internet Archive a randomizer mod for the Faces of Evil and Wand of Gamelon remasters (Windows version), made in their free time. A configurator sets up randomization, and the seed shows on the main menu to be shared."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Internet Archive — Faces of Evil & Wand of Gamelon Remastered Randomizer",
+      "url": "https://archive.org/details/foer-wogr-randomizer-mod"
+    }
+  ]
+}

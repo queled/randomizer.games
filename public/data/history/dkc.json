@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Donkey Kong Country se joue en multiworld : l'accès aux mondes, les capacités des Kongs, les animaux et les tonneaux y sont randomisés.",
+    "en": "Donkey Kong Country can be played in multiworld: access to worlds, Kong abilities, animal buddies and barrels are randomized."
+  },
+  "events": [
+    {
+      "date": "1994",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Rare et Nintendo sortent Donkey Kong Country sur Super Nintendo en 1994.",
+        "en": "Rare and Nintendo release Donkey Kong Country on the Super Nintendo in 1994."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Donkey Kong Country est jouable en multiworld avec le multiworld (multiworld.gg). L'accès à chaque monde, les capacités des Kongs, les animaux et les tonneaux y sont randomisés ; les objets reçus s'appliquent immédiatement, même au milieu d'un niveau.",
+        "en": "Donkey Kong Country can be played in multiworld with multiworld (multiworld.gg). Access to each world, Kong abilities, animal buddies and barrels are randomized; received items apply immediately, even mid-stage."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Donkey Kong Country",
+      "url": "https://multiworld.gg/games/Donkey%20Kong%20Country/info/en"
+    }
+  ]
+}

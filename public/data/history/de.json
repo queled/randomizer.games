@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Le Deus Ex Randomizer de Die4Ever remélange tout le jeu, avec une logique qui garantit qu'il reste finissable, et a été suivi par toute une série de randomizers du même auteur.",
+    "en": "Die4Ever's Deus Ex Randomizer reshuffles the whole game, with logic that ensures it stays beatable, and was followed by a whole series of randomizers by the same author."
+  },
+  "events": [
+    {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Ion Storm et Eidos sortent Deus Ex en 2000.",
+        "en": "Ion Storm and Eidos release Deus Ex in 2000."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Version 1.0",
+        "en": "Version 1.0"
+      },
+      "text": {
+        "fr": "Die4Ever commence le Deus Ex Randomizer en avril 2020 et publie la version 1.0 le 11 juillet 2020. Le mod mélange tout pour faire de chaque partie un nouveau jeu, avec la même histoire, et vise à renforcer la rejouabilité et la stratégie.",
+        "en": "Die4Ever starts the Deus Ex Randomizer in April 2020 and releases version 1.0 on July 11, 2020. The mod shuffles everything to make each run a new game, with the same story, and aims to increase replayability and strategy."
+      }
+    },
+    {
+      "date": "2022-2026",
+      "title": {
+        "fr": "Versions 2 et 3",
+        "en": "Versions 2 and 3"
+      },
+      "text": {
+        "fr": "Avec theastropath comme second grand contributeur, la version 2.0 sort en juin 2022 et la 3.0 en juin 2024, jusqu'à la 3.8.1 en octobre 2026. S'y ajoutent des modes comme WaltonWare, des modes Halloween et un mélange des entrées, ainsi qu'un installateur qui applique des correctifs de compatibilité pour les PC modernes.",
+        "en": "With theastropath as the other main contributor, version 2.0 comes out in June 2022 and 3.0 in June 2024, up to 3.8.1 in October 2026. Modes such as WaltonWare, Halloween modes and entrance shuffle are added, along with an installer that applies compatibility fixes for modern PCs."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Die4Ever/deus-ex-randomizer (GitHub)",
+      "url": "https://github.com/Die4Ever/deus-ex-randomizer"
+    },
+    {
+      "label": "Mods4Ever — Deus Ex Randomizer",
+      "url": "https://mods4ever.com/project/DXRando"
+    }
+  ]
+}

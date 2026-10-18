@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Donkey Kong Country 2 se joue en multiworld.",
+    "en": "Donkey Kong Country 2 can be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "1995",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Rare et Nintendo sortent Donkey Kong Country 2: Diddy's Kong Quest sur Super Nintendo en 1995.",
+        "en": "Rare and Nintendo release Donkey Kong Country 2: Diddy's Kong Quest on the Super Nintendo in 1995."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Donkey Kong Country 2 est jouable en multiworld avec le multiworld (multiworld.gg).",
+        "en": "Donkey Kong Country 2 can be played in multiworld with multiworld (multiworld.gg)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Donkey Kong Country 2",
+      "url": "https://multiworld.gg/games/Donkey%20Kong%20Country%202/info/en"
+    }
+  ]
+}

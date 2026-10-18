@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "DELTARUNE se randomise avec un randomizer de rencontres pour le chapitre 2, et se joue aussi en multiworld.",
+    "en": "DELTARUNE is randomized with an encounter randomizer for Chapter 2, and can also be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Toby Fox sort le premier chapitre de DELTARUNE en 2018, puis le chapitre 2 en 2021.",
+        "en": "Toby Fox releases DELTARUNE's first chapter in 2018, then Chapter 2 in 2021."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Randomizers et multiworld",
+        "en": "Randomizers and multiworld"
+      },
+      "text": {
+        "fr": "Un mod « Chapter 2 Encounter Randomizer » est disponible sur GameBanana. DELTARUNE est aussi jouable en multiworld, avec un dossier de sauvegarde séparé pour chaque partie.",
+        "en": "A \"Chapter 2 Encounter Randomizer\" mod is available on GameBanana. DELTARUNE can also be played in multiworld, with a separate save folder for each slot."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GameBanana — Chapter 2 Encounter Randomizer",
+      "url": "https://gamebanana.com/mods/405974"
+    },
+    {
+      "label": "Multiworld — DELTARUNE",
+      "url": "https://multiworld.gg/games/DELTARUNE/info/en"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Double Dragon II, de Micheil Skeens, est sorti en alpha en 2021.",
+    "en": "Micheil Skeens's Double Dragon II randomizer came out in alpha in 2021."
+  },
+  "events": [
+    {
+      "date": "1988",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Technos Japan sort Double Dragon II: The Revenge sur NES en 1989 en Amérique du Nord, après la version arcade de 1988.",
+        "en": "Technos Japan releases Double Dragon II: The Revenge on the NES in 1989 in North America, after the 1988 arcade version."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Micheil Skeens publie le randomizer de la version américaine, en alpha, le 22 février 2021, l'un de ses nombreux randomizers pour la NES et la Super Nintendo.",
+        "en": "Micheil Skeens releases the randomizer for the US version, in alpha, on February 22, 2021, one of many NES and Super Nintendo randomizers by the same author."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Micheil Skeens — Double Dragon 2 Randomizer",
+      "url": "https://micheilskeens.com/double-dragon-2-randomizer.php"
+    }
+  ]
+}

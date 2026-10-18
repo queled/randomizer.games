@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "DLC Quest se joue en multiworld avec Archipelago : ses DLC deviennent des checks, et ses agacements deviennent des pièges.",
+    "en": "DLC Quest can be played in multiworld with Archipelago: its DLCs become checks, and its annoyances become traps."
+  },
+  "events": [
+    {
+      "date": "2011",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Going Loud Studios sort DLC Quest en 2011, parodie des contenus téléchargeables.",
+        "en": "Going Loud Studios releases DLC Quest in 2011, a parody of downloadable content."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "DLC Quest est jouable en multiworld avec Archipelago. Les DLC s'obtiennent comme des checks ; on choisit l'une des deux campagnes, ou les deux. De nouveaux pièges, inspirés des agacements du jeu (moutons zombies, écrans de chargement, piques temporaires), servent de remplissage.",
+        "en": "DLC Quest can be played in multiworld with Archipelago. DLCs are obtained as checks; you pick one of the two campaigns, or both. New trap items, based on the game's annoyances (zombie sheep, loading screens, temporary spikes), serve as filler."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — DLCQuest",
+      "url": "https://archipelago.gg/games/DLCQuest/info/en"
+    }
+  ]
+}

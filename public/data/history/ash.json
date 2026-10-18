@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "A Short Hike se joue en multiworld avec Archipelago : tous les objets des coffres, du sol et des personnages sont randomisés.",
+    "en": "A Short Hike can be played in multiworld with Archipelago: every item from chests, the ground and characters is randomized."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "adamgryu sort A Short Hike en 2019.",
+        "en": "adamgryu releases A Short Hike in 2019."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "A Short Hike est jouable en multiworld avec Archipelago. Tous les objets obtenus dans les coffres, au sol ou auprès des personnages sont randomisés, et les objets des autres mondes prennent la forme de coffres.",
+        "en": "A Short Hike can be played in multiworld with Archipelago. All items obtained from chests, the ground and characters are randomized, and items from other worlds appear as chests."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — A Short Hike",
+      "url": "https://archipelago.gg/games/A%20Short%20Hike/info/en"
+    }
+  ]
+}

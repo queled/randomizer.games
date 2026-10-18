@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "An Untitled Story a eu un randomizer autonome de Mokesmoe, à partir duquel a été construite son intégration multiworld.",
+    "en": "An Untitled Story had a standalone randomizer by Mokesmoe, on which its multiworld integration was built."
+  },
+  "events": [
+    {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Maddy Thorson sort An Untitled Story en 2007.",
+        "en": "Maddy Thorson releases An Untitled Story in 2007."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Randomizer et multiworld",
+        "en": "Randomizer and multiworld"
+      },
+      "text": {
+        "fr": "Mokesmoe a créé un randomizer autonome pour le jeu, et a permis de s'en servir pour son intégration au multiworld, à laquelle Black Silver a aussi contribué.",
+        "en": "Mokesmoe created a standalone randomizer for the game, and allowed it to be used for its multiworld integration, to which Black Silver also contributed."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — An Untitled Story",
+      "url": "https://multiworld.gg/games/An%20Untitled%20Story/info/en"
+    },
+    {
+      "label": "Mokesmoe's randomizer",
+      "url": "https://www.dropbox.com/s/awy8mmf7eirwnm8/AnUntitledStory_Randomizer.zip?dl=0"
+    }
+  ]
+}

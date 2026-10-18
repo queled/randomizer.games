@@ -1,0 +1,29 @@
+{
+  "intro": {
+    "fr": "Ascent, romhack de Super Metroid, a son randomizer, réalisé par ironrusty dans une série de randomizers de hacks.",
+    "en": "Ascent, a Super Metroid romhack, has its randomizer, made by ironrusty as part of a series of hack randomizers."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "En août 2023, ironrusty publie un randomizer d'Ascent, resté inachevé et uniquement en « full rando ». Son objectif avec ces randomizers de hacks est de préserver au maximum le comportement d'origine de chaque hack, avec l'algorithme de remplissage de Subversion, de beauxq.",
+        "en": "In August 2023, ironrusty releases an Ascent randomizer, left unfinished and full rando only. The goal of these hack randomizers is to preserve each hack's original behavior as much as possible, using beauxq's Subversion fill algorithm."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "randorandy — Ascent Rando",
+      "url": "https://randorandy.github.io/AscentRando/"
+    },
+    {
+      "label": "randorandy",
+      "url": "https://randorandy.github.io/"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Balatro, le roguelike de deck-building sur le thème du poker, se joue aussi en multiworld.",
+    "en": "Balatro, the poker-themed roguelike deck-builder, can also be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "LocalThunk et Playstack sortent Balatro en 2024 : on joue des mains de poker pour marquer des points et battre des « blinds », en améliorant son deck et en achetant des jokers.",
+        "en": "LocalThunk and Playstack release Balatro in 2024: you play poker hands to score points and beat \"blinds\", while improving your deck and buying jokers."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Balatro est jouable en multiworld avec le multiworld (multiworld.gg). Ses options se règlent depuis une page dédiée.",
+        "en": "Balatro can be played in multiworld with multiworld (multiworld.gg). Its options are set from a dedicated page."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Balatro",
+      "url": "https://multiworld.gg/games/Balatro/info/en"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "ArchipIDLE est né comme poisson d'avril d'Archipelago en 2022, et revient chaque année en avril.",
+    "en": "ArchipIDLE was born as Archipelago's 2022 April Fools' joke, and comes back every April."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Un poisson d'avril",
+        "en": "An April Fools' joke"
+      },
+      "text": {
+        "fr": "ArchipIDLE est à l'origine le poisson d'avril 2022 d'Archipelago : un jeu idle qui envoie un check à intervalles réguliers.",
+        "en": "ArchipIDLE was originally Archipelago's 2022 April Fools' Day joke: an idle game that sends a location check at regular intervals."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Chaque mois d'avril",
+        "en": "Every April"
+      },
+      "text": {
+        "fr": "Le jeu est mis à jour chaque année avec de nouveaux objets et gadgets, et n'est visible que pendant le mois d'avril.",
+        "en": "The game is updated every year with new items and gimmicks, and is only visible during April."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — ArchipIDLE",
+      "url": "https://multiworld.gg/games/ArchipIDLE/info/en"
+    }
+  ]
+}

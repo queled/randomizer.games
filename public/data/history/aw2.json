@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Advance Wars 2 se randomise avec une ROM qui se randomise elle-même, publiée par Vesly, et avec le randomizer d'Ephraim225.",
+    "en": "Advance Wars 2 is randomized with a self-randomizing ROM released by Vesly, and with Ephraim225's randomizer."
+  },
+  "events": [
+    {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Intelligent Systems et Nintendo sortent Advance Wars 2: Black Hole Rising sur Game Boy Advance en 2003.",
+        "en": "Intelligent Systems and Nintendo release Advance Wars 2: Black Hole Rising on the Game Boy Advance in 2003."
+      }
+    },
+    {
+      "date": "2024",
+      "title": {
+        "fr": "La ROM auto-randomisée de Vesly",
+        "en": "Vesly's self-randomizing ROM"
+      },
+      "text": {
+        "fr": "Le 27 mars 2024, Vesly publie sur FEUniverse une ROM qui randomise les statistiques des commandants selon le nom donné à la carte 1, ainsi que chaque carte, avec des patchs de Xenesis. Ephraim225 avait aussi présenté un randomizer sur Reddit.",
+        "en": "On March 27, 2024, Vesly releases on FEUniverse a ROM that randomizes CO stats based on the name given to design map 1, as well as every map, with patches by Xenesis. Ephraim225 had also presented a randomizer on Reddit."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "FEUniverse — AW2 Self Randomizing Rom",
+      "url": "https://feuniverse.us/t/aw2-self-randomizing-rom-complete/24788"
+    },
+    {
+      "label": "Reddit — Advance Wars 2 randomizer program",
+      "url": "https://www.reddit.com/r/Advance_Wars/comments/k2kj5y/advance_wars_2_randomizer_program/"
+    }
+  ]
+}

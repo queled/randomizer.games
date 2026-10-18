@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "ANIMAL WELL se joue en multiworld ; le randomizer en dévoile les mécaniques et les secrets, d'où le conseil de finir le jeu d'abord.",
+    "en": "ANIMAL WELL can be played in multiworld; the randomizer spoils its mechanics and secrets, hence the advice to beat the game first."
+  },
+  "events": [
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Billy Basso (Shared Memory) et Bigmode sortent ANIMAL WELL en 2024.",
+        "en": "Billy Basso (Shared Memory) and Bigmode release ANIMAL WELL in 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "ANIMAL WELL est jouable en multiworld avec le multiworld (multiworld.gg). Le randomizer dévoile les mécaniques, les objets et l'emplacement des secrets : il est conseillé de trouver d'abord les œufs, l'équipement et un maximum de lapins dans le jeu d'origine.",
+        "en": "ANIMAL WELL can be played in multiworld with multiworld (multiworld.gg). The randomizer spoils mechanics, items and the locations of secrets: it is recommended to first find the eggs, the equipment and as many bunnies as possible in the original game."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — ANIMAL WELL",
+      "url": "https://multiworld.gg/games/ANIMAL%20WELL/info/en"
+    }
+  ]
+}

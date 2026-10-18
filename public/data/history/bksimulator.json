@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "BK Simulator est un jeu pensé pour le multiworld : il faut marcher jusqu'au BK, par tous les temps, et chaque arrivée est un check.",
+    "en": "BK Simulator is a game built for multiworld: you walk to BK in all kinds of weather, and each arrival is a check."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Un jeu pour le multiworld",
+        "en": "A game for multiworld"
+      },
+      "text": {
+        "fr": "Dans BK Simulator, d'Emily, chaque arrivée au BK compte comme un check, et il faut tous les récupérer puis rentrer chez soi. On règle le nombre d'emplacements, la distance du premier BK et le gain de vitesse des améliorations ; le DeathLink est pris en charge.",
+        "en": "In Emily's BK Simulator, each arrival at BK counts as a check, and you must collect them all then return home. You set the number of locations, the distance to the first BK and the speed gained per upgrade; DeathLink is supported."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — BKSimulator",
+      "url": "https://multiworld.gg/games/BKSimulator/info/en"
+    }
+  ]
+}

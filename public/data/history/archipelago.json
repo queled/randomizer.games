@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "Archipela-Go! est un jeu pensé pour le multiworld, inspiré de Pokémon Go : on marche dans son propre quartier pour récupérer des checks.",
+    "en": "Archipela-Go! is a game built for multiworld, inspired by Pokémon Go: you walk around your own neighborhood to collect checks."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Un jeu pour le multiworld",
+        "en": "A game for multiworld"
+      },
+      "text": {
+        "fr": "Archipela-Go! est un jeu ou mod inspiré de Pokémon Go : il faut courir, ou marcher, dans son quartier pour récupérer des checks, à l'aide d'une application mobile.",
+        "en": "Archipela-Go! is a game or mod inspired by Pokémon Go: you run, or walk, around your neighborhood to collect checks, using a mobile app."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Archipela-Go!",
+      "url": "https://multiworld.gg/games/Archipela-Go%21/info/en"
+    }
+  ]
+}

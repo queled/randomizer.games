@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "Build a Jetpack se joue en multiworld : il faut atteindre l'étoile dans le ciel grâce à trois objets Jetpack.",
+    "en": "Build a Jetpack can be played in multiworld: you must reach the star in the sky with three Jetpack items."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "En multiworld, l'objectif est d'atteindre l'étoile haut dans le ciel, ce qui demande trois objets Jetpack. Toutes les améliorations (équipement de plongée, extensions du radeau…) rejoignent le pool d'objets, et acheter des améliorations envoie des checks.",
+        "en": "In multiworld, the goal is to reach the star high in the sky, which requires three Jetpack items. Every upgrade (diving equipment, raft expansions…) joins the item pool, and buying upgrades sends location checks."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Build a Jetpack",
+      "url": "https://multiworld.gg/games/Build%20a%20Jetpack/info/en"
+    }
+  ]
+}

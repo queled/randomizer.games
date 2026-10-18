@@ -1,0 +1,107 @@
+{
+  "intro": {
+    "fr": "Le randomizer d'Ocarina of Time mélange les objets, et selon les réglages les chansons, les entrées ou les donjons, du Zelda de 1998. Lancé en 2018 dans le sillage du randomizer d'A Link to the Past, il est devenu l'un des randomizers les plus joués, avec une scène de tournois très riche.",
+    "en": "The Ocarina of Time Randomizer shuffles the items, and depending on settings the songs, entrances or dungeons, of the 1998 Zelda. Launched in 2018 in the wake of the A Link to the Past Randomizer, it became one of the most played randomizers, with a very rich tournament scene."
+  },
+  "events": [
+    {
+      "date": "1998",
+      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "text": {
+        "fr": "Nintendo sort The Legend of Zelda: Ocarina of Time sur Nintendo 64 en novembre 1998.",
+        "en": "Nintendo releases The Legend of Zelda: Ocarina of Time on the Nintendo 64 in November 1998."
+      }
+    },
+    {
+      "date": "2018",
+      "title": { "fr": "AmazingAmpharos se lance", "en": "AmazingAmpharos gets started" },
+      "text": {
+        "fr": "Après avoir vu le randomizer d'A Link to the Past, AmazingAmpharos juge Ocarina of Time idéal pour l'exercice, tant sa progression par objets lui ressemble. Il reprend la base de code et l'algorithme de mélange du randomizer d'ALTTP, « un défi personnel », et publie le projet sur GitHub le 12 mars 2018. Avec le moddeur Wulfy, il rend aussi aléatoires les objets posés au sol, puis ouvre le code à la communauté, qui s'organise sur Discord.",
+        "en": "After seeing the A Link to the Past Randomizer, AmazingAmpharos finds Ocarina of Time ideal for the exercise, its item progression being so similar. He reuses the ALTTP randomizer's code base and shuffling algorithm, \"a bit of a self challenge\", and publishes the project on GitHub on March 12, 2018. With modder Wulfy he also randomizes freestanding items, then opens the code to the community, which organizes on Discord."
+      }
+    },
+    {
+      "date": "2018",
+      "title": { "fr": "Les premières versions officielles", "en": "The first official releases" },
+      "text": {
+        "fr": "La version 1.0, « première version officielle », sort le 29 mai 2018, suivie de la 2.0 en juin, puis de la 3.0 le 24 octobre 2018, la première proposée sur Windows, macOS et Linux.",
+        "en": "Version 1.0, \"the first official release\", comes out on May 29, 2018, followed by 2.0 in June, then 3.0 on October 24, 2018, the first offered on Windows, macOS and Linux."
+      }
+    },
+    {
+      "date": "2018",
+      "title": { "fr": "La version de TestRunner", "en": "TestRunner's version" },
+      "text": {
+        "fr": "TestRunner, speedrunner et directeur technique des Games Done Quick, crée l'un des forks les plus populaires et enrichit les options de personnalisation. Sa version, hébergée sur ootrandomizer.com, devient la référence, tandis que celle d'AmazingAmpharos n'évolue plus après 2018. Le site crédite aujourd'hui « TestRunner, AmazingAmpharos et bien d'autres ».",
+        "en": "TestRunner, speedrunner and Games Done Quick technical director, creates one of the most popular forks and expands the customization options. His version, hosted on ootrandomizer.com, becomes the reference, while AmazingAmpharos's stops evolving after 2018. The site now credits \"TestRunner, AmazingAmpharos & many others\"."
+      }
+    },
+    {
+      "date": "2018",
+      "title": { "fr": "Les premiers tournois ZSR", "en": "The first ZSR tournaments" },
+      "text": {
+        "fr": "En octobre 2018 démarre le ZSR OoT Randomizer Tournament 2018 (16 joueurs en bracket), le plus ancien tournoi OoTR recensé sur ce site. Suivent les tournois « Standard », organisés avec ZeldaSpeedRuns, dont la saison 9 se joue en 2026.",
+        "en": "In October 2018 the ZSR OoT Randomizer Tournament 2018 begins (16 players in the bracket), the oldest OoTR tournament listed on this site. Then come the \"Standard\" tournaments, run with ZeldaSpeedRuns, whose season 9 is played in 2026."
+      }
+    },
+    {
+      "date": "2019",
+      "title": { "fr": "Version 4 et reconnaissance", "en": "Version 4 and recognition" },
+      "text": {
+        "fr": "La version 4.0 sort le 6 février 2019. Deux jours plus tard, Kotaku consacre un article au randomizer et au plaisir de redécouvrir Ocarina of Time grâce à lui.",
+        "en": "Version 4.0 comes out on February 6, 2019. Two days later, Kotaku publishes an article about the randomizer and the joy of rediscovering Ocarina of Time through it."
+      }
+    },
+    {
+      "date": "2020",
+      "title": { "fr": "Co-op aux GDQ et Random Settings", "en": "Co-op at GDQ and Random Settings" },
+      "text": {
+        "fr": "Le randomizer arrive aux Games Done Quick en co-op : Corona Relief Done Quick en avril 2020, puis Summer Games Done Quick 2020. En juin démarre la première saison du Random Settings, où les réglages eux-mêmes sont tirés au sort. La version 6.0 sort le 4 décembre 2020. Sur l'année, le nombre de courses recensées double (près de 2 600).",
+        "en": "The randomizer reaches Games Done Quick in co-op: Corona Relief Done Quick in April 2020, then Summer Games Done Quick 2020. In June the first Random Settings season begins, where the settings themselves are drawn at random. Version 6.0 comes out on December 4, 2020. Over the year, the number of listed races doubles (nearly 2,600)."
+      }
+    },
+    {
+      "date": "2022",
+      "title": { "fr": "Ship of Harkinian et le multiworld", "en": "Ship of Harkinian and multiworld" },
+      "text": {
+        "fr": "Ship of Harkinian, portage PC d'Ocarina of Time sorti en mars 2022, présente son propre randomizer en juillet 2022. La saison 3 du Multiworld Tournament réunit 108 joueurs, et le SGDQ 2022 propose une co-op « 5 Dungeonsanity ».",
+        "en": "Ship of Harkinian, a PC port of Ocarina of Time released in March 2022, unveils its own randomizer in July 2022. Season 3 of the Multiworld Tournament gathers 108 players, and SGDQ 2022 features a \"5 Dungeonsanity\" co-op."
+      }
+    },
+    {
+      "date": "2023",
+      "title": { "fr": "La League sur Mido's House", "en": "The League on Mido's House" },
+      "text": {
+        "fr": "L'OoTR League, hébergée sur Mido's House, réunit 89 joueurs pour sa saison 4 au printemps 2023, puis enchaîne deux saisons par an. La saison 8, en 2025, atteint 111 joueurs.",
+        "en": "The OoTR League, hosted on Mido's House, gathers 89 players for its season 4 in spring 2023, then runs two seasons a year. Season 8, in 2025, reaches 111 players."
+      }
+    },
+    {
+      "date": "2025",
+      "title": { "fr": "No Logic à l'AGDQ", "en": "No Logic at AGDQ" },
+      "text": {
+        "fr": "L'Awesome Games Done Quick 2025 accueille une partie No Logic, où les objets sont placés sans garantie que la seed soit faisable sans glitches. La saison 5 du Multiworld Tournament réunit 114 joueurs.",
+        "en": "Awesome Games Done Quick 2025 hosts a No Logic run, where items are placed with no guarantee that the seed can be beaten without glitches. Season 5 of the Multiworld Tournament gathers 114 players."
+      }
+    },
+    {
+      "date": "2026",
+      "title": { "fr": "Version 9 et une scène foisonnante", "en": "Version 9 and a thriving scene" },
+      "text": {
+        "fr": "La version 9.0.0 sort le 2 janvier 2026. Aux côtés du Standard (saison 9), de la League (saison 10) et du Multiworld (saison 6), les formats se multiplient : Triforce Blitz, Mixed Pools, Tournament of Truth, Escape From Kak, Pots of Time, Rupees of Time, Spoiler Log, Mentor Tournament… Ce site recense entre 3 300 et 4 400 courses par an de 2021 à 2025.",
+        "en": "Version 9.0.0 comes out on January 2, 2026. Alongside the Standard (season 9), the League (season 10) and Multiworld (season 6), formats multiply: Triforce Blitz, Mixed Pools, Tournament of Truth, Escape From Kak, Pots of Time, Rupees of Time, Spoiler Log, Mentor Tournament… This site counts between 3,300 and 4,400 races a year from 2021 to 2025."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "Kotaku — The Pleasure of Playing a Randomized Version of The Legend of Zelda: Ocarina of Time (2019)", "url": "https://kotaku.com/the-pleasure-of-playing-a-randomized-version-of-the-leg-1832471384" },
+    { "label": "AmazingAmpharos/OoT-Randomizer — Releases (GitHub)", "url": "https://github.com/AmazingAmpharos/OoT-Randomizer/releases" },
+    { "label": "ootrandomizer.com — Downloads", "url": "https://ootrandomizer.com/downloads" },
+    { "label": "OoTRandomizer/OoT-Randomizer (GitHub)", "url": "https://github.com/OoTRandomizer/OoT-Randomizer" },
+    { "label": "Zelda64 Wiki — Ocarina of Time Randomizer", "url": "https://zelda64.miraheze.org/wiki/Ocarina_of_Time_Randomiser" },
+    { "label": "Wikipedia — Ship of Harkinian", "url": "https://en.wikipedia.org/wiki/Ship_of_Harkinian" },
+    { "label": "Wikipedia — The Legend of Zelda: Ocarina of Time", "url": "https://en.wikipedia.org/wiki/The_Legend_of_Zelda:_Ocarina_of_Time" },
+    { "label": "Mido's House — OoTR League", "url": "https://midos.house/event/league/10" },
+    { "label": "racetime.gg — OoTR", "url": "https://racetime.gg/ootr" }
+  ]
+}

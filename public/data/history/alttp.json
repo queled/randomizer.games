@@ -6,7 +6,10 @@
   "events": [
     {
       "date": "1991",
-      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
       "text": {
         "fr": "Nintendo sort The Legend of Zelda: A Link to the Past sur Super Famicom (fin 1991 au Japon, 1992 en Amérique du Nord et en Europe). Son monde ouvert, ses deux mondes (Light et Dark World) et ses objets qui débloquent la progression en font un terrain idéal pour le mélange.",
         "en": "Nintendo releases The Legend of Zelda: A Link to the Past on the Super Famicom (late 1991 in Japan, 1992 in North America and Europe). Its open world, its Light and Dark Worlds and its item-gated progression make it ideal ground for shuffling."
@@ -14,7 +17,10 @@
     },
     {
       "date": "2014",
-      "title": { "fr": "L'idée de Dessyreqt", "en": "Dessyreqt's idea" },
+      "title": {
+        "fr": "L'idée de Dessyreqt",
+        "en": "Dessyreqt's idea"
+      },
       "text": {
         "fr": "En travaillant sur un randomizer de Super Metroid, David « Dessyreqt » Carroll trouve un nouvel algorithme de mélange des objets. Vers le milieu de 2014, il commence en secret une version pour A Link to the Past, puis met le projet en pause.",
         "en": "While building a Super Metroid randomizer, David \"Dessyreqt\" Carroll finds a new item-shuffling algorithm. Around mid-2014 he secretly starts an A Link to the Past version, then puts the project on hold."
@@ -22,7 +28,10 @@
     },
     {
       "date": "2016",
-      "title": { "fr": "Premières courses et version 1.0", "en": "First races and version 1.0" },
+      "title": {
+        "fr": "Premières courses et version 1.0",
+        "en": "First races and version 1.0"
+      },
       "text": {
         "fr": "En février 2016, Dessyreqt partage une première version sur le canal #alttp de l'IRC SpeedRunsLive. Le randomizer y apparaît en course le 29 mai 2016, et la version 1.0 sort publiquement le 2 juin 2016. Dès le premier mois, 64 speedrunners y participent.",
         "en": "In February 2016, Dessyreqt shares a first build on the #alttp channel of the SpeedRunsLive IRC. The randomizer first shows up in races on May 29, 2016, and version 1.0 is released publicly on June 2, 2016. In its first month, 64 speedrunners take part."
@@ -30,23 +39,32 @@
     },
     {
       "date": "2016",
-      "title": { "fr": "Une équipe se forme", "en": "A team comes together" },
+      "title": {
+        "fr": "Une équipe se forme",
+        "en": "A team comes together"
+      },
       "text": {
-        "fr": "Karkat (assembleur) puis ChristosOwen (logique) rejoignent le projet, avec Smallhacker. Vers la version 5, Veetorp arrive : il écrit un algorithme de génération plus rapide et crée le site web du randomizer, l'ancêtre d'alttpr.com (« VT » pour Veetorp). Fin 2016, la version 7 mélange aussi les pendentifs et les cristaux entre les donjons, et Dessyreqt passe la main à l'équipe.",
-        "en": "Karkat (assembly) and ChristosOwen (logic) join the project, along with Smallhacker. Around version 5, Veetorp arrives: he writes a faster generation algorithm and builds the randomizer's website, the ancestor of alttpr.com (\"VT\" stands for Veetorp). In late 2016, version 7 also shuffles pendants and crystals between dungeons, and Dessyreqt hands over to the team."
+        "fr": "Karkat (assembleur) puis ChristosOwen (logique) rejoignent le projet, avec Smallhacker. Vers la version 5, Veetorp arrive : il écrit un algorithme de génération plus rapide et crée le site web du randomizer, l'ancêtre d'alttpr.com. Fin 2016, la version 7 mélange aussi les pendentifs et les cristaux entre les donjons, et Dessyreqt passe la main à l'équipe.",
+        "en": "Karkat (assembly) and ChristosOwen (logic) join the project, along with Smallhacker. Around version 5, Veetorp arrives: he writes a faster generation algorithm and builds the randomizer's website, the ancestor of alttpr.com. In late 2016, version 7 also shuffles pendants and crystals between dungeons, and Dessyreqt hands over to the team."
       }
     },
     {
       "date": "2017",
-      "title": { "fr": "Le premier tournoi et le premier champion", "en": "The first tournament and the first champion" },
+      "title": {
+        "fr": "Le premier tournoi et le premier champion",
+        "en": "The first tournament and the first champion"
+      },
       "text": {
         "fr": "Le Spring Randomizer Tournament démarre le 25 mars 2017 et dure environ trois mois, diffusé sur la chaîne de SpeedGaming. En finale, au meilleur des cinq, Ben (ajneb174) bat ChristosOwen et devient le premier champion du randomizer. À l'automne, le Fall Randomizer Tournament réunit environ 250 participants.",
         "en": "The Spring Randomizer Tournament kicks off on March 25, 2017 and runs for about three months on SpeedGaming's channel. In a best-of-five final, Ben (ajneb174) beats ChristosOwen to become the randomizer's first champion. In the fall, the Fall Randomizer Tournament gathers about 250 participants."
       }
     },
     {
-      "date": "2017",
-      "title": { "fr": "Les variantes se multiplient", "en": "Variants multiply" },
+      "date": "2017-2018",
+      "title": {
+        "fr": "Les variantes se multiplient",
+        "en": "Variants multiply"
+      },
       "text": {
         "fr": "Au fil des versions VT8, le randomizer gagne le mode Swordless (sans épée), la chasse à la Triforce, le Keysanity (clés et cartes mélangées dans tout le monde), les défis quotidiens et l'intégration de l'Entrance Randomizer, qui mélange les entrées des bâtiments et des grottes. En octobre 2017, SpeedRunsLive compte déjà 3 185 courses disputées par 736 coureurs.",
         "en": "Across the VT8 versions, the randomizer gains Swordless mode, Triforce Hunt, Keysanity (keys and maps shuffled across the world), daily challenges and the Entrance Randomizer, which shuffles building and cave entrances. By October 2017, SpeedRunsLive already counts 3,185 races by 736 runners."
@@ -54,15 +72,21 @@
     },
     {
       "date": "2018",
-      "title": { "fr": "Les Games Done Quick", "en": "Games Done Quick" },
+      "title": {
+        "fr": "Les Games Done Quick",
+        "en": "Games Done Quick"
+      },
       "text": {
-        "fr": "Après une apparition au Harvey Relief Done Quick (septembre 2017), le randomizer arrive sur la scène principale de l'Awesome Games Done Quick 2018 en janvier, avec une course entre ChristosOwen et Andy. Il y reviendra notamment à l'AGDQ 2020.",
-        "en": "After an appearance at Harvey Relief Done Quick (September 2017), the randomizer reaches the main stage of Awesome Games Done Quick 2018 in January, with a race between ChristosOwen and Andy. It comes back at AGDQ 2020, among others."
+        "fr": "Après une course Swordless au Harvey Relief Done Quick (septembre 2017), le randomizer arrive sur la scène principale de l'Awesome Games Done Quick 2018 en janvier, avec une course entre ChristosOwen et Andy. En octobre 2018, la GDQ Express accueille aussi SMZ3, le randomizer combiné Super Metroid + A Link to the Past.",
+        "en": "After a Swordless race at Harvey Relief Done Quick (September 2017), the randomizer reaches the main stage of Awesome Games Done Quick 2018 in January, with a race between ChristosOwen and Andy. In October 2018, GDQ Express also hosts SMZ3, the Super Metroid + A Link to the Past combo randomizer."
       }
     },
     {
       "date": "2018",
-      "title": { "fr": "512 joueurs au printemps, Enemizer et Inverted", "en": "512 players in spring, Enemizer and Inverted" },
+      "title": {
+        "fr": "512 joueurs au printemps, Enemizer et Inverted",
+        "en": "512 players in spring, Enemizer and Inverted"
+      },
       "text": {
         "fr": "Le Spring Tournament 2018 commence le 9 avril avec 512 joueurs : une ronde suisse d'au moins quatre semaines, puis un bracket à élimination directe de 128 joueurs. La version 30 ajoute l'Enemizer (ennemis et boss mélangés) et le mode Inverted, qui fait démarrer Link dans le Dark World.",
         "en": "The Spring Tournament 2018 starts on April 9 with 512 players: a Swiss stage of at least four weeks, then a 128-player single-elimination bracket. Version 30 adds the Enemizer (shuffled enemies and bosses) and Inverted mode, which starts Link in the Dark World."
@@ -70,31 +94,43 @@
     },
     {
       "date": "2019",
-      "title": { "fr": "La League, SMZ3 et la v31", "en": "The League, SMZ3 and v31" },
+      "title": {
+        "fr": "La League et la v31",
+        "en": "The League and v31"
+      },
       "text": {
-        "fr": "En mars 2019 démarre la première saison de l'ALTTPR League, un championnat par équipes. Au même moment, la communauté découvre SMZ3, le randomizer combiné Super Metroid + A Link to the Past de tewtal, où l'on passe d'un jeu à l'autre. La version 31 réunit le randomizer d'objets, l'Entrance Randomizer et l'Enemizer dans une seule interface, et le Main Tournament 2019 réunit 128 joueurs (poules puis élimination directe).",
-        "en": "In March 2019, the first season of the ALTTPR League, a team championship, begins. At the same time, the community discovers SMZ3, tewtal's Super Metroid + A Link to the Past combo randomizer, where players travel between both games. Version 31 brings the item randomizer, the Entrance Randomizer and the Enemizer together in one interface, and the 2019 Main Tournament gathers 128 players (groups, then single elimination)."
+        "fr": "En mars 2019 démarre la première saison de l'ALTTPR League (48 joueurs). La version 31 réunit le randomizer d'objets, l'Entrance Randomizer et l'Enemizer dans une seule interface, et le Main Tournament 2019 réunit 128 joueurs (poules puis élimination directe). Au SGDQ 2019, SMZ3 revient en co-op.",
+        "en": "In March 2019 the first season of the ALTTPR League begins (48 players). Version 31 brings the item randomizer, the Entrance Randomizer and the Enemizer together in one interface, and the 2019 Main Tournament gathers 128 players (groups, then single elimination). At SGDQ 2019, SMZ3 comes back in co-op."
       }
     },
     {
       "date": "2020",
-      "title": { "fr": "Le multiworld et la naissance d'Archipelago", "en": "Multiworld and the birth of Archipelago" },
+      "title": {
+        "fr": "Le multiworld et la naissance d'Archipelago",
+        "en": "Multiworld and the birth of Archipelago"
+      },
       "text": {
-        "fr": "Le multiworld d'A Link to the Past, où les objets de plusieurs joueurs sont mélangés entre leurs parties, donne naissance le 12 janvier 2020 à un projet tiré de la branche multiworld de l'Entrance Randomizer. Il deviendra Archipelago, qui relie aujourd'hui des centaines de jeux. La même année, la League s'ouvre à tous avec une division Open (saison 3).",
-        "en": "A Link to the Past multiworld, where several players' items are shuffled across each other's games, gives rise on January 12, 2020 to a project forked from the Entrance Randomizer's multiworld branch. It will become Archipelago, which now connects hundreds of games. The same year, the League opens to everyone with an Open division (season 3)."
+        "fr": "Le multiworld d'A Link to the Past, où les objets de plusieurs joueurs sont mélangés entre leurs parties, donne naissance le 12 janvier 2020 à un projet tiré de la branche multiworld de l'Entrance Randomizer : il deviendra Archipelago, qui relie aujourd'hui de très nombreux jeux. En janvier, l'AGDQ 2020 propose une partie avec Crowd Control, où le public agit sur le jeu ; en février, Frost Fatales 2020 accueille une co-op multiworld. La League lance une division Open (saison 3).",
+        "en": "A Link to the Past multiworld, where several players' items are shuffled across each other's games, gives rise on January 12, 2020 to a project forked from the Entrance Randomizer's multiworld branch: it will become Archipelago, which now connects a great many games. In January, AGDQ 2020 features a Crowd Control run, where the audience acts on the game; in February, Frost Fatales 2020 hosts a multiworld co-op. The League launches an Open division (season 3)."
       }
     },
     {
       "date": "2021",
-      "title": { "fr": "Door Randomizer et Overworld Randomizer", "en": "Door Randomizer and Overworld Randomizer" },
+      "title": {
+        "fr": "Door Randomizer et Overworld Randomizer",
+        "en": "Door Randomizer and Overworld Randomizer"
+      },
       "text": {
-        "fr": "Développé par Aerinon à partir de l'Entrance Randomizer, le Door Randomizer mélange les portes à l'intérieur des donjons. L'Overworld Randomizer, dérivé à son tour du Door Randomizer, mélange les liaisons entre les zones de la carte. Les formats de tournoi se diversifient : Crosskeys, Boots, Spoiler Log, Enemizer, No Logic…",
-        "en": "Built by Aerinon on top of the Entrance Randomizer, the Door Randomizer shuffles doors inside dungeons. The Overworld Randomizer, derived in turn from the Door Randomizer, shuffles the connections between map areas. Tournament formats diversify: Crosskeys, Boots, Spoiler Log, Enemizer, No Logic…"
+        "fr": "Développé par Aerinon à partir de l'Entrance Randomizer, le Door Randomizer mélange les portes à l'intérieur des donjons ; le podcast Go Mode reçoit son auteur en janvier 2021. L'Overworld Randomizer, dérivé à son tour du Door Randomizer, mélange les liaisons entre les zones de la carte.",
+        "en": "Built by Aerinon on top of the Entrance Randomizer, the Door Randomizer shuffles doors inside dungeons; the Go Mode podcast hosts its author in January 2021. The Overworld Randomizer, derived in turn from the Door Randomizer, shuffles the connections between map areas."
       }
     },
     {
       "date": "2023",
-      "title": { "fr": "Nouveaux objectifs", "en": "New goals" },
+      "title": {
+        "fr": "Nouveaux objectifs",
+        "en": "New goals"
+      },
       "text": {
         "fr": "La version 31.1 (mars 2023) ajoute l'objectif Ganonhunt et la prise en charge des Hybrid Major Glitches ; la 31.2 (août 2023) ajoute l'objectif Completionist.",
         "en": "Version 31.1 (March 2023) adds the Ganonhunt goal and Hybrid Major Glitches support; 31.2 (August 2023) adds the Completionist goal."
@@ -102,7 +138,10 @@
     },
     {
       "date": "2024",
-      "title": { "fr": "Main Tournament 2024", "en": "2024 Main Tournament" },
+      "title": {
+        "fr": "Main Tournament 2024",
+        "en": "2024 Main Tournament"
+      },
       "text": {
         "fr": "Gammachuu remporte le Main Tournament 2024, le plus grand tournoi annuel du randomizer.",
         "en": "Gammachuu wins the 2024 Main Tournament, the randomizer's largest yearly tournament."
@@ -110,21 +149,56 @@
     },
     {
       "date": "2026",
-      "title": { "fr": "Dix ans de randomizer", "en": "Ten years of randomizer" },
+      "title": {
+        "fr": "Dix ans de randomizer",
+        "en": "Ten years of randomizer"
+      },
       "text": {
-        "fr": "La communauté fête les dix ans de la sortie publique avec l'événement « AlttPR 10 Year Anniversary ». Le Main Tournament 2026 démarre en novembre (poules du 2 au 22 novembre, brackets jusqu'en janvier 2027). Le randomizer se joue aujourd'hui sur racetime.gg, et ce site y recense entre 7 000 et 8 600 courses par an depuis 2021.",
-        "en": "The community celebrates ten years since the public release with the \"AlttPR 10 Year Anniversary\" event. The 2026 Main Tournament starts in November (groups from November 2 to 22, brackets until January 2027). The randomizer is now raced on racetime.gg, where this site counts between 7,000 and 8,600 races a year since 2021."
+        "fr": "La communauté fête les dix ans de la sortie publique avec l'événement « AlttPR 10 Year Anniversary ». Le Main Tournament 2026 démarre en novembre (poules du 2 au 22 novembre, brackets jusqu'en janvier 2027). Les formats de tournoi se sont multipliés : Crosskeys, Boots, Spoiler Log, Enemizer, No Logic… Le randomizer se joue aujourd'hui sur racetime.gg, et ce site y recense entre 7 500 et 8 600 courses par an de 2022 à 2025.",
+        "en": "The community celebrates ten years since the public release with the \"AlttPR 10 Year Anniversary\" event. The 2026 Main Tournament starts in November (groups from November 2 to 22, brackets until January 2027). Tournament formats have multiplied: Crosskeys, Boots, Spoiler Log, Enemizer, No Logic… The randomizer is now raced on racetime.gg, where this site counts between 7,500 and 8,600 races a year from 2022 to 2025."
       }
     }
   ],
   "sources": [
-    { "label": "Destructoid — Infinite Remix: The Story of the Link to the Past Randomizer (2017)", "url": "https://www.destructoid.com/infinite-remix-the-story-of-the-link-to-the-past-randomizer/" },
-    { "label": "alttpr.com — Updates", "url": "https://alttpr.com/en/updates" },
-    { "label": "Dessyreqt/alttprandomizer (GitHub)", "url": "https://github.com/Dessyreqt/alttprandomizer" },
-    { "label": "Challonge — Spring Tournament 2018", "url": "https://alttp.challonge.com/springrando2018" },
-    { "label": "Archipelago (README)", "url": "https://github.com/ArchipelagoMW/Archipelago" },
-    { "label": "aerinon/ALttPDoorRandomizer (GitHub)", "url": "https://github.com/aerinon/ALttPDoorRandomizer" },
-    { "label": "Two Sixteen podcast — ALTTPR 2024 Main Tournament Champion", "url": "https://podcasts.apple.com/us/podcast/alttpr-2024-main-tournament-champion/id1788940432?i=1000683062835" },
-    { "label": "racetime.gg — ALTTPR", "url": "https://racetime.gg/alttpr" }
+    {
+      "label": "Destructoid — Infinite Remix: The Story of the Link to the Past Randomizer (2017)",
+      "url": "https://www.destructoid.com/infinite-remix-the-story-of-the-link-to-the-past-randomizer/"
+    },
+    {
+      "label": "alttpr.com — Updates",
+      "url": "https://alttpr.com/en/updates"
+    },
+    {
+      "label": "Dessyreqt/alttprandomizer (GitHub)",
+      "url": "https://github.com/Dessyreqt/alttprandomizer"
+    },
+    {
+      "label": "Challonge — Spring Tournament 2018",
+      "url": "https://alttp.challonge.com/springrando2018"
+    },
+    {
+      "label": "Archipelago (README)",
+      "url": "https://github.com/ArchipelagoMW/Archipelago"
+    },
+    {
+      "label": "aerinon/ALttPDoorRandomizer (GitHub)",
+      "url": "https://github.com/aerinon/ALttPDoorRandomizer"
+    },
+    {
+      "label": "Go Mode podcast — Door Randomizer w/ Aerinon",
+      "url": "https://go-mode-a-link-to-the-past-randomizer-podcast.castos.com/episodes/door-randomizer-w-aerinon-league-division-finals-news-speedround"
+    },
+    {
+      "label": "Two Sixteen podcast — ALTTPR 2024 Main Tournament Champion",
+      "url": "https://podcasts.apple.com/us/podcast/alttpr-2024-main-tournament-champion/id1788940432?i=1000683062835"
+    },
+    {
+      "label": "racetime.gg — ALTTPR",
+      "url": "https://racetime.gg/alttpr"
+    },
+    {
+      "label": "Games Done Quick — VODs",
+      "url": "https://gamesdonequick.com/"
+    }
   ]
 }

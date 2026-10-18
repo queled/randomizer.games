@@ -16,25 +16,28 @@
       }
     },
     {
-      "date": "2022",
+      "date": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
       "title": {
         "fr": "Le randomizer d'acastelli",
         "en": "acastelli's randomizer"
       },
       "text": {
-        "fr": "acastelli propose ses ROM hacks de Diddy Kong Racing sous forme de patchs, dont un randomizer. En mode 100 %, tous les warps peuvent être randomisés (sauf Wizpig 2), et finir la partie devient un véritable puzzle ; en mode « All Trophy Races », chaque course est réattribuée à un monde au hasard. Véhicules, nombre de tours, bonus des ballons et codes magiques peuvent aussi être randomisés. Les premières courses recensées sur ce site ont lieu en octobre 2022 sur racetime.gg.",
-        "en": "acastelli offers Diddy Kong Racing ROM hacks as patches, including a randomizer. In 100% mode, every warp can be randomized (except Wizpig 2), and finishing the game becomes a real puzzle; in \"All Trophy Races\" mode, each track is reassigned to a random world. Vehicles, lap counts, balloon power-ups and magic codes can also be randomized. The first races listed on this site take place in October 2022 on racetime.gg."
+        "fr": "acastelli propose ses ROM hacks de Diddy Kong Racing sous forme de patchs, dont un randomizer. En mode 100 %, tous les warps peuvent être randomisés (sauf Wizpig 2), et finir la partie devient un véritable puzzle ; en mode « All Trophy Races », chaque course est réattribuée à un monde au hasard. Véhicules, nombre de tours, bonus des ballons et codes magiques peuvent aussi être randomisés.",
+        "en": "acastelli offers Diddy Kong Racing ROM hacks as patches, including a randomizer. In 100% mode, every warp can be randomized (except Wizpig 2), and finishing the game becomes a real puzzle; in \"All Trophy Races\" mode, each track is reassigned to a random world. Vehicles, lap counts, balloon power-ups and magic codes can also be randomized."
       }
     },
     {
-      "date": "2023",
+      "date": "2022-2023",
       "title": {
         "fr": "Les courses",
         "en": "Races"
       },
       "text": {
-        "fr": "Ce site recense 17 courses en 2023. Le jeu est aussi jouable en multiworld.",
-        "en": "This site counts 17 races in 2023. The game can also be played in multiworld."
+        "fr": "Les premières courses recensées sur ce site ont lieu en octobre 2022 sur racetime.gg, et 2023 en compte 17. Le jeu est aussi jouable en multiworld.",
+        "en": "The first races listed on this site take place in October 2022 on racetime.gg, and 2023 counts 17. The game can also be played in multiworld."
       }
     }
   ],

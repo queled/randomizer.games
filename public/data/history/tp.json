@@ -1,0 +1,64 @@
+{
+  "intro": {
+    "fr": "Le Twilight Princess Randomizer (TPR) mélange le contenu des coffres et des autres objets à collecter du Zelda de 2006, avec de nombreux réglages de confort. Développé par l'équipe zsrtp depuis 2019, il a atteint sa version 1.0 en 2023 et a désormais ses saisons de tournoi.",
+    "en": "The Twilight Princess Randomizer (TPR) shuffles the contents of chests and other collectibles of the 2006 Zelda, with plenty of quality-of-life settings. Developed by the zsrtp team since 2019, it reached version 1.0 in 2023 and now has its own tournament seasons."
+  },
+  "events": [
+    {
+      "date": "2006",
+      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "text": {
+        "fr": "Nintendo sort The Legend of Zelda: Twilight Princess sur Wii et sur GameCube en 2006.",
+        "en": "Nintendo releases The Legend of Zelda: Twilight Princess on the Wii and the GameCube in 2006."
+      }
+    },
+    {
+      "date": "2019",
+      "title": { "fr": "Les débuts sur GameCube", "en": "The beginnings on GameCube" },
+      "text": {
+        "fr": "Le premier dépôt du randomizer, pour la version GameCube, démarre le 1er juillet 2019, avec une première bêta (0.2) le 9 juillet. Il s'appuie sur les ttyd-tools de PistonMiner, portés sur Twilight Princess par Zephiles.",
+        "en": "The randomizer's first repository, for the GameCube version, starts on July 1, 2019, with a first beta (0.2) on July 9. It builds on PistonMiner's ttyd-tools, ported to Twilight Princess by Zephiles."
+      }
+    },
+    {
+      "date": "2020-2021",
+      "title": { "fr": "Une refonte complète", "en": "A full rewrite" },
+      "text": {
+        "fr": "Face à l'ampleur des changements, l'équipe ouvre un nouveau dépôt le 5 février 2020. Ses principaux artisans : AECX (fondateur, framework), Zephiles (rétro-ingénierie), lunarsoap5 (direction du projet, générateur), vbn598 et Isaac. L'ancienne branche publie sa dernière bêta en novembre 2021.",
+        "en": "Given the scale of the changes, the team opens a new repository on February 5, 2020. Its main builders: AECX (founder, framework), Zephiles (reverse engineering), lunarsoap5 (project lead, generator), vbn598 and Isaac. The old branch releases its last beta in November 2021."
+      }
+    },
+    {
+      "date": "2023",
+      "title": { "fr": "La version 1.0", "en": "Version 1.0" },
+      "text": {
+        "fr": "La version 1.0 sort le 12 septembre 2023, avec un générateur web sur tprandomizer.com. Les courses décollent : 28 en 2022, 288 en 2023 sur ce site.",
+        "en": "Version 1.0 comes out on September 12, 2023, with a web generator on tprandomizer.com. Races take off: 28 in 2022, 288 in 2023 on this site."
+      }
+    },
+    {
+      "date": "2024",
+      "title": { "fr": "SGDQ, PAX et première saison", "en": "SGDQ, PAX and first season" },
+      "text": {
+        "fr": "Le Summer Games Done Quick 2024 accueille une partie en co-op, puis le Speedrun Stage de PAX West 2024 une partie du randomizer. En septembre démarre la phase finale de la saison 1 du tournoi, un top 24.",
+        "en": "Summer Games Done Quick 2024 hosts a co-op run, then the PAX West 2024 Speedrun Stage a randomizer run. In September, the final stage of the tournament's season 1 begins, a top 24."
+      }
+    },
+    {
+      "date": "2026",
+      "title": { "fr": "Saison 2", "en": "Season 2" },
+      "text": {
+        "fr": "La version 1.3 sort en avril 2026, et la saison 2 du tournoi réunit 31 joueurs en juin.",
+        "en": "Version 1.3 comes out in April 2026, and season 2 of the tournament gathers 31 players in June."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "zsrtp/Randomizer (GitHub)", "url": "https://github.com/zsrtp/Randomizer" },
+    { "label": "zsrtp/GC-Randomizer (GitHub)", "url": "https://github.com/zsrtp/GC-Randomizer" },
+    { "label": "Twilight Princess Randomizer", "url": "https://tprandomizer.com/" },
+    { "label": "Challonge — Twilight Princess Randomizer Season 1 Top 24", "url": "https://challonge.com/tpr_s1_top_24" },
+    { "label": "start.gg — Twilight Princess Randomizer: Season 2 Tournament", "url": "https://start.gg/tournament/twilight-princess-randomizer-season-2-tournament/event/main-tournament" },
+    { "label": "racetime.gg — TPR", "url": "https://racetime.gg/tpr" }
+  ]
+}

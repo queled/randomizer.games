@@ -1,0 +1,85 @@
+{
+  "intro": {
+    "fr": "Le Mega Man 2 Randomizer, créé par duckfist en 2016, remélange le classique de Capcom. Repris par la communauté depuis 2020, il a ses propres tournois en 2026.",
+    "en": "The Mega Man 2 Randomizer, created by duckfist in 2016, reshuffles Capcom's classic. Carried on by the community since 2020, it has its own tournaments in 2026."
+  },
+  "events": [
+    {
+      "date": "1988",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Mega Man 2 (Rockman 2 au Japon) sur NES en 1988.",
+        "en": "Capcom releases Mega Man 2 (Rockman 2 in Japan) on the NES in 1988."
+      }
+    },
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le randomizer de duckfist",
+        "en": "duckfist's randomizer"
+      },
+      "text": {
+        "fr": "duckfist crée le dépôt MM2Random le 10 février 2016. Les premières courses recensées sur ce site ont lieu le 27 août 2016, sur SpeedRunsLive.",
+        "en": "duckfist creates the MM2Random repository on February 10, 2016. The first races listed on this site take place on August 27, 2016, on SpeedRunsLive."
+      }
+    },
+    {
+      "date": "2018-2019",
+      "title": {
+        "fr": "Les années SpeedRunsLive",
+        "en": "The SpeedRunsLive years"
+      },
+      "text": {
+        "fr": "Les courses atteignent 269 en 2018 et 264 en 2019 sur ce site. La version 0.5.0 beta est publiée le 5 mai 2019.",
+        "en": "Races reach 269 in 2018 and 264 in 2019 on this site. Version 0.5.0 beta is published on May 5, 2019."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "La relève de la communauté",
+        "en": "The community takes over"
+      },
+      "text": {
+        "fr": "Le développement continue dans le dépôt MegaMan2Randomizer2 de squid-man, dont la version 0.6 beta sort le 31 août 2020, avec notamment duckfist, TheRealQuantam et CharlieboyX parmi les contributeurs. Les courses passent ensuite de SpeedRunsLive à racetime.gg.",
+        "en": "Development continues in squid-man's MegaMan2Randomizer2 repository, whose version 0.6 beta comes out on August 31, 2020, with duckfist, TheRealQuantam and CharlieboyX among the contributors. Races then move from SpeedRunsLive to racetime.gg."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Place aux tournois",
+        "en": "Time for tournaments"
+      },
+      "text": {
+        "fr": "Le Mega Man 2 Randomizer Proto Challenge Weekend 2026 (8 joueurs), puis le Mega Man 2 Randomizer Tournament 2026 (18 joueurs) lancent la compétition, et une nouvelle version sort le 1er août 2026. Le jeu est aussi pris en charge par Archipelago.",
+        "en": "The Mega Man 2 Randomizer Proto Challenge Weekend 2026 (8 players), then the Mega Man 2 Randomizer Tournament 2026 (18 players) kick off competition, and a new version comes out on August 1, 2026. The game is also supported by Archipelago."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "duckfist/MM2Random (GitHub)",
+      "url": "https://github.com/duckfist/MM2Random"
+    },
+    {
+      "label": "squid-man/MegaMan2Randomizer2 (GitHub)",
+      "url": "https://github.com/squid-man/MegaMan2Randomizer2"
+    },
+    {
+      "label": "Challonge — Mega Man 2 Randomizer Tournament 2026",
+      "url": "https://challonge.com/MM2Randomizer26"
+    },
+    {
+      "label": "Archipelago — Mega Man 2",
+      "url": "https://archipelago.gg/games/Mega%20Man%202/info/en"
+    },
+    {
+      "label": "racetime.gg — MM2R",
+      "url": "https://racetime.gg/mm2r"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "L'Open World Paper Mario Randomizer transforme Paper Mario sur Nintendo 64 en monde ouvert et en mélange le contenu. Développé par icebound777, clover et Pronyo depuis 2020, il se génère depuis un site web.",
+    "en": "The Open World Paper Mario Randomizer turns Paper Mario on the Nintendo 64 into an open world and shuffles its contents. Developed by icebound777, clover and Pronyo since 2020, it is generated from a website."
+  },
+  "events": [
+    {
+      "date": "2000",
+      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "text": {
+        "fr": "Intelligent Systems et Nintendo sortent Paper Mario sur Nintendo 64 en 2000 au Japon, puis en 2001 en Amérique du Nord et en Europe.",
+        "en": "Intelligent Systems and Nintendo release Paper Mario on the Nintendo 64 in 2000 in Japan, then in 2001 in North America and Europe."
+      }
+    },
+    {
+      "date": "2020-2021",
+      "title": { "fr": "Les débuts", "en": "The beginnings" },
+      "text": {
+        "fr": "Pronyo démarre l'application web du randomizer le 21 mai 2020, pour le mod Open World Paper Mario Randomizer d'icebound777 et clover. Le générateur de seeds, en Python, a son premier commit en avril 2021.",
+        "en": "Pronyo starts the randomizer's web app on May 21, 2020, for icebound777 and clover's Open World Paper Mario Randomizer mod. The Python seed generator has its first commit in April 2021."
+      }
+    },
+    {
+      "date": "2022-2023",
+      "title": { "fr": "Premières courses", "en": "First races" },
+      "text": {
+        "fr": "Les premières courses recensées sur ce site ont lieu le 20 mars 2022 sur racetime.gg, puis passent de 61 en 2022 à 253 en 2023.",
+        "en": "The first races listed on this site take place on March 20, 2022 on racetime.gg, then grow from 61 in 2022 to 253 in 2023."
+      }
+    },
+    {
+      "date": "2025",
+      "title": { "fr": "Blitz à PAX West", "en": "Blitz at PAX West" },
+      "text": {
+        "fr": "Le Speedrun Stage de PAX West 2025 accueille une partie du randomizer en format Blitz. Le jeu est aussi jouable en multiworld grâce à une adaptation pour Archipelago.",
+        "en": "The PAX West 2025 Speedrun Stage hosts a randomizer run in Blitz format. The game can also be played in multiworld thanks to an Archipelago adaptation."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "icebound777/PMR-SeedGenerator (GitHub)", "url": "https://github.com/icebound777/PMR-SeedGenerator" },
+    { "label": "Pronyo-Chan/paper-mario-randomizer-web-app (GitHub)", "url": "https://github.com/Pronyo-Chan/paper-mario-randomizer-web-app" },
+    { "label": "Paper Mario Randomizer", "url": "https://pm64randomizer.com/" },
+    { "label": "JKBSunshine/PMR_APWorld (GitHub)", "url": "https://github.com/JKBSunshine/PMR_APWorld" },
+    { "label": "racetime.gg — PM64R", "url": "https://racetime.gg/pm64r" }
+  ]
+}

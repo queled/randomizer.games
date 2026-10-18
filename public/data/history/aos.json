@@ -1,0 +1,56 @@
+{
+  "intro": {
+    "fr": "Castlevania: Aria of Sorrow se prête bien au mélange : ses âmes et ses objets ouvrent la voie dans le château. D'abord randomisé par abyssonym en 2017, il a connu plusieurs générations d'outils, jusqu'à l'Aria of Sorrow Randomizer 2 utilisé aujourd'hui en tournoi.",
+    "en": "Castlevania: Aria of Sorrow lends itself to shuffling: its souls and items open the way through the castle. First randomized by abyssonym in 2017, it has gone through several generations of tools, up to the Aria of Sorrow Randomizer 2 used in tournaments today."
+  },
+  "events": [
+    {
+      "date": "2003",
+      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "text": {
+        "fr": "Konami sort Castlevania: Aria of Sorrow sur Game Boy Advance en 2003.",
+        "en": "Konami releases Castlevania: Aria of Sorrow on the Game Boy Advance in 2003."
+      }
+    },
+    {
+      "date": "2017-2018",
+      "title": { "fr": "L'Item Randomizer d'abyssonym", "en": "abyssonym's Item Randomizer" },
+      "text": {
+        "fr": "abyssonym lance son Item Randomizer en mars 2017, « dans la même veine que les randomizers d'objets de Link to the Past et de Super Metroid », avec un mode Chaos plus difficile et des seeds personnalisées. La version 9 date du 8 mai 2018, et les premières courses recensées sur ce site, sur SpeedRunsLive, en novembre 2018.",
+        "en": "abyssonym starts his Item Randomizer in March 2017, \"in the same vein as the LttP and Super Metroid item randomizers\", with a harder Chaos mode and custom seeds. Version 9 dates from May 8, 2018, and the first races listed on this site, on SpeedRunsLive, from November 2018."
+      }
+    },
+    {
+      "date": "2020",
+      "title": { "fr": "Premier tournoi", "en": "First tournament" },
+      "text": {
+        "fr": "Les courses de 2020 portent la trace du « Aria of Sorrow Randomizer 2020 Spring Tournament ». L'objectif « Defeat Chaos » devient la norme.",
+        "en": "Races from 2020 bear the mark of the \"Aria of Sorrow Randomizer 2020 Spring Tournament\". The \"Defeat Chaos\" goal becomes the standard."
+      }
+    },
+    {
+      "date": "2021",
+      "title": { "fr": "Réécritures et mélange des portes", "en": "Rewrites and door shuffle" },
+      "text": {
+        "fr": "EliteSoba réécrit un randomizer en JavaScript, inspiré du projet d'abyssonym et des randomizers DSVania de LagoLunatic, avec pour nouveauté le mélange de toutes les portes du château. Les courses passent sur racetime.gg, avec 89 courses en 2021 puis 391 en 2022, un record.",
+        "en": "EliteSoba rewrites a randomizer in JavaScript, inspired by abyssonym's project and LagoLunatic's DSVania randomizers, whose new feature is shuffling every door in the castle. Races move to racetime.gg, with 89 races in 2021 then 391 in 2022, a record."
+      }
+    },
+    {
+      "date": "2026",
+      "title": { "fr": "Aria of Sorrow Randomizer 2 et SpeedGaming Live", "en": "Aria of Sorrow Randomizer 2 and SpeedGaming Live" },
+      "text": {
+        "fr": "L'Aria of Sorrow Randomizer 2 de Fuse se joue directement dans le navigateur. En juillet 2026, le randomizer a son tournoi à la SpeedGaming Live 2026 (11 joueurs).",
+        "en": "Fuse's Aria of Sorrow Randomizer 2 runs straight in the browser. In July 2026, the randomizer has its tournament at SpeedGaming Live 2026 (11 players)."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "abyssonym/aos_rando (GitHub)", "url": "https://github.com/abyssonym/aos_rando" },
+    { "label": "EliteSoba/AoSRando (GitHub)", "url": "https://github.com/EliteSoba/AoSRando" },
+    { "label": "Aria of Sorrow Randomizer 2", "url": "https://aosrando.surge.sh/" },
+    { "label": "Malaert64/AoSR2_SpoilerLogGenerator (GitHub)", "url": "https://github.com/Malaert64/AoSR2_SpoilerLogGenerator" },
+    { "label": "Challonge — SGL2026 Castlevania: Aria of Sorrow Randomizer Tournament", "url": "https://challonge.com/sgl26aosr" },
+    { "label": "racetime.gg — AoSR", "url": "https://racetime.gg/aosr" }
+  ]
+}

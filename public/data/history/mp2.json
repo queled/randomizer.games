@@ -1,0 +1,54 @@
+{
+  "intro": {
+    "fr": "Metroid Prime 2: Echoes est le jeu d'origine de Randovania : la plateforme, qui randomise aujourd'hui de nombreux jeux, est née en 2017 pour Echoes. Elle y mélange les objets, les connexions entre zones et propose le multiworld.",
+    "en": "Metroid Prime 2: Echoes is Randovania's original game: the platform, which now randomizes many games, was born in 2017 for Echoes. It shuffles items and area connections there, and offers multiworld."
+  },
+  "events": [
+    {
+      "date": "2004",
+      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "text": {
+        "fr": "Retro Studios et Nintendo sortent Metroid Prime 2: Echoes sur GameCube en 2004.",
+        "en": "Retro Studios and Nintendo release Metroid Prime 2: Echoes on the GameCube in 2004."
+      }
+    },
+    {
+      "date": "2017",
+      "title": { "fr": "Naissance de Randovania", "en": "Randovania is born" },
+      "text": {
+        "fr": "henriquegemignani crée Randovania le 7 septembre 2017. Ses premières versions, en octobre 2017, intègrent le Claris Randomizer pour Echoes. Il reste de loin le principal contributeur du projet.",
+        "en": "henriquegemignani creates Randovania on September 7, 2017. Its first releases, in October 2017, bundle the Claris Randomizer for Echoes. He remains by far the project's main contributor."
+      }
+    },
+    {
+      "date": "2019-2020",
+      "title": { "fr": "Premières courses et version 1.0", "en": "First races and version 1.0" },
+      "text": {
+        "fr": "Les premières courses recensées sur ce site datent de juin 2019, sur SpeedRunsLive. Randovania 1.0 sort le 9 février 2020, avec les préréglages et le mélange des ascenseurs. Le 15 novembre 2020, la version 2.0 introduit le multiworld, où chaque joueur a son monde rempli d'objets destinés aux autres.",
+        "en": "The first races listed on this site date from June 2019, on SpeedRunsLive. Randovania 1.0 comes out on February 9, 2020, with presets and elevator shuffle. On November 15, 2020, version 2.0 introduces multiworld, where each player's world is filled with items meant for others."
+      }
+    },
+    {
+      "date": "2021",
+      "title": { "fr": "Tournoi et record", "en": "Tournament and record" },
+      "text": {
+        "fr": "Un « MP2R Tournament » se dispute sur racetime.gg, et ce site recense 222 courses en 2021, un record. La même année, Randovania s'ouvre à Metroid Prime, puis à de plus en plus de jeux.",
+        "en": "An \"MP2R Tournament\" is played on racetime.gg, and this site counts 222 races in 2021, a record. The same year, Randovania opens up to Metroid Prime, then to more and more games."
+      }
+    },
+    {
+      "date": "2023",
+      "title": { "fr": "Multiworld à l'AGDQ", "en": "Multiworld at AGDQ" },
+      "text": {
+        "fr": "L'Awesome Games Done Quick 2023 accueille une partie en co-op multiworld réunissant Metroid Prime et Metroid Prime 2: Echoes. Randovania atteint sa version 11 en septembre 2026.",
+        "en": "Awesome Games Done Quick 2023 hosts a multiworld co-op run combining Metroid Prime and Metroid Prime 2: Echoes. Randovania reaches version 11 in September 2026."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "randovania/randovania (GitHub)", "url": "https://github.com/randovania/randovania" },
+    { "label": "Randovania — CHANGELOG", "url": "https://github.com/randovania/randovania/blob/main/CHANGELOG.md" },
+    { "label": "Randovania", "url": "https://randovania.org/" },
+    { "label": "racetime.gg — MP2R", "url": "https://racetime.gg/mp2r" }
+  ]
+}

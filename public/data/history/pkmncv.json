@@ -1,0 +1,119 @@
+{
+  "intro": {
+    "fr": "En course, Pokémon Crystal se joue surtout avec l'Item Randomizer d'ERC, qui mélange tous les objets et les badges du jeu, objets clés compris. Né en 2018, il a été prolongé par la communauté, et le jeu a aussi ses randomizers de carte et son multiworld.",
+    "en": "In races, Pokémon Crystal is mostly played with ERC's Item Randomizer, which shuffles every item and badge in the game, key items included. Born in 2018, it has been carried on by the community, and the game also has map randomizers and multiworld."
+  },
+  "events": [
+    {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Pokémon Version Cristal sort sur Game Boy Color au Japon en décembre 2000, puis en 2001 en Amérique du Nord et en Europe.",
+        "en": "Pokémon Crystal comes out on the Game Boy Color in Japan in December 2000, then in 2001 in North America and Europe."
+      }
+    },
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Randofuser, des Pokémon fusionnés",
+        "en": "Randofuser, fused Pokémon"
+      },
+      "text": {
+        "fr": "xCrystal publie la version 1.0 de Crystal Randofuser le 16 novembre 2016, puis la 2.0 en avril 2017 : un randomizer qui fusionne chaque Pokémon avec un autre de même stade d'évolution, en combinant leurs attaques et leurs statistiques. Le projet a depuis été remplacé par une version intégrée au désassemblage pokecrystal.",
+        "en": "xCrystal releases version 1.0 of Crystal Randofuser on November 16, 2016, then 2.0 in April 2017: a randomizer that fuses each Pokémon with another of the same evolution stage, combining their moves and stats. The project has since been replaced by a version built into the pokecrystal disassembly."
+      }
+    },
+    {
+      "date": "2018",
+      "title": {
+        "fr": "L'Item Randomizer d'ERC",
+        "en": "ERC's Item Randomizer"
+      },
+      "text": {
+        "fr": "ERC (erudnick-cohen) commence le Pokémon Crystal Item Randomizer le 21 janvier 2018. Conçu pour le mod « speedchoice » de Pokémon Crystal, il mélange l'emplacement de tous les objets et des badges (CT, CS, objets clés…), avec plusieurs modes : Key Items, Standard, Johto… Pour mélanger aussi les Pokémon, on passe d'abord la ROM dans une version compatible de l'Universal Pokémon Randomizer. ERC reste de loin le principal auteur du projet.",
+        "en": "ERC (erudnick-cohen) starts the Pokémon Crystal Item Randomizer on January 21, 2018. Built for the \"speedchoice\" mod of Pokémon Crystal, it shuffles the locations of every item and badge (TMs, HMs, key items…), with several modes: Key Items, Standard, Johto… To shuffle Pokémon too, the ROM first goes through a compatible version of the Universal Pokémon Randomizer. ERC remains by far the project's main author."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Version 1.0 et premières courses",
+        "en": "Version 1.0 and first races"
+      },
+      "text": {
+        "fr": "La version 1.0 sort le 15 mars 2020, suivie des versions 2.0 (juin) et 3.0 (septembre). Les premières courses recensées sur ce site ont lieu le 31 mai 2020 sur racetime.gg, en « Key Item Randomizer », puis en « Full Item Randomizer », qui mélange aussi les objets visibles et ceux donnés par les personnages.",
+        "en": "Version 1.0 comes out on March 15, 2020, followed by versions 2.0 (June) and 3.0 (September). The first races listed on this site take place on May 31, 2020 on racetime.gg, as \"Key Item Randomizer\", then as \"Full Item Randomizer\", which also shuffles visible items and items given by characters."
+      }
+    },
+    {
+      "date": "2021-2022",
+      "title": {
+        "fr": "Versions 4 à 6, et la suite par choatix",
+        "en": "Versions 4 to 6, and choatix carries on"
+      },
+      "text": {
+        "fr": "La version 4.0 sort en février 2021 et la 6.0 en janvier 2022. Un fork de choatix poursuit ensuite le développement, jusqu'à la version 8.1.4 en avril 2024. Un randomizer de carte, d'iFatRain, apparaît aussi en 2022.",
+        "en": "Version 4.0 comes out in February 2021 and 6.0 in January 2022. A fork by choatix then carries development on, up to version 8.1.4 in April 2024. A map randomizer by iFatRain also appears in 2022."
+      }
+    },
+    {
+      "date": "2023-2024",
+      "title": {
+        "fr": "L'explosion des courses",
+        "en": "Races explode"
+      },
+      "text": {
+        "fr": "Les courses recensées sur ce site passent de 101 en 2022 à 649 en 2023, puis 773 en 2024, un record, presque toutes en Full Item Randomizer.",
+        "en": "Races listed on this site go from 101 in 2022 to 649 in 2023, then 773 in 2024, a record, nearly all of them Full Item Randomizer."
+      }
+    },
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "Pokémon Crystal est aussi jouable en multiworld grâce à une adaptation d'Archipelago développée par gerbiljames.",
+        "en": "Pokémon Crystal can also be played in multiworld thanks to an Archipelago adaptation developed by gerbiljames."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "erudnick-cohen/Pokemon-Crystal-Item-Randomizer (GitHub)",
+      "url": "https://github.com/erudnick-cohen/Pokemon-Crystal-Item-Randomizer"
+    },
+    {
+      "label": "choatix/Pokemon-Crystal-Item-Randomizer (GitHub)",
+      "url": "https://github.com/choatix/Pokemon-Crystal-Item-Randomizer"
+    },
+    {
+      "label": "PokéCommunity — Pokemon Crystal Item Randomizer",
+      "url": "https://www.pokecommunity.com/threads/pokemon-crystal-item-randomizer.409135/"
+    },
+    {
+      "label": "vicendithas — EmoTracker pack",
+      "url": "https://github.com/vicendithas/pokemon-crystal-randomizer-tracker"
+    },
+    {
+      "label": "xCrystal/crystal-randofuser (GitHub)",
+      "url": "https://github.com/xCrystal/crystal-randofuser"
+    },
+    {
+      "label": "iFatRain/pokemon-crystal-map-randomizer (GitHub)",
+      "url": "https://github.com/iFatRain/pokemon-crystal-map-randomizer"
+    },
+    {
+      "label": "gerbiljames/Archipelago-Crystal (GitHub)",
+      "url": "https://github.com/gerbiljames/Archipelago-Crystal"
+    },
+    {
+      "label": "racetime.gg — Pokémon Crystal",
+      "url": "https://racetime.gg/pkmncrystal"
+    }
+  ]
+}

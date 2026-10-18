@@ -1,0 +1,55 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Metroid Prime mélange les 100 objets du jeu, avec une logique qui garantit que chaque seed peut être terminée. Né en 2017 autour du patcher randomprime, il vit aujourd'hui dans Randovania, une plateforme multi-jeux qui permet aussi le multiworld.",
+    "en": "The Metroid Prime Randomizer shuffles the game's 100 items, with logic that ensures every seed can be completed. Born in 2017 around the randomprime patcher, it now lives in Randovania, a multi-game platform that also enables multiworld."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": { "fr": "Le jeu d'origine", "en": "The original game" },
+      "text": {
+        "fr": "Retro Studios et Nintendo sortent Metroid Prime sur GameCube en 2002.",
+        "en": "Retro Studios and Nintendo release Metroid Prime on the GameCube in 2002."
+      }
+    },
+    {
+      "date": "2017",
+      "title": { "fr": "randomprime et le randomizer de BashPrime", "en": "randomprime and BashPrime's randomizer" },
+      "text": {
+        "fr": "aprilwade publie randomprime le 2 mai 2017 : un patcher qui modifie l'ISO du jeu pour placer les objets selon une disposition donnée. En août 2017, BashPrime démarre le Metroid Prime Randomizer, une application qui s'appuie sur randomprime pour générer des seeds complètes.",
+        "en": "aprilwade releases randomprime on May 2, 2017: a patcher that modifies the game's ISO to place items according to a given layout. In August 2017, BashPrime starts the Metroid Prime Randomizer, an application built on randomprime to generate complete seeds."
+      }
+    },
+    {
+      "date": "2018-2020",
+      "title": { "fr": "Versions 1.0 et 2.0", "en": "Versions 1.0 and 2.0" },
+      "text": {
+        "fr": "Le randomizer de BashPrime sort sa version 0.1 en juin 2018, la 1.0 le 20 mars 2019 et la 2.0 le 23 mars 2020. Les premières courses recensées sur ce site datent d'avril 2019, et un « MPR 2020 Tournament » se dispute en 2020.",
+        "en": "BashPrime's randomizer releases version 0.1 in June 2018, 1.0 on March 20, 2019 and 2.0 on March 23, 2020. The first races listed on this site date from April 2019, and an \"MPR 2020 Tournament\" is played in 2020."
+      }
+    },
+    {
+      "date": "2021",
+      "title": { "fr": "Le passage à Randovania", "en": "The move to Randovania" },
+      "text": {
+        "fr": "La version 3.0 de Randovania prend entièrement en charge Metroid Prime le 30 juillet 2021, multiworld et suivi automatique compris. Le 11 août 2021, BashPrime arrête le support de son application et redirige vers Randovania.",
+        "en": "Randovania version 3.0 fully supports Metroid Prime on July 30, 2021, multiworld and auto tracker included. On August 11, 2021, BashPrime ends support for his application and points to Randovania."
+      }
+    },
+    {
+      "date": "2023",
+      "title": { "fr": "Multiworld à l'AGDQ", "en": "Multiworld at AGDQ" },
+      "text": {
+        "fr": "L'Awesome Games Done Quick 2023 accueille une partie en co-op multiworld réunissant Metroid Prime et Metroid Prime 2: Echoes. Ce site recense entre 207 et 222 courses par an de 2023 à 2025.",
+        "en": "Awesome Games Done Quick 2023 hosts a multiworld co-op run combining Metroid Prime and Metroid Prime 2: Echoes. This site counts between 207 and 222 races a year from 2023 to 2025."
+      }
+    }
+  ],
+  "sources": [
+    { "label": "aprilwade/randomprime (GitHub)", "url": "https://github.com/aprilwade/randomprime" },
+    { "label": "BashPrime/metroid-prime-randomizer (GitHub)", "url": "https://github.com/BashPrime/metroid-prime-randomizer" },
+    { "label": "Randovania — CHANGELOG", "url": "https://github.com/randovania/randovania/blob/main/CHANGELOG.md" },
+    { "label": "Randovania", "url": "https://randovania.org/" },
+    { "label": "racetime.gg — MPR", "url": "https://racetime.gg/mpr" }
+  ]
+}

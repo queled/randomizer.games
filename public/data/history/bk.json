@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Le Banjo-Kazooie Randomizer de GiantJigglypuff est né de l'envie de donner à Banjo-Kazooie ce qu'Ocarina of Time et Super Mario 64 avaient déjà : un randomizer.",
+    "en": "GiantJigglypuff's Banjo-Kazooie Randomizer was born from the wish to give Banjo-Kazooie what Ocarina of Time and Super Mario 64 already had: a randomizer."
+  },
+  "events": [
+    {
+      "date": "1998",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Rare et Nintendo sortent Banjo-Kazooie sur Nintendo 64 en 1998.",
+        "en": "Rare and Nintendo release Banjo-Kazooie on the Nintendo 64 in 1998."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "GiantJigglypuff (CyrusKashef) commence le randomizer en mars 2021 et publie la version 1.0 le 7 juin 2021. Son auteur l'a presque entièrement codé, avec l'aide de la communauté de modding Banjo's Backpack pour le ROM hacking.",
+        "en": "GiantJigglypuff (CyrusKashef) starts the randomizer in March 2021 and releases version 1.0 on June 7, 2021. Its author coded almost all of it, with help from the Banjo's Backpack modding community for the ROM hacking."
+      }
+    },
+    {
+      "date": "2022-2023",
+      "title": {
+        "fr": "Version 2 et courses",
+        "en": "Version 2 and races"
+      },
+      "text": {
+        "fr": "Les versions 2.0 (mai 2022) et 2.1 (juin 2022) suivent. Les premières courses recensées sur ce site ont lieu en février 2023 sur racetime.gg.",
+        "en": "Versions 2.0 (May 2022) and 2.1 (June 2022) follow. The first races listed on this site take place in February 2023 on racetime.gg."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "CyrusKashef/BK_Randomizer (GitHub)",
+      "url": "https://github.com/CyrusKashef/BK_Randomizer"
+    },
+    {
+      "label": "racetime.gg — BKR",
+      "url": "https://racetime.gg/bkr"
+    }
+  ]
+}

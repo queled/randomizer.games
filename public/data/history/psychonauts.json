@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "PsychoRando, le randomizer de Psychonauts, est maintenu par Akashortstack et Mysteryem. Il s'appuie sur le chargeur de mods Astralathe et sur Archipelago.",
+    "en": "PsychoRando, the Psychonauts randomizer, is maintained by Akashortstack and Mysteryem. It relies on the Astralathe mod loader and on Archipelago."
+  },
+  "events": [
+    {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Double Fine sort Psychonauts en 2005.",
+        "en": "Double Fine releases Psychonauts in 2005."
+      }
+    },
+    {
+      "date": "2023",
+      "title": {
+        "fr": "PsychoRando",
+        "en": "PsychoRando"
+      },
+      "text": {
+        "fr": "Akashortstack commence PsychoRando en mai 2023 et publie une bêta en août, grâce à Astralathe, le chargeur de mods créé par Jill qui a rendu possible le modding du jeu. Mysteryem contribue largement au randomizer et au mod Archipelago. Les premières courses recensées sur ce site ont lieu le 14 décembre 2023, et la version 1.0 sort le 30 décembre.",
+        "en": "Akashortstack starts PsychoRando in May 2023 and releases a beta in August, thanks to Astralathe, the mod loader created by Jill that made modding the game possible. Mysteryem contributes heavily to the randomizer and the Archipelago mod. The first races listed on this site take place on December 14, 2023, and version 1.0 comes out on December 30."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Version 2.1",
+        "en": "Version 2.1"
+      },
+      "text": {
+        "fr": "La version 2.1 sort en août 2026.",
+        "en": "Version 2.1 comes out in August 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Akashortstack/PsychoRando (GitHub)",
+      "url": "https://github.com/Akashortstack/PsychoRando"
+    },
+    {
+      "label": "racetime.gg — Psychonauts Randomizer",
+      "url": "https://racetime.gg/psyrando"
+    }
+  ]
+}

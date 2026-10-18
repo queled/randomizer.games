@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Maelstrom est un randomizer pour la version PC de Final Fantasy VIII : boss, boutiques, capacités des G-Force, points de magie, cartes Triple Triad… avec un mode monde ouvert en préparation.",
+    "en": "Maelstrom is a randomizer for the PC version of Final Fantasy VIII: bosses, shops, GF abilities, draw points, Triple Triad cards… with an open-world mode in the works."
+  },
+  "events": [
+    {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square sort Final Fantasy VIII sur PlayStation en 1999, puis sur PC.",
+        "en": "Square releases Final Fantasy VIII on the PlayStation in 1999, then on PC."
+      }
+    },
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Maelstrom",
+        "en": "Maelstrom"
+      },
+      "text": {
+        "fr": "sleepeybunney commence Maelstrom en août 2019 et publie la version 0.1 le 8 septembre 2019. Il mélange l'emplacement des boss, les objets des boutiques, les capacités des G-Force, les sorts des points de magie et les cartes rares de Triple Triad, avec un fichier de spoilers.",
+        "en": "sleepeybunney starts Maelstrom in August 2019 and releases version 0.1 on September 8, 2019. It shuffles boss locations, shop items, GF abilities, draw point spells and rare Triple Triad cards, with a spoiler file."
+      }
+    },
+    {
+      "date": "2022-2023",
+      "title": {
+        "fr": "Courses et monde ouvert",
+        "en": "Races and open world"
+      },
+      "text": {
+        "fr": "Les premières courses recensées sur ce site ont lieu en janvier 2022 sur racetime.gg. La version 0.6.6 sort en mai 2023. Un mode « Free Roam », inspiré de Free Enterprise (FF4), en est encore au stade de pré-alpha : on y parcourt le monde librement dès le début.",
+        "en": "The first races listed on this site take place in January 2022 on racetime.gg. Version 0.6.6 comes out in May 2023. A \"Free Roam\" mode, inspired by Free Enterprise (FF4), is still in pre-alpha: you travel the world freely from the start."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "sleepeybunney/maelstrom (GitHub)",
+      "url": "https://github.com/sleepeybunney/maelstrom"
+    },
+    {
+      "label": "racetime.gg — FF8",
+      "url": "https://racetime.gg/ff8"
+    }
+  ]
+}

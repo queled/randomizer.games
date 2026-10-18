@@ -1,0 +1,59 @@
+{
+  "intro": {
+    "fr": "Randstalker, de Dinopony, randomise les objets de Landstalker sur Mega Drive et allège le jeu pour le format randomizer. Né en 2020, il est aussi jouable en multiworld.",
+    "en": "Dinopony's Randstalker randomizes Landstalker's items on the Mega Drive and streamlines the game for the randomizer format. Born in 2020, it can also be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "1992",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Climax Entertainment et Sega sortent Landstalker: The Treasures of King Nole sur Mega Drive en 1992.",
+        "en": "Climax Entertainment and Sega release Landstalker: The Treasures of King Nole on the Mega Drive in 1992."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Randstalker",
+        "en": "Randstalker"
+      },
+      "text": {
+        "fr": "Dinopony commence Randstalker le 18 janvier 2020 et publie une version 0.9c le lendemain. La partie démarre à un point aléatoire, l'introduction et la plupart des cinématiques sont retirées, et il faut réunir un nombre de joyaux choisi pour rejoindre Kazalt.",
+        "en": "Dinopony starts Randstalker on January 18, 2020 and releases a version 0.9c the next day. The game starts at a random spawn, the intro and most cutscenes are removed, and you need a chosen number of jewels to reach Kazalt."
+      }
+    },
+    {
+      "date": "2021-2023",
+      "title": {
+        "fr": "Courses et multiworld",
+        "en": "Races and multiworld"
+      },
+      "text": {
+        "fr": "Les premières courses recensées sur ce site ont lieu en mars 2021 sur racetime.gg, et 2022 en compte 24. Dinopony crée en 2021 des outils pour relier plusieurs joueurs sur BizHawk, puis en 2023 un client Archipelago. La version 1.8.1 sort en octobre 2023.",
+        "en": "The first races listed on this site take place in March 2021 on racetime.gg, and 2022 counts 24. In 2021 Dinopony creates tools to connect several players on BizHawk, then in 2023 an Archipelago client. Version 1.8.1 comes out in October 2023."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Dinopony/randstalker (GitHub)",
+      "url": "https://github.com/Dinopony/randstalker"
+    },
+    {
+      "label": "Dinopony/randstalker-archipelago (GitHub)",
+      "url": "https://github.com/Dinopony/randstalker-archipelago"
+    },
+    {
+      "label": "Randstalker",
+      "url": "https://randstalker.ovh/"
+    },
+    {
+      "label": "racetime.gg — Landstalker Randomizer",
+      "url": "https://racetime.gg/landstalker-rando"
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "intro": {
+    "fr": "Paper Mario: La Porte Millénaire a connu plusieurs randomizers : ceux de Zephiles, le Shufflizer et l'Infinite Pit de jdaster64, puis le randomizer en monde ouvert de jamesbrq, joué en course depuis 2025.",
+    "en": "Paper Mario: The Thousand-Year Door has had several randomizers: Zephiles's, jdaster64's Shufflizer and Infinite Pit, then jamesbrq's open-world randomizer, raced since 2025."
+  },
+  "events": [
+    {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Intelligent Systems et Nintendo sortent Paper Mario: La Porte Millénaire sur GameCube en 2004.",
+        "en": "Intelligent Systems and Nintendo release Paper Mario: The Thousand-Year Door on the GameCube in 2004."
+      }
+    },
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Shufflizer",
+        "en": "Shufflizer"
+      },
+      "text": {
+        "fr": "Zephiles propose des randomizers d'objets, de zones de chargement, de PV des ennemis et de butins, ainsi qu'un Pit Randomizer. S'appuyant sur les outils de PistonMiner et de Zephiles, jdaster64 publie le 5 octobre 2018 la version 1.0 du Shufflizer, qui mélange les objets ramassables et les boutiques selon une seed tirée du nom de la sauvegarde.",
+        "en": "Zephiles offers item, loading zone, enemy HP and item drop randomizers, as well as a Pit Randomizer. Building on PistonMiner's and Zephiles's tools, jdaster64 releases version 1.0 of the Shufflizer on October 5, 2018, which shuffles field items and shops based on a seed taken from the save file name."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Infinite Pit",
+        "en": "Infinite Pit"
+      },
+      "text": {
+        "fr": "Le 27 août 2020, jdaster64 publie la version 1.0 d'Infinite Pit, un mod roguelike de la Fosse aux 100 épreuves, inspiré du Pit Randomizer de Zephiles.",
+        "en": "On August 27, 2020, jdaster64 releases version 1.0 of Infinite Pit, a roguelike mod of the Pit of 100 Trials, inspired by Zephiles's Pit Randomizer."
+      }
+    },
+    {
+      "date": "2024-2025",
+      "title": {
+        "fr": "Le randomizer de jamesbrq",
+        "en": "jamesbrq's randomizer"
+      },
+      "text": {
+        "fr": "jamesbrq, déjà auteur du randomizer de Mario & Luigi: Superstar Saga, crée un randomizer en monde ouvert : objets clés, partenaires, badges et consommables peuvent se trouver n'importe où, et les chapitres se font dans le désordre, sans glitch requis. Une intégration Archipelago suit. Les premières courses recensées sur ce site ont lieu le 27 avril 2025 : 37 dans l'année.",
+        "en": "jamesbrq, already the author of the Mario & Luigi: Superstar Saga randomizer, creates an open-world randomizer: key items, partners, badges and consumables can be anywhere, and chapters can be done out of order, with no glitches required. An Archipelago integration follows. The first races listed on this site take place on April 27, 2025: 37 that year."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "TTYD Randomizer",
+      "url": "https://www.ttydrandomizer.com/"
+    },
+    {
+      "label": "jdaster64/shufflizer (GitHub)",
+      "url": "https://github.com/jdaster64/shufflizer"
+    },
+    {
+      "label": "jdaster64/ttyd-infinite-pit (GitHub)",
+      "url": "https://github.com/jdaster64/ttyd-infinite-pit"
+    },
+    {
+      "label": "speedrun.com — TTYD resources",
+      "url": "https://www.speedrun.com/ttyd/resources"
+    },
+    {
+      "label": "racetime.gg — TTYDR",
+      "url": "https://racetime.gg/ttydr"
+    }
+  ]
+}

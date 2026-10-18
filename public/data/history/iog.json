@@ -1,0 +1,55 @@
+{
+  "intro": {
+    "fr": "L'Illusion of Gaia Randomizer (IoGR) de DontBaguMe se génère dans le navigateur sur iogr.app. Lancé en 2019, il mélange les récompenses et ajoute des indices en jeu.",
+    "en": "DontBaguMe's Illusion of Gaia Randomizer (IoGR) is generated in the browser on iogr.app. Started in 2019, it shuffles rewards and adds in-game hints."
+  },
+  "events": [
+    {
+      "date": "1993-1994",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Quintet et Enix sortent Illusion of Gaia (Gaia Gensouki) sur Super Famicom au Japon en 1993, puis sur Super Nintendo en 1994.",
+        "en": "Quintet and Enix release Illusion of Gaia (Gaia Gensouki) on the Super Famicom in Japan in 1993, then on the Super Nintendo in 1994."
+      }
+    },
+    {
+      "date": "2019",
+      "title": {
+        "fr": "IoGR",
+        "en": "IoGR"
+      },
+      "text": {
+        "fr": "DontBaguMe commence le randomizer en mai 2019 et publie la version 1.0 le 13 juin 2019, avec un suivi EmoTracker. Raeven0 en devient l'un des principaux contributeurs.",
+        "en": "DontBaguMe starts the randomizer in May 2019 and releases version 1.0 on June 13, 2019, with an EmoTracker pack. Raeven0 becomes one of its main contributors."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Les courses",
+        "en": "Races"
+      },
+      "text": {
+        "fr": "Les premières courses recensées sur ce site ont lieu fin décembre 2020 sur racetime.gg, et 2021 en compte 16.",
+        "en": "The first races listed on this site take place in late December 2020 on racetime.gg, and 2021 counts 16."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "DontBaguMe/IoGR (GitHub)",
+      "url": "https://github.com/DontBaguMe/IoGR"
+    },
+    {
+      "label": "Illusion of Gaia Randomizer",
+      "url": "https://www.iogr.app"
+    },
+    {
+      "label": "racetime.gg — IoGR",
+      "url": "https://racetime.gg/iogr"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "intro": {
+    "fr": "Le Secret of Mana Randomizer de Mop existe depuis 2016. Il propose plusieurs modes, dont le monde ouvert, le plus populaire, qui donne vite le tambour de Flammie et disperse sorts, graines de mana et personnages.",
+    "en": "Mop's Secret of Mana Randomizer has existed since 2016. It offers several modes, including open world, the most popular, which grants the Flammie Drum early and scatters spells, mana seeds and characters."
+  },
+  "events": [
+    {
+      "date": "1993",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square sort Secret of Mana (Seiken Densetsu 2) sur Super Famicom au Japon en 1993, puis sur Super Nintendo.",
+        "en": "Square releases Secret of Mana (Seiken Densetsu 2) on the Super Famicom in Japan in 1993, then on the Super Nintendo."
+      }
+    },
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Les débuts",
+        "en": "The beginnings"
+      },
+      "text": {
+        "fr": "Mop tient le blog du randomizer depuis décembre 2016, avec un premier stream de test le 14 décembre et la version 0.20 le 16 décembre. Les premiers modes s'appellent Ancient Cave (cartes générées), Boss Rush et Chaos.",
+        "en": "Mop has kept the randomizer's blog since December 2016, with a first test stream on December 14 and version 0.20 on December 16. The early modes are called Ancient Cave (generated maps), Boss Rush and Chaos."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Un suivi pour le monde ouvert",
+        "en": "A tracker for open world"
+      },
+      "text": {
+        "fr": "En février 2020, Cyb3RGER publie un pack de suivi pour le mode Open World, aujourd'hui le plus populaire du randomizer.",
+        "en": "In February 2020, Cyb3RGER releases a tracker pack for the Open World mode, now the randomizer's most popular."
+      }
+    },
+    {
+      "date": "2024-2026",
+      "title": {
+        "fr": "Sur GitHub et racetime.gg",
+        "en": "On GitHub and racetime.gg"
+      },
+      "text": {
+        "fr": "Le code arrive sur GitHub en août 2024, à la version 1.37, avec des contributions de Cyb3RGER et black-sliver. Les premières courses recensées sur ce site ont lieu en mars 2024 sur racetime.gg, et la version 1.49 sort en février 2026.",
+        "en": "The code arrives on GitHub in August 2024, at version 1.37, with contributions from Cyb3RGER and black-sliver. The first races listed on this site take place in March 2024 on racetime.gg, and version 1.49 comes out in February 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Secret of Mana Randomizer — blog",
+      "url": "https://secretofmanaancientcave.blogspot.com/"
+    },
+    {
+      "label": "Moppu/SecretOfManaRandomizer (GitHub)",
+      "url": "https://github.com/Moppu/SecretOfManaRandomizer"
+    },
+    {
+      "label": "Cyb3RGER/SoM-Open-Mode-Tracker (GitHub)",
+      "url": "https://github.com/Cyb3RGER/SoM-Open-Mode-Tracker"
+    },
+    {
+      "label": "racetime.gg — SoMR",
+      "url": "https://racetime.gg/somr"
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "intro": {
+    "fr": "Le Super Mario Land 2 Randomizer de slashinfty, sorti en 2017, mélange l'emplacement des niveaux, les boss, les ennemis, les bonus et même la gravité ou la physique de Luigi.",
+    "en": "slashinfty's Super Mario Land 2 Randomizer, released in 2017, shuffles level locations, bosses, enemies, power-ups and even gravity or Luigi physics."
+  },
+  "events": [
+    {
+      "date": "1992",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Super Mario Land 2: 6 Golden Coins sur Game Boy en 1992.",
+        "en": "Nintendo releases Super Mario Land 2: 6 Golden Coins on the Game Boy in 1992."
+      }
+    },
+    {
+      "date": "2017-2018",
+      "title": {
+        "fr": "Le randomizer de slashinfty",
+        "en": "slashinfty's randomizer"
+      },
+      "text": {
+        "fr": "slashinfty publie le randomizer le 14 avril 2017, en Java (version 1.0.1 deux jours plus tard), puis le réécrit en JavaScript en 2018. Il propose de nombreux réglages : emplacement des niveaux et des boss, santé des boss, ennemis, bonus, gravité, défilement, physique de Luigi, musique…",
+        "en": "slashinfty releases the randomizer on April 14, 2017, in Java (version 1.0.1 two days later), then rewrites it in JavaScript in 2018. It offers many settings: level and boss locations, boss health, enemies, power-ups, gravity, scrolling, Luigi physics, music…"
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Premières courses",
+        "en": "First races"
+      },
+      "text": {
+        "fr": "Les premières courses recensées sur ce site ont lieu le 31 juillet 2020 sur racetime.gg : 25 dans l'année.",
+        "en": "The first races listed on this site take place on July 31, 2020 on racetime.gg: 25 that year."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Web et Archipelago",
+        "en": "Web and Archipelago"
+      },
+      "text": {
+        "fr": "Le randomizer se génère dans le navigateur sur sml2r.com, et le jeu est aussi pris en charge par Archipelago pour le multiworld. Ce site recense déjà 18 courses en 2026.",
+        "en": "The randomizer is generated in the browser on sml2r.com, and the game is also supported by Archipelago for multiworld. This site already counts 18 races in 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "slashinfty/sml2randomizer (GitHub)",
+      "url": "https://github.com/slashinfty/sml2randomizer"
+    },
+    {
+      "label": "SML2 Randomizer",
+      "url": "https://sml2r.com/"
+    },
+    {
+      "label": "Archipelago — Super Mario Land 2",
+      "url": "https://archipelago.gg/games/Super%20Mario%20Land%202/info/en"
+    },
+    {
+      "label": "racetime.gg — SML2",
+      "url": "https://racetime.gg/sml2"
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "intro": {
+    "fr": "Le Mario & Luigi: Superstar Saga Randomizer de jamesbrq mélange tous les objets du jeu, y compris objets clés, marteaux et capacités, et se joue aussi en multiworld.",
+    "en": "jamesbrq's Mario & Luigi: Superstar Saga Randomizer shuffles every item in the game, including key items, hammers and abilities, and can also be played in multiworld."
+  },
+  "events": [
+    {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "AlphaDream et Nintendo sortent Mario & Luigi: Superstar Saga sur Game Boy Advance en 2003.",
+        "en": "AlphaDream and Nintendo release Mario & Luigi: Superstar Saga on the Game Boy Advance in 2003."
+      }
+    },
+    {
+      "date": "2022-2023",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "jamesbrq commence le randomizer en septembre 2022 et publie la version 1.0 le 21 janvier 2023. Tous les objets sont mélangés, et les zones restent verrouillées jusqu'à l'objet qui les ouvre normalement. Les premières courses recensées sur ce site ont lieu fin décembre 2022.",
+        "en": "jamesbrq starts the randomizer in September 2022 and releases version 1.0 on January 21, 2023. Every item is shuffled, and areas stay locked until you find the item that normally opens them. The first races listed on this site take place in late December 2022."
+      }
+    },
+    {
+      "date": "2023-2025",
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "jamesbrq crée en septembre 2023 l'intégration Archipelago du randomizer. La version 1.10.3 sort en décembre 2025.",
+        "en": "In September 2023 jamesbrq creates the randomizer's Archipelago integration. Version 1.10.3 comes out in December 2025."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "jamesbrq/MLSSRandomizer (GitHub)",
+      "url": "https://github.com/jamesbrq/MLSSRandomizer"
+    },
+    {
+      "label": "jamesbrq/ArchipelagoMLSS (GitHub)",
+      "url": "https://github.com/jamesbrq/ArchipelagoMLSS"
+    },
+    {
+      "label": "Archipelago — Mario & Luigi Superstar Saga",
+      "url": "https://archipelago.gg/games/Mario%20&%20Luigi%20Superstar%20Saga/info/en"
+    },
+    {
+      "label": "racetime.gg — MLSSR",
+      "url": "https://racetime.gg/mlssr"
+    }
+  ]
+}

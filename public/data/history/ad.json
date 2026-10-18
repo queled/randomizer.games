@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "L'Azure Dreams (De-)Randomizer de pro_grammar remélange Azure Dreams, ou au contraire fixe ses étages aléatoires, directement dans le navigateur.",
+    "en": "pro_grammar's Azure Dreams (De-)Randomizer reshuffles Azure Dreams, or on the contrary fixes its random floors, straight in the browser."
+  },
+  "events": [
+    {
+      "date": "1997",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Azure Dreams sur PlayStation en 1997.",
+        "en": "Konami releases Azure Dreams on the PlayStation in 1997."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Le (De-)Randomizer",
+        "en": "The (De-)Randomizer"
+      },
+      "text": {
+        "fr": "pro_grammar propose sur adrando.com un « (De-)Randomizer » qui fonctionne dans le navigateur. Il peut randomiser les thèmes des étages, les œufs, les monstres ennemis, les objets de départ, les éléments des sorts, et proposer une tour à étages fixes (« dé-randomisée »), avec des options pour passer l'introduction et le tutoriel, ainsi que des palettes adaptées aux personnes daltoniennes.",
+        "en": "pro_grammar offers on adrando.com a \"(De-)Randomizer\" that runs in the browser. It can randomize floor themes, eggs, enemy monsters, starting items and spell elements, and offer a seeded tower (\"de-randomized\" floors), with options to skip the intro and tutorial, plus palettes suited to color-blind players."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Azure Dreams (De-)Randomizer",
+      "url": "https://adrando.com/"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "L'Azure Dreams (De-)Randomizer de pro_grammar remélange Azure Dreams (Game Boy Color), ou au contraire fixe ses étages aléatoires, directement dans le navigateur.",
+    "en": "pro_grammar's Azure Dreams (De-)Randomizer reshuffles Azure Dreams (Game Boy Color), or on the contrary fixes its random floors, straight in the browser."
+  },
+  "events": [
+    {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Azure Dreams sur Game Boy Color en 2000.",
+        "en": "Konami releases Azure Dreams on the Game Boy Color in 2000."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Le (De-)Randomizer",
+        "en": "The (De-)Randomizer"
+      },
+      "text": {
+        "fr": "pro_grammar propose sur adrando.com un « (De-)Randomizer » qui fonctionne dans le navigateur. Cette version cible la sortie américaine du jeu sur Game Boy Color, et propose elle aussi une tour à étages fixes (« dé-randomisée »).",
+        "en": "pro_grammar offers on adrando.com a \"(De-)Randomizer\" that runs in the browser. This version targets the US Game Boy Color release, and also offers a seeded tower (\"de-randomized\" floors)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Azure Dreams (De-)Randomizer",
+      "url": "https://adrando.com/gbc/"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Ape Escape se joue en multiworld : l'accès aux niveaux y dépend de clés de monde.",
+    "en": "Ape Escape can be played in multiworld: access to levels depends on World Keys."
+  },
+  "events": [
+    {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sony sort Ape Escape sur PlayStation en 1999.",
+        "en": "Sony releases Ape Escape on the PlayStation in 1999."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Ape Escape est jouable en multiworld avec le multiworld (multiworld.gg). L'accès aux niveaux y est déterminé par des « World Keys » placées dans le multiworld.",
+        "en": "Ape Escape can be played in multiworld with multiworld (multiworld.gg). Access to levels is determined by World Keys placed in the multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Ape Escape",
+      "url": "https://multiworld.gg/games/Ape%20Escape/info/en"
+    }
+  ]
+}

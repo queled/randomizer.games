@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "APQuest est un jeu original créé par NewSoupVi pour Archipelago.",
+    "en": "APQuest is an original game created by NewSoupVi for Archipelago."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Un jeu pensé pour Archipelago",
+        "en": "A game built for Archipelago"
+      },
+      "text": {
+        "fr": "APQuest est un jeu original créé entièrement par NewSoupVi : une courte aventure inspirée de l'ère 8 bits, avec des déplacements sur une grille, qui dure une vingtaine de secondes.",
+        "en": "APQuest is an original game made entirely by NewSoupVi: a short 8-bit-era inspired adventure with grid-like movement, about 20 seconds long."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — APQuest",
+      "url": "https://archipelago.gg/games/APQuest/info/en"
+    }
+  ]
+}

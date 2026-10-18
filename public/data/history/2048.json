@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "2048 se joue en multiworld, dans une version volontairement minimale du jeu.",
+    "en": "2048 can be played in multiworld, in a deliberately minimal version of the game."
+  },
+  "events": [
+    {
+      "date": "2014",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Gabriele Cirulli publie 2048 en 2014 : il faut fusionner des tuiles de même valeur jusqu'à obtenir 2048.",
+        "en": "Gabriele Cirulli publishes 2048 in 2014: you merge equal tiles until you get a 2048."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "2048 est jouable en multiworld avec le multiworld (multiworld.gg). L'interface proposée y est minimale : pas d'annulation, pas de graphismes élaborés ni de son.",
+        "en": "2048 can be played in multiworld with multiworld (multiworld.gg). The interface is minimal: no undo button, no fancy graphics, no sound."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — 2048",
+      "url": "https://multiworld.gg/games/2048/info/en"
+    }
+  ]
+}

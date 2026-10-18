@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Aquaria se joue en multiworld avec Archipelago, qui randomise ses bulbes chantants, urnes et autres emplacements.",
+    "en": "Aquaria can be played in multiworld with Archipelago, which randomizes its sing bulbs, urns and other locations."
+  },
+  "events": [
+    {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bit Blot sort Aquaria en 2007.",
+        "en": "Bit Blot releases Aquaria in 2007."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Aquaria est jouable en multiworld avec Archipelago. Les emplacements randomisés comprennent notamment tous les bulbes chantants et les urnes de Mithalas.",
+        "en": "Aquaria can be played in multiworld with Archipelago. Randomized locations include all sing bulbs and Mithalas urns, among others."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Aquaria",
+      "url": "https://archipelago.gg/games/Aquaria/info/en"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "A Hat in Time se joue en multiworld avec Archipelago, avec des objets déplacés et des coûts de chapitres randomisés.",
+    "en": "A Hat in Time can be played in multiworld with Archipelago, with moved items and randomized chapter costs."
+  },
+  "events": [
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Gears for Breakfast sort A Hat in Time en 2017.",
+        "en": "Gears for Breakfast releases A Hat in Time in 2017."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "A Hat in Time est jouable en multiworld avec Archipelago. Les objets que le joueur obtient normalement au fil du jeu sont déplacés, et le coût des chapitres est randomisé de façon progressive selon les options.",
+        "en": "A Hat in Time can be played in multiworld with Archipelago. Items the player would normally get through the game are moved around, and chapter costs are randomized in a progressive order based on the options."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — A Hat in Time",
+      "url": "https://archipelago.gg/games/A%20Hat%20in%20Time/info/en"
+    }
+  ]
+}

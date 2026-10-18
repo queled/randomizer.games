@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Adventure, l'un des premiers jeux à proposer un placement aléatoire des objets, se joue aujourd'hui en multiworld avec Archipelago.",
+    "en": "Adventure, one of the first games to offer random item placement, is now played in multiworld with Archipelago."
+  },
+  "events": [
+    {
+      "date": "1979",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Warren Robinett et Atari sortent Adventure sur Atari 2600 en 1979. Son troisième niveau de jeu place déjà les objets au hasard.",
+        "en": "Warren Robinett and Atari release Adventure on the Atari 2600 in 1979. Its third game level already places items at random."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Adventure est jouable en multiworld avec Archipelago. Les objets peuvent s'y retrouver à des emplacements impossibles dans le randomizer d'origine du jeu, et tous rejoignent le pool d'objets du multiworld.",
+        "en": "Adventure can be played in multiworld with Archipelago. Items can end up in locations not possible in the game's own randomizer, and all of them join the multiworld item pool."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Adventure",
+      "url": "https://archipelago.gg/games/Adventure/info/en"
+    }
+  ]
+}

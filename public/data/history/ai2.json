@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer d'Adventure Island II de Micheil Skeens fait partie d'une longue série de randomizers NES et Super Nintendo du même auteur.",
+    "en": "Micheil Skeens's Adventure Island II randomizer is part of a long series of NES and Super Nintendo randomizers by the same author."
+  },
+  "events": [
+    {
+      "date": "1991",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Hudson Soft sort Adventure Island II sur NES en 1991.",
+        "en": "Hudson Soft releases Adventure Island II on the NES in 1991."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Micheil Skeens publie le randomizer de la version américaine le 17 décembre 2020. Il est aussi l'auteur de randomizers pour Duck Tales, Clash at Demonhead, Ninja Gaiden, Monster Party, The Guardian Legend, Castlevania III, La Petite Sirène ou Milon's Secret Castle.",
+        "en": "Micheil Skeens releases the randomizer for the US version on December 17, 2020. He is also the author of randomizers for Duck Tales, Clash at Demonhead, Ninja Gaiden, Monster Party, The Guardian Legend, Castlevania III, The Little Mermaid or Milon's Secret Castle."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Micheil Skeens — Adventure Island II Randomizer",
+      "url": "https://micheilskeens.com/adventure-island-2-randomizer.php"
+    }
+  ]
+}

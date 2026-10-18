@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "Archipelaballs est un jeu jouable en multiworld, où les balles du joueur sont dispersées dans le multiworld.",
+    "en": "Archipelaballs is a game playable in multiworld, where the player's balls are scattered across the multiworld."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Dans Archipelaballs, les balles du joueur sont dispersées dans le multiworld.",
+        "en": "In Archipelaballs, the player's balls are scattered throughout the multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Archipelaballs",
+      "url": "https://multiworld.gg/games/Archipelaballs/info/en"
+    }
+  ]
+}

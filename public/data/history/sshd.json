@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Le Skyward Sword HD Randomizer (SSHDR) mélange tous les objets des coffres, des quêtes et du sol de la version Switch de Skyward Sword, avec une logique qui garantit des seeds finissables sans glitch.",
+    "en": "The Skyward Sword HD Randomizer (SSHDR) shuffles every item from chests, quests and loose pickups in the Switch version of Skyward Sword, with logic that ensures seeds are beatable without glitches."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort The Legend of Zelda: Skyward Sword HD sur Nintendo Switch en 2021, remaster du jeu Wii de 2011, qui avait déjà son propre randomizer.",
+        "en": "Nintendo releases The Legend of Zelda: Skyward Sword HD on the Nintendo Switch in 2021, a remaster of the 2011 Wii game, which already had its own randomizer."
+      }
+    },
+    {
+      "date": "2023-2024",
+      "title": {
+        "fr": "SSHDR",
+        "en": "SSHDR"
+      },
+      "text": {
+        "fr": "CovenEsme commence le randomizer le 6 août 2023, rejoint par gymnast86, les deux principaux contributeurs. La version 1.0 sort le 7 juin 2024, et les premières courses recensées sur ce site ont lieu deux jours plus tard sur racetime.gg.",
+        "en": "CovenEsme starts the randomizer on August 6, 2023, joined by gymnast86, the two main contributors. Version 1.0 comes out on June 7, 2024, and the first races listed on this site take place two days later on racetime.gg."
+      }
+    },
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Version 2.2",
+        "en": "Version 2.2"
+      },
+      "text": {
+        "fr": "La version 2.2 sort en septembre 2025.",
+        "en": "Version 2.2 comes out in September 2025."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "mint-choc-chip-skyblade/sshd-rando (GitHub)",
+      "url": "https://github.com/mint-choc-chip-skyblade/sshd-rando"
+    },
+    {
+      "label": "racetime.gg — SSHDR",
+      "url": "https://racetime.gg/sshdr"
+    }
+  ]
+}

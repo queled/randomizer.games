@@ -1,0 +1,65 @@
+{
+  "intro": {
+    "fr": "Dawn of Sorrow se randomise avec le DSVania Randomizer de LagoLunatic, qui couvre les trois Castlevania de la DS et peut aller jusqu'à générer de nouvelles cartes.",
+    "en": "Dawn of Sorrow is randomized with LagoLunatic's DSVania Randomizer, which covers all three DS Castlevanias and can even generate new maps."
+  },
+  "events": [
+    {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Castlevania: Dawn of Sorrow sur Nintendo DS en 2005.",
+        "en": "Konami releases Castlevania: Dawn of Sorrow on the Nintendo DS in 2005."
+      }
+    },
+    {
+      "date": "2017",
+      "title": {
+        "fr": "DSVania Randomizer",
+        "en": "DSVania Randomizer"
+      },
+      "text": {
+        "fr": "LagoLunatic sépare en avril 2017 le DSVania Randomizer de son éditeur DSVEdit, et publie la version 1.0 le 27 juin 2017. Il randomise les trois Castlevania de la DS (Dawn of Sorrow, Portrait of Ruin, Order of Ecclesia) : objets et compétences, ennemis et boss, âmes des boss, et peut même générer des cartes entièrement nouvelles. ",
+        "en": "LagoLunatic splits the DSVania Randomizer from the DSVEdit editor in April 2017, and releases version 1.0 on June 27, 2017. It randomizes the three DS Castlevanias (Dawn of Sorrow, Portrait of Ruin, Order of Ecclesia): items and skills, enemies and bosses, boss souls, and can even generate brand new maps. "
+      }
+    },
+    {
+      "date": "2022-2023",
+      "title": {
+        "fr": "Les courses",
+        "en": "Races"
+      },
+      "text": {
+        "fr": "Les premières courses recensées sur ce site ont lieu fin décembre 2022 sur racetime.gg, et 2023 en compte 12. La version 1.4.8 du randomizer sort en octobre 2024.",
+        "en": "The first races listed on this site take place in late December 2022 on racetime.gg, and 2023 counts 12. Randomizer version 1.4.8 comes out in October 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Dawn of Sorrow est aussi jouable en multiworld.",
+        "en": "Dawn of Sorrow can also be played in multiworld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "LagoLunatic/dsvrandom (GitHub)",
+      "url": "https://github.com/LagoLunatic/dsvrandom"
+    },
+    {
+      "label": "racetime.gg — DoSR",
+      "url": "https://racetime.gg/dosr"
+    }
+  ]
+}

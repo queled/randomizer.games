@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Portrait of Ruin se randomise avec le DSVania Randomizer de LagoLunatic, qui couvre les trois Castlevania de la DS et mélange même l'emplacement des tableaux.",
+    "en": "Portrait of Ruin is randomized with LagoLunatic's DSVania Randomizer, which covers all three DS Castlevanias and even shuffles where the portraits are."
+  },
+  "events": [
+    {
+      "date": "2006",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Castlevania: Portrait of Ruin sur Nintendo DS en 2006.",
+        "en": "Konami releases Castlevania: Portrait of Ruin on the Nintendo DS in 2006."
+      }
+    },
+    {
+      "date": "2017",
+      "title": {
+        "fr": "DSVania Randomizer",
+        "en": "DSVania Randomizer"
+      },
+      "text": {
+        "fr": "LagoLunatic sépare en avril 2017 le DSVania Randomizer de son éditeur DSVEdit, et publie la version 1.0 le 27 juin 2017. Il randomise les trois Castlevania de la DS (Dawn of Sorrow, Portrait of Ruin, Order of Ecclesia) : objets et compétences, ennemis et boss, âmes des boss, et peut même générer des cartes entièrement nouvelles. Dans Portrait of Ruin, il peut aussi mélanger l'emplacement des tableaux.",
+        "en": "LagoLunatic splits the DSVania Randomizer from the DSVEdit editor in April 2017, and releases version 1.0 on June 27, 2017. It randomizes the three DS Castlevanias (Dawn of Sorrow, Portrait of Ruin, Order of Ecclesia): items and skills, enemies and bosses, boss souls, and can even generate brand new maps. In Portrait of Ruin, it can also shuffle where the portraits are."
+      }
+    },
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Les courses",
+        "en": "Races"
+      },
+      "text": {
+        "fr": "Les premières courses recensées sur ce site ont lieu en juillet 2023 sur racetime.gg : 12 dans l'année.",
+        "en": "The first races listed on this site take place in July 2023 on racetime.gg: 12 that year."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "LagoLunatic/dsvrandom (GitHub)",
+      "url": "https://github.com/LagoLunatic/dsvrandom"
+    },
+    {
+      "label": "racetime.gg — PoRR",
+      "url": "https://racetime.gg/porr"
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "intro": {
+    "fr": "Le SotN Randomizer de Wild Mouse (3snow_p7im) mélange Castlevania: Symphony of the Night directement dans le navigateur, sur sotn.io. Autour de lui s'est construit tout un écosystème d'outils, et d'autres randomizers ont suivi.",
+    "en": "Wild Mouse's (3snow_p7im) SotN Randomizer shuffles Castlevania: Symphony of the Night straight in the browser, on sotn.io. A whole ecosystem of tools has grown around it, and other randomizers followed."
+  },
+  "events": [
+    {
+      "date": "1997",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Castlevania: Symphony of the Night sur PlayStation en 1997.",
+        "en": "Konami releases Castlevania: Symphony of the Night on the PlayStation in 1997."
+      }
+    },
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le SotN Randomizer",
+        "en": "The SotN Randomizer"
+      },
+      "text": {
+        "fr": "Wild Mouse (3snow_p7im) commence le SotN Randomizer le 1er avril 2019. Il fonctionne dans le navigateur sur sotn.io comme en ligne de commande, et reste aujourd'hui son principal auteur, devant eldri7ch2 et crazy4blades.",
+        "en": "Wild Mouse (3snow_p7im) starts the SotN Randomizer on April 1, 2019. It works in the browser on sotn.io as well as on the command line, and Wild Mouse remains its main author today, ahead of eldri7ch2 and crazy4blades."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "SotN Rando Tools",
+        "en": "SotN Rando Tools"
+      },
+      "text": {
+        "fr": "TalicZealot lance en mars 2021 les SotN Rando Tools, une suite d'outils pour enrichir l'expérience du randomizer, en version 1.0 dès juillet 2021.",
+        "en": "In March 2021 TalicZealot launches the SotN Rando Tools, a suite of tools to enhance the randomizer experience, reaching version 1.0 in July 2021."
+      }
+    },
+    {
+      "date": "2022-2023",
+      "title": {
+        "fr": "Area Rando et SGDQ",
+        "en": "Area Rando and SGDQ"
+      },
+      "text": {
+        "fr": "En novembre 2022, MottZilla publie un Area Randomizer qui mélange les portes entre les zones, et propose aussi des randomizers complets pour les versions Saturn et PSP. En 2023, le Summer Games Done Quick accueille une partie du randomizer en bonus, en Any% sans glitch, et ce site recense 11 courses dans l'année.",
+        "en": "In November 2022, MottZilla releases an Area Randomizer that shuffles the doors between areas, and also offers full randomizers for the Saturn and PSP versions. In 2023, Summer Games Done Quick hosts a bonus randomizer run, glitchless Any%, and this site counts 11 races that year."
+      }
+    },
+    {
+      "date": "2024-2025",
+      "title": {
+        "fr": "De nouvelles déclinaisons",
+        "en": "New variants"
+      },
+      "text": {
+        "fr": "MottZilla publie en 2024 un randomizer pour la version Xbox Live Arcade, puis en septembre 2025 un « Integrated Randomizer » pour la version PlayStation. La communauté tient un guide en plusieurs langues sur symphonyrando.fun.",
+        "en": "In 2024 MottZilla releases a randomizer for the Xbox Live Arcade version, then in September 2025 an \"Integrated Randomizer\" for the PlayStation version. The community maintains a multilingual guide on symphonyrando.fun."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "sotnrando/sotnrando (GitHub)",
+      "url": "https://github.com/sotnrando/sotnrando"
+    },
+    {
+      "label": "SotN Randomizer",
+      "url": "https://sotn.io/"
+    },
+    {
+      "label": "symphonyrando.fun",
+      "url": "https://www.symphonyrando.fun"
+    },
+    {
+      "label": "TalicZealot/SotnRandoTools (GitHub)",
+      "url": "https://github.com/TalicZealot/SotnRandoTools"
+    },
+    {
+      "label": "MottZilla/SOTN_AR (GitHub)",
+      "url": "https://github.com/MottZilla/SOTN_AR"
+    },
+    {
+      "label": "MottZilla/SOTN_XB_RANDO (GitHub)",
+      "url": "https://github.com/MottZilla/SOTN_XB_RANDO"
+    },
+    {
+      "label": "MottZilla/SotN_Integrated_Rando (GitHub)",
+      "url": "https://github.com/MottZilla/SotN_Integrated_Rando"
+    },
+    {
+      "label": "racetime.gg — SotNR",
+      "url": "https://racetime.gg/sotnr"
+    }
+  ]
+}

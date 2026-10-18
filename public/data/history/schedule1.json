@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Schedule I se joue en multiworld : missions, clients, revendeurs et fournisseurs deviennent des emplacements ou des objets.",
+    "en": "Schedule I can be played in multiworld: missions, customers, dealers and suppliers become checks or items."
+  },
+  "events": [
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "TVGS sort Schedule I en accès anticipé en 2025.",
+        "en": "TVGS releases Schedule I in early access in 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Schedule I est jouable en multiworld avec le multiworld (multiworld.gg). Toutes les missions envoient des emplacements ; clients, revendeurs et fournisseurs peuvent être débloqués par des objets reçus, et chaque action qui fait reculer l'influence du cartel est aussi un emplacement.",
+        "en": "Schedule I can be played in multiworld with multiworld (multiworld.gg). All missions send checks; customers, dealers and suppliers can be unlocked by received items, and every action that lowers cartel influence is a check too."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Schedule I",
+      "url": "https://multiworld.gg/games/Schedule%20I/info/en"
+    }
+  ]
+}

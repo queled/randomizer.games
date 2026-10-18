@@ -1,0 +1,29 @@
+{
+  "intro": {
+    "fr": "Cliffhanger Redux, romhack de Super Metroid, a son randomizer, réalisé par ironrusty.",
+    "en": "Cliffhanger Redux, a Super Metroid romhack, has its randomizer, made by ironrusty."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "En octobre 2023, ironrusty publie un randomizer de Cliffhanger Redux. Quelques modifications de la ROM permettent davantage de passages à rebours dans le Wrecked Ship, et le Morph Ball reste à sa place d'origine ou à une salle près. Ces randomizers de hacks cherchent à préserver au maximum le comportement d'origine de chaque hack, avec l'algorithme de remplissage de Subversion, de beauxq.",
+        "en": "In October 2023, ironrusty releases a Cliffhanger Redux randomizer. A few ROM edits allow more reverse traversals in the Wrecked Ship, and the Morph Ball stays at its original spot or one room away. These hack randomizers aim to preserve each hack's original behavior as much as possible, using beauxq's Subversion fill algorithm."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "randorandy — Cliffhanger Redux Rando",
+      "url": "https://randorandy.github.io/CliffhangerReduxRando/"
+    },
+    {
+      "label": "randorandy — Super Metroid hack randomizers",
+      "url": "https://randorandy.github.io/"
+    }
+  ]
+}

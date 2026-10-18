@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Le Super Mario Land 2 Randomizer (sml2r.com) peut aussi appliquer le patch DX en couleur.",
+    "en": "The Super Mario Land 2 Randomizer (sml2r.com) can also apply the colour DX patch."
+  },
+  "events": [
+    {
+      "date": "1992",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Super Mario Land 2: 6 Golden Coins sur Game Boy en 1992.",
+        "en": "Nintendo releases Super Mario Land 2: 6 Golden Coins on the Game Boy in 1992."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Le Super Mario Land 2 Randomizer, en ligne et au code source ouvert, randomise l'emplacement des niveaux et des boss, la santé des boss, les ennemis, les bonus, la gravité, la physique de glace ou de Luigi et la musique. Une option applique en même temps le patch DX.",
+        "en": "The Super Mario Land 2 Randomizer, online and open source, randomizes level and boss locations, boss health, enemies, power-ups, gravity, ice or Luigi physics and music. An option also applies the DX patch."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "SML2 Randomizer",
+      "url": "https://sml2r.com/"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Un randomizer web existe pour Shadow Tower, avec des préréglages et plusieurs niveaux de difficulté.",
+    "en": "A web randomizer exists for Shadow Tower, with presets and several difficulty levels."
+  },
+  "events": [
+    {
+      "date": "1998",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "FromSoftware sort Shadow Tower sur PlayStation en 1998.",
+        "en": "FromSoftware releases Shadow Tower on the PlayStation in 1998."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Shadow Tower Randomizer",
+        "en": "Shadow Tower Randomizer"
+      },
+      "text": {
+        "fr": "Le Shadow Tower Randomizer, en ligne, génère une ISO randomisée à partir de celle du joueur, avec des difficultés allant de « Extremely Easy » à « Even harder » et des préréglages (Any%, 100 %, « Scary Game », « Comedy Bonanza »…).",
+        "en": "The online Shadow Tower Randomizer generates a randomized ISO from the player's own, with difficulties from \"Extremely Easy\" to \"Even harder\" and presets (Any%, 100%, \"Scary Game\", \"Comedy Bonanza\"…)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Shadow Tower Randomizer",
+      "url": "https://shadow-tower-randomizer-1023048112324.us-central1.run.app/"
+    }
+  ]
+}

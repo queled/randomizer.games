@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Shivers se joue en multiworld avec Archipelago : morceaux de pots Ixupi et clés du musée sont mélangés.",
+    "en": "Shivers can be played in multiworld with Archipelago: Ixupi pot pieces and museum keys are shuffled."
+  },
+  "events": [
+    {
+      "date": "1995",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sierra On-Line sort Shivers en 1995.",
+        "en": "Sierra On-Line releases Shivers in 1995."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Shivers est jouable en multiworld avec Archipelago. Tous les morceaux de pots Ixupi sont randomisés, et des clés ajoutées verrouillent les salles du musée ; il faut aussi débloquer le fait de ramper. Énigmes résolues et Ixupi capturés sont des emplacements.",
+        "en": "Shivers can be played in multiworld with Archipelago. All Ixupi pot pieces are randomized, and added keys lock the museum's rooms; crawling must also be unlocked. Solved puzzles and captured Ixupi are checks."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — Shivers",
+      "url": "https://archipelago.gg/games/Shivers/info/en"
+    }
+  ]
+}

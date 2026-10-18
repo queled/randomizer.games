@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Sonic & Knuckles Collection Randomizer de MainMemory mélange l'ordre des niveaux, les Special Stages, les musiques et les moniteurs.",
+    "en": "MainMemory's Sonic & Knuckles Collection Randomizer shuffles level order, Special Stages, music and monitors."
+  },
+  "events": [
+    {
+      "date": "1997",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sega sort Sonic & Knuckles Collection sur PC en 1997.",
+        "en": "Sega releases Sonic & Knuckles Collection on PC in 1997."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Au Sonic Hacking Contest",
+        "en": "At the Sonic Hacking Contest"
+      },
+      "text": {
+        "fr": "MainMemory présente son randomizer à l'Expo du Sonic Hacking Contest 2022. Il randomise l'ordre des niveaux, les Special Stages, la musique, les moniteurs et les effets sonores, avec un pack optionnel de musiques d'autres jeux Sonic.",
+        "en": "MainMemory presents the randomizer at the Sonic Hacking Contest 2022 Expo. It randomizes level order, Special Stages, music, monitors and sound effects, with an optional music pack from other Sonic games."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Sonic Hacking Contest 2022 — Sonic & Knuckles Collection Randomizer",
+      "url": "https://shc.zone/entries/expo2022/682"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "shapez se joue en multiworld avec Archipelago : bâtiments et mécaniques ne se débloquent plus en finissant les niveaux.",
+    "en": "shapez can be played in multiworld with Archipelago: buildings and mechanics are no longer unlocked by completing levels."
+  },
+  "events": [
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "tobspr Games sort shapez en 2020.",
+        "en": "tobspr Games releases shapez in 2020."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "shapez est jouable en multiworld avec Archipelago. Les bâtiments et mécaniques, normalement débloqués niveau après niveau, ainsi que les améliorations, deviennent des objets ; terminer les niveaux et acheter des améliorations envoie des emplacements.",
+        "en": "shapez can be played in multiworld with Archipelago. Buildings and mechanics, normally unlocked level by level, and upgrades become items; completing levels and buying upgrades sends checks."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archipelago — shapez",
+      "url": "https://archipelago.gg/games/shapez/info/en"
+    }
+  ]
+}

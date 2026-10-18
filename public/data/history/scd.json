@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Sonic CD, par MainMemory, mélange l'ordre des 70 niveaux du jeu, voyages dans le temps compris.",
+    "en": "MainMemory's Sonic CD randomizer shuffles the order of the game's 70 stages, time travel included."
+  },
+  "events": [
+    {
+      "date": "1993",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sega sort Sonic CD sur Mega-CD en 1993 ; la version remasterisée de Christian Whitehead sort en 2011.",
+        "en": "Sega releases Sonic CD on the Mega-CD in 1993; Christian Whitehead's remastered version comes out in 2011."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le randomizer de MainMemory",
+        "en": "MainMemory's randomizer"
+      },
+      "text": {
+        "fr": "Le 3 janvier 2022, MainMemory publie sur GameBanana un randomizer pour la version de 2011 : il peut mélanger les 70 niveaux (en comptant les différentes époques) en un chemin principal, avec ou sans voyages dans le temps, et randomise d'autres éléments du jeu.",
+        "en": "On January 3, 2022, MainMemory releases on GameBanana a randomizer for the 2011 version: it can shuffle all 70 stages (counting the different time periods) into a main path, with or without time travel, and randomizes other parts of the game."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GameBanana — Sonic CD Randomizer",
+      "url": "https://gamebanana.com/mods/347942"
+    }
+  ]
+}

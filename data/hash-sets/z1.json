@@ -1,10 +1,36 @@
 {
-  "game": "Zelda 1 Randomizer: race-info spellings of hash icons; Beams (also called Wifi) is the Beam emote",
+  "game": "Zelda 1 Randomizer: race-info spellings of hash icons; Beams (also called Wifi) is the Beam emote. Candle, Ring, Potion, Sword and Map alone name several icons (or none): they show as text",
   "sizes": [
     4
   ],
   "aliases": {
     "Beams": "Beam",
-    "Wifi": "Beam"
+    "Wifi": "Beam",
+    "Boomer": "Boomerang",
+    "Wood Boomerang": "Boomerang",
+    "Magical Sword": "MagicSword",
+    "Magic Key": "MagicKey",
+    "SmallHeart": "Heart",
+    "Small Heart": "Heart",
+    "Little Heart": "Heart",
+    "HC": "HeartContainer",
+    "BigHeart": "HeartContainer",
+    "Heart Container": "HeartContainer",
+    "Rupy": "Rupee",
+    "Bracelet": "PowerBracelet",
+    "Blue Candle": "BlueCandle",
+    "Red Candle": "RedCandle",
+    "Blue Ring": "BlueRing",
+    "Red Ring": "RedRing",
+    "Blue Potion": "BluePotion",
+    "Red Potion": "RedPotion",
+    "White Sword": "WhiteSword"
+  },
+  "words": {
+    "Candle": null,
+    "Ring": null,
+    "Potion": null,
+    "Sword": null,
+    "Map": null
   }
 }

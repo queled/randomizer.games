@@ -52,7 +52,7 @@ const ALTTPR_ALIASES = {
   'Moon Pearl': 'HashMoonPearl', MoonPearl: 'HashMoonPearl', Pearl: 'HashMoonPearl',
   'Bug Net': 'HashBugnet', BugNet: 'HashBugnet',
   Cane: 'HashSomaria', Ocarina: 'HashFlute', Glove: 'HashGloves', Bomb: 'HashBombs',
-  Shroom: 'HashMushroom', BK: 'HashBigKey',
+  Shroom: 'HashMushroom', BK: 'HashBigKey', Net: 'HashBugnet', Rod: 'HashIceRod',
   // French community races
   Livre: 'HashBook', Poudre: 'HashMagicPowder', 'Bouteille vide': 'HashEmptyBottle',
   Bouteille: 'HashEmptyBottle', Flacon: 'HashEmptyBottle', 'Pendentif vert': 'HashPendant',
@@ -70,7 +70,16 @@ const ALIASES = {
   oot: {
     'Megaton Hammer': 'HashHammer', 'Silver Gauntlets': 'HashSilvers', 'Heart Container': 'HashHeart',
     Stick: 'HashDekuStick', Nut: 'HashDekuNut', Agony: 'HashStoneOfAgony', Ocarina: 'HashFairyOcarina',
-    Lens: 'HashLensOfTruth', Chu: 'HashBombchu', Skull: 'HashSkullToken'
+    Lens: 'HashLensOfTruth', Chu: 'HashBombchu', Skull: 'HashSkullToken',
+    // Players' names for them in race infos
+    Bean: 'HashBeans', 'Magic Bean': 'HashBeans', Tunic: 'HashKokiriTunic', Fish: 'HashBottledFish', 'Fish Bottle': 'HashBottledFish',
+    Milk: 'HashBottledMilk', 'Milk Bottle': 'HashBottledMilk', 'Double Magic': 'HashBigMagic', Hovers: 'HashHoverBoots',
+    "Poacher's Saw": 'HashSaw', 'Poachers Saw': 'HashSaw', Rang: 'HashBoomerang', Shroom: 'HashMushroom', 'Odd Mushroom': 'HashMushroom',
+    BK: 'HashBossKey', 'Gold Skull': 'HashSkullToken', 'Gold Skulltula': 'HashSkullToken', GS: 'HashSkullToken', Token: 'HashSkullToken',
+    LS: 'HashLongshot', Speedfrog: 'HashFrog', 'Eyeball Frog': 'HashFrog', Mirror: 'HashMirrorShield', STR2: 'HashSilvers', 'Str 2': 'HashSilvers',
+    'Silver Gauntlet': 'HashSilvers', Compas: 'HashCompass', Comp: 'HashCompass', Bomchu: 'HashBombchu', 'Fairy Bow': 'HashBow',
+    MoT: 'HashMaskOfTruth', Sling: 'HashSlingshot', MS: 'HashMasterSword', Sword: 'HashMasterSword',
+    'Long Shot': 'HashLongshot', 'Skulltula Token': 'HashSkullToken', Skulltula: 'HashSkullToken', 'Big Key': 'HashBossKey', BigKey: 'HashBossKey'
   },
   mm: {
     'Gold Dust Bottle': 'HashGoldDust', 'Hot Spring Water': 'HashHotWater', 'Ocarina of Time': 'HashOcarina',

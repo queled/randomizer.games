@@ -111,6 +111,8 @@
       "Bomb": "HashBombs",
       "Shroom": "HashMushroom",
       "BK": "HashBigKey",
+      "Net": "HashBugnet",
+      "Rod": "HashIceRod",
       "Livre": "HashBook",
       "Poudre": "HashMagicPowder",
       "Bouteille vide": "HashEmptyBottle",
@@ -281,6 +283,9 @@
       "Start": "Start.png",
       "ZButton": "ZButton.png"
     },
+    "words": [
+      "Coin"
+    ],
     "aliases": {
       "Sax": "Saxophone",
       "Nintendo Coin": "NintendoCoin",
@@ -2269,7 +2274,46 @@
       "Ocarina": "HashFairyOcarina",
       "Lens": "HashLensOfTruth",
       "Chu": "HashBombchu",
-      "Skull": "HashSkullToken"
+      "Skull": "HashSkullToken",
+      "Bean": "HashBeans",
+      "Magic Bean": "HashBeans",
+      "Tunic": "HashKokiriTunic",
+      "Fish": "HashBottledFish",
+      "Fish Bottle": "HashBottledFish",
+      "Milk": "HashBottledMilk",
+      "Milk Bottle": "HashBottledMilk",
+      "Double Magic": "HashBigMagic",
+      "Hovers": "HashHoverBoots",
+      "Poacher's Saw": "HashSaw",
+      "Poachers Saw": "HashSaw",
+      "Rang": "HashBoomerang",
+      "Shroom": "HashMushroom",
+      "Odd Mushroom": "HashMushroom",
+      "BK": "HashBossKey",
+      "Gold Skull": "HashSkullToken",
+      "Gold Skulltula": "HashSkullToken",
+      "GS": "HashSkullToken",
+      "Token": "HashSkullToken",
+      "LS": "HashLongshot",
+      "Speedfrog": "HashFrog",
+      "Eyeball Frog": "HashFrog",
+      "Mirror": "HashMirrorShield",
+      "STR2": "HashSilvers",
+      "Str 2": "HashSilvers",
+      "Silver Gauntlet": "HashSilvers",
+      "Compas": "HashCompass",
+      "Comp": "HashCompass",
+      "Bomchu": "HashBombchu",
+      "Fairy Bow": "HashBow",
+      "MoT": "HashMaskOfTruth",
+      "Sling": "HashSlingshot",
+      "MS": "HashMasterSword",
+      "Sword": "HashMasterSword",
+      "Long Shot": "HashLongshot",
+      "Skulltula Token": "HashSkullToken",
+      "Skulltula": "HashSkullToken",
+      "Big Key": "HashBossKey",
+      "BigKey": "HashBossKey"
     }
   },
   "oot3d": {
@@ -3786,6 +3830,13 @@
       "WoodenArrow": "WoodenArrow.png",
       "WoodenSword": "WoodenSword.png"
     },
+    "words": [
+      "Candle",
+      "Ring",
+      "Potion",
+      "Sword",
+      "Map"
+    ],
     "aliases": {
       "Meat": "Bait",
       "WoodSword": "WoodenSword",
@@ -3800,7 +3851,26 @@
       "Whistle": "Recorder",
       "Shield": "MagicShield",
       "Beams": "Beam",
-      "Wifi": "Beam"
+      "Wifi": "Beam",
+      "Boomer": "Boomerang",
+      "Wood Boomerang": "Boomerang",
+      "Magical Sword": "MagicSword",
+      "Magic Key": "MagicKey",
+      "SmallHeart": "Heart",
+      "Small Heart": "Heart",
+      "Little Heart": "Heart",
+      "HC": "HeartContainer",
+      "BigHeart": "HeartContainer",
+      "Heart Container": "HeartContainer",
+      "Rupy": "Rupee",
+      "Bracelet": "PowerBracelet",
+      "Blue Candle": "BlueCandle",
+      "Red Candle": "RedCandle",
+      "Blue Ring": "BlueRing",
+      "Red Ring": "RedRing",
+      "Blue Potion": "BluePotion",
+      "Red Potion": "RedPotion",
+      "White Sword": "WhiteSword"
     },
     "sizes": [
       4

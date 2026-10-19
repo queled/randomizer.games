@@ -51,12 +51,12 @@
     {
       "date": "2021-2022",
       "title": {
-        "fr": "Versions 4 à 6, et la suite par choatix",
-        "en": "Versions 4 to 6, and choatix carries on"
+        "fr": "Versions 4 à 6, la suite par choatix et de nouveaux randomizers",
+        "en": "Versions 4 to 6, choatix carries on, and new randomizers"
       },
       "text": {
-        "fr": "La version 4.0 sort en février 2021 et la 6.0 en janvier 2022. Un fork de choatix poursuit ensuite le développement, jusqu'à la version 8.1.4 en avril 2024. Un randomizer de carte, d'iFatRain, apparaît aussi en 2022.",
-        "en": "Version 4.0 comes out in February 2021 and 6.0 in January 2022. A fork by choatix then carries development on, up to version 8.1.4 in April 2024. A map randomizer by iFatRain also appears in 2022."
+        "fr": "La version 4.0 sort en février 2021 et la 6.0 en janvier 2022. Un fork de choatix poursuit ensuite le développement, jusqu'à la version 8.1.4 en avril 2024. Le Type Chart Randomizer de NPO-197 (2021) randomise la table des types, et un randomizer de carte, d'iFatRain, apparaît en 2022.",
+        "en": "Version 4.0 comes out in February 2021 and 6.0 in January 2022. A fork by choatix then carries development on, up to version 8.1.4 in April 2024. NPO-197's Type Chart Randomizer (2021) randomizes the type chart, and a map randomizer by iFatRain appears in 2022."
       }
     },
     {
@@ -102,6 +102,10 @@
     {
       "label": "xCrystal/crystal-randofuser (GitHub)",
       "url": "https://github.com/xCrystal/crystal-randofuser"
+    },
+    {
+      "label": "NPO-197/PokemonTypeChartRandomizer (GitHub)",
+      "url": "https://github.com/NPO-197/PokemonTypeChartRandomizer"
     },
     {
       "label": "iFatRain/pokemon-crystal-map-randomizer (GitHub)",

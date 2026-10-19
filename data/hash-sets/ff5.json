@@ -1,0 +1,45 @@
+{
+  "game": "Final Fantasy V Career Day: 5 item and magic type glyphs of the SNES font; images: FFV SNES menu icons (Final Fantasy Wiki). Knife, Staff, Gloves, Helmet, Robe, Key, Tent, Ring and Shuriken have no SNES icon online: they show as text",
+  "afterHash": true,
+  "minRun": 2,
+  "sizes": [
+    5
+  ],
+  "words": {
+    "Sword": "https://finalfantasy.fandom.com/wiki/File:FFV_SNES_Sword_Icon.png",
+    "Katana": "https://finalfantasy.fandom.com/wiki/File:FFV_SNES_Katana_Icon.png",
+    "Axe": "https://finalfantasy.fandom.com/wiki/File:FFV_SNES_Axe_Icon.png",
+    "Hammer": "https://finalfantasy.fandom.com/wiki/File:FFV_SNES_Hammer_Icon.png",
+    "Rod": "https://finalfantasy.fandom.com/wiki/File:FFV_SNES_Rod_Icon.png",
+    "Whip": "https://finalfantasy.fandom.com/wiki/File:FFV_SNES_Whip_Icon.png",
+    "Bow": "https://finalfantasy.fandom.com/wiki/File:FFV_SNES_Bow_Icon.png",
+    "Spear": "https://finalfantasy.fandom.com/wiki/File:FFV_SNES_Spear_Icon.png",
+    "Harp": "https://finalfantasy.fandom.com/wiki/File:FFV_SNES_Harp_Icon.png",
+    "Shield": "https://finalfantasy.fandom.com/wiki/File:FFV_SNES_Shield_Icon.png",
+    "Armor": "https://finalfantasy.fandom.com/wiki/File:FFV_SNES_Armor_Icon.png",
+    "Ribbon": "https://finalfantasy.fandom.com/wiki/File:FFV_SNES_Ribbon_Icon.png",
+    "White Magic": "https://finalfantasy.fandom.com/wiki/File:White-ffv-icon.png",
+    "Black Magic": "https://finalfantasy.fandom.com/wiki/File:Black-ffv-icon.png",
+    "Time Magic": "https://finalfantasy.fandom.com/wiki/File:Time-ffv-icon.png",
+    "Summon": "https://finalfantasy.fandom.com/wiki/File:Summon-ffv-icon.png",
+    "Song": "https://finalfantasy.fandom.com/wiki/File:Song-ffv-icon.png",
+    "Spellblade": "https://finalfantasy.fandom.com/wiki/File:SwordM-ffv-icon.png",
+    "Knife": null,
+    "Staff": null,
+    "Gloves": null,
+    "Helmet": null,
+    "Robe": null,
+    "Key": null,
+    "Tent": null,
+    "Ring": null,
+    "Shuriken": null,
+    "Skeen": null,
+    "White Suit": null
+  },
+  "aliases": {
+    "White": "White Magic",
+    "Black": "Black Magic",
+    "Time": "Time Magic",
+    "Glove": "Gloves"
+  }
+}

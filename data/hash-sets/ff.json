@@ -1,0 +1,33 @@
+{
+  "game": "Final Fantasy Randomizer (FFR): 8 of 12 item-type glyphs of the NES font (bytes D4-DF); images: FF1 NES menu icons (Final Fantasy Wiki)",
+  "list": "https://github.com/FiendsOfTheElements/FF1Randomizer/blob/master/FF1Lib/FF1Rom.cs",
+  "afterHash": true,
+  "minRun": 2,
+  "sizes": [
+    8
+  ],
+  "words": {
+    "Sword": "https://finalfantasy.fandom.com/wiki/File:FF1_Sword_Icon_NES.png",
+    "Hammer": "https://finalfantasy.fandom.com/wiki/File:FF1_Hammer_Icon_NES.png",
+    "Dagger": "https://finalfantasy.fandom.com/wiki/File:FF1_Dagger_Icon_NES.png",
+    "Axe": "https://finalfantasy.fandom.com/wiki/File:FF1_Axe_Icon_NES.png",
+    "Staff": "https://finalfantasy.fandom.com/wiki/File:FF1_Staff_Icon_NES.png",
+    "Nunchucks": "https://finalfantasy.fandom.com/wiki/File:FF1_Nunchuks_Icon_NES.png",
+    "Armor": "https://finalfantasy.fandom.com/wiki/File:FF1_Armor_Icon_NES.png",
+    "Shield": "https://finalfantasy.fandom.com/wiki/File:FF1_Shield_Icon_NES.png",
+    "Helm": "https://finalfantasy.fandom.com/wiki/File:FF1_Helm_Icon_NES.png",
+    "Gauntlet": "https://finalfantasy.fandom.com/wiki/File:FF1_Gloves_Icon_NES.png",
+    "Bracelet": "https://finalfantasy.fandom.com/wiki/File:FF1_Bracelet_Icon_NES.png",
+    "Shirt": "https://finalfantasy.fandom.com/wiki/File:FF1_Shirt_Icon_NES.png",
+    "Bonk": null
+  },
+  "aliases": {
+    "Stick": "Staff",
+    "Chucks": "Nunchucks",
+    "Nunchuks": "Nunchucks",
+    "Knife": "Dagger",
+    "Gloves": "Gauntlet",
+    "Glove": "Gauntlet",
+    "Helmet": "Helm"
+  }
+}

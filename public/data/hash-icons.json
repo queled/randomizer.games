@@ -305,6 +305,91 @@
       5
     ]
   },
+  "ff": {
+    "categories": [
+      "ff1r"
+    ],
+    "icons": {
+      "Sword": "Sword.png",
+      "Hammer": "Hammer.png",
+      "Dagger": "Dagger.png",
+      "Axe": "Axe.png",
+      "Staff": "Staff.png",
+      "Nunchucks": "Nunchucks.png",
+      "Armor": "Armor.png",
+      "Shield": "Shield.png",
+      "Helm": "Helm.png",
+      "Gauntlet": "Gauntlet.png",
+      "Bracelet": "Bracelet.png",
+      "Shirt": "Shirt.png"
+    },
+    "words": [
+      "Bonk"
+    ],
+    "aliases": {
+      "Stick": "Staff",
+      "Chucks": "Nunchucks",
+      "Nunchuks": "Nunchucks",
+      "Knife": "Dagger",
+      "Gloves": "Gauntlet",
+      "Glove": "Gauntlet",
+      "Helmet": "Helm"
+    },
+    "afterHash": true,
+    "minRun": 2,
+    "sizes": [
+      8
+    ]
+  },
+  "ff5": {
+    "categories": [
+      "ffvcd"
+    ],
+    "icons": {
+      "Sword": "Sword.png",
+      "Katana": "Katana.png",
+      "Axe": "Axe.png",
+      "Hammer": "Hammer.png",
+      "Rod": "Rod.png",
+      "Whip": "Whip.png",
+      "Bow": "Bow.png",
+      "Spear": "Spear.png",
+      "Harp": "Harp.png",
+      "Shield": "Shield.png",
+      "Armor": "Armor.png",
+      "Ribbon": "Ribbon.png",
+      "White Magic": "White Magic.png",
+      "Black Magic": "Black Magic.png",
+      "Time Magic": "Time Magic.png",
+      "Summon": "Summon.png",
+      "Song": "Song.png",
+      "Spellblade": "Spellblade.png"
+    },
+    "words": [
+      "Knife",
+      "Staff",
+      "Gloves",
+      "Helmet",
+      "Robe",
+      "Key",
+      "Tent",
+      "Ring",
+      "Shuriken",
+      "Skeen",
+      "White Suit"
+    ],
+    "aliases": {
+      "White": "White Magic",
+      "Black": "Black Magic",
+      "Time": "Time Magic",
+      "Glove": "Gloves"
+    },
+    "afterHash": true,
+    "minRun": 2,
+    "sizes": [
+      5
+    ]
+  },
   "md": {
     "categories": [
       "dread-rando"
@@ -2698,6 +2783,35 @@
       4
     ],
     "aliases": {}
+  },
+  "smb3": {
+    "categories": [
+      "smb3r"
+    ],
+    "icons": {
+      "1up": "1up.png",
+      "1k": "1k.png",
+      "2k": "2k.png",
+      "4k": "4k.png",
+      "8k": "8k.png",
+      "Mushroom": "Mushroom.png",
+      "Flower": "Flower.png",
+      "Star": "Star.png",
+      "Coin": "Coin.png",
+      "Vine": "Vine.png",
+      "Shell": "Shell.png"
+    },
+    "aliases": {
+      "Mush": "Mushroom",
+      "Fire": "Flower",
+      "1-up": "1up",
+      "1UP": "1up"
+    },
+    "afterHash": true,
+    "minRun": 2,
+    "sizes": [
+      6
+    ]
   },
   "smz3": {
     "categories": [

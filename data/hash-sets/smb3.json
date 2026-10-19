@@ -1,0 +1,27 @@
+{
+  "game": "SMB3 Randomizer: the hash shows Super Mario Bros. 3 sprites (inferred from race infos, the randomizer is closed source): score sprites 1k, 2k, 4k, 8k, 1-Up Mushroom, Super Mushroom, Fire Flower, Starman, Coin, Vine, Koopa shell; images: Super Mario Wiki",
+  "afterHash": true,
+  "minRun": 2,
+  "sizes": [
+    6
+  ],
+  "words": {
+    "1up": "https://www.mariowiki.com/File:SMB3_1-up.png",
+    "1k": "https://www.mariowiki.com/File:SMB3_Points_1000_land.png",
+    "2k": "https://www.mariowiki.com/File:SMB3_Points_2000_land.png",
+    "4k": "https://www.mariowiki.com/File:SMB3_Points_4000_land.png",
+    "8k": "https://www.mariowiki.com/File:SMB3_Points_8000_land.png",
+    "Mushroom": "https://www.mariowiki.com/File:SMB3_Super_Mushroom_sprite_cave.png",
+    "Flower": "https://www.mariowiki.com/File:SMB3_Fire_Flower_sprite_land.png",
+    "Star": "https://www.mariowiki.com/File:SMB3_Starman_sprite_static.png",
+    "Coin": "https://www.mariowiki.com/File:SMB3_Coin_Sprite_(still).png",
+    "Vine": "https://www.mariowiki.com/File:SMB3_Vine_Top.png",
+    "Shell": "https://www.mariowiki.com/File:SMB3_Koopa_Shell_green_cave.png"
+  },
+  "aliases": {
+    "Mush": "Mushroom",
+    "Fire": "Flower",
+    "1-up": "1up",
+    "1UP": "1up"
+  }
+}

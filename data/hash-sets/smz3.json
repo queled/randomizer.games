@@ -1,0 +1,43 @@
+{
+  "game": "SMZ3: 4 names from 64 enemy names (Super Metroid ones share the sm images; the A Link to the Past ones, Japanese names, stay as text)",
+  "list": "https://github.com/tewtal/SMZ3Randomizer/blob/master/WebRandomizer/Controllers/Helpers.cs",
+  "include": [
+    "sm"
+  ],
+  "afterHash": true,
+  "minRun": 2,
+  "words": {
+    "ARRGI": null,
+    "BABUSU": null,
+    "BORU": null,
+    "HACHI": null,
+    "BABURU": null,
+    "TAINON": null,
+    "GERUDO": null,
+    "GIBO": null,
+    "KOPPI": null,
+    "PON": null,
+    "HOBA": null,
+    "HYU": null,
+    "KISU": null,
+    "KYUNE": null,
+    "RIBA": null,
+    "MEDUSA": null,
+    "TERU": null,
+    "FANGIN": null,
+    "PIKKU": null,
+    "POPO": null,
+    "NOMOSU": null,
+    "GUZU": null,
+    "AIGORU": null,
+    "ROPA": null,
+    "GAPURA": null,
+    "HEISHI": null,
+    "SUTARU": null,
+    "TOZOKU": null,
+    "TOPPO": null,
+    "WAINDA": null,
+    "KURIPI": null,
+    "ZORA": null
+  }
+}

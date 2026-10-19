@@ -4,8 +4,8 @@
 // (scripts/sync-hash-icons.js); a hash word without an image stays as text.
 (function () {
   const MANIFEST_URL = '/data/hash-icons.json';
-  // Between the items of a hash: "A B", "(A/B)", "A - B", ["A", "B"]
-  const SEPARATOR = '[\\s,/;|_\\-–\\[\\]"]+';
+  // Between the items of a hash: "A B", "(A/B)", "A - B", ["A", "B"], "(A) (B)", "{a}{b}"
+  const SEPARATOR = '[\\s,/;|_\\-–\\[\\]"(){}]+';
   // A hash shows several items: shorter runs are left as text. Emotes named
   // HashX / NoteX can't be anything else, plain names (Map, Bow) can.
   const MIN_RUN = 4;
@@ -119,7 +119,8 @@
   // end) becomes its icon, words the list doesn't know stay as they are
   function hashSegmentsToHtml(matcher, str) {
     const segment = /(hash(?:\s+(?:items?|is))?\s*[:=\-]*)([^|\n]*?)(?=\||\n|https?:\/\/|$)/gi;
-    const single = { ...matcher, run: new RegExp(`(?<![A-Za-z0-9])${matcher.token.source}(?:${SEPARATOR}${matcher.token.source})*`, 'gi') };
+    // Brackets around the words go with them: (X) (Bow) -> icons only
+    const single = { ...matcher, run: new RegExp(`(?<![A-Za-z0-9])[([{"]*${matcher.token.source}(?:${SEPARATOR}${matcher.token.source})*[)\\]}"]*`, 'gi') };
     let html = '';
     let last = 0;
     let m;

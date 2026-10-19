@@ -1,0 +1,8 @@
+{
+  "game": "Metroid Fusion Open Randomizer: hash words of Fusion creatures, as in the Randovania list",
+  "include": [
+    "mf"
+  ],
+  "afterHash": true,
+  "minRun": 2
+}

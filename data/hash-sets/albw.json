@@ -1,0 +1,18 @@
+{
+  "game": "A Link Between Worlds Randomizer: 5 symbols of the game font (3DS buttons, Ravio, Bow, Bombs, Fire Rod), written (A) (Bow)...; images: ALBW button glyphs, Ravio symbol and item icons (Zelda Wiki)",
+  "list": "https://github.com/rickfay/z17-randomizer/blob/master/randomizer/src/lib.rs",
+  "afterHash": true,
+  "minRun": 2,
+  "words": {
+    "A": "https://zeldawiki.wiki/wiki/File:ALBW_A_Icon.png",
+    "B": "https://zeldawiki.wiki/wiki/File:ALBW_B_Icon.png",
+    "X": "https://zeldawiki.wiki/wiki/File:ALBW_X_Icon.png",
+    "Y": "https://zeldawiki.wiki/wiki/File:ALBW_Y_Icon.png",
+    "L": "https://zeldawiki.wiki/wiki/File:ALBW_L_Icon.png",
+    "R": "https://zeldawiki.wiki/wiki/File:ALBW_R_Icon.png",
+    "Ravio": "https://zeldawiki.wiki/wiki/File:ALBW_Ravio_Symbol.png",
+    "Bow": "https://zeldawiki.wiki/wiki/File:ALBW_Bow_Icon.png",
+    "Bomb": "https://zeldawiki.wiki/wiki/File:ALBW_Bomb_Icon.png",
+    "Fire": "https://zeldawiki.wiki/wiki/File:ALBW_Fire_Rod_Icon.png"
+  }
+}

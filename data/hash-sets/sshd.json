@@ -1,0 +1,8 @@
+{
+  "game": "Skyward Sword HD Randomizer: same names.txt hash words as the Wii randomizer",
+  "include": [
+    "ss"
+  ],
+  "afterHash": true,
+  "minRun": 2
+}

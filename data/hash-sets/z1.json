@@ -1,9 +1,10 @@
 {
-  "game": "Zelda 1 Randomizer: hash words of race infos without a racetime.gg emote",
+  "game": "Zelda 1 Randomizer: race-info spellings of hash icons; Beams (also called Wifi) is the Beam emote",
   "sizes": [
     4
   ],
-  "words": {
-    "Beams": null
+  "aliases": {
+    "Beams": "Beam",
+    "Wifi": "Beam"
   }
 }

@@ -281,13 +281,6 @@
       "Start": "Start.png",
       "ZButton": "ZButton.png"
     },
-    "words": [
-      "DK Coin",
-      "DKCoin"
-    ],
-    "sizes": [
-      5
-    ],
     "aliases": {
       "Sax": "Saxophone",
       "Nintendo Coin": "NintendoCoin",
@@ -299,8 +292,13 @@
       "Rareware": "RarewareCoin",
       "Nint Coin": "NintendoCoin",
       "NinCoin": "NintendoCoin",
-      "Oranges": "Orange"
-    }
+      "Oranges": "Orange",
+      "DK Coin": "RaceCoin",
+      "DKCoin": "RaceCoin"
+    },
+    "sizes": [
+      5
+    ]
   },
   "md": {
     "categories": [
@@ -2293,6 +2291,7 @@
       "Bottled Fish": "Bottled Fish.png",
       "Bottled Milk": "Bottled Milk.png",
       "Mask of Truth": "Mask of Truth.png",
+      "SOLD OUT": "SOLD OUT.png",
       "Cucco": "Cucco.png",
       "Mushroom": "Mushroom.png",
       "Saw": "Saw.png",
@@ -2311,15 +2310,14 @@
       "Map": "Map.png",
       "Big Magic": "Big Magic.png"
     },
-    "words": [
-      "SOLD OUT"
-    ],
+    "aliases": {
+      "Shard of Agony": "Stone of Agony"
+    },
     "afterHash": true,
     "minRun": 2,
     "sizes": [
       5
-    ],
-    "aliases": {}
+    ]
   },
   "pm": {
     "categories": [
@@ -2621,7 +2619,9 @@
       "RIPPER": "RIPPER.png",
       "ATOMIC": "ATOMIC.png",
       "POWAMP": "POWAMP.png",
+      "SCISER": "SCISER.png",
       "NAMIHE": "NAMIHE.png",
+      "PUROMI": "PUROMI.png",
       "ALCOON": "ALCOON.png",
       "BEETOM": "BEETOM.png",
       "OWTCH": "OWTCH.png",
@@ -2648,10 +2648,6 @@
       "SOVA": "SOVA.png",
       "BULL": "BULL.png"
     },
-    "words": [
-      "SCISER",
-      "PUROMI"
-    ],
     "afterHash": true,
     "minRun": 2,
     "sizes": [
@@ -2668,7 +2664,9 @@
       "RIPPER": "sm/RIPPER.png",
       "ATOMIC": "sm/ATOMIC.png",
       "POWAMP": "sm/POWAMP.png",
+      "SCISER": "sm/SCISER.png",
       "NAMIHE": "sm/NAMIHE.png",
+      "PUROMI": "sm/PUROMI.png",
       "ALCOON": "sm/ALCOON.png",
       "BEETOM": "sm/BEETOM.png",
       "OWTCH": "sm/OWTCH.png",
@@ -2693,44 +2691,40 @@
       "GAMET": "sm/GAMET.png",
       "GERUTA": "sm/GERUTA.png",
       "SOVA": "sm/SOVA.png",
-      "BULL": "sm/BULL.png"
+      "BULL": "sm/BULL.png",
+      "ARRGI": "ARRGI.png",
+      "BABUSU": "BABUSU.png",
+      "BORU": "BORU.png",
+      "HACHI": "HACHI.png",
+      "BABURU": "BABURU.png",
+      "TAINON": "TAINON.png",
+      "GERUDO": "GERUDO.png",
+      "GIBO": "GIBO.png",
+      "KOPPI": "KOPPI.png",
+      "PON": "PON.png",
+      "HOBA": "HOBA.png",
+      "HYU": "HYU.png",
+      "KISU": "KISU.png",
+      "KYUNE": "KYUNE.png",
+      "RIBA": "RIBA.png",
+      "MEDUSA": "MEDUSA.png",
+      "TERU": "TERU.png",
+      "FANGIN": "FANGIN.png",
+      "PIKKU": "PIKKU.png",
+      "POPO": "POPO.png",
+      "NOMOSU": "NOMOSU.png",
+      "GUZU": "GUZU.png",
+      "AIGORU": "AIGORU.png",
+      "ROPA": "ROPA.png",
+      "GAPURA": "GAPURA.png",
+      "HEISHI": "HEISHI.png",
+      "SUTARU": "SUTARU.png",
+      "TOZOKU": "TOZOKU.png",
+      "TOPPO": "TOPPO.png",
+      "WAINDA": "WAINDA.png",
+      "KURIPI": "KURIPI.png",
+      "ZORA": "ZORA.png"
     },
-    "words": [
-      "SCISER",
-      "PUROMI",
-      "ARRGI",
-      "BABUSU",
-      "BORU",
-      "HACHI",
-      "BABURU",
-      "TAINON",
-      "GERUDO",
-      "GIBO",
-      "KOPPI",
-      "PON",
-      "HOBA",
-      "HYU",
-      "KISU",
-      "KYUNE",
-      "RIBA",
-      "MEDUSA",
-      "TERU",
-      "FANGIN",
-      "PIKKU",
-      "POPO",
-      "NOMOSU",
-      "GUZU",
-      "AIGORU",
-      "ROPA",
-      "GAPURA",
-      "HEISHI",
-      "SUTARU",
-      "TOZOKU",
-      "TOPPO",
-      "WAINDA",
-      "KURIPI",
-      "ZORA"
-    ],
     "afterHash": true,
     "minRun": 2,
     "sizes": [
@@ -3687,15 +3681,19 @@
       "Zelda": "Zelda.png",
       "Medli": "Medli.png",
       "Makar": "Makar.png",
+      "Korok": "Korok.png",
       "Hollo": "Hollo.png",
       "Kreeb": "Kreeb.png",
       "Kamo": "Kamo.png",
       "Obli": "Obli.png",
       "Willi": "Willi.png",
+      "Zora": "Zora.png",
       "Gonzo": "Gonzo.png",
+      "'Hoy": "'Hoy.png",
       "Aryll": "Aryll.png",
       "Mila": "Mila.png",
       "Ganon": "Ganon.png",
+      "Rito": "Rito.png",
       "Sam": "Sam.png",
       "Vera": "Vera.png",
       "Missy": "Missy.png",
@@ -3707,6 +3705,7 @@
       "Poe": "Poe.png",
       "Gyorg": "Gyorg.png",
       "Niko": "Niko.png",
+      "Woods": "Woods.png",
       "Morth": "Morth.png",
       "Elma": "Elma.png",
       "Oakin": "Oakin.png",
@@ -3732,16 +3731,11 @@
       "Linda": "Linda.png",
       "Fado": "Fado.png",
       "Baito": "Baito.png",
+      "Din": "Din.png",
       "Nayru": "Nayru.png",
       "Jabun": "Jabun.png"
     },
     "words": [
-      "Korok",
-      "Zora",
-      "'Hoy",
-      "Rito",
-      "Woods",
-      "Din",
       "Bobby"
     ],
     "afterHash": true,
@@ -3792,12 +3786,6 @@
       "WoodenArrow": "WoodenArrow.png",
       "WoodenSword": "WoodenSword.png"
     },
-    "words": [
-      "Beams"
-    ],
-    "sizes": [
-      4
-    ],
     "aliases": {
       "Meat": "Bait",
       "WoodSword": "WoodenSword",
@@ -3810,7 +3798,12 @@
       "Mags": "MagicSword",
       "WoodenBoomer": "Boomerang",
       "Whistle": "Recorder",
-      "Shield": "MagicShield"
-    }
+      "Shield": "MagicShield",
+      "Beams": "Beam",
+      "Wifi": "Beam"
+    },
+    "sizes": [
+      4
+    ]
   }
 }

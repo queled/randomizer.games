@@ -20,7 +20,7 @@
     "Bottled Fish": "https://zeldawiki.wiki/wiki/File:OoT3D_Fish_Icon.png",
     "Bottled Milk": "https://zeldawiki.wiki/wiki/File:OoT3D_Lon_Lon_Milk_Icon.png",
     "Mask of Truth": "https://zeldawiki.wiki/wiki/File:OoT3D_Mask_of_Truth_Icon.png",
-    "SOLD OUT": null,
+    "SOLD OUT": "https://racetime.gg/ootr (HashSoldOut emote, the Ocarina of Time SOLD OUT sign)",
     "Cucco": "https://zeldawiki.wiki/wiki/File:OoT3D_Cucco_Icon.png",
     "Mushroom": "https://zeldawiki.wiki/wiki/File:OoT3D_Odd_Mushroom_Icon.png",
     "Saw": "https://zeldawiki.wiki/wiki/File:OoT3D_Poacher's_Saw_Icon.png",
@@ -38,5 +38,9 @@
     "Compass": "https://zeldawiki.wiki/wiki/File:OoT3D_Compass_Icon.png",
     "Map": "https://zeldawiki.wiki/wiki/File:OoT3D_Dungeon_Map_Icon.png",
     "Big Magic": "https://zeldawiki.wiki/wiki/File:OoT3D_Large_Magic_Jar_Icon.png"
-  }
+  },
+  "aliases": {
+    "Shard of Agony": "Stone of Agony"
+  },
+  "list": "https://github.com/gamestabled/OoT3D_Randomizer/blob/main/source/spoiler_log.cpp"
 }

@@ -1,5 +1,5 @@
 {
-  "game": "Super Metroid Map Randomizer: 4 enemy names, written as text in game",
+  "game": "Super Metroid Map Randomizer: 4 enemy names, written as text in game. Enemy IDs from the Super Metroid disassembly (patrickjohnston.org/bank/A0): Sciser D77F, Puromi = fire arc E0BF",
   "list": "https://github.com/blkerby/MapRandomizer/blob/main/patches/src/seed_hash_display.asm",
   "afterHash": true,
   "minRun": 2,
@@ -11,9 +11,9 @@
     "RIPPER": "https://www.metroidwiki.org/wiki/File:Ripper_sm_Sprite.png",
     "ATOMIC": "https://www.metroidwiki.org/wiki/File:Atomic_sm_Sprite.png",
     "POWAMP": "https://www.metroidwiki.org/wiki/File:Powamp_sm_Sprite.png",
-    "SCISER": null,
+    "SCISER": "https://github.com/blkerby/MapRandomizer/blob/main/TitleScreen/Export/Enemies/D77F.gfx",
     "NAMIHE": "https://www.metroidwiki.org/wiki/File:Namihe.png",
-    "PUROMI": null,
+    "PUROMI": "https://github.com/blkerby/MapRandomizer/blob/main/TitleScreen/Export/Enemies/E0BF.gfx",
     "ALCOON": "https://www.metroidwiki.org/wiki/File:Alcoon_sm_Sprite.png",
     "BEETOM": "https://www.metroidwiki.org/wiki/File:Beetom.png",
     "OWTCH": "https://www.metroidwiki.org/wiki/File:Owtch.png",

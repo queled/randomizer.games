@@ -1,10 +1,10 @@
 {
-  "game": "Donkey Kong 64 Randomizer: hash words of race infos without a racetime.gg emote",
+  "game": "Donkey Kong 64 Randomizer: race-info spellings; the DK Coin is the RaceCoin emote (gold coin with the DK logo)",
   "sizes": [
     5
   ],
-  "words": {
-    "DK Coin": null,
-    "DKCoin": null
+  "aliases": {
+    "DK Coin": "RaceCoin",
+    "DKCoin": "RaceCoin"
   }
 }

@@ -22,19 +22,18 @@
     }
   }
 
-  function formatInfoHtml(text) {
+  // Links its URLs and, once the manifest is loaded, shows the seed hash as icons
+  function formatInfoHtml(text, category, hashIcons) {
     return String(text || '')
       .split('\n')
-      .map((line) => {
-        const escapedLine = escapeHtml(line);
-        return escapedLine.replace(/(https?:\/\/[^\s<]+)/g, (match) => {
-          const safeUrl = sanitizeExternalUrl(match);
-          const label = escapeHtml(match);
-          return safeUrl
-            ? `<a href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer" style="color:#60a5fa;word-break:break-word;">${label}</a>`
-            : label;
-        });
-      })
+      .map((line) => line.split(/(https?:\/\/[^\s<>"']+)/).map((part, i) => {
+        if (i % 2 === 0) return window.HashIcons ? window.HashIcons.toHtml(part, category, hashIcons) : escapeHtml(part);
+        const safeUrl = sanitizeExternalUrl(part);
+        const label = escapeHtml(part);
+        return safeUrl
+          ? `<a href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer" style="color:#60a5fa;word-break:break-word;">${label}</a>`
+          : label;
+      }).join(''))
       .join('<br>');
   }
 
@@ -659,7 +658,10 @@
       
       // Info (seed info, etc.)
       if (race.info) {
-        infoEl.innerHTML = formatInfoHtml(race.info);
+        infoEl.innerHTML = formatInfoHtml(race.info, race.category);
+        window.HashIcons?.load().then((hashIcons) => {
+          infoEl.innerHTML = formatInfoHtml(race.info, race.category, hashIcons);
+        });
       }
       
       // Times

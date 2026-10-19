@@ -2119,6 +2119,22 @@ body.spoiler-mode .spoiler-text::before {
     word-break: break-all;
 }
 
+/* Seed hash shown as the game's icons (public/js/hash-icons.js) */
+.hash-icons {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.2rem;
+    vertical-align: middle;
+    font-style: normal;
+}
+
+.hash-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    object-fit: contain;
+}
+
 .race-links {
     display: flex;
     flex-wrap: wrap;

@@ -1605,6 +1605,9 @@ function createQualificationRaceCard(race) {
     const raceInfoText = document.createElement('p');
     raceInfoText.style.cssText = 'font-size: 0.875rem; color: #d1d5db; font-style: italic;';
     raceInfoText.textContent = race.info;
+    window.HashIcons?.load().then((hashIcons) => {
+      raceInfoText.innerHTML = window.HashIcons.toHtml(race.info, race.category, hashIcons);
+    });
     titleDiv.appendChild(raceInfoText);
   }
   

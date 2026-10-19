@@ -27,6 +27,17 @@
       }
     },
     {
+      "date": "2021",
+      "title": {
+        "fr": "FireRed Speedchoice",
+        "en": "FireRed Speedchoice"
+      },
+      "text": {
+        "fr": "PikalaxALT publie la version 1.0.0 de FireRed Speedchoice, un hack de Rouge Feu pensé pour le speedrun et la randomisation, le 25 avril 2021. Le projet n'est plus maintenu et son équipe renvoie aujourd'hui vers le monde Archipelago de vyneras.",
+        "en": "PikalaxALT releases version 1.0.0 of FireRed Speedchoice, a speedrun- and randomizer-oriented FireRed hack, on April 25, 2021. The project is no longer maintained and its team now points to vyneras's Archipelago world."
+      }
+    },
+    {
       "date": "2024-2025",
       "title": {
         "fr": "Archipelago",
@@ -53,6 +64,10 @@
     {
       "label": "vyneras/Archipelago — Pokémon FRLG (GitHub)",
       "url": "https://github.com/vyneras/Archipelago/blob/frlg-stable/worlds/pokemon_frlg/docs/setup_en.md"
+    },
+    {
+      "label": "PikalaxALT/firered-speedchoice (GitHub)",
+      "url": "https://github.com/PikalaxALT/firered-speedchoice"
     },
     {
       "label": "start.gg — WANTED Challenge by Predator #1",

@@ -1,6 +1,6 @@
 /**
- * alttp.localhorst.tv — community schedule of ALTTPR, Super Metroid Rando and
- * SMZ3 races (mostly the German community), with their restream channels.
+ * alttp.localhorst.tv — community schedule of the races of a few games (mostly
+ * the German community), with their restream channels.
  *
  * Its JSON API is public: events (`/api/events`) and their races, called
  * episodes (`/api/episodes?event[]=<id>`), each with its racetime.gg room and

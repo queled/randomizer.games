@@ -13,7 +13,7 @@
  *   node scripts/sync-racetime-global.js --game <slug>      # Sync complète d'un jeu
  *   node scripts/sync-racetime-global.js --max-pages 100    # Limiter les pages (avec --game)
  *   node scripts/sync-racetime-global.js --catch-up-since 2026-09-01  # Rattraper les races manquées
- *   node scripts/sync-racetime-global.js --catch-up-since 2020-01-01 --categories alttpr,z1r
+ *   node scripts/sync-racetime-global.js --catch-up-since 2020-01-01 --categories a,b
  */
 
 const path = require('path');

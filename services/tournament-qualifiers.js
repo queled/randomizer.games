@@ -22,7 +22,7 @@ const QUALIFIER_RE = /\bqual(?:if(?:ier|ication)|)s?\b(?:\s+race)?\s*#?\s*(\d{1,
 const NOT_QUALIFIER_RE = /\b(practice|showcase|not|format|draft|mock|async)\b/i;
 // Words of a qualifier label that never name the event
 const QUALIFIER_STOPWORDS = new Set(['qualifier', 'qualifiers', 'qualification', 'qual', 'quals', 'race', 'online', 'live', 'na', 'eu', 'weekly']);
-// A room goal naming an event ("Scrubs Tournament Season 8") rather than a ruleset
+// A room goal naming an event ("Some Tournament Season 8") rather than a ruleset
 const GOAL_EVENT_RE = /\b(tournament|tourney|league|cup|season|qualif\w*|s\d+)\b/i;
 
 function eventTokens(text) {
@@ -30,7 +30,7 @@ function eventTokens(text) {
 }
 
 /**
- * Qualifier room label: "OoTR Standard Tournament Season 7: Qualifier #13 (NA Weekly)"
+ * Qualifier room label: "Some Tournament Season 7: Qualifier #13 (Weekly)"
  * → { index: '13', eventTokens: ['s7'] }. The event is read before the qualifier
  * number and right after it ("Qualifier race #3 Season 2 tournament"), up to a separator.
  */
@@ -106,13 +106,13 @@ function matchQualifierToTournament(race, tournament, window = getQualifierWindo
     return parsed.eventTokens.every((token) => tournamentTokens.has(token)) ? 'named' : null;
   }
 
-  // A plain label relies on the room goal: naming this event ("Triforce Blitz"),
+  // A plain label relies on the room goal: naming this event ("Event Name"),
   // a ruleset ("Standard Ruleset"), or another event
   const goal = String(race?.goal || '');
   const goalTokens = eventTokens(goal);
   if (goalTokens.length && goalTokens.every((token) => tournamentTokens.has(token))) return 'named';
   if (GOAL_EVENT_RE.test(goal)) return null;
-  // A plain qualifier of two players may be a match: a named one is sure ("SGL2026 - Live Quals 1")
+  // A plain qualifier of two players may be a match: a named one is sure ("EVT2026 - Live Quals 1")
   if (Array.isArray(race?.entrants) && race.entrants.length && race.entrants.length < MIN_QUALIFIER_ENTRANTS) return null;
   return 'bare';
 }
@@ -236,7 +236,7 @@ async function buildQualifierPreview({ tournament, Race, racetime = false }) {
 }
 
 /**
- * Import a racetime room (and its players) into the database: "/ootr/amazing-deadhand-3884"
+ * Import a racetime room (and its players) into the database: "/category/room-name-1234"
  */
 async function importRacetimeRace({ raceUrl, Race, Player }) {
   const [category, slug] = String(raceUrl).replace(/^https?:\/\/(www\.)?racetime\.gg/i, '').split('/').filter(Boolean);

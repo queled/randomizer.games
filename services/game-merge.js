@@ -121,7 +121,7 @@ async function mergeGames(targetId, sourceId) {
   for (const field of ['platforms', 'logo', 'image', 'series']) {
     if (isEmpty(target[field]) && !isEmpty(source[field])) target[field] = source[field];
   }
-  // Not official.name: the source's is the name of another version ("Pokémon Blue Version")
+  // Not official.name: the source's is the name of another version (another version of the game)
   for (const field of ['releaseDate', 'releaseYear', 'website']) {
     if (isEmpty(target.official?.[field]) && !isEmpty(source.official?.[field])) {
       target.set(`official.${field}`, source.official[field]);

@@ -11,7 +11,7 @@
  *   4. the archipelago.gg / multiworld.gg links the game already has
  *      (rando-list, former manual import);
  *   5. the game's names (site, official, randomizer, rando-list, Twitch), then
- *      the part after the colon ("The Legend of Zelda: Phantom Hourglass").
+ *      the part after the colon ("Series: Subtitle").
  * A world no game matches becomes a new game (id built from its name, then
  * Twitch category and release year looked up). A name several games match is
  * listed and left alone.
@@ -69,11 +69,9 @@ const OVERRIDES = {
     'Quake 1': 'quake',
     'Metroid Fusion': 'mf',
     'Xenoblade X': 'xcx',
-    // Door Rando, beside "A Link to the Past"
+    // Variant worlds, beside the base game's
     'The Legend of Zelda: A Link to the Past': false,
-    // Map Rando, beside "Super Metroid"
     'Super Metroid Map Rando': false,
-    // Romhacks, beside "Super Mario 64"
     'SM64 Romhack': false
   }
 };
@@ -97,7 +95,7 @@ function parseArgs() {
   };
 }
 
-// "Pokémon Red/Blue" and "Pokemon Red and Blue", "StarCraft II" and "Starcraft 2"
+// "Name A/B" and "Name A and B", "Name II" and "Name 2"
 const norm = s => String(s || '')
   .normalize('NFD').replace(/\p{Diacritic}/gu, '')
   .toLowerCase()
@@ -106,16 +104,16 @@ const norm = s => String(s || '')
   .replace(/\b(ii|iii|iv|vi|vii|viii|ix)\b/g, roman => ROMAN[roman])
   .replace(/[^a-z0-9]/g, '');
 
-// "Celeste (Open World)" → "Celeste", "DOOM II (Beta)" → "DOOM II"
+// "Name (Variant)" → "Name", "Name II (Beta)" → "Name II"
 const withoutBrackets = s => String(s || '').replace(/\s*\([^)]*\)\s*/g, ' ').replace(/\s+beta$/i, '').trim();
 
 const TITLE_SPLIT_RE = /\s*[:–]\s+|\s+-\s+/;
-// "The Legend of Zelda: Phantom Hourglass" → "Phantom Hourglass"
+// "Series: Subtitle" → "Subtitle"
 const subtitle = s => {
   const parts = String(s || '').split(TITLE_SPLIT_RE);
   return parts.length > 1 ? parts.slice(1).join(' ') : null;
 };
-// "Super Mario Land 2: 6 Golden Coins" → "Super Mario Land 2"
+// "Title 2: Subtitle" → "Title 2"
 const mainTitle = s => {
   const parts = String(s || '').split(TITLE_SPLIT_RE);
   return parts.length > 1 ? parts[0] : null;
@@ -269,7 +267,7 @@ function matchSite(siteKey, worlds, games, indexes, apMatches) {
   return { matches, report };
 }
 
-// "Hatsune Miku Project Diva Mega Mix+" → "hmpdmm", "UFO 50" → "ufo50", "Pokemon Crystal" → "pkmnc"
+// "Some Long Game Name" → "slgn", "Name 50" → "name50", a franchise word may have its own short form
 function idCandidates(name) {
   const words = String(name)
     .replace(/^the legend of zelda\s*[:-]\s*/i, '')

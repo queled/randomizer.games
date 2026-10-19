@@ -19,7 +19,7 @@ class RacetimeAPI {
 
   /**
    * Get race details
-   * @param {string} category - Game category (e.g., 'ootr', 'alttpr')
+   * @param {string} category - Game category 
    * @param {string} raceId - The race ID
    */
   async getRace(category, raceId) {
@@ -252,7 +252,7 @@ class RacetimeAPI {
 
   /**
    * Check if a game category exists on racetime.gg
-   * @param {string} slug - Category slug (e.g., 'ootr', 'alttpr')
+   * @param {string} slug - Category slug 
    * @returns {Promise<Object|null>} Category info or null
    */
   async getCategoryInfo(slug) {

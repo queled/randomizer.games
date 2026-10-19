@@ -10,7 +10,7 @@
  * Usage:
  *   node scripts/enrich-release-years.js --dry-run        # Afficher sans rien écrire
  *   node scripts/enrich-release-years.js                  # Écrire les années trouvées
- *   node scripts/enrich-release-years.js --ids oot,mm     # Certains jeux seulement
+ *   node scripts/enrich-release-years.js --ids a,b     # Certains jeux seulement
  *   node scripts/enrich-release-years.js --skip a,b       # Ignorer des jeux (catégorie trompeuse)
  *
  * Variables d'environnement requises:

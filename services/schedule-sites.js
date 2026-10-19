@@ -1,7 +1,7 @@
 /**
- * Mido's House (https://midos.house) — OoTR tournament scheduling — and
- * Hyrule Town Hall (https://hyruletownhall.com), its fork for ALTTPR, TWWR,
- * MMR and other Zelda tournaments. Both run the same code: same pages, same API.
+ * Mido's House (https://midos.house) — tournament scheduling — and
+ * Hyrule Town Hall (https://hyruletownhall.com), its fork for other games'
+ * tournaments. Both run the same code: same pages, same API.
  *
  * Players schedule their races there (Discord bot in the tournament's server)
  * and restreamers add their channel per language. Its GraphQL API has no

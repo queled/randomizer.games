@@ -86,7 +86,7 @@ function renderPlayers(players) {
     // Use racesByGame from API (already sorted by count desc, limited to 3)
     const racesByGame = player.racesByGame || [];
     
-    // Avatar setup: first letter or digit, so "(DX)Oblast" shows "D" rather than "("
+    // Avatar setup: first letter or digit, so "(AB)Name" shows "A" rather than "("
     const initialMatch = String(player.name || '').match(/[\p{L}\p{N}]/u);
     const initial = initialMatch ? initialMatch[0].toUpperCase() : '?';
     const lastRace = player.lastRaceAt

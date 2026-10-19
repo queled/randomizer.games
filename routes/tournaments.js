@@ -177,7 +177,7 @@ router.get('/:id', validateObjectId('id'), async (req, res, next) => {
     }
 
     const tournamentObj = tournament.toObject();
-    // Preserve the original gameName from Challonge (e.g., "The Legend of Zelda: Ocarina of Time Randomizer")
+    // Preserve the original gameName from Challonge
     // Only use game.name as fallback if gameName is not set
     if (tournamentObj.game && !tournamentObj.gameName) {
       tournamentObj.gameName = tournamentObj.game.name || tournamentObj.game.randomizer?.shortName || tournamentObj.game.id;
@@ -190,7 +190,7 @@ router.get('/:id', validateObjectId('id'), async (req, res, next) => {
   }
 });
 
-// "https://racetime.gg/ootr/room" or "/ootr/room" → "/ootr/room"
+// "https://racetime.gg/<category>/<room>" or "/<category>/<room>" → "/<category>/<room>"
 function racetimeRoomPath(url) {
   return String(url || '').replace(/^https?:\/\/(?:www\.)?racetime\.gg/i, '').replace(/\/+$/, '') || null;
 }

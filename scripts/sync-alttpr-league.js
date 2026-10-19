@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Sync the seasons of the ALTTPR League as tournaments
+ * Sync the seasons of the team league as tournaments
  *
  * The League (services/alttpr-league.js: Invitational and Open leagues) pits
  * teams of three against each other, once a week within a division, then in
@@ -14,7 +14,7 @@
  *     single a room out when two are known, or one with the players' names;
  *   - then by the players' names among the rooms of the same week (dated by
  *     the races found by their times): a room whose info names the League
- *     ("ALTTPR League S8 Invitational - A vs. B"), forfeits included, or any
+ *     ("League S8 Invitational - A vs. B"), forfeits included, or any
  *     room whose finish times are within a minute of the League's (SRL rooms
  *     of 2020 have the mode as goal, and times seconds off).
  * Rooms already linked to another tournament stay there.
@@ -46,7 +46,7 @@ const WEEK_WINDOW_MS = 5 * DAY_MS;
 const REGULAR_PHASE = 'Saison régulière';
 const PLAYOFFS_PHASE = 'Playoffs';
 const LEAGUE_ROOM_RE = /alttpr (?:open )?league|league s\d+ (?:invitational|open)/i;
-// Some 2020 SRL rooms only have the mode as goal ("vt8 randomizer - mystery league")
+// Some 2020 SRL rooms only have the mode as goal
 const ANY_LEAGUE_RE = /league/i;
 
 function parseArgs() {
@@ -72,7 +72,7 @@ function finishMs(entrant) {
 
 const weekNumber = label => Number((String(label).match(/^Week\s*(\d+)$/i) || [])[1]) || null;
 
-// The League player's names: shown name and page slug ("nobly" for "Nobly")
+// The League player's names: shown name and page slug ("name" for "Name")
 const namesOf = player => [player.name, player.slug.replace(/_/g, ' ')];
 
 /**
@@ -100,7 +100,7 @@ function fit(room, race) {
     return count;
   };
   const timeHits = hits(TIME_TOLERANCE_MS);
-  // The room info lists the players by their League name ("ALTTPR League S8 Invitational - sean9541 vs. flipheal")
+  // The room info lists the players by their League name ("League S8 Invitational - A vs. B")
   const info = normalizeName(room.info);
   const inInfo = players.every(p => [p.slug, p.name].map(normalizeName).some(n => n.length >= 3 && info.includes(n)));
   const pilots = entrants.length === 2 && players.length > 2;
@@ -118,7 +118,7 @@ function fit(room, race) {
 const ROOM_FIELDS = 'url startedAt endedAt tournamentId goal info entrants.userId entrants.userName entrants.finishTimeMs entrants.finishTime';
 const SMALL_ROOM = { 'entrants.1': { $exists: true }, 'entrants.4': { $exists: false } };
 
-// ALTTPR rooms of 2 to 4 entrants between two dates, whatever their goal
+// Rooms of the game with 2 to 4 entrants between two dates, whatever their goal
 async function roomsBetween(from, to) {
   return Race.find({ category: 'alttpr', ...SMALL_ROOM, startedAt: { $gte: from, $lte: to }, status: { $ne: 'cancelled' } })
     .select(ROOM_FIELDS).lean();

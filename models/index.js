@@ -16,11 +16,11 @@ const gameSchema = new mongoose.Schema({
   
   // === RANDOMIZER INFO ===
   randomizer: {
-    displayName: String,    // Nom pour affichage (ex: "A Link to the Past Randomizer")
-    shortName: String,      // Acronyme (ex: "ALttP Randomizer")
-    tinyName: String,       // Très court (ex: "ALttPR", "OoTR")
-    name: String,           // Nom complet (ex: "The Legend of Zelda: A Link to the Past Randomizer")
-    website: String,        // Site du randomizer (ex: "https://alttpr.com")
+    displayName: String,    // Nom pour affichage
+    shortName: String,      // Acronyme
+    tinyName: String,       // Très court
+    name: String,           // Nom complet
+    website: String,        // Site du randomizer
     opensource: Boolean,
     addedDate: Date,        // Date d'ajout du randomizer
     updatedDate: Date       // Dernière mise à jour
@@ -77,7 +77,7 @@ const gameSchema = new mongoose.Schema({
   platforms: [String],
   logo: String,
   image: String,
-  series: String,           // e.g. "Zelda Series"
+  series: String,           // name of the game series
   
   // === CATEGORIES ===
   // Categories the game is raced in (shown on its Categories tab)
@@ -102,7 +102,7 @@ const gameSchema = new mongoose.Schema({
   integrations: {
     randoList: {
       enabled: { type: Boolean, default: false },
-      seriesFile: String,           // e.g. "The_Legend_of_Zelda.yml"
+      seriesFile: String,           // series file in rando-list
       gameName: String,             // exact name in rando-list
       gameNames: [String],          // other rando-list names of the same game (merged games)
       randomizerIdentifier: String, // identifier in rando-list
@@ -111,24 +111,24 @@ const gameSchema = new mongoose.Schema({
     },
     racetime: {
       enabled: { type: Boolean, default: false },
-      gameSlug: String,             // e.g. "ootr", "alttpr" (slug principal)
-      gameSlugs: [String],          // e.g. ["alttpr", "alttpr-ladder"] (slugs additionnels à scanner)
+      gameSlug: String,             // slug principal
+      gameSlugs: [String],          // slugs additionnels à scanner
       gameName: String,             // display name on racetime
-      goalFilters: { type: Map, of: String }, // slug -> regex (case-insensitive) of the goals to import, e.g. { ffmq: "randomizer" }
+      goalFilters: { type: Map, of: String }, // slug -> regex (case-insensitive) of the goals to import, e.g. { <slug>: "randomizer" }
       confidence: { type: String, enum: ['manual', 'auto'], default: 'manual' },
       lastSync: Date
     },
     speedrun: {
       enabled: { type: Boolean, default: false },
       gameId: String,               // speedrun.com game ID
-      weblink: String,              // e.g. "https://www.speedrun.com/alttp"
+      weblink: String,              // speedrun.com game page
       confidence: { type: String, enum: ['manual', 'auto'], default: 'manual' },
       lastSync: Date
     },
     twitch: {
       enabled: { type: Boolean, default: false },
       categoryId: String,           // Twitch category ID (game_id)
-      categoryName: String,         // Twitch category name (e.g. "The Legend of Zelda: A Link to the Past")
+      categoryName: String,         // Twitch category name
       boxArtUrl: String,            // URL de l'image de la catégorie
       confidence: { type: String, enum: ['manual', 'auto'], default: 'manual' },
       lastSync: Date,
@@ -144,7 +144,7 @@ const gameSchema = new mongoose.Schema({
     challonge: {
       enabled: { type: Boolean, default: false },
       gameId: Number,               // Challonge game_id for this game
-      subdomain: String,            // Organisation subdomain (e.g. "ootrmm") if applicable
+      subdomain: String,            // Organisation subdomain, if applicable
       searchKeywords: [String],     // Extra keywords to search for this game's tournaments
       confidence: { type: String, enum: ['manual', 'auto'], default: 'manual' },
       lastSync: Date
@@ -153,7 +153,7 @@ const gameSchema = new mongoose.Schema({
     // web hosts, kept in sync by scripts/sync-archipelago-games.js
     archipelago: {
       enabled: { type: Boolean, default: false },
-      gameName: String,             // name of the world on the site, e.g. "A Link to the Past"
+      gameName: String,             // name of the world on the site
       confidence: { type: String, enum: ['manual', 'auto'], default: 'manual' },
       lastSync: Date
     },
@@ -287,8 +287,8 @@ const tournamentSchema = new mongoose.Schema({
   startggSlug: String,
   // Last refresh from the Challonge API (the update job spaces them out: 500 requests per 30 days)
   challongeSyncedAt: Date,
-  // Races scheduled on Mido's House (OoTR) or Hyrule Town Hall (its fork for other
-  // Zelda games), linked to matches by start.gg set.
+  // Races scheduled on Mido's House or Hyrule Town Hall (its fork for other
+  // games), linked to matches by start.gg set.
   // Kept apart from `matches`, which the start.gg sync rebuilds.
   midosHouse: {
     // 'midos' or 'hth' (services/schedule-sites.js); missing: Mido's House

@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 /**
- * One-off migration: the game "dw" (Dragon Warrior, NES) had been matched to the
- * rando-list entry "Digimon World", which gave it that official name and the
- * Digimon World randomizer as its site.
+ * One-off migration: a game had been matched to the rando-list entry of another
+ * game with the same abbreviation, which gave it that official name and the
+ * other randomizer as its site.
  *
- * - dw: official name Dragon Warrior, linked to the rando-list entry "Dragon Quest"
- *   (the NES game, whose randomizer is mcgrew's dwrandomizer)
- * - digimonworld: gets the "Digimon World" rando-list link and its randomizer site
+ * - the game gets back its official name, linked to its own rando-list entry
+ * - the other game gets the rando-list link and its randomizer site
  *
  * Idempotent.
  *

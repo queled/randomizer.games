@@ -1,5 +1,5 @@
 /**
- * ALTTPR League (https://alttprleague.com, Open league on open.alttprleague.com):
+ * Team league (https://alttprleague.com, Open league on its open. subdomain):
  * teams of three players meet once a week, each match being two races (1v1
  * or co-op) between their players. The site has no API: each team page holds
  * every season of the team, one tab per season, with its division and the

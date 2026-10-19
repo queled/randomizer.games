@@ -2,7 +2,7 @@
 /**
  * Sync the randomizer runs of Games Done Quick marathons
  *
- * GDQ marathons (AGDQ, SGDQ, Frost/Flame Fatales...) regularly feature
+ * GDQ marathons regularly feature
  * randomizer runs and races. The GDQ tracker (services/gdq.js) lists each run
  * with its game, category, runners and YouTube VOD, added after the marathon.
  * A run counts when its category or name speaks of a randomizer ("Random
@@ -10,7 +10,7 @@
  * with the game of the site it is a randomizer of:
  *   - the Twitch category of the run, when given, among the games' Twitch
  *     categories (when several games share it, the one the run names, else
- *     the game whose official name is that category: alttp rather than its hacks);
+ *     the game whose official name is that category: the base game rather than its hacks);
  *   - else its name, "Randomizer" and "BONUS GAME n -" aside, against the
  *     games' names;
  *   - GAME_HINTS for names neither finds (combo randomizers).
@@ -46,7 +46,7 @@ function parseArgs() {
 
 const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[^a-z0-9]/g, '');
 
-// "BONUS GAME 2 - Castlevania: Symphony of the Night Randomizer" → "Castlevania: Symphony of the Night"
+// "BONUS GAME 2 - Game Name Randomizer" → "Game Name"
 function cleanName(name) {
   return String(name || '').replace(/\s+/g, ' ').replace(/^bonus game\s*\d*\s*-\s*/i, '').replace(/\s*\brandomi[sz]er\b\s*/ig, ' ').trim();
 }

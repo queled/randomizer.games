@@ -52,7 +52,6 @@
     const participantsCount = t.participantsCount || (t.participants && t.participants.length) || 0;
     
     // The linked game's official name first: the source's own label varies
-    // ("Ocarina of Time Randomizer", "the Legend of Zelda: …")
     const gameName = (gamesById[t.gameId] && resolveGameLabel(gamesById[t.gameId])) || t.gameName || '';
 
     const winnerName = getTournamentWinnerName(t);

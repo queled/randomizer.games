@@ -1206,7 +1206,7 @@ const {
 
 /**
  * Parse a racetime URL to extract category and raceId.
- * Accepts: https://racetime.gg/ootr/chaotic-volvagia-4238, /ootr/chaotic-volvagia-4238, ootr/chaotic-volvagia-4238
+ * Accepts: https://racetime.gg/category/room-name-1234, /category/room-name-1234, category/room-name-1234
  * Returns { category, raceId, normalizedUrl } or null
  */
 function parseRacetimeUrl(url) {
@@ -1849,10 +1849,10 @@ function parseStartggSlug(url) {
 /**
  * Parse a Challonge URL to extract the tournament identifier.
  * Accepts:
- *   https://challonge.com/MMRSeason6
- *   https://challonge.com/fr/MMRSeason6
+ *   https://challonge.com/my-tournament
+ *   https://challonge.com/fr/my-tournament
  *   https://challonge.com/tournaments/12345
- *   https://community.challonge.com/MMRSeason6
+ *   https://community.challonge.com/my-tournament
  */
 function parseChallongeId(url) {
   try {

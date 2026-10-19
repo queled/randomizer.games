@@ -1,6 +1,6 @@
 /**
  * Goal filters of racetime.gg categories shared with non-randomizer races
- * (e.g. "ffmq", where "Any%" races are vanilla speedruns).
+ * (e.g. a category where "Any%" races are vanilla speedruns).
  */
 
 const { Game } = require('../models');

@@ -16,7 +16,7 @@
  *   node scripts/enrich-games.js --speedrun
  *   node scripts/enrich-games.js --racetime
  *   node scripts/enrich-games.js --all
- *   node scripts/enrich-games.js --game=alttp
+ *   node scripts/enrich-games.js --game=<slug>
  */
 
 const path = require('path');
@@ -244,7 +244,7 @@ Options:
 
 Exemples:
   node scripts/enrich-games.js --dry-run
-  node scripts/enrich-games.js --speedrun --game=alttp
+  node scripts/enrich-games.js --speedrun --game=<slug>
   node scripts/enrich-games.js --all
 `);
     process.exit(0);

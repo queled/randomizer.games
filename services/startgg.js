@@ -135,7 +135,7 @@ class StartGGAPI {
 
   /**
    * Get tournament by slug
-   * Example slug: "tournament/ocarina-of-time-randomizer-standard-tournament-season-9"
+   * Example slug: "tournament/my-tournament"
    */
   async getTournament(slug, { details = true } = {}) {
     const query = `
@@ -413,7 +413,7 @@ class StartGGAPI {
 
   /**
    * Name of the tournament made of one start.gg event: "Tournament - Event", or the
-   * tournament name alone when it already ends with the event's ("RSL Season 7 - RSL Season 7").
+   * tournament name alone when it already ends with the event's ("Name Season 7 - Name Season 7").
    */
   static eventTournamentName(tournamentName, eventName) {
     const squash = (value) => String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -558,8 +558,8 @@ class StartGGAPI {
    * Extract tournament slug from start.gg URL
    */
   static extractSlugFromUrl(url) {
-    // https://www.start.gg/tournament/ocarina-of-time-randomizer-standard-tournament-season-9/events
-    // => tournament/ocarina-of-time-randomizer-standard-tournament-season-9
+    // https://www.start.gg/tournament/my-tournament/events
+    // => tournament/my-tournament
     const match = url.match(/start\.gg\/(tournament\/[^\/]+)/);
     return match ? match[1] : null;
   }

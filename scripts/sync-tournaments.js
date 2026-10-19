@@ -199,7 +199,7 @@ async function updateActiveTournaments({ dryRun, challongeHours }) {
 
         for (const bracket of tournament.challongeBrackets) {
           await sleep(RATE_LIMIT_MS);
-          // The numeric id: the short url misses tournaments of an organization (z2r.challonge.com/sgl26)
+          // The numeric id: the short url misses tournaments of an organization (sub.challonge.com/slug)
           const challongeId = String(bracket.challongeId || bracket.url);
           const { tournamentData, participants, matches } = await challongeAPI.getTournamentDetails(challongeId);
           if (!tournamentData) continue;
@@ -225,7 +225,7 @@ async function updateActiveTournaments({ dryRun, challongeHours }) {
         }
 
         await sleep(RATE_LIMIT_MS);
-        // The numeric id: the short url misses tournaments of an organization (z2r.challonge.com/sgl26)
+        // The numeric id: the short url misses tournaments of an organization (sub.challonge.com/slug)
         const challongeId = String(tournament.challongeId || tournament.url);
         const details = await challongeAPI.getTournamentDetails(challongeId);
         const { tournamentData, matches } = details;

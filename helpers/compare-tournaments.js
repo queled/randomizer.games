@@ -7,7 +7,7 @@ function normalizeName(name) {
   return name.toString().toLowerCase().trim().normalize('NFD').replace(/[̀-ͯ]/g, '');
 }
 
-// "https://racetime.gg/ootr/room" or "/ootr/room" → "/ootr/room"
+// "https://racetime.gg/<category>/<room>" or "/<category>/<room>" → "/<category>/<room>"
 function racetimeRoomPath(url) {
   return String(url || '').replace(/^https?:\/\/(?:www\.)?racetime\.gg/i, '').replace(/\/+$/, '').toLowerCase() || null;
 }

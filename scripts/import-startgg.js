@@ -4,8 +4,8 @@
  * Import tournament from start.gg
  * 
  * Usage: node scripts/import-startgg.js <tournament-url-or-slug>
- * Example: node scripts/import-startgg.js https://www.start.gg/tournament/ocarina-of-time-randomizer-standard-tournament-season-9/events
- * Or: node scripts/import-startgg.js tournament/ocarina-of-time-randomizer-standard-tournament-season-9
+ * Example: node scripts/import-startgg.js https://www.start.gg/tournament/my-tournament/events
+ * Or: node scripts/import-startgg.js tournament/my-tournament
  * 
  * Before running:
  * 1. Set STARTGG_API_TOKEN in .env file
@@ -39,7 +39,7 @@ async function main() {
   if (!args[0]) {
     console.error('❌ Start.gg tournament URL or slug required');
     console.error('Usage: node scripts/import-startgg.js <tournament-url-or-slug>');
-    console.error('Example: node scripts/import-startgg.js https://www.start.gg/tournament/ocarina-of-time-randomizer-standard-tournament-season-9/events');
+    console.error('Example: node scripts/import-startgg.js https://www.start.gg/tournament/my-tournament/events');
     process.exit(1);
   }
 

@@ -1,5 +1,5 @@
 // Usage: node scripts/unlink-race.js <raceUrl>
-// Example: node scripts/unlink-race.js /ootr/priceless-mamamu-3174
+// Example: node scripts/unlink-race.js /category/room-name-1234
 
 const mongoose = require('mongoose');
 const path = require('path');

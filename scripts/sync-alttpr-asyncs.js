@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * Sync async series of alttprasyncs.com onto ALTTPR tournaments
+ * Sync async series of alttprasyncs.com onto their tournaments
  *
  * A series goes to the tournament it is about, found by name: the same kind
- * of tournament (main, crosskeys, co-op, spoiler...) and the same year, or
+ * of tournament (main, co-op, spoiler...) and the same year, or
  * season / edition number. Ambiguous or unmatched series are listed; --link
  * ties one by hand. Stored in `tournament.alttprAsyncs`:
  *   - practice series: title, link and seed count;
@@ -64,7 +64,7 @@ function parseArgs() {
   return opts;
 }
 
-// "ALttPR Crosskeys Tournament 2025 - Main Event" → { kinds: 'crosskeys', year: 2025, number: null }
+// "<Kind> Tournament 2025 - Main Event" → { kinds: '<kind>', year: 2025, number: null }
 function describe(name, fallbackYear = null) {
   const lower = String(name || '').toLowerCase().replace(/\s*-?\s*main event\b/g, ' ');
   const kinds = Object.keys(KINDS).filter(k => KINDS[k].test(lower)).sort().join('+');

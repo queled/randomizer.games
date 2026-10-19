@@ -1,6 +1,6 @@
 // Tournaments a player entered (player page): found by racetime account first, by name
 // only for participants not linked to an account. Each one with the player's rank,
-// team, and win/loss record when the tournament gives no rank (OoTR League).
+// team, and win/loss record when the tournament gives no rank (leagues).
 const { calculateTournamentStatus } = require('./tournament-status');
 
 const STATUS_KEYS = { 'terminé': 'finished', 'en cours': 'ongoing', 'à venir': 'upcoming' };

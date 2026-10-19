@@ -13,11 +13,11 @@
  *   node scripts/discover-tournaments.js --keywords "keyword1,keyword2"  # Extra keywords
  *   node scripts/discover-tournaments.js --max-pages 5        # Limit pagination (start.gg short-name queries: 5 max)
  *   node scripts/discover-tournaments.js --since 2024-01-01   # Only tournaments after date
- *   node scripts/discover-tournaments.js --game ootr          # Only search for a specific game
- *   node scripts/discover-tournaments.js --source startgg --game oot --startgg-slug tournament/example
+ *   node scripts/discover-tournaments.js --game <slug>          # Only search for a specific game
+ *   node scripts/discover-tournaments.js --source startgg --game <slug> --startgg-slug tournament/example
  *   node scripts/discover-tournaments.js --source speedgaming --dry-run   # Brackets listed on speedgaming.org/events
- *   node scripts/discover-tournaments.js --source midos --dry-run         # OoT brackets linked from midos.house
- *   node scripts/discover-tournaments.js --source hth --dry-run           # brackets linked from hyruletownhall.com (ALTTPR, TWWR...)
+ *   node scripts/discover-tournaments.js --source midos --dry-run         # brackets linked from midos.house
+ *   node scripts/discover-tournaments.js --source hth --dry-run           # brackets linked from hyruletownhall.com
  *   node scripts/discover-tournaments.js --source speedgaming --challonge-url https://challonge.com/xyz
  */
 
@@ -57,7 +57,7 @@ const RANDOMIZER_SIGNAL_KEYWORDS = [
 
 // Searched once for all games; distinctive randomizer short names are added per game
 const STARTGG_GENERIC_QUERIES = ['randomizer', 'randomiser', 'rando', 'multiworld', 'archipelago'];
-// Short-name queries ("sotn", "tpr"...) can match thousands of unrelated tournaments
+// Short-name queries can match thousands of unrelated tournaments
 const STARTGG_ALIAS_MAX_PAGES = 5;
 
 // ─── CLI argument parsing ────────────────────────────────────────────────────
@@ -238,7 +238,7 @@ function buildTournamentSearchText(tournament) {
 
 const containsWord = (text, word) => new RegExp(`(^|[^a-z0-9])${escapeRegExp(word)}([^a-z0-9]|$)`).test(text);
 
-// Short names that only mean the randomizer ("ootr", "alttpr", "smz3"...): searched on their own
+// Short names that only mean the randomizer: searched on their own
 function getDistinctiveRandomizerAliases(game) {
   return uniqueNormalized([
     game.randomizer?.shortName,
@@ -250,7 +250,7 @@ function getDistinctiveRandomizerAliases(game) {
 }
 
 /**
- * start.gg searches whole words in tournament names, so "zelda randomizer" adds nothing to
+ * start.gg searches whole words in tournament names, so "<series> randomizer" adds nothing to
  * "randomizer": one pass over the generic keywords + the distinctive short names covers every game.
  */
 function buildStartGGSearchQueries(games, extraKeywords = []) {
@@ -262,7 +262,7 @@ function buildStartGGSearchQueries(games, extraKeywords = []) {
 }
 
 /**
- * Strict game match for global search results, where loose aliases ("air", "adventure")
+ * Strict game match for global search results, where loose aliases (common words)
  * hit hundreds of unrelated events: start.gg game, then names that only mean the randomizer.
  */
 function matchStartGGGame(tournament, games) {
@@ -391,7 +391,7 @@ async function buildSearchTerms(gameSlug = null) {
 
     // Also add game name + "randomizer" / "rando" combos for more targeted searches
     if (game.official?.name) {
-      const baseName = game.official.name.split(':')[0].trim(); // e.g. "The Legend of Zelda"
+      const baseName = game.official.name.split(':')[0].trim(); // the series part of the name
       searchTerms.add(`${baseName.toLowerCase()} randomizer`);
     }
   }
@@ -854,7 +854,7 @@ async function discoverSpeedGaming({ games, dryRun, challongeUrls = [] }) {
   const recentSkips = new Set((await DiscoverySkip.find({ checkedAt: { $gte: new Date(Date.now() - SKIP_RETRY_MS) } }).select('url').lean()).map(s => s.url));
   const manual = challongeUrls.length > 0;
   const seen = new Set();
-  // start.gg brackets go to the start.gg import ("2026 ALTTPR Casual Boots Tournament")
+  // start.gg brackets go to the start.gg import
   const startggSlugs = new Set();
 
   for (const { title, link, group = null, label = null } of entries) {
@@ -912,7 +912,7 @@ async function discoverSpeedGaming({ games, dryRun, challongeUrls = [] }) {
       }
 
       const match = matchChallongeGame(tournament, title, games);
-      // Short game aliases (e.g. "sms") are too ambiguous here: require an explicit randomizer keyword
+      // Short game aliases are too ambiguous here: require an explicit randomizer keyword
       const signalText = normalizeText(`${title} ${tournament.name}`);
       if (!match || !RANDOMIZER_SIGNAL_KEYWORDS.some(keyword => signalText.includes(keyword))) {
         console.log(`   ↪ Not a tracked randomizer: ${tournament.name} [${tournament.gameName || 'no game'}] (${ref.url})`);
@@ -945,7 +945,7 @@ async function discoverSpeedGaming({ games, dryRun, challongeUrls = [] }) {
   return stats;
 }
 
-// ─── Mido's House Discovery (OoT events → start.gg brackets) ───────────────────────
+// ─── Mido's House Discovery (events → start.gg brackets) ───────────────────────────
 
 // Event pages only: brackets are read from public links, never copied from Mido's own data
 async function fetchMidosStartGGSlugs() {
@@ -999,8 +999,8 @@ async function discoverMidos({ games, dryRun }) {
 // ─── Hyrule Town Hall Discovery (events → start.gg brackets) ─────────────────
 
 // Hyrule Town Hall runs Mido's House for other games. Its game slugs are racetime.gg
-// categories ("alttpr", "twwr"), so one of a game of ours is a randomizer; "botw" or
-// "tp" (speedrun tournaments, whose randomizers are "botwr" and "tpr") are not.
+// categories, so one of a game of ours is a randomizer; the slug of a speedrun
+// category (whose randomizer has its own slug) is not.
 function hthGame(hthSlug, games) {
   return games.find(game => {
     const racetime = game.integrations?.racetime || {};

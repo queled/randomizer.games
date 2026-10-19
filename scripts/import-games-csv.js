@@ -37,11 +37,11 @@ const CSV_COLUMN_MAP = {
   'id game speedrun.com': 'speedrunId',
   'id rando racetime.gg': 'racetimeSlug',
   'very shortname rando racetime.gg': 'racetimeShortName',
-  'shortname rando': 'shortName',                    // Acronyme: "ALttP Randomizer"
-  'official rando name': 'randomizerDisplayName',    // Pour affichage: "A Link to the Past Randomizer"
+  'shortname rando': 'shortName',                    // Acronyme
+  'official rando name': 'randomizerDisplayName',    // Pour affichage
   'game name': 'gameName',
   'full game name': 'fullGameName',
-  'full rando name': 'fullRandoName',                // Nom complet: "The Legend of Zelda: A Link to the Past Randomizer"
+  'full rando name': 'fullRandoName',                // Nom complet
   'année de sortie du jeu': 'releaseYear',
   'série': 'series',
   'plateforme': 'platforms'
@@ -183,10 +183,10 @@ async function importGames(csvPath, options = {}) {
 function buildFullUpdateData(record, integrations) {
   const data = { ...integrations };
   
-  // name = nom court du jeu (ex: "A Link to the Past")
+  // name = nom court du jeu
   if (record.gameName) data.name = record.gameName;
   
-  // randomizer.shortName = acronyme du randomizer (ex: "ALttP Randomizer")
+  // randomizer.shortName = acronyme du randomizer
   if (record.shortName) data['randomizer.shortName'] = record.shortName;
   
   if (record.series) data.series = record.series;
@@ -196,12 +196,12 @@ function buildFullUpdateData(record, integrations) {
   if (record.fullGameName) data['official.name'] = record.fullGameName;
   if (record.releaseYear) data['official.releaseDate'] = parseReleaseDate(record.releaseYear);
   
-  // randomizer.displayName = nom pour affichage (ex: "A Link to the Past Randomizer")
+  // randomizer.displayName = nom pour affichage
   if (record.randomizerDisplayName) {
     data['randomizer.displayName'] = record.randomizerDisplayName;
   }
   
-  // randomizer.name = nom complet du randomizer (ex: "The Legend of Zelda: A Link to the Past Randomizer")
+  // randomizer.name = nom complet du randomizer
   if (record.fullRandoName) {
     const cleaned = record.fullRandoName.replace(/\s+Randomizer\s+Randomizer$/i, ' Randomizer');
     data['randomizer.name'] = cleaned;
@@ -218,7 +218,7 @@ function buildNewGameData(record, gameId, integrations) {
   
   return {
     id: gameId,
-    // name = nom court du jeu (ex: "A Link to the Past")
+    // name = nom court du jeu
     name: record.gameName || record.fullGameName || gameId,
     series: record.series || null,
     platforms: parsePlatforms(record.platforms),
@@ -230,11 +230,11 @@ function buildNewGameData(record, gameId, integrations) {
       website: null
     },
     randomizer: {
-      // displayName = nom pour affichage (ex: "A Link to the Past Randomizer")
+      // displayName = nom pour affichage
       displayName: record.randomizerDisplayName || null,
       shortName: record.shortName || `${gameId.toUpperCase()} Randomizer`,
       tinyName: record.tinyName || null,
-      // name = nom complet (ex: "The Legend of Zelda: A Link to the Past Randomizer")
+      // name = nom complet
       name: fullRandoName,
       website: null,
       opensource: null

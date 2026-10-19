@@ -259,7 +259,7 @@ async function playerRaceSummary(player) {
     { $group: { _id: '$category', count: { $sum: 1 } } }
   ]).option({ maxTimeMS: 3000 });
 
-  // Several racetime categories can belong to one game (alttpr and alttpr-ladder)
+  // Several racetime categories can belong to one game
   const byGame = new Map();
   await Promise.all(byCategory.map(async ({ _id: category, count }) => {
     const game = await findGameForRaceCategory(category);

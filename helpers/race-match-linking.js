@@ -285,7 +285,7 @@ function scoreNameMatch(entrantName, target) {
   if (entrantTokens.includes(target)) return 200;
   if (targetTokens.length && targetTokens.every((t) => entrantTokens.includes(t))) return 180;
 
-  // "Flow" for Flowleyd: a nickname prefix, weaker than a near-identical token
+  // "Abc" for "Abcdef": a nickname prefix, weaker than a near-identical token
   let nickname = false;
   for (const et of entrantTokens) {
     for (const tt of targetTokens) {
@@ -328,8 +328,8 @@ function scorePlayerName(entrantName, target, { aliases = null, accounts = null 
 
 /**
  * Learn racetime account aliases from confident links: when one entrant clearly is one
- * bracket player and the other entrant matches nobody ("Scarlet Blackflame" in a room
- * linked to "josh5146 vs iba allday"), the other entrant played as the other player.
+ * bracket player and the other entrant matches nobody (C in a room
+ * linked to "A vs B"), the other entrant played as the other player.
  * Accounts seen under several bracket names are dropped.
  */
 function learnPlayerAliases(linkedRaces) {
@@ -369,7 +369,7 @@ function getMatchMembers(match) {
 }
 
 // How surely a racetime account is a team player: 2 same name, 1 one inside the other
-// ("Painapple" = "ThePainapple"), 0 not them
+// ("Name" = "TheName"), 0 not them
 function teamMemberMatch(entrantName, member) {
   const a = entrantName.replace(/ /g, '');
   const b = member.replace(/ /g, '');
@@ -393,7 +393,7 @@ function extractTeamEntrants(race, match) {
   })).filter((e) => e.name);
   if (roomPlayers.length < 3) return null;
 
-  // Each room player joins the team it matches best ("Alpha" over "ALPHAMARIOX")
+  // Each room player joins the team it matches best
   const best = (e, members) => Math.max(0, ...members.map((m) => teamMemberMatch(e.name, m)));
   const team1Players = [];
   const team2Players = [];
@@ -472,8 +472,8 @@ function scoreRaceAgainstMatch(race, match, options = {}) {
   const extracted = extractRaceEntrants(race, { requireDirect: options.requireDirect });
   const fromEntrants = scoreExtractedAgainstMatch(race, match, extracted, options);
   if (['group-label', 'stage-label'].includes(extracted.source)) {
-    // The label may shorten a bracket name its racetime account spells out ("Fox" for
-    // RedFox): a 1v1 room's own entrants are a reading of their own
+    // The label may shorten a bracket name its racetime account spells out ("Abc" for
+    // XyzAbc): a 1v1 room's own entrants are a reading of their own
     const roomEntrants = (race?.entrants || [])
       .map((entrant) => ({ name: normalizeName(entrant?.userName || entrant?.name || ''), finishedAt: entrant?.finishedAt || null }))
       .filter((entrant) => entrant.name);
@@ -484,7 +484,7 @@ function scoreRaceAgainstMatch(race, match, options = {}) {
   const labelPlayers = extracted.source === 'entrants' ? extracted.stageInfo?.players : null;
   if (!labelPlayers) return fromEntrants;
 
-  // Racetime accounts often differ from bracket names (Slimba = MegaSlim): the room
+  // Racetime accounts often differ from bracket names: the room
   // label's "A vs B" names the bracket players, keep whichever reading matches best
   const fromLabel = scoreExtractedAgainstMatch(race, match, { ...extracted, entrants: labelPlayers, source: 'label' }, options);
   return fromLabel.score > fromEntrants.score ? fromLabel : fromEntrants;

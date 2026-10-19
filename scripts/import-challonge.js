@@ -1,5 +1,5 @@
 // Usage: node scripts/import-challonge.js <challongeIdOrUrl>
-// Example: node scripts/import-challonge.js MMRSeason6
+// Example: node scripts/import-challonge.js my-tournament
 
 const mongoose = require('mongoose');
 const path = require('path');
@@ -14,7 +14,7 @@ function parseChallongeId(input){
   if(!input) return null;
   try{
     const url = new URL(input);
-    // challonge URLs are like https://challonge.com/fr/MMRSeason6 or /MMRSeason6
+    // challonge URLs are like https://challonge.com/fr/my-tournament or /my-tournament
     const parts = url.pathname.split('/').filter(Boolean);
     if(parts.length) return parts[parts.length-1];
     return null;

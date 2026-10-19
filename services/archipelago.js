@@ -88,8 +88,8 @@ async function fetchGames(siteKey) {
 
 const WIKI = { host: 'archipelago.miraheze.org', api: 'https://archipelago.miraheze.org/w/api.php' };
 
-// "Pokémon Mystery Dungeon: Explorers of Sky" and "Pokemon Mystery Dungeon Explorers of Sky",
-// "Ratchet & Clank: The Odd Couple" and "Ratchet & Clank: Odd Couple"
+// "Námé: Subtitle" and "Name Subtitle",
+// "A & B: The Subtitle" and "A & B: Subtitle"
 const wikiKey = title => String(title || '')
   .normalize('NFD').replace(/\p{Diacritic}/gu, '')
   .toLowerCase()
@@ -145,8 +145,8 @@ async function wikiArticles() {
 }
 
 /**
- * The sites' wiki links name pages that don't exist ("BKSimulator" for "BK
- * Simulator", "DOOM II (Beta)"). Each link to a missing page points to the
+ * The sites' wiki links name pages that don't exist ("NameSim" for "Name
+ * Sim", "Name (Beta)"). Each link to a missing page points to the
  * article of the same name, spelling aside, else the variant's game
  * ("(Beta)" dropped), else goes. Returns the links changed; a wiki that cannot
  * be read leaves them as they are.

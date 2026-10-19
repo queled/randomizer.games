@@ -29,7 +29,7 @@ const ALIASES_BY_PLAYER = {
   r0bd0g: ['r0bd0g (invitation pending)'],
   Riley: ['Riley2w69t'],
   TrenteR: ['TrenteR_TR'],
-  WTHH: ['Whatthehellshappened'] // SpeedRunsLive name (2015-2020), Challonge OoTR S3
+  WTHH: ['Whatthehellshappened'] // SpeedRunsLive and Challonge name
 };
 
 const escapeRegex = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

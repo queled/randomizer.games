@@ -92,30 +92,29 @@ const COMBO_KEYWORDS = {
 // Combo games: streams are fetched from the Twitch categories of their source
 // games, then kept by COMBO_KEYWORDS (all of them when the game has none).
 // Categories are given by ID: Twitch answers some names with a duplicate
-// category (the Switch 2 remake for "Ocarina of Time", the Famicom Disk
-// System version for "Metroid", a stub for "Metroid Prime").
+// category (a remake, another version, a stub).
 const COMBO_TWITCH_CATEGORY_IDS = {
-  'ootmm': ['11557', '12482'], // Ocarina of Time (N64), Majora's Mask
-  'smz3': ['9435', '7595'], // A Link to the Past, Super Metroid
-  'hodbt': ['16541', '8352'], // Harmony of Dissonance, Bomberman Tournament
-  'mpcg': ['14198', '1459'], // Metroid Prime (GC), Metroid Prime 2: Echoes
-  'z1m1': ['10979', '19813'], // The Legend of Zelda, Metroid (NES)
-  'z1m1z3m3': ['10979', '19813', '9435', '7595'], // + A Link to the Past, Super Metroid
-  // Wily Wars has no Twitch category: it is streamed under the games it remakes,
-  // the NES originals or the Wily Wars versions Twitch lists apart
+  'ootmm': ['11557', '12482'],
+  'smz3': ['9435', '7595'],
+  'hodbt': ['16541', '8352'],
+  'mpcg': ['14198', '1459'],
+  'z1m1': ['10979', '19813'],
+  'z1m1z3m3': ['10979', '19813', '9435', '7595'],
+  // A remake without a Twitch category: streamed under the games it remakes,
+  // the originals or the remake versions Twitch lists apart
   'mmtww': ['4815', '12870', '4133', '1478044090', '1003948618', '1311228706'],
-  // Fates is sold as two games (Birthright, Conquest); Revelation has no category
+  // A game sold as two editions, the third one has no category
   'fe14': ['405007883', '1674286069'],
-  // The Universal Pokémon Randomizer randomizes the main series games of
-  // generations 1 to 7, streamed under each game's category, pair or version
+  // A randomizer of every main game of a series, streamed under each game's
+  // category, pair or version
   'upkmn': [
-    '3623', '1528763908', '17124', // Red/Blue, Red, Yellow
-    '7528', '185837347', '14543', // Gold, Silver, Crystal
-    '9287', '1144464298', '10609', '13332', // Ruby/Sapphire, Sapphire, Emerald, FireRed/LeafGreen
-    '2993', '1343302596', '19745', '23857', // Diamond/Pearl, Pearl, Platinum, HeartGold/SoulSilver
-    '27602', '1432908059', '33734', '1690221315', // Black/White, White, Black 2/White 2, Black 2
-    '103828', '2045592890', '460327', // X/Y, X, Omega Ruby/Alpha Sapphire
-    '491599', '1926347727', '497334', '351385416' // Sun/Moon, Sun, Ultra Sun/Ultra Moon, Ultra Sun
+    '3623', '1528763908', '17124',
+    '7528', '185837347', '14543',
+    '9287', '1144464298', '10609', '13332',
+    '2993', '1343302596', '19745', '23857',
+    '27602', '1432908059', '33734', '1690221315',
+    '103828', '2045592890', '460327',
+    '491599', '1926347727', '497334', '351385416'
   ]
 };
 
@@ -123,7 +122,6 @@ const COMBO_TWITCH_CATEGORY_IDS = {
 // - PER_GAME_TITLE_KEYWORDS: require one of these keywords to start a word of the title/tags
 // - PER_GAME_ALLOWED_TWITCH_CATEGORIES: only accept streams whose Twitch category name matches one of these
 const PER_GAME_TITLE_KEYWORDS = {
-  // ootmq requires "master quest" or "mq" or "ootmqr" in title/tags
   'ootmq': ['master quest', 'mq', 'ootmq'],
   // ROM hacks have no Twitch category of their own: they are streamed under
   // the game they modify (stored as their category), named in the title
@@ -155,13 +153,11 @@ const PER_GAME_TITLE_KEYWORDS = {
 };
 
 const PER_GAME_ALLOWED_TWITCH_CATEGORIES = {
-  // alttpfs should only accept streams whose Twitch category is Four Swords
   'alttpfs': ['The Legend of Zelda: Four Swords Adventures', 'The Legend of Zelda: Four Swords']
 };
 
 // Twitch game category names (as they appear on Twitch) - fallback only
 const TWITCH_GAME_NAMES = {
-  // === ZELDA SERIES ===
   'alttp': 'The Legend of Zelda: A Link to the Past',
   'albw': 'The Legend of Zelda: A Link Between Worlds',
   'botw': 'The Legend of Zelda: Breath of the Wild',
@@ -172,7 +168,7 @@ const TWITCH_GAME_NAMES = {
   'oos': 'The Legend of Zelda: Oracle of Seasons',
   'oot': 'The Legend of Zelda: Ocarina of Time',
   'oot3d': 'The Legend of Zelda: Ocarina of Time 3D',
-  'ootmm': 'The Legend of Zelda: Ocarina of Time', // combo - aussi MM
+  'ootmm': 'The Legend of Zelda: Ocarina of Time', // combo
   'ss': 'The Legend of Zelda: Skyward Sword',
   'tmc': 'The Legend of Zelda: The Minish Cap',
   'tp': 'The Legend of Zelda: Twilight Princess',
@@ -181,12 +177,10 @@ const TWITCH_GAME_NAMES = {
   'z1': 'The Legend of Zelda',
   'z2': 'Zelda II: The Adventure of Link',
   
-  // === ZELDA COMBOS ===
-  'smz3': 'Super Metroid', // combo - aussi ALttP
-  'z1m1': 'The Legend of Zelda', // combo - aussi Metroid NES
+  'smz3': 'Super Metroid', // combo
+  'z1m1': 'The Legend of Zelda', // combo
   'z1m1z3m3': 'The Legend of Zelda', // mega combo
   
-  // === METROID SERIES ===
   'am2r': 'AM2R',
   'm1': 'Metroid',
   'md': 'Metroid Dread',
@@ -195,13 +189,12 @@ const TWITCH_GAME_NAMES = {
   'mp': 'Metroid Prime',
   'mp2': 'Metroid Prime 2: Echoes',
   'mp3': 'Metroid Prime 3: Corruption',
-  'mpcg': 'Metroid Prime', // combo - aussi MP2
+  'mpcg': 'Metroid Prime', // combo
   'mpr': 'Metroid Prime Remastered',
   'msr': 'Metroid: Samus Returns',
   'mzm': 'Metroid: Zero Mission',
   'sm': 'Super Metroid',
   
-  // === CASTLEVANIA SERIES ===
   'aos': 'Castlevania: Aria of Sorrow',
   'c2': 'Castlevania II: Simon\'s Quest',
   'cotm': 'Castlevania: Circle of the Moon',
@@ -212,12 +205,10 @@ const TWITCH_GAME_NAMES = {
   'por': 'Castlevania: Portrait of Ruin',
   'sotn': 'Castlevania: Symphony of the Night',
   
-  // === KINGDOM HEARTS SERIES ===
   'kh2fm': ['Kingdom Hearts II', 'Kingdom Hearts HD 1.5 + 2.5 ReMIX'],
   'kh3': 'Kingdom Hearts III',
   'khfm': ['Kingdom Hearts', 'Kingdom Hearts HD 1.5 + 2.5 ReMIX'],
   
-  // === MARIO SERIES ===
   'pm': 'Paper Mario',
   'pmttyd': 'Paper Mario: The Thousand-Year Door',
   'sm64': 'Super Mario 64',
@@ -226,30 +217,24 @@ const TWITCH_GAME_NAMES = {
   'smw': 'Super Mario World',
   'mlss': 'Mario & Luigi: Superstar Saga',
   
-  // === DONKEY KONG SERIES ===
   'dk64': 'Donkey Kong 64',
   'dkr': 'Diddy Kong Racing',
   
-  // === FINAL FANTASY SERIES ===
   'ff': 'Final Fantasy',
   'ff5': 'Final Fantasy V',
   'ff6': 'Final Fantasy VI',
   
-  // === DRAGON QUEST/WARRIOR SERIES ===
   'dw': 'Dragon Warrior',
   'dw2': 'Dragon Warrior II',
   'dw3': 'Dragon Warrior III',
   'dw4': 'Dragon Warrior IV',
   
-  // === MEGA MAN SERIES ===
   'mm2': 'Mega Man 2',
   
-  // === POKÉMON SERIES ===
   'pkmne': 'Pokémon Emerald',
   'prb': 'Pokémon Red and Blue',
-  'up': 'Pokémon Crystal', // Universal Pokemon Randomizer works on various
+  'up': 'Pokémon Crystal', // randomizer of several games
   
-  // === OTHER GAMES ===
   'alundra': 'Alundra',
   'arzette': 'Arzette: The Jewel of Faramore',
   'bk': 'Banjo-Kazooie',
@@ -293,7 +278,6 @@ const MULTI_GAME_TWITCH_CATEGORY_IDS = [
 // Acronymes/diminutifs des randomizers à chercher dans le titre des streams
 // Mappé par Twitch game name (ou array de noms) pour vérifier que c'est la bonne catégorie
 const RANDOMIZER_ACRONYMS = {
-  // === ZELDA SERIES ===
   'The Legend of Zelda: A Link to the Past': ['alttpr', 'lttpr', 'z3r', 'quad randomizer', 'quad crossover randomizer'],
   'The Legend of Zelda: A Link Between Worlds': ['albwr'],
   'The Legend of Zelda: Breath of the Wild': ['botwr'],
@@ -311,7 +295,6 @@ const RANDOMIZER_ACRONYMS = {
   'The Legend of Zelda': ['z1r', 'loz1r', 'tloz1r', 'quad randomizer', 'quad crossover randomizer'],
   'Zelda II: The Adventure of Link': ['z2r', 'aol rando'],
   
-  // === METROID SERIES ===
   'AM2R': ['am2r rando', 'am2rr'],
   'Metroid': ['m1r', 'nes metroid rando', 'quad randomizer', 'quad crossover randomizer'],
   'Metroid Dread': ['dread rando', 'mdr'],
@@ -324,7 +307,6 @@ const RANDOMIZER_ACRONYMS = {
   'Metroid: Zero Mission': ['mzmr', 'zm rando'],
   'Super Metroid': ['smr', 'sm rando', 'varia', 'quad randomizer', 'quad crossover randomizer'],
   
-  // === CASTLEVANIA SERIES ===
   'Castlevania: Aria of Sorrow': ['aosr', 'aos rando'],
   'Castlevania II: Simon\'s Quest': ['cv2r', 'simons quest rando'],
   'Castlevania: Circle of the Moon': ['cotmr', 'cotm rando'],
@@ -334,13 +316,11 @@ const RANDOMIZER_ACRONYMS = {
   'Castlevania: Portrait of Ruin': ['porr', 'por rando'],
   'Castlevania: Symphony of the Night': ['sotnr', 'sotn rando'],
   
-  // === KINGDOM HEARTS SERIES ===
   'Kingdom Hearts II': ['kh2r', 'kh2 rando', 'kh2fm rando'],
   'Kingdom Hearts HD 1.5 + 2.5 ReMIX': ['kh2r', 'kh2fm rando', 'khfmr'],
   'Kingdom Hearts III': ['kh3r', 'kh3 rando'],
   'Kingdom Hearts': ['khfmr', 'kh1 rando'],
   
-  // === MARIO SERIES ===
   'Paper Mario': ['pm64r', 'pm64 rando'],
   'Paper Mario: The Thousand-Year Door': ['ttydr', 'ttyd rando', 'pmttyd rando'],
   'Super Mario 64': ['sm64r', 'sm64 rando'],
@@ -349,30 +329,24 @@ const RANDOMIZER_ACRONYMS = {
   'Super Mario World': ['smwr', 'smw rando'],
   'Mario & Luigi: Superstar Saga': ['mlssr', 'mlss rando'],
   
-  // === DONKEY KONG SERIES ===
   'Donkey Kong 64': ['dk64r', 'dk64 rando'],
   'Diddy Kong Racing': ['dkrr', 'dkr rando'],
   
-  // === FINAL FANTASY SERIES ===
   'Final Fantasy': ['ff1r', 'ffr', 'ff1 rando'],
   'Final Fantasy V': ['ff5r', 'ffvr', 'ffvcd'],
   'Final Fantasy VI': ['ff6r', 'ff6wc', 'worlds collide'],
   
-  // === DRAGON QUEST/WARRIOR SERIES ===
   'Dragon Warrior': ['dwr', 'dw1r'],
   'Dragon Warrior II': ['dw2r'],
   'Dragon Warrior III': ['dw3r'],
   'Dragon Warrior IV': ['dw4r'],
   
-  // === MEGA MAN SERIES ===
   'Mega Man 2': ['mm2r', 'mm2 rando'],
   
-  // === POKÉMON SERIES ===
   'Pokémon Emerald': ['emerald rando', 'pkmne'],
   'Pokémon Red and Blue': ['pokemon rando', 'pkmnrb'],
   'Pokémon Crystal': ['crystal rando', 'universal pokemon'],
   
-  // === OTHER GAMES ===
   'Alundra': ['alundra rando'],
   'Arzette: The Jewel of Faramore': ['arzette rando'],
   'Banjo-Kazooie': ['bkr', 'bk rando'],
@@ -633,7 +607,7 @@ async function fetchTwitchStreamsByCategoryId(categoryId, gameNameForFilter, inc
 }
 
 // Whether a stream's title or tags contain one of the keywords at the start
-// of a word ("eris" must not match "series", "upr" not "supreme")
+// of a word ("abc" must not match "xabc")
 function streamMentions(stream, keywords) {
   const title = (stream.title || '').toLowerCase();
   const tags = (stream.tags || []).map(t => (t || '').toLowerCase()).join(' ');
@@ -672,7 +646,7 @@ function isRandomizerStream(stream, gameName) {
   }
   
   // Check generic randomizer/rando mentions. "randomizer" is specific enough inside
-  // another word ("OoTRandomizer", tag "ZeldaRandomizer"); "rando" and "randomized"
+  // another word (title "<Game>Randomizer", tag "<Series>Randomizer"); "rando" and "randomized"
   // must be whole words, or "random", "Randolocke" and Spanish "explorando" match
   if ([title, ...tags].some(text => /randomi[sz]er/.test(text) || RANDO_WORD.test(text))) {
     return true;
@@ -682,11 +656,11 @@ function isRandomizerStream(stream, gameName) {
   const acronyms = RANDOMIZER_ACRONYMS[gameName];
   if (acronyms && acronyms.length > 0) {
     // Check if any acronym appears in the title
-    // Use word boundary matching to avoid false positives (e.g., "SSR" not matching "USSR")
+    // Use word boundary matching to avoid false positives (e.g., "ABC" not matching "XABC")
     for (const acronym of acronyms) {
       const acroLower = acronym.toLowerCase();
-      // For short acronyms (like "ssr", "ootr"), use word boundary check
-      // For longer phrases (like "jets of time"), use simple includes
+      // For short acronyms, use word boundary check
+      // For longer phrases, use simple includes
       if (acroLower.includes(' ')) {
         // Multi-word phrase - simple includes
         if (title.includes(acroLower)) {
@@ -742,7 +716,7 @@ async function fetchTwitchStreams(gameName, includeAll = false) {
         let candidateStreams = rawStreams;
 
         // By default, only include streams that mention randomizer/rando in title or tags,
-        // OR that use game-specific acronyms (e.g., "OoTR", "SSR", "ALBWR").
+        // OR that use game-specific acronyms.
         // For some Twitch categories (e.g., Archipelago) we want to include all streams
         // regardless of title/tags because the category itself implies randomizer content.
         if (!includeAll) {
@@ -1104,7 +1078,7 @@ async function buildGameStreamsResult(gameId, preloadedDoc) {
     console.warn('Per-game stream filtering failed for', gameIdLower, e);
   }
 
-  // Show the site's name rather than the Twitch styling ("ELDEN RING"), except where the
+  // Show the site's name rather than the Twitch styling (all capitals), except where the
   // category tells which game is played: combos and multi-game categories (Archipelago)
   const siteGameName = gameDoc.official?.name || gameDoc.name;
   let allStreams = twitchStreamsAll
@@ -1468,7 +1442,7 @@ async function buildAllStreams() {
     console.error('Error fetching Twitch streams:', error);
   }
 
-  // Twitch category names follow each publisher's styling ("ELDEN RING"): show the site's name
+  // Twitch category names follow each publisher's styling (all capitals): show the site's name
   const siteGameNames = new Map(games.map(g => [(g.id || '').toLowerCase(), g.official?.name || g.name]));
   for (const stream of allStreams) {
     const siteName = stream.gameId && siteGameNames.get(stream.gameId);

@@ -210,7 +210,7 @@ function buildRandomizerIndex(seriesData) {
 
 function normalizeGameName(name) {
   return name.toLowerCase()
-    .replace(/^\([ivx]+(-[ivx]+)?\)\s*/, '') // generation prefix of Pokémon.yml, e.g. "(III) Pokémon Emerald"
+    .replace(/^\([ivx]+(-[ivx]+)?\)\s*/, '') // generation prefix of a series file, e.g. "(III) Name"
     .replace(/[^a-z0-9]/g, '')
     .replace(/thelegendofzelda/g, 'zelda')
     .replace(/supermetroid/g, 'sm')
@@ -253,7 +253,7 @@ async function updateGameResources(seriesData, dryRun = false) {
     }
     
     // 2. Chercher par nom de jeu
-    // A short name reduced to an abbreviation ("SM Randomizer" → "sm") collides with other games
+    // A short name reduced to an abbreviation ("XY Randomizer" → "xy") collides with other games
     const shortName = game.randomizer?.shortName;
     const namesToTry = [
       game.name,

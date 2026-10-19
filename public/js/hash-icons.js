@@ -1,13 +1,13 @@
-// Seed hash icons: shows the icons of a seed hash (HashGoldScale HashSlingshot...,
-// (Shield/Map/Ice Rod/...), Hash: ATOMIC VIOLA YARD COVERN) in place of their
-// names in a race info. The icons come from racetime.gg and data/hash-sets
+// Seed hash icons: shows the icons of a seed hash (HashA HashB...,
+// (ItemA/ItemB/...), Hash: WORD WORD WORD WORD) in place of their names in a
+// race info. The icons come from racetime.gg and data/hash-sets
 // (scripts/sync-hash-icons.js); a hash word without an image stays as text.
 (function () {
   const MANIFEST_URL = '/data/hash-icons.json';
   // Between the items of a hash: "A B", "(A/B)", "A - B", ["A", "B"], "(A) (B)", "{a}{b}"
   const SEPARATOR = '[\\s,/;|_\\-–\\[\\]"(){}]+';
   // A hash shows several items: shorter runs are left as text. Emotes named
-  // HashX / NoteX can't be anything else, plain names (Map, Bow) can.
+  // HashX / NoteX can't be anything else, plain item names can.
   const MIN_RUN = 4;
   const MIN_RUN_PREFIXED = 3;
   // Games whose hash is a few common words (names): only right after "Hash:"
@@ -42,7 +42,7 @@
     for (const [alias, name] of Object.entries(entry.aliases || {})) {
       if (lookup[name.toLowerCase()]) lookup[alias.toLowerCase()] = name;
     }
-    // Names of several words also written in one (BigGreenRupee, RocsCape)
+    // Names of several words also written in one ("Item Name" as ItemName)
     for (const [key, name] of Object.entries(lookup)) {
       const joined = key.replace(/[\s'’.]+/g, '');
       if (joined !== key && !lookup[joined]) lookup[joined] = name;
@@ -133,7 +133,7 @@
   // end) becomes its icon, words the list doesn't know stay as they are
   function hashSegmentsToHtml(matcher, str) {
     const segment = /(hash(?:\s+(?:items?|is))?\s*[:=\-]*)([^|\n]*?)(?=\||\n|https?:\/\/|$)/gi;
-    // Brackets around the words go with them: (X) (Bow) -> icons only
+    // Brackets around the words go with them: (A) (B) -> icons only
     const single = { ...matcher, run: new RegExp(`(?<![A-Za-z0-9])[([{"]*${matcher.token.source}(?:${SEPARATOR}${matcher.token.source})*[)\\]}"]*`, 'gi') };
     let html = '';
     let last = 0;
@@ -158,7 +158,7 @@
     if (!matcher.sizes) return escapeHtml(str);
     const run = `[([{"]*${matcher.token.source}(?:${SEPARATOR}${matcher.token.source})*[)\\]}"]*`;
     const whole = new RegExp(`(^\\s*|[;:]\\s*)(${run})[\\s.,;]*$`, 'i');
-    // A whole line first ("Map | Key | Earth..."), then each part between | of it
+    // A whole line first ("A | B | C..."), then each part between | of it
     return str.split(/(\n)/).map((line, i) => {
       if (i % 2) return escapeHtml(line);
       const all = renderBare(matcher, whole, line);

@@ -13,7 +13,7 @@ function tokens(name) {
 
 /**
  * Phase name of a bracket: the words its name does not share with its siblings
- * ("2026 Spoiler Tournament Upper Bracket" + "... Lower Bracket" → "Upper", "Lower").
+ * ("2026 Tournament Upper Bracket" + "... Lower Bracket" → "Upper", "Lower").
  */
 function deriveBracketLabels(names) {
   if (names.length < 2) return names.map(name => name);

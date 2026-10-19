@@ -1,6 +1,5 @@
 /**
- * ALttPR Asyncs (https://alttprasyncs.com) — async seeds of the ALTTPR
- * community, grouped in series: practice seeds of a tournament, its live
+ * Async site (https://alttprasyncs.com) — async seeds of a community, grouped in series: practice seeds of a tournament, its live
  * qualifiers (the racetime.gg room, then asyncs of the same seed), leagues,
  * weekly series.
  *

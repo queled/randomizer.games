@@ -1,6 +1,6 @@
 // Merges several games of the site into one (see services/game-merge.js).
 // Usage: node scripts/merge-games.js <targetId> <sourceId>... [--rename <newId>] [--short-name "<name>"]
-// Example: node scripts/merge-games.js tes5s tes5sse --short-name "TES5S Randomizer"
+// Example: node scripts/merge-games.js game game-edition --short-name "Game Randomizer"
 //
 // The target keeps its races and integrations and receives the sources' resources;
 // the sources are deleted. --rename then gives the merged game another id.

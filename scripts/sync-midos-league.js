@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * Sync the seasons of the OoTR League as tournaments
+ * Sync the seasons of the league as tournaments
  *
- * The League (https://league.ootrandomizer.com, behind a Discord login) pairs
+ * The League (its own site, behind a Discord login) pairs
  * players of the same division in 1v1 races. Each season becomes a tournament
  * with one round robin phase, one group per division, from its racetime.gg races:
  *   - the rooms Mido's House lists for the season (series "league"), with their division;

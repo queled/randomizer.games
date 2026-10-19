@@ -279,7 +279,7 @@ async function buildPlayersResponse(includeTournaments) {
   const players = Array.from(playersMap.entries()).map(([normalized, player]) => {
     const playerRaceCounts = raceCountsByPlayer.get(normalized) || new Map();
 
-    // Merge racetime categories that belong to the same game (e.g. alttpr + alttpr-ladder)
+    // Merge racetime categories that belong to the same game
     const racesByGameId = new Map();
     for (const [slug, count] of playerRaceCounts.entries()) {
       const lowerSlug = String(slug || '').toLowerCase();
@@ -612,9 +612,9 @@ function isCompactRequest(req) {
 }
 
 /**
- * Player of a name that is not its current one: a former racetime name ("Xavi" for an
- * account now named otherwise) or a bracket name ("Xavi1337" on start.gg, shown in its
- * sets as "Prefix | Xavi1337") linked to a racetime account. Only when the name leads to
+ * Player of a name that is not its current one: a former racetime name (for an account
+ * now named otherwise) or a bracket name (a start.gg gamer tag, shown in its sets as
+ * "Prefix | GamerTag") linked to a racetime account. Only when the name leads to
  * a single account. The Player document, or `{ name }` of the racetime name when the
  * account has none; the player page redirects to it.
  */

@@ -6,8 +6,8 @@
  * Utile pour synchroniser un nouveau jeu détecté depuis rando-list.
  * 
  * Usage:
- *   node scripts/sync-racetime-game.js --game ootr
- *   node scripts/sync-racetime-game.js --game ootr --max-pages 100
+ *   node scripts/sync-racetime-game.js --game <slug>
+ *   node scripts/sync-racetime-game.js --game <slug> --max-pages 100
  */
 
 const path = require('path');

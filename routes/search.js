@@ -17,15 +17,15 @@ function normalizeName(name) {
 }
 
 // Official game names keyed by game id, racetime category and the other names a
-// game goes by, so results show "The Legend of Zelda" rather than a racetime slug
-// like "z1r" or a tournament's own label like "Ocarina of Time Randomizer"
+// game goes by, so results show the official name rather than a racetime slug
+// or a tournament's own label
 async function loadGameLabels() {
   const docs = await Game.find({})
     .select('id name official.name randomizer.name randomizer.displayName integrations.racetime.gameSlug integrations.racetime.gameSlugs')
     .lean();
   const labels = new Map();
   const labelOf = (g) => (g.official && g.official.name) || g.name;
-  // Weakest key first: other names, "<id>r" (oot → ootr), then the id, then the racetime slugs
+  // Weakest key first: other names, "<id>r", then the id, then the racetime slugs
   docs.forEach(g => {
     [g.name, g.randomizer && g.randomizer.name, g.randomizer && g.randomizer.displayName, g.official && g.official.name]
       .filter(Boolean)
@@ -43,7 +43,7 @@ async function loadGameLabels() {
   return (key) => {
     if (!key) return null;
     const k = String(key).toLowerCase().trim();
-    // "the Legend of Zelda: A Link to the Past Randomizer" → the game's own name
+    // "<official name> Randomizer" → the game's own name
     return labels.get(k) || labels.get(k.replace(/\s+randomizer$/, '')) || null;
   };
 }
@@ -77,36 +77,24 @@ router.get('/', async (req, res, next) => {
     const normalizedSearch = normalizeName(searchTerm);
     const limitNum = Math.min(parseInt(limit) || 10, 50);
 
-        // Derive game categories from query (so "Ocarina" matches oot/ootr races)
+        // Derive game categories from query (so part of a game's name matches its races)
         function categoriesFromQuery(q) {
           const s = normalizeName(q);
           const cats = new Set();
           const addAll = (arr) => arr.forEach(x => cats.add(x));
 
-          // Ocarina of Time
           if (/ocarina|\boot\b|\bootr\b/.test(s)) addAll(['oot','ootr']);
           if (/legend.*ocarina.*time/.test(s)) addAll(['oot','ootr']);
-          // Majora's Mask
           if (/majora|\bmm\b|mmr\b/.test(s)) addAll(['mm','mmr']);
-          // A Link to the Past
           if (/link.*past|\balttp\b|alttpr\b/.test(s)) addAll(['alttp','alttpr']);
-          // Super Metroid
           if (/super.*metroid|\bsm\b|smr\b/.test(s)) addAll(['sm','smr']);
-          // Super Mario 64
           if (/super.*mario.*64|\bsm64\b/.test(s)) addAll(['sm64']);
-          // Donkey Kong 64
           if (/donkey.*kong.*64|\bdk64\b|\bdk64r\b/.test(s)) addAll(['dk64','dk64r']);
-          // Wind Waker
           if (/wind.*waker|\btww\b/.test(s)) addAll(['tww']);
-          // Twilight Princess
           if (/twilight.*princess|\btp\b/.test(s)) addAll(['tp']);
-          // Kingdom Hearts 2
           if (/kingdom.*hearts.*(2|ii)|\bkh2\b/.test(s)) addAll(['kh2fm','kh2fmr','kh2r']);
-          // Symphony of the Night
           if (/symphony.*night|\bsotn\b/.test(s)) addAll(['sotn']);
-          // SMZ3 (combo)
           if (/smz3|super.*metroid.*link|link.*super.*metroid/.test(s)) addAll(['smz3']);
-          // OoT+MM combo
           if (/ootmm|ocarina.*majora/.test(s)) addAll(['ootmm','oot','ootr','mm','mmr']);
 
           return Array.from(cats);

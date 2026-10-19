@@ -2,8 +2,8 @@
 /**
  * Sync Mido's House and Hyrule Town Hall schedules and restreams
  *
- * Reads the races of the events listed on https://midos.house (OoTR
- * tournaments) and https://hyruletownhall.com (its fork: ALTTPR, TWWR...)
+ * Reads the races of the events listed on https://midos.house and
+ * https://hyruletownhall.com (its fork)
  * and stores them on the start.gg tournament they belong to, linked to
  * matches by start.gg set ID:
  *   - `midosHouse.schedule`: upcoming races, replaced on each sync;
@@ -21,7 +21,7 @@
  *   node scripts/sync-schedule-sites.js                    # events on the home page of both sites
  *   node scripts/sync-schedule-sites.js --site hth         # one site only: midos or hth (repeatable)
  *   node scripts/sync-schedule-sites.js --archive          # finished events too, highlights of any age (one-off backfill)
- *   node scripts/sync-schedule-sites.js --event rot/1      # one event (repeatable), of the first --site (default midos), highlights of any age
+ *   node scripts/sync-schedule-sites.js --event <series>/<n>      # one event (repeatable), of the first --site (default midos), highlights of any age
  *   node scripts/sync-schedule-sites.js --no-vods          # skip the Twitch VOD lookup
  *   node scripts/sync-schedule-sites.js --dry-run
  */

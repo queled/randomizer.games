@@ -144,7 +144,7 @@ class SpeedRunsLiveAPI {
 
   /**
    * Get past results for an SRL game, newest first
-   * @param {string} game - SRL game abbreviation (e.g. 'oothacks')
+   * @param {string} game - SRL game abbreviation
    * @param {number} page - Page number (1-based)
    * @param {number} pageSize - Races per page (SRL accepts up to 500)
    */

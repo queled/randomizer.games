@@ -1,6 +1,6 @@
 /**
  * Speedrace (https://speedrace.deeplydevs.com) — restream planning of a few
- * OoTR tournaments, mostly French-speaking ones.
+ * tournaments, mostly French-speaking ones.
  *
  * Organizers create the matches, restreamers are assigned to them and enter
  * the link of their VOD themselves. Its public API gives each season's

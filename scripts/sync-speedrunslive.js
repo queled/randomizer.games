@@ -11,8 +11,8 @@
  *
  * Usage:
  *   node scripts/sync-speedrunslive.js --all
- *   node scripts/sync-speedrunslive.js --game oothacks
- *   node scripts/sync-speedrunslive.js --game ootr --dry-run
+ *   node scripts/sync-speedrunslive.js --game <srl-abbreviation>
+ *   node scripts/sync-speedrunslive.js --game <category> --dry-run
  *   node scripts/sync-speedrunslive.js --all --max-pages 2
  */
 
@@ -162,7 +162,7 @@ function parseArgs() {
 async function main() {
   const opts = parseArgs();
 
-  // --game accepts an SRL abbreviation (oothacks) or a racetime category (ootr)
+  // --game accepts an SRL abbreviation or a racetime category
   const mappings = opts.all
     ? SRL_GAME_MAPPINGS
     : SRL_GAME_MAPPINGS.filter(m => opts.game && [m.srl.toLowerCase(), m.category].includes(opts.game.toLowerCase()));

@@ -9,7 +9,7 @@
  *   node scripts/enrich-twitch.js                  # Enrichir tous les jeux
  *   node scripts/enrich-twitch.js --dry-run        # Mode simulation
  *   node scripts/enrich-twitch.js --force          # Forcer la mise à jour
- *   node scripts/enrich-twitch.js --ids alttp,ootr # Enrichir certains jeux
+ *   node scripts/enrich-twitch.js --ids a,b # Enrichir certains jeux
  * 
  * Variables d'environnement requises:
  *   TWITCH_CLIENT_ID     - Client ID de l'application Twitch

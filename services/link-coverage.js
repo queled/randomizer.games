@@ -6,7 +6,7 @@ const { QUALIFIER_PHASE } = require('./tournament-autolink');
  * forfeits (start.gg "DQ") left out: they never have a race.
  *
  * status: complete (every played match linked), partial, none (no race at all: a game
- * not raced on racetime.gg, like Melee), empty (no played match yet).
+ * not raced on racetime.gg), empty (no played match yet).
  */
 
 const STARTGG_COMPLETED = 3;

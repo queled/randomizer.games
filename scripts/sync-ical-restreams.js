@@ -2,7 +2,7 @@
 /**
  * Sync restreams from public calendars (iCal)
  *
- * Restream teams such as ZeldaSpeedRuns' French and German channels publish
+ * Restream teams publish
  * their schedule as a calendar, one event per match: "Event: Round 2 - A vs. B",
  * the channel in its description. The past broadcasts of the feed's channel
  * carry the same titles, and cover the matches the calendar misses.
@@ -19,7 +19,7 @@
  *   node scripts/sync-ical-restreams.js                 # matches of the last 3 days
  *   node scripts/sync-ical-restreams.js --days 60       # further back
  *   node scripts/sync-ical-restreams.js --archive       # every event of the calendars (one-off backfill)
- *   node scripts/sync-ical-restreams.js --feed zsr-fr   # one feed (repeatable)
+ *   node scripts/sync-ical-restreams.js --feed <id>   # one feed (repeatable)
  *   node scripts/sync-ical-restreams.js --dry-run
  */
 
@@ -72,13 +72,13 @@ function parseArgs() {
   return opts;
 }
 
-// The channel an event names ("Restream: https://twitch.tv/ZeldaSpeedRunsFR"), else the feed's
+// The channel an event names ("Restream: https://twitch.tv/<channel>"), else the feed's
 function eventChannel(event, feed) {
   const m = `${event.location || ''} ${event.description || ''}`.match(/https?:\/\/(?:www\.)?twitch\.tv\/[A-Za-z0-9_]+/);
   return (m && twitchVods.twitchLogin(m[0])) || feed.channel;
 }
 
-// racetime.gg categories of the game an event title names ("ALTTPR 9. Deutsches Turnier" → alttpr…), cached by title
+// racetime.gg categories of the game an event title names ("<Game> Tournament" → its categories), cached by title
 const slugsByText = new Map();
 async function categoriesOf(text) {
   const key = text.toLowerCase();
@@ -102,7 +102,7 @@ async function findRaces(slugs, sides, from, to) {
     if (names.length < 2) return false;
     const a = names.filter(n => sideNamesPlayer(sides[0], [n]));
     const b = names.filter(n => sideNamesPlayer(sides[1], [n]));
-    // Two different entrants: "Teto vs. Teto2" must not be one player twice
+    // Two different entrants: "Name vs. Name2" must not be one player twice
     return a.length && b.length && new Set([...a, ...b]).size >= 2;
   });
 }

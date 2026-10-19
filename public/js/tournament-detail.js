@@ -1338,7 +1338,7 @@ function teamTitle(name, members) {
   return members && members.length ? `${name} (${members.join(' / ')})` : name;
 }
 
-// Racetime account of a team player: same name, else one inside the other ("Painapple" = "ThePainapple")
+// Racetime account of a team player: same name, else one inside the other ("Name" = "TheName")
 function findMemberEntrant(race, member) {
   const compact = s => normalizeName(s).replace(/ /g, '');
   const target = compact(member);
@@ -1529,7 +1529,7 @@ function displayAsyncSeries(tournament) {
     const m = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
     return `${h}:${m}:${String(sec % 60).padStart(2, '0')}`;
   };
-  // The site cuts descriptions ("Live Qualifier - ..."): numbered, with the mode ("kaesden/open_ad_tileswap" → "open ad tileswap")
+  // The site cuts descriptions ("Live Qualifier - ..."): numbered, with the mode ("user/mode_name" → "mode name")
   const modeLabel = mode => String(mode || '').split('/').pop().replace(/_/g, ' ');
   const card = (seed, index) => {
     const room = sanitizeExternalUrl(seed.roomUrl);
@@ -2984,7 +2984,7 @@ function findEntrantTime(race, playerName){
     // Exact token match: any token equal to target (good confidence)
     if (entrantTokens.includes(target)) score += 200;
 
-    // All target tokens present in entrant tokens (e.g., 'xavi cola')
+    // All target tokens present in entrant tokens (e.g., 'abc def')
     const allTokensPresent = targetTokens.length > 0 && targetTokens.every(t => entrantTokens.includes(t));
     if (allTokensPresent) score += 180;
 
@@ -2994,7 +2994,7 @@ function findEntrantTime(race, playerName){
       if (re.test(uname)) score += 160;
     } catch (e) {}
 
-    // Prefix/suffix handling: treat short nickname prefixes as good matches (e.g. 'ico' vs 'icola')
+    // Prefix/suffix handling: treat short nickname prefixes as good matches (e.g. 'abc' vs 'abcd')
     try {
       const utoks = uname.split(' ').filter(Boolean);
       const ttoks = target.split(' ').filter(Boolean);
@@ -3029,7 +3029,7 @@ function findEntrantTime(race, playerName){
     if (similarity > 0.85) score += 140;
     else if (similarity > 0.7) score += 80;
 
-    // Penalize short accidental matches (avoid 'cola' matching 'icola')
+    // Penalize short accidental matches (avoid 'bcd' matching 'abcd')
     if (target.length < 4 && uname.includes(target) && !entrantTokens.includes(target)) {
       score -= 50;
     }

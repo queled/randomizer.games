@@ -2,7 +2,7 @@
 /**
  * One-off migration: moves the former hard-coded categories of the game page
  * (public/js/game-detail.js) into the `categories` and `categorySettings` fields
- * of SM64 and ALttP, writes those of OoT, all linked to their racetime goals,
+ * of two games, writes those of a third, all linked to their racetime goals,
  * and clears the generic placeholder categories ("Standard settings"...) of the
  * other games.
  *
@@ -52,12 +52,12 @@ const CONTENT = {
         racetimeGoals: [{ slug: 'sm64r', goal: '120 Star Non Stop' }]
       }
     ],
-    // Several SM64 randomizers coexist, each with its own options
+    // Several randomizers of the game coexist, each with its own options
     categorySettings: []
   },
 
   oot: {
-    // Racetime goals of OoTR are rulesets (techniques allowed) and game modes
+    // Racetime goals of this randomizer are rulesets (techniques allowed) and game modes
     categories: [
       {
         id: 'standard',

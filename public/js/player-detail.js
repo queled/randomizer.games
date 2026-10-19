@@ -487,7 +487,7 @@
       const meta = getGameMetaFromCategory(category);
       if (!meta.slug) continue;
 
-      // Group by canonical game so racetime categories of the same game (e.g. alttpr + alttpr-ladder) merge
+      // Group by canonical game so racetime categories of the same game merge
       if (!map.has(meta.gameId)) {
         map.set(meta.gameId, { slug: meta.slug, gameId: meta.gameId, name: meta.name || 'Jeu inconnu', count: 0 });
       }
@@ -677,7 +677,7 @@
         result = tr('playerDetail.dq', 'Disqualified');
       }
 
-      // The category field contains the game slug (e.g., 'oot', 'alttp')
+      // The category field contains the game slug
       const gameName = getGameDisplayName(r.category || r.name?.split('/')[0] || '');
       const statusKey = RACE_STATUS_KEYS[r.status];
       const raceId = r._id || r.id || '';

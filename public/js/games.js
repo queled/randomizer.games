@@ -114,12 +114,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     return sorted;
   }
   
-  // Lowercase without accents, so "pokemon" finds "Pokémon"
+  // Lowercase without accents, so a search typed without accents still finds the name
   function normalize(text) {
     return String(text || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   }
 
-  // Every name a game goes by: "OoTR", "Ocarina of Time", "The Legend of Zelda: Ocarina of Time"...
+  // Every name a game goes by: abbreviation, short name, full name...
   function searchableText(game) {
     const r = game.randomizer || {};
     return normalize([game.id, game.name, game.official?.name, r.displayName, r.shortName, r.tinyName, r.name].filter(Boolean).join(' | '));
@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     grid.innerHTML = games.map(game => {
       const id = (game.id || '').toLowerCase();
       const image = getGameImage(game);
-      // Afficher randomizer.shortName (ex: "ALttP Randomizer") sur la page liste
+      // Afficher randomizer.shortName sur la page liste
       const displayTitle = game.randomizer?.shortName || game.randomizer?.displayName || `${game.name} Randomizer`;
       // Afficher le nom complet du jeu en sous-titre
       const gameName = game.official?.name || game.name;

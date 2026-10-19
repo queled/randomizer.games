@@ -81,8 +81,8 @@ function parseMatchup(title) {
 
 /**
  * A side of a match title stands for a player when one name contains the other:
- * "Tyrant" for "Tyrant242", "Mr. Navigator" for "mr__navigator". The shorter
- * name needs 4 characters, as "Jem" would be found in any other name.
+ * "Abc" for "Abc242", "Mr. Abc" for "mr__abc". The shorter name needs
+ * 4 characters, as a 3-letter name would be found in any other name.
  */
 function sideNamesPlayer(side, names) {
   const s = normalizeName(side);

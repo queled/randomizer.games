@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Link tournament participants to the racetime account that raced their matches
- * ("Ultimastrike" in the bracket = "Ultimaderp" on racetime), from the races linked
+ * (whatever name the bracket gives them), from the races linked
  * to the matches, then from the account the same name or start.gg user raced with in
  * other tournaments. Done after each race link; this script catches up past tournaments.
  *

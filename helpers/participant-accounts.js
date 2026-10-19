@@ -1,7 +1,7 @@
 /**
  * Racetime account of each tournament participant, learned from the races linked to
- * its matches. Organizers type any name in the bracket ("Ultimastrike"); racetime
- * says who actually raced ("Ultimaderp"). Kept per tournament, unlike player aliases,
+ * its matches. Organizers type any name in the bracket; racetime says who
+ * actually raced. Kept per tournament, unlike player aliases,
  * so a bracket name never captures someone else's racetime account elsewhere.
  */
 const { normalizeName, scoreNameMatch } = require('./race-match-linking');
@@ -85,8 +85,7 @@ function getMatchTime(match) {
 }
 
 /**
- * Racetime account of bracket names it looks nothing like ("Natorade" racing as
- * "Nathann"), from the tournament schedule: on the day of most of its matches, the
+ * Racetime account of bracket names it looks nothing like, from the tournament schedule: on the day of most of its matches, the
  * same account raced a 1v1 room against that match's opponent. Learned before any race
  * is linked, so the rooms of these matches can be linked.
  * → Map(normalized racetime name → Set(normalized bracket name))
@@ -272,7 +271,7 @@ async function loadKnownAccounts(Tournament) {
 /**
  * Racetime accounts that raced under these exact names (case aside) in the game of the
  * tournament: racetime says who a name is, but only among the players of that game, so a
- * Melee bracket name never becomes a namesake who races something else.
+ * bracket name of another game never becomes a namesake who races something else.
  * → Map(normalized name → Map(userId → { userId, userName, races }))
  */
 async function findRaceNameAccounts(Race, names, categories) {
@@ -382,7 +381,7 @@ async function syncParticipantAccounts({ tournament, Race, knownAccounts = null,
   }
 
   // Still unknown: the account of the tournament's races no participant has, that looks
-  // like the name ("blueroses" racing as "blueroses4u"), when it fits no other one
+  // like the name ("name" racing as "name4u"), when it fits no other one
   const linkedIds = new Set(tournament.participants.map((p) => p.racetimeUserId).filter(Boolean));
   const freeAccounts = new Map();
   for (const entrant of races.flatMap((race) => race.entrants || [])) {

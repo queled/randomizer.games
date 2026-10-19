@@ -1225,8 +1225,8 @@
         posterEl.src = image;
       }
 
-      // Afficher randomizer.displayName (ex: "A Link to the Past Randomizer") en titre principal (h1)
-      // et official.name (ex: "The Legend of Zelda: A Link to the Past") en sous-titre (h2)
+      // Afficher randomizer.displayName en titre principal (h1)
+      // et official.name en sous-titre (h2)
       const displayTitle = game.randomizer?.displayName || game.randomizer?.shortName || game.officialName || `${game.name} Randomizer`;
       const gameName = game.official?.name || game.name;
       

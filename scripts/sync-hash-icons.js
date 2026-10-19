@@ -3,7 +3,7 @@
  * Download the seed hash icons of every game from racetime.gg
  *
  * Each racetime.gg category lists its emotes (/<category>/data). Those of the
- * seed hash (HashGoldScale, HashCape, NoteA...) are saved under
+ * seed hash (HashX, NoteX...) are saved under
  * public/assets/hash/<game id>/<emote>.<ext>, named after the emote, and
  * listed in public/data/hash-icons.json, which race pages read to show the
  * icons in place of the words. Chat emotes are left out. The categories of a
@@ -34,7 +34,7 @@ const HASH_SETS_DIR = path.join(__dirname, '..', 'data', 'hash-sets');
 const DELAY_MS = 300;
 
 // Which emotes of a game are hash icons, by game id. Most categories prefix them
-// (HashX, and NoteX for the OoTR ocarina password); a few name them after the item.
+// (HashX, and NoteX for a password of notes); a few name them after the item.
 const HASH_EMOTE = /^(Hash|Note)[A-Z]/;
 const ICON_RULES = {
   dk64: () => true,
@@ -64,7 +64,7 @@ const ALTTPR_ALIASES = {
   'Perle de lune': 'HashMoonPearl', Perle: 'HashMoonPearl', 'Potion verte': 'HashGreenPotion',
   Filet: 'HashBugnet', 'Baguette de glace': 'HashIceRod', 'Grande clé': 'HashBigKey', Bombes: 'HashBombs'
 };
-// The plain item names (Bow, Lens Of Truth...) of the Hash emotes are added by buildAliases
+// The plain item names of the Hash emotes are added by buildAliases
 const ALIASES = {
   alttp: ALTTPR_ALIASES,
   oot: {
@@ -100,7 +100,7 @@ const ALIASES = {
     NinCoin: 'NintendoCoin', Oranges: 'Orange'
   }
 };
-// Games where the item names of the HashX emotes (Cape, Lens Of Truth) are written too
+// Games where the item names of the HashX emotes are written too
 const PLAIN_NAMES = ['alttp', 'oot', 'mm'];
 
 function parseArgs() {
@@ -133,7 +133,7 @@ function buildAliases(gameId, files) {
       if (!name.startsWith('Hash')) continue;
       const plain = name.slice(4);
       aliases[plain] = name;
-      // GoldScale -> Gold Scale
+      // ItemName -> Item Name
       const spaced = plain.replace(/([a-z])([A-Z])/g, '$1 $2');
       if (spaced !== plain) aliases[spaced] = name;
     }

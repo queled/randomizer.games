@@ -199,7 +199,7 @@
         if (g.integrations?.racetime?.gameSlug) {
           gamesBySlug[g.integrations.racetime.gameSlug.toLowerCase()] = g;
         }
-        // Indexer aussi les slugs additionnels (comme alttpr-ladder)
+        // Indexer aussi les slugs additionnels
         if (g.integrations?.racetime?.gameSlugs) {
           g.integrations.racetime.gameSlugs.forEach(slug => {
             gamesBySlug[slug.toLowerCase()] = g;

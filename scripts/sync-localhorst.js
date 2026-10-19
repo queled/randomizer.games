@@ -2,7 +2,7 @@
 /**
  * Sync restreams scheduled on alttp.localhorst.tv
  *
- * The site schedules ALTTPR, Super Metroid Rando and SMZ3 races with the
+ * The site schedules the races of a few games with the
  * channels restreaming them (German ones especially). Each race gives its
  * racetime.gg room: its channels go to `race.restreams` of that race, with the
  * Twitch past broadcast covering its start while Twitch keeps it.
@@ -14,7 +14,7 @@
  *   node scripts/sync-localhorst.js                   # running events, races of the last 3 days
  *   node scripts/sync-localhorst.js --days 60         # further back (Twitch keeps past broadcasts 60 days at most)
  *   node scripts/sync-localhorst.js --archive         # every event, all its races (one-off backfill)
- *   node scripts/sync-localhorst.js --event beer-s4   # one event (repeatable), all its races
+ *   node scripts/sync-localhorst.js --event <slug>   # one event (repeatable), all its races
  *   node scripts/sync-localhorst.js --dry-run
  */
 

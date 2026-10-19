@@ -401,7 +401,7 @@ function goalTokens(value) {
     .replace(/\b(?:season|saison)\s*(\d+)\b/g, 's$1')
     .split(/[^a-z0-9]+/)
     // "Event2026" and "Event26" name the same edition
-    // "SGL 2026" names it too
+    // "EVT 2026" names it too
     .flatMap((token, index, tokens) => (/^[a-z]+$/.test(token) && /^20\d{2}$/.test(tokens[index + 1] || '')
       ? [token, `${token}${tokens[index + 1].slice(2)}`]
       : [token]))
@@ -418,7 +418,7 @@ function goalsLookAlike(a, b) {
   return goalTokens(left).some((token) => rightTokens.has(token));
 }
 
-// "League S6 Division 2 ...", "Step Ladder Series ...", "Weekly ...": a recurring series
+// "League S6 Division 2 ...", "Ladder Series ...", "Weekly ...": a recurring series
 // the tournament is not part of, even when the same two players meet
 const EVENT_SERIES_RE = /\b(league|ladder|weekly)\b/i;
 
@@ -433,7 +433,7 @@ const STAGE_WORDS = new Set([
   'quarterfinals', 'elimination', 'playoff', 'playoffs', 'match', 'set', 'async', 'live'
 ]);
 
-// "CT7 - Ragnoth vs Megaslim": words before the players that are neither a stage, a
+// "XY7 - A vs B": words before the players that are neither a stage, a
 // round number nor a player, and share nothing with the tournament name
 function namesOtherEvent(label, matchPlayers, tournamentName) {
   const parts = String(label || '').split(/\s+(?:vs\.?|v\.?)\s+/i);
@@ -452,7 +452,7 @@ function namesOtherEvent(label, matchPlayers, tournamentName) {
 }
 
 /**
- * Racetime goals are usually per event ("Random settings league", "SGL 2025"...): drop
+ * Racetime goals are usually per event ("Some League", "EVT 2025"...): drop
  * proposals whose goal neither matches the tournament's dominant goal nor its name,
  * they come from another event the same players met in.
  */
@@ -473,7 +473,7 @@ function filterProposalsByGoal(tournament, proposals, races) {
     // A room goal like "League Season 8" names another event even when the season matches
     if (namesOtherEventSeries(goalByUrl.get(proposal.raceUrl), tournament?.name)) return false;
     // Players read from the label rather than the room entrants: only trust labels that
-    // name this event ("League 2025 - ..."), not another one the same players met in ("CT7 - ...")
+    // name this event ("League 2025 - ..."), not another one the same players met in ("XY7 - ...")
     if (proposal.fromLabel && !goalsLookAlike(proposal.raceLabel, tournament?.name)) return false;
     // Players recognised through an alias or a nickname: reject rooms naming another event
     if (proposal.inferred && namesOtherEvent(proposal.raceLabel, proposal.matchPlayers, tournament?.name)) return false;
@@ -531,7 +531,7 @@ async function loadPlayerAliases({ Race, races }) {
   }).select('entrants.userName matchPlayers').lean();
   const aliases = learnPlayerAliases(linkedRaces);
 
-  // Aliases set on player profiles (SRL account "anatomyz" = bracket name "atz")
+  // Aliases set on player profiles (an SRL account under another bracket name)
   const Player = Race.db.models.Player;
   if (!Player) return aliases;
   const players = await Player.find({ 'aliases.0': { $exists: true } }).select('name aliases').lean();

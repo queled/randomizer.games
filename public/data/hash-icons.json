@@ -144,6 +144,10 @@
       "Start": "Start.png",
       "ZButton": "ZButton.png"
     },
+    "words": [
+      "DK Coin",
+      "DKCoin"
+    ],
     "aliases": {
       "Sax": "Saxophone",
       "Nintendo Coin": "NintendoCoin",
@@ -462,6 +466,120 @@
       "Skull": "HashSkullToken"
     }
   },
+  "sm": {
+    "categories": [
+      "smr"
+    ],
+    "icons": {
+      "GEEMER": "GEEMER.png",
+      "RIPPER": "RIPPER.png",
+      "ATOMIC": "ATOMIC.png",
+      "POWAMP": "POWAMP.png",
+      "NAMIHE": "NAMIHE.png",
+      "ALCOON": "ALCOON.png",
+      "BEETOM": "BEETOM.png",
+      "OWTCH": "OWTCH.png",
+      "ZEBBO": "ZEBBO.png",
+      "ZEELA": "ZEELA.png",
+      "HOLTZ": "HOLTZ.png",
+      "VIOLA": "VIOLA.png",
+      "WAVER": "WAVER.png",
+      "RINKA": "RINKA.png",
+      "BOYON": "BOYON.png",
+      "CHOOT": "CHOOT.png",
+      "KAGO": "KAGO.png",
+      "SKREE": "SKREE.png",
+      "COVERN": "COVERN.png",
+      "EVIR": "EVIR.png",
+      "TATORI": "TATORI.png",
+      "OUM": "OUM.png",
+      "PUYO": "PUYO.png",
+      "YARD": "YARD.png",
+      "ZOA": "ZOA.png",
+      "FUNE": "FUNE.png",
+      "GAMET": "GAMET.png",
+      "GERUTA": "GERUTA.png",
+      "SOVA": "SOVA.png",
+      "BULL": "BULL.png"
+    },
+    "words": [
+      "SCISER",
+      "PUROMI"
+    ],
+    "afterHash": true,
+    "minRun": 2,
+    "aliases": {}
+  },
+  "tww": {
+    "categories": [
+      "twwr"
+    ],
+    "icons": {
+      "Link": "Link.png",
+      "Zelda": "Zelda.png",
+      "Medli": "Medli.png",
+      "Makar": "Makar.png",
+      "Hollo": "Hollo.png",
+      "Kreeb": "Kreeb.png",
+      "Kamo": "Kamo.png",
+      "Obli": "Obli.png",
+      "Willi": "Willi.png",
+      "Gonzo": "Gonzo.png",
+      "Aryll": "Aryll.png",
+      "Mila": "Mila.png",
+      "Ganon": "Ganon.png",
+      "Sam": "Sam.png",
+      "Vera": "Vera.png",
+      "Missy": "Missy.png",
+      "Dampa": "Dampa.png",
+      "Kane": "Kane.png",
+      "Tetra": "Tetra.png",
+      "Valoo": "Valoo.png",
+      "Gohma": "Gohma.png",
+      "Poe": "Poe.png",
+      "Gyorg": "Gyorg.png",
+      "Niko": "Niko.png",
+      "Morth": "Morth.png",
+      "Elma": "Elma.png",
+      "Oakin": "Oakin.png",
+      "Drona": "Drona.png",
+      "Irch": "Irch.png",
+      "Aldo": "Aldo.png",
+      "Rown": "Rown.png",
+      "Keese": "Keese.png",
+      "Basht": "Basht.png",
+      "Bisht": "Bisht.png",
+      "Ilari": "Ilari.png",
+      "Ivan": "Ivan.png",
+      "Jan": "Jan.png",
+      "Jin": "Jin.png",
+      "Mesa": "Mesa.png",
+      "Joel": "Joel.png",
+      "Abe": "Abe.png",
+      "Zill": "Zill.png",
+      "Zuko": "Zuko.png",
+      "Ankle": "Ankle.png",
+      "Lenzo": "Lenzo.png",
+      "Anton": "Anton.png",
+      "Linda": "Linda.png",
+      "Fado": "Fado.png",
+      "Baito": "Baito.png",
+      "Nayru": "Nayru.png",
+      "Jabun": "Jabun.png"
+    },
+    "words": [
+      "Korok",
+      "Zora",
+      "'Hoy",
+      "Rito",
+      "Woods",
+      "Din",
+      "Bobby"
+    ],
+    "afterHash": true,
+    "minRun": 2,
+    "aliases": {}
+  },
   "z1": {
     "categories": [
       "z1r"
@@ -503,6 +621,9 @@
       "WoodenArrow": "WoodenArrow.png",
       "WoodenSword": "WoodenSword.png"
     },
+    "words": [
+      "Beams"
+    ],
     "aliases": {
       "Meat": "Bait",
       "WoodSword": "WoodenSword",

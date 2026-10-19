@@ -9,6 +9,11 @@
  * icons in place of the words. Chat emotes are left out. The categories of a
  * game (integrations.racetime.gameSlug / gameSlugs) share its icons.
  *
+ * Games whose hash is a few words (enemy or character names...) have their
+ * list in data/hash-sets/<game id>.json, taken from the randomizer's source:
+ * word -> source page of its image, saved as public/assets/hash/<game id>/<word>.png,
+ * or null when nothing shows it (the word stays as text among the icons).
+ *
  * Usage:
  *   node scripts/sync-hash-icons.js
  *   node scripts/sync-hash-icons.js --force    # download the images again
@@ -25,6 +30,7 @@ const { Race, Game } = require('../models');
 
 const ICONS_DIR = path.join(__dirname, '..', 'public', 'assets', 'hash');
 const MANIFEST = path.join(__dirname, '..', 'public', 'data', 'hash-icons.json');
+const HASH_SETS_DIR = path.join(__dirname, '..', 'data', 'hash-sets');
 const DELAY_MS = 300;
 
 // Which emotes of a game are hash icons, by game id. Most categories prefix them
@@ -154,6 +160,37 @@ async function loadCategoryGames() {
   }
 }
 
+// Word lists of data/hash-sets, merged with the racetime.gg emotes of the same game
+function addHashSets(manifest, categoryGames) {
+  if (!fs.existsSync(HASH_SETS_DIR)) return;
+  for (const file of fs.readdirSync(HASH_SETS_DIR).filter(f => f.endsWith('.json')).sort()) {
+    const gameId = file.slice(0, -5);
+    const set = JSON.parse(fs.readFileSync(path.join(HASH_SETS_DIR, file), 'utf8'));
+    const categories = categoryGames.filter(c => c.gameId === gameId).map(c => c.category);
+    if (!categories.length) {
+      console.warn(`  ⚠ ${file}: no race of game ${gameId} in the database`);
+      continue;
+    }
+    const entry = manifest[gameId] || (manifest[gameId] = { categories: [], icons: {} });
+    for (const category of categories) {
+      if (!entry.categories.includes(category)) entry.categories.push(category);
+    }
+    const words = [];
+    for (const [word, source] of Object.entries(set.words || {})) {
+      const iconFile = word + '.png';
+      if (source && fs.existsSync(path.join(ICONS_DIR, gameId, iconFile))) entry.icons[word] = iconFile;
+      else {
+        if (source) console.warn(`  ⚠ ${gameId}: no image ${iconFile} for ${word}`);
+        words.push(word);
+      }
+    }
+    if (words.length) entry.words = words;
+    if (set.aliases) entry.aliases = set.aliases;
+    if (set.afterHash) entry.afterHash = true;
+    if (set.minRun) entry.minRun = set.minRun;
+  }
+}
+
 async function main() {
   const opts = parseArgs();
   const categoryGames = await loadCategoryGames();
@@ -197,11 +234,14 @@ async function main() {
     }
   }
 
+  addHashSets(manifest, categoryGames);
+
   const sorted = {};
   for (const gameId of Object.keys(manifest).sort()) {
     const entry = manifest[gameId];
-    sorted[gameId] = { ...entry, aliases: buildAliases(gameId, entry.icons) };
-    console.log(`  ✓ ${gameId} (${entry.categories.join(', ')}): ${Object.keys(entry.icons).length} icons`);
+    sorted[gameId] = { ...entry, aliases: { ...buildAliases(gameId, entry.icons), ...entry.aliases } };
+    const words = entry.words ? `, ${entry.words.length} words as text` : '';
+    console.log(`  ✓ ${gameId} (${entry.categories.join(', ')}): ${Object.keys(entry.icons).length} icons${words}`);
   }
   if (opts.dryRun) {
     console.log(`Dry run: ${Object.keys(sorted).length} games with hash icons`);

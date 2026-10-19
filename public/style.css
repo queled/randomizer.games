@@ -2135,6 +2135,16 @@ body.spoiler-mode .spoiler-text::before {
     object-fit: contain;
 }
 
+/* Hash word without an image */
+.hash-word {
+    padding: 0.05rem 0.35rem;
+    border: 1px solid currentColor;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    line-height: 1.5rem;
+    opacity: 0.85;
+}
+
 .race-links {
     display: flex;
     flex-wrap: wrap;

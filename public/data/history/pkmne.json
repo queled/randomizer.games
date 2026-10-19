@@ -1,7 +1,7 @@
 {
   "intro": {
-    "fr": "Pokémon Émeraude se joue en multiworld avec Archipelago, qui randomise à la fois les objets et les Pokémon.",
-    "en": "Pokémon Emerald can be played in multiworld with Archipelago, which randomizes both items and Pokémon."
+    "fr": "Pokémon Émeraude se randomise avec les hacks Speedchoice de RevoSucks, pensés pour le speedrun, et se joue en multiworld avec Archipelago, qui randomise à la fois les objets et les Pokémon.",
+    "en": "Pokémon Emerald is randomized with RevoSucks's Speedchoice hacks, built for speedrunning, and can be played in multiworld with Archipelago, which randomizes both items and Pokémon."
   },
   "events": [
     {
@@ -13,6 +13,17 @@
       "text": {
         "fr": "Game Freak et Nintendo sortent Pokémon Émeraude sur Game Boy Advance en 2004.",
         "en": "Game Freak and Nintendo release Pokémon Emerald on the Game Boy Advance in 2004."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Emerald Speedchoice",
+        "en": "Emerald Speedchoice"
+      },
+      "text": {
+        "fr": "RevoSucks publie deux hacks d'Émeraude pensés pour le speedrun et la randomisation, tous deux issus de la décompilation pokeemerald : Emerald EX Speedchoice (versions 0.3.0 en avril et 0.4.0 en août 2022) et Emerald Speedchoice (juin 2022). Le Type Chart Randomizer de NPO-197 est utilisé avec les deux.",
+        "en": "RevoSucks releases two Emerald hacks built for speedrunning and randomizing, both based on the pokeemerald decompilation: Emerald EX Speedchoice (versions 0.3.0 in April and 0.4.0 in August 2022) and Emerald Speedchoice (June 2022). NPO-197's Type Chart Randomizer is used with both."
       }
     },
     {
@@ -31,6 +42,18 @@
     }
   ],
   "sources": [
+    {
+      "label": "RevoSucks/pokeemerald-ex-speedchoice (GitHub)",
+      "url": "https://github.com/RevoSucks/pokeemerald-ex-speedchoice"
+    },
+    {
+      "label": "RevoSucks/pokeemerald-speedchoice (GitHub)",
+      "url": "https://github.com/RevoSucks/pokeemerald-speedchoice"
+    },
+    {
+      "label": "NPO-197/PokemonTypeChartRandomizer (GitHub)",
+      "url": "https://github.com/NPO-197/PokemonTypeChartRandomizer"
+    },
     {
       "label": "Archipelago — Pokemon Emerald",
       "url": "https://archipelago.gg/games/Pokemon%20Emerald/info/en"

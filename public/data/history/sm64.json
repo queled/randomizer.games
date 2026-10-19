@@ -54,12 +54,12 @@
         "en": "Today"
       },
       "title": {
-        "fr": "Archipelago",
-        "en": "Archipelago"
+        "fr": "Multiworld",
+        "en": "Multiworld"
       },
       "text": {
-        "fr": "Super Mario 64 est aussi pris en charge par Archipelago pour le multiworld.",
-        "en": "Super Mario 64 is also supported by Archipelago for multiworld."
+        "fr": "Super Mario 64 est aussi pris en charge par Archipelago pour le multiworld. Ses romhacks se jouent en multiworld avec MultiworldGG, qui accepte la plupart des hacks binaires et mélange clés, étoiles, casquettes et canons ; la série Star Revenge y bénéficie d'une prise en charge spéciale.",
+        "en": "Super Mario 64 is also supported by Archipelago for multiworld. Its romhacks can be played in multiworld with MultiworldGG, which supports most binary hacks and shuffles keys, stars, caps and cannons; the Star Revenge series gets special support."
       }
     }
   ],
@@ -83,6 +83,10 @@
     {
       "label": "racetime.gg — SM64 Randomizer",
       "url": "https://racetime.gg/sm64r"
+    },
+    {
+      "label": "Multiworld — SM64 Romhack",
+      "url": "https://multiworld.gg/games/SM64%20Romhack/info/en"
     }
   ]
 }

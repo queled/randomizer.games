@@ -42,6 +42,11 @@
     for (const [alias, name] of Object.entries(entry.aliases || {})) {
       if (lookup[name.toLowerCase()]) lookup[alias.toLowerCase()] = name;
     }
+    // Names of several words also written in one (BigGreenRupee, RocsCape)
+    for (const [key, name] of Object.entries(lookup)) {
+      const joined = key.replace(/[\s'’.]+/g, '');
+      if (joined !== key && !lookup[joined]) lookup[joined] = name;
+    }
     const words = Object.keys(lookup)
       .sort((a, b) => b.length - a.length)
       .map((w) => escapeRegex(w).replace(/ /g, '\\s+'));
@@ -89,15 +94,41 @@
     const str = String(text || '');
     const matcher = manifest ? getMatcher(manifest, category) : null;
     if (!matcher) return escapeHtml(str);
+    if (matcher.afterHash) return hashSegmentsToHtml(matcher, str);
+    return runsToHtml(matcher, str, (run, before) => renderRun(matcher, run, before));
+  }
+
+  function runsToHtml(matcher, str, render) {
     let html = '';
     let last = 0;
     matcher.run.lastIndex = 0;
     let m;
     while ((m = matcher.run.exec(str))) {
-      const icons = renderRun(matcher, m[0], str.slice(0, m.index));
+      const icons = render(m[0], str.slice(0, m.index));
       if (!icons) continue;
       html += escapeHtml(str.slice(last, m.index)) + icons;
       last = m.index + m[0].length;
+    }
+    return html + escapeHtml(str.slice(last));
+  }
+
+  // Word hashes: every known word after "Hash:" (up to a | , a link or the line
+  // end) becomes its icon, words the list doesn't know stay as they are
+  function hashSegmentsToHtml(matcher, str) {
+    const segment = /(hash(?:\s+(?:items?|is))?\s*[:=\-]*)([^|\n]*?)(?=\||\n|https?:\/\/|$)/gi;
+    const single = { ...matcher, run: new RegExp(`(?<![A-Za-z0-9])${matcher.token.source}(?:${SEPARATOR}${matcher.token.source})*`, 'gi') };
+    let html = '';
+    let last = 0;
+    let m;
+    while ((m = segment.exec(str))) {
+      if (!m[2].trim()) {
+        if (m[0] === '') segment.lastIndex++;
+        continue;
+      }
+      const start = m.index + m[1].length;
+      const inner = runsToHtml(single, m[2], (run) => renderRun({ ...single, afterHash: false, minRun: 1 }, run, ''));
+      html += escapeHtml(str.slice(last, start)) + inner;
+      last = start + m[2].length;
     }
     return html + escapeHtml(str.slice(last));
   }

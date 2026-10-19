@@ -70,7 +70,9 @@ const OVERRIDES = {
     'Metroid Fusion': 'mf',
     'Xenoblade X': 'xcx',
     // Door Rando, beside "A Link to the Past"
-    'The Legend of Zelda: A Link to the Past': false
+    'The Legend of Zelda: A Link to the Past': false,
+    // Map Rando, beside "Super Metroid"
+    'Super Metroid Map Rando': false
   }
 };
 

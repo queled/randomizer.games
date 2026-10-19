@@ -4,5 +4,8 @@
     "ss"
   ],
   "afterHash": true,
-  "minRun": 2
+  "minRun": 2,
+  "sizes": [
+    3
+  ]
 }

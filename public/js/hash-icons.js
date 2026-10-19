@@ -58,6 +58,7 @@
       lookup,
       afterHash: !!entry.afterHash,
       minRun: entry.minRun || 0,
+      sizes: entry.sizes || null,
       run: new RegExp(`(?<![A-Za-z0-9])${token}(?:${SEPARATOR}${token})+`, 'gi'),
       token: new RegExp(token, 'gi')
     };
@@ -97,7 +98,10 @@
     const str = String(text || '');
     const matcher = manifest ? getMatcher(manifest, category) : null;
     if (!matcher) return escapeHtml(str);
-    if (matcher.afterHash) return hashSegmentsToHtml(matcher, str);
+    if (matcher.afterHash) {
+      const html = hashSegmentsToHtml(matcher, str);
+      return html.includes('class="hash-icons"') ? html : bareHashToHtml(matcher, str);
+    }
     return runsToHtml(matcher, str, (run, before) => renderRun(matcher, run, before));
   }
 
@@ -135,6 +139,26 @@
       last = start + m[2].length;
     }
     return html + escapeHtml(str.slice(last));
+  }
+
+  // A hash written without "Hash:": a whole part of the info (between | or line
+  // breaks, or after a ; or :) made only of the game's hash words, as many as a
+  // hash has, at least two of them with an icon. Place names and sentences fail.
+  function bareHashToHtml(matcher, str) {
+    if (!matcher.sizes) return escapeHtml(str);
+    const run = `[([{"]*${matcher.token.source}(?:${SEPARATOR}${matcher.token.source})*[)\\]}"]*`;
+    const whole = new RegExp(`(^\\s*|[;:]\\s*)(${run})[\\s.,;]*$`, 'i');
+    return str.split(/(\||\n)/).map((part, i) => {
+      if (i % 2) return escapeHtml(part);
+      const m = whole.exec(part);
+      if (!m) return escapeHtml(part);
+      const names = (m[2].match(matcher.token) || []).map((w) => matcher.lookup[w.toLowerCase().replace(/\s+/g, ' ')]);
+      const icons = names.filter((n) => n && matcher.icons[n]).length;
+      if (names.some((n) => !n) || !matcher.sizes.includes(names.length) || icons < 2) return escapeHtml(part);
+      const start = m.index + m[1].length;
+      const rendered = renderRun({ ...matcher, afterHash: false, minRun: 1 }, m[2], '');
+      return rendered ? escapeHtml(part.slice(0, start)) + rendered + escapeHtml(part.slice(start + m[2].length)) : escapeHtml(part);
+    }).join('');
   }
 
   window.HashIcons = { load, toHtml };

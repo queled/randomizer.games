@@ -216,6 +216,8 @@ function addHashSets(manifest, categoryGames) {
     if (Object.keys(aliases).length) entry.aliases = aliases;
     if (set.afterHash) entry.afterHash = true;
     if (set.minRun) entry.minRun = set.minRun;
+    // Word counts of a whole hash, to spot one written without "Hash:"
+    if (set.sizes) entry.sizes = set.sizes;
   }
 }
 

@@ -3,6 +3,9 @@
   "list": "https://github.com/blkerby/MapRandomizer/blob/main/patches/src/seed_hash_display.asm",
   "afterHash": true,
   "minRun": 2,
+  "sizes": [
+    4
+  ],
   "words": {
     "GEEMER": "https://github.com/blkerby/MapRandomizer/blob/main/TitleScreen/Export/Enemies/DCFF.gfx",
     "RIPPER": "https://www.metroidwiki.org/wiki/File:Ripper_sm_Sprite.png",

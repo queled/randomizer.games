@@ -3,6 +3,9 @@
   "list": "https://github.com/randovania/randovania/blob/main/randovania/games/dread/hash_words.py",
   "afterHash": true,
   "minRun": 2,
+  "sizes": [
+    3
+  ],
   "words": {
     "Aberration": null,
     "Adam": null,

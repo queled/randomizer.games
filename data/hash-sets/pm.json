@@ -3,6 +3,9 @@
   "list": "https://github.com/icebound777/PMR-SeedGenerator/blob/main/metadata/item_general.py",
   "afterHash": true,
   "minRun": 2,
+  "sizes": [
+    4
+  ],
   "words": {
     "Lucky Star": null,
     "First Degree Card": null,

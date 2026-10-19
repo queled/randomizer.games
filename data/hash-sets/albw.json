@@ -3,6 +3,9 @@
   "list": "https://github.com/rickfay/z17-randomizer/blob/master/randomizer/src/lib.rs",
   "afterHash": true,
   "minRun": 2,
+  "sizes": [
+    5
+  ],
   "words": {
     "A": "https://zeldawiki.wiki/wiki/File:ALBW_A_Icon.png",
     "B": "https://zeldawiki.wiki/wiki/File:ALBW_B_Icon.png",

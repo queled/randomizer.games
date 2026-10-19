@@ -3,6 +3,9 @@
   "list": "https://github.com/LagoLunatic/wwrando/blob/master/seedgen/names.txt",
   "afterHash": true,
   "minRun": 2,
+  "sizes": [
+    2
+  ],
   "words": {
     "Link": "https://zeldawiki.wiki/wiki/File:TWW_Link_%26_the_King_of_Red_Lions_Figurine_Model.png",
     "Zelda": "https://zeldawiki.wiki/wiki/File:TWW_Princess_Zelda_Figurine_Model.png",

@@ -2,6 +2,9 @@
   "game": "Ocarina of Time 3D Randomizer: the Ocarina of Time randomizer hash items; images are the OoT3D item icons (Zelda Wiki)",
   "afterHash": true,
   "minRun": 2,
+  "sizes": [
+    5
+  ],
   "words": {
     "Deku Stick": "https://zeldawiki.wiki/wiki/File:OoT3D_Deku_Stick_Icon.png",
     "Deku Nut": "https://zeldawiki.wiki/wiki/File:OoT3D_Deku_Nut_Icon.png",

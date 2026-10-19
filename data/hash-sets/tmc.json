@@ -3,6 +3,10 @@
   "list": "https://github.com/minishmaker/randomizer/blob/master/RandomizerCore/Resources/hashicons.png",
   "afterHash": true,
   "minRun": 2,
+  "sizes": [
+    5,
+    7
+  ],
   "words": {
     "Big Blue Rupee": "https://github.com/minishmaker/randomizer/blob/master/RandomizerCore/Resources/hashicons.png",
     "Big Green Rupee": "https://github.com/minishmaker/randomizer/blob/master/RandomizerCore/Resources/hashicons.png",
@@ -157,6 +161,14 @@
     "HeartC": "Heart Container",
     "Loaf": "Brioche",
     "G-Egg": "Green Egg",
-    "BigGRupee": "Big Green Rupee"
+    "BigGRupee": "Big Green Rupee",
+    "Blue Octorok": "Blue Octo",
+    "Red Octorok": "Red Octo",
+    "Blue Oktorock": "Blue Octo",
+    "Red Oktorock": "Red Octo",
+    "Earth": "Earth Element",
+    "Fire": "Fire Element",
+    "Water": "Water Element",
+    "Wind": "Wind Element"
   }
 }

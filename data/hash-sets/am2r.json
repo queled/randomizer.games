@@ -3,6 +3,9 @@
   "list": "https://github.com/randovania/randovania/blob/main/randovania/games/am2r/hash_words.py",
   "afterHash": true,
   "minRun": 2,
+  "sizes": [
+    3
+  ],
   "words": {
     "Samus": "https://metroid.fandom.com/wiki/File:M2_art_Samus_01.png",
     "Metroid": "https://metroid.fandom.com/wiki/File:MDR_UK_MII_Metroid_Larva_Crop.png",

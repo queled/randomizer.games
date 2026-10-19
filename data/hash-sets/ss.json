@@ -3,6 +3,9 @@
   "list": "https://github.com/ssrando/ssrando/blob/main/names.txt",
   "afterHash": true,
   "minRun": 2,
+  "sizes": [
+    3
+  ],
   "words": {
     "Link": "https://zeldawiki.wiki/wiki/File:SS_Link_Icon.png",
     "Zelda": "https://zeldawiki.wiki/wiki/File:SS_Zelda_Icon.png",

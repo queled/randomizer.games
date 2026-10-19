@@ -3,6 +3,9 @@
   "list": "https://github.com/randovania/randovania/blob/main/randovania/games/prime2/hash_words.py",
   "afterHash": true,
   "minRun": 2,
+  "sizes": [
+    3
+  ],
   "words": {
     "A-Kul": "https://metroid.fandom.com/wiki/File:A-KulClueBust.png",
     "Abandoned": null,

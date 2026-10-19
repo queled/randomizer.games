@@ -6,6 +6,9 @@
   ],
   "afterHash": true,
   "minRun": 2,
+  "sizes": [
+    4
+  ],
   "words": {
     "ARRGI": null,
     "BABUSU": null,

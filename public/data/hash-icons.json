@@ -17,6 +17,9 @@
     },
     "afterHash": true,
     "minRun": 2,
+    "sizes": [
+      5
+    ],
     "aliases": {}
   },
   "alttp": {
@@ -251,6 +254,9 @@
     ],
     "afterHash": true,
     "minRun": 2,
+    "sizes": [
+      3
+    ],
     "aliases": {}
   },
   "dk64": {
@@ -278,6 +284,9 @@
     "words": [
       "DK Coin",
       "DKCoin"
+    ],
+    "sizes": [
+      5
     ],
     "aliases": {
       "Sax": "Saxophone",
@@ -435,6 +444,9 @@
     ],
     "afterHash": true,
     "minRun": 2,
+    "sizes": [
+      3
+    ],
     "aliases": {}
   },
   "mf": {
@@ -558,6 +570,9 @@
     ],
     "afterHash": true,
     "minRun": 2,
+    "sizes": [
+      3
+    ],
     "aliases": {}
   },
   "mfo": {
@@ -681,6 +696,9 @@
     ],
     "afterHash": true,
     "minRun": 2,
+    "sizes": [
+      4
+    ],
     "aliases": {}
   },
   "mm": {
@@ -1025,6 +1043,9 @@
     ],
     "afterHash": true,
     "minRun": 2,
+    "sizes": [
+      3
+    ],
     "aliases": {}
   },
   "mp2": {
@@ -1361,6 +1382,9 @@
     ],
     "afterHash": true,
     "minRun": 2,
+    "sizes": [
+      3
+    ],
     "aliases": {}
   },
   "mp3": {
@@ -1697,6 +1721,9 @@
     ],
     "afterHash": true,
     "minRun": 2,
+    "sizes": [
+      3
+    ],
     "aliases": {}
   },
   "mpcg": {
@@ -2134,6 +2161,9 @@
     ],
     "afterHash": true,
     "minRun": 2,
+    "sizes": [
+      3
+    ],
     "aliases": {}
   },
   "oot": {
@@ -2286,6 +2316,9 @@
     ],
     "afterHash": true,
     "minRun": 2,
+    "sizes": [
+      5
+    ],
     "aliases": {}
   },
   "pm": {
@@ -2574,6 +2607,9 @@
     ],
     "afterHash": true,
     "minRun": 2,
+    "sizes": [
+      4
+    ],
     "aliases": {}
   },
   "sm": {
@@ -2618,6 +2654,9 @@
     ],
     "afterHash": true,
     "minRun": 2,
+    "sizes": [
+      4
+    ],
     "aliases": {}
   },
   "smz3": {
@@ -2694,6 +2733,9 @@
     ],
     "afterHash": true,
     "minRun": 2,
+    "sizes": [
+      4
+    ],
     "aliases": {}
   },
   "ss": {
@@ -3070,6 +3112,9 @@
     ],
     "afterHash": true,
     "minRun": 2,
+    "sizes": [
+      3
+    ],
     "aliases": {}
   },
   "sshd": {
@@ -3446,6 +3491,9 @@
     ],
     "afterHash": true,
     "minRun": 2,
+    "sizes": [
+      3
+    ],
     "aliases": {}
   },
   "tmc": {
@@ -3606,10 +3654,22 @@
       "HeartC": "Heart Container",
       "Loaf": "Brioche",
       "G-Egg": "Green Egg",
-      "BigGRupee": "Big Green Rupee"
+      "BigGRupee": "Big Green Rupee",
+      "Blue Octorok": "Blue Octo",
+      "Red Octorok": "Red Octo",
+      "Blue Oktorock": "Blue Octo",
+      "Red Oktorock": "Red Octo",
+      "Earth": "Earth Element",
+      "Fire": "Fire Element",
+      "Water": "Water Element",
+      "Wind": "Wind Element"
     },
     "afterHash": true,
-    "minRun": 2
+    "minRun": 2,
+    "sizes": [
+      5,
+      7
+    ]
   },
   "tww": {
     "categories": [
@@ -3679,6 +3739,9 @@
     ],
     "afterHash": true,
     "minRun": 2,
+    "sizes": [
+      2
+    ],
     "aliases": {}
   },
   "z1": {
@@ -3724,6 +3787,9 @@
     },
     "words": [
       "Beams"
+    ],
+    "sizes": [
+      4
     ],
     "aliases": {
       "Meat": "Bait",

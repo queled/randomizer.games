@@ -3,6 +3,9 @@
   "list": "https://github.com/randovania/randovania/blob/main/randovania/games/fusion/hash_words.py",
   "afterHash": true,
   "minRun": 2,
+  "sizes": [
+    3
+  ],
   "words": {
     "Animals": null,
     "Arachnus": "https://www.metroidwiki.org/wiki/File:Arachnus_mf_Sprite.png",

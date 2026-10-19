@@ -59,7 +59,8 @@
       afterHash: !!entry.afterHash,
       minRun: entry.minRun || 0,
       sizes: entry.sizes || null,
-      run: new RegExp(`(?<![A-Za-z0-9])${token}(?:${SEPARATOR}${token})+`, 'gi'),
+      // Brackets and quotes around the run go with it: (A/B), ["A", "B"]
+      run: new RegExp(`(?<![A-Za-z0-9])[([{"]*${token}(?:${SEPARATOR}${token})+[)\\]}"]*`, 'gi'),
       token: new RegExp(token, 'gi')
     };
   }

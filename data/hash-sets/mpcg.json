@@ -1,0 +1,9 @@
+{
+  "game": "Metroid Prime & Echoes cross-game (Randovania): words of both games; Prime 1 images win for words both lists have",
+  "include": [
+    "mp2",
+    "mp"
+  ],
+  "afterHash": true,
+  "minRun": 2
+}

@@ -83,7 +83,10 @@
     const imgs = names.map((name) => {
       const label = escapeHtml(name.replace(/^(Hash|Note)(?=[A-Z])/, ''));
       if (!matcher.icons[name]) return `<span class="hash-word">${label}</span>`;
-      return `<img class="hash-icon" src="${base}${encodeURIComponent(matcher.icons[name])}" alt="${label}" title="${label}" loading="lazy" decoding="async">`;
+      // "<game id>/<file>": an icon another game's list shares
+      const file = matcher.icons[name];
+      const src = file.includes('/') ? '/assets/hash/' + file.split('/').map(encodeURIComponent).join('/') : base + encodeURIComponent(file);
+      return `<img class="hash-icon" src="${src}" alt="${label}" title="${label}" loading="lazy" decoding="async">`;
     });
     return `<span class="hash-icons" role="img" aria-label="${escapeHtml(names.join(' '))}">${imgs.join('')}</span>`;
   }

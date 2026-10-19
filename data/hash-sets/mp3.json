@@ -1,0 +1,8 @@
+{
+  "game": "Metroid Prime 3: Corruption: its seeds use the Echoes hash words",
+  "include": [
+    "mp2"
+  ],
+  "afterHash": true,
+  "minRun": 2
+}

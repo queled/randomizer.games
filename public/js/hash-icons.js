@@ -148,17 +148,26 @@
     if (!matcher.sizes) return escapeHtml(str);
     const run = `[([{"]*${matcher.token.source}(?:${SEPARATOR}${matcher.token.source})*[)\\]}"]*`;
     const whole = new RegExp(`(^\\s*|[;:]\\s*)(${run})[\\s.,;]*$`, 'i');
-    return str.split(/(\||\n)/).map((part, i) => {
-      if (i % 2) return escapeHtml(part);
+    // A whole line first ("Map | Key | Earth..."), then each part between | of it
+    return str.split(/(\n)/).map((line, i) => {
+      if (i % 2) return escapeHtml(line);
+      const all = renderBare(matcher, whole, line);
+      return all !== null ? all : line.split(/(\|)/).map((part, j) => (j % 2 ? escapeHtml(part) : (renderBare(matcher, whole, part) ?? escapeHtml(part)))).join('');
+    }).join('');
+  }
+
+  // HTML of a part that is a whole hash, else null
+  function renderBare(matcher, whole, part) {
+    {
       const m = whole.exec(part);
-      if (!m) return escapeHtml(part);
+      if (!m) return null;
       const names = (m[2].match(matcher.token) || []).map((w) => matcher.lookup[w.toLowerCase().replace(/\s+/g, ' ')]);
       const icons = names.filter((n) => n && matcher.icons[n]).length;
-      if (names.some((n) => !n) || !matcher.sizes.includes(names.length) || icons < 2) return escapeHtml(part);
+      if (names.some((n) => !n) || !matcher.sizes.includes(names.length) || icons < 2) return null;
       const start = m.index + m[1].length;
       const rendered = renderRun({ ...matcher, afterHash: false, minRun: 1 }, m[2], '');
-      return rendered ? escapeHtml(part.slice(0, start)) + rendered + escapeHtml(part.slice(start + m[2].length)) : escapeHtml(part);
-    }).join('');
+      return rendered ? escapeHtml(part.slice(0, start)) + rendered + escapeHtml(part.slice(start + m[2].length)) : null;
+    }
   }
 
   window.HashIcons = { load, toHtml };

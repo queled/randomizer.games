@@ -1,5 +1,5 @@
 {
-  "game": "The Minish Cap Randomizer: icons from the randomizer's own hash sheet (hashicons.png, 16x16 each), named as players write them in race infos",
+  "game": "The Minish Cap Randomizer: icons from the randomizer's own hash sheet (hashicons.png, 16x16 each), named as players write them in race infos. Key, Egg, Kinstone, Octo and Rupee alone name several icons: they show as text",
   "list": "https://github.com/minishmaker/randomizer/blob/master/RandomizerCore/Resources/hashicons.png",
   "afterHash": true,
   "minRun": 2,
@@ -71,7 +71,12 @@
     "Water Element": "https://github.com/minishmaker/randomizer/blob/master/RandomizerCore/Resources/hashicons.png",
     "Wind Element": "https://github.com/minishmaker/randomizer/blob/master/RandomizerCore/Resources/hashicons.png",
     "Yellow Egg": "https://github.com/minishmaker/randomizer/blob/master/RandomizerCore/Resources/hashicons.png",
-    "Zeffa": "https://github.com/minishmaker/randomizer/blob/master/RandomizerCore/Resources/hashicons.png"
+    "Zeffa": "https://github.com/minishmaker/randomizer/blob/master/RandomizerCore/Resources/hashicons.png",
+    "Key": null,
+    "Egg": null,
+    "Kinstone": null,
+    "Octo": null,
+    "Rupee": null
   },
   "aliases": {
     "Smith's Sword": "Smith Sword",

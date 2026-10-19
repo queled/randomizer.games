@@ -136,8 +136,9 @@ function buildTournamentQuery(gameDoc, gameIdLower) {
     gameDoc?.randomizer?.shortName
   ].filter(Boolean);
 
+  // Whole words only: "ST Randomizer" must not match "A Link to the Past Randomizer"
   candidateNames.forEach(name => {
-    conditions.push({ gameName: { $regex: new RegExp(escapeRegex(name), 'i') } });
+    conditions.push({ gameName: { $regex: new RegExp(`(^|[^a-z0-9])${escapeRegex(name)}($|[^a-z0-9])`, 'i') } });
   });
 
   if (conditions.length === 0) {

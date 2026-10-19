@@ -72,7 +72,9 @@ const OVERRIDES = {
     // Door Rando, beside "A Link to the Past"
     'The Legend of Zelda: A Link to the Past': false,
     // Map Rando, beside "Super Metroid"
-    'Super Metroid Map Rando': false
+    'Super Metroid Map Rando': false,
+    // Romhacks, beside "Super Mario 64"
+    'SM64 Romhack': false
   }
 };
 

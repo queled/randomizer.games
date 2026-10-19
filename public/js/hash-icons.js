@@ -82,15 +82,24 @@
     const prefixed = names.some((name) => /^(Hash|Note)[A-Z]/.test(name));
     if (names.length < (matcher.minRun || (prefixed ? MIN_RUN_PREFIXED : MIN_RUN))) return null;
     const base = '/assets/hash/' + encodeURIComponent(matcher.gameId) + '/';
-    const imgs = names.map((name) => {
+    const icon = (name) => {
       const label = escapeHtml(name.replace(/^(Hash|Note)(?=[A-Z])/, ''));
       if (!matcher.icons[name]) return `<span class="hash-word">${label}</span>`;
       // "<game id>/<file>": an icon another game's list shares
       const file = matcher.icons[name];
       const src = file.includes('/') ? '/assets/hash/' + file.split('/').map(encodeURIComponent).join('/') : base + encodeURIComponent(file);
       return `<img class="hash-icon" src="${src}" alt="${label}" title="${label}" loading="lazy" decoding="async">`;
-    });
-    return `<span class="hash-icons" role="img" aria-label="${escapeHtml(names.join(' '))}">${imgs.join('')}</span>`;
+    };
+    // Each word becomes its icon in place: every other character of the info stays
+    let html = '';
+    let last = 0;
+    const re = new RegExp(matcher.token.source, 'gi');
+    let m;
+    while ((m = re.exec(text))) {
+      html += escapeHtml(text.slice(last, m.index)) + icon(matcher.lookup[m[0].toLowerCase().replace(/\s+/g, ' ')]);
+      last = m.index + m[0].length;
+    }
+    return `<span class="hash-icons">${html}${escapeHtml(text.slice(last))}</span>`;
   }
 
   // Escaped HTML of a plain text with its hash runs as icons. `manifest` is the

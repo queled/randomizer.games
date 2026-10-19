@@ -2121,22 +2121,21 @@ body.spoiler-mode .spoiler-text::before {
 
 /* Seed hash shown as the game's icons (public/js/hash-icons.js) */
 .hash-icons {
-    display: inline-flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.2rem;
-    vertical-align: middle;
     font-style: normal;
 }
 
 .hash-icon {
     width: 1.75rem;
     height: 1.75rem;
+    margin: 0 0.1rem;
     object-fit: contain;
+    vertical-align: middle;
 }
 
 /* Hash word without an image */
 .hash-word {
+    display: inline-block;
+    margin: 0 0.1rem;
     padding: 0.05rem 0.35rem;
     border: 1px solid currentColor;
     border-radius: 0.25rem;

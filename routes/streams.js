@@ -1,4 +1,5 @@
 const express = require('express');
+const { whenConnected } = require('../config/database');
 const router = express.Router();
 const { Game } = require('../models');
 const { isSafeImageContentType, setRelayedImageHeaders } = require('../middleware/security');
@@ -1210,11 +1211,12 @@ function refreshStreamsStatsByGame() {
   return statsByGameInFlight;
 }
 
-setTimeout(() => {
+// Warmed once MongoDB is connected
+whenConnected(() => setTimeout(() => {
   refreshStreamsStatsByGame().catch(err => {
     console.warn('Warmup /api/streams/stats/by-game failed:', err?.message || err);
   });
-}, 2500);
+}, 2500));
 
 router.get('/stats/by-game', async (req, res, next) => {
   try {
@@ -1488,7 +1490,7 @@ function warmAllStreams() {
     console.warn('Refresh /api/streams failed:', err?.message || err);
   });
 }
-setTimeout(warmAllStreams, 4000);
+whenConnected(() => setTimeout(warmAllStreams, 4000));
 // Refreshed a little before the cache expires
 setInterval(warmAllStreams, CACHE_TTL - 30 * 1000).unref();
 

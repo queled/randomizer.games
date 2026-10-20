@@ -22,4 +22,12 @@ mongoose.connection.on('disconnected', () => {
   console.log('⚠️ MongoDB disconnected');
 });
 
+// Runs fn once MongoDB is connected: a query sent earlier sits in mongoose's
+// buffer and times out after 10 s when the connection is slow to come up
+const whenConnected = (fn) => {
+  if (mongoose.connection.readyState === 1) fn();
+  else mongoose.connection.once('open', fn);
+};
+
 module.exports = connectDB;
+module.exports.whenConnected = whenConnected;

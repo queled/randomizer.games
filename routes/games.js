@@ -1,4 +1,5 @@
 const express = require('express');
+const { whenConnected } = require('../config/database');
 const router = express.Router();
 const { Game } = require('../models');
 const { requireAdmin } = require('../middleware/admin-auth');
@@ -141,11 +142,12 @@ function invalidateGamesWithStats() {
   });
 }
 
-setTimeout(() => {
+// Warmed once MongoDB is connected
+whenConnected(() => setTimeout(() => {
   getGamesWithStatsCached().catch(err => {
     console.warn('Warmup /api/games/with-stats failed:', err?.message || err);
   });
-}, 1500);
+}, 1500));
 
 // Get all games
 router.get('/', async (req, res, next) => {

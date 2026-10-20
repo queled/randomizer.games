@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Pokémon Snap se joue en multiworld : chaque photo envoyée au professeur Chen devient un objectif, et les circuits se débloquent au fil des objets reçus.",
+    "en": "Pokémon Snap is played in multiworld: every photo sent to Professor Oak becomes a check, and courses unlock as items come in."
+  },
+  "events": [
+    {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "HAL Laboratory et Nintendo sortent Pokémon Snap sur Nintendo 64 en 1999.",
+        "en": "HAL Laboratory and Nintendo release Pokémon Snap on the Nintendo 64 in 1999."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Le multiworld",
+        "en": "The multiworld"
+      },
+      "text": {
+        "fr": "Pokémon Snap est jouable en multiworld avec MultiworldGG. Les objectifs sont les photos de chaque Pokémon, les poses spéciales, les signes Pokémon et les récompenses de Chen ; les six circuits, la nourriture, les Pester Balls, la Pokéflûte et le Dash Engine sont mélangés. Pour gagner, on débloque le circuit Rainbow Cloud puis on photographie Mew.",
+        "en": "Pokémon Snap is playable in multiworld with MultiworldGG. Checks are photos of every Pokémon, special poses, Pokémon signs and Oak's rewards; the six courses, food, Pester Balls, the Poké Flute and the Dash Engine are shuffled. To win, unlock the Rainbow Cloud course, then photograph Mew."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Pokemon Snap",
+      "url": "https://multiworld.gg/games/Pokemon%20Snap/info/en"
+    }
+  ]
+}

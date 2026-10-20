@@ -261,6 +261,31 @@
     ],
     "aliases": {}
   },
+  "ct": {
+    "categories": [
+      "ct-jets"
+    ],
+    "icons": {
+      "sword": "sword.png",
+      "bow": "bow.png",
+      "gun": "gun.png",
+      "arm": "arm.png",
+      "blade": "blade.png",
+      "fist": "fist.png",
+      "scythe": "scythe.png",
+      "helm": "helm.png",
+      "armor": "armor.png",
+      "acc": "acc.png",
+      "shield": "shield.png",
+      "star": "star.png"
+    },
+    "afterHash": true,
+    "minRun": 2,
+    "sizes": [
+      8
+    ],
+    "aliases": {}
+  },
   "dk64": {
     "categories": [
       "dk64r"
@@ -2826,6 +2851,8 @@
       "S Smash Chg": "S Smash Chg.png",
       "S Jump Chg": "S Jump Chg.png",
       "Power Rush": "Power Rush.png",
+      "Auto Jump": "Auto Jump.png",
+      "Auto Smash": "Auto Smash.png",
       "Crazy Heart": "Crazy Heart.png",
       "Last Stand": "Last Stand.png",
       "Close Call": "Close Call.png",
@@ -2844,8 +2871,10 @@
       "Speedy Spin": "Speedy Spin.png",
       "Bump Attack": "Bump Attack.png",
       "Power Jump": "Power Jump.png",
+      "Super Jump": "Super Jump.png",
       "Mega Jump": "Mega Jump.png",
       "Power Smash": "Power Smash.png",
+      "Super Smash": "Super Smash.png",
       "Mega Smash": "Mega Smash.png",
       "Shrink Smash": "Shrink Smash.png",
       "Kaiden": "Kaiden.png",
@@ -2869,8 +2898,20 @@
       "Attack FX C": "Attack FX C.png",
       "Attack FX F": "Attack FX F.png",
       "Healthy Healthy": "Healthy Healthy.png",
+      "Heart": "Heart.png",
+      "Coin": "Coin.png",
       "Star Point": "Star Point.png",
+      "Heart Point": "Heart Point.png",
+      "Flower Point": "Flower Point.png",
       "Star Piece": "Star Piece.png",
+      "Cake Done": "Cake Done.png",
+      "Cake Bare": "Cake Bare.png",
+      "Cake Pan": "Cake Pan.png",
+      "Cake Batter": "Cake Batter.png",
+      "Cake Bowl": "Cake Bowl.png",
+      "Cake Mixed": "Cake Mixed.png",
+      "Cake With Icing": "Cake With Icing.png",
+      "Cake With Berries": "Cake With Berries.png",
       "Hammer": "Hammer.png",
       "Super Hammer": "Super Hammer.png",
       "Ultra Hammer": "Ultra Hammer.png",
@@ -2878,24 +2919,6 @@
       "Super Boots": "Super Boots.png",
       "Ultra Boots": "Ultra Boots.png"
     },
-    "words": [
-      "Auto Jump",
-      "Auto Smash",
-      "Super Jump",
-      "Super Smash",
-      "Heart",
-      "Coin",
-      "Heart Point",
-      "Flower Point",
-      "Cake Done",
-      "Cake Bare",
-      "Cake Pan",
-      "Cake Batter",
-      "Cake Bowl",
-      "Cake Mixed",
-      "Cake With Icing",
-      "Cake With Berries"
-    ],
     "afterHash": true,
     "minRun": 2,
     "sizes": [

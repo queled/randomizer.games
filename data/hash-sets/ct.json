@@ -1,0 +1,23 @@
+{
+  "game": "Chrono Trigger: Jets of Time: 8 symbols of the menu font (bytes 20-29, 2E, 2F), written {sword}{bow}...; images: glyphs of the US ROM's 8x8 font (ROM 0x3F8C60 + code x 16), with a dark outline",
+  "list": "https://github.com/Anguirel86/jetsoftime/blob/master/sourcefiles/seedhash.py",
+  "afterHash": true,
+  "minRun": 2,
+  "sizes": [
+    8
+  ],
+  "words": {
+    "sword": "ROM US, menu font glyph 20 (sourcefiles/ctstrings.py)",
+    "bow": "ROM US, menu font glyph 21 (sourcefiles/ctstrings.py)",
+    "gun": "ROM US, menu font glyph 22 (sourcefiles/ctstrings.py)",
+    "arm": "ROM US, menu font glyph 23 (sourcefiles/ctstrings.py)",
+    "blade": "ROM US, menu font glyph 24 (sourcefiles/ctstrings.py)",
+    "fist": "ROM US, menu font glyph 25 (sourcefiles/ctstrings.py)",
+    "scythe": "ROM US, menu font glyph 26 (sourcefiles/ctstrings.py)",
+    "helm": "ROM US, menu font glyph 27 (sourcefiles/ctstrings.py)",
+    "armor": "ROM US, menu font glyph 28 (sourcefiles/ctstrings.py)",
+    "acc": "ROM US, menu font glyph 29 (sourcefiles/ctstrings.py)",
+    "shield": "ROM US, menu font glyph 2E (sourcefiles/ctstrings.py)",
+    "star": "ROM US, menu font glyph 2F (sourcefiles/ctstrings.py)"
+  }
+}

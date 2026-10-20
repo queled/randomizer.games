@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le Chaos Magic Edition Randomizer de grendell mélange les objets de Shadowgate 64, avec une logique qui garantit que chaque objet arrive avant d'être nécessaire.",
+    "en": "grendell's Chaos Magic Edition Randomizer shuffles Shadowgate 64's items, with logic that guarantees each item shows up before it is needed."
+  },
+  "events": [
+    {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Kemco sort Shadowgate 64: Trials of the Four Towers sur Nintendo 64 en 1999.",
+        "en": "Kemco releases Shadowgate 64: Trials of the Four Towers on the Nintendo 64 in 1999."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "grendell publie la version 1.0.0 le 2 mars 2026 et présente le randomizer à Fire & Ice RGX 2026 ; la 1.0.2 sort le 25 août 2026. Il modifie la ROM américaine d'environ 300 octets, et propose quatre façons de mélanger les livres, dont une sans logique pour les joueurs qui connaissent déjà les énigmes.",
+        "en": "grendell releases version 1.0.0 on March 2, 2026 and presents the randomizer at Fire & Ice RGX 2026; 1.0.2 comes out on August 25, 2026. It changes about 300 bytes of the US ROM, and offers four book shuffling modes, including one without logic for players who already know the puzzles."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "grendell/sg64rando (GitHub)",
+      "url": "https://github.com/grendell/sg64rando"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Crash Twinsanity se randomise avec Crate Mod Loader, le chargeur de mods et randomizer tout-en-un de BetaM pour de nombreux jeux de console.",
+    "en": "Crash Twinsanity is randomized with Crate Mod Loader, BetaM's all-in-one mod loader and randomizer for many console games."
+  },
+  "events": [
+    {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Traveller's Tales et Vivendi Universal Games sortent Crash Twinsanity sur PlayStation 2 et Xbox en 2004.",
+        "en": "Traveller's Tales and Vivendi Universal Games release Crash Twinsanity on the PlayStation 2 and Xbox in 2004."
+      }
+    },
+    {
+      "date": "2019-2020",
+      "title": {
+        "fr": "Crate Mod Loader",
+        "en": "Crate Mod Loader"
+      },
+      "text": {
+        "fr": "BetaM commence Crate Mod Loader en décembre 2019 et publie la version 1.0 le 3 février 2020, puis la 1.3 le 25 décembre 2020, avec ManDude parmi les contributeurs. Pour Crash Twinsanity, il prend en charge les versions PS2 et Xbox et randomise notamment les caisses et l'emplacement des gemmes, en s'appuyant sur l'éditeur Twinsanity de NeoKesha, Smartkin, ManDude, BetaM et Marko.",
+        "en": "BetaM starts Crate Mod Loader in December 2019 and releases version 1.0 on February 3, 2020, then 1.3 on December 25, 2020, with ManDude among the contributors. For Crash Twinsanity it supports the PS2 and Xbox versions and randomizes crates and gem locations among other things, building on the Twinsanity editor by NeoKesha, Smartkin, ManDude, BetaM and Marko."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "TheBetaM/CrateModLoader (GitHub)",
+      "url": "https://github.com/TheBetaM/CrateModLoader"
+    },
+    {
+      "label": "Crate Mod Loader — GAMES.md",
+      "url": "https://github.com/TheBetaM/CrateModLoader/blob/master/GAMES.md"
+    }
+  ]
+}

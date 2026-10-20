@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Black & White: Ultimate, le grand mod de Shane, propose en option des tribus et des miracles aléatoires.",
+    "en": "Shane's large Black & White: Ultimate mod offers random tribes and miracles as an option."
+  },
+  "events": [
+    {
+      "date": "2001",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Lionhead Studios et Electronic Arts sortent Black & White sur PC en 2001, suivi de l'extension Creature Isle en 2002.",
+        "en": "Lionhead Studios and Electronic Arts release Black & White on the PC in 2001, followed by the Creature Isle expansion in 2002."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Black & White: Ultimate",
+        "en": "Black & White: Ultimate"
+      },
+      "text": {
+        "fr": "Shane publie Black & White: Ultimate le 27 mars 2021 sur la communauté bwgame.net. Le mod réunit l'histoire d'origine et celle de Creature Isle dans un seul jeu, avec un mode difficile, une IA améliorée et un multijoueur enrichi ; rando-list signale qu'il inclut en option des tribus et des miracles aléatoires.",
+        "en": "Shane releases Black & White: Ultimate on March 27, 2021 on the bwgame.net community. The mod combines the original story and Creature Isle into a single game, with a hard mode, improved AI and better multiplayer; rando-list notes that it includes random tribes and miracles as an option."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Black & White: Ultimate (bwgame.net)",
+      "url": "https://www.bwgame.net/downloads/black-white-ultimate.1460/"
+    },
+    {
+      "label": "rando-list — Black & White",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Black_and_White.yml"
+    }
+  ]
+}

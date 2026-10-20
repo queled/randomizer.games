@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "opiter09 a écrit un randomizer de fossiles, de starter et d'équipes pour Fossil Fighters.",
+    "en": "opiter09 wrote a fossil, starter and team randomizer for Fossil Fighters."
+  },
+  "events": [
+    {
+      "date": "2008",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Fossil Fighters sur Nintendo DS au Japon en 2008.",
+        "en": "Nintendo releases Fossil Fighters on the Nintendo DS in Japan in 2008."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "opiter09 propose sur son site un randomizer de fossiles, de starter et d'équipes, avec d'autres fonctions, parmi d'autres outils pour Fossil Fighters et Fossil Fighters: Champions (éditeurs des apparitions de fossiles et des équipes ennemies, documentation du fonctionnement des jeux).",
+        "en": "opiter09's site offers a fossil, starter and team randomizer, with other functions, among other tools for Fossil Fighters and Fossil Fighters: Champions (fossil spawn and enemy team editors, documentation of how the games work)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Opiter09's Projects",
+      "url": "https://opiter-projects.neocities.org/"
+    }
+  ]
+}

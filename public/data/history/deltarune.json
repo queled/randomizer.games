@@ -1,7 +1,7 @@
 {
   "intro": {
-    "fr": "DELTARUNE se randomise avec un randomizer de rencontres pour le chapitre 2, et se joue aussi en multiworld.",
-    "en": "DELTARUNE is randomized with an encounter randomizer for Chapter 2, and can also be played in multiworld."
+    "fr": "DELTARUNE se randomise avec des randomizers de rencontres, dont le Chaos Randomizer qui couvre tous les chapitres, et se joue aussi en multiworld.",
+    "en": "DELTARUNE is randomized with encounter randomizers, including the Chaos Randomizer which covers every chapter, and can also be played in multiworld."
   },
   "events": [
     {
@@ -13,6 +13,17 @@
       "text": {
         "fr": "Toby Fox sort le premier chapitre de DELTARUNE en 2018, puis le chapitre 2 en 2021.",
         "en": "Toby Fox releases DELTARUNE's first chapter in 2018, then Chapter 2 in 2021."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Le Chaos Randomizer",
+        "en": "The Chaos Randomizer"
+      },
+      "text": {
+        "fr": "Skywatcher publie le DELTARUNE Chaos Randomizer sur GameBanana le 3 février 2026, jusqu'à la version 5.0.0 en octobre 2026, qui prend en charge les cinq chapitres. Chaque combat fait apparaître des ennemis tirés au sort, boss compris ; les combats de boss de l'histoire restent intacts sauf option, et la musique peut aussi être mélangée.",
+        "en": "Skywatcher releases the DELTARUNE Chaos Randomizer on GameBanana on February 3, 2026, up to version 5.0.0 in October 2026, which supports all five chapters. Every battle spawns random enemies, bosses included; story boss fights stay intact unless an option is turned on, and the music can be shuffled too."
       }
     },
     {
@@ -38,6 +49,10 @@
     {
       "label": "Multiworld — DELTARUNE",
       "url": "https://multiworld.gg/games/DELTARUNE/info/en"
+    },
+    {
+      "label": "GameBanana — DELTARUNE Chaos Randomizer",
+      "url": "https://gamebanana.com/mods/650496"
     }
   ]
 }

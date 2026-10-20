@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Le Shadow Man Remastered Randomizer de bropacman mélange objets clés, âmes, armes, pouvoirs gad, entrées et ennemis, et se joue aussi en multiworld Archipelago.",
+    "en": "bropacman's Shadow Man Remastered Randomizer shuffles key items, souls, weapons, gad powers, entrances and enemies, and can also be played in an Archipelago multiworld."
+  },
+  "events": [
+    {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Acclaim sort Shadow Man en 1999. Nightdive Studios en publie une version remastérisée en 2021.",
+        "en": "Acclaim releases Shadow Man in 1999. Nightdive Studios publishes a remastered version in 2021."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "bropacman publie la version 1.0.0 le 28 avril 2026, puis enchaîne les mises à jour jusqu'à la 1.3.0 le 18 octobre 2026. Un algorithme de remplissage garantit que chaque seed est finissable ; on peut aussi randomiser les combinaisons des pistons du Dark Engine, inscrites dans le schéma de Jack, qui devient alors un objet de progression. Un monde Archipelago suit en août 2026.",
+        "en": "bropacman releases version 1.0.0 on April 28, 2026, then ships updates up to 1.3.0 on October 18, 2026. An assumed-fill algorithm guarantees every seed is beatable; the Dark Engine piston combinations can also be randomized and are written into Jack's Schematic, which then becomes a progression item. An Archipelago world follows in August 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "bropacman/shadow-man-remastered-randomizer (GitHub)",
+      "url": "https://github.com/bropacman/shadow-man-remastered-randomizer"
+    },
+    {
+      "label": "bropacman/shadow-man-remastered-ap-world (GitHub)",
+      "url": "https://github.com/bropacman/shadow-man-remastered-ap-world"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le MZ-X4 Randomizer de MottZilla randomise Mega Man X4 sur PlayStation.",
+    "en": "MottZilla's MZ-X4 Randomizer randomizes Mega Man X4 on the PlayStation."
+  },
+  "events": [
+    {
+      "date": "1997",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Mega Man X4 sur PlayStation et Saturn en 1997.",
+        "en": "Capcom releases Mega Man X4 on the PlayStation and Saturn in 1997."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "MottZilla publie la version 1.0 le 28 février 2026, puis une 1.01 bêta le 14 mars 2026. Le randomizer s'utilise avec la version PlayStation nord-américaine.",
+        "en": "MottZilla releases version 1.0 on February 28, 2026, then a 1.01 beta on March 14, 2026. The randomizer works with the North American PlayStation version."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "MottZilla/MZ-X4-Randomizer (GitHub)",
+      "url": "https://github.com/MottZilla/MZ-X4-Randomizer"
+    }
+  ]
+}

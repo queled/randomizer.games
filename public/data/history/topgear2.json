@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Le Top Gear 2 Randomizer d'Oipo mélange les circuits et la météo de la version SNES, directement dans le navigateur.",
+    "en": "Oipo's Top Gear 2 Randomizer shuffles the tracks and weather of the SNES version, right in the browser."
+  },
+  "events": [
+    {
+      "date": "1993",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Gremlin Interactive et Kemco sortent Top Gear 2 sur Super Nintendo en 1993.",
+        "en": "Gremlin Interactive and Kemco release Top Gear 2 on the Super Nintendo in 1993."
+      }
+    },
+    {
+      "date": "2022-2026",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "Oipo crée le dépôt du randomizer en mars 2022. L'outil, compilé en WebAssembly, prend la ROM américaine et peut mélanger les circuits, avec une difficulté des drones qui suit l'ordre des courses, et la météo, y compris une météo « espace ». Il permet aussi de régler l'équipement et l'argent de départ des deux joueurs.",
+        "en": "Oipo creates the randomizer's repository in March 2022. The tool, built to WebAssembly, takes the US ROM and can shuffle the tracks, with drone difficulty ramping by race order, and the weather, including a \"space\" weather. It also lets you set both players' starting equipment and money."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Top Gear 2 Randomizer (volt-software.nl)",
+      "url": "https://volt-software.nl/tg2"
+    },
+    {
+      "label": "Oipo/tg2-randomizer (GitHub)",
+      "url": "https://github.com/Oipo/tg2-randomizer"
+    }
+  ]
+}

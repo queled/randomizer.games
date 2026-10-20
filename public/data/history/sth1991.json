@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "S1RL: Random Levels Project, de DigitalDuck, est un hack de Sonic the Hedgehog qui génère ses niveaux en temps réel.",
+    "en": "DigitalDuck's S1RL: Random Levels Project is a Sonic the Hedgehog hack that generates its levels in real time."
+  },
+  "events": [
+    {
+      "date": "1991",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sonic Team et Sega sortent Sonic the Hedgehog sur Mega Drive en 1991.",
+        "en": "Sonic Team and Sega release Sonic the Hedgehog on the Mega Drive in 1991."
+      }
+    },
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "DigitalDuck présente la version 0.1 sur les forums de Sonic Retro le 23 avril 2017. Le jeu génère ses niveaux au fil de la partie ; Sonic reçoit le Spin Dash de Sonic 2 et le Peel Out de Sonic CD, les actes sont bien plus longs et la limite de temps passe à 24 heures. Rando-list le décrit comme une randomisation de Green Hill Zone.",
+        "en": "DigitalDuck presents version 0.1 on the Sonic Retro forums on April 23, 2017. The game generates its levels as you play; Sonic gets Sonic 2's Spin Dash and Sonic CD's Peel Out, acts are much longer and the time limit goes up to 24 hours. Rando-list describes it as randomizing Green Hill Zone."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Random Levels Project (Sonic Retro)",
+      "url": "https://forums.sonicretro.org/index.php?threads/random-levels-project.36646/"
+    },
+    {
+      "label": "rando-list — Sonic the Hedgehog",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Sonic_the_Hedgehog.yml"
+    }
+  ]
+}

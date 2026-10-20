@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Le randomizer de dethwing mélange 107 emplacements de Wonder Boy in Monster World : boutiques, coffres, récompenses et équipement de départ.",
+    "en": "dethwing's randomizer shuffles 107 locations in Wonder Boy in Monster World: shops, chests, rewards and starting equipment."
+  },
+  "events": [
+    {
+      "date": "1991",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Westone et Sega sortent Wonder Boy in Monster World (Monster World III) sur Mega Drive en 1991.",
+        "en": "Westone and Sega release Wonder Boy in Monster World (Monster World III) on the Mega Drive in 1991."
+      }
+    },
+    {
+      "date": "2025-2026",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "dethwing crée le dépôt en janvier 2025 et le met à jour jusqu'en octobre 2026. Il reprend le travail commencé par PaddyCo, qui avait fourni les adresses d'une dizaine d'emplacements, et s'appuie sur le Simple Randomizer Maker de Mode8fx. Quelques emplacements sont échangés avec des coffres à plusieurs objets pour réduire l'importance du Trident.",
+        "en": "dethwing creates the repository in January 2025 and updates it until October 2026. It builds on the work started by PaddyCo, who had provided the addresses of about ten locations, and uses Mode8fx's Simple Randomizer Maker. A few locations are swapped with multi-item chests to reduce the Trident's importance."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "dethwing/Wonder-Boy-in-Monster-World---Randomizer (GitHub)",
+      "url": "https://github.com/dethwing/Wonder-Boy-in-Monster-World---Randomizer"
+    },
+    {
+      "label": "PaddyCo/mw3rando (GitHub)",
+      "url": "https://github.com/PaddyCo/mw3rando"
+    }
+  ]
+}

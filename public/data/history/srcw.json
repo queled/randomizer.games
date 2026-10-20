@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Le mod Randomized & Custom Grand Prix de bova_ tire au sort les circuits du premier Grand Prix de Sonic Racing: CrossWorlds.",
+    "en": "bova_'s Randomized & Custom Grand Prix mod picks the tracks of Sonic Racing: CrossWorlds' first Grand Prix at random."
+  },
+  "events": [
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sega sort Sonic Racing: CrossWorlds en 2025.",
+        "en": "Sega releases Sonic Racing: CrossWorlds in 2025."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "bova_ publie le mod sur GameBanana le 2 juillet 2026, jusqu'à la version 1.11. À chaque partie, les circuits du premier Grand Prix sont tirés au sort ; on peut aussi choisir le circuit de chaque tour ou en exclure. Le mod passe par UE4SS, ne touche pas au contre-la-montre, au Race Park ni au jeu en ligne, et n'inclut pas les circuits en DLC.",
+        "en": "bova_ releases the mod on GameBanana on July 2, 2026, up to version 1.11. Each time you play, the first Grand Prix's tracks are picked at random; you can also set the track for each lap or exclude some. The mod runs through UE4SS, leaves Time Trial, Race Park and online play alone, and does not include DLC tracks."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Randomized & Custom Grand Prix (GameBanana)",
+      "url": "https://gamebanana.com/mods/690842"
+    }
+  ]
+}

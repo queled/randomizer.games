@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "opiter09 a écrit un randomizer de fossiles, de starter, d'équipes, de couleurs et de particules pour Fossil Fighters: Champions.",
+    "en": "opiter09 wrote a fossil, starter, team, color and particle randomizer for Fossil Fighters: Champions."
+  },
+  "events": [
+    {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Fossil Fighters: Champions sur Nintendo DS au Japon en 2010.",
+        "en": "Nintendo releases Fossil Fighters: Champions on the Nintendo DS in Japan in 2010."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "opiter09 propose sur son site un randomizer de fossiles, de starter, d'équipes, de couleurs et de particules, avec d'autres fonctions, parmi d'autres outils pour la série (éditeurs des apparitions de fossiles et des équipes ennemies, documentation du fonctionnement des jeux).",
+        "en": "opiter09's site offers a fossil, starter, team, color and particle randomizer, with other functions, among other tools for the series (fossil spawn and enemy team editors, documentation of how the games work)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Opiter09's Projects",
+      "url": "https://opiter-projects.neocities.org/"
+    }
+  ]
+}

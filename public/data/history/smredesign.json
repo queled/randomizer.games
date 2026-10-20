@@ -1,0 +1,40 @@
+{
+  "intro": {
+    "fr": "Super Metroid: Redesign, romhack de Super Metroid, se randomise via la page de ironrusty consacrée aux randomizers de hacks.",
+    "en": "Super Metroid: Redesign, a Super Metroid romhack, is randomized through ironrusty's page of hack randomizers."
+  },
+  "events": [
+    {
+      "date": "2006",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Super Metroid: Redesign sort en 2006.",
+        "en": "Super Metroid: Redesign comes out in 2006."
+      }
+    },
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "En mars 2024, ironrusty publie Undesign Rando, une version modifiée de Redesign : elle reprend la logique du randomizer de Redesign d'Audraxys, à quelques changements près, et le patch Undesign de Cheesyboatride, qui permet de jouer Redesign avec la physique de Super Metroid d'origine.",
+        "en": "In March 2024, ironrusty releases Undesign Rando, a modified Redesign: it reuses the logic of Audraxys' Redesign randomizer, with only a couple of small changes, and Cheesyboatride's Undesign patch, which lets you play Redesign with vanilla Super Metroid physics."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "randorandy — Super Metroid hack randomizers",
+      "url": "https://randorandy.github.io/"
+    },
+    {
+      "label": "randorandy — Undesign Rando",
+      "url": "https://randorandy.github.io/UndesignRando/"
+    }
+  ]
+}

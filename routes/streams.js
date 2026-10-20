@@ -1339,9 +1339,15 @@ async function buildAllStreams() {
   // Build reverse map: Twitch game name -> gameIds (from DB only)
   const fallbackTwitchGameToGameIds = new Map();
   const twitchCategoryIdToGameRefs = new Map();
+  const comboGameIds = [];
   const games = await Game.find({ enabled: { $ne: false } });
   for (const game of games) {
     const gameId = (game.id || '').toLowerCase();
+    // Combo games share their source games' categories: kept by their keywords, as on their page
+    if (COMBO_TWITCH_CATEGORY_IDS[gameId]) {
+      comboGameIds.push(gameId);
+      continue;
+    }
     const twitchCategoryId = game.integrations?.twitch?.categoryId;
     const twitchNameFromDb = game.integrations?.twitch?.categoryName;
     const fallbackName = TWITCH_GAME_NAMES[gameId] || game.official?.name || game.name;
@@ -1372,6 +1378,12 @@ async function buildAllStreams() {
   const streamMap = new Map(); // To deduplicate
   
   try {
+    // Combo games first: a stream naming the combo goes to it, not to a source game
+    const comboResults = await mapWithConcurrency(comboGameIds, 4, async (gameId) => {
+      const results = await Promise.all(COMBO_TWITCH_CATEGORY_IDS[gameId].map(id => fetchTwitchStreamsByCategoryId(id, null)));
+      return { streams: filterComboStreams(results.flat(), gameId), primaryGameId: gameId };
+    });
+
     // Fetch streams from known categories with bounded concurrency
     const categoryEntries = Array.from(twitchCategoryIdToGameRefs.entries());
     const categoryResults = await mapWithConcurrency(categoryEntries, 8, async ([categoryId, refs]) => {
@@ -1387,7 +1399,7 @@ async function buildAllStreams() {
     }));
     categoryResults.push(...multiGameResults);
 
-    for (const result of categoryResults) {
+    for (const result of [...comboResults, ...categoryResults]) {
       for (const stream of (result?.streams || [])) {
         if (!streamMap.has(stream.id)) {
           streamMap.set(stream.id, {

@@ -8,6 +8,6 @@
     "DKCoin": "RaceCoin"
   },
   "words": {
-    "Coin": null
+    "Coin": "composite: NintendoCoin / RarewareCoin / RainbowCoin / RaceCoin (the word names one of them)"
   }
 }

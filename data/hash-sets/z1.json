@@ -27,10 +27,10 @@
     "White Sword": "WhiteSword"
   },
   "words": {
-    "Candle": null,
-    "Ring": null,
-    "Potion": null,
-    "Sword": null,
+    "Candle": "composite: BlueCandle / RedCandle (the word names one of them)",
+    "Ring": "composite: BlueRing / RedRing (the word names one of them)",
+    "Potion": "composite: BluePotion / RedPotion (the word names one of them)",
+    "Sword": "composite: WoodenSword / WhiteSword / MagicSword (the word names one of them)",
     "Map": null
   }
 }

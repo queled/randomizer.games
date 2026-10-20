@@ -72,11 +72,11 @@
     "Wind Element": "https://github.com/minishmaker/randomizer/blob/master/RandomizerCore/Resources/hashicons.png",
     "Yellow Egg": "https://github.com/minishmaker/randomizer/blob/master/RandomizerCore/Resources/hashicons.png",
     "Zeffa": "https://github.com/minishmaker/randomizer/blob/master/RandomizerCore/Resources/hashicons.png",
-    "Key": null,
-    "Egg": null,
-    "Kinstone": null,
-    "Octo": null,
-    "Rupee": null
+    "Key": "composite: Small Key / Big Key / Graveyard Key / Lon Lon Key (the word names one of them)",
+    "Egg": "composite: Red Egg / Blue Egg / Green Egg / Yellow Egg (the word names one of them)",
+    "Kinstone": "composite: Green Kinstone / Blue Kinstone / Red Kinstone / Gold Kinstone (the word names one of them)",
+    "Octo": "composite: Red Octo / Blue Octo (the word names one of them)",
+    "Rupee": "composite: Green Rupee / Blue Rupee / Red Rupee (the word names one of them)"
   },
   "aliases": {
     "Smith's Sword": "Smith Sword",

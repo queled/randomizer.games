@@ -1,7 +1,7 @@
 {
   "intro": {
-    "fr": "Nine Sols se joue en multiworld : la partie commence directement au Four Seasons Pavilion, avec la téléportation débloquée.",
-    "en": "Nine Sols can be played in multiworld: the game starts right at the Four Seasons Pavilion, with Teleport unlocked."
+    "fr": "L'Archipelago Randomizer d'Ixrec rend Nine Sols jouable en multiworld : la partie commence directement au Four Seasons Pavilion, avec la téléportation débloquée.",
+    "en": "Ixrec's Archipelago Randomizer makes Nine Sols playable in multiworld: the game starts right at the Four Seasons Pavilion, with Teleport unlocked."
   },
   "events": [
     {
@@ -13,6 +13,17 @@
       "text": {
         "fr": "Red Candle Games sort Nine Sols en 2024.",
         "en": "Red Candle Games releases Nine Sols in 2024."
+      }
+    },
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le mod d'Ixrec",
+        "en": "Ixrec's mod"
+      },
+      "text": {
+        "fr": "Après le randomizer Archipelago d'Outer Wilds, Ixrec commence celui de Nine Sols en octobre 2024 et publie une première version le 10 mars 2025. Le mod s'appuie sur TeleportFromAnywhere, car un objet important peut tomber dans un cul-de-sac dont on ne sort qu'en se téléportant.",
+        "en": "After the Outer Wilds Archipelago randomizer, Ixrec starts the Nine Sols one in October 2024 and releases a first version on March 10, 2025. The mod relies on TeleportFromAnywhere, since an important item may land in a dead end you can only leave by teleporting."
       }
     },
     {
@@ -31,6 +42,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "Ixrec/NineSolsArchipelagoRandomizer (GitHub)",
+      "url": "https://github.com/Ixrec/NineSolsArchipelagoRandomizer"
+    },
     {
       "label": "Multiworld — Nine Sols",
       "url": "https://multiworld.gg/games/Nine%20Sols/info/en"

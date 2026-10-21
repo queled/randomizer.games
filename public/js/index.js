@@ -132,12 +132,7 @@ async function getLastMatchDate(tournamentId) {
 
 // Resolve a friendly game/category name
 function getGameDisplayName(game) {
-  return game?.official?.name
-    || game?.name
-    || game?.randomizer?.displayName
-    || game?.randomizer?.shortName
-    || game?.id
-    || null;
+  return gameLabel(game);
 }
 
 function resolveGameForCategory(cat) {

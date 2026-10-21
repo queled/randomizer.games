@@ -5,6 +5,7 @@ const { validateObjectId } = require('../middleware/security');
 const racetimeAPI = require('../services/racetime');
 const { buildTournamentQuery } = require('../helpers/game-matching');
 const { calculateTournamentStatus } = require('../helpers/tournament-status');
+const { tournamentGameLabel } = require('../helpers/game-label');
 
 function extractRaceSlug(race) {
   const externalId = race?.source?.externalId;
@@ -133,9 +134,9 @@ router.get('/', async (req, res, next) => {
         if (g.id) {
           tournament.gameId = g.id;
         }
-        if (!tournament.gameName) {
-          tournament.gameName = g.official?.name || g.name || g.randomizer?.shortName || tournament.gameId || null;
-        }
+        // The bracket's own game name stays in sourceGameName; gameName is the site's label
+        tournament.sourceGameName = tournament.gameName || null;
+        tournament.gameName = tournamentGameLabel(tournament);
       }
 
       tournament.status = calculateTournamentStatus(tournament);
@@ -177,10 +178,10 @@ router.get('/:id', validateObjectId('id'), async (req, res, next) => {
     }
 
     const tournamentObj = tournament.toObject();
-    // Preserve the original gameName from Challonge
-    // Only use game.name as fallback if gameName is not set
-    if (tournamentObj.game && !tournamentObj.gameName) {
-      tournamentObj.gameName = tournamentObj.game.name || tournamentObj.game.randomizer?.shortName || tournamentObj.game.id;
+    // The bracket's own game name stays in sourceGameName; gameName is the site's label
+    if (tournamentObj.game) {
+      tournamentObj.sourceGameName = tournamentObj.gameName || null;
+      tournamentObj.gameName = tournamentGameLabel(tournamentObj);
     }
     tournamentObj.status = calculateTournamentStatus(tournamentObj);
 

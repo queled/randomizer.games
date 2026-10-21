@@ -2,6 +2,7 @@
 // only for participants not linked to an account. Each one with the player's rank,
 // team, and win/loss record when the tournament gives no rank (leagues).
 const { calculateTournamentStatus } = require('./tournament-status');
+const { loadGameLabels, tournamentGameLabel } = require('./game-label');
 
 const STATUS_KEYS = { 'terminé': 'finished', 'en cours': 'ongoing', 'à venir': 'upcoming' };
 
@@ -131,9 +132,13 @@ async function buildPlayerTournaments({ Tournament, Match, userId, names }) {
   const cleanNames = [...new Set(names.filter(Boolean))];
   const owner = { userId, normalizedNames: new Set(cleanNames.map(normalizeName)) };
 
-  const tournaments = await Tournament.find(participantQuery({ userId, names: cleanNames }))
-    .select('name gameName gameSlug gameId startDate endDate state status participantsCount participants matches.player1.startggEntrantId matches.player2.startggEntrantId matches.winnerId matches.phaseGroup midosHouse.schedule.startAt')
-    .lean();
+  const [tournaments, labelFor] = await Promise.all([
+    Tournament.find(participantQuery({ userId, names: cleanNames }))
+      .select('name gameName gameSlug gameId startDate endDate state status participantsCount participants matches.player1.startggEntrantId matches.player2.startggEntrantId matches.winnerId matches.phaseGroup midosHouse.schedule.startAt game')
+      .populate('game', 'id name official.name randomizer')
+      .lean(),
+    loadGameLabels()
+  ]);
 
   const entries = [];
   for (const t of tournaments) {
@@ -178,8 +183,8 @@ async function buildPlayerTournaments({ Tournament, Match, userId, names }) {
     return {
       tournamentId: t._id,
       name: t.name,
-      gameName: t.gameName || null,
-      gameSlug: t.gameSlug || t.gameId || null,
+      gameName: tournamentGameLabel(t, labelFor),
+      gameSlug: t.gameSlug || t.gameId || t.game?.id || null,
       startDate: t.startDate || null,
       endDate: t.endDate || null,
       status,

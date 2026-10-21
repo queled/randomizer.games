@@ -13,38 +13,7 @@
   let gamesReady = Promise.resolve(); // cards need the games list to resolve names
   let loadId = 0; // ignores responses from a request a newer filter replaced
 
-  // Game slug to display name mapping
-  const gameDisplayNames = {
-    'oot': 'Ocarina of Time Randomizer',
-    'ootr': 'Ocarina of Time Randomizer',
-    'alttp': 'A Link to the Past Randomizer',
-    'alttpr': 'A Link to the Past Randomizer',
-    'alttpr-ladder': 'A Link to the Past Randomizer',
-    'mm': 'Majora\'s Mask Randomizer',
-    'mmr': 'Majora\'s Mask Randomizer',
-    'sm': 'Super Metroid Randomizer',
-    'smr': 'Super Metroid Randomizer',
-    'sm64': 'Super Mario 64 Randomizer',
-    'dk64': 'Donkey Kong 64 Randomizer',
-    'dk64r': 'Donkey Kong 64 Randomizer',
-    'tww': 'The Wind Waker Randomizer',
-    'tp': 'Twilight Princess Randomizer',
-    'kh2fm': 'Kingdom Hearts 2 FM Randomizer',
-    'kh2r': 'Kingdom Hearts 2 FM Randomizer',
-    'kh2fmr': 'Kingdom Hearts 2 FM Randomizer',
-    'sotn': 'Symphony of the Night Randomizer',
-    'smz3': 'SMZ3 Combo Randomizer',
-    'ootmm': 'OoT+MM Combo Randomizer'
-  };
 
-  function resolveGameLabel(game) {
-    return game?.official?.name
-      || game?.name
-      || game?.randomizer?.displayName
-      || game?.randomizer?.shortName
-      || game?.id
-      || null;
-  }
 
   // Parse ISO 8601 duration to milliseconds
   function parseISODuration(str) {
@@ -94,17 +63,16 @@
     
     // Chercher d'abord par slug racetime
     if (gamesBySlug[lowerSlug]) {
-      return resolveGameLabel(gamesBySlug[lowerSlug]) || slug;
+      return gameLabel(gamesBySlug[lowerSlug]) || slug;
     }
     // Sinon par ID
     if (gamesById[lowerSlug]) {
-      return resolveGameLabel(gamesById[lowerSlug]) || slug;
+      return gameLabel(gamesById[lowerSlug]) || slug;
     }
     if (lowerSlug.endsWith('r') && gamesById[lowerSlug.slice(0, -1)]) {
-      return resolveGameLabel(gamesById[lowerSlug.slice(0, -1)]) || slug;
+      return gameLabel(gamesById[lowerSlug.slice(0, -1)]) || slug;
     }
-    // Fallback sur les noms statiques
-    return gameDisplayNames[lowerSlug] || slug;
+    return slug;
   }
 
   function cardFor(r){
@@ -210,7 +178,7 @@
       // Add options to select, sorted alphabetically by label; only games that have races
       games
         .filter(g => g.totalRaces > 0)
-        .map(g => ({ id: g.id, label: resolveGameLabel(g) || g.id }))
+        .map(g => ({ id: g.id, label: gameLabel(g) || g.id }))
         .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base', numeric: true }))
         .forEach(({ id, label }) => {
           const opt = document.createElement('option');

@@ -3,6 +3,7 @@ const router = express.Router();
 const { Player, Tournament, Race, Game, Match } = require('../models');
 const { buildCommonTournaments, racetimeRoomPath } = require('../helpers/compare-tournaments');
 const { buildPlayerTournaments } = require('../helpers/player-tournaments');
+const { gameLabel, loadGameLabels, tournamentGameLabel } = require('../helpers/game-label');
 const { buildAliasIndex, loadAliasIndex, getCanonicalName, getAliases } = require('../helpers/player-aliases');
 const { exactNameRegex, buildPlayerRacesFilter } = require('../helpers/player-races-filter');
 
@@ -66,15 +67,6 @@ function filterPlayersByName(payload, rawName) {
   };
 }
 
-function resolveGameDisplayNameFromDoc(game) {
-  return game?.randomizer?.displayName
-    || game?.randomizer?.shortName
-    || game?.official?.name
-    || game?.name
-    || game?.id
-    || null;
-}
-
 async function buildGameDisplayMaps() {
   const games = await Game.find({ enabled: { $ne: false } })
     .select('id name official randomizer integrations.racetime')
@@ -91,7 +83,7 @@ async function buildGameDisplayMaps() {
   };
 
   for (const game of games) {
-    const label = resolveGameDisplayNameFromDoc(game);
+    const label = gameLabel(game);
     const gameId = String(game.id || '').toLowerCase().trim();
     const primarySlug = String(game?.integrations?.racetime?.gameSlug || '').toLowerCase();
     const extraSlugs = Array.isArray(game?.integrations?.racetime?.gameSlugs)
@@ -134,7 +126,7 @@ async function buildGameDisplayMaps() {
 async function buildPlayersResponse(includeTournaments) {
   const { displayBySlug: gameDisplayBySlug, canonicalIdBySlug: canonicalGameIdBySlug } = await buildGameDisplayMaps();
 
-  const [playerDocs, tournamentParticipants, raceCounts] = await Promise.all([
+  const [playerDocs, tournamentParticipants, raceCounts, labelFor] = await Promise.all([
     Player.find({}).select('name aliases racetimeUrl racetimeId userId twitch racetimeDeletedAt').lean(),
     Tournament.aggregate([
       { $match: { participants: { $exists: true, $ne: [] } } },
@@ -144,6 +136,9 @@ async function buildPlayersResponse(includeTournaments) {
           tournamentId: '$_id',
           tournamentName: '$name',
           tournamentGameName: '$gameName',
+          tournamentGame: '$game',
+          tournamentGameId: '$gameId',
+          tournamentGameSlug: '$gameSlug',
           participantName: { $ifNull: ['$participants.displayName', '$participants.name'] },
           racetimeUserId: '$participants.racetimeUserId',
           racetimeName: '$participants.racetimeName',
@@ -176,7 +171,8 @@ async function buildPlayersResponse(includeTournaments) {
           lastRaceAt: { $max: '$startedAt' }
         }
       }
-    ])
+    ]),
+    loadGameLabels()
   ]);
 
   // Accounts deleted from racetime leave the list (their races stay)
@@ -240,8 +236,14 @@ async function buildPlayersResponse(includeTournaments) {
 
     const player = playersMap.get(normalized);
 
-    if (row.tournamentGameName) {
-      player.games.add(row.tournamentGameName);
+    const rowGameName = tournamentGameLabel({
+      game: row.tournamentGame,
+      gameId: row.tournamentGameId,
+      gameSlug: row.tournamentGameSlug,
+      gameName: row.tournamentGameName
+    }, labelFor);
+    if (rowGameName) {
+      player.games.add(rowGameName);
     }
 
     player.tournamentsCount += 1;
@@ -250,7 +252,7 @@ async function buildPlayersResponse(includeTournaments) {
       player.tournaments.push({
         tournamentId: row.tournamentId,
         tournamentName: row.tournamentName,
-        gameName: row.tournamentGameName || null,
+        gameName: rowGameName || null,
         finalRank: row.finalRank,
         seed: row.seed
       });

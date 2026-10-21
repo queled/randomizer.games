@@ -11,14 +11,6 @@
   let gamesById = {};
   let gamesReady = Promise.resolve(); // cards need the games list to resolve names
 
-  function resolveGameLabel(game) {
-    return game?.official?.name
-      || game?.name
-      || game?.randomizer?.displayName
-      || game?.randomizer?.shortName
-      || game?.id
-      || null;
-  }
   let loadId = 0; // ignores responses from a request a newer filter replaced
   // Map frontend filter keys to server status strings (server returns French status strings)
   const statusFilterMap = {
@@ -51,8 +43,8 @@
     const date = formatDate(t.startDate);
     const participantsCount = t.participantsCount || (t.participants && t.participants.length) || 0;
     
-    // The linked game's official name first: the source's own label varies
-    const gameName = (gamesById[t.gameId] && resolveGameLabel(gamesById[t.gameId])) || t.gameName || '';
+    // The linked game's label first: the source's own label varies
+    const gameName = (gamesById[t.gameId] && gameLabel(gamesById[t.gameId])) || t.gameName || '';
 
     const winnerName = getTournamentWinnerName(t);
     const winnerText = winnerName
@@ -94,7 +86,7 @@
       // Same labels and order as the races page; only games that have tournaments
       games
         .filter(g => g.totalTournaments > 0)
-        .map(g => ({ id: g.id, label: resolveGameLabel(g) || g.id }))
+        .map(g => ({ id: g.id, label: gameLabel(g) || g.id }))
         .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base', numeric: true }))
         .forEach(({ id, label }) => {
           const opt = document.createElement('option');

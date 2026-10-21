@@ -5,6 +5,7 @@ const { Game } = require('../models');
 const { isSafeImageContentType, setRelayedImageHeaders } = require('../middleware/security');
 const { titleNamesRace } = require('../helpers/restream-titles');
 const { gameGoalFilters, isGoalAllowed } = require('../helpers/racetime-goals');
+const { gameLabel } = require('../helpers/game-label');
 
 // Cache for stream results (5 minutes TTL)
 const cache = {
@@ -1098,7 +1099,7 @@ async function buildGameStreamsResult(gameId, preloadedDoc) {
 
   // Show the site's name rather than the Twitch styling (all capitals), except where the
   // category tells which game is played: combos and multi-game categories (Archipelago)
-  const siteGameName = gameDoc.official?.name || gameDoc.name;
+  const siteGameName = gameLabel(gameDoc);
   let allStreams = twitchStreamsAll
     .map(stream => ({
       ...stream,
@@ -1474,7 +1475,7 @@ async function buildAllStreams() {
   }
 
   // Twitch category names follow each publisher's styling (all capitals): show the site's name
-  const siteGameNames = new Map(games.map(g => [(g.id || '').toLowerCase(), g.official?.name || g.name]));
+  const siteGameNames = new Map(games.map(g => [(g.id || '').toLowerCase(), gameLabel(g)]));
   for (const stream of allStreams) {
     const siteName = stream.gameId && siteGameNames.get(stream.gameId);
     if (siteName) stream.gameName = siteName;

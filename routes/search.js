@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Game, Tournament, Race, Player } = require('../models');
+const { gameLabel: labelOfGame, loadGameLabels, tournamentGameLabel } = require('../helpers/game-label');
 
 function escapeRegex(value) {
   return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -14,38 +15,6 @@ function normalizeName(name) {
     .trim()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '');
-}
-
-// Official game names keyed by game id, racetime category and the other names a
-// game goes by, so results show the official name rather than a racetime slug
-// or a tournament's own label
-async function loadGameLabels() {
-  const docs = await Game.find({})
-    .select('id name official.name randomizer.name randomizer.displayName integrations.racetime.gameSlug integrations.racetime.gameSlugs')
-    .lean();
-  const labels = new Map();
-  const labelOf = (g) => (g.official && g.official.name) || g.name;
-  // Weakest key first: other names, "<id>r", then the id, then the racetime slugs
-  docs.forEach(g => {
-    [g.name, g.randomizer && g.randomizer.name, g.randomizer && g.randomizer.displayName, g.official && g.official.name]
-      .filter(Boolean)
-      .forEach(name => labels.set(name.toLowerCase(), labelOf(g)));
-  });
-  docs.forEach(g => { if (g.id) labels.set(`${g.id}r`.toLowerCase(), labelOf(g)); });
-  // Older tournaments store the game's Mongo _id as gameId
-  docs.forEach(g => labels.set(String(g._id), labelOf(g)));
-  docs.forEach(g => { if (g.id) labels.set(g.id.toLowerCase(), labelOf(g)); });
-  docs.forEach(g => {
-    const rt = (g.integrations && g.integrations.racetime) || {};
-    [rt.gameSlug, ...(rt.gameSlugs || [])].filter(Boolean)
-      .forEach(slug => labels.set(slug.toLowerCase(), labelOf(g)));
-  });
-  return (key) => {
-    if (!key) return null;
-    const k = String(key).toLowerCase().trim();
-    // "<official name> Randomizer" → the game's own name
-    return labels.get(k) || labels.get(k.replace(/\s+randomizer$/, '')) || null;
-  };
 }
 
 // Global search endpoint
@@ -248,13 +217,14 @@ router.get('/', async (req, res, next) => {
         games: games.map(g => ({
           id: g.id,
           name: g.name,
+          label: labelOfGame(g),
           officialName: g.official && g.official.name,
           icon: g.icon
         })),
         tournaments: tournaments.map(t => ({
           _id: t._id,
           name: t.name,
-          gameName: gameLabel(t.gameId) || gameLabel(t.gameName) || t.gameName,
+          gameName: tournamentGameLabel(t, gameLabel),
           startDate: t.startDate,
           endDate: t.endDate,
           participantCount: t.participants ? t.participants.length : 0

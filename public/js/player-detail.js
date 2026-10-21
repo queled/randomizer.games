@@ -411,7 +411,7 @@
       const data = await fetchJson('/api/games');
       const games = data.games || [];
       games.forEach(g => {
-        const label = g?.randomizer?.displayName || g?.randomizer?.shortName || g?.official?.name || g?.name;
+        const label = gameLabel(g);
         const id = String(g?.id || '').toLowerCase();
         const rt = g?.integrations?.racetime || {};
         put(id, id, label);

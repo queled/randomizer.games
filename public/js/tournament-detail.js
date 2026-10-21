@@ -131,16 +131,14 @@ function applyTournamentSeo(tournament) {
     return;
   }
 
-  const gameLabel = tournament.gameName
-    || tournament.game?.official?.name
-    || tournament.game?.name
-    || tournament.game?.randomizer?.shortName
+  const tournamentGame = window.gameLabel(tournament.game)
+    || tournament.gameName
     || 'Randomizer game';
   const status = getTournamentStatus(tournament);
   const participantsCount = Number(tournament.participantsCount) || (Array.isArray(tournament.participants) ? tournament.participants.length : 0);
   const description = [
     `${tournament.name} on Randomizer.`,
-    `${status} ${gameLabel} tournament with ${participantsCount} participants.`,
+    `${status} ${tournamentGame} tournament with ${participantsCount} participants.`,
     'Explore bracket, participants and linked races.'
   ].join(' ');
   const detailUrl = `/tournament-detail.html?id=${encodeURIComponent(tournament._id || tournament.id)}`;
@@ -748,7 +746,7 @@ function displayTournamentInfo(tournament) {
   document.getElementById('tournament-title').textContent = tournament.name;
   document.title = `${tournament.name} - Randomizer`;
   const tournamentGameEl = document.getElementById('tournament-game');
-  const tournamentGameLabel = tournament.game?.official?.name || tournament.gameName || 'Unknown game';
+  const tournamentGameLabel = window.gameLabel(tournament.game) || tournament.gameName || 'Unknown game';
   if (tournament.game?.id) {
     tournamentGameEl.innerHTML = `<a href="/game-detail.html?id=${encodeURIComponent(tournament.game.id)}" style="color:inherit;text-decoration:none;">${escHtml(tournamentGameLabel)}</a>`;
   } else {

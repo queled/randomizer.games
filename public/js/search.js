@@ -79,8 +79,8 @@
   function renderGameCard(game) {
     return `
       <a href="/game-detail.html?id=${encodeURIComponent(game.id)}" class="result-card">
-        <div class="title">${highlightText(game.officialName || game.name, searchQuery)}</div>
-        <div class="subtitle">${escHtml(game.id)}</div>
+        <div class="title">${highlightText(game.label || game.officialName || game.name, searchQuery)}</div>
+        <div class="subtitle">${highlightText(game.officialName || game.id, searchQuery)}</div>
       </a>
     `;
   }

@@ -1,6 +1,7 @@
 // Tournaments two players both entered (compare page): each one's final rank and
 // the bracket matches they played against each other.
 const { calculateTournamentStatus } = require('./tournament-status');
+const { loadGameLabels, tournamentGameLabel } = require('./game-label');
 
 function normalizeName(name) {
   if (!name) return '';
@@ -77,10 +78,13 @@ async function buildCommonTournaments({ Tournament, Match, players, raceIdByRoom
   for (const p of players) p.normalizedNames = new Set(Array.from(p.names).map(normalizeName));
   const [p1, p2] = players;
 
-  const tournaments = await Tournament.find({ $and: [participantQuery(p1), participantQuery(p2)] })
-    .select('name gameName startDate endDate state participants participantsCount matches.startggSetId matches.round matches.phase matches.phaseGroup matches.displayScore matches.completedAt matches.winnerId matches.player1 matches.player2 matches.raceUrl matches.raceUrls midosHouse.schedule.startAt')
-    .populate('game', 'name randomizer.shortName')
-    .lean();
+  const [tournaments, labelFor] = await Promise.all([
+    Tournament.find({ $and: [participantQuery(p1), participantQuery(p2)] })
+      .select('name gameName gameId gameSlug game startDate endDate state participants participantsCount matches.startggSetId matches.round matches.phase matches.phaseGroup matches.displayScore matches.completedAt matches.winnerId matches.player1 matches.player2 matches.raceUrl matches.raceUrls midosHouse.schedule.startAt')
+      .populate('game', 'id name official.name randomizer')
+      .lean(),
+    loadGameLabels()
+  ]);
 
   const entries = [];
   for (const t of tournaments) {
@@ -178,7 +182,7 @@ async function buildCommonTournaments({ Tournament, Match, players, raceIdByRoom
     return {
       tournamentId: t._id,
       name: t.name,
-      gameName: t.gameName || t.game?.randomizer?.shortName || t.game?.name || null,
+      gameName: tournamentGameLabel(t, labelFor),
       startDate: t.startDate || null,
       status: calculateTournamentStatus(t),
       participantsCount: t.participantsCount || (t.participants || []).length || null,

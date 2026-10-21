@@ -14,6 +14,7 @@ const { Game, Tournament, Player, Race } = require('../models');
 const { calculateTournamentStatus } = require('../helpers/tournament-status');
 const { buildPlayerRacesFilter } = require('../helpers/player-races-filter');
 const { countPlayerTournaments } = require('../helpers/player-tournaments');
+const { gameLabel, tournamentGameLabel } = require('../helpers/game-label');
 
 const PUBLIC_DIR = path.join(__dirname, '..', 'public');
 // Square logo for social previews and the Organization logo
@@ -135,10 +136,6 @@ function breadcrumb(siteUrl, items) {
   };
 }
 
-function gameDisplayName(game) {
-  return game?.randomizer?.displayName || game?.randomizer?.shortName || game?.official?.name || game?.name || '';
-}
-
 function compact(obj) {
   return Object.fromEntries(Object.entries(obj).filter(([, value]) => value !== undefined && value !== null && value !== ''));
 }
@@ -163,7 +160,7 @@ async function gameMeta(query, siteUrl) {
 
   // Race counts depend on the racetime category resolution in routes/games.js
   // (a scan over every game); the description sticks to what the document holds.
-  const displayTitle = gameDisplayName(game) || 'Game';
+  const displayTitle = gameLabel(game) || 'Game';
   const gameName = game.official?.name || game.name || displayTitle;
   const description = displayTitle !== gameName
     ? `${displayTitle} for ${gameName}: races, tournaments, players and community resources on Randomizer.`
@@ -212,10 +209,10 @@ async function tournamentMeta(query, siteUrl) {
   const tournament = await Tournament.findById(id).populate('game', 'id name official randomizer image logo').lean();
   if (!tournament) return null;
 
-  const gameLabel = tournament.gameName || gameDisplayName(tournament.game) || 'randomizer';
+  const tournamentGame = tournamentGameLabel(tournament) || 'randomizer';
   const status = tournamentStatus(tournament);
   const participants = Number(tournament.participantsCount) || (Array.isArray(tournament.participants) ? tournament.participants.length : 0);
-  const description = `${tournament.name} on Randomizer. ${status ? `${status} ` : ''}${gameLabel} tournament${participants ? ` with ${participants} participants` : ''}. Explore bracket, participants and linked races.`;
+  const description = `${tournament.name} on Randomizer. ${status ? `${status} ` : ''}${tournamentGame} tournament${participants ? ` with ${participants} participants` : ''}. Explore bracket, participants and linked races.`;
   const canonicalPath = `/tournament-detail.html?id=${encodeURIComponent(String(tournament._id))}`;
   const image = tournament.game?.image || tournament.game?.logo;
 
@@ -264,7 +261,7 @@ async function playerRaceSummary(player) {
   await Promise.all(byCategory.map(async ({ _id: category, count }) => {
     const game = await findGameForRaceCategory(category);
     const key = game?.id || category;
-    const entry = byGame.get(key) || { name: gameDisplayName(game) || category, count: 0 };
+    const entry = byGame.get(key) || { name: gameLabel(game) || category, count: 0 };
     entry.count += count;
     byGame.set(key, entry);
   }));
@@ -356,7 +353,7 @@ async function raceMeta(query, siteUrl) {
     findGameForRaceCategory(race.category),
     race.tournamentId ? Tournament.findById(race.tournamentId).select('name').lean() : null
   ]);
-  const gameName = gameDisplayName(game) || race.category;
+  const gameName = gameLabel(game) || race.category;
   const goal = String(race.goal || '').trim() || 'Race';
   const matchup = String(race.matchPlayers || '').trim();
   const label = matchup ? `${matchup} (${goal})` : goal;

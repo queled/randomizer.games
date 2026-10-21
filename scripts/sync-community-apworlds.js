@@ -18,7 +18,8 @@
  * The sync owns, on each game, the links it adds (source "apworld"):
  *   - the APWorld itself (releases, else setup guide, else Discord), shown as
  *     a community APWorld with its stability ("broken" gets a warning);
- *   - the PopTracker / tracker pack, the setup guide, the Discord thread.
+ *   - the PopTracker / tracker pack, the setup guide, the invite to the
+ *     Discord server of the support thread.
  * It drops them when the row leaves the list, and replaces a link added by
  * hand to the same repository. A row of the game's own archipelago.gg /
  * multiworld.gg world gets neither APWorld nor guide (the page stands for
@@ -204,6 +205,22 @@ const repoKey = url => {
   return m ? `${m[1]}/${m[2]}/${m[3].replace(/\.git$/, '')}`.toLowerCase() : null;
 };
 const isDiscord = url => /^https?:\/\/(?:www\.)?discord(?:app)?\.com\//i.test(url || '');
+const isDiscordInvite = url => /^https?:\/\/(?:www\.)?discord(?:\.gg|(?:app)?\.com\/invite)\//i.test(url || '');
+
+// Servers of the support threads: a thread only opens for members, the Discord
+// tab links to the server's invite instead
+const DISCORD_SERVERS = {
+  '731205301247803413': { name: 'Archipelago Discord', fr: 'Discord Archipelago', url: 'https://discord.gg/8Z65BR2' },
+  '1085716850370957462': { name: 'AP After Dark Discord (18+)', fr: 'Discord AP After Dark (18+)', url: 'https://discord.gg/Sbhy4ykUKn' }
+};
+
+// Invite of a support link: its server's for a thread, the link itself for an invite
+function discordInvite(url) {
+  const server = DISCORD_SERVERS[String(url).match(/\/channels\/(\d+)/)?.[1]];
+  if (server) return { url: server.url, name: server.name, translations: { fr: { name: server.fr } } };
+  if (isDiscordInvite(url)) return { url, name: 'Discord', translations: { fr: { name: 'Discord' } } };
+  return null;
+}
 const isSiteHost = url => SITE_HOST_RE.test(url || '');
 
 // Repository name ("owner/Archipelago" for a fork of Archipelago), else host
@@ -257,15 +274,8 @@ function rowLinks(row) {
       source: SOURCE
     };
   }
-  if (discord && discord !== siteUrl) {
-    links.discord = {
-      url: discord,
-      name: 'Archipelago Discord thread',
-      translations: { fr: { name: 'Fil du Discord Archipelago' } },
-      type: 'discord',
-      source: SOURCE
-    };
-  }
+  const invite = discord && discordInvite(discord);
+  if (invite) links.discord = { ...invite, type: 'discord', source: SOURCE };
   return links;
 }
 
@@ -290,11 +300,10 @@ function planGame(game, rows, now) {
       delete links.site;
       delete links.guide;
     }
-    // Several rows (variants): each guide and thread says which one it is about
-    for (const link of [links.guide, links.discord]) {
-      if (!link || rows.length < 2) continue;
-      link.name += ` (${row.name})`;
-      link.translations.fr.name += ` (${row.name})`;
+    // Several rows (variants): each guide says which one it is about
+    if (links.guide && rows.length > 1) {
+      links.guide.name += ` (${row.name})`;
+      links.guide.translations.fr.name += ` (${row.name})`;
     }
     return links;
   });

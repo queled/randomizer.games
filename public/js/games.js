@@ -134,30 +134,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  // Search and sort live in the URL, so they survive a back navigation that reloads the page
-  const initialParams = new URLSearchParams(window.location.search);
-  if (filterInput && initialParams.has('q')) filterInput.value = initialParams.get('q');
-  const initialSort = initialParams.get('sort');
-  if (initialSort && [...sortSelect.options].some(o => o.value === initialSort)) sortSelect.value = initialSort;
+  // Search and sort are kept in the history entry (not the URL): a back navigation or a reload
+  // that rebuilds the page finds them there, while a fresh visit starts empty
+  const savedState = history.state || {};
+  if (filterInput && typeof savedState.q === 'string') filterInput.value = savedState.q;
+  if (savedState.sort && [...sortSelect.options].some(o => o.value === savedState.sort)) sortSelect.value = savedState.sort;
 
-  function saveStateInUrl() {
-    const params = new URLSearchParams(window.location.search);
-    const q = filterInput ? filterInput.value.trim() : '';
-    if (q) params.set('q', q); else params.delete('q');
-    if (sortSelect.value !== sortSelect.querySelector('option[selected]')?.value) params.set('sort', sortSelect.value);
-    else params.delete('sort');
-    const query = params.toString();
-    history.replaceState(history.state, '', window.location.pathname + (query ? '?' + query : '') + window.location.hash);
+  function saveState() {
+    history.replaceState({
+      ...(history.state || {}),
+      q: filterInput ? filterInput.value : '',
+      sort: sortSelect.value,
+      scrollY: window.scrollY
+    }, '');
   }
 
   // The grid is rendered after a fetch, too late for the browser to restore the scroll by itself
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-  let pendingScroll = history.state && typeof history.state.scrollY === 'number' ? history.state.scrollY : null;
+  let pendingScroll = typeof savedState.scrollY === 'number' ? savedState.scrollY : null;
   const dropPendingScroll = () => { pendingScroll = null; };
   ['wheel', 'touchstart', 'keydown'].forEach(type => window.addEventListener(type, dropPendingScroll, { once: true, passive: true }));
-  window.addEventListener('pagehide', () => {
-    history.replaceState({ ...(history.state || {}), scrollY: window.scrollY }, '');
-  });
+  window.addEventListener('pagehide', saveState);
 
   // Filter, sort, render and update the count
   function renderCurrent() {
@@ -172,7 +169,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   function onControlsChange() {
-    saveStateInUrl();
+    saveState();
     renderCurrent();
   }
 

@@ -33,13 +33,13 @@
  */
 
 const path = require('path');
-const { spawnSync } = require('child_process');
 const mongoose = require('mongoose');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env'), quiet: true });
 
 const connectDB = require('../config/database');
 const { Game } = require('../models');
 const { SITES, fetchGames, resolveWikiLinks } = require('../services/archipelago');
+const { norm, withoutBrackets, subtitle, mainTitle, gameNames, pickCandidate, newGameId, runEnrichment } = require('../services/game-names');
 
 const SOURCE = 'archipelago';
 const SITE_HOST_RE = /^https?:\/\/(?:www\.)?(archipelago|multiworld)\.gg(?:\/|$)/i;
@@ -76,8 +76,6 @@ const OVERRIDES = {
   }
 };
 
-const ROMAN = { ii: '2', iii: '3', iv: '4', v: '5', vi: '6', vii: '7', viii: '8', ix: '9', x: '10' };
-
 function parseArgs() {
   const args = process.argv.slice(2);
   const siteIndex = args.indexOf('--site');
@@ -95,45 +93,7 @@ function parseArgs() {
   };
 }
 
-// "Name A/B" and "Name A and B", "Name II" and "Name 2"
-const norm = s => String(s || '')
-  .normalize('NFD').replace(/\p{Diacritic}/gu, '')
-  .toLowerCase()
-  .replace(/\brandomi[sz]er\b|\band\b|&/g, ' ')
-  .replace(/^\s*the\s+/, '')
-  .replace(/\b(ii|iii|iv|vi|vii|viii|ix)\b/g, roman => ROMAN[roman])
-  .replace(/[^a-z0-9]/g, '');
-
-// "Name (Variant)" → "Name", "Name II (Beta)" → "Name II"
-const withoutBrackets = s => String(s || '').replace(/\s*\([^)]*\)\s*/g, ' ').replace(/\s+beta$/i, '').trim();
-
-const TITLE_SPLIT_RE = /\s*[:–]\s+|\s+-\s+/;
-// "Series: Subtitle" → "Subtitle"
-const subtitle = s => {
-  const parts = String(s || '').split(TITLE_SPLIT_RE);
-  return parts.length > 1 ? parts.slice(1).join(' ') : null;
-};
-// "Title 2: Subtitle" → "Title 2"
-const mainTitle = s => {
-  const parts = String(s || '').split(TITLE_SPLIT_RE);
-  return parts.length > 1 ? parts[0] : null;
-};
-
 const worldNames = world => [...new Set([world.name, world.displayName, withoutBrackets(world.name), withoutBrackets(world.displayName)])];
-
-function gameNames(game) {
-  const r = game.randomizer || {};
-  const strip = s => (s ? String(s).replace(/\s*\brandomi[sz]er\b\s*/ig, ' ').trim() : s);
-  return [
-    game.name,
-    game.official?.name,
-    strip(r.displayName),
-    strip(r.name),
-    game.integrations?.randoList?.gameName,
-    ...(game.integrations?.randoList?.gameNames || []),
-    game.integrations?.twitch?.categoryName
-  ].filter(Boolean);
-}
 
 // World name of an archipelago.gg / multiworld.gg link: game page or setup guide anchor
 function linkedWorld(url) {
@@ -174,18 +134,6 @@ function buildIndexes(games) {
     }
   }
   return { byId, strong, weak, linked };
-}
-
-// One game among candidates: the only one, else the one whose own name is the world's
-function pickCandidate(candidates, names) {
-  const list = [...(candidates || [])];
-  if (list.length <= 1) return { game: list[0] || null };
-  const keys = new Set(names.map(norm));
-  for (const nameOf of [g => g.name, g => g.official?.name]) {
-    const exact = list.filter(g => keys.has(norm(nameOf(g))));
-    if (exact.length === 1) return { game: exact[0] };
-  }
-  return { game: null, ambiguous: list.map(g => g.id) };
 }
 
 // Games of a world: { games } (several for some overrides), else why none
@@ -265,38 +213,6 @@ function matchSite(siteKey, worlds, games, indexes, apMatches) {
     report.hows[how] = (report.hows[how] || 0) + 1;
   }
   return { matches, report };
-}
-
-// "Some Long Game Name" → "slgn", "Name 50" → "name50", a franchise word may have its own short form
-function idCandidates(name) {
-  const words = String(name)
-    .replace(/^the legend of zelda\s*[:-]\s*/i, '')
-    .normalize('NFD').replace(/\p{Diacritic}/gu, '')
-    .replace(/'/g, '')
-    .split(/[^A-Za-z0-9]+/)
-    .filter(Boolean);
-  const slug = words.join('').toLowerCase().slice(0, 24);
-  if (words.length === 1) return [slug];
-  const initials = words.map(word => {
-    const lower = word.toLowerCase();
-    if (lower === 'pokemon') return 'pkmn';
-    if (/^\d+$/.test(word)) return word;
-    if (ROMAN[lower] && word === word.toUpperCase()) return ROMAN[lower];
-    if (word.length >= 2 && word === word.toUpperCase()) return lower;
-    return lower[0];
-  }).join('');
-  return initials.length >= 2 ? [initials, slug] : [slug];
-}
-
-function newGameId(name, takenIds) {
-  const candidates = idCandidates(name).filter(Boolean);
-  for (const id of candidates) {
-    if (!takenIds.has(id)) return id;
-  }
-  const base = candidates[candidates.length - 1] || 'game';
-  for (let n = 2; ; n++) {
-    if (!takenIds.has(`${base}${n}`)) return `${base}${n}`;
-  }
 }
 
 function siteLink(siteKey, world) {
@@ -450,17 +366,6 @@ function newGameDoc(id, worldsBySite, now) {
     enabled: true,
     categories: []
   };
-}
-
-function runEnrichment(ids) {
-  for (const script of ['enrich-twitch.js', 'enrich-release-years.js']) {
-    console.log(`\n▶ ${script} --ids ${ids.join(',')}`);
-    const result = spawnSync(process.execPath, [path.join(__dirname, script), '--ids', ids.join(',')], {
-      stdio: 'inherit',
-      timeout: 5 * 60 * 1000
-    });
-    if (result.status !== 0) console.warn(`⚠️ ${script} : code ${result.status}`);
-  }
 }
 
 async function main() {

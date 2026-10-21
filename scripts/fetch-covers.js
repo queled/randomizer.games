@@ -47,8 +47,8 @@ const BROWSER = {
   Referer: 'https://www.speedrun.com/'
 };
 const SRC_DELAY_MS = 1000;
-// Covers made by hand: games of two versions, the covers cut diagonally
-const HAND_MADE = new Set(['pkmnrb', 'pkmnbw', 'pkmnbw2', 'pkmnfl', 'mmbn3', 'mmbn5', 'mmbn6', 'ie2', 'iegcs', 'medabots', 'dwm2', 'dq12']);
+// Covers made by hand: games of several versions, the covers cut diagonally
+const HAND_MADE = new Set(['pkmnrb', 'pkmnbw', 'pkmnbw2', 'pkmnfl', 'mmbn3', 'mmbn5', 'mmbn6', 'ie2', 'iegcs', 'medabots', 'dwm2', 'dq12', 'g2t3', 'g3', 'dwdd', 'iegg']);
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 function parseArgs() {

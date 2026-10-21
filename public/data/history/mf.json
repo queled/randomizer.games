@@ -1,15 +1,23 @@
 {
   "intro": {
-    "fr": "Depuis 2025, Metroid Fusion se randomise aussi avec Randovania, grâce au Metroid Advance Randomizer System (MARS), qui modifie le jeu pour accueillir un randomizer moderne.",
-    "en": "Since 2025, Metroid Fusion can also be randomized with Randovania, thanks to the Metroid Advance Randomizer System (MARS), which modifies the game to support a modern randomizer."
+    "fr": "Metroid Fusion se randomise d'abord avec le Metroid Fusion Open Randomizer (MFOR) de Kazuto, joué en course dès 2021, puis, depuis 2025, avec Randovania, grâce au Metroid Advance Randomizer System (MARS), qui modifie le jeu pour accueillir un randomizer moderne.",
+    "en": "Metroid Fusion was first randomized with Kazuto's Metroid Fusion Open Randomizer (MFOR), raced from 2021, then, since 2025, with Randovania, thanks to the Metroid Advance Randomizer System (MARS), which modifies the game to support a modern randomizer."
   },
   "events": [
     {
       "date": "2002",
       "title": { "fr": "Le jeu d'origine", "en": "The original game" },
       "text": {
-        "fr": "Nintendo sort Metroid Fusion sur Game Boy Advance en 2002. Un premier randomizer, le Metroid Fusion Open Randomizer de Kazuto, se joue en course dès 2021.",
-        "en": "Nintendo releases Metroid Fusion on the Game Boy Advance in 2002. An earlier randomizer, Kazuto's Metroid Fusion Open Randomizer, has been raced since 2021."
+        "fr": "Nintendo sort Metroid Fusion sur Game Boy Advance en 2002.",
+        "en": "Nintendo releases Metroid Fusion on the Game Boy Advance in 2002."
+      }
+    },
+    {
+      "date": "2021",
+      "title": { "fr": "MFOR", "en": "MFOR" },
+      "text": {
+        "fr": "Kazuto présente le Metroid Fusion Open Randomizer, une application Windows, sur le forum Metroid Construction. Les premières courses recensées sur ce site ont lieu le 29 août 2021 sur racetime.gg : 183 en 2021 et 131 en 2022.",
+        "en": "Kazuto presents the Metroid Fusion Open Randomizer, a Windows application, on the Metroid Construction forum. The first races listed on this site take place on August 29, 2021 on racetime.gg: 183 in 2021 and 131 in 2022."
       }
     },
     {
@@ -24,8 +32,8 @@
       "date": "2025",
       "title": { "fr": "Dans Randovania", "en": "In Randovania" },
       "text": {
-        "fr": "Le 1er août 2025, la version 10.0 de Randovania ajoute Metroid Fusion en solo, avec des points de départ aléatoires et plusieurs options. Les premières courses recensées sur ce site ont lieu le 29 août 2025 : 108 dans l'année.",
-        "en": "On August 1, 2025, Randovania version 10.0 adds Metroid Fusion in single player, with random starting locations and several options. The first races listed on this site take place on August 29, 2025: 108 that year."
+        "fr": "Le 1er août 2025, la version 10.0 de Randovania ajoute Metroid Fusion en solo, avec des points de départ aléatoires et plusieurs options, et les courses quittent peu à peu MFOR. Les premières courses recensées sur ce site ont lieu le 29 août 2025 : 108 dans l'année.",
+        "en": "On August 1, 2025, Randovania version 10.0 adds Metroid Fusion in single player, with random starting locations and several options, and races gradually move away from MFOR. The first races listed on this site take place on August 29, 2025: 108 that year."
       }
     },
     {
@@ -44,6 +52,8 @@
     { "label": "MetroidAdvRandomizerSystem/mars-fusion-asm (GitHub)", "url": "https://github.com/MetroidAdvRandomizerSystem/mars-fusion-asm" },
     { "label": "Randovania — CHANGELOG", "url": "https://github.com/randovania/randovania/blob/main/CHANGELOG.md" },
     { "label": "Kazuto88/MFOR (GitHub)", "url": "https://github.com/Kazuto88/MFOR" },
+    { "label": "Metroid Construction — Metroid Fusion Open Randomizer", "url": "https://forum.metroidconstruction.com/index.php?topic=5376.0" },
+    { "label": "racetime.gg — Metroid Fusion Randomizer (MFOR)", "url": "https://racetime.gg/mfr" },
     { "label": "racetime.gg — Metroid Fusion Randomizer (Randovania)", "url": "https://racetime.gg/mfr-rdv" }
   ]
 }

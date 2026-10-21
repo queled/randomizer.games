@@ -240,7 +240,6 @@ const TWITCH_GAME_NAMES = {
   'm1': 'Metroid',
   'md': 'Metroid Dread',
   'mf': 'Metroid Fusion',
-  'mfo': 'Metroid Fusion',
   'mp': 'Metroid Prime',
   'mp2': 'Metroid Prime 2: Echoes',
   'mp3': 'Metroid Prime 3: Corruption',

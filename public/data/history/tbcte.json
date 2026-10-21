@@ -49,12 +49,12 @@
         "en": "Today"
       },
       "title": {
-        "fr": "Tableur communautaire",
-        "en": "Community list"
+        "fr": "Un APWorld parmi d'autres",
+        "en": "One APWorld among many"
       },
       "text": {
-        "fr": "Turnip Boy Commits Tax Evasion figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
-        "en": "Turnip Boy Commits Tax Evasion is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+        "fr": "Comme beaucoup de jeux, Turnip Boy Commits Tax Evasion rejoint Archipelago par un APWorld non officiel : un fichier .apworld distribué à part, que chaque joueur ajoute lui-même à son installation pour l'intégrer à un multiworld.",
+        "en": "Like many games, Turnip Boy Commits Tax Evasion joins Archipelago through an unofficial APWorld: a .apworld file distributed separately, which each player adds to their own install to bring it into a multiworld."
       }
     }
   ],
@@ -72,8 +72,8 @@
       "url": "https://github.com/pointfivetee/TurnipBoyRandomizer/releases"
     },
     {
-      "label": "Tableur communautaire des APWorlds",
-      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+      "label": "Archipelago — spécification des APWorlds",
+      "url": "https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/apworld%20specification.md"
     }
   ]
 }

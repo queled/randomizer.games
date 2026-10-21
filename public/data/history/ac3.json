@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "FromSoftware sort Armored Core 3 en 2002.",
+        "en": "FromSoftware releases Armored Core 3 in 2002."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Armored Core 3",
+      "url": "https://www.igdb.com/games/armored-core-3"
+    },
     {
       "label": "GitHub — Aleksandylmao/Armored-Core-3-PCSX2-Archipelago",
       "url": "https://github.com/Aleksandylmao/Armored-Core-3-PCSX2-Archipelago"

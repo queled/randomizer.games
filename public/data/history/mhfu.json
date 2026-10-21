@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2008",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom Production Studio 1 sort Monster Hunter Freedom Unite en 2008.",
+        "en": "Capcom Production Studio 1 releases Monster Hunter Freedom Unite in 2008."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2026",
         "en": "April 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Monster Hunter Freedom Unite",
+      "url": "https://www.igdb.com/games/monster-hunter-freedom-unite"
+    },
     {
       "label": "GitHub — Silvris/Archipelago",
       "url": "https://github.com/Silvris/Archipelago"

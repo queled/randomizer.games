@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Pupuya Games sort Little Witch Nobeta en 2022.",
+        "en": "Pupuya Games releases Little Witch Nobeta in 2022."
+      }
+    },
+    {
       "date": {
         "fr": "Octobre 2025",
         "en": "October 2025"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Little Witch Nobeta",
+      "url": "https://www.igdb.com/games/little-witch-nobeta"
+    },
     {
       "label": "GitHub — danielgruethling/Archipelago",
       "url": "https://github.com/danielgruethling/Archipelago"

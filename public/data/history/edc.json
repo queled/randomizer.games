@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sam Cameron sort Easy Delivery Co. en 2025.",
+        "en": "Sam Cameron releases Easy Delivery Co. in 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Décembre 2025",
         "en": "December 2025"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Easy Delivery Co.",
+      "url": "https://www.igdb.com/games/easy-delivery-co"
+    },
     {
       "label": "GitHub — Aeromaze/Archipelago",
       "url": "https://github.com/Aeromaze/Archipelago"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Minit sort en 2018.",
+        "en": "Minit is released in 2018."
+      }
+    },
+    {
       "date": {
         "fr": "Octobre 2023",
         "en": "October 2023"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Minit",
+      "url": "https://www.igdb.com/games/minit"
+    },
     {
       "label": "GitHub — qwint/APMinit",
       "url": "https://github.com/qwint/APMinit"

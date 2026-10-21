@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Anodyne sort en 2013.",
+        "en": "Anodyne is released in 2013."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2024",
         "en": "July 2024"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Anodyne",
+      "url": "https://www.igdb.com/games/anodyne"
+    },
     {
       "label": "GitHub — PixieCatSupreme/ArchipelagoAno",
       "url": "https://github.com/PixieCatSupreme/ArchipelagoAno"

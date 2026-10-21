@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Team Shanghai Alice sort Touhou Youyoumu ~ Perfect Cherry Blossom en 2003.",
+        "en": "Team Shanghai Alice releases Touhou Youyoumu ~ Perfect Cherry Blossom in 2003."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2025",
         "en": "May 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Touhou Youyoumu: Perfect Cherry Blossom",
+      "url": "https://www.igdb.com/games/touhou-youyoumu-perfect-cherry-blossom"
+    },
     {
       "label": "GitHub — Nepley/pcb-apworld",
       "url": "https://github.com/Nepley/pcb-apworld"

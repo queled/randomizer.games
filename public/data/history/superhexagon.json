@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2012",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Super Hexagon sort en 2012.",
+        "en": "Super Hexagon is released in 2012."
+      }
+    },
+    {
       "date": {
         "fr": "Octobre 2026",
         "en": "October 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Super Hexagon",
+      "url": "https://www.igdb.com/games/super-hexagon"
+    },
     {
       "label": "GitHub — Jeffdev-Archipelago-Implementations/Archipelago-Hexagon",
       "url": "https://github.com/Jeffdev-Archipelago-Implementations/Archipelago-Hexagon"

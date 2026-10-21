@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "7th Beat Games sort Rhythm Doctor en 2025.",
+        "en": "7th Beat Games releases Rhythm Doctor in 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Rhythm Doctor",
+      "url": "https://www.igdb.com/games/rhythm-doctor"
+    },
     {
       "label": "GitHub — nonperforming/Archipelago",
       "url": "https://github.com/nonperforming/Archipelago"

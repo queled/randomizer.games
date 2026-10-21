@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Naughty Dog sort Jak 3 en 2004.",
+        "en": "Naughty Dog releases Jak 3 in 2004."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Jak 3",
+      "url": "https://www.igdb.com/games/jak-3"
+    },
     {
       "label": "GitHub — Blake645/Archipelago",
       "url": "https://github.com/Blake645/Archipelago"

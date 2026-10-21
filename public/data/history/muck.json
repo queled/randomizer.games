@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Dani sort Muck en 2021.",
+        "en": "Dani releases Muck in 2021."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Muck",
+      "url": "https://www.igdb.com/games/muck"
+    },
     {
       "label": "GitHub — PGMProductions/Muck-for-Archipelago",
       "url": "https://github.com/PGMProductions/Muck-for-Archipelago"

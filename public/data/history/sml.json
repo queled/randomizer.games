@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1989",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo R&D1 sort Super Mario Land en 1989.",
+        "en": "Nintendo R&D1 releases Super Mario Land in 1989."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2026",
         "en": "September 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Super Mario Land",
+      "url": "https://www.igdb.com/games/super-mario-land"
+    },
     {
       "label": "GitHub — MarioGamer9871/Super-Mario-Land-Archipelago",
       "url": "https://github.com/MarioGamer9871/Super-Mario-Land-Archipelago"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "rose-engine sort Signalis en 2022.",
+        "en": "rose-engine releases Signalis in 2022."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2025",
         "en": "April 2025"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Signalis",
+      "url": "https://www.igdb.com/games/signalis"
+    },
     {
       "label": "GitHub — devoidlazarus/SIGNALISArchipelagoRandomizer",
       "url": "https://github.com/devoidlazarus/SIGNALISArchipelagoRandomizer"

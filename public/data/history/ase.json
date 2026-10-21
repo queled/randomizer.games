@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Studio Wildcard sort Ark: Survival Evolved en 2017.",
+        "en": "Studio Wildcard releases Ark: Survival Evolved in 2017."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Ark: Survival Evolved",
+      "url": "https://www.igdb.com/games/ark-survival-evolved"
+    },
     {
       "label": "GitHub — Jbaker16163/Ark-Survival-Archipelago",
       "url": "https://github.com/Jbaker16163/Ark-Survival-Archipelago"

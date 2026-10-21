@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Criterion Games sort Burnout 3: Takedown en 2004.",
+        "en": "Criterion Games releases Burnout 3: Takedown in 2004."
+      }
+    },
+    {
       "date": {
         "fr": "Février 2026",
         "en": "February 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Burnout 3: Takedown",
+      "url": "https://www.igdb.com/games/burnout-3-takedown"
+    },
     {
       "label": "GitHub — Metasura/Burnout3Archipelago",
       "url": "https://github.com/Metasura/Burnout3Archipelago"

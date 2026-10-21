@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Zen Studios sort Pinball FX en 2022.",
+        "en": "Zen Studios releases Pinball FX in 2022."
+      }
+    },
+    {
       "date": {
         "fr": "Janvier 2026",
         "en": "January 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Pinball FX",
+      "url": "https://www.igdb.com/games/pinball-fx--1"
+    },
     {
       "label": "GitHub — SerpentAI/Archipelago",
       "url": "https://github.com/SerpentAI/Archipelago"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2026",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Yacht Club Games sort Mina the Hollower en 2026.",
+        "en": "Yacht Club Games releases Mina the Hollower in 2026."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Mina the Hollower",
+      "url": "https://www.igdb.com/games/mina-the-hollower"
+    },
     {
       "label": "GitHub — FyreDay/Archipelago-MinaTheHollower",
       "url": "https://github.com/FyreDay/Archipelago-MinaTheHollower"

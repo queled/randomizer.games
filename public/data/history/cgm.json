@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2008",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Cat Daddy Games sort Carnival Games MiniGolf en 2008.",
+        "en": "Cat Daddy Games releases Carnival Games MiniGolf in 2008."
+      }
+    },
+    {
       "date": {
         "fr": "Octobre 2026",
         "en": "October 2026"
@@ -34,6 +45,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Carnival Games Mini Golf",
+      "url": "https://www.igdb.com/games/carnival-games-mini-golf"
+    },
     {
       "label": "GitHub — mariokirby1703/Lumas-Archipelago",
       "url": "https://github.com/mariokirby1703/Lumas-Archipelago"

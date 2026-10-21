@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "PopCap Games sort Zuma Deluxe en 2003.",
+        "en": "PopCap Games releases Zuma Deluxe in 2003."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Zuma Deluxe",
+      "url": "https://www.igdb.com/games/zuma-deluxe"
+    },
     {
       "label": "GitHub — Movido51/Archipelago",
       "url": "https://github.com/Movido51/Archipelago"

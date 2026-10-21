@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Naughty Dog sort Crash Team Racing en 1999.",
+        "en": "Naughty Dog releases Crash Team Racing in 1999."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Crash Team Racing",
+      "url": "https://www.igdb.com/games/crash-team-racing"
+    },
     {
       "label": "GitHub — dowlle/ctr-native-ap",
       "url": "https://github.com/dowlle/ctr-native-ap"

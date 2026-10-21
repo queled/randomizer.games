@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2026",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Orsonik's Studio sort Casualties: Unknown en 2026.",
+        "en": "Orsonik's Studio releases Casualties: Unknown in 2026."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2025",
         "en": "August 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Casualties: Unknown",
+      "url": "https://www.igdb.com/games/casualties-unknown"
+    },
     {
       "label": "GitHub — Nichologeam/CUAP",
       "url": "https://github.com/Nichologeam/CUAP"

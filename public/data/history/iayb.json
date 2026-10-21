@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Strange Scaffold sort I am Your Beast en 2024.",
+        "en": "Strange Scaffold releases I am Your Beast in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — I Am Your Beast",
+      "url": "https://www.igdb.com/games/i-am-your-beast"
+    },
     {
       "label": "GitHub — petiboy7/IAYBArchipelago",
       "url": "https://github.com/petiboy7/IAYBArchipelago"

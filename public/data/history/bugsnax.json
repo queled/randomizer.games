@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Young Horses sort Bugsnax en 2020.",
+        "en": "Young Horses releases Bugsnax in 2020."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Bugsnax",
+      "url": "https://www.igdb.com/games/bugsnax"
+    },
     {
       "label": "GitHub — robofett28/bugsnax_ap_world",
       "url": "https://github.com/robofett28/bugsnax_ap_world"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Rocketcat Games sort Death Road to Canada en 2016.",
+        "en": "Rocketcat Games releases Death Road to Canada in 2016."
+      }
+    },
+    {
       "date": {
         "fr": "Janvier 2026",
         "en": "January 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Death Road to Canada",
+      "url": "https://www.igdb.com/games/death-road-to-canada"
+    },
     {
       "label": "GitHub — PixelShake92/DR2C-AP",
       "url": "https://github.com/PixelShake92/DR2C-AP"

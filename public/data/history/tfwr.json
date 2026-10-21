@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Timon Herzog sort The Farmer Was Replaced en 2025.",
+        "en": "Timon Herzog releases The Farmer Was Replaced in 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Janvier 2026",
         "en": "January 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — The Farmer Was Replaced",
+      "url": "https://www.igdb.com/games/the-farmer-was-replaced"
+    },
     {
       "label": "GitHub — seadoggie001/TFWR-APMod",
       "url": "https://github.com/seadoggie001/TFWR-APMod"

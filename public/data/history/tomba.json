@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1997",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Whoopee Camp sort Tomba! en 1997.",
+        "en": "Whoopee Camp releases Tomba! in 1997."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Tomba!",
+      "url": "https://www.igdb.com/games/tomba"
+    },
     {
       "label": "GitHub — T4g1/ArchipelagoTomba",
       "url": "https://github.com/T4g1/ArchipelagoTomba"

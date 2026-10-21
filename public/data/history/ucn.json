@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Scottgames sort Ultimate Custom Night en 2018.",
+        "en": "Scottgames releases Ultimate Custom Night in 2018."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Ultimate Custom Night",
+      "url": "https://www.igdb.com/games/ultimate-custom-night"
+    },
     {
       "label": "GitHub — fewffwa/UCN-AP",
       "url": "https://github.com/fewffwa/UCN-AP"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Blitz Games sort Taz: Wanted en 2002.",
+        "en": "Blitz Games releases Taz: Wanted in 2002."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Taz: Wanted",
+      "url": "https://www.igdb.com/games/taz-wanted"
+    },
     {
       "label": "GitHub — imklubb/Archipelago-Taz-Wanted",
       "url": "https://github.com/imklubb/Archipelago-Taz-Wanted"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Vlambeer sort Nuclear Throne en 2015.",
+        "en": "Vlambeer releases Nuclear Throne in 2015."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2026",
         "en": "April 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Nuclear Throne",
+      "url": "https://www.igdb.com/games/nuclear-throne"
+    },
     {
       "label": "GitHub — GraphiteGraphic/NuclearThroneArchipelago",
       "url": "https://github.com/GraphiteGraphic/NuclearThroneArchipelago"

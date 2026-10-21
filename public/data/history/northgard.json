@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Shiro Games sort Northgard en 2018.",
+        "en": "Shiro Games releases Northgard in 2018."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Northgard",
+      "url": "https://www.igdb.com/games/northgard"
+    },
     {
       "label": "GitHub — ChakraaThePanda/Archipelago-Northgard",
       "url": "https://github.com/ChakraaThePanda/Archipelago-Northgard"

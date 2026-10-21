@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2006",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nicktoons: Battle for Volcano Island sort en 2006.",
+        "en": "Nicktoons: Battle for Volcano Island is released in 2006."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Nicktoons: Battle for Volcano Island",
+      "url": "https://www.igdb.com/games/nicktoons-battle-for-volcano-island"
+    },
     {
       "label": "GitHub — dylpill999/Nicktoons-BFVI-GBA-AP",
       "url": "https://github.com/dylpill999/Nicktoons-BFVI-GBA-AP"

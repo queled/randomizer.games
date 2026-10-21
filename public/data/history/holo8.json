@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "holo8 sort en 2025.",
+        "en": "holo8 is released in 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2025",
         "en": "May 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Holo8",
+      "url": "https://www.igdb.com/games/holo8"
+    },
     {
       "label": "GitHub — KitLemonfoot/ArchipelagoHolo8",
       "url": "https://github.com/KitLemonfoot/ArchipelagoHolo8"

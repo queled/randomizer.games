@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "David Wu SoftDev sort Delivering Hope en 2022.",
+        "en": "David Wu SoftDev releases Delivering Hope in 2022."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2025",
         "en": "July 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Delivering Hope",
+      "url": "https://www.igdb.com/games/delivering-hope"
+    },
     {
       "label": "GitHub — StellatedCUBE/Delivering-Hope-Archipelago",
       "url": "https://github.com/StellatedCUBE/Delivering-Hope-Archipelago"

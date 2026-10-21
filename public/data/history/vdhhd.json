@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2014",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nerdook Productions sort Vertical Drop Heroes HD en 2014.",
+        "en": "Nerdook Productions releases Vertical Drop Heroes HD in 2014."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Vertical Drop Heroes HD",
+      "url": "https://www.igdb.com/games/vertical-drop-heroes-hd"
+    },
     {
       "label": "GitHub — zane31415/APVerticalDropHeroesHD",
       "url": "https://github.com/zane31415/APVerticalDropHeroesHD"

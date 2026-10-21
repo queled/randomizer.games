@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Max Inferno sort A Little to the Left en 2022.",
+        "en": "Max Inferno releases A Little to the Left in 2022."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2026",
         "en": "September 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — A Little to the Left",
+      "url": "https://www.igdb.com/games/a-little-to-the-left"
+    },
     {
       "label": "GitHub — drohack/alttl-archipelago",
       "url": "https://github.com/drohack/alttl-archipelago"

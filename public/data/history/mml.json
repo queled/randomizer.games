@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1997",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom Production Studio 2 sort Mega Man Legends en 1997.",
+        "en": "Capcom Production Studio 2 releases Mega Man Legends in 1997."
+      }
+    },
+    {
       "date": {
         "fr": "Novembre 2025",
         "en": "November 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Mega Man Legends",
+      "url": "https://www.igdb.com/games/mega-man-legends"
+    },
     {
       "label": "GitHub — functorial/MMLAP",
       "url": "https://github.com/functorial/MMLAP"

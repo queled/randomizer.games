@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "SoulGame Studio sort Minishoot' Adventures en 2024.",
+        "en": "SoulGame Studio releases Minishoot' Adventures in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Novembre 2024",
         "en": "November 2024"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Minishoot' Adventures",
+      "url": "https://www.igdb.com/games/minishoot-adventures"
+    },
     {
       "label": "GitHub — TheNooodle/MinishootRandomizer",
       "url": "https://github.com/TheNooodle/MinishootRandomizer"

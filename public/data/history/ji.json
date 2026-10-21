@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Master Indie sort Jet Island en 2018.",
+        "en": "Master Indie releases Jet Island in 2018."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2025",
         "en": "May 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Jet Island",
+      "url": "https://www.igdb.com/games/jet-island"
+    },
     {
       "label": "GitHub — Nullctipus/JetIslandArchipelago",
       "url": "https://github.com/Nullctipus/JetIslandArchipelago"

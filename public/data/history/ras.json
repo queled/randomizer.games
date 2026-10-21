@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "mino_dev sort Rabbit and Steel en 2024.",
+        "en": "mino_dev releases Rabbit and Steel in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2025",
         "en": "May 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Rabbit & Steel",
+      "url": "https://www.igdb.com/games/rabbit-and-steel"
+    },
     {
       "label": "GitHub — tjwombo/RNSArchipelago",
       "url": "https://github.com/tjwombo/RNSArchipelago"

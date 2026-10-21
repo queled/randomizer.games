@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Moonsprout Games sort Bug Fables: The Everlasting Sapling en 2019.",
+        "en": "Moonsprout Games releases Bug Fables: The Everlasting Sapling in 2019."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2026",
         "en": "September 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Bug Fables: The Everlasting Sapling",
+      "url": "https://www.igdb.com/games/bug-fables-the-everlasting-sapling"
+    },
     {
       "label": "GitHub — Tsukino-uwu/Bug-Fables-Archipelago",
       "url": "https://github.com/Tsukino-uwu/Bug-Fables-Archipelago"

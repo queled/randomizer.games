@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "semiwork sort R.E.P.O en 2025.",
+        "en": "semiwork releases R.E.P.O in 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2025",
         "en": "May 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — R.E.P.O.",
+      "url": "https://www.igdb.com/games/repo"
+    },
     {
       "label": "GitHub — Automagic00/R.E.P.O.-Archipelago-Client-Mod",
       "url": "https://github.com/Automagic00/R.E.P.O.-Archipelago-Client-Mod"

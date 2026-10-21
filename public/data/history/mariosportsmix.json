@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Mario Sports Mix sort en 2010.",
+        "en": "Mario Sports Mix is released in 2010."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2026",
         "en": "April 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Mario Sports Mix",
+      "url": "https://www.igdb.com/games/mario-sports-mix"
+    },
     {
       "label": "GitHub — ElectroStarz/ArchipelagoMSM",
       "url": "https://github.com/ElectroStarz/ArchipelagoMSM"

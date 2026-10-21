@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Evolve Incremental sort en 2019.",
+        "en": "Evolve Incremental is released in 2019."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2026",
         "en": "March 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Evolve Incremental",
+      "url": "https://www.igdb.com/games/evolve-incremental"
+    },
     {
       "label": "GitHub — The1stBurb/EvolveAPWorld",
       "url": "https://github.com/The1stBurb/EvolveAPWorld"

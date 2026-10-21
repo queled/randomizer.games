@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sega Corporation sort K-ON! Houkago Live!! en 2010.",
+        "en": "Sega Corporation releases K-ON! Houkago Live!! in 2010."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2025",
         "en": "June 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — K-ON! Houkago Live!!",
+      "url": "https://www.igdb.com/games/k-on-houkago-live"
+    },
     {
       "label": "GitHub — dannybonz/k-on_archipelago",
       "url": "https://github.com/dannybonz/k-on_archipelago"

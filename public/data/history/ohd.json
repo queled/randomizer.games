@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2006",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Ōkami sort en 2006.",
+        "en": "Ōkami is released in 2006."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2025",
         "en": "July 2025"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Ōkami",
+      "url": "https://www.igdb.com/games/okami"
+    },
     {
       "label": "GitHub — Ragmoa/Archipelago",
       "url": "https://github.com/Ragmoa/Archipelago"

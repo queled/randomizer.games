@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2006",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Blitz Games sort Sneak King en 2006.",
+        "en": "Blitz Games releases Sneak King in 2006."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2026",
         "en": "April 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Sneak King",
+      "url": "https://www.igdb.com/games/sneak-king"
+    },
     {
       "label": "GitHub — jamesbrq/SneakKingAP",
       "url": "https://github.com/jamesbrq/SneakKingAP"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2006",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "HAL Laboratory sort Kirby Squeak Squad en 2006.",
+        "en": "HAL Laboratory releases Kirby Squeak Squad in 2006."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Kirby: Squeak Squad",
+      "url": "https://www.igdb.com/games/kirby-squeak-squad"
+    },
     {
       "label": "GitHub — WindChill404/Kirby-Squeak-Squad-APWORLD",
       "url": "https://github.com/WindChill404/Kirby-Squeak-Squad-APWORLD"

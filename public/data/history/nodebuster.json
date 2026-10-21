@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Goblobin sort Nodebuster en 2024.",
+        "en": "Goblobin releases Nodebuster in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Décembre 2025",
         "en": "December 2025"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Nodebuster",
+      "url": "https://www.igdb.com/games/nodebuster"
+    },
     {
       "label": "GitHub — josephwhite/Emerlads-Nodebuster_AP_Mod",
       "url": "https://github.com/josephwhite/Emerlads-Nodebuster_AP_Mod"

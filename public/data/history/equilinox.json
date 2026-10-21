@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "ThinMatrix sort Equilinox en 2018.",
+        "en": "ThinMatrix releases Equilinox in 2018."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Equilinox",
+      "url": "https://www.igdb.com/games/equilinox--1"
+    },
     {
       "label": "GitHub — AAces17/EquilinoxAPClient",
       "url": "https://github.com/AAces17/EquilinoxAPClient"

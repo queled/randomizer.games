@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sonic Team sort Sonic Frontiers en 2022.",
+        "en": "Sonic Team releases Sonic Frontiers in 2022."
+      }
+    },
+    {
       "date": {
         "fr": "Novembre 2025",
         "en": "November 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Sonic Frontiers",
+      "url": "https://www.igdb.com/games/sonic-frontiers"
+    },
     {
       "label": "GitHub — OnakuTV/SonicFrontiersAPWorld",
       "url": "https://github.com/OnakuTV/SonicFrontiersAPWorld"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Pocket Trap sort Pipistrello and the Cursed Yoyo en 2025.",
+        "en": "Pocket Trap releases Pipistrello and the Cursed Yoyo in 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Janvier 2026",
         "en": "January 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Pipistrello and the Cursed Yoyo",
+      "url": "https://www.igdb.com/games/pipistrello-and-the-cursed-yoyo"
+    },
     {
       "label": "GitHub — CertifiedPyro/PipistrelloArchipelago",
       "url": "https://github.com/CertifiedPyro/PipistrelloArchipelago"

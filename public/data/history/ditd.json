@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2026",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "ATICO sort Die in the Dungeon en 2026.",
+        "en": "ATICO releases Die in the Dungeon in 2026."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2026",
         "en": "September 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Die in the Dungeon",
+      "url": "https://www.igdb.com/games/die-in-the-dungeon"
+    },
     {
       "label": "GitHub — Skytttle/DITD-Archipelago",
       "url": "https://github.com/Skytttle/DITD-Archipelago"

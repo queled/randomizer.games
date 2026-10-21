@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "BEHEMUTT sort Nova Lands en 2023.",
+        "en": "BEHEMUTT releases Nova Lands in 2023."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Nova Lands",
+      "url": "https://www.igdb.com/games/nova-lands"
+    },
     {
       "label": "GitHub — Foxolotl713/NovaLandsMods",
       "url": "https://github.com/Foxolotl713/NovaLandsMods"

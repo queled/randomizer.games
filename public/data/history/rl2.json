@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Cellar Door Games sort Rogue Legacy 2 en 2022.",
+        "en": "Cellar Door Games releases Rogue Legacy 2 in 2022."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2026",
         "en": "April 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Rogue Legacy 2",
+      "url": "https://www.igdb.com/games/rogue-legacy-2"
+    },
     {
       "label": "GitHub — zaphim12/RL2Archipelago",
       "url": "https://github.com/zaphim12/RL2Archipelago"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sonic Team sort Sonic Battle en 2003.",
+        "en": "Sonic Team releases Sonic Battle in 2003."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2026",
         "en": "May 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Sonic Battle",
+      "url": "https://www.igdb.com/games/sonic-battle"
+    },
     {
       "label": "GitHub — Happyhappyism/Sonic-Battle-Archipelago",
       "url": "https://github.com/Happyhappyism/Sonic-Battle-Archipelago"

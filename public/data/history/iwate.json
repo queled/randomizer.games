@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Northway Games sort I Was A Teenage Exocolonist en 2022.",
+        "en": "Northway Games releases I Was A Teenage Exocolonist in 2022."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2025",
         "en": "September 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — I Was a Teenage Exocolonist",
+      "url": "https://www.igdb.com/games/i-was-a-teenage-exocolonist"
+    },
     {
       "label": "GitHub — pamymaf/Exocolonist-AP",
       "url": "https://github.com/pamymaf/Exocolonist-AP"

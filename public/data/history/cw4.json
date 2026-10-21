@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Knuckle Cracker sort Creeper World 4 en 2020.",
+        "en": "Knuckle Cracker releases Creeper World 4 in 2020."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Creeper World 4",
+      "url": "https://www.igdb.com/games/creeper-world-4"
+    },
     {
       "label": "GitHub — drohack/cw4-archipelago",
       "url": "https://github.com/drohack/cw4-archipelago"

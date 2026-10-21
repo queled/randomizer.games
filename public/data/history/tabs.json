@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Landfall Games sort Totally Accurate Battle Simulator en 2021.",
+        "en": "Landfall Games releases Totally Accurate Battle Simulator in 2021."
+      }
+    },
+    {
       "date": {
         "fr": "Décembre 2025",
         "en": "December 2025"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Totally Accurate Battle Simulator",
+      "url": "https://www.igdb.com/games/totally-accurate-battle-simulator"
+    },
     {
       "label": "GitHub — duckboycool/TABS-Archipelago",
       "url": "https://github.com/duckboycool/TABS-Archipelago"

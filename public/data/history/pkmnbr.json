@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2006",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Genius Sonority sort Pokémon Battle Revolution en 2006.",
+        "en": "Genius Sonority releases Pokémon Battle Revolution in 2006."
+      }
+    },
+    {
       "date": {
         "fr": "Octobre 2026",
         "en": "October 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Pokémon Battle Revolution",
+      "url": "https://www.igdb.com/games/pokemon-battle-revolution"
+    },
     {
       "label": "GitHub — Axcel-Snowpix/PokemonRevoAP",
       "url": "https://github.com/Axcel-Snowpix/PokemonRevoAP"

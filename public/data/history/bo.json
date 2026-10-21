@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Brutal Orchestra sort en 2021.",
+        "en": "Brutal Orchestra is released in 2021."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Brutal Orchestra",
+      "url": "https://www.igdb.com/games/brutal-orchestra"
+    },
     {
       "label": "GitHub — DeadEyeDv/Brutal-Orchestra-Archipelago",
       "url": "https://github.com/DeadEyeDv/Brutal-Orchestra-Archipelago"

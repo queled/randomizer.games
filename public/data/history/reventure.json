@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Pixelatto sort Reventure en 2019.",
+        "en": "Pixelatto releases Reventure in 2019."
+      }
+    },
+    {
       "date": {
         "fr": "Novembre 2023",
         "en": "November 2023"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Reventure",
+      "url": "https://www.igdb.com/games/reventure"
+    },
     {
       "label": "GitHub — Droppel/ReventureEndingRando",
       "url": "https://github.com/Droppel/ReventureEndingRando"

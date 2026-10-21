@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2006",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Spike sort Dragon Ball Z: Budokai Tenkaichi 2 en 2006.",
+        "en": "Spike releases Dragon Ball Z: Budokai Tenkaichi 2 in 2006."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Dragon Ball Z: Budokai Tenkaichi 2",
+      "url": "https://www.igdb.com/games/dragon-ball-z-budokai-tenkaichi-2--1"
+    },
     {
       "label": "GitHub — z3xox/Tenkaichi2AP",
       "url": "https://github.com/z3xox/Tenkaichi2AP"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "XPEC sort Hello Kitty: Roller Rescue en 2005.",
+        "en": "XPEC releases Hello Kitty: Roller Rescue in 2005."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Hello Kitty: Roller Rescue",
+      "url": "https://www.igdb.com/games/hello-kitty-roller-rescue"
+    },
     {
       "label": "GitHub — richarm4/Archipelago",
       "url": "https://github.com/richarm4/Archipelago"

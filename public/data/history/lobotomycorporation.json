@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Project Moon sort Lobotomy Corporation en 2018.",
+        "en": "Project Moon releases Lobotomy Corporation in 2018."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2025",
         "en": "July 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Lobotomy Corporation",
+      "url": "https://www.igdb.com/games/lobotomy-corporation"
+    },
     {
       "label": "GitHub — Kli333/LobCorp-AP",
       "url": "https://github.com/Kli333/LobCorp-AP"

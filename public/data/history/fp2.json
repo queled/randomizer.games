@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "GalaxyTrail sort Freedom Planet 2 en 2022.",
+        "en": "GalaxyTrail releases Freedom Planet 2 in 2022."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2024",
         "en": "May 2024"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Freedom Planet 2",
+      "url": "https://www.igdb.com/games/freedom-planet-2"
+    },
     {
       "label": "GitHub — Knuxfan24/Freedom-Planet-2-Archipelago",
       "url": "https://github.com/Knuxfan24/Freedom-Planet-2-Archipelago"

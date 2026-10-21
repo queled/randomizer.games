@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sonic Team sort Sonic Rush en 2005.",
+        "en": "Sonic Team releases Sonic Rush in 2005."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2025",
         "en": "April 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Sonic Rush",
+      "url": "https://www.igdb.com/games/sonic-rush"
+    },
     {
       "label": "GitHub — BlastSlimey/SonicRushAP",
       "url": "https://github.com/BlastSlimey/SonicRushAP"

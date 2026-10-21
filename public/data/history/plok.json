@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1993",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Software Creations sort Plok en 1993.",
+        "en": "Software Creations releases Plok in 1993."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2025",
         "en": "April 2025"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Plok",
+      "url": "https://www.igdb.com/games/plok"
+    },
     {
       "label": "GitHub — Happyhappyism/Archipelago",
       "url": "https://github.com/Happyhappyism/Archipelago"

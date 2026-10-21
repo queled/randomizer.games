@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Atlus sort Etrian Odyssey en 2007.",
+        "en": "Atlus releases Etrian Odyssey in 2007."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2026",
         "en": "March 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Etrian Odyssey",
+      "url": "https://www.igdb.com/games/etrian-odyssey"
+    },
     {
       "label": "GitHub — TheMasterZelda/Etrian_Odyssey_1_Archipelago",
       "url": "https://github.com/TheMasterZelda/Etrian_Odyssey_1_Archipelago"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Whalefall sort Poco en 2025.",
+        "en": "Whalefall releases Poco in 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2026",
         "en": "March 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Poco",
+      "url": "https://www.igdb.com/games/poco"
+    },
     {
       "label": "GitHub — SWCreeperKing/Pocopelago",
       "url": "https://github.com/SWCreeperKing/Pocopelago"

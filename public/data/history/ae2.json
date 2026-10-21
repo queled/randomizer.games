@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "SCE Japan Studio sort Ape Escape 2 en 2002.",
+        "en": "SCE Japan Studio releases Ape Escape 2 in 2002."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Ape Escape 2",
+      "url": "https://www.igdb.com/games/ape-escape-2"
+    },
     {
       "label": "GitHub — dannybonz/ae2_archipelago",
       "url": "https://github.com/dannybonz/ae2_archipelago"

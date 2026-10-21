@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "pianoman373 sort Air Delivery en 2023.",
+        "en": "pianoman373 releases Air Delivery in 2023."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2024",
         "en": "June 2024"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Air Delivery",
+      "url": "https://www.igdb.com/games/air-delivery"
+    },
     {
       "label": "GitHub — qwint/ap-air-delivery",
       "url": "https://github.com/qwint/ap-air-delivery"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2006",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Pokémon Ranger sort en 2006.",
+        "en": "Pokémon Ranger is released in 2006."
+      }
+    },
+    {
       "date": {
         "fr": "Février 2026",
         "en": "February 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Pokémon Ranger",
+      "url": "https://www.igdb.com/games/pokemon-ranger"
+    },
     {
       "label": "GitHub — BlastSlimey/Archipelago",
       "url": "https://github.com/BlastSlimey/Archipelago"

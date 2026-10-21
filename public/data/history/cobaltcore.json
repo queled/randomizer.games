@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Rocket Rat Games sort Cobalt Core en 2023.",
+        "en": "Rocket Rat Games releases Cobalt Core in 2023."
+      }
+    },
+    {
       "date": {
         "fr": "Janvier 2026",
         "en": "January 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Cobalt Core",
+      "url": "https://www.igdb.com/games/cobalt-core"
+    },
     {
       "label": "GitHub — Isaac-SOL/CobaltCoreArchipelagoMod",
       "url": "https://github.com/Isaac-SOL/CobaltCoreArchipelagoMod"

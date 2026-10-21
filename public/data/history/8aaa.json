@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Rootless Studio sort 8Doors: Arum's Afterlife Adventure en 2021.",
+        "en": "Rootless Studio releases 8Doors: Arum's Afterlife Adventure in 2021."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — 8Doors: Arum's Afterlife Adventure",
+      "url": "https://www.igdb.com/games/8doors-arums-afterlife-adventure"
+    },
     {
       "label": "GitHub — Xtruh/Arum-s-Eight-Doors-Archipelago-Randomizer",
       "url": "https://github.com/Xtruh/Arum-s-Eight-Doors-Archipelago-Randomizer"

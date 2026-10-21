@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Massive Monster sort Cult of the Lamb en 2022.",
+        "en": "Massive Monster releases Cult of the Lamb in 2022."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Cult of the Lamb",
+      "url": "https://www.igdb.com/games/cult-of-the-lamb"
+    },
     {
       "label": "GitHub — IanCichy/CultOfTheLamb_Archipelago",
       "url": "https://github.com/IanCichy/CultOfTheLamb_Archipelago"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "FromSoftware sort Lost Kingdoms 2 en 2003.",
+        "en": "FromSoftware releases Lost Kingdoms 2 in 2003."
+      }
+    },
+    {
       "date": {
         "fr": "Janvier 2026",
         "en": "January 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Lost Kingdoms II",
+      "url": "https://www.igdb.com/games/lost-kingdoms-ii"
+    },
     {
       "label": "GitHub — cokeman5/LK2Archipelago",
       "url": "https://github.com/cokeman5/LK2Archipelago"

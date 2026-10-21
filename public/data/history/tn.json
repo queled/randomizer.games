@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Terra Nil sort en 2023.",
+        "en": "Terra Nil is released in 2023."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2026",
         "en": "April 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Terra Nil",
+      "url": "https://www.igdb.com/games/terra-nil--1"
+    },
     {
       "label": "GitHub — nepcore/TerraNilAP",
       "url": "https://github.com/nepcore/TerraNilAP"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Cutting Edge Entertainment sort Three Goblin Wobblin' en 2024.",
+        "en": "Cutting Edge Entertainment releases Three Goblin Wobblin' in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2026",
         "en": "April 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Three Goblin Wobblin'",
+      "url": "https://www.igdb.com/games/three-goblin-wobblin"
+    },
     {
       "label": "GitHub — melenehh/Three-Goblin-Archipelago",
       "url": "https://github.com/melenehh/Three-Goblin-Archipelago"

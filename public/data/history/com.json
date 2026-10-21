@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Dead Mage sort Children of Morta en 2019.",
+        "en": "Dead Mage releases Children of Morta in 2019."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2025",
         "en": "May 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Children of Morta",
+      "url": "https://www.igdb.com/games/children-of-morta"
+    },
     {
       "label": "GitHub — BocikPG/Children-Of-Morta-Archipelago-Randomizer-Mod",
       "url": "https://github.com/BocikPG/Children-Of-Morta-Archipelago-Randomizer-Mod"

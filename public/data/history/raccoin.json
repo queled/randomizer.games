@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2026",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Doraccoon sort Raccoin: Coin Pusher Roguelike en 2026.",
+        "en": "Doraccoon releases Raccoin: Coin Pusher Roguelike in 2026."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2026",
         "en": "April 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Raccoin: Coin Pusher Roguelike",
+      "url": "https://www.igdb.com/games/raccoin-coin-pusher-roguelike"
+    },
     {
       "label": "GitHub — SoaringWyvern/RaccoinArchipeligo",
       "url": "https://github.com/SoaringWyvern/RaccoinArchipeligo"

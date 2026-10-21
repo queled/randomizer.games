@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Tevi sort en 2023.",
+        "en": "Tevi is released in 2023."
+      }
+    },
+    {
       "date": {
         "fr": "Février 2024",
         "en": "February 2024"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Tevi",
+      "url": "https://www.igdb.com/games/tevi"
+    },
     {
       "label": "GitHub — BlackSoulKnight/Tevi_Randomizer",
       "url": "https://github.com/BlackSoulKnight/Tevi_Randomizer"

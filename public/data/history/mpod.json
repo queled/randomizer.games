@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Pandemic Studios sort Mercenaries: Playground of Destruction en 2005.",
+        "en": "Pandemic Studios releases Mercenaries: Playground of Destruction in 2005."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2025",
         "en": "September 2025"
@@ -34,6 +45,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Mercenaries: Playground of Destruction",
+      "url": "https://www.igdb.com/games/mercenaries-playground-of-destruction"
+    },
     {
       "label": "GitHub — ToxicFrog/mercs-ap",
       "url": "https://github.com/ToxicFrog/mercs-ap"

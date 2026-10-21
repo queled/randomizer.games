@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Splashteam sort Splasher en 2017.",
+        "en": "Splashteam releases Splasher in 2017."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2026",
         "en": "May 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Splasher",
+      "url": "https://www.igdb.com/games/splasher"
+    },
     {
       "label": "GitHub — Frisk202020/Archipelago",
       "url": "https://github.com/Frisk202020/Archipelago"

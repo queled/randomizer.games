@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1994",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Diversions Entertainment sort One Must Fall: 2097 en 1994.",
+        "en": "Diversions Entertainment releases One Must Fall: 2097 in 1994."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — One Must Fall: 2097",
+      "url": "https://www.igdb.com/games/one-must-fall-2097"
+    },
     {
       "label": "GitHub — stubobis1/archipelago-openomf-apworld",
       "url": "https://github.com/stubobis1/archipelago-openomf-apworld"

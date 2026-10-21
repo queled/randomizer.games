@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2026",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Iron Gate Studios sort Valheim en 2026.",
+        "en": "Iron Gate Studios releases Valheim in 2026."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Valheim",
+      "url": "https://www.igdb.com/games/valheim"
+    },
     {
       "label": "GitHub — xyzzy44/ValheimArchipelagoRandomizer",
       "url": "https://github.com/xyzzy44/ValheimArchipelagoRandomizer"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Facepunch Studios sort Garry's Mod en 2004.",
+        "en": "Facepunch Studios releases Garry's Mod in 2004."
+      }
+    },
+    {
       "date": {
         "fr": "Novembre 2025",
         "en": "November 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Garry's Mod",
+      "url": "https://www.igdb.com/games/garry-s-mod"
+    },
     {
       "label": "GitHub — ChrisCj8/ap_adventure",
       "url": "https://github.com/ChrisCj8/ap_adventure"

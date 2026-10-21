@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2006",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sprout Games sort Feeding Frenzy 2: Shipwreck Showdown en 2006.",
+        "en": "Sprout Games releases Feeding Frenzy 2: Shipwreck Showdown in 2006."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2026",
         "en": "April 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Feeding Frenzy 2: Shipwreck Showdown",
+      "url": "https://www.igdb.com/games/feeding-frenzy-2-shipwreck-showdown"
+    },
     {
       "label": "GitHub — barretg/feeding-frenzy-2-archipelago",
       "url": "https://github.com/barretg/feeding-frenzy-2-archipelago"

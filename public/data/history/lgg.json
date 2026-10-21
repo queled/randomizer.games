@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "MegaWobble sort Lil Gator Game en 2022.",
+        "en": "MegaWobble releases Lil Gator Game in 2022."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2024",
         "en": "July 2024"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Lil Gator Game",
+      "url": "https://www.igdb.com/games/lil-gator-game"
+    },
     {
       "label": "GitHub — natronium/GatorArchipelago",
       "url": "https://github.com/natronium/GatorArchipelago"

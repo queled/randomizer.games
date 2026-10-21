@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2026",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Salsa Shark Productions sort Super Chipflake Ü: Quest for the Uncooked Schnitzel en 2026.",
+        "en": "Salsa Shark Productions releases Super Chipflake Ü: Quest for the Uncooked Schnitzel in 2026."
+      }
+    },
+    {
       "date": {
         "fr": "Février 2026",
         "en": "February 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Super Chipflake Ü: Quest for the Uncooked Schnitzel",
+      "url": "https://www.igdb.com/games/super-chipflake-u-quest-for-the-uncooked-schnitzel"
+    },
     {
       "label": "GitHub — Max-G4/Chipflake_AP",
       "url": "https://github.com/Max-G4/Chipflake_AP"

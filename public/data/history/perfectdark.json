@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Rare sort Perfect Dark en 2000.",
+        "en": "Rare releases Perfect Dark in 2000."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2026",
         "en": "May 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Perfect Dark",
+      "url": "https://www.igdb.com/games/perfect-dark"
+    },
     {
       "label": "GitHub — ajeloom/Perfect-Dark-PC-AP",
       "url": "https://github.com/ajeloom/Perfect-Dark-PC-AP"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Snoozy Kazoo sort Turnip Boy Commits Tax Evasion en 2021.",
+        "en": "Snoozy Kazoo releases Turnip Boy Commits Tax Evasion in 2021."
+      }
+    },
+    {
       "date": {
         "fr": "Décembre 2024",
         "en": "December 2024"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Turnip Boy Commits Tax Evasion",
+      "url": "https://www.igdb.com/games/turnip-boy-commits-tax-evasion"
+    },
     {
       "label": "GitHub — pointfivetee/TurnipBoyRandomizer",
       "url": "https://github.com/pointfivetee/TurnipBoyRandomizer"

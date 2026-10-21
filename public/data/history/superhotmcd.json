@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "SUPERHOT Team sort SUPERHOT: Mind Control Delete en 2020.",
+        "en": "SUPERHOT Team releases SUPERHOT: Mind Control Delete in 2020."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2026",
         "en": "September 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — SuperHot: Mind Control Delete",
+      "url": "https://www.igdb.com/games/superhot-mind-control-delete"
+    },
     {
       "label": "GitHub — Temperz87/SUPERHOT_MCD_Archipelago",
       "url": "https://github.com/Temperz87/SUPERHOT_MCD_Archipelago"

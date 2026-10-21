@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Dani sort RE:RUN en 2020.",
+        "en": "Dani releases RE:RUN in 2020."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2026",
         "en": "May 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Re:Run",
+      "url": "https://www.igdb.com/games/re-run"
+    },
     {
       "label": "GitHub — MuratDev41/rerun-ap",
       "url": "https://github.com/MuratDev41/rerun-ap"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "It’s happening sort Plateup! en 2022.",
+        "en": "It’s happening releases Plateup! in 2022."
+      }
+    },
+    {
       "date": {
         "fr": "Février 2025",
         "en": "February 2025"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — PlateUp!",
+      "url": "https://www.igdb.com/games/plateup"
+    },
     {
       "label": "GitHub — CazIsABoi/Archipelago",
       "url": "https://github.com/CazIsABoi/Archipelago"

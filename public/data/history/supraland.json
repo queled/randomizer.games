@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Supra Games UG sort Supraland en 2019.",
+        "en": "Supra Games UG releases Supraland in 2019."
+      }
+    },
+    {
       "date": {
         "fr": "Novembre 2025",
         "en": "November 2025"
@@ -34,6 +45,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Supraland",
+      "url": "https://www.igdb.com/games/supraland"
+    },
     {
       "label": "GitHub — DrNjitram/ArchipelagoSupra",
       "url": "https://github.com/DrNjitram/ArchipelagoSupra"

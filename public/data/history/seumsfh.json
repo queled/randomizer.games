@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Pine Studio sort SEUM: Speedrunners from Hell en 2016.",
+        "en": "Pine Studio releases SEUM: Speedrunners from Hell in 2016."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Seum: Speedrunners from Hell",
+      "url": "https://www.igdb.com/games/seum-speedrunners-from-hell"
+    },
     {
       "label": "GitHub — azukaar/SEUM-archipelago",
       "url": "https://github.com/azukaar/SEUM-archipelago"

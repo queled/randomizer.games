@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "David Szymanski sort DUSK en 2018.",
+        "en": "David Szymanski releases DUSK in 2018."
+      }
+    },
+    {
       "date": {
         "fr": "Décembre 2024",
         "en": "December 2024"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Dusk",
+      "url": "https://www.igdb.com/games/dusk"
+    },
     {
       "label": "GitHub — FlapjackRetro/dusk-rando",
       "url": "https://github.com/FlapjackRetro/dusk-rando"

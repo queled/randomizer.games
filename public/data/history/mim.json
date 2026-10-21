@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1993",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "The Software Toolworks sort Mario is Missing en 1993.",
+        "en": "The Software Toolworks releases Mario is Missing in 1993."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2025",
         "en": "July 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Mario Is Missing!",
+      "url": "https://www.igdb.com/games/mario-is-missing"
+    },
     {
       "label": "GitHub — TheRealSolidusSnake/Mario-Is-Missing",
       "url": "https://github.com/TheRealSolidusSnake/Mario-Is-Missing"

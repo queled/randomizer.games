@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Value Wave sort Mega Man X5 en 2000.",
+        "en": "Value Wave releases Mega Man X5 in 2000."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Mega Man X5",
+      "url": "https://www.igdb.com/games/mega-man-x5"
+    },
     {
       "label": "GitHub — Shinnuu/Archipelago",
       "url": "https://github.com/Shinnuu/Archipelago"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "BlueTwelve Studio sort Stray en 2022.",
+        "en": "BlueTwelve Studio releases Stray in 2022."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Stray",
+      "url": "https://www.igdb.com/games/stray"
+    },
     {
       "label": "GitHub — Nichologeam/StrayAP",
       "url": "https://github.com/Nichologeam/StrayAP"

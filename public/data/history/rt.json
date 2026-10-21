@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2006",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo SPD Production Group No. 1 sort Rhythm Tengoku en 2006.",
+        "en": "Nintendo SPD Production Group No. 1 releases Rhythm Tengoku in 2006."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Rhythm Tengoku",
+      "url": "https://www.igdb.com/games/rhythm-tengoku"
+    },
     {
       "label": "GitHub — TheLX5/Archipelago",
       "url": "https://github.com/TheLX5/Archipelago"

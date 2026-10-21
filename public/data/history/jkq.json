@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2026",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nexile sort Jump King Quest en 2026.",
+        "en": "Nexile releases Jump King Quest in 2026."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Jump King Quest",
+      "url": "https://www.igdb.com/games/jump-king-quest"
+    },
     {
       "label": "GitHub — Daaxren/jkq-archipelago",
       "url": "https://github.com/Daaxren/jkq-archipelago"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1998",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami Computer Entertainment Japan sort Metal Gear Solid en 1998.",
+        "en": "Konami Computer Entertainment Japan releases Metal Gear Solid in 1998."
+      }
+    },
+    {
       "date": {
         "fr": "Février 2026",
         "en": "February 2026"
@@ -34,6 +45,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Metal Gear Solid",
+      "url": "https://www.igdb.com/games/metal-gear-solid"
+    },
     {
       "label": "GitHub — SDMichaud/Archipelago-MGS",
       "url": "https://github.com/SDMichaud/Archipelago-MGS"

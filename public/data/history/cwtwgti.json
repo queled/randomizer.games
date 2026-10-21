@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2026",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Buried Things sort Cursed Words en 2026.",
+        "en": "Buried Things releases Cursed Words in 2026."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2026",
         "en": "April 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Cursed Words",
+      "url": "https://www.igdb.com/games/cursed-words"
+    },
     {
       "label": "GitHub — JammyGeeza/CursedWords-Archipelago",
       "url": "https://github.com/JammyGeeza/CursedWords-Archipelago"

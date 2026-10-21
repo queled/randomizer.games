@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2012",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Wix Games sort Duck Life 4 en 2012.",
+        "en": "Wix Games releases Duck Life 4 in 2012."
+      }
+    },
+    {
       "date": {
         "fr": "Février 2026",
         "en": "February 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Duck Life 4",
+      "url": "https://www.igdb.com/games/duck-life-4"
+    },
     {
       "label": "GitHub — spencer2585/Duck-Life-4-Archipelago",
       "url": "https://github.com/spencer2585/Duck-Life-4-Archipelago"

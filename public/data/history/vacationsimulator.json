@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Owlchemy Labs sort Vacation Simulator en 2019.",
+        "en": "Owlchemy Labs releases Vacation Simulator in 2019."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Vacation Simulator",
+      "url": "https://www.igdb.com/games/vacation-simulator"
+    },
     {
       "label": "GitHub — energymaster22/Archipelago",
       "url": "https://github.com/energymaster22/Archipelago"

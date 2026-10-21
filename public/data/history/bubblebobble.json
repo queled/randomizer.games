@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1990",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Clover Soft sort Bubble Bobble en 1990.",
+        "en": "Clover Soft releases Bubble Bobble in 1990."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Bubble Bobble",
+      "url": "https://www.igdb.com/games/bubble-bobble--15"
+    },
     {
       "label": "GitHub — sensokaeru/bubblebobbleAP",
       "url": "https://github.com/sensokaeru/bubblebobbleAP"

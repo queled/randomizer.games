@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Relic Entertainment sort Age of Empires IV en 2021.",
+        "en": "Relic Entertainment releases Age of Empires IV in 2021."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -34,6 +45,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Age of Empires IV",
+      "url": "https://www.igdb.com/games/age-of-empires-iv"
+    },
     {
       "label": "GitHub — skilliard/AOE4-Archipelago",
       "url": "https://github.com/skilliard/AOE4-Archipelago"

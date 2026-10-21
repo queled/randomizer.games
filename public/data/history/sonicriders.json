@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2006",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sonic Riders sort en 2006.",
+        "en": "Sonic Riders is released in 2006."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2026",
         "en": "March 2026"
@@ -34,6 +45,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Sonic Riders",
+      "url": "https://www.igdb.com/games/sonic-riders"
+    },
     {
       "label": "GitHub — Orangestar12/Archipelago-SR-J-SJ",
       "url": "https://github.com/Orangestar12/Archipelago-SR-J-SJ"

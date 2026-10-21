@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Team Shanghai Alice sort Touhou Fuujinroku ~ Mountain of Faith en 2007.",
+        "en": "Team Shanghai Alice releases Touhou Fuujinroku ~ Mountain of Faith in 2007."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Touhou Fuujinroku: Mountain of Faith",
+      "url": "https://www.igdb.com/games/touhou-fuujinroku-mountain-of-faith"
+    },
     {
       "label": "GitHub — Nepley/mof-apworld",
       "url": "https://github.com/Nepley/mof-apworld"

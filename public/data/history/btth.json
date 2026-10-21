@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "ceroro sort Bat to the Heavens en 2024.",
+        "en": "ceroro releases Bat to the Heavens in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Bat to the Heavens",
+      "url": "https://www.igdb.com/games/bat-to-the-heavens"
+    },
     {
       "label": "GitHub — NathanW001/BTTHArchipelago",
       "url": "https://github.com/NathanW001/BTTHArchipelago"

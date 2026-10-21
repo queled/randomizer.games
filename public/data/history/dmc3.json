@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom Production Studio 1 sort Devil May Cry 3: Dante's Awakening en 2005.",
+        "en": "Capcom Production Studio 1 releases Devil May Cry 3: Dante's Awakening in 2005."
+      }
+    },
+    {
       "date": {
         "fr": "Décembre 2025",
         "en": "December 2025"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Devil May Cry 3: Dante's Awakening",
+      "url": "https://www.igdb.com/games/devil-may-cry-3-dante-s-awakening"
+    },
     {
       "label": "GitHub — AshIndigo/Archipelago",
       "url": "https://github.com/AshIndigo/Archipelago"

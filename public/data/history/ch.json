@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Blazing Stick sort Cyber Hook en 2020.",
+        "en": "Blazing Stick releases Cyber Hook in 2020."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Cyber Hook",
+      "url": "https://www.igdb.com/games/cyber-hook"
+    },
     {
       "label": "GitHub — PieOrPi/CyberHookAPWorld",
       "url": "https://github.com/PieOrPi/CyberHookAPWorld"

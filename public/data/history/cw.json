@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Content Warning sort en 2024.",
+        "en": "Content Warning is released in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2026",
         "en": "April 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Content Warning",
+      "url": "https://www.igdb.com/games/content-warning"
+    },
     {
       "label": "GitHub — Jakeodude/cw-apworld",
       "url": "https://github.com/Jakeodude/cw-apworld"

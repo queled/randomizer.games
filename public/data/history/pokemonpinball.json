@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Jupiter Corporation sort Pokémon Pinball en 1999.",
+        "en": "Jupiter Corporation releases Pokémon Pinball in 1999."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2025",
         "en": "June 2025"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Pokémon Pinball",
+      "url": "https://www.igdb.com/games/pokemon-pinball"
+    },
     {
       "label": "GitHub — Happyhappyism/Archipelago",
       "url": "https://github.com/Happyhappyism/Archipelago"

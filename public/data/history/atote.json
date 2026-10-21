@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "LABS Works sort Astalon: Tears of the Earth en 2021.",
+        "en": "LABS Works releases Astalon: Tears of the Earth in 2021."
+      }
+    },
+    {
       "date": {
         "fr": "Février 2024",
         "en": "February 2024"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Astalon: Tears of the Earth",
+      "url": "https://www.igdb.com/games/astalon-tears-of-the-earth"
+    },
     {
       "label": "GitHub — drtchops/Archipelago-Astalon",
       "url": "https://github.com/drtchops/Archipelago-Astalon"

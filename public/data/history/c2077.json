@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "CD Projekt RED sort Cyberpunk 2077 en 2020.",
+        "en": "CD Projekt RED releases Cyberpunk 2077 in 2020."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2026",
         "en": "March 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Cyberpunk 2077",
+      "url": "https://www.igdb.com/games/cyberpunk-2077"
+    },
     {
       "label": "GitHub — 247Tossing/cyberpunk_archipelago",
       "url": "https://github.com/247Tossing/cyberpunk_archipelago"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Osumia Games sort Running with Rifles en 2015.",
+        "en": "Osumia Games releases Running with Rifles in 2015."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2026",
         "en": "March 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Running With Rifles",
+      "url": "https://www.igdb.com/games/running-with-rifles"
+    },
     {
       "label": "GitHub — mjousse72/archipelago_rwr",
       "url": "https://github.com/mjousse72/archipelago_rwr"

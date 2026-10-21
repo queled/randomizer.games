@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2026",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Lunch Money Games sort Scritchy Scratchy en 2026.",
+        "en": "Lunch Money Games releases Scritchy Scratchy in 2026."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Scritchy Scratchy",
+      "url": "https://www.igdb.com/games/scritchy-scratchy"
+    },
     {
       "label": "GitHub — ksteve35/ScritchyScratchyAP",
       "url": "https://github.com/ksteve35/ScritchyScratchyAP"

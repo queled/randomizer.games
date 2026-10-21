@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Activision sort Star Trek: Armada en 2000.",
+        "en": "Activision releases Star Trek: Armada in 2000."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Star Trek - Armada",
+      "url": "https://www.igdb.com/games/star-trek-armada"
+    },
     {
       "label": "GitHub — reedwhaley/star-trek-armada-apworld",
       "url": "https://github.com/reedwhaley/star-trek-armada-apworld"

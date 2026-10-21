@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2014",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "ZeniMax Online Studios sort The Elder Scrolls Online en 2014.",
+        "en": "ZeniMax Online Studios releases The Elder Scrolls Online in 2014."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2025",
         "en": "July 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — The Elder Scrolls Online",
+      "url": "https://www.igdb.com/games/the-elder-scrolls-online"
+    },
     {
       "label": "GitHub — spencer2585/APESO",
       "url": "https://github.com/spencer2585/APESO"

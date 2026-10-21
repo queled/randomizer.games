@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "GLYPHS sort en 2025.",
+        "en": "GLYPHS is released in 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Décembre 2025",
         "en": "December 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Glyphs",
+      "url": "https://www.igdb.com/games/glyphs"
+    },
     {
       "label": "GitHub — BuffYoda21/ap-glyphs",
       "url": "https://github.com/BuffYoda21/ap-glyphs"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2026",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Mega Crit Games sort Slay the Spire 2 en 2026.",
+        "en": "Mega Crit Games releases Slay the Spire 2 in 2026."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2026",
         "en": "March 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Slay the Spire II",
+      "url": "https://www.igdb.com/games/slay-the-spire-ii"
+    },
     {
       "label": "GitHub — dlueben1/Slay-the-Spire-2-Archipelago",
       "url": "https://github.com/dlueben1/Slay-the-Spire-2-Archipelago"

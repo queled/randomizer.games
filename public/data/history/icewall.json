@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Erlend Kirkeboe sort ICEwall en 2022.",
+        "en": "Erlend Kirkeboe releases ICEwall in 2022."
+      }
+    },
+    {
       "date": {
         "fr": "Janvier 2026",
         "en": "January 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Icewall",
+      "url": "https://www.igdb.com/games/icewall"
+    },
     {
       "label": "GitHub — System-of-Root/ICEwallAPword",
       "url": "https://github.com/System-of-Root/ICEwallAPword"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2026",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "sketbordcat sort Horse Magnifier: The Full Horse en 2026.",
+        "en": "sketbordcat releases Horse Magnifier: The Full Horse in 2026."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Horse Magnifier: The Full Horse",
+      "url": "https://www.igdb.com/games/horse-magnifier-the-full-horse"
+    },
     {
       "label": "GitHub — DannySchultzDev/Archipelago-Horse-Magnifier-Client",
       "url": "https://github.com/DannySchultzDev/Archipelago-Horse-Magnifier-Client"

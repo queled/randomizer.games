@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1998",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Interactive Studios sort Glover en 1998.",
+        "en": "Interactive Studios releases Glover in 1998."
+      }
+    },
+    {
       "date": {
         "fr": "Décembre 2025",
         "en": "December 2025"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Glover",
+      "url": "https://www.igdb.com/games/glover"
+    },
     {
       "label": "GitHub — Smg065/GloverArchipelago",
       "url": "https://github.com/Smg065/GloverArchipelago"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2012",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Gameshot sort Johnny Upgrade en 2012.",
+        "en": "Gameshot releases Johnny Upgrade in 2012."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Johnny Upgrade",
+      "url": "https://www.igdb.com/games/johnny-upgrade"
+    },
     {
       "label": "GitHub — barretg/johnny-upgrade-ap",
       "url": "https://github.com/barretg/johnny-upgrade-ap"

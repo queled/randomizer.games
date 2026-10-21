@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Isles of Sea and Sky sort en 2024.",
+        "en": "Isles of Sea and Sky is released in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Isles of Sea and Sky",
+      "url": "https://www.igdb.com/games/isles-of-sea-and-sky"
+    },
     {
       "label": "GitHub — cuberyl-catastrophe/Archipelago",
       "url": "https://github.com/cuberyl-catastrophe/Archipelago"

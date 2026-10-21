@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Noisestorm sort Crab Champions en 2023.",
+        "en": "Noisestorm releases Crab Champions in 2023."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2026",
         "en": "September 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Crab Champions",
+      "url": "https://www.igdb.com/games/crab-champions"
+    },
     {
       "label": "GitHub — Str8UpWHITE64/CrabChampionsAP",
       "url": "https://github.com/Str8UpWHITE64/CrabChampionsAP"

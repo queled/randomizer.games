@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "CornKidz64 sort en 2023.",
+        "en": "CornKidz64 is released in 2023."
+      }
+    },
+    {
       "date": {
         "fr": "Janvier 2025",
         "en": "January 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Corn Kidz 64",
+      "url": "https://www.igdb.com/games/corn-kidz-64"
+    },
     {
       "label": "GitHub — Cyb3RGER/cornkidz64_apworld",
       "url": "https://github.com/Cyb3RGER/cornkidz64_apworld"

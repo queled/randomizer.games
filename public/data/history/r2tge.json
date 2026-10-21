@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Ubisoft Montpellier sort Rayman 2: The Great Escape en 2000.",
+        "en": "Ubisoft Montpellier releases Rayman 2: The Great Escape in 2000."
+      }
+    },
+    {
       "date": {
         "fr": "Janvier 2025",
         "en": "January 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Rayman 2: The Great Escape",
+      "url": "https://www.igdb.com/games/rayman-2-the-great-escape--2"
+    },
     {
       "label": "GitHub — Aeltumn/Rayman2AP",
       "url": "https://github.com/Aeltumn/Rayman2AP"

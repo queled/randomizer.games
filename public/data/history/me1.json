@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Mass Effect sort en 2007.",
+        "en": "Mass Effect is released in 2007."
+      }
+    },
+    {
       "date": {
         "fr": "Octobre 2026",
         "en": "October 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Mass Effect",
+      "url": "https://www.igdb.com/games/mass-effect"
+    },
     {
       "label": "GitHub — Unowa001/ArchipelagoME1",
       "url": "https://github.com/Unowa001/ArchipelagoME1"

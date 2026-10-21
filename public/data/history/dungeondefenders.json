@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Trendy Entertainment sort Dungeon Defenders en 2010.",
+        "en": "Trendy Entertainment releases Dungeon Defenders in 2010."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2026",
         "en": "September 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Dungeon Defenders",
+      "url": "https://www.igdb.com/games/dungeon-defenders"
+    },
     {
       "label": "GitHub — Haywire32/DD1-AP",
       "url": "https://github.com/Haywire32/DD1-AP"

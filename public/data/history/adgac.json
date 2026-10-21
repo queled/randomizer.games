@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Pontypants sort A Difficult Game About Climbing en 2024.",
+        "en": "Pontypants releases A Difficult Game About Climbing in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Février 2025",
         "en": "February 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — A Difficult Game About Climbing",
+      "url": "https://www.igdb.com/games/a-difficult-game-about-climbing"
+    },
     {
       "label": "GitHub — BlastSlimey/GrabbingChecks",
       "url": "https://github.com/BlastSlimey/GrabbingChecks"

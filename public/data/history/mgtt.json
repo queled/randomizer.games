@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Camelot Software Planning sort Mario Golf: Toadstool Tour en 2003.",
+        "en": "Camelot Software Planning releases Mario Golf: Toadstool Tour in 2003."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Mario Golf: Toadstool Tour",
+      "url": "https://www.igdb.com/games/mario-golf-toadstool-tour"
+    },
     {
       "label": "GitHub — JackalopeSJ/MGTT-Archipelago",
       "url": "https://github.com/JackalopeSJ/MGTT-Archipelago"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "D-CELL GAMES sort UNBEATABLE en 2025.",
+        "en": "D-CELL GAMES releases UNBEATABLE in 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Décembre 2025",
         "en": "December 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Unbeatable",
+      "url": "https://www.igdb.com/games/unbeatable"
+    },
     {
       "label": "GitHub — AllPoland/unbeatAP",
       "url": "https://github.com/AllPoland/unbeatAP"

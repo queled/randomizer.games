@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "SCE Japan Studio sort Ape Escape 3 en 2005.",
+        "en": "SCE Japan Studio releases Ape Escape 3 in 2005."
+      }
+    },
+    {
       "date": {
         "fr": "Février 2025",
         "en": "February 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Ape Escape 3",
+      "url": "https://www.igdb.com/games/ape-escape-3"
+    },
     {
       "label": "GitHub — aidanii24/ae3-archipelago",
       "url": "https://github.com/aidanii24/ae3-archipelago"

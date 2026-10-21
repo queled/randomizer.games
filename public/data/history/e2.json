@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Everhood 2 sort en 2025.",
+        "en": "Everhood 2 is released in 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2025",
         "en": "April 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Everhood 2",
+      "url": "https://www.igdb.com/games/everhood-2"
+    },
     {
       "label": "GitHub — DeamonHunter/ArchipelagoEverhood2",
       "url": "https://github.com/DeamonHunter/ArchipelagoEverhood2"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bytten Studio sort Cassette Beasts en 2023.",
+        "en": "Bytten Studio releases Cassette Beasts in 2023."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2024",
         "en": "August 2024"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Cassette Beasts",
+      "url": "https://www.igdb.com/games/cassette-beasts"
+    },
     {
       "label": "GitHub — sitskin/apCassetteBeasts",
       "url": "https://github.com/sitskin/apCassetteBeasts"

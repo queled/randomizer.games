@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "kiwiwalks sort Witchspring R en 2023.",
+        "en": "kiwiwalks releases Witchspring R in 2023."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2026",
         "en": "May 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — WitchSpring R",
+      "url": "https://www.igdb.com/games/witchspring-r"
+    },
     {
       "label": "GitHub — LeiAfkpuz/WitchSpring-R-Archipelago",
       "url": "https://github.com/LeiAfkpuz/WitchSpring-R-Archipelago"

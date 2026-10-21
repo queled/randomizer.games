@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2006",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nihon Falcom sort Ys Origin en 2006.",
+        "en": "Nihon Falcom releases Ys Origin in 2006."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Ys Origin",
+      "url": "https://www.igdb.com/games/ys-origin"
+    },
     {
       "label": "GitHub — 4rtefakt/ys-origin-archipelago",
       "url": "https://github.com/4rtefakt/ys-origin-archipelago"

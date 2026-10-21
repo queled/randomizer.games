@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1998",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Hudson Soft sort Bomberman Hero en 1998.",
+        "en": "Hudson Soft releases Bomberman Hero in 1998."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2025",
         "en": "March 2025"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Bomberman Hero",
+      "url": "https://www.igdb.com/games/bomberman-hero"
+    },
     {
       "label": "GitHub — Happyhappyism/Archipelago",
       "url": "https://github.com/Happyhappyism/Archipelago"

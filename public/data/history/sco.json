@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sven Co-op Team sort Sven Co-op en 1999.",
+        "en": "Sven Co-op Team releases Sven Co-op in 1999."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Sven Co-op",
+      "url": "https://www.igdb.com/games/sven-co-op"
+    },
     {
       "label": "GitHub — barretg/hl1-sven-ap",
       "url": "https://github.com/barretg/hl1-sven-ap"

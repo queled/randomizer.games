@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2026",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Tegridy Made Games sort Library of Babel en 2026.",
+        "en": "Tegridy Made Games releases Library of Babel in 2026."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2026",
         "en": "March 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Library of Babel",
+      "url": "https://www.igdb.com/games/library-of-babel"
+    },
     {
       "label": "GitHub — YarRuin/LOBAP",
       "url": "https://github.com/YarRuin/LOBAP"

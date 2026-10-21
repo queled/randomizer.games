@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Dodge Roll sort Enter the Gungeon en 2016.",
+        "en": "Dodge Roll releases Enter the Gungeon in 2016."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2025",
         "en": "April 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Enter the Gungeon",
+      "url": "https://www.igdb.com/games/enter-the-gungeon"
+    },
     {
       "label": "GitHub — MaoBoulve/ArchipelaGunAPWorld",
       "url": "https://github.com/MaoBoulve/ArchipelaGunAPWorld"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Free Radical Design sort TimeSplitters: Future Perfect en 2005.",
+        "en": "Free Radical Design releases TimeSplitters: Future Perfect in 2005."
+      }
+    },
+    {
       "date": {
         "fr": "Octobre 2026",
         "en": "October 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — TimeSplitters: Future Perfect",
+      "url": "https://www.igdb.com/games/timesplitters-future-perfect"
+    },
     {
       "label": "GitHub — captpurpleheart/tsfp-archipelago",
       "url": "https://github.com/captpurpleheart/tsfp-archipelago"

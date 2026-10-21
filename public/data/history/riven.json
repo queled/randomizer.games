@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Cyan Worlds sort Riven en 2024.",
+        "en": "Cyan Worlds releases Riven in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -34,6 +45,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Riven",
+      "url": "https://www.igdb.com/games/riven"
+    },
     {
       "label": "GitHub — SerpentAI/Archipelago",
       "url": "https://github.com/SerpentAI/Archipelago"

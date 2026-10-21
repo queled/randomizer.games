@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Klub Kofta Studio sort Operation Octo en 2025.",
+        "en": "Klub Kofta Studio releases Operation Octo in 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Janvier 2026",
         "en": "January 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Operation Octo",
+      "url": "https://www.igdb.com/games/operation-octo"
+    },
     {
       "label": "GitHub — GraymonDgt/OperationOctoAP",
       "url": "https://github.com/GraymonDgt/OperationOctoAP"

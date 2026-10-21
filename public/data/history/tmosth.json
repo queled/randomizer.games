@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sega sort The Murder of Sonic the Hedgehog en 2023.",
+        "en": "Sega releases The Murder of Sonic the Hedgehog in 2023."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — The Murder of Sonic the Hedgehog",
+      "url": "https://www.igdb.com/games/the-murder-of-sonic-the-hedgehog"
+    },
     {
       "label": "GitHub — TwinklePillar/MurderOfSonicAP",
       "url": "https://github.com/TwinklePillar/MurderOfSonicAP"

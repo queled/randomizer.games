@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "The WereCleaner sort en 2024.",
+        "en": "The WereCleaner is released in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Janvier 2026",
         "en": "January 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — The WereCleaner",
+      "url": "https://www.igdb.com/games/the-werecleaner"
+    },
     {
       "label": "GitHub — SWCreeperKing/Werepelago",
       "url": "https://github.com/SWCreeperKing/Werepelago"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Colorgrave sort Prodigal en 2020.",
+        "en": "Colorgrave releases Prodigal in 2020."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2023",
         "en": "September 2023"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Prodigal",
+      "url": "https://www.igdb.com/games/prodigal"
+    },
     {
       "label": "GitHub — randomsalience/ProdigalArchipelago",
       "url": "https://github.com/randomsalience/ProdigalArchipelago"

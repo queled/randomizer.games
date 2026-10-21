@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "KisSoft sort Atlyss en 2024.",
+        "en": "KisSoft releases Atlyss in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2026",
         "en": "May 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Atlyss",
+      "url": "https://www.igdb.com/games/atlyss"
+    },
     {
       "label": "GitHub — Blitz0070/ATLYSS-Archipelago",
       "url": "https://github.com/Blitz0070/ATLYSS-Archipelago"

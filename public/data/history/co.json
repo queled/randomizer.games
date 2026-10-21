@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Corru.Works sort corru.observer en 2022.",
+        "en": "Corru.Works releases corru.observer in 2022."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2025",
         "en": "August 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Corru.Observer",
+      "url": "https://www.igdb.com/games/corru-dot-observer"
+    },
     {
       "label": "GitHub — Adrthegamedev/ArchipelagoCorruObserver",
       "url": "https://github.com/Adrthegamedev/ArchipelagoCorruObserver"

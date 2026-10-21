@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Miju Games sort The Planet Crafter en 2024.",
+        "en": "Miju Games releases The Planet Crafter in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2025",
         "en": "September 2025"
@@ -34,6 +45,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Planet Crafter",
+      "url": "https://www.igdb.com/games/planet-crafter"
+    },
     {
       "label": "GitHub — Hawkrex/Archipelago-ThePlanetCrafter",
       "url": "https://github.com/Hawkrex/Archipelago-ThePlanetCrafter"

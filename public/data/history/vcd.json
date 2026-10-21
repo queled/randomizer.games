@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "RuneStorm sort Viscera Cleanup Detail en 2015.",
+        "en": "RuneStorm releases Viscera Cleanup Detail in 2015."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Viscera Cleanup Detail",
+      "url": "https://www.igdb.com/games/viscera-cleanup-detail"
+    },
     {
       "label": "GitHub — Kryen112/Viscera-Cleanup-Detail-AP",
       "url": "https://github.com/Kryen112/Viscera-Cleanup-Detail-AP"

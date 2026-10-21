@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1998",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "The Digital Village sort Starship Titanic en 1998.",
+        "en": "The Digital Village releases Starship Titanic in 1998."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Starship Titanic",
+      "url": "https://www.igdb.com/games/starship-titanic"
+    },
     {
       "label": "GitHub — rescheer/Starship-Titanic-AP",
       "url": "https://github.com/rescheer/Starship-Titanic-AP"

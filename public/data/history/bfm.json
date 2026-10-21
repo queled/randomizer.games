@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1998",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Product Development Division 5 sort Brave Fencer Musashi en 1998.",
+        "en": "Square Product Development Division 5 releases Brave Fencer Musashi in 1998."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2025",
         "en": "April 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Brave Fencer Musashi",
+      "url": "https://www.igdb.com/games/brave-fencer-musashi"
+    },
     {
       "label": "GitHub — AegeusEvander/Brave-Fencer-Musashi-AP-World",
       "url": "https://github.com/AegeusEvander/Brave-Fencer-Musashi-AP-World"

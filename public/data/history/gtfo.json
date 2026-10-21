@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "10 Chambers Collective sort GTFO en 2021.",
+        "en": "10 Chambers Collective releases GTFO in 2021."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2026",
         "en": "May 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — GTFO",
+      "url": "https://www.igdb.com/games/gtfo"
+    },
     {
       "label": "GitHub — RoboRyGuy/Archipelago-GTFO",
       "url": "https://github.com/RoboRyGuy/Archipelago-GTFO"

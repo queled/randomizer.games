@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2008",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "ha55ii sort Stick Ranger en 2008.",
+        "en": "ha55ii releases Stick Ranger in 2008."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2025",
         "en": "April 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Stick Ranger",
+      "url": "https://www.igdb.com/games/stick-ranger"
+    },
     {
       "label": "GitHub — Kryen112/AP_Stick_Ranger",
       "url": "https://github.com/Kryen112/AP_Stick_Ranger"

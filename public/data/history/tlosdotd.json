@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2008",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Etranges Libellulles sort The Legend of Spyro: Dawn of the Dragon en 2008.",
+        "en": "Etranges Libellulles releases The Legend of Spyro: Dawn of the Dragon in 2008."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2026",
         "en": "April 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — The Legend of Spyro: Dawn of the Dragon",
+      "url": "https://www.igdb.com/games/the-legend-of-spyro-dawn-of-the-dragon"
+    },
     {
       "label": "GitHub — IcyPenguin28/DotDAP",
       "url": "https://github.com/IcyPenguin28/DotDAP"

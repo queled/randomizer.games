@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Simogo sort Sayonara Wild Hearts en 2025.",
+        "en": "Simogo releases Sayonara Wild Hearts in 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Sayonara Wild Hearts",
+      "url": "https://www.igdb.com/games/sayonara-wild-hearts--1"
+    },
     {
       "label": "GitHub — Chainsawkitten/SayonaraWildHeartsAP",
       "url": "https://github.com/Chainsawkitten/SayonaraWildHeartsAP"

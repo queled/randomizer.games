@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Flytrap Studios sort MetroCUBEvania en 2018.",
+        "en": "Flytrap Studios releases MetroCUBEvania in 2018."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2024",
         "en": "July 2024"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Metrocubevania",
+      "url": "https://www.igdb.com/games/metrocubevania"
+    },
     {
       "label": "GitHub — ap-metrocubevania/ap-metrocubevania",
       "url": "https://github.com/ap-metrocubevania/ap-metrocubevania"

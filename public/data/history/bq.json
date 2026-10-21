@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1998",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Eleven sort Bomberman Quest en 1998.",
+        "en": "Eleven releases Bomberman Quest in 1998."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2025",
         "en": "September 2025"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Bomberman Quest",
+      "url": "https://www.igdb.com/games/bomberman-quest"
+    },
     {
       "label": "GitHub — Happyhappyism/Archipelago",
       "url": "https://github.com/Happyhappyism/Archipelago"

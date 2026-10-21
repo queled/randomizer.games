@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Orteil sort Cookie Clicker en 2013.",
+        "en": "Orteil releases Cookie Clicker in 2013."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2026",
         "en": "April 2026"
@@ -34,6 +45,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Cookie Clicker",
+      "url": "https://www.igdb.com/games/cookie-clicker"
+    },
     {
       "label": "GitHub — Charlignon/AP_CookieClicker",
       "url": "https://github.com/Charlignon/AP_CookieClicker"

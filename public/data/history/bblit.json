@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Behaviour Interactive sort Bugs Bunny Lost in Time en 1999.",
+        "en": "Behaviour Interactive releases Bugs Bunny Lost in Time in 1999."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Bugs Bunny: Lost in Time",
+      "url": "https://www.igdb.com/games/bugs-bunny-lost-in-time"
+    },
     {
       "label": "GitHub — SynthKat67/BugsBunnylitAPWorld",
       "url": "https://github.com/SynthKat67/BugsBunnylitAPWorld"

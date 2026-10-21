@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1998",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Traveller's Tales sort A Bug's Life en 1998.",
+        "en": "Traveller's Tales releases A Bug's Life in 1998."
+      }
+    },
+    {
       "date": {
         "fr": "Décembre 2025",
         "en": "December 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — A Bug's Life",
+      "url": "https://www.igdb.com/games/a-bugs-life--2"
+    },
     {
       "label": "GitHub — WalWalrus/ABLAP",
       "url": "https://github.com/WalWalrus/ABLAP"

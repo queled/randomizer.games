@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "SUPERHOT Team sort SUPERHOT en 2016.",
+        "en": "SUPERHOT Team releases SUPERHOT in 2016."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — SuperHot",
+      "url": "https://www.igdb.com/games/superhot"
+    },
     {
       "label": "GitHub — My-Key-Morris/SUPERHOT_Archipelago",
       "url": "https://github.com/My-Key-Morris/SUPERHOT_Archipelago"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "OpenTTD Team sort OpenTTD en 2004.",
+        "en": "OpenTTD Team releases OpenTTD in 2004."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — OpenTTD",
+      "url": "https://www.igdb.com/games/openttd"
+    },
     {
       "label": "GitHub — solida1987/openttd-archipelago",
       "url": "https://github.com/solida1987/openttd-archipelago"

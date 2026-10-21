@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2012",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Polytron Corporation sort Fez en 2012.",
+        "en": "Polytron Corporation releases Fez in 2012."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2025",
         "en": "September 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Fez",
+      "url": "https://www.igdb.com/games/fez"
+    },
     {
       "label": "GitHub — nhyldmar/fez-ap",
       "url": "https://github.com/nhyldmar/fez-ap"

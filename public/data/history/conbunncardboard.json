@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Conbunn Cardboard sort en 2023.",
+        "en": "Conbunn Cardboard is released in 2023."
+      }
+    },
+    {
       "date": {
         "fr": "Février 2026",
         "en": "February 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Conbunn Cardboard",
+      "url": "https://www.igdb.com/games/conbunn-cardboard"
+    },
     {
       "label": "GitHub — SWCreeperKing/Conbunnipelago",
       "url": "https://github.com/SWCreeperKing/Conbunnipelago"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "EA Bright Light sort Create en 2010.",
+        "en": "EA Bright Light releases Create in 2010."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2026",
         "en": "September 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Create",
+      "url": "https://www.igdb.com/games/create"
+    },
     {
       "label": "GitHub — mariokirby1703/Lumas-Archipelago",
       "url": "https://github.com/mariokirby1703/Lumas-Archipelago"

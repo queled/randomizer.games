@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Team Undertale Yellow sort Undertale Yellow en 2023.",
+        "en": "Team Undertale Yellow releases Undertale Yellow in 2023."
+      }
+    },
+    {
       "date": {
         "fr": "Janvier 2026",
         "en": "January 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Undertale Yellow",
+      "url": "https://www.igdb.com/games/undertale-yellow"
+    },
     {
       "label": "GitHub — Pugie38/Undertale-Yellow-AP",
       "url": "https://github.com/Pugie38/Undertale-Yellow-AP"

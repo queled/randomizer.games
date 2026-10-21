@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Rooster Teeth Games sort RWBY: Grimm Eclipse en 2016.",
+        "en": "Rooster Teeth Games releases RWBY: Grimm Eclipse in 2016."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — RWBY: Grimm Eclipse",
+      "url": "https://www.igdb.com/games/rwby-grimm-eclipse"
+    },
     {
       "label": "GitHub — nepcore/RwbyAP",
       "url": "https://github.com/nepcore/RwbyAP"

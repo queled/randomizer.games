@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Rengame sort Once Upon a Katamari en 2025.",
+        "en": "Rengame releases Once Upon a Katamari in 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2026",
         "en": "March 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Once Upon a Katamari",
+      "url": "https://www.igdb.com/games/once-upon-a-katamari--1"
+    },
     {
       "label": "GitHub — ItsSeafoamy/Once-Upon-an-Archipelago",
       "url": "https://github.com/ItsSeafoamy/Once-Upon-an-Archipelago"

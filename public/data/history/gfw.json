@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Game in a Bottle sort Gemcraft: Frostborn Wrath en 2020.",
+        "en": "Game in a Bottle releases Gemcraft: Frostborn Wrath in 2020."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2026",
         "en": "March 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — GemCraft: Frostborn Wrath",
+      "url": "https://www.igdb.com/games/gemcraft-frostborn-wrath"
+    },
     {
       "label": "GitHub — Levisaxos/Archipelago_GemcraftFrostbornWrath",
       "url": "https://github.com/Levisaxos/Archipelago_GemcraftFrostbornWrath"

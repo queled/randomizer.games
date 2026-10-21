@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Blizzard Entertainment sort Heroes of the Storm en 2015.",
+        "en": "Blizzard Entertainment releases Heroes of the Storm in 2015."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Heroes of the Storm",
+      "url": "https://www.igdb.com/games/heroes-of-the-storm"
+    },
     {
       "label": "GitHub — POD-io/HotS-ArchipelagoWorld",
       "url": "https://github.com/POD-io/HotS-ArchipelagoWorld"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo Entertainment Analysis & Development sort Animal Crossing: Wild World en 2005.",
+        "en": "Nintendo Entertainment Analysis & Development releases Animal Crossing: Wild World in 2005."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Animal Crossing: Wild World",
+      "url": "https://www.igdb.com/games/animal-crossing-wild-world"
+    },
     {
       "label": "GitHub — MikeFritzDevelops/ACWW-Archipelago",
       "url": "https://github.com/MikeFritzDevelops/ACWW-Archipelago"

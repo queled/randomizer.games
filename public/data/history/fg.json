@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Mediatonic sort Fall Guys en 2020.",
+        "en": "Mediatonic releases Fall Guys in 2020."
+      }
+    },
+    {
       "date": {
         "fr": "Octobre 2026",
         "en": "October 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Fall Guys",
+      "url": "https://www.igdb.com/games/fall-guys"
+    },
     {
       "label": "GitHub — ninpalk/FallGuysAP",
       "url": "https://github.com/ninpalk/FallGuysAP"

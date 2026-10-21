@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Jupiter Corporation sort Pokémon Pinball Ruby & Sapphire en 2003.",
+        "en": "Jupiter Corporation releases Pokémon Pinball Ruby & Sapphire in 2003."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2026",
         "en": "April 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Pokémon Pinball: Ruby & Sapphire",
+      "url": "https://www.igdb.com/games/pokemon-pinball-ruby-sapphire"
+    },
     {
       "label": "GitHub — Silvris/Archipelago",
       "url": "https://github.com/Silvris/Archipelago"

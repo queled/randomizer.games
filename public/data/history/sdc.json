@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Arcane Kids sort Sonic Dreams Collection en 2015.",
+        "en": "Arcane Kids releases Sonic Dreams Collection in 2015."
+      }
+    },
+    {
       "date": {
         "fr": "Février 2025",
         "en": "February 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Sonic Dreams Collection",
+      "url": "https://www.igdb.com/games/sonic-dreams-collection"
+    },
     {
       "label": "GitHub — KitLemonfoot/ArchipelagoSDC",
       "url": "https://github.com/KitLemonfoot/ArchipelagoSDC"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Aggro Crab Games sort Another Crab's Treasure en 2024.",
+        "en": "Aggro Crab Games releases Another Crab's Treasure in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2024",
         "en": "May 2024"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Another Crab's Treasure",
+      "url": "https://www.igdb.com/games/another-crabs-treasure"
+    },
     {
       "label": "GitHub — Automagic00/ACT-AP-Client-Plugin",
       "url": "https://github.com/Automagic00/ACT-AP-Client-Plugin"

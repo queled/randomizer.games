@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Dark Machine Games sort White Knuckle en 2025.",
+        "en": "Dark Machine Games releases White Knuckle in 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — White Knuckle",
+      "url": "https://www.igdb.com/games/white-knuckle"
+    },
     {
       "label": "GitHub — Makshime/White-Knuckle-Archipelago",
       "url": "https://github.com/Makshime/White-Knuckle-Archipelago"

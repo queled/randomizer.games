@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2026",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Stray Fawn Studio sort Dungeon Clawler en 2026.",
+        "en": "Stray Fawn Studio releases Dungeon Clawler in 2026."
+      }
+    },
+    {
       "date": {
         "fr": "Février 2025",
         "en": "February 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Dungeon Clawler",
+      "url": "https://www.igdb.com/games/dungeon-clawler"
+    },
     {
       "label": "GitHub — agilbert1412/Clawrchipelago",
       "url": "https://github.com/agilbert1412/Clawrchipelago"

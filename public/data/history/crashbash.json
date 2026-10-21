@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Eurocom Entertainment Software sort Crash Bash en 2000.",
+        "en": "Eurocom Entertainment Software releases Crash Bash in 2000."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Crash Bash",
+      "url": "https://www.igdb.com/games/crash-bash"
+    },
     {
       "label": "GitHub — JustinMarshall98/Crash-Bash-PSX-Archipelago",
       "url": "https://github.com/JustinMarshall98/Crash-Bash-PSX-Archipelago"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2001",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Traveller's Tales sort Toy Story Racer en 2001.",
+        "en": "Traveller's Tales releases Toy Story Racer in 2001."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2026",
         "en": "September 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Toy Story Racer",
+      "url": "https://www.igdb.com/games/toy-story-racer"
+    },
     {
       "label": "GitHub — Vzencio/Toy-Story-Racer-Archipelago",
       "url": "https://github.com/Vzencio/Toy-Story-Racer-Archipelago"

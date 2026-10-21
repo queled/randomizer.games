@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "BeXide sort Hololive Treasure Mountain en 2024.",
+        "en": "BeXide releases Hololive Treasure Mountain in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2025",
         "en": "August 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Hololive Treasure Mountain",
+      "url": "https://www.igdb.com/games/hololive-treasure-mountain"
+    },
     {
       "label": "GitHub — StellatedCUBE/Treasure-Mountain-Archipelago",
       "url": "https://github.com/StellatedCUBE/Treasure-Mountain-Archipelago"

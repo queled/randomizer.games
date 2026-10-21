@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Fantastic Fist sort en 2024.",
+        "en": "Fantastic Fist is released in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2026",
         "en": "May 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Fantastic Fist",
+      "url": "https://www.igdb.com/games/fantastic-fist"
+    },
     {
       "label": "GitHub — DannySchultzDev/Fantastic-Fist-Archipelago-Client",
       "url": "https://github.com/DannySchultzDev/Fantastic-Fist-Archipelago-Client"

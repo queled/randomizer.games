@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sucker Punch Productions sort Sly 3: Honor Among Thieves en 2010.",
+        "en": "Sucker Punch Productions releases Sly 3: Honor Among Thieves in 2010."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2026",
         "en": "March 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Sly 3: Honor Among Thieves",
+      "url": "https://www.igdb.com/games/sly-3-honor-among-thieves--1"
+    },
     {
       "label": "GitHub — NikolajDanger/ApSly3",
       "url": "https://github.com/NikolajDanger/ApSly3"

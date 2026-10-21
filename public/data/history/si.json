@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Spirit Island sort en 2020.",
+        "en": "Spirit Island is released in 2020."
+      }
+    },
+    {
       "date": {
         "fr": "Janvier 2026",
         "en": "January 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Spirit Island",
+      "url": "https://www.igdb.com/games/spirit-island"
+    },
     {
       "label": "GitHub — Wouter17/Spirit-Archipelago",
       "url": "https://github.com/Wouter17/Spirit-Archipelago"

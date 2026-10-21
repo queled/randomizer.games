@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Insomniac Games sort Spyro 2: Ripto's Rage en 1999.",
+        "en": "Insomniac Games releases Spyro 2: Ripto's Rage in 1999."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2025",
         "en": "August 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Spyro 2: Ripto's Rage!",
+      "url": "https://www.igdb.com/games/spyro-2-ripto-s-rage"
+    },
     {
       "label": "GitHub — Uroogla/S2AP",
       "url": "https://github.com/Uroogla/S2AP"

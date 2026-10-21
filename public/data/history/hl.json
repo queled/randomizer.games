@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Klei Entertainment sort Hot Lava en 2019.",
+        "en": "Klei Entertainment releases Hot Lava in 2019."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2026",
         "en": "May 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Hot Lava",
+      "url": "https://www.igdb.com/games/hot-lava"
+    },
     {
       "label": "GitHub — Bongo9911/HotLavaAPWorld",
       "url": "https://github.com/Bongo9911/HotLavaAPWorld"

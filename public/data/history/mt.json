@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Camelot sort Mario Tennis en 2000.",
+        "en": "Camelot releases Mario Tennis in 2000."
+      }
+    },
+    {
       "date": {
         "fr": "Octobre 2026",
         "en": "October 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Mario Tennis",
+      "url": "https://www.igdb.com/games/mario-tennis"
+    },
     {
       "label": "GitHub — gerbiljames/mario-tennis-gbc-disasm",
       "url": "https://github.com/gerbiljames/mario-tennis-gbc-disasm"

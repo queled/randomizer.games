@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom Development Division 1 sort Resident Evil 7: Biohazard en 2017.",
+        "en": "Capcom Development Division 1 releases Resident Evil 7: Biohazard in 2017."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2025",
         "en": "March 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Resident Evil 7: Biohazard",
+      "url": "https://www.igdb.com/games/resident-evil-7-biohazard"
+    },
     {
       "label": "GitHub — ElGrenier/RE7_AP_World",
       "url": "https://github.com/ElGrenier/RE7_AP_World"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Blue Byte sort The Settlers: Heritage of Kings en 2005.",
+        "en": "Blue Byte releases The Settlers: Heritage of Kings in 2005."
+      }
+    },
+    {
       "date": {
         "fr": "Octobre 2025",
         "en": "October 2025"
@@ -34,6 +45,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — The Settlers: Heritage of Kings",
+      "url": "https://www.igdb.com/games/the-settlers-heritage-of-kings"
+    },
     {
       "label": "GitHub — ZorkManu/SettlersHeritageOfKingsAPWorld",
       "url": "https://github.com/ZorkManu/SettlersHeritageOfKingsAPWorld"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Rune Factory 4 Special sort en 2019.",
+        "en": "Rune Factory 4 Special is released in 2019."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Rune Factory 4 Special",
+      "url": "https://www.igdb.com/games/rune-factory-4-special"
+    },
     {
       "label": "GitHub — Happyhappyism/Rune-Factory-4-Archipelago",
       "url": "https://github.com/Happyhappyism/Rune-Factory-4-Archipelago"

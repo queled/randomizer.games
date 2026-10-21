@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Super Cat Planet sort en 2015.",
+        "en": "Super Cat Planet is released in 2015."
+      }
+    },
+    {
       "date": {
         "fr": "Février 2025",
         "en": "February 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Super Cat Planet",
+      "url": "https://www.igdb.com/games/super-cat-planet"
+    },
     {
       "label": "GitHub — lone01/scp",
       "url": "https://github.com/lone01/scp"

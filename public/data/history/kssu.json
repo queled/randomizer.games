@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2008",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "HAL Laboratory sort Kirby Super Star Ultra en 2008.",
+        "en": "HAL Laboratory releases Kirby Super Star Ultra in 2008."
+      }
+    },
+    {
       "date": {
         "fr": "Octobre 2026",
         "en": "October 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Kirby Super Star Ultra",
+      "url": "https://www.igdb.com/games/kirby-super-star-ultra"
+    },
     {
       "label": "GitHub — GhostCappy/Archipelago",
       "url": "https://github.com/GhostCappy/Archipelago"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Mini Metro sort en 2015.",
+        "en": "Mini Metro is released in 2015."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2026",
         "en": "May 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Mini Metro",
+      "url": "https://www.igdb.com/games/mini-metro"
+    },
     {
       "label": "GitHub — Slimm160/Mini-Metro-Archipelago",
       "url": "https://github.com/Slimm160/Mini-Metro-Archipelago"

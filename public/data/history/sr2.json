@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Monomi Park sort Slime Rancher 2 en 2025.",
+        "en": "Monomi Park releases Slime Rancher 2 in 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2026",
         "en": "April 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Slime Rancher 2",
+      "url": "https://www.igdb.com/games/slime-rancher-2"
+    },
     {
       "label": "GitHub — Rhelys/SlimeRancher2-AP",
       "url": "https://github.com/Rhelys/SlimeRancher2-AP"

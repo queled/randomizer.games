@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Rogue Duck Interactive sort Lost But Found en 2024.",
+        "en": "Rogue Duck Interactive releases Lost But Found in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Lost But Found",
+      "url": "https://www.igdb.com/games/lost-but-found"
+    },
     {
       "label": "GitHub — Michimarii/LostButFoundAP",
       "url": "https://github.com/Michimarii/LostButFoundAP"

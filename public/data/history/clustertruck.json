@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Landfall Games sort ClusterTruck en 2016.",
+        "en": "Landfall Games releases ClusterTruck in 2016."
+      }
+    },
+    {
       "date": {
         "fr": "Février 2025",
         "en": "February 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Clustertruck",
+      "url": "https://www.igdb.com/games/clustertruck"
+    },
     {
       "label": "GitHub — Nullctipus/ArchipelagoClusterTruck",
       "url": "https://github.com/Nullctipus/ArchipelagoClusterTruck"

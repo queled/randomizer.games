@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "HAL Laboratory sort Super Smash Bros. en 1999.",
+        "en": "HAL Laboratory releases Super Smash Bros. in 1999."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2026",
         "en": "May 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Super Smash Bros.",
+      "url": "https://www.igdb.com/games/super-smash-bros"
+    },
     {
       "label": "GitHub — IncidiousJacob/Smashipelago",
       "url": "https://github.com/IncidiousJacob/Smashipelago"

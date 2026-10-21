@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Rusted Moss sort en 2023.",
+        "en": "Rusted Moss is released in 2023."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2024",
         "en": "June 2024"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Rusted Moss",
+      "url": "https://www.igdb.com/games/rusted-moss"
+    },
     {
       "label": "GitHub — dgrossmann144/Archipelago",
       "url": "https://github.com/dgrossmann144/Archipelago"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "The Marble Collective sort Marble It Up! Ultra en 2023.",
+        "en": "The Marble Collective releases Marble It Up! Ultra in 2023."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2026",
         "en": "April 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Marble It Up! Ultra",
+      "url": "https://www.igdb.com/games/marble-it-up-ultra"
+    },
     {
       "label": "GitHub — KitLemonfoot/ArchipelagoMIUU",
       "url": "https://github.com/KitLemonfoot/ArchipelagoMIUU"

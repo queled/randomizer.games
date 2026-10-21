@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Hudson Soft sort Bomberman 64: The Second Attack en 1999.",
+        "en": "Hudson Soft releases Bomberman 64: The Second Attack in 1999."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2025",
         "en": "March 2025"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Bomberman 64: The Second Attack!",
+      "url": "https://www.igdb.com/games/bomberman-64-the-second-attack"
+    },
     {
       "label": "GitHub — Happyhappyism/Archipelago",
       "url": "https://github.com/Happyhappyism/Archipelago"

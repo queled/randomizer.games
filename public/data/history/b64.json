@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1997",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Hudson Soft sort Bomberman 64 en 1997.",
+        "en": "Hudson Soft releases Bomberman 64 in 1997."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2025",
         "en": "July 2025"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Bomberman 64",
+      "url": "https://www.igdb.com/games/bomberman-64"
+    },
     {
       "label": "GitHub — Happyhappyism/Archipelago",
       "url": "https://github.com/Happyhappyism/Archipelago"

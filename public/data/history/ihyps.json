@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "scitydreamer sort I Hate You, Please Suffer en 2023.",
+        "en": "scitydreamer releases I Hate You, Please Suffer in 2023."
+      }
+    },
+    {
       "date": {
         "fr": "Février 2026",
         "en": "February 2026"
@@ -34,6 +45,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — I Hate You, Please Suffer",
+      "url": "https://www.igdb.com/games/i-hate-you-please-suffer"
+    },
     {
       "label": "GitHub — chloebangbang/Archipelago",
       "url": "https://github.com/chloebangbang/Archipelago"

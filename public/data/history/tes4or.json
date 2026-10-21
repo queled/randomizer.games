@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Virtuos sort The Elder Scrolls IV: Oblivion Remastered en 2025.",
+        "en": "Virtuos releases The Elder Scrolls IV: Oblivion Remastered in 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2025",
         "en": "June 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — The Elder Scrolls IV: Oblivion Remastered",
+      "url": "https://www.igdb.com/games/the-elder-scrolls-iv-oblivion-remastered"
+    },
     {
       "label": "GitHub — POD-io/Oblivion-ArchipelagoWorld",
       "url": "https://github.com/POD-io/Oblivion-ArchipelagoWorld"

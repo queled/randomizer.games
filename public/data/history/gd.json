@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Crate Entertainment sort Grim Dawn en 2016.",
+        "en": "Crate Entertainment releases Grim Dawn in 2016."
+      }
+    },
+    {
       "date": {
         "fr": "Décembre 2024",
         "en": "December 2024"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Grim Dawn",
+      "url": "https://www.igdb.com/games/grim-dawn"
+    },
     {
       "label": "GitHub — routhken/Archipelago",
       "url": "https://github.com/routhken/Archipelago"

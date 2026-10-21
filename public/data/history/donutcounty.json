@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Ben Esposito sort Donut County en 2018.",
+        "en": "Ben Esposito releases Donut County in 2018."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Donut County",
+      "url": "https://www.igdb.com/games/donut-county"
+    },
     {
       "label": "GitHub — 1e1001/DonutCountyAP",
       "url": "https://github.com/1e1001/DonutCountyAP"

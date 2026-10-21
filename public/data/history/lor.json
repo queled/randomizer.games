@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Project Moon sort Library of Ruina en 2021.",
+        "en": "Project Moon releases Library of Ruina in 2021."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2024",
         "en": "August 2024"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Library of Ruina",
+      "url": "https://www.igdb.com/games/library-of-ruina"
+    },
     {
       "label": "GitHub — Az-LastPenguin/LORAP",
       "url": "https://github.com/Az-LastPenguin/LORAP"

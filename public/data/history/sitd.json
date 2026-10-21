@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1991",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Shining in the Darkness sort en 1991.",
+        "en": "Shining in the Darkness is released in 1991."
+      }
+    },
+    {
       "date": {
         "fr": "Octobre 2025",
         "en": "October 2025"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Shining in the Darkness",
+      "url": "https://www.igdb.com/games/shining-in-the-darkness"
+    },
     {
       "label": "GitHub — lagdotcom/Archipelago",
       "url": "https://github.com/lagdotcom/Archipelago"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "The Creative Assembly sort Total War: Warhammer III en 2022.",
+        "en": "The Creative Assembly releases Total War: Warhammer III in 2022."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2026",
         "en": "March 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Total War: Warhammer III",
+      "url": "https://www.igdb.com/games/total-war-warhammer-iii"
+    },
     {
       "label": "GitHub — jordansds/Archipelago_TWW3_Alt",
       "url": "https://github.com/jordansds/Archipelago_TWW3_Alt"

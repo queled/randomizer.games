@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2009",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Voltorb Flip sort en 2009.",
+        "en": "Voltorb Flip is released in 2009."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2025",
         "en": "September 2025"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Voltorb Flip",
+      "url": "https://www.igdb.com/games/voltorb-flip"
+    },
     {
       "label": "GitHub — BlastSlimey/Archipelago",
       "url": "https://github.com/BlastSlimey/Archipelago"

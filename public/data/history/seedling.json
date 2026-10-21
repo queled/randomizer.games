@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2012",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Connor Ullmann sort Seedling en 2012.",
+        "en": "Connor Ullmann releases Seedling in 2012."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2023",
         "en": "August 2023"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Seedling",
+      "url": "https://www.igdb.com/games/seedling"
+    },
     {
       "label": "GitHub — madisonsilver/SeedlingArchipelagoWorld",
       "url": "https://github.com/madisonsilver/SeedlingArchipelagoWorld"

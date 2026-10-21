@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Quinn Patrick sort Vespadian en 2021.",
+        "en": "Quinn Patrick releases Vespadian in 2021."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2025",
         "en": "August 2025"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Vespadian",
+      "url": "https://www.igdb.com/games/vespadian"
+    },
     {
       "label": "GitHub — Quinn-Patrick/Archipelago-Vespadian",
       "url": "https://github.com/Quinn-Patrick/Archipelago-Vespadian"

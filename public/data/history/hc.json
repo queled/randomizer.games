@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Remar Games sort Hero Core en 2010.",
+        "en": "Remar Games releases Hero Core in 2010."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2025",
         "en": "May 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Hero Core",
+      "url": "https://www.igdb.com/games/hero-core"
+    },
     {
       "label": "GitHub — Minish-Link/HeroCore-Archipelago",
       "url": "https://github.com/Minish-Link/HeroCore-Archipelago"

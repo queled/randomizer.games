@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2014",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Matthew Brown sort Hexcells Infinite en 2014.",
+        "en": "Matthew Brown releases Hexcells Infinite in 2014."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Hexcells Infinite",
+      "url": "https://www.igdb.com/games/hexcells-infinite"
+    },
     {
       "label": "GitHub — Chainsawkitten/HexcellsInfiniteAP",
       "url": "https://github.com/Chainsawkitten/HexcellsInfiniteAP"

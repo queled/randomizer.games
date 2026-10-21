@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Scottgames sort Freddy Fazbear's Pizzeria Simulator en 2017.",
+        "en": "Scottgames releases Freddy Fazbear's Pizzeria Simulator in 2017."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Freddy Fazbear's Pizzeria Simulator",
+      "url": "https://www.igdb.com/games/freddy-fazbears-pizzeria-simulator"
+    },
     {
       "label": "GitHub — EviVirus/Archipelago-FFPS",
       "url": "https://github.com/EviVirus/Archipelago-FFPS"

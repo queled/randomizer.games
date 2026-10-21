@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Other Ocean Interactive sort Yu-Gi-Oh! Legacy of the Duelist: Link Evolution en 2019.",
+        "en": "Other Ocean Interactive releases Yu-Gi-Oh! Legacy of the Duelist: Link Evolution in 2019."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2026",
         "en": "May 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Yu-Gi-Oh! Legacy of the Duelist: Link Evolution",
+      "url": "https://www.igdb.com/games/yu-gi-oh-legacy-of-the-duelist-link-evolution"
+    },
     {
       "label": "GitHub — HillbillyDroid/YGO-LotD-LE-APWorld",
       "url": "https://github.com/HillbillyDroid/YGO-LotD-LE-APWorld"

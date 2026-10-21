@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nightdive Studios sort Turok 2: Seeds of Evil en 2017.",
+        "en": "Nightdive Studios releases Turok 2: Seeds of Evil in 2017."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2026",
         "en": "April 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Turok 2: Seeds of Evil",
+      "url": "https://www.igdb.com/games/turok-2-seeds-of-evil--2"
+    },
     {
       "label": "GitHub — chikakoo/Turok-2-AP-World",
       "url": "https://github.com/chikakoo/Turok-2-AP-World"

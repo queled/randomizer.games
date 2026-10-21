@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Finite Reflections Studios sort Void Sols en 2024.",
+        "en": "Finite Reflections Studios releases Void Sols in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Janvier 2026",
         "en": "January 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Void Sols",
+      "url": "https://www.igdb.com/games/void-sols--1"
+    },
     {
       "label": "GitHub — cookie966507/Archipelago",
       "url": "https://github.com/cookie966507/Archipelago"

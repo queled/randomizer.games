@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2009",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bayonetta sort en 2009.",
+        "en": "Bayonetta is released in 2009."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Bayonetta",
+      "url": "https://www.igdb.com/games/bayonetta"
+    },
     {
       "label": "GitHub — Boi-027/BayonettaArchipelago",
       "url": "https://github.com/Boi-027/BayonettaArchipelago"

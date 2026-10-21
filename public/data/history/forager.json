@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Forager sort en 2019.",
+        "en": "Forager is released in 2019."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Forager",
+      "url": "https://www.igdb.com/games/forager"
+    },
     {
       "label": "GitHub — olixx12/Foragipelago",
       "url": "https://github.com/olixx12/Foragipelago"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Dead Cells sort en 2018.",
+        "en": "Dead Cells is released in 2018."
+      }
+    },
+    {
       "date": {
         "fr": "Février 2026",
         "en": "February 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Dead Cells",
+      "url": "https://www.igdb.com/games/dead-cells"
+    },
     {
       "label": "GitHub — Maxlamenace572/DeadCellsArchipelago",
       "url": "https://github.com/Maxlamenace572/DeadCellsArchipelago"

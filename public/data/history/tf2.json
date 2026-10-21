@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Valve sort Team Fortress 2 en 2007.",
+        "en": "Valve releases Team Fortress 2 in 2007."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Team Fortress 2",
+      "url": "https://www.igdb.com/games/team-fortress-2"
+    },
     {
       "label": "GitHub — m-this/tf2-archipelago",
       "url": "https://github.com/m-this/tf2-archipelago"

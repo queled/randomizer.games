@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Playtonic sort Yooka-Replaylee en 2025.",
+        "en": "Playtonic releases Yooka-Replaylee in 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2026",
         "en": "September 2026"
@@ -34,6 +45,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Yooka-Replaylee",
+      "url": "https://www.igdb.com/games/yooka-replaylee"
+    },
     {
       "label": "GitHub — ninpalk/Archipelago",
       "url": "https://github.com/ninpalk/Archipelago"

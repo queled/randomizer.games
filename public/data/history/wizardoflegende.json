@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Contingent99 sort Wizard of Legend en 2018.",
+        "en": "Contingent99 releases Wizard of Legend in 2018."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2026",
         "en": "September 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Wizard of Legend",
+      "url": "https://www.igdb.com/games/wizard-of-legend"
+    },
     {
       "label": "GitHub — Skelrin/WoLArchipelago",
       "url": "https://github.com/Skelrin/WoLArchipelago"

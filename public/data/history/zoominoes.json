@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2026",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Starlight Games sort Zoominoes en 2026.",
+        "en": "Starlight Games releases Zoominoes in 2026."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Zoominoes",
+      "url": "https://www.igdb.com/games/zoominoes"
+    },
     {
       "label": "GitHub — chickentuna/Archipelago-Zoominoes",
       "url": "https://github.com/chickentuna/Archipelago-Zoominoes"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nihon Falcom sort The Legend of Heroes: Trails Beyond the Horizon en 2024.",
+        "en": "Nihon Falcom releases The Legend of Heroes: Trails Beyond the Horizon in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Octobre 2026",
         "en": "October 2026"
@@ -34,6 +45,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — The Legend of Heroes: Trails Beyond the Horizon",
+      "url": "https://www.igdb.com/games/the-legend-of-heroes-trails-beyond-the-horizon--1"
+    },
     {
       "label": "GitHub — brimaster2000/Trails-Beyond-the-Horizon-Archipelago",
       "url": "https://github.com/brimaster2000/Trails-Beyond-the-Horizon-Archipelago"

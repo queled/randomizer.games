@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Harry Potter and the Chamber of Secrets sort en 2002.",
+        "en": "Harry Potter and the Chamber of Secrets is released in 2002."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2026",
         "en": "May 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Harry Potter and the Chamber of Secrets",
+      "url": "https://www.igdb.com/games/harry-potter-and-the-chamber-of-secrets"
+    },
     {
       "label": "GitHub — Kryen112/HP2PC_AP",
       "url": "https://github.com/Kryen112/HP2PC_AP"

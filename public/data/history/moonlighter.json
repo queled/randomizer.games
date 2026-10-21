@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Digital Sun Games sort Moonlighter en 2018.",
+        "en": "Digital Sun Games releases Moonlighter in 2018."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Moonlighter",
+      "url": "https://www.igdb.com/games/moonlighter"
+    },
     {
       "label": "GitHub — FeluciaPS/MoonlighterAP",
       "url": "https://github.com/FeluciaPS/MoonlighterAP"

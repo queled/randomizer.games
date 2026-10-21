@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Tango Gameworks sort Hi-Fi Rush en 2023.",
+        "en": "Tango Gameworks releases Hi-Fi Rush in 2023."
+      }
+    },
+    {
       "date": {
         "fr": "Octobre 2025",
         "en": "October 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Hi-Fi Rush",
+      "url": "https://www.igdb.com/games/hi-fi-rush"
+    },
     {
       "label": "GitHub — TRPG0/HbkArchipelago",
       "url": "https://github.com/TRPG0/HbkArchipelago"

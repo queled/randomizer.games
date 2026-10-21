@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Pugstorm sort Core Keeper en 2024.",
+        "en": "Pugstorm releases Core Keeper in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Core Keeper",
+      "url": "https://www.igdb.com/games/core-keeper"
+    },
     {
       "label": "GitHub — URAQTDev/Core-Keeper-Archipelago-APWorld-Tracker",
       "url": "https://github.com/URAQTDev/Core-Keeper-Archipelago-APWorld-Tracker"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2026",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Stella sort en 2026.",
+        "en": "Stella is released in 2026."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2026",
         "en": "April 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Stella",
+      "url": "https://www.igdb.com/games/stella"
+    },
     {
       "label": "GitHub — giovannialayan/oigArchipelago",
       "url": "https://github.com/giovannialayan/oigArchipelago"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Celeste Classic sort en 2023.",
+        "en": "Celeste Classic is released in 2023."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Celeste Classic",
+      "url": "https://www.igdb.com/games/celeste-classic--2"
+    },
     {
       "label": "GitHub — NyanMC/ap-celesteclassic",
       "url": "https://github.com/NyanMC/ap-celesteclassic"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "The Fun Pimps sort 7 Days to Die en 2024.",
+        "en": "The Fun Pimps releases 7 Days to Die in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — 7 Days to Die",
+      "url": "https://www.igdb.com/games/7-days-to-die"
+    },
     {
       "label": "GitHub — OrcThrowman/7-Days-to-Die-AP",
       "url": "https://github.com/OrcThrowman/7-Days-to-Die-AP"

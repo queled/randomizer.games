@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Matt Dabrowski sort Streets of Rogue en 2019.",
+        "en": "Matt Dabrowski releases Streets of Rogue in 2019."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2026",
         "en": "May 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Streets of Rogue",
+      "url": "https://www.igdb.com/games/streets-of-rogue"
+    },
     {
       "label": "GitHub — Jmarcs27/StreetsOfRogueArchipelago",
       "url": "https://github.com/Jmarcs27/StreetsOfRogueArchipelago"

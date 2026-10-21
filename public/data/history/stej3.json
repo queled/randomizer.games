@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Feperd Games sort Spark the Electric Jester 3 en 2022.",
+        "en": "Feperd Games releases Spark the Electric Jester 3 in 2022."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2026",
         "en": "April 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Spark the Electric Jester 3",
+      "url": "https://www.igdb.com/games/spark-the-electric-jester-3"
+    },
     {
       "label": "GitHub — TwinklePillar/Spark3-Archipelago",
       "url": "https://github.com/TwinklePillar/Spark3-Archipelago"

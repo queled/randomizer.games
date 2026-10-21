@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Mario & Luigi: Dream Team sort en 2013.",
+        "en": "Mario & Luigi: Dream Team is released in 2013."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2025",
         "en": "June 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Mario & Luigi: Dream Team",
+      "url": "https://www.igdb.com/games/mario-luigi-dream-team"
+    },
     {
       "label": "GitHub — MnL-Modding/Piillomizer",
       "url": "https://github.com/MnL-Modding/Piillomizer"

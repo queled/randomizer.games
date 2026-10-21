@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Eurocom Entertainment Software sort Spyro: A Hero's Tail en 2004.",
+        "en": "Eurocom Entertainment Software releases Spyro: A Hero's Tail in 2004."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Spyro: A Hero's Tail",
+      "url": "https://www.igdb.com/games/spyro-a-hero-s-tail"
+    },
     {
       "label": "GitHub — PhoenixAki/PhoenixAP",
       "url": "https://github.com/PhoenixAki/PhoenixAP"

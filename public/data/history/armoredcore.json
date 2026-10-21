@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1997",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "FromSoftware sort Armored Core en 1997.",
+        "en": "FromSoftware releases Armored Core in 1997."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2025",
         "en": "July 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Armored Core",
+      "url": "https://www.igdb.com/games/armored-core"
+    },
     {
       "label": "GitHub — JustinMarshall98/Armored-Core-PSX-Archipelago",
       "url": "https://github.com/JustinMarshall98/Armored-Core-PSX-Archipelago"

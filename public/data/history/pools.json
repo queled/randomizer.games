@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Tensori sort POOLS en 2024.",
+        "en": "Tensori releases POOLS in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -34,6 +45,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Pools",
+      "url": "https://www.igdb.com/games/pools"
+    },
     {
       "label": "GitHub — SerpentAI/Archipelago",
       "url": "https://github.com/SerpentAI/Archipelago"

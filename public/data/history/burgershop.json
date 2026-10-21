@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "GoBit Games sort Burger Shop en 2007.",
+        "en": "GoBit Games releases Burger Shop in 2007."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Burger Shop",
+      "url": "https://www.igdb.com/games/burger-shop"
+    },
     {
       "label": "GitHub — zsiegel701/Burger-Shop-Archipelago",
       "url": "https://github.com/zsiegel701/Burger-Shop-Archipelago"

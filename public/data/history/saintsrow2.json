@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2008",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Volition sort Saints Row 2 en 2008.",
+        "en": "Volition releases Saints Row 2 in 2008."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Saints Row 2",
+      "url": "https://www.igdb.com/games/saints-row-2"
+    },
     {
       "label": "GitHub — hoXyy/SaintsRow2Archipelago",
       "url": "https://github.com/hoXyy/SaintsRow2Archipelago"

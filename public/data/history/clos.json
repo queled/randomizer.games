@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "MercurySteam sort Castlevania: Lords of Shadow en 2010.",
+        "en": "MercurySteam releases Castlevania: Lords of Shadow in 2010."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Castlevania: Lords of Shadow",
+      "url": "https://www.igdb.com/games/castlevania-lords-of-shadow"
+    },
     {
       "label": "GitHub — Haywire32/LoS-Archipelago",
       "url": "https://github.com/Haywire32/LoS-Archipelago"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Rare sort Star Fox Adventures en 2002.",
+        "en": "Rare releases Star Fox Adventures in 2002."
+      }
+    },
+    {
       "date": {
         "fr": "Janvier 2026",
         "en": "January 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Star Fox Adventures",
+      "url": "https://www.igdb.com/games/star-fox-adventures"
+    },
     {
       "label": "GitHub — MichelFenouil/SFA-Archipelago",
       "url": "https://github.com/MichelFenouil/SFA-Archipelago"

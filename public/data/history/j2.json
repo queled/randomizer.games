@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Naughty Dog sort Jak II en 2003.",
+        "en": "Naughty Dog releases Jak II in 2003."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2025",
         "en": "September 2025"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Jak II",
+      "url": "https://www.igdb.com/games/jak-ii"
+    },
     {
       "label": "GitHub — narramoment/Archipelago",
       "url": "https://github.com/narramoment/Archipelago"

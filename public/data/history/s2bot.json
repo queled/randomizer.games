@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sucker Punch Productions sort Sly 2: Band of Thieves en 2010.",
+        "en": "Sucker Punch Productions releases Sly 2: Band of Thieves in 2010."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2025",
         "en": "April 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Sly 2: Band of Thieves",
+      "url": "https://www.igdb.com/games/sly-2-band-of-thieves--1"
+    },
     {
       "label": "GitHub — NikolajDanger/APSly2",
       "url": "https://github.com/NikolajDanger/APSly2"

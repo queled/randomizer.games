@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "FromSoftware sort Armored Core VI: Fires of Rubicon en 2023.",
+        "en": "FromSoftware releases Armored Core VI: Fires of Rubicon in 2023."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Armored Core VI: Fires of Rubicon",
+      "url": "https://www.igdb.com/games/armored-core-vi-fires-of-rubicon"
+    },
     {
       "label": "GitHub — DeltaSilver/Armored-Core-6-Archipelago",
       "url": "https://github.com/DeltaSilver/Armored-Core-6-Archipelago"

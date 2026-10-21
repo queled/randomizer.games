@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Klei Entertainment sort Oxygen Not Included en 2019.",
+        "en": "Klei Entertainment releases Oxygen Not Included in 2019."
+      }
+    },
+    {
       "date": {
         "fr": "Décembre 2024",
         "en": "December 2024"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Oxygen Not Included",
+      "url": "https://www.igdb.com/games/oxygen-not-included"
+    },
     {
       "label": "GitHub — ShadowKitty42/ONI-Archipelago",
       "url": "https://github.com/ShadowKitty42/ONI-Archipelago"

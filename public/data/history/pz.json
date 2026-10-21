@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Frontier Developments sort Planet Zoo en 2019.",
+        "en": "Frontier Developments releases Planet Zoo in 2019."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Planet Zoo",
+      "url": "https://www.igdb.com/games/planet-zoo"
+    },
     {
       "label": "GitHub — tinkieZo/ArchipelagoPZ",
       "url": "https://github.com/tinkieZo/ArchipelagoPZ"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2009",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "IronMonkey Studios sort Mirror's Edge en 2009.",
+        "en": "IronMonkey Studios releases Mirror's Edge in 2009."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2026",
         "en": "April 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Mirror's Edge",
+      "url": "https://www.igdb.com/games/mirrors-edge"
+    },
     {
       "label": "GitHub — SerpentAI/Archipelago",
       "url": "https://github.com/SerpentAI/Archipelago"

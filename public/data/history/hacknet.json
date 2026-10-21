@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Team Fractal Alligator sort Hacknet en 2015.",
+        "en": "Team Fractal Alligator releases Hacknet in 2015."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2025",
         "en": "May 2025"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Hacknet",
+      "url": "https://www.igdb.com/games/hacknet"
+    },
     {
       "label": "GitHub — AutumnRivers/Archipelago-Hacknet",
       "url": "https://github.com/AutumnRivers/Archipelago-Hacknet"

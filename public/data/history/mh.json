@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "The Outsiders sort Metal Hellsinger en 2022.",
+        "en": "The Outsiders releases Metal Hellsinger in 2022."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Metal: Hellsinger",
+      "url": "https://www.igdb.com/games/metal-hellsinger"
+    },
     {
       "label": "GitHub — DanielSchaack/ArchipelagoMetalHellsinger",
       "url": "https://github.com/DanielSchaack/ArchipelagoMetalHellsinger"

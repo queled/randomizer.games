@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nokta Games sort Supermarket Simulator en 2025.",
+        "en": "Nokta Games releases Supermarket Simulator in 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Supermarket Simulator",
+      "url": "https://www.igdb.com/games/supermarket-simulator--3"
+    },
     {
       "label": "GitHub — Lemix028/SupermarketSimulator-Archipelago",
       "url": "https://github.com/Lemix028/SupermarketSimulator-Archipelago"

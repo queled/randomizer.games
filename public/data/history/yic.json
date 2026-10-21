@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nihon Falcom sort Ys I Chronicles en 2013.",
+        "en": "Nihon Falcom releases Ys I Chronicles in 2013."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2026",
         "en": "March 2026"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Ys I Chronicles+",
+      "url": "https://www.igdb.com/games/ys-i-chronicles-plus"
+    },
     {
       "label": "GitHub — Glomels/ys-archipelago",
       "url": "https://github.com/Glomels/ys-archipelago"

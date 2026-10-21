@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Artefacts Studio sort Garfield Kart: Furious Racing en 2019.",
+        "en": "Artefacts Studio releases Garfield Kart: Furious Racing in 2019."
+      }
+    },
+    {
       "date": {
         "fr": "Octobre 2025",
         "en": "October 2025"
@@ -62,6 +73,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Garfield Kart: Furious Racing",
+      "url": "https://www.igdb.com/games/garfield-kart-furious-racing"
+    },
     {
       "label": "GitHub — FeluciaPS/GarfieldKartAP",
       "url": "https://github.com/FeluciaPS/GarfieldKartAP"

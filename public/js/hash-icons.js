@@ -129,10 +129,13 @@
     return html + escapeHtml(str.slice(last));
   }
 
-  // Word hashes: every known word after "Hash:" (up to a | , a link or the line
-  // end) becomes its icon, words the list doesn't know stay as they are
+  // Word hashes: every known word after "Hash:" (up to a | , a link, a seed code
+  // such as "(AB12CD34)" or the line end) becomes its icon, words the list
+  // doesn't know stay as they are
   function hashSegmentsToHtml(matcher, str) {
     const segment = /(hash(?:\s+(?:items?|is))?\s*[:=\-]*)([^|\n]*?)(?=\||\n|https?:\/\/|$)/gi;
+    // Seed code in capitals after the words: "Hash: A B C (AB12CD34) Preset: ..."
+    const code = /\([A-Z0-9]{6,}\)/;
     // Brackets around the words go with them: (A) (B) -> icons only
     const single = { ...matcher, run: new RegExp(`(?<![A-Za-z0-9])[([{"]*${matcher.token.source}(?:${SEPARATOR}${matcher.token.source})*[)\\]}"]*`, 'gi') };
     let html = '';
@@ -144,9 +147,11 @@
         continue;
       }
       const start = m.index + m[1].length;
-      const inner = runsToHtml(single, m[2], (run) => renderRun({ ...single, afterHash: false, minRun: 1 }, run, ''));
+      const cut = m[2].search(code);
+      const words = cut === -1 ? m[2] : m[2].slice(0, cut);
+      const inner = runsToHtml(single, words, (run) => renderRun({ ...single, afterHash: false, minRun: 1 }, run, ''));
       html += escapeHtml(str.slice(last, start)) + inner;
-      last = start + m[2].length;
+      last = start + words.length;
     }
     return html + escapeHtml(str.slice(last));
   }

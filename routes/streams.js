@@ -106,6 +106,23 @@ const COMBO_TWITCH_CATEGORY_IDS = {
   'mmtww': ['4815', '12870', '4133', '1478044090', '1003948618', '1311228706'],
   // A game sold as two editions, the third one has no category
   'fe14': ['405007883', '1674286069'],
+  // Games sold as two versions, one category each (Twitch also lists the
+  // DWM2 pair together, and the MMBN versions again in the Legacy Collection)
+  'dwm2': ['395287996', '1982003207', '74065666'],
+  'mmbn3': ['1550736308', '1388250717'],
+  'mmbn5': ['1984284718', '324568485', '831068607', '1296951556'],
+  'mmbn6': ['1565051033', '740052011', '1809826844', '1247663652'],
+  'ie2': ['23396', '711834465'],
+  'iegcs': ['259153033', '1080451162'],
+  'medabots': ['20912', '1355062682'],
+  // A game randomized on its NES version, also streamed under its remakes'
+  // categories (the Western titles of the mobile, console and DS versions)
+  'dw': ['1565834559', '1775376845'],
+  'dw2': ['604531278', '451728013', '835849790'],
+  'dw3': ['1385699518', '1253712846'],
+  'dw4': ['488153', '1734826487'],
+  // The Super Famicom remake of the first two games, one category each
+  'dq12': ['18994872', '327576750'],
   // A randomizer of every main game of a series, streamed under each game's
   // category, pair or version
   'upkmn': [

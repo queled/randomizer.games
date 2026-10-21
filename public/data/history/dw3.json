@@ -1,7 +1,7 @@
 {
   "intro": {
-    "fr": "Dragon Quest III se randomise avec le Dragon Warrior 3 Randomizer, créé par gameboy9 et repris en 2023 par Endymionls.",
-    "en": "Dragon Quest III is randomized with the Dragon Warrior 3 Randomizer, created by gameboy9 and taken over in 2023 by Endymionls."
+    "fr": "Dragon Quest III se randomise sur NES avec le Dragon Warrior 3 Randomizer, créé par gameboy9 et repris en 2023 par Endymionls.",
+    "en": "Dragon Quest III is randomized on the NES with the Dragon Warrior 3 Randomizer, created by gameboy9 and taken over in 2023 by Endymionls."
   },
   "events": [
     {
@@ -11,8 +11,8 @@
         "en": "The original game"
       },
       "text": {
-        "fr": "Enix sort Dragon Quest III sur Famicom au Japon en 1988 ; « The Seeds of Salvation » est le sous-titre de ses versions occidentales récentes.",
-        "en": "Enix releases Dragon Quest III on the Famicom in Japan in 1988; \"The Seeds of Salvation\" is the subtitle of its recent Western versions."
+        "fr": "Enix sort Dragon Quest III sur Famicom au Japon en 1988 ; il arrive en Amérique du Nord sous le nom de Dragon Warrior III en 1992, et « The Seeds of Salvation » est le sous-titre de ses versions occidentales récentes.",
+        "en": "Enix releases Dragon Quest III on the Famicom in Japan in 1988; it reaches North America as Dragon Warrior III in 1992, and \"The Seeds of Salvation\" is the subtitle of its recent Western versions."
       }
     },
     {

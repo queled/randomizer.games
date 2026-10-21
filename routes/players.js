@@ -96,30 +96,6 @@ async function buildGameDisplayMaps() {
     extraSlugs.forEach(slug => add(slug, label, gameId));
   }
 
-  const fallback = {
-    oot: { label: 'Ocarina of Time Randomizer', gameId: 'oot' },
-    ootr: { label: 'Ocarina of Time Randomizer', gameId: 'oot' },
-    alttp: { label: 'A Link to the Past Randomizer', gameId: 'alttp' },
-    alttpr: { label: 'A Link to the Past Randomizer', gameId: 'alttp' },
-    mm: { label: 'Majora\'s Mask Randomizer', gameId: 'mm' },
-    mmr: { label: 'Majora\'s Mask Randomizer', gameId: 'mm' },
-    sm: { label: 'Super Metroid Randomizer', gameId: 'sm' },
-    smr: { label: 'Super Metroid Randomizer', gameId: 'sm' },
-    sm64: { label: 'Super Mario 64 Randomizer', gameId: 'sm64' },
-    dk64: { label: 'Donkey Kong 64 Randomizer', gameId: 'dk64' },
-    dk64r: { label: 'Donkey Kong 64 Randomizer', gameId: 'dk64' },
-    tww: { label: 'The Wind Waker Randomizer', gameId: 'tww' },
-    tp: { label: 'Twilight Princess Randomizer', gameId: 'tp' },
-    kh2fm: { label: 'Kingdom Hearts 2 FM Randomizer', gameId: 'kh2fm' },
-    sotn: { label: 'Symphony of the Night Randomizer', gameId: 'sotn' },
-    smz3: { label: 'SMZ3 Combo Randomizer', gameId: 'smz3' },
-    ootmm: { label: 'OoT+MM Combo Randomizer', gameId: 'ootmm' },
-    z1: { label: 'The Legend of Zelda Randomizer', gameId: 'z1' },
-    z1r: { label: 'The Legend of Zelda Randomizer', gameId: 'z1' }
-  };
-
-  Object.entries(fallback).forEach(([slug, entry]) => add(slug, entry.label, entry.gameId));
-
   return { displayBySlug, canonicalIdBySlug };
 }
 

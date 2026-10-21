@@ -174,6 +174,35 @@ const PER_GAME_TITLE_KEYWORDS = {
   's6': ['scrolls six', 'scrolls 6'],
   'wm': ['winter mission'],
   'zmdf': ['deep freeze'],
+  'smredesign': ['redesign'],
+  'superjunkoid': ['junkoid'],
+  'cm64': ['cursed mario'],
+  'sm64sm64': ['spicy mycena'],
+  'smsa2': ['sunshine arcade'],
+  'ootbijmqwt': ['water temple'],
+  'zagdx': ['gdx'],
+  'pkmncrystaldust': ['crystaldust', 'crystal dust'],
+  'pkmng': ['gaia'],
+  // Mods, modpacks and maps, streamed under their base game
+  'bg3tot': ['trials of tav'],
+  'easytutu': ['easytutu', 'tutu'],
+  'secmod': ['secmod'],
+  'ccmo': ['mental omega'],
+  'ccr': ['reloaded'],
+  'fwbm': ["bob's mods", 'bobs mods', "bob's"],
+  'fp': ['platformer'],
+  'payday2cd': ['criminal dawn'],
+  'maem': ['aem'],
+  'mvh': ['vault hunters'],
+  'wynncraft': ['wynncraft'],
+  'dapotheosis': ['drehmal'],
+  'cl': ['citadel'],
+  'oc': ['cargolock'],
+  'mgsmgs': ['masala'],
+  // Versions without a Twitch category of their own, streamed under another one
+  'sth2006': ['sonic 06', 'sonic 2006', 'sonic the hedgehog 2006', 'sonic the hedgehog (2006)', 'sth06'],
+  'ff1&2dos': ['dawn of souls'],
+  'skc': ['knuckles collection', 's&k collection'],
   // Archipelago games without a Twitch category are streamed under Archipelago
   'jigsaw': ['jigsaw']
 };
@@ -642,6 +671,13 @@ function streamMentions(stream, keywords) {
     const escaped = keyword.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     return new RegExp(`(^|[^a-z0-9])${escaped}`).test(combined);
   });
+}
+
+// A category shared by a game and its mods or duplicates: a stream naming a mod
+// goes to it, any other to the first game that needs no keyword
+function gameOfSharedCategory(stream, refs) {
+  const named = refs.find(r => PER_GAME_TITLE_KEYWORDS[r.gameId] && streamMentions(stream, PER_GAME_TITLE_KEYWORDS[r.gameId]));
+  return (named || refs.find(r => !PER_GAME_TITLE_KEYWORDS[r.gameId]) || refs[0]).gameId;
 }
 
 // Filter streams for combo games by checking if title/tags contain combo-specific keywords
@@ -1416,7 +1452,7 @@ async function buildAllStreams() {
       const includeAll = PASS_THROUGH_TWITCH_CATEGORIES.has(String(primary.categoryName || '').toLowerCase());
       const streams = await fetchTwitchStreamsByCategoryId(categoryId, primary.categoryName, includeAll);
       // A multi-game category (Archipelago) doesn't tell which game is played
-      return { streams, primaryGameId: includeAll ? null : primary.gameId };
+      return { streams, primaryGameId: includeAll ? null : primary.gameId, refs: includeAll ? null : refs };
     });
     const multiGameResults = await mapWithConcurrency(MULTI_GAME_TWITCH_CATEGORY_IDS, 2, async (categoryId) => ({
       streams: await fetchTwitchStreamsByCategoryId(categoryId, null),
@@ -1429,7 +1465,7 @@ async function buildAllStreams() {
         if (!streamMap.has(stream.id)) {
           streamMap.set(stream.id, {
             ...stream,
-            gameId: result.primaryGameId
+            gameId: result.refs ? gameOfSharedCategory(stream, result.refs) : result.primaryGameId
           });
         }
       }

@@ -796,9 +796,16 @@
     return '👥';
   }
 
+  // Archipelago link hosted elsewhere than archipelago.gg / multiworld.gg (GitHub…)
+  function isCommunityApworld(site) {
+    const url = (site?.url || '').toLowerCase();
+    return isMultiworldSite(site) && !url.includes('archipelago.gg') && !url.includes('multiworld.gg');
+  }
+
   function getMultiworldIcon(site) {
     const url = (site?.url || '').toLowerCase();
     const name = (site?.name || '').toLowerCase();
+    if (isCommunityApworld(site)) return '🧩';
     if (url.includes('archipelago.gg') || name.includes('archipelago') || !!site?.isArchipelago) {
       return renderAssetIcon('/assets/archipelago.png', 'Archipelago');
     }
@@ -902,7 +909,9 @@
     };
 
     sites.forEach(pushMultiworldSite);
-    pushMultiworldSite(officialSite);
+    if (!(data.hasMultiworldPage && isCommunityApworld(officialSite))) pushMultiworldSite(officialSite);
+    // Pages archipelago.gg / multiworld.gg first, community APWorlds after
+    multiworldSites.sort((a, b) => isCommunityApworld(a) - isCommunityApworld(b));
 
     let html = '';
 
@@ -953,7 +962,7 @@
             ${multiworldSites.map(site => renderLinkChip({
               url: site.url,
               name: site.name || getHostFromUrl(site.url),
-              description: ''
+              description: isCommunityApworld(site) ? t('gameDetail.communityApworld', 'Community APWorld (unofficial)') : ''
             }, getMultiworldIcon(site))).join('')}
           </div>
         </div>

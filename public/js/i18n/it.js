@@ -177,6 +177,7 @@ const it = {
         resourceOfficialSite: "Sito ufficiale",
         resourceSites: "Siti",
         resourceMultiworld: "Archipelago e Multiworld",
+        communityApworld: "APWorld della community (non ufficiale)",
         resourceGenerateSeed: "Genera una seed",
         resourceTrackers: "Tracker",
         resourceGuides: "Guide",

@@ -195,6 +195,7 @@ const en = {
         resourceOfficialSite: "Official site",
         resourceSites: "Sites",
         resourceMultiworld: "Archipelago & Multiworld",
+        communityApworld: "Community APWorld (unofficial)",
         resourceGenerateSeed: "Generate a seed",
         resourceTrackers: "Trackers",
         resourceGuides: "Guides",

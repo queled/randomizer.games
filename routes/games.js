@@ -287,6 +287,11 @@ function multiworldHost(url) {
   return (String(url || '').match(/^https?:\/\/(?:www\.)?(archipelago|multiworld)\.gg(?:\/|$)/i) || [])[1]?.toLowerCase() || null;
 }
 
+// Archipelago link hosted elsewhere than archipelago.gg / multiworld.gg (GitHub…)
+function isCommunityApworld(site) {
+  return !!(site?.isArchipelago || site?.isMultiworld) && !multiworldHost(site.url);
+}
+
 // Get game resources (sites, trackers, guides)
 router.get('/:id/resources', async (req, res, next) => {
   try {
@@ -321,15 +326,19 @@ router.get('/:id/resources', async (req, res, next) => {
     }
     
     // Filtrer les sites obsolètes pour l'affichage, ainsi que les liens génériques
-    // vers archipelago.gg / multiworld.gg (rando-list) quand le jeu a sa page sur ce site
+    // vers archipelago.gg / multiworld.gg (rando-list) quand le jeu a sa page sur ce site.
+    // Les APWorlds communautaires s'effacent aussi derrière ces pages (sans être supprimés)
     const syncedHosts = new Set((resources.sites || [])
       .filter(s => s.source === 'archipelago')
       .map(s => multiworldHost(s.url)));
     const activeSites = (resources.sites || []).filter(s =>
-      !s.isObsolete && !(s.source !== 'archipelago' && syncedHosts.has(multiworldHost(s.url))));
-    
+      !s.isObsolete &&
+      !(s.source !== 'archipelago' && syncedHosts.has(multiworldHost(s.url))) &&
+      !(syncedHosts.size && isCommunityApworld(s)));
+
     res.json({
       officialSite,
+      hasMultiworldPage: syncedHosts.size > 0,
       sites: activeSites,
       trackers: resources.trackers || [],
       guides: resources.guides || [],

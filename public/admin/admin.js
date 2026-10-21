@@ -845,6 +845,8 @@ const admin = {
   getAdminSiteIcon(site = {}) {
     const url = String(site.url || '').toLowerCase();
     const name = String(site.name || '').toLowerCase();
+    // Community APWorld: Archipelago link hosted elsewhere (GitHub…)
+    if ((site.isArchipelago || site.isMultiworld) && !/(archipelago|multiworld)\.gg/.test(url)) return '🧩';
     if (site.isArchipelago || url.includes('archipelago.gg') || name.includes('archipelago')) {
       return this.renderAdminAssetIcon('/assets/archipelago.png', 'Archipelago');
     }

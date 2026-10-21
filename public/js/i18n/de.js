@@ -179,6 +179,7 @@ const de = {
         resourceOfficialSite: "Offizielle Website",
         resourceSites: "Websites",
         resourceMultiworld: "Archipelago & Multiworld",
+        communityApworld: "Community-APWorld (inoffiziell)",
         resourceGenerateSeed: "Seed generieren",
         resourceTrackers: "Tracker",
         resourceGuides: "Guides",

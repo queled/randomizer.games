@@ -219,6 +219,7 @@ const pt = {
         resourceOfficialSite: "Site oficial",
         resourceSites: "Sites",
         resourceMultiworld: "Archipelago e Multiworld",
+        communityApworld: "APWorld da comunidade (não oficial)",
         resourceGenerateSeed: "Gerar seed",
         resourceTrackers: "Trackers",
         resourceGuides: "Guias",

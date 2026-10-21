@@ -183,6 +183,7 @@ const fr = {
         resourceOfficialSite: "Site officiel",
         resourceSites: "Sites",
         resourceMultiworld: "Archipelago & Multiworld",
+        communityApworld: "APWorld communautaire (non officiel)",
         resourceGenerateSeed: "Générer une seed",
         resourceTrackers: "Trackers",
         resourceGuides: "Guides",

@@ -180,6 +180,7 @@ const de = {
         resourceSites: "Websites",
         resourceMultiworld: "Archipelago & Multiworld",
         communityApworld: "Community-APWorld (inoffiziell)",
+        apworldBroken: "Broken on Main: funktioniert nicht mit der aktuellen Archipelago-Version",
         resourceGenerateSeed: "Seed generieren",
         resourceTrackers: "Tracker",
         resourceGuides: "Guides",

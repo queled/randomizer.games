@@ -10,7 +10,7 @@
 #   race-vods             VOD Twitch des joueurs, restreams trouvés sur Twitch (toutes les 30 min)
 #   tournaments-discover  nouveaux tournois des 2 derniers jours, séries async, saisons de ligue, runs GDQ (tous les jours)
 #   rando-list            cache rando-list, si le dépôt a changé    (tous les jours)
-#   archipelago           jeux d'archipelago.gg et multiworld.gg     (tous les jours)
+#   archipelago           jeux d'archipelago.gg et multiworld.gg, puis APWorlds communautaires (tous les jours)
 #   players               joueurs et profils racetime.gg, comptes des participants (tous les jours)
 #   challonge-check       une requête pour savoir si le quota Challonge est revenu (tous les jours)
 #   backup                mongodump avec rotation                   (toutes les nuits)
@@ -93,7 +93,11 @@ run_rando_list() {
 }
 
 run_archipelago() {
-  timeout 10m node scripts/sync-archipelago-games.js
+  local status=0
+  timeout 10m node scripts/sync-archipelago-games.js || status=$?
+  # Après : il s'appuie sur les mondes que la synchro précédente vient de rattacher
+  timeout 15m node scripts/sync-community-apworlds.js || status=$?
+  return "$status"
 }
 
 run_players() {

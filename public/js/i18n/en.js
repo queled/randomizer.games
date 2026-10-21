@@ -196,6 +196,7 @@ const en = {
         resourceSites: "Sites",
         resourceMultiworld: "Archipelago & Multiworld",
         communityApworld: "Community APWorld (unofficial)",
+        apworldBroken: "Broken on Main: does not work with the current Archipelago version",
         resourceGenerateSeed: "Generate a seed",
         resourceTrackers: "Trackers",
         resourceGuides: "Guides",

@@ -220,6 +220,7 @@ const pt = {
         resourceSites: "Sites",
         resourceMultiworld: "Archipelago e Multiworld",
         communityApworld: "APWorld da comunidade (não oficial)",
+        apworldBroken: "Broken on Main: não funciona com a versão atual do Archipelago",
         resourceGenerateSeed: "Gerar seed",
         resourceTrackers: "Trackers",
         resourceGuides: "Guias",

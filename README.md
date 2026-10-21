@@ -25,6 +25,7 @@ Everything shown is public data, refreshed automatically:
 | [start.gg](https://start.gg) and [Challonge](https://challonge.com) | Tournaments, brackets and matches |
 | [rando-list](https://github.com/video-game-randomizers/rando-list) | The list of games and randomizers |
 | [Archipelago](https://archipelago.gg/games) and [Multiworld](https://multiworld.gg/games) | Games playable in an Archipelago multiworld |
+| [Community APWorlds list](https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit) | Worlds distributed outside Archipelago: downloads, stability, trackers, setup guides |
 | [speedrun.com](https://www.speedrun.com) | Game details (platforms, release year) |
 | [Twitch](https://twitch.tv) | Live streams |
 

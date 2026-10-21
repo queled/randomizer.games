@@ -756,7 +756,7 @@
     );
   }
 
-  function renderLinkChip(link, icon = '🔗') {
+  function renderLinkChip(link, icon = '🔗', badge = '') {
     const lang = getCurrentLanguage() || 'en';
     const tr = link?.translations?.[lang] || null;
     const displayName = tr?.name || link.name || getHostFromUrl(link.url) || link.url;
@@ -772,9 +772,10 @@
 
     return `
       <${tagName}${linkAttrs ? ' ' + linkAttrs : ''}
-         style="display:block;background:#1f2937;padding:0.875rem 1rem;border-radius:0.5rem;text-decoration:none;transition:background 0.2s;border:1px solid #374151;"
+         style="display:block;position:relative;background:#1f2937;padding:0.875rem 1rem;border-radius:0.5rem;text-decoration:none;transition:background 0.2s;border:1px solid #374151;"
          data-hover-style="background:#374151"
          data-rest-style="background:#1f2937">
+        ${badge}
         <div style="display:flex;align-items:center;gap:0.5rem;color:#60a5fa;font-weight:500;">
           ${iconMarkup}
           <span>${name}</span>
@@ -802,10 +803,19 @@
     return isMultiworldSite(site) && !url.includes('archipelago.gg') && !url.includes('multiworld.gg');
   }
 
+  // Warning in the corner of a community APWorld broken on Archipelago's current version
+  function getApworldBadge(site) {
+    if (site?.apworldStatus !== 'broken') return '';
+    const label = escapeHtml(t('gameDetail.apworldBroken', 'Broken on Main: does not work with the current Archipelago version'));
+    return `<span title="${label}" aria-label="${label}" style="position:absolute;top:-0.5rem;right:-0.5rem;background:#b45309;color:#fff;border-radius:999px;width:1.5rem;height:1.5rem;display:flex;align-items:center;justify-content:center;font-size:0.8rem;border:2px solid #111827;">⚠️</span>`;
+  }
+
   function getMultiworldIcon(site) {
     const url = (site?.url || '').toLowerCase();
     const name = (site?.name || '').toLowerCase();
-    if (isCommunityApworld(site)) return '🧩';
+    if (isCommunityApworld(site)) {
+      return /discord(app)?\.com\//.test(url) ? renderAssetIcon('/assets/discord.svg', 'Discord') : '🧩';
+    }
     if (url.includes('archipelago.gg') || name.includes('archipelago') || !!site?.isArchipelago) {
       return renderAssetIcon('/assets/archipelago.png', 'Archipelago');
     }
@@ -962,8 +972,11 @@
             ${multiworldSites.map(site => renderLinkChip({
               url: site.url,
               name: site.name || getHostFromUrl(site.url),
-              description: isCommunityApworld(site) ? t('gameDetail.communityApworld', 'Community APWorld (unofficial)') : ''
-            }, getMultiworldIcon(site))).join('')}
+              description: [
+                isCommunityApworld(site) ? t('gameDetail.communityApworld', 'Community APWorld (unofficial)') : '',
+                site.apworldStatus === 'broken' ? t('gameDetail.apworldBroken', 'Broken on Main: does not work with the current Archipelago version') : ''
+              ].filter(Boolean).join(' · ')
+            }, getMultiworldIcon(site), getApworldBadge(site))).join('')}
           </div>
         </div>
       `;

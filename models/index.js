@@ -40,10 +40,12 @@ const gameSchema = new mongoose.Schema({
       url: String,
       name: String,
       description: String,
-      source: { type: String, enum: ['rando-list', 'manual', 'import', 'community', 'archipelago'], default: 'manual' },
+      source: { type: String, enum: ['rando-list', 'manual', 'import', 'community', 'archipelago', 'apworld'], default: 'manual' },
       isArchipelago: { type: Boolean, default: false },
       isMultiworld: { type: Boolean, default: false },
-      isObsolete: { type: Boolean, default: false }
+      isObsolete: { type: Boolean, default: false },
+      // Community APWorld: its stability in the community list
+      apworldStatus: { type: String, enum: ['stable', 'unstable', 'broken'] }
     }],
     // Trackers
     trackers: [{
@@ -51,7 +53,7 @@ const gameSchema = new mongoose.Schema({
       name: String,
       description: String,
       translations: { type: mongoose.Schema.Types.Mixed, default: {} },
-      source: { type: String, enum: ['manual', 'rando-list', 'import', 'community', 'archipelago'], default: 'manual' }
+      source: { type: String, enum: ['manual', 'rando-list', 'import', 'community', 'archipelago', 'apworld'], default: 'manual' }
     }],
     // Guides et tutoriels
     guides: [{
@@ -60,7 +62,7 @@ const gameSchema = new mongoose.Schema({
       description: String,
       translations: { type: mongoose.Schema.Types.Mixed, default: {} },
       type: { type: String, enum: ['guide', 'tutorial', 'wiki', 'video'], default: 'guide' },
-      source: { type: String, enum: ['manual', 'rando-list', 'import', 'community', 'archipelago'], default: 'manual' }
+      source: { type: String, enum: ['manual', 'rando-list', 'import', 'community', 'archipelago', 'apworld'], default: 'manual' }
     }],
     // Autres ressources (Discord, forums, etc.)
     other: [{
@@ -69,7 +71,7 @@ const gameSchema = new mongoose.Schema({
       description: String,
       translations: { type: mongoose.Schema.Types.Mixed, default: {} },
       type: { type: String, default: 'resource' },
-      source: { type: String, enum: ['manual', 'rando-list', 'import', 'community', 'archipelago'], default: 'manual' }
+      source: { type: String, enum: ['manual', 'rando-list', 'import', 'community', 'archipelago', 'apworld'], default: 'manual' }
     }]
   },
   
@@ -162,12 +164,20 @@ const gameSchema = new mongoose.Schema({
       gameName: String,
       confidence: { type: String, enum: ['manual', 'auto'], default: 'manual' },
       lastSync: Date
+    },
+    // Community APWorlds list (spreadsheet), kept in sync by scripts/sync-community-apworlds.js
+    apworld: {
+      enabled: { type: Boolean, default: false },
+      gameNames: [String],          // names of the game's rows in the list
+      mature: { type: Boolean, default: false }, // flagged 18+ / unrated there
+      confidence: { type: String, enum: ['manual', 'auto'], default: 'manual' },
+      lastSync: Date
     }
   },
   
   // === METADATA ===
   source: {
-    origin: { type: String, enum: ['seed', 'csv-import', 'rando-list', 'manual', 'archipelago'], default: 'manual' },
+    origin: { type: String, enum: ['seed', 'csv-import', 'rando-list', 'manual', 'archipelago', 'apworld'], default: 'manual' },
     importedAt: Date
   },
   enabled: { type: Boolean, default: true }

@@ -327,14 +327,16 @@ router.get('/:id/resources', async (req, res, next) => {
     
     // Filtrer les sites obsolètes pour l'affichage, ainsi que les liens génériques
     // vers archipelago.gg / multiworld.gg (rando-list) quand le jeu a sa page sur ce site.
-    // Les APWorlds communautaires s'effacent aussi derrière ces pages (sans être supprimés)
+    // Les APWorlds communautaires d'autres sources (rando-list, ajout à la main) s'effacent
+    // aussi derrière ces pages (sans être supprimés) ; ceux du tableur (source "apworld")
+    // sont déjà triés par sync-community-apworlds.js, qui garde les variantes
     const syncedHosts = new Set((resources.sites || [])
       .filter(s => s.source === 'archipelago')
       .map(s => multiworldHost(s.url)));
     const activeSites = (resources.sites || []).filter(s =>
       !s.isObsolete &&
       !(s.source !== 'archipelago' && syncedHosts.has(multiworldHost(s.url))) &&
-      !(syncedHosts.size && isCommunityApworld(s)));
+      !(syncedHosts.size && s.source !== 'apworld' && isCommunityApworld(s)));
 
     res.json({
       officialSite,

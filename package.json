@@ -55,6 +55,8 @@
     "sync-rando-list:detect": "node scripts/sync-rando-list.js --detect-new",
     "sync:archipelago": "node scripts/sync-archipelago-games.js",
     "sync:archipelago:dry": "node scripts/sync-archipelago-games.js --dry-run",
+    "sync:apworlds": "node scripts/sync-community-apworlds.js",
+    "sync:apworlds:dry": "node scripts/sync-community-apworlds.js --dry-run",
     "import-games": "node scripts/import-games-csv.js",
     "enrich-games": "node scripts/enrich-games.js",
     "db:backup": "node scripts/backup-db.js",

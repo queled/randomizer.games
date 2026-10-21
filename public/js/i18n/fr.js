@@ -184,6 +184,7 @@ const fr = {
         resourceSites: "Sites",
         resourceMultiworld: "Archipelago & Multiworld",
         communityApworld: "APWorld communautaire (non officiel)",
+        apworldBroken: "Broken on Main : ne fonctionne plus avec la version actuelle d’Archipelago",
         resourceGenerateSeed: "Générer une seed",
         resourceTrackers: "Trackers",
         resourceGuides: "Guides",

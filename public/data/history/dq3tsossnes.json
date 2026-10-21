@@ -1,0 +1,58 @@
+{
+  "intro": {
+    "fr": "Dragon Quest III: Heavenly Flight, de cleartonic, est un randomizer d'objets clés pour le remake Super Famicom de Dragon Quest III, en japonais ou avec sa traduction anglaise de fans.",
+    "en": "cleartonic's Dragon Quest III: Heavenly Flight is a key item randomizer for the Super Famicom remake of Dragon Quest III, in Japanese or with its English fan translation."
+  },
+  "events": [
+    {
+      "date": "1996",
+      "title": {
+        "fr": "Le remake Super Famicom",
+        "en": "The Super Famicom remake"
+      },
+      "text": {
+        "fr": "Dragon Quest III, sorti sur Famicom en 1988, est refait par Heartbeat sur Super Famicom, où Enix le sort au Japon le 6 décembre 1996. Ce remake n'est jamais sorti officiellement en Occident.",
+        "en": "Dragon Quest III, released on the Famicom in 1988, is remade by Heartbeat on the Super Famicom, where Enix releases it in Japan on December 6, 1996. This remake never came out officially in the West."
+      }
+    },
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Heavenly Flight",
+        "en": "Heavenly Flight"
+      },
+      "text": {
+        "fr": "cleartonic crée le projet le 17 avril 2021 et publie la v.01 alpha le 23 avril, en invitant à rejoindre le Discord pour tester les bugs, puis la v.02 le 29 décembre 2021. Le randomizer mélange les objets clés de progression entre les emplacements du jeu, ainsi que les coffres, les objets cachés, les récompenses d'événements et les boutiques.",
+        "en": "cleartonic creates the project on April 17, 2021 and releases v.01 alpha on April 23, inviting players to join the Discord to test for bugs, then v.02 on December 29, 2021. The randomizer shuffles the progression key items among the game's locations, along with chests, hidden items, event rewards and shops."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Un jeu accéléré",
+        "en": "A faster game"
+      },
+      "text": {
+        "fr": "Pour la randomisation, l'expérience est multipliée par 4 par défaut, chaque petite médaille donne sa propre récompense, et le changement de classe à Dharma ne dépend plus du niveau.",
+        "en": "For randomization, experience is multiplied by 4 by default, each Small Medal gives its own reward, and class changes at Dharma no longer depend on level."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "cleartonic.net — Dragon Quest III: Heavenly Flight",
+      "url": "https://cleartonic.net/dq3hf/dq3hf.html"
+    },
+    {
+      "label": "cleartonic/dq3hf (GitHub)",
+      "url": "https://github.com/cleartonic/dq3hf"
+    },
+    {
+      "label": "Wikipedia — Dragon Quest III",
+      "url": "https://en.wikipedia.org/wiki/Dragon_Quest_III"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "intro": {
+    "fr": "Dragon Warrior Monsters 2 se randomise sur ses deux versions Game Boy Color, Tara's Adventure et Cobi's Journey : d'abord avec le randomizer de Bynine en 2017, puis avec celui, plus complet, de TheCowness.",
+    "en": "Dragon Warrior Monsters 2 is randomized on both its Game Boy Color versions, Tara's Adventure and Cobi's Journey: first with Bynine's randomizer in 2017, then with TheCowness's more complete one."
+  },
+  "events": [
+    {
+      "date": "2001",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Tose développe Dragon Quest Monsters 2, qu'Enix sort sur Game Boy Color au Japon le 9 mars 2001, en deux versions. Elles arrivent en Amérique du Nord le 25 septembre 2001 sous les noms de Dragon Warrior Monsters 2: Tara's Adventure et Cobi's Journey.",
+        "en": "Tose develops Dragon Quest Monsters 2, which Enix releases on the Game Boy Color in Japan on March 9, 2001, in two versions. They reach North America on September 25, 2001 as Dragon Warrior Monsters 2: Tara's Adventure and Cobi's Journey."
+      }
+    },
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le randomizer de Bynine",
+        "en": "Bynine's randomizer"
+      },
+      "text": {
+        "fr": "Le 24 février 2017, Bynine publie sur le forum Dragon's Den la version 1.0 d'un randomizer écrit « sur un coup de tête » en quelques jours. Il fonctionne avec l'une ou l'autre version, change les monstres rencontrés ou reçus lors des événements, y compris celui de départ, et peut modifier les caractéristiques des monstres.",
+        "en": "On February 24, 2017, Bynine posts on the Dragon's Den forum version 1.0 of a randomizer written \"on a whim\" over a couple of days. It works with either version, changes the monsters met or received in events, including the starting one, and can alter the monsters' characteristics."
+      }
+    },
+    {
+      "date": "2017-2019",
+      "title": {
+        "fr": "Le randomizer de TheCowness",
+        "en": "TheCowness's randomizer"
+      },
+      "text": {
+        "fr": "TheCowness crée en avril 2017 un randomizer plus complet, que Bynine recommande ensuite dans une mise à jour de son message, et le fait évoluer jusqu'en 2019. Il se génère en ligne et randomise la croissance, les résistances et les compétences des monstres ainsi que les rencontres, avec un monstre de départ au choix, des réglages d'expérience et de statistiques, et un « Yeti Mode » où presque tous les monstres sont des yétis.",
+        "en": "TheCowness creates a more complete randomizer in April 2017, which Bynine later recommends in an update to the original post, and develops it until 2019. It is generated online and randomizes monster growth, resistances and skills as well as encounters, with a selectable starting monster, experience and stat settings, and a \"Yeti Mode\" where almost every monster is a yeti."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Dragon's Den — Dragon Warrior Monsters 2 Randomizer",
+      "url": "https://www.woodus.com/forums/topic/36046-dragon-warrior-monsters-2-randomizer/"
+    },
+    {
+      "label": "TheCowness/DWM2Randomizer (GitHub)",
+      "url": "https://github.com/TheCowness/DWM2Randomizer"
+    },
+    {
+      "label": "Wikipedia — Dragon Warrior Monsters 2",
+      "url": "https://en.wikipedia.org/wiki/Dragon_Warrior_Monsters_2"
+    }
+  ]
+}

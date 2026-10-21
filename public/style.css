@@ -2626,10 +2626,10 @@ body.spoiler-mode .spoiler-text::before {
         height: 28px;
     }
 
-    /* Show mobile menu toggle */
+    /* Show mobile menu toggle, top right, with the spoiler switch on its left */
     .mobile-menu-toggle {
         display: block;
-        margin-left: auto;
+        order: 1;
     }
 
     /* Hide search on mobile header (can be in menu) */
@@ -2890,6 +2890,7 @@ body.spoiler-mode .spoiler-text::before {
 
     /* Spoiler toggle */
     .spoiler-toggle-container {
+        margin-left: auto;
         margin-right: 0.5rem;
     }
 

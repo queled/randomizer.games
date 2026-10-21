@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "The Murder of Sonic the Hedgehog se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "The Murder of Sonic the Hedgehog can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub TwinklePillar/MurderOfSonicAP, qui héberge l'APWorld de The Murder of Sonic the Hedgehog.",
+        "en": "The GitHub repository TwinklePillar/MurderOfSonicAP, home of the The Murder of Sonic the Hedgehog APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.1.0-alpha.",
+        "en": "The first version, v0.1.0-alpha, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v0.4.0-beta, la plus récente au 21 octobre 2026 (7 versions publiées).",
+        "en": "Version v0.4.0-beta is released, the latest as of October 21, 2026 (7 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "The Murder of Sonic the Hedgehog figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "The Murder of Sonic the Hedgehog is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — TwinklePillar/MurderOfSonicAP",
+      "url": "https://github.com/TwinklePillar/MurderOfSonicAP"
+    },
+    {
+      "label": "GitHub — TwinklePillar/MurderOfSonicAP (releases)",
+      "url": "https://github.com/TwinklePillar/MurderOfSonicAP/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Dracomino se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Dracomino can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Janvier 2026",
+        "en": "January 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub DragonWolfLeo/DracominoAPWorld, qui héberge l'APWorld de Dracomino.",
+        "en": "The GitHub repository DragonWolfLeo/DracominoAPWorld, home of the Dracomino APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2026",
+        "en": "January 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.2.0.",
+        "en": "The first version, v0.2.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2026",
+        "en": "April 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v0.3.0, la plus récente au 21 octobre 2026 (3 versions publiées).",
+        "en": "Version v0.3.0 is released, the latest as of October 21, 2026 (3 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Dracomino figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Dracomino is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — DragonWolfLeo/DracominoAPWorld",
+      "url": "https://github.com/DragonWolfLeo/DracominoAPWorld"
+    },
+    {
+      "label": "GitHub — DragonWolfLeo/DracominoAPWorld (releases)",
+      "url": "https://github.com/DragonWolfLeo/DracominoAPWorld/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

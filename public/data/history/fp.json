@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Factorio Platformer se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Factorio Platformer can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Janvier 2026",
+        "en": "January 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub lepideble/factorio-apworld, qui héberge l'APWorld de Factorio Platformer.",
+        "en": "The GitHub repository lepideble/factorio-apworld, home of the Factorio Platformer APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2026",
+        "en": "April 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, platformer-0.1.0.",
+        "en": "The first version, platformer-0.1.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version platformer-0.4.6, la plus récente au 21 octobre 2026 (12 versions publiées).",
+        "en": "Version platformer-0.4.6 is released, the latest as of October 21, 2026 (12 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Factorio Platformer figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Factorio Platformer is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — lepideble/factorio-apworld",
+      "url": "https://github.com/lepideble/factorio-apworld"
+    },
+    {
+      "label": "GitHub — lepideble/factorio-apworld (releases)",
+      "url": "https://github.com/lepideble/factorio-apworld/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

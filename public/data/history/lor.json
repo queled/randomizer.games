@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Library of Ruina se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Library of Ruina can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Août 2024",
+        "en": "August 2024"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub Az-LastPenguin/LORAP, qui héberge l'APWorld de Library of Ruina.",
+        "en": "The GitHub repository Az-LastPenguin/LORAP, home of the Library of Ruina APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2024",
+        "en": "August 2024"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.1 (préversion).",
+        "en": "The first version, v0.1 (pre-release), is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v1.0.0-eta.3, la plus récente au 21 octobre 2026 (15 versions publiées).",
+        "en": "Version v1.0.0-eta.3 is released, the latest as of October 21, 2026 (15 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Library of Ruina figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Library of Ruina is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — Az-LastPenguin/LORAP",
+      "url": "https://github.com/Az-LastPenguin/LORAP"
+    },
+    {
+      "label": "GitHub — Az-LastPenguin/LORAP (releases)",
+      "url": "https://github.com/Az-LastPenguin/LORAP/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

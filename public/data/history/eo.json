@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Etrian Odyssey se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Etrian Odyssey can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Mars 2026",
+        "en": "March 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub TheMasterZelda/Etrian_Odyssey_1_Archipelago, qui héberge l'APWorld de Etrian Odyssey.",
+        "en": "The GitHub repository TheMasterZelda/Etrian_Odyssey_1_Archipelago, home of the Etrian Odyssey APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.1.0.",
+        "en": "The first version, v0.1.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v0.4.1, la plus récente au 21 octobre 2026 (6 versions publiées).",
+        "en": "Version v0.4.1 is released, the latest as of October 21, 2026 (6 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Etrian Odyssey figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Etrian Odyssey is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — TheMasterZelda/Etrian_Odyssey_1_Archipelago",
+      "url": "https://github.com/TheMasterZelda/Etrian_Odyssey_1_Archipelago"
+    },
+    {
+      "label": "GitHub — TheMasterZelda/Etrian_Odyssey_1_Archipelago (releases)",
+      "url": "https://github.com/TheMasterZelda/Etrian_Odyssey_1_Archipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "holo8 se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "holo8 can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Mai 2025",
+        "en": "May 2025"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub KitLemonfoot/ArchipelagoHolo8, qui héberge l'APWorld de holo8.",
+        "en": "The GitHub repository KitLemonfoot/ArchipelagoHolo8, home of the holo8 APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2025",
+        "en": "May 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, alpha_v0.1.0.",
+        "en": "The first version, alpha_v0.1.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2025",
+        "en": "December 2025"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v0.3.0-alpha, la plus récente au 21 octobre 2026 (7 versions publiées).",
+        "en": "Version v0.3.0-alpha is released, the latest as of October 21, 2026 (7 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "holo8 figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "holo8 is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — KitLemonfoot/ArchipelagoHolo8",
+      "url": "https://github.com/KitLemonfoot/ArchipelagoHolo8"
+    },
+    {
+      "label": "GitHub — KitLemonfoot/ArchipelagoHolo8 (releases)",
+      "url": "https://github.com/KitLemonfoot/ArchipelagoHolo8/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

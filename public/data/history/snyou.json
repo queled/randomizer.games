@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Santa Needs YOU! se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Santa Needs YOU! can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Décembre 2023",
+        "en": "December 2023"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub Ishigh1/Santa_AP, qui héberge l'APWorld de Santa Needs YOU!.",
+        "en": "The GitHub repository Ishigh1/Santa_AP, home of the Santa Needs YOU! APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2023",
+        "en": "December 2023"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, 1.0.",
+        "en": "The first version, 1.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2023",
+        "en": "December 2023"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version 1.1.4, la plus récente au 21 octobre 2026 (6 versions publiées).",
+        "en": "Version 1.1.4 is released, the latest as of October 21, 2026 (6 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Santa Needs YOU! figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Santa Needs YOU! is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — Ishigh1/Santa_AP",
+      "url": "https://github.com/Ishigh1/Santa_AP"
+    },
+    {
+      "label": "GitHub — Ishigh1/Santa_AP (releases)",
+      "url": "https://github.com/Ishigh1/Santa_AP/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

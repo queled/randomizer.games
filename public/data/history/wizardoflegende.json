@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Wizard of Legende se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Wizard of Legende can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub Skelrin/WoLArchipelago, qui héberge l'APWorld de Wizard of Legende.",
+        "en": "The GitHub repository Skelrin/WoLArchipelago, home of the Wizard of Legende APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.2.0 (préversion).",
+        "en": "The first version, v0.2.0 (pre-release), is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v1.0.0, la plus récente au 21 octobre 2026 (10 versions publiées).",
+        "en": "Version v1.0.0 is released, the latest as of October 21, 2026 (10 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Wizard of Legende figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Wizard of Legende is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — Skelrin/WoLArchipelago",
+      "url": "https://github.com/Skelrin/WoLArchipelago"
+    },
+    {
+      "label": "GitHub — Skelrin/WoLArchipelago (releases)",
+      "url": "https://github.com/Skelrin/WoLArchipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

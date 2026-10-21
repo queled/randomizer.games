@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Elementipelago se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Elementipelago can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Décembre 2025",
+        "en": "December 2025"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub peppidesu/elementipelago, qui héberge l'APWorld de Elementipelago.",
+        "en": "The GitHub repository peppidesu/elementipelago, home of the Elementipelago APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2025",
+        "en": "December 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.1.0-alpha (préversion).",
+        "en": "The first version, v0.1.0-alpha (pre-release), is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v1.1.0, la plus récente au 21 octobre 2026 (8 versions publiées).",
+        "en": "Version v1.1.0 is released, the latest as of October 21, 2026 (8 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Elementipelago figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Elementipelago is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — peppidesu/elementipelago",
+      "url": "https://github.com/peppidesu/elementipelago"
+    },
+    {
+      "label": "GitHub — peppidesu/elementipelago (releases)",
+      "url": "https://github.com/peppidesu/elementipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "intro": {
+    "fr": "Perfect Dark se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Perfect Dark can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, pd-v0.1.0.",
+        "en": "The first version, pd-v0.1.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version pd-v0.7.0, la plus récente des 11 versions au nom du jeu sur ce dépôt au 21 octobre 2026.",
+        "en": "Version pd-v0.7.0 is released, the latest of the 11 versions named after the game on this repository as of October 21, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Perfect Dark figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Perfect Dark is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — ajeloom/Perfect-Dark-PC-AP",
+      "url": "https://github.com/ajeloom/Perfect-Dark-PC-AP"
+    },
+    {
+      "label": "GitHub — ajeloom/Perfect-Dark-PC-AP (releases)",
+      "url": "https://github.com/ajeloom/Perfect-Dark-PC-AP/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

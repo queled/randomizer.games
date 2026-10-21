@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Huniecam Studio se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Huniecam Studio can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Décembre 2025",
+        "en": "December 2025"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub DotsofdarknessArchipelago/Hunie-Cam-Studio-Archipelago, qui héberge l'APWorld de Huniecam Studio.",
+        "en": "The GitHub repository DotsofdarknessArchipelago/Hunie-Cam-Studio-Archipelago, home of the Huniecam Studio APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2025",
+        "en": "December 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, V0.1.0.",
+        "en": "The first version, V0.1.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version 0.4.0, la plus récente au 21 octobre 2026 (7 versions publiées).",
+        "en": "Version 0.4.0 is released, the latest as of October 21, 2026 (7 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Huniecam Studio figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Huniecam Studio is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — DotsofdarknessArchipelago/Hunie-Cam-Studio-Archipelago",
+      "url": "https://github.com/DotsofdarknessArchipelago/Hunie-Cam-Studio-Archipelago"
+    },
+    {
+      "label": "GitHub — DotsofdarknessArchipelago/Hunie-Cam-Studio-Archipelago (releases)",
+      "url": "https://github.com/DotsofdarknessArchipelago/Hunie-Cam-Studio-Archipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

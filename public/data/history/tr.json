@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Time Rifters se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Time Rifters can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub johnny1754/TimeRifters-Archipelago, qui héberge l'APWorld de Time Rifters.",
+        "en": "The GitHub repository johnny1754/TimeRifters-Archipelago, home of the Time Rifters APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.5.7 (préversion).",
+        "en": "The first version, v0.5.7 (pre-release), is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v1.0.13, la plus récente au 21 octobre 2026 (7 versions publiées).",
+        "en": "Version v1.0.13 is released, the latest as of October 21, 2026 (7 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Time Rifters figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Time Rifters is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — johnny1754/TimeRifters-Archipelago",
+      "url": "https://github.com/johnny1754/TimeRifters-Archipelago"
+    },
+    {
+      "label": "GitHub — johnny1754/TimeRifters-Archipelago (releases)",
+      "url": "https://github.com/johnny1754/TimeRifters-Archipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

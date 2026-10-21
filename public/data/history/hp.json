@@ -1,0 +1,64 @@
+{
+  "intro": {
+    "fr": "Hungry Pumkin se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Hungry Pumkin can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Mars 2026",
+        "en": "March 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub NotFamilyJules/hungry_pumkin_ap, qui héberge l'APWorld de Hungry Pumkin.",
+        "en": "The GitHub repository NotFamilyJules/hungry_pumkin_ap, home of the Hungry Pumkin APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2026",
+        "en": "March 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la version v0.1, seule version parue au 21 octobre 2026.",
+        "en": "Version v0.1 is released, the only one as of October 21, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Hungry Pumkin figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Hungry Pumkin is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — NotFamilyJules/hungry_pumkin_ap",
+      "url": "https://github.com/NotFamilyJules/hungry_pumkin_ap"
+    },
+    {
+      "label": "GitHub — NotFamilyJules/hungry_pumkin_ap (releases)",
+      "url": "https://github.com/NotFamilyJules/hungry_pumkin_ap/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

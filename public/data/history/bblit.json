@@ -1,0 +1,64 @@
+{
+  "intro": {
+    "fr": "Bugs Bunny Lost in Time se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Bugs Bunny Lost in Time can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub SynthKat67/BugsBunnylitAPWorld, qui héberge l'APWorld de Bugs Bunny Lost in Time.",
+        "en": "The GitHub repository SynthKat67/BugsBunnylitAPWorld, home of the Bugs Bunny Lost in Time APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la version v.0.2.0, seule version parue au 21 octobre 2026.",
+        "en": "Version v.0.2.0 is released, the only one as of October 21, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Bugs Bunny Lost in Time figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Bugs Bunny Lost in Time is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — SynthKat67/BugsBunnylitAPWorld",
+      "url": "https://github.com/SynthKat67/BugsBunnylitAPWorld"
+    },
+    {
+      "label": "GitHub — SynthKat67/BugsBunnylitAPWorld (releases)",
+      "url": "https://github.com/SynthKat67/BugsBunnylitAPWorld/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

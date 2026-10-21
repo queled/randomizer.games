@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Resident Evil 7 se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Resident Evil 7 can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Mars 2025",
+        "en": "March 2025"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub ElGrenier/RE7_AP_World, qui héberge l'APWorld de Resident Evil 7.",
+        "en": "The GitHub repository ElGrenier/RE7_AP_World, home of the Resident Evil 7 APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2025",
+        "en": "May 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, 0.0.5 (préversion).",
+        "en": "The first version, 0.0.5 (pre-release), is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version 0.4.0, la plus récente au 21 octobre 2026 (19 versions publiées).",
+        "en": "Version 0.4.0 is released, the latest as of October 21, 2026 (19 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Resident Evil 7 figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Resident Evil 7 is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — ElGrenier/RE7_AP_World",
+      "url": "https://github.com/ElGrenier/RE7_AP_World"
+    },
+    {
+      "label": "GitHub — ElGrenier/RE7_AP_World (releases)",
+      "url": "https://github.com/ElGrenier/RE7_AP_World/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

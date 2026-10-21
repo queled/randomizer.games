@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Muck se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Muck can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub PGMProductions/Muck-for-Archipelago, qui héberge l'APWorld de Muck.",
+        "en": "The GitHub repository PGMProductions/Muck-for-Archipelago, home of the Muck APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v1.0.0.",
+        "en": "The first version, v1.0.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v1.2.1, la plus récente au 21 octobre 2026 (6 versions publiées).",
+        "en": "Version v1.2.1 is released, the latest as of October 21, 2026 (6 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Muck figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Muck is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — PGMProductions/Muck-for-Archipelago",
+      "url": "https://github.com/PGMProductions/Muck-for-Archipelago"
+    },
+    {
+      "label": "GitHub — PGMProductions/Muck-for-Archipelago (releases)",
+      "url": "https://github.com/PGMProductions/Muck-for-Archipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Resident Evil 4 Remake se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Resident Evil 4 Remake can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub LiterallyMetaphorical/RE4R-AP-Wizard, qui héberge l'APWorld de Resident Evil 4 Remake.",
+        "en": "The GitHub repository LiterallyMetaphorical/RE4R-AP-Wizard, home of the Resident Evil 4 Remake APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.1.0-alpha (préversion).",
+        "en": "The first version, v0.1.0-alpha (pre-release), is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v0.6.0-beta, la plus récente au 21 octobre 2026 (8 versions publiées).",
+        "en": "Version v0.6.0-beta is released, the latest as of October 21, 2026 (8 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Resident Evil 4 Remake figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Resident Evil 4 Remake is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — LiterallyMetaphorical/RE4R-AP-Wizard",
+      "url": "https://github.com/LiterallyMetaphorical/RE4R-AP-Wizard"
+    },
+    {
+      "label": "GitHub — LiterallyMetaphorical/RE4R-AP-Wizard (releases)",
+      "url": "https://github.com/LiterallyMetaphorical/RE4R-AP-Wizard/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

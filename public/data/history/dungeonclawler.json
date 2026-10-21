@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Dungeon Clawler se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Dungeon Clawler can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Février 2025",
+        "en": "February 2025"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub agilbert1412/Clawrchipelago, qui héberge l'APWorld de Dungeon Clawler.",
+        "en": "The GitHub repository agilbert1412/Clawrchipelago, home of the Dungeon Clawler APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2025",
+        "en": "February 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, 1.0.0 (préversion).",
+        "en": "The first version, 1.0.0 (pre-release), is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2025",
+        "en": "May 2025"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version DE_1.0.0, la plus récente au 21 octobre 2026 (5 versions publiées).",
+        "en": "Version DE_1.0.0 is released, the latest as of October 21, 2026 (5 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Dungeon Clawler figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Dungeon Clawler is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — agilbert1412/Clawrchipelago",
+      "url": "https://github.com/agilbert1412/Clawrchipelago"
+    },
+    {
+      "label": "GitHub — agilbert1412/Clawrchipelago (releases)",
+      "url": "https://github.com/agilbert1412/Clawrchipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

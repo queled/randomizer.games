@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Johnny Upgrade se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Johnny Upgrade can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub barretg/johnny-upgrade-ap, qui héberge l'APWorld de Johnny Upgrade.",
+        "en": "The GitHub repository barretg/johnny-upgrade-ap, home of the Johnny Upgrade APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, 0.1-beta1 (préversion).",
+        "en": "The first version, 0.1-beta1 (pre-release), is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v1.4.2, la plus récente au 21 octobre 2026 (9 versions publiées).",
+        "en": "Version v1.4.2 is released, the latest as of October 21, 2026 (9 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Johnny Upgrade figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Johnny Upgrade is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — barretg/johnny-upgrade-ap",
+      "url": "https://github.com/barretg/johnny-upgrade-ap"
+    },
+    {
+      "label": "GitHub — barretg/johnny-upgrade-ap (releases)",
+      "url": "https://github.com/barretg/johnny-upgrade-ap/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

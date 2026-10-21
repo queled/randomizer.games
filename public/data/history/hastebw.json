@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "HASTE: Broken Worlds se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "HASTE: Broken Worlds can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Avril 2025",
+        "en": "April 2025"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub WritingHusky/haste_apworld, qui héberge l'APWorld de HASTE: Broken Worlds.",
+        "en": "The GitHub repository WritingHusky/haste_apworld, home of the HASTE: Broken Worlds APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2025",
+        "en": "April 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.1.0.",
+        "en": "The first version, v0.1.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v0.5.1, la plus récente au 21 octobre 2026 (9 versions publiées).",
+        "en": "Version v0.5.1 is released, the latest as of October 21, 2026 (9 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "HASTE: Broken Worlds figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "HASTE: Broken Worlds is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — WritingHusky/haste_apworld",
+      "url": "https://github.com/WritingHusky/haste_apworld"
+    },
+    {
+      "label": "GitHub — WritingHusky/haste_apworld (releases)",
+      "url": "https://github.com/WritingHusky/haste_apworld/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

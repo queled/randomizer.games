@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Super Chipflake Ü: Quest for the Uncooked Schnitzel se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Super Chipflake Ü: Quest for the Uncooked Schnitzel can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub Max-G4/Chipflake_AP, qui héberge l'APWorld de Super Chipflake Ü: Quest for the Uncooked Schnitzel.",
+        "en": "The GitHub repository Max-G4/Chipflake_AP, home of the Super Chipflake Ü: Quest for the Uncooked Schnitzel APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, tag1.",
+        "en": "The first version, tag1, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version latest, la plus récente au 21 octobre 2026 (2 versions publiées).",
+        "en": "Version latest is released, the latest as of October 21, 2026 (2 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Super Chipflake Ü: Quest for the Uncooked Schnitzel figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Super Chipflake Ü: Quest for the Uncooked Schnitzel is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — Max-G4/Chipflake_AP",
+      "url": "https://github.com/Max-G4/Chipflake_AP"
+    },
+    {
+      "label": "GitHub — Max-G4/Chipflake_AP (releases)",
+      "url": "https://github.com/Max-G4/Chipflake_AP/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Sonic Frontiers se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Sonic Frontiers can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Novembre 2025",
+        "en": "November 2025"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub OnakuTV/SonicFrontiersAPWorld, qui héberge l'APWorld de Sonic Frontiers.",
+        "en": "The GitHub repository OnakuTV/SonicFrontiersAPWorld, home of the Sonic Frontiers APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2026",
+        "en": "January 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.1.0.",
+        "en": "The first version, v0.1.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v0.2.2, la plus récente au 21 octobre 2026 (9 versions publiées).",
+        "en": "Version v0.2.2 is released, the latest as of October 21, 2026 (9 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Sonic Frontiers figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Sonic Frontiers is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — OnakuTV/SonicFrontiersAPWorld",
+      "url": "https://github.com/OnakuTV/SonicFrontiersAPWorld"
+    },
+    {
+      "label": "GitHub — OnakuTV/SonicFrontiersAPWorld (releases)",
+      "url": "https://github.com/OnakuTV/SonicFrontiersAPWorld/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

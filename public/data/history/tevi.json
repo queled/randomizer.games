@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Tevi se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Tevi can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Février 2024",
+        "en": "February 2024"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub BlackSoulKnight/Tevi_Randomizer, qui héberge l'APWorld de Tevi.",
+        "en": "The GitHub repository BlackSoulKnight/Tevi_Randomizer, home of the Tevi APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2024",
+        "en": "July 2024"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.9.9.4.",
+        "en": "The first version, v0.9.9.4, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v1.6.4, la plus récente au 21 octobre 2026 (43 versions publiées).",
+        "en": "Version v1.6.4 is released, the latest as of October 21, 2026 (43 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Tevi figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Tevi is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — BlackSoulKnight/Tevi_Randomizer",
+      "url": "https://github.com/BlackSoulKnight/Tevi_Randomizer"
+    },
+    {
+      "label": "GitHub — BlackSoulKnight/Tevi_Randomizer (releases)",
+      "url": "https://github.com/BlackSoulKnight/Tevi_Randomizer/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

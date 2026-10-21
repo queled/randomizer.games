@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Prodigal se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Prodigal can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Septembre 2023",
+        "en": "September 2023"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub randomsalience/ProdigalArchipelago, qui héberge l'APWorld de Prodigal.",
+        "en": "The GitHub repository randomsalience/ProdigalArchipelago, home of the Prodigal APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2023",
+        "en": "September 2023"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.1.0.",
+        "en": "The first version, v0.1.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v0.2.4, la plus récente au 21 octobre 2026 (12 versions publiées).",
+        "en": "Version v0.2.4 is released, the latest as of October 21, 2026 (12 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Prodigal figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Prodigal is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — randomsalience/ProdigalArchipelago",
+      "url": "https://github.com/randomsalience/ProdigalArchipelago"
+    },
+    {
+      "label": "GitHub — randomsalience/ProdigalArchipelago (releases)",
+      "url": "https://github.com/randomsalience/ProdigalArchipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Bubble Bobble se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Bubble Bobble can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub sensokaeru/bubblebobbleAP, qui héberge l'APWorld de Bubble Bobble.",
+        "en": "The GitHub repository sensokaeru/bubblebobbleAP, home of the Bubble Bobble APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, 1.1.1.",
+        "en": "The first version, 1.1.1, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v1.2.2, la plus récente au 21 octobre 2026 (10 versions publiées).",
+        "en": "Version v1.2.2 is released, the latest as of October 21, 2026 (10 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Bubble Bobble figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Bubble Bobble is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — sensokaeru/bubblebobbleAP",
+      "url": "https://github.com/sensokaeru/bubblebobbleAP"
+    },
+    {
+      "label": "GitHub — sensokaeru/bubblebobbleAP (releases)",
+      "url": "https://github.com/sensokaeru/bubblebobbleAP/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Cobalt Core se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Cobalt Core can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Janvier 2026",
+        "en": "January 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub Isaac-SOL/CobaltCoreArchipelagoMod, qui héberge l'APWorld de Cobalt Core.",
+        "en": "The GitHub repository Isaac-SOL/CobaltCoreArchipelagoMod, home of the Cobalt Core APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2026",
+        "en": "January 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, release/1.0.0.",
+        "en": "The first version, release/1.0.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version release/1.2.3, la plus récente au 21 octobre 2026 (18 versions publiées).",
+        "en": "Version release/1.2.3 is released, the latest as of October 21, 2026 (18 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Cobalt Core figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Cobalt Core is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — Isaac-SOL/CobaltCoreArchipelagoMod",
+      "url": "https://github.com/Isaac-SOL/CobaltCoreArchipelagoMod"
+    },
+    {
+      "label": "GitHub — Isaac-SOL/CobaltCoreArchipelagoMod (releases)",
+      "url": "https://github.com/Isaac-SOL/CobaltCoreArchipelagoMod/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "intro": {
+    "fr": "Layer8Problem se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Layer8Problem can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, Layer8Problem.",
+        "en": "The first version, Layer8Problem, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v0.9.3, la plus récente des 15 versions au nom du jeu sur ce dépôt au 21 octobre 2026.",
+        "en": "Version v0.9.3 is released, the latest of the 15 versions named after the game on this repository as of October 21, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Layer8Problem figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Layer8Problem is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — TheZockerBrain069/Layer8Problem-AP",
+      "url": "https://github.com/TheZockerBrain069/Layer8Problem-AP"
+    },
+    {
+      "label": "GitHub — TheZockerBrain069/Layer8Problem-AP (releases)",
+      "url": "https://github.com/TheZockerBrain069/Layer8Problem-AP/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

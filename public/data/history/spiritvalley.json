@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Spirit Valley se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Spirit Valley can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Septembre 2025",
+        "en": "September 2025"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub DotsofdarknessArchipelago/Spirit-Valley-Archipelago, qui héberge l'APWorld de Spirit Valley.",
+        "en": "The GitHub repository DotsofdarknessArchipelago/Spirit-Valley-Archipelago, home of the Spirit Valley APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2025",
+        "en": "September 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, V0.1.0.",
+        "en": "The first version, V0.1.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version V2.1.1, la plus récente au 21 octobre 2026 (20 versions publiées).",
+        "en": "Version V2.1.1 is released, the latest as of October 21, 2026 (20 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Spirit Valley figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Spirit Valley is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — DotsofdarknessArchipelago/Spirit-Valley-Archipelago",
+      "url": "https://github.com/DotsofdarknessArchipelago/Spirit-Valley-Archipelago"
+    },
+    {
+      "label": "GitHub — DotsofdarknessArchipelago/Spirit-Valley-Archipelago (releases)",
+      "url": "https://github.com/DotsofdarknessArchipelago/Spirit-Valley-Archipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

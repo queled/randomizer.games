@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Star Fox Adventures se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Star Fox Adventures can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Janvier 2026",
+        "en": "January 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub MichelFenouil/SFA-Archipelago, qui héberge l'APWorld de Star Fox Adventures.",
+        "en": "The GitHub repository MichelFenouil/SFA-Archipelago, home of the Star Fox Adventures APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2026",
+        "en": "March 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, sfa-0.1.0.",
+        "en": "The first version, sfa-0.1.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2026",
+        "en": "March 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version sfa-0.1.2, la plus récente au 21 octobre 2026 (3 versions publiées).",
+        "en": "Version sfa-0.1.2 is released, the latest as of October 21, 2026 (3 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Star Fox Adventures figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Star Fox Adventures is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — MichelFenouil/SFA-Archipelago",
+      "url": "https://github.com/MichelFenouil/SFA-Archipelago"
+    },
+    {
+      "label": "GitHub — MichelFenouil/SFA-Archipelago (releases)",
+      "url": "https://github.com/MichelFenouil/SFA-Archipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

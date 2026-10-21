@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Hi-Fi Rush se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Hi-Fi Rush can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Octobre 2025",
+        "en": "October 2025"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub TRPG0/HbkArchipelago, qui héberge l'APWorld de Hi-Fi Rush.",
+        "en": "The GitHub repository TRPG0/HbkArchipelago, home of the Hi-Fi Rush APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2025",
+        "en": "November 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, 0.1.0.",
+        "en": "The first version, 0.1.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version 0.3.1, la plus récente au 21 octobre 2026 (9 versions publiées).",
+        "en": "Version 0.3.1 is released, the latest as of October 21, 2026 (9 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Hi-Fi Rush figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Hi-Fi Rush is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — TRPG0/HbkArchipelago",
+      "url": "https://github.com/TRPG0/HbkArchipelago"
+    },
+    {
+      "label": "GitHub — TRPG0/HbkArchipelago (releases)",
+      "url": "https://github.com/TRPG0/HbkArchipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

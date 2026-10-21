@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "C&C Reloaded se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "C&C Reloaded can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub Heinki/Reloaded-Randomizer, qui héberge l'APWorld de C&C Reloaded.",
+        "en": "The GitHub repository Heinki/Reloaded-Randomizer, home of the C&C Reloaded APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, V1.0.",
+        "en": "The first version, V1.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version V1.8, la plus récente au 21 octobre 2026 (9 versions publiées).",
+        "en": "Version V1.8 is released, the latest as of October 21, 2026 (9 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "C&C Reloaded figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "C&C Reloaded is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — Heinki/Reloaded-Randomizer",
+      "url": "https://github.com/Heinki/Reloaded-Randomizer"
+    },
+    {
+      "label": "GitHub — Heinki/Reloaded-Randomizer (releases)",
+      "url": "https://github.com/Heinki/Reloaded-Randomizer/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

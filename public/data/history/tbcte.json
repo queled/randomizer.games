@@ -1,0 +1,64 @@
+{
+  "intro": {
+    "fr": "Turnip Boy Commits Tax Evasion se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Turnip Boy Commits Tax Evasion can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Décembre 2024",
+        "en": "December 2024"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub pointfivetee/TurnipBoyRandomizer, qui héberge l'APWorld de Turnip Boy Commits Tax Evasion.",
+        "en": "The GitHub repository pointfivetee/TurnipBoyRandomizer, home of the Turnip Boy Commits Tax Evasion APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la version v0.1.4, seule version parue au 21 octobre 2026.",
+        "en": "Version v0.1.4 is released, the only one as of October 21, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Turnip Boy Commits Tax Evasion figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Turnip Boy Commits Tax Evasion is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — pointfivetee/TurnipBoyRandomizer",
+      "url": "https://github.com/pointfivetee/TurnipBoyRandomizer"
+    },
+    {
+      "label": "GitHub — pointfivetee/TurnipBoyRandomizer (releases)",
+      "url": "https://github.com/pointfivetee/TurnipBoyRandomizer/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

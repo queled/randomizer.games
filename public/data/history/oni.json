@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Oxygen Not Included se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Oxygen Not Included can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Décembre 2024",
+        "en": "December 2024"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub ShadowKitty42/ONI-Archipelago, qui héberge l'APWorld de Oxygen Not Included.",
+        "en": "The GitHub repository ShadowKitty42/ONI-Archipelago, home of the Oxygen Not Included APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2024",
+        "en": "December 2024"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.1.",
+        "en": "The first version, v0.1, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v0.9.11, la plus récente au 21 octobre 2026 (16 versions publiées).",
+        "en": "Version v0.9.11 is released, the latest as of October 21, 2026 (16 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Oxygen Not Included figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Oxygen Not Included is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — ShadowKitty42/ONI-Archipelago",
+      "url": "https://github.com/ShadowKitty42/ONI-Archipelago"
+    },
+    {
+      "label": "GitHub — ShadowKitty42/ONI-Archipelago (releases)",
+      "url": "https://github.com/ShadowKitty42/ONI-Archipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

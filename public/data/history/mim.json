@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Mario is Missing se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Mario is Missing can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juillet 2025",
+        "en": "July 2025"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub TheRealSolidusSnake/Mario-Is-Missing, qui héberge l'APWorld de Mario is Missing.",
+        "en": "The GitHub repository TheRealSolidusSnake/Mario-Is-Missing, home of the Mario is Missing APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2025",
+        "en": "July 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, 0.0.1.",
+        "en": "The first version, 0.0.1, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version 0.0.3, la plus récente au 21 octobre 2026 (3 versions publiées).",
+        "en": "Version 0.0.3 is released, the latest as of October 21, 2026 (3 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Mario is Missing figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Mario is Missing is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — TheRealSolidusSnake/Mario-Is-Missing",
+      "url": "https://github.com/TheRealSolidusSnake/Mario-Is-Missing"
+    },
+    {
+      "label": "GitHub — TheRealSolidusSnake/Mario-Is-Missing (releases)",
+      "url": "https://github.com/TheRealSolidusSnake/Mario-Is-Missing/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Age of Mythology: Retold se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Age of Mythology: Retold can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Mars 2026",
+        "en": "March 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub 1-800-thewolf/AoM-Archipelago, qui héberge l'APWorld de Age of Mythology: Retold.",
+        "en": "The GitHub repository 1-800-thewolf/AoM-Archipelago, home of the Age of Mythology: Retold APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2026",
+        "en": "April 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.1.0.",
+        "en": "The first version, v0.1.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v1.3.7, la plus récente au 21 octobre 2026 (30 versions publiées).",
+        "en": "Version v1.3.7 is released, the latest as of October 21, 2026 (30 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Age of Mythology: Retold figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Age of Mythology: Retold is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — 1-800-thewolf/AoM-Archipelago",
+      "url": "https://github.com/1-800-thewolf/AoM-Archipelago"
+    },
+    {
+      "label": "GitHub — 1-800-thewolf/AoM-Archipelago (releases)",
+      "url": "https://github.com/1-800-thewolf/AoM-Archipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

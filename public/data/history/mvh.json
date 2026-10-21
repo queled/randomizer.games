@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Minecraft: Vault Hunters se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Minecraft: Vault Hunters can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Janvier 2026",
+        "en": "January 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub Studmuffin2227/VHAPMod, qui héberge l'APWorld de Minecraft: Vault Hunters.",
+        "en": "The GitHub repository Studmuffin2227/VHAPMod, home of the Minecraft: Vault Hunters APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, Version 1.0.0.",
+        "en": "The first version, Version 1.0.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v1.3.1, la plus récente au 21 octobre 2026 (14 versions publiées).",
+        "en": "Version v1.3.1 is released, the latest as of October 21, 2026 (14 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Minecraft: Vault Hunters figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Minecraft: Vault Hunters is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — Studmuffin2227/VHAPMod",
+      "url": "https://github.com/Studmuffin2227/VHAPMod"
+    },
+    {
+      "label": "GitHub — Studmuffin2227/VHAPMod (releases)",
+      "url": "https://github.com/Studmuffin2227/VHAPMod/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

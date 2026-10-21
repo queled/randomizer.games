@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Mario Tennis se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Mario Tennis can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub gerbiljames/mario-tennis-gbc-disasm, qui héberge l'APWorld de Mario Tennis.",
+        "en": "The GitHub repository gerbiljames/mario-tennis-gbc-disasm, home of the Mario Tennis APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, apworld-v0.1.0.",
+        "en": "The first version, apworld-v0.1.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version apworld-v0.2.0, la plus récente au 21 octobre 2026 (2 versions publiées).",
+        "en": "Version apworld-v0.2.0 is released, the latest as of October 21, 2026 (2 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Mario Tennis figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Mario Tennis is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — gerbiljames/mario-tennis-gbc-disasm",
+      "url": "https://github.com/gerbiljames/mario-tennis-gbc-disasm"
+    },
+    {
+      "label": "GitHub — gerbiljames/mario-tennis-gbc-disasm (releases)",
+      "url": "https://github.com/gerbiljames/mario-tennis-gbc-disasm/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

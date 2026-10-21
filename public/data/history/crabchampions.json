@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Crab Champions se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Crab Champions can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub Str8UpWHITE64/CrabChampionsAP, qui héberge l'APWorld de Crab Champions.",
+        "en": "The GitHub repository Str8UpWHITE64/CrabChampionsAP, home of the Crab Champions APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, 0.1.0.",
+        "en": "The first version, 0.1.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version 1.4.0, la plus récente au 21 octobre 2026 (13 versions publiées).",
+        "en": "Version 1.4.0 is released, the latest as of October 21, 2026 (13 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Crab Champions figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Crab Champions is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — Str8UpWHITE64/CrabChampionsAP",
+      "url": "https://github.com/Str8UpWHITE64/CrabChampionsAP"
+    },
+    {
+      "label": "GitHub — Str8UpWHITE64/CrabChampionsAP (releases)",
+      "url": "https://github.com/Str8UpWHITE64/CrabChampionsAP/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

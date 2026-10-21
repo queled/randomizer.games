@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Gemcraft: Frostborn Wrath se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Gemcraft: Frostborn Wrath can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Mars 2026",
+        "en": "March 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub Levisaxos/Archipelago_GemcraftFrostbornWrath, qui héberge l'APWorld de Gemcraft: Frostborn Wrath.",
+        "en": "The GitHub repository Levisaxos/Archipelago_GemcraftFrostbornWrath, home of the Gemcraft: Frostborn Wrath APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2026",
+        "en": "March 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.0.1-pre-alpha (préversion).",
+        "en": "The first version, v0.0.1-pre-alpha (pre-release), is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v0.0.6.3, la plus récente au 21 octobre 2026 (15 versions publiées).",
+        "en": "Version v0.0.6.3 is released, the latest as of October 21, 2026 (15 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Gemcraft: Frostborn Wrath figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Gemcraft: Frostborn Wrath is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — Levisaxos/Archipelago_GemcraftFrostbornWrath",
+      "url": "https://github.com/Levisaxos/Archipelago_GemcraftFrostbornWrath"
+    },
+    {
+      "label": "GitHub — Levisaxos/Archipelago_GemcraftFrostbornWrath (releases)",
+      "url": "https://github.com/Levisaxos/Archipelago_GemcraftFrostbornWrath/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

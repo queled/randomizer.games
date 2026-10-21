@@ -1,0 +1,64 @@
+{
+  "intro": {
+    "fr": "Pokémon Ranger se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Pokémon Ranger can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, pkmn_ranger_quest_1.0.0.",
+        "en": "The first version, pkmn_ranger_quest_1.0.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version pkmn_ranger_quest_1.0.5, la plus récente des 6 versions au nom du jeu sur ce dépôt au 21 octobre 2026.",
+        "en": "Version pkmn_ranger_quest_1.0.5 is released, the latest of the 6 versions named after the game on this repository as of October 21, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Pokémon Ranger figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Pokémon Ranger is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — BlastSlimey/Archipelago",
+      "url": "https://github.com/BlastSlimey/Archipelago"
+    },
+    {
+      "label": "GitHub — BlastSlimey/Archipelago (releases)",
+      "url": "https://github.com/BlastSlimey/Archipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

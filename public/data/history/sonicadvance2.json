@@ -1,0 +1,64 @@
+{
+  "intro": {
+    "fr": "Sonic Advance 2 se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Sonic Advance 2 can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Novembre 2025",
+        "en": "November 2025"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub NiwatoriCode/sadv2_ap_releases, qui héberge l'APWorld de Sonic Advance 2.",
+        "en": "The GitHub repository NiwatoriCode/sadv2_ap_releases, home of the Sonic Advance 2 APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2025",
+        "en": "November 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la version sadv2-v0.1.0, seule version parue au 21 octobre 2026.",
+        "en": "Version sadv2-v0.1.0 is released, the only one as of October 21, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Sonic Advance 2 figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Sonic Advance 2 is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — NiwatoriCode/sadv2_ap_releases",
+      "url": "https://github.com/NiwatoriCode/sadv2_ap_releases"
+    },
+    {
+      "label": "GitHub — NiwatoriCode/sadv2_ap_releases (releases)",
+      "url": "https://github.com/NiwatoriCode/sadv2_ap_releases/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "intro": {
+    "fr": "Toy Story Racer se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Toy Story Racer can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub Vzencio/Toy-Story-Racer-Archipelago, qui héberge l'APWorld de Toy Story Racer.",
+        "en": "The GitHub repository Vzencio/Toy-Story-Racer-Archipelago, home of the Toy Story Racer APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la version v0.1, seule version parue au 21 octobre 2026.",
+        "en": "Version v0.1 is released, the only one as of October 21, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Toy Story Racer figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Toy Story Racer is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — Vzencio/Toy-Story-Racer-Archipelago",
+      "url": "https://github.com/Vzencio/Toy-Story-Racer-Archipelago"
+    },
+    {
+      "label": "GitHub — Vzencio/Toy-Story-Racer-Archipelago (releases)",
+      "url": "https://github.com/Vzencio/Toy-Story-Racer-Archipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

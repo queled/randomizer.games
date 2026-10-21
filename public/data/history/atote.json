@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Astalon: Tears of the Earth se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Astalon: Tears of the Earth can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Février 2024",
+        "en": "February 2024"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub drtchops/Archipelago-Astalon, qui héberge l'APWorld de Astalon: Tears of the Earth.",
+        "en": "The GitHub repository drtchops/Archipelago-Astalon, home of the Astalon: Tears of the Earth APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2024",
+        "en": "March 2024"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.1.1 (préversion).",
+        "en": "The first version, v0.1.1 (pre-release), is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v1.0.0-rc6, la plus récente au 21 octobre 2026 (61 versions publiées).",
+        "en": "Version v1.0.0-rc6 is released, the latest as of October 21, 2026 (61 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Astalon: Tears of the Earth figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Astalon: Tears of the Earth is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — drtchops/Archipelago-Astalon",
+      "url": "https://github.com/drtchops/Archipelago-Astalon"
+    },
+    {
+      "label": "GitHub — drtchops/Archipelago-Astalon (releases)",
+      "url": "https://github.com/drtchops/Archipelago-Astalon/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "S.T.A.L.K.E.R 2 Heart of Chornobyl se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "S.T.A.L.K.E.R 2 Heart of Chornobyl can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub Hitmanty/S.T.A.L.K.E.R-2-Archipelago, qui héberge l'APWorld de S.T.A.L.K.E.R 2 Heart of Chornobyl.",
+        "en": "The GitHub repository Hitmanty/S.T.A.L.K.E.R-2-Archipelago, home of the S.T.A.L.K.E.R 2 Heart of Chornobyl APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, Pre-Release test 1 (préversion).",
+        "en": "The first version, Pre-Release test 1 (pre-release), is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version 1.0.3 Cleanup and bugfixes, la plus récente au 21 octobre 2026 (12 versions publiées).",
+        "en": "Version 1.0.3 Cleanup and bugfixes is released, the latest as of October 21, 2026 (12 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "S.T.A.L.K.E.R 2 Heart of Chornobyl figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "S.T.A.L.K.E.R 2 Heart of Chornobyl is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — Hitmanty/S.T.A.L.K.E.R-2-Archipelago",
+      "url": "https://github.com/Hitmanty/S.T.A.L.K.E.R-2-Archipelago"
+    },
+    {
+      "label": "GitHub — Hitmanty/S.T.A.L.K.E.R-2-Archipelago (releases)",
+      "url": "https://github.com/Hitmanty/S.T.A.L.K.E.R-2-Archipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

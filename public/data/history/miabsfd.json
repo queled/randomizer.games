@@ -1,0 +1,46 @@
+{
+  "intro": {
+    "fr": "Made in Abyss BSFD se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Made in Abyss BSFD can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub OctoberWolf/MadeInAbyssBSFD-AP, qui héberge l'APWorld de Made in Abyss BSFD.",
+        "en": "The GitHub repository OctoberWolf/MadeInAbyssBSFD-AP, home of the Made in Abyss BSFD APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Made in Abyss BSFD figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Made in Abyss BSFD is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — OctoberWolf/MadeInAbyssBSFD-AP",
+      "url": "https://github.com/OctoberWolf/MadeInAbyssBSFD-AP"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

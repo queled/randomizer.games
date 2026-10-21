@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Super Smash Bros. se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Super Smash Bros. can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub IncidiousJacob/Smashipelago, qui héberge l'APWorld de Super Smash Bros..",
+        "en": "The GitHub repository IncidiousJacob/Smashipelago, home of the Super Smash Bros. APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, Version 0.0.1.",
+        "en": "The first version, Version 0.0.1, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version Version 0.1.0, la plus récente au 21 octobre 2026 (5 versions publiées).",
+        "en": "Version Version 0.1.0 is released, the latest as of October 21, 2026 (5 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Super Smash Bros. figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Super Smash Bros. is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — IncidiousJacob/Smashipelago",
+      "url": "https://github.com/IncidiousJacob/Smashipelago"
+    },
+    {
+      "label": "GitHub — IncidiousJacob/Smashipelago (releases)",
+      "url": "https://github.com/IncidiousJacob/Smashipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

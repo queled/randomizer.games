@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Air Delivery se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Air Delivery can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juin 2024",
+        "en": "June 2024"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub qwint/ap-air-delivery, qui héberge l'APWorld de Air Delivery.",
+        "en": "The GitHub repository qwint/ap-air-delivery, home of the Air Delivery APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2024",
+        "en": "June 2024"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, 0.1.0.",
+        "en": "The first version, 0.1.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2025",
+        "en": "September 2025"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version 0.1.6, la plus récente au 21 octobre 2026 (7 versions publiées).",
+        "en": "Version 0.1.6 is released, the latest as of October 21, 2026 (7 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Air Delivery figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Air Delivery is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — qwint/ap-air-delivery",
+      "url": "https://github.com/qwint/ap-air-delivery"
+    },
+    {
+      "label": "GitHub — qwint/ap-air-delivery (releases)",
+      "url": "https://github.com/qwint/ap-air-delivery/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

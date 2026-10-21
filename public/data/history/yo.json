@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Ys Origin se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Ys Origin can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub 4rtefakt/ys-origin-archipelago, qui héberge l'APWorld de Ys Origin.",
+        "en": "The GitHub repository 4rtefakt/ys-origin-archipelago, home of the Ys Origin APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v1.0.0.",
+        "en": "The first version, v1.0.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v2.1.1, la plus récente au 21 octobre 2026 (24 versions publiées).",
+        "en": "Version v2.1.1 is released, the latest as of October 21, 2026 (24 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Ys Origin figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Ys Origin is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — 4rtefakt/ys-origin-archipelago",
+      "url": "https://github.com/4rtefakt/ys-origin-archipelago"
+    },
+    {
+      "label": "GitHub — 4rtefakt/ys-origin-archipelago (releases)",
+      "url": "https://github.com/4rtefakt/ys-origin-archipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Armored Core VI: Fires of Rubicon se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Armored Core VI: Fires of Rubicon can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub DeltaSilver/Armored-Core-6-Archipelago, qui héberge l'APWorld de Armored Core VI: Fires of Rubicon.",
+        "en": "The GitHub repository DeltaSilver/Armored-Core-6-Archipelago, home of the Armored Core VI: Fires of Rubicon APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.1-beta (préversion).",
+        "en": "The first version, v0.1-beta (pre-release), is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v0.2.1-Beta, la plus récente au 21 octobre 2026 (6 versions publiées).",
+        "en": "Version v0.2.1-Beta is released, the latest as of October 21, 2026 (6 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Armored Core VI: Fires of Rubicon figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Armored Core VI: Fires of Rubicon is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — DeltaSilver/Armored-Core-6-Archipelago",
+      "url": "https://github.com/DeltaSilver/Armored-Core-6-Archipelago"
+    },
+    {
+      "label": "GitHub — DeltaSilver/Armored-Core-6-Archipelago (releases)",
+      "url": "https://github.com/DeltaSilver/Armored-Core-6-Archipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

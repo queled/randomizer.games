@@ -1,0 +1,64 @@
+{
+  "intro": {
+    "fr": "Freddy Fazbear's Pizzeria Simulator se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Freddy Fazbear's Pizzeria Simulator can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub EviVirus/Archipelago-FFPS, qui héberge l'APWorld de Freddy Fazbear's Pizzeria Simulator.",
+        "en": "The GitHub repository EviVirus/Archipelago-FFPS, home of the Freddy Fazbear's Pizzeria Simulator APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la version v1.0.0-pre1 (préversion), seule version parue au 21 octobre 2026.",
+        "en": "Version v1.0.0-pre1 (pre-release) is released, the only one as of October 21, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Freddy Fazbear's Pizzeria Simulator figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Freddy Fazbear's Pizzeria Simulator is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — EviVirus/Archipelago-FFPS",
+      "url": "https://github.com/EviVirus/Archipelago-FFPS"
+    },
+    {
+      "label": "GitHub — EviVirus/Archipelago-FFPS (releases)",
+      "url": "https://github.com/EviVirus/Archipelago-FFPS/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

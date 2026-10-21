@@ -1,0 +1,64 @@
+{
+  "intro": {
+    "fr": "Chests 'n' Keys se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Chests 'n' Keys can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juillet 2025",
+        "en": "July 2025"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub not-aoyama/ChestsNKeys-Web, qui héberge l'APWorld de Chests 'n' Keys.",
+        "en": "The GitHub repository not-aoyama/ChestsNKeys-Web, home of the Chests 'n' Keys APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la version v0.3.0 (préversion), seule version parue au 21 octobre 2026.",
+        "en": "Version v0.3.0 (pre-release) is released, the only one as of October 21, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Chests 'n' Keys figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Chests 'n' Keys is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — not-aoyama/ChestsNKeys-Web",
+      "url": "https://github.com/not-aoyama/ChestsNKeys-Web"
+    },
+    {
+      "label": "GitHub — not-aoyama/ChestsNKeys-Web (releases)",
+      "url": "https://github.com/not-aoyama/ChestsNKeys-Web/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

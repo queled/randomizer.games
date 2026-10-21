@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Armored Core se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Armored Core can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juillet 2025",
+        "en": "July 2025"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub JustinMarshall98/Armored-Core-PSX-Archipelago, qui héberge l'APWorld de Armored Core.",
+        "en": "The GitHub repository JustinMarshall98/Armored-Core-PSX-Archipelago, home of the Armored Core APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2025",
+        "en": "July 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.1.0.",
+        "en": "The first version, v0.1.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v0.3.0, la plus récente au 21 octobre 2026 (5 versions publiées).",
+        "en": "Version v0.3.0 is released, the latest as of October 21, 2026 (5 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Armored Core figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Armored Core is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — JustinMarshall98/Armored-Core-PSX-Archipelago",
+      "url": "https://github.com/JustinMarshall98/Armored-Core-PSX-Archipelago"
+    },
+    {
+      "label": "GitHub — JustinMarshall98/Armored-Core-PSX-Archipelago (releases)",
+      "url": "https://github.com/JustinMarshall98/Armored-Core-PSX-Archipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

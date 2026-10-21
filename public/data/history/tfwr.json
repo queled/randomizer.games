@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "The Farmer Was Replaced se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "The Farmer Was Replaced can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Janvier 2026",
+        "en": "January 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub seadoggie001/TFWR-APMod, qui héberge l'APWorld de The Farmer Was Replaced.",
+        "en": "The GitHub repository seadoggie001/TFWR-APMod, home of the The Farmer Was Replaced APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.0.1-beta (préversion).",
+        "en": "The first version, v0.0.1-beta (pre-release), is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v0.0.10-beta, la plus récente au 21 octobre 2026 (10 versions publiées).",
+        "en": "Version v0.0.10-beta is released, the latest as of October 21, 2026 (10 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "The Farmer Was Replaced figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "The Farmer Was Replaced is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — seadoggie001/TFWR-APMod",
+      "url": "https://github.com/seadoggie001/TFWR-APMod"
+    },
+    {
+      "label": "GitHub — seadoggie001/TFWR-APMod (releases)",
+      "url": "https://github.com/seadoggie001/TFWR-APMod/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

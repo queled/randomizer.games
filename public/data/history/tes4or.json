@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "The Elder Scrolls IV: Oblivion Remastered se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "The Elder Scrolls IV: Oblivion Remastered can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juin 2025",
+        "en": "June 2025"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub POD-io/Oblivion-ArchipelagoWorld, qui héberge l'APWorld de The Elder Scrolls IV: Oblivion Remastered.",
+        "en": "The GitHub repository POD-io/Oblivion-ArchipelagoWorld, home of the The Elder Scrolls IV: Oblivion Remastered APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2025",
+        "en": "July 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.2.0-beta.",
+        "en": "The first version, v0.2.0-beta, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v0.6.0, la plus récente au 21 octobre 2026 (8 versions publiées).",
+        "en": "Version v0.6.0 is released, the latest as of October 21, 2026 (8 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "The Elder Scrolls IV: Oblivion Remastered figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "The Elder Scrolls IV: Oblivion Remastered is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — POD-io/Oblivion-ArchipelagoWorld",
+      "url": "https://github.com/POD-io/Oblivion-ArchipelagoWorld"
+    },
+    {
+      "label": "GitHub — POD-io/Oblivion-ArchipelagoWorld (releases)",
+      "url": "https://github.com/POD-io/Oblivion-ArchipelagoWorld/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

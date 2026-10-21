@@ -1,0 +1,64 @@
+{
+  "intro": {
+    "fr": "Hacknet se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Hacknet can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Mai 2025",
+        "en": "May 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, hacknet-alpha-2 (préversion).",
+        "en": "The first version, hacknet-alpha-2 (pre-release), is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version hacknet-1.0.0, la plus récente des 8 versions au nom du jeu sur ce dépôt au 21 octobre 2026.",
+        "en": "Version hacknet-1.0.0 is released, the latest of the 8 versions named after the game on this repository as of October 21, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Hacknet figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Hacknet is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — AutumnRivers/Archipelago-Hacknet",
+      "url": "https://github.com/AutumnRivers/Archipelago-Hacknet"
+    },
+    {
+      "label": "GitHub — AutumnRivers/Archipelago-Hacknet (releases)",
+      "url": "https://github.com/AutumnRivers/Archipelago-Hacknet/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Rune Factory 4 Special se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Rune Factory 4 Special can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub Happyhappyism/Rune-Factory-4-Archipelago, qui héberge l'APWorld de Rune Factory 4 Special.",
+        "en": "The GitHub repository Happyhappyism/Rune-Factory-4-Archipelago, home of the Rune Factory 4 Special APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, rune4_v0.1.3.",
+        "en": "The first version, rune4_v0.1.3, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version rune4_v0.3.2, la plus récente au 21 octobre 2026 (6 versions publiées).",
+        "en": "Version rune4_v0.3.2 is released, the latest as of October 21, 2026 (6 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Rune Factory 4 Special figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Rune Factory 4 Special is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — Happyhappyism/Rune-Factory-4-Archipelago",
+      "url": "https://github.com/Happyhappyism/Rune-Factory-4-Archipelago"
+    },
+    {
+      "label": "GitHub — Happyhappyism/Rune-Factory-4-Archipelago (releases)",
+      "url": "https://github.com/Happyhappyism/Rune-Factory-4-Archipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

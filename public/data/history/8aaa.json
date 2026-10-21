@@ -1,0 +1,64 @@
+{
+  "intro": {
+    "fr": "8Doors: Arum's Afterlife Adventure se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "8Doors: Arum's Afterlife Adventure can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub Xtruh/Arum-s-Eight-Doors-Archipelago-Randomizer, qui héberge l'APWorld de 8Doors: Arum's Afterlife Adventure.",
+        "en": "The GitHub repository Xtruh/Arum-s-Eight-Doors-Archipelago-Randomizer, home of the 8Doors: Arum's Afterlife Adventure APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la version 0.1.0, seule version parue au 21 octobre 2026.",
+        "en": "Version 0.1.0 is released, the only one as of October 21, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "8Doors: Arum's Afterlife Adventure figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "8Doors: Arum's Afterlife Adventure is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — Xtruh/Arum-s-Eight-Doors-Archipelago-Randomizer",
+      "url": "https://github.com/Xtruh/Arum-s-Eight-Doors-Archipelago-Randomizer"
+    },
+    {
+      "label": "GitHub — Xtruh/Arum-s-Eight-Doors-Archipelago-Randomizer (releases)",
+      "url": "https://github.com/Xtruh/Arum-s-Eight-Doors-Archipelago-Randomizer/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

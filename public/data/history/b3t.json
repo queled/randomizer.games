@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Burnout 3: Takedown se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Burnout 3: Takedown can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub Metasura/Burnout3Archipelago, qui héberge l'APWorld de Burnout 3: Takedown.",
+        "en": "The GitHub repository Metasura/Burnout3Archipelago, home of the Burnout 3: Takedown APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, 0.0.1.",
+        "en": "The first version, 0.0.1, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version 0.1.0, la plus récente au 21 octobre 2026 (7 versions publiées).",
+        "en": "Version 0.1.0 is released, the latest as of October 21, 2026 (7 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Burnout 3: Takedown figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Burnout 3: Takedown is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — Metasura/Burnout3Archipelago",
+      "url": "https://github.com/Metasura/Burnout3Archipelago"
+    },
+    {
+      "label": "GitHub — Metasura/Burnout3Archipelago (releases)",
+      "url": "https://github.com/Metasura/Burnout3Archipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

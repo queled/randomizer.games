@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Cult of the Lamb se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Cult of the Lamb can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub IanCichy/CultOfTheLamb_Archipelago, qui héberge l'APWorld de Cult of the Lamb.",
+        "en": "The GitHub repository IanCichy/CultOfTheLamb_Archipelago, home of the Cult of the Lamb APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.9.0-beta.1.",
+        "en": "The first version, v0.9.0-beta.1, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v0.9.5, la plus récente au 21 octobre 2026 (6 versions publiées).",
+        "en": "Version v0.9.5 is released, the latest as of October 21, 2026 (6 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Cult of the Lamb figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Cult of the Lamb is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — IanCichy/CultOfTheLamb_Archipelago",
+      "url": "https://github.com/IanCichy/CultOfTheLamb_Archipelago"
+    },
+    {
+      "label": "GitHub — IanCichy/CultOfTheLamb_Archipelago (releases)",
+      "url": "https://github.com/IanCichy/CultOfTheLamb_Archipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

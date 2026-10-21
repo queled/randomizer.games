@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Toy Story 2 se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Toy Story 2 can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub imklubb/Archipelago-Toy-Story-2, qui héberge l'APWorld de Toy Story 2.",
+        "en": "The GitHub repository imklubb/Archipelago-Toy-Story-2, home of the Toy Story 2 APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, 1.0.0.",
+        "en": "The first version, 1.0.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version 2.3.3, la plus récente au 21 octobre 2026 (18 versions publiées).",
+        "en": "Version 2.3.3 is released, the latest as of October 21, 2026 (18 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Toy Story 2 figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Toy Story 2 is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — imklubb/Archipelago-Toy-Story-2",
+      "url": "https://github.com/imklubb/Archipelago-Toy-Story-2"
+    },
+    {
+      "label": "GitHub — imklubb/Archipelago-Toy-Story-2 (releases)",
+      "url": "https://github.com/imklubb/Archipelago-Toy-Story-2/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

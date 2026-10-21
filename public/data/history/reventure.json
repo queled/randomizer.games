@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Reventure se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Reventure can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Novembre 2023",
+        "en": "November 2023"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub Droppel/ReventureEndingRando, qui héberge l'APWorld de Reventure.",
+        "en": "The GitHub repository Droppel/ReventureEndingRando, home of the Reventure APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2023",
+        "en": "November 2023"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, 0.0.1 (préversion).",
+        "en": "The first version, 0.0.1 (pre-release), is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version 0.21.1, la plus récente au 21 octobre 2026 (39 versions publiées).",
+        "en": "Version 0.21.1 is released, the latest as of October 21, 2026 (39 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Reventure figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Reventure is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — Droppel/ReventureEndingRando",
+      "url": "https://github.com/Droppel/ReventureEndingRando"
+    },
+    {
+      "label": "GitHub — Droppel/ReventureEndingRando (releases)",
+      "url": "https://github.com/Droppel/ReventureEndingRando/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

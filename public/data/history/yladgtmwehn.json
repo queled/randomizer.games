@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Yakuza | Like a Dragon Gaiden: The Man Who Erased His Name se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Yakuza | Like a Dragon Gaiden: The Man Who Erased His Name can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub zorasknight/YakLaDGaiRando, qui héberge l'APWorld de Yakuza | Like a Dragon Gaiden: The Man Who Erased His Name.",
+        "en": "The GitHub repository zorasknight/YakLaDGaiRando, home of the Yakuza | Like a Dragon Gaiden: The Man Who Erased His Name APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, Yakuza Gaiden Closed Beta for Testing (préversion).",
+        "en": "The first version, Yakuza Gaiden Closed Beta for Testing (pre-release), is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version Beta-3, la plus récente au 21 octobre 2026 (4 versions publiées).",
+        "en": "Version Beta-3 is released, the latest as of October 21, 2026 (4 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Yakuza | Like a Dragon Gaiden: The Man Who Erased His Name figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Yakuza | Like a Dragon Gaiden: The Man Who Erased His Name is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — zorasknight/YakLaDGaiRando",
+      "url": "https://github.com/zorasknight/YakLaDGaiRando"
+    },
+    {
+      "label": "GitHub — zorasknight/YakLaDGaiRando (releases)",
+      "url": "https://github.com/zorasknight/YakLaDGaiRando/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

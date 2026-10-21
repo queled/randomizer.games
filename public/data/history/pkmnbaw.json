@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Pokémon Black and White se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Pokémon Black and White can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Août 2025",
+        "en": "August 2025"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub BlastSlimey/PokemonBWAP, qui héberge l'APWorld de Pokémon Black and White.",
+        "en": "The GitHub repository BlastSlimey/PokemonBWAP, home of the Pokémon Black and White APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2025",
+        "en": "August 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, 0.1.0.",
+        "en": "The first version, 0.1.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version 0.4.2, la plus récente au 21 octobre 2026 (55 versions publiées).",
+        "en": "Version 0.4.2 is released, the latest as of October 21, 2026 (55 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Pokémon Black and White figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Pokémon Black and White is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — BlastSlimey/PokemonBWAP",
+      "url": "https://github.com/BlastSlimey/PokemonBWAP"
+    },
+    {
+      "label": "GitHub — BlastSlimey/PokemonBWAP (releases)",
+      "url": "https://github.com/BlastSlimey/PokemonBWAP/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

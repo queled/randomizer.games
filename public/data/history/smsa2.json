@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Super Mario Sunshine Arcade 2 se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Super Mario Sunshine Arcade 2 can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juin 2025",
+        "en": "June 2025"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub Jorbori/SMSA2AP, qui héberge l'APWorld de Super Mario Sunshine Arcade 2.",
+        "en": "The GitHub repository Jorbori/SMSA2AP, home of the Super Mario Sunshine Arcade 2 APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2025",
+        "en": "July 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, 0.1.0 (préversion).",
+        "en": "The first version, 0.1.0 (pre-release), is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2025",
+        "en": "August 2025"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version 0.4.0, la plus récente au 21 octobre 2026 (6 versions publiées).",
+        "en": "Version 0.4.0 is released, the latest as of October 21, 2026 (6 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Super Mario Sunshine Arcade 2 figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Super Mario Sunshine Arcade 2 is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — Jorbori/SMSA2AP",
+      "url": "https://github.com/Jorbori/SMSA2AP"
+    },
+    {
+      "label": "GitHub — Jorbori/SMSA2AP (releases)",
+      "url": "https://github.com/Jorbori/SMSA2AP/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

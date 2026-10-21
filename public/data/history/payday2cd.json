@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "PAYDAY 2: Criminal Dawn se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "PAYDAY 2: Criminal Dawn can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub CATEM1NAL/PD2-Criminal-Dawn, qui héberge l'APWorld de PAYDAY 2: Criminal Dawn.",
+        "en": "The GitHub repository CATEM1NAL/PD2-Criminal-Dawn, home of the PAYDAY 2: Criminal Dawn APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2026",
+        "en": "April 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.0.0.",
+        "en": "The first version, v0.0.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v1.0.13, la plus récente au 21 octobre 2026 (51 versions publiées).",
+        "en": "Version v1.0.13 is released, the latest as of October 21, 2026 (51 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "PAYDAY 2: Criminal Dawn figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "PAYDAY 2: Criminal Dawn is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — CATEM1NAL/PD2-Criminal-Dawn",
+      "url": "https://github.com/CATEM1NAL/PD2-Criminal-Dawn"
+    },
+    {
+      "label": "GitHub — CATEM1NAL/PD2-Criminal-Dawn (releases)",
+      "url": "https://github.com/CATEM1NAL/PD2-Criminal-Dawn/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

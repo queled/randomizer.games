@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "CornKidz64 se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "CornKidz64 can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Janvier 2025",
+        "en": "January 2025"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub Cyb3RGER/cornkidz64_apworld, qui héberge l'APWorld de CornKidz64.",
+        "en": "The GitHub repository Cyb3RGER/cornkidz64_apworld, home of the CornKidz64 APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2025",
+        "en": "January 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.0.1.",
+        "en": "The first version, v0.0.1, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v0.0.7, la plus récente au 21 octobre 2026 (6 versions publiées).",
+        "en": "Version v0.0.7 is released, the latest as of October 21, 2026 (6 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "CornKidz64 figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "CornKidz64 is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — Cyb3RGER/cornkidz64_apworld",
+      "url": "https://github.com/Cyb3RGER/cornkidz64_apworld"
+    },
+    {
+      "label": "GitHub — Cyb3RGER/cornkidz64_apworld (releases)",
+      "url": "https://github.com/Cyb3RGER/cornkidz64_apworld/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

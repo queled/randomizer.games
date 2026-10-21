@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "LEGO Harry Potter 5-7 se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "LEGO Harry Potter 5-7 can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Novembre 2025",
+        "en": "November 2025"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub jradcode23/LHP2-Mod, qui héberge l'APWorld de LEGO Harry Potter 5-7.",
+        "en": "The GitHub repository jradcode23/LHP2-Mod, home of the LEGO Harry Potter 5-7 APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2026",
+        "en": "April 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v1.0.0.",
+        "en": "The first version, v1.0.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v1.2.0, la plus récente au 21 octobre 2026 (11 versions publiées).",
+        "en": "Version v1.2.0 is released, the latest as of October 21, 2026 (11 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "LEGO Harry Potter 5-7 figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "LEGO Harry Potter 5-7 is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — jradcode23/LHP2-Mod",
+      "url": "https://github.com/jradcode23/LHP2-Mod"
+    },
+    {
+      "label": "GitHub — jradcode23/LHP2-Mod (releases)",
+      "url": "https://github.com/jradcode23/LHP2-Mod/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

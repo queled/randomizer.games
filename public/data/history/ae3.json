@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Ape Escape 3 se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Ape Escape 3 can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Février 2025",
+        "en": "February 2025"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub aidanii24/ae3-archipelago, qui héberge l'APWorld de Ape Escape 3.",
+        "en": "The GitHub repository aidanii24/ae3-archipelago, home of the Ape Escape 3 APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2025",
+        "en": "May 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, 1.0.00.",
+        "en": "The first version, 1.0.00, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v2.1.0, la plus récente au 21 octobre 2026 (27 versions publiées).",
+        "en": "Version v2.1.0 is released, the latest as of October 21, 2026 (27 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Ape Escape 3 figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Ape Escape 3 is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — aidanii24/ae3-archipelago",
+      "url": "https://github.com/aidanii24/ae3-archipelago"
+    },
+    {
+      "label": "GitHub — aidanii24/ae3-archipelago (releases)",
+      "url": "https://github.com/aidanii24/ae3-archipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

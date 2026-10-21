@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Command & Conquer: Mental Omega se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Command & Conquer: Mental Omega can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub Heinki/Mental-Omega-Randomizer, qui héberge l'APWorld de Command & Conquer: Mental Omega.",
+        "en": "The GitHub repository Heinki/Mental-Omega-Randomizer, home of the Command & Conquer: Mental Omega APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, V1.0.",
+        "en": "The first version, V1.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version V1.44, la plus récente au 21 octobre 2026 (36 versions publiées).",
+        "en": "Version V1.44 is released, the latest as of October 21, 2026 (36 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Command & Conquer: Mental Omega figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Command & Conquer: Mental Omega is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — Heinki/Mental-Omega-Randomizer",
+      "url": "https://github.com/Heinki/Mental-Omega-Randomizer"
+    },
+    {
+      "label": "GitHub — Heinki/Mental-Omega-Randomizer (releases)",
+      "url": "https://github.com/Heinki/Mental-Omega-Randomizer/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

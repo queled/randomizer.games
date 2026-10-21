@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Friday Night Funkin' se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Friday Night Funkin' can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Février 2025",
+        "en": "February 2025"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub Z11Coding/Mixtape-Engine-Rework, qui héberge l'APWorld de Friday Night Funkin'.",
+        "en": "The GitHub repository Z11Coding/Mixtape-Engine-Rework, home of the Friday Night Funkin' APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2025",
+        "en": "February 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, Beta AP Release (0.3.5) (préversion).",
+        "en": "The first version, Beta AP Release (0.3.5) (pre-release), is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version beta13.4, la plus récente au 21 octobre 2026 (20 versions publiées).",
+        "en": "Version beta13.4 is released, the latest as of October 21, 2026 (20 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Friday Night Funkin' figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Friday Night Funkin' is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — Z11Coding/Mixtape-Engine-Rework",
+      "url": "https://github.com/Z11Coding/Mixtape-Engine-Rework"
+    },
+    {
+      "label": "GitHub — Z11Coding/Mixtape-Engine-Rework (releases)",
+      "url": "https://github.com/Z11Coding/Mixtape-Engine-Rework/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Oh So Hero se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Oh So Hero can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub L-technology-mods/Archipelago-Oh-So-Heroe, qui héberge l'APWorld de Oh So Hero.",
+        "en": "The GitHub repository L-technology-mods/Archipelago-Oh-So-Heroe, home of the Oh So Hero APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v1.0.0.",
+        "en": "The first version, v1.0.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v1.0.5, la plus récente au 21 octobre 2026 (8 versions publiées).",
+        "en": "Version v1.0.5 is released, the latest as of October 21, 2026 (8 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Oh So Hero figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Oh So Hero is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — L-technology-mods/Archipelago-Oh-So-Heroe",
+      "url": "https://github.com/L-technology-mods/Archipelago-Oh-So-Heroe"
+    },
+    {
+      "label": "GitHub — L-technology-mods/Archipelago-Oh-So-Heroe (releases)",
+      "url": "https://github.com/L-technology-mods/Archipelago-Oh-So-Heroe/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

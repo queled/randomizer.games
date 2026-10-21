@@ -1,0 +1,46 @@
+{
+  "intro": {
+    "fr": "The Settlers: Heritage of Kings se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "The Settlers: Heritage of Kings can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Octobre 2025",
+        "en": "October 2025"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub ZorkManu/SettlersHeritageOfKingsAPWorld, qui héberge l'APWorld de The Settlers: Heritage of Kings.",
+        "en": "The GitHub repository ZorkManu/SettlersHeritageOfKingsAPWorld, home of the The Settlers: Heritage of Kings APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "The Settlers: Heritage of Kings figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "The Settlers: Heritage of Kings is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — ZorkManu/SettlersHeritageOfKingsAPWorld",
+      "url": "https://github.com/ZorkManu/SettlersHeritageOfKingsAPWorld"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Three Goblin Wobblin' se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Three Goblin Wobblin' can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Avril 2026",
+        "en": "April 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub melenehh/Three-Goblin-Archipelago, qui héberge l'APWorld de Three Goblin Wobblin'.",
+        "en": "The GitHub repository melenehh/Three-Goblin-Archipelago, home of the Three Goblin Wobblin' APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2026",
+        "en": "April 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.0.1-alpha.",
+        "en": "The first version, v0.0.1-alpha, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v0.0.3 alpha Teleporter Update, la plus récente au 21 octobre 2026 (3 versions publiées).",
+        "en": "Version v0.0.3 alpha Teleporter Update is released, the latest as of October 21, 2026 (3 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Three Goblin Wobblin' figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Three Goblin Wobblin' is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — melenehh/Three-Goblin-Archipelago",
+      "url": "https://github.com/melenehh/Three-Goblin-Archipelago"
+    },
+    {
+      "label": "GitHub — melenehh/Three-Goblin-Archipelago (releases)",
+      "url": "https://github.com/melenehh/Three-Goblin-Archipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

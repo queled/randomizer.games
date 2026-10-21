@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "fr": "Super Mario Land se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Super Mario Land can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Création du dépôt GitHub MarioGamer9871/Super-Mario-Land-Archipelago, qui héberge l'APWorld de Super Mario Land.",
+        "en": "The GitHub repository MarioGamer9871/Super-Mario-Land-Archipelago, home of the Super Mario Land APWorld, is created."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, v0.0.1.",
+        "en": "The first version, v0.0.1, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version v0.5.0, la plus récente au 21 octobre 2026 (14 versions publiées).",
+        "en": "Version v0.5.0 is released, the latest as of October 21, 2026 (14 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tableur communautaire",
+        "en": "Community list"
+      },
+      "text": {
+        "fr": "Super Mario Land figure dans le tableur communautaire des APWorlds, qui recense les mondes jouables hors de l'installation officielle d'Archipelago.",
+        "en": "Super Mario Land is listed in the community APWorlds spreadsheet, which tracks the worlds playable outside the official Archipelago install."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — MarioGamer9871/Super-Mario-Land-Archipelago",
+      "url": "https://github.com/MarioGamer9871/Super-Mario-Land-Archipelago"
+    },
+    {
+      "label": "GitHub — MarioGamer9871/Super-Mario-Land-Archipelago (releases)",
+      "url": "https://github.com/MarioGamer9871/Super-Mario-Land-Archipelago/releases"
+    },
+    {
+      "label": "Tableur communautaire des APWorlds",
+      "url": "https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw/edit"
+    }
+  ]
+}

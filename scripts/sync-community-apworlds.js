@@ -210,14 +210,14 @@ const isDiscordInvite = url => /^https?:\/\/(?:www\.)?discord(?:\.gg|(?:app)?\.c
 // Servers of the support threads: a thread only opens for members, the Discord
 // tab links to the server's invite instead
 const DISCORD_SERVERS = {
-  '731205301247803413': { name: 'Archipelago Discord', fr: 'Discord Archipelago', url: 'https://discord.gg/8Z65BR2' },
-  '1085716850370957462': { name: 'AP After Dark Discord (18+)', fr: 'Discord AP After Dark (18+)', url: 'https://discord.gg/Sbhy4ykUKn' }
+  '731205301247803413': { name: 'Archipelago', url: 'https://discord.gg/8Z65BR2' },
+  '1085716850370957462': { name: 'AP After Dark (18+)', url: 'https://discord.gg/Sbhy4ykUKn' }
 };
 
 // Invite of a support link: its server's for a thread, the link itself for an invite
 function discordInvite(url) {
   const server = DISCORD_SERVERS[String(url).match(/\/channels\/(\d+)/)?.[1]];
-  if (server) return { url: server.url, name: server.name, translations: { fr: { name: server.fr } } };
+  if (server) return { url: server.url, name: server.name, translations: { fr: { name: server.name } } };
   if (isDiscordInvite(url)) return { url, name: 'Discord', translations: { fr: { name: 'Discord' } } };
   return null;
 }

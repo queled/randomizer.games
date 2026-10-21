@@ -274,7 +274,8 @@ const strip = list => JSON.stringify((list || []).map(({ _id, ...rest }) => rest
 /**
  * New resources and integration of a game from its rows (none: the game left
  * the list). A link added by hand to the same repository makes way; a
- * rando-list link to it stays, and the APWorld is then not added twice.
+ * rando-list link to it stays (sync-rando-list.js owns it): the API shows the
+ * APWorld, with its status, in its place.
  */
 function planGame(game, rows, now) {
   const resources = game.resources || {};
@@ -310,7 +311,7 @@ function planGame(game, rows, now) {
   const kept = (resources.sites || []).filter(site => site.source !== SOURCE && !replaced(site));
   const sites = [
     ...kept,
-    ...wantedSites.filter(w => !kept.some(site => site.url === w.url || (repoKey(w.url) && repoKey(site.url) === repoKey(w.url))))
+    ...wantedSites.filter(w => !kept.some(site => site.url === w.url))
   ];
 
   const merge = (list, add) => {

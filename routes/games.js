@@ -287,6 +287,12 @@ function multiworldHost(url) {
   return (String(url || '').match(/^https?:\/\/(?:www\.)?(archipelago|multiworld)\.gg(?:\/|$)/i) || [])[1]?.toLowerCase() || null;
 }
 
+// "host/owner/repo" of a link to a code repository, else null
+function repoKey(url) {
+  const m = String(url || '').match(/^https?:\/\/(?:www\.)?(github\.com|gitlab\.com|codeberg\.org)\/([^/?#]+)\/([^/?#]+)/i);
+  return m ? `${m[1]}/${m[2]}/${m[3].replace(/\.git$/, '')}`.toLowerCase() : null;
+}
+
 // Archipelago link hosted elsewhere than archipelago.gg / multiworld.gg (GitHub…)
 function isCommunityApworld(site) {
   return !!(site?.isArchipelago || site?.isMultiworld) && !multiworldHost(site.url);
@@ -329,14 +335,19 @@ router.get('/:id/resources', async (req, res, next) => {
     // vers archipelago.gg / multiworld.gg (rando-list) quand le jeu a sa page sur ce site.
     // Les APWorlds communautaires d'autres sources (rando-list, ajout à la main) s'effacent
     // aussi derrière ces pages (sans être supprimés) ; ceux du tableur (source "apworld")
-    // sont déjà triés par sync-community-apworlds.js, qui garde les variantes
+    // sont déjà triés par sync-community-apworlds.js, qui garde les variantes, et passent
+    // devant les autres liens vers le même dépôt (rando-list), sans statut ni mention APWorld
+    const apworldRepos = new Set((resources.sites || [])
+      .filter(s => s.source === 'apworld' && !s.isObsolete)
+      .map(s => repoKey(s.url)).filter(Boolean));
     const syncedHosts = new Set((resources.sites || [])
       .filter(s => s.source === 'archipelago')
       .map(s => multiworldHost(s.url)));
     const activeSites = (resources.sites || []).filter(s =>
       !s.isObsolete &&
       !(s.source !== 'archipelago' && syncedHosts.has(multiworldHost(s.url))) &&
-      !(syncedHosts.size && s.source !== 'apworld' && isCommunityApworld(s)));
+      !(syncedHosts.size && s.source !== 'apworld' && isCommunityApworld(s)) &&
+      !(s.source !== 'apworld' && apworldRepos.has(repoKey(s.url))));
 
     res.json({
       officialSite,

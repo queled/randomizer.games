@@ -1,7 +1,7 @@
 {
   "intro": {
-    "fr": "Pokémon Rouge et Bleu se randomisent avec l'Online Randomizer de sanqui.net et, en multiworld, avec Archipelago.",
-    "en": "Pokémon Red and Blue are randomized with sanqui.net's Online Randomizer and, in multiworld, with Archipelago."
+    "fr": "Pokémon Rouge et Bleu se randomisent avec l'Online Randomizer de sanqui.net, avec le hack Red Speedchoice pensé pour le speedrun et, en multiworld, avec Archipelago.",
+    "en": "Pokémon Red and Blue are randomized with sanqui.net's Online Randomizer, with the speedrun-oriented Red Speedchoice hack and, in multiworld, with Archipelago."
   },
   "events": [
     {
@@ -27,6 +27,17 @@
       }
     },
     {
+      "date": "2020",
+      "title": {
+        "fr": "Red Speedchoice",
+        "en": "Red Speedchoice"
+      },
+      "text": {
+        "fr": "Red Speedchoice, un hack de Pokémon Rouge pensé pour le speedrun, se randomise avec une version du randomizer diffusée sur Discord en juin 2020, prévue pour sa version 1.1. Le Type Chart Randomizer de NPO-197 prend aussi en charge cette version.",
+        "en": "Red Speedchoice, a speedrun-oriented Pokémon Red hack, is randomized with a build of the randomizer shared on Discord in June 2020, made for its version 1.1. NPO-197's Type Chart Randomizer supports that version too."
+      }
+    },
+    {
       "date": {
         "fr": "Aujourd'hui",
         "en": "Today"
@@ -45,6 +56,10 @@
     {
       "label": "sanqui.net — Online Randomizer",
       "url": "https://sanqui.net/randomizer/"
+    },
+    {
+      "label": "NPO-197/PokemonTypeChartRandomizer (GitHub)",
+      "url": "https://github.com/NPO-197/PokemonTypeChartRandomizer"
     },
     {
       "label": "Archipelago — Pokemon Red and Blue",

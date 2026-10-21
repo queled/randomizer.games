@@ -252,6 +252,9 @@ const TWITCH_GAME_NAMES = {
   
   'pkmne': 'Pokémon Emerald',
   'prb': 'Pokémon Red and Blue',
+  // Twitch splits each pair between a joint category and a single-version one
+  'pkmnbw': ['Pokémon Black/White', 'Pokémon White Version'],
+  'pkmnbw2': ['Pokémon Black/White Version 2', 'Pokémon Black Version 2'],
   'up': 'Pokémon Crystal', // randomizer of several games
   
   'alundra': 'Alundra',

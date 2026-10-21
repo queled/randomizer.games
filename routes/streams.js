@@ -116,6 +116,13 @@ const COMBO_TWITCH_CATEGORY_IDS = {
   'ie2': ['23396', '711834465'],
   'iegcs': ['259153033', '1080451162'],
   'medabots': ['20912', '1355062682'],
+  'dwdd': ['1786018241', '22093'],
+  // Twitch lists each pair together and one of its versions apart
+  'pkmnrb': ['3623', '1528763908'],
+  'pkmnbw': ['27602', '1432908059'],
+  'pkmnbw2': ['33734', '1690221315'],
+  // A game and its fan remake, one category each
+  'legorrmm': ['9147', '375440842'],
   // A game randomized on its NES version, also streamed under its remakes'
   // categories (the Western titles of the mobile, console and DS versions)
   'dw': ['1565834559', '1775376845'],
@@ -252,9 +259,6 @@ const TWITCH_GAME_NAMES = {
   
   'pkmne': 'Pokémon Emerald',
   'prb': 'Pokémon Red and Blue',
-  // Twitch splits each pair between a joint category and a single-version one
-  'pkmnbw': ['Pokémon Black/White', 'Pokémon White Version'],
-  'pkmnbw2': ['Pokémon Black/White Version 2', 'Pokémon Black Version 2'],
   'up': 'Pokémon Crystal', // randomizer of several games
   
   'alundra': 'Alundra',

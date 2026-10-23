@@ -5,17 +5,6 @@
   },
   "events": [
     {
-      "date": "2025",
-      "title": {
-        "fr": "Le jeu d'origine",
-        "en": "The original game"
-      },
-      "text": {
-        "fr": "Adglobe et Live Wire sortent Ender Magnolia: Bloom in the Mist en 2025, suite d'Ender Lilies.",
-        "en": "Adglobe and Live Wire release Ender Magnolia: Bloom in the Mist in 2025, the sequel to Ender Lilies."
-      }
-    },
-    {
       "date": {
         "fr": "Octobre 2023",
         "en": "October 2023"
@@ -27,6 +16,17 @@
       "text": {
         "fr": "Trexounay publie en octobre 2023 un premier APWorld pour Ender Lilies, le jeu précédent.",
         "en": "Trexounay releases a first APWorld for Ender Lilies, the previous game, in October 2023."
+      }
+    },
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Adglobe et Live Wire sortent Ender Magnolia: Bloom in the Mist en 2025, suite d'Ender Lilies.",
+        "en": "Adglobe and Live Wire release Ender Magnolia: Bloom in the Mist in 2025, the sequel to Ender Lilies."
       }
     },
     {

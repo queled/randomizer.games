@@ -17,20 +17,6 @@
     },
     {
       "date": {
-        "fr": "Aujourd'hui",
-        "en": "Today"
-      },
-      "title": {
-        "fr": "Randomizer",
-        "en": "Randomizer"
-      },
-      "text": {
-        "fr": "La liste rando-list recense le randomizer de Benn Powell, publié sur benn-gaming.co.uk.",
-        "en": "The rando-list catalog lists Benn Powell's randomizer, published on benn-gaming.co.uk."
-      }
-    },
-    {
-      "date": {
         "fr": "Août 2024",
         "en": "August 2024"
       },
@@ -41,6 +27,20 @@
       "text": {
         "fr": "Le 19 août 2024, marphoria court le jeu en « Randomizer (Items + Enemies) » au marathon Flame Fatales 2024.",
         "en": "On August 19, 2024, marphoria runs the game in \"Randomizer (Items + Enemies)\" at the Flame Fatales 2024 marathon."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Randomizer",
+        "en": "Randomizer"
+      },
+      "text": {
+        "fr": "La liste rando-list recense le randomizer de Benn Powell, publié sur benn-gaming.co.uk.",
+        "en": "The rando-list catalog lists Benn Powell's randomizer, published on benn-gaming.co.uk."
       }
     }
   ],

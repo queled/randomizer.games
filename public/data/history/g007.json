@@ -31,20 +31,6 @@
     },
     {
       "date": {
-        "fr": "Aujourd'hui",
-        "en": "Today"
-      },
-      "title": {
-        "fr": "Random Eye",
-        "en": "Random Eye"
-      },
-      "text": {
-        "fr": "La liste rando-list recense aussi Random Eye, « the true randomizer », de Murk-17, sur ModDB.",
-        "en": "The rando-list catalog also lists Murk-17's Random Eye, \"the true randomizer\", on ModDB."
-      }
-    },
-    {
-      "date": {
         "fr": "Mars 2026",
         "en": "March 2026"
       },
@@ -55,6 +41,20 @@
       "text": {
         "fr": "NotFamilyJules publie le 27 mars 2026 la version alpha 0.1 de l'APWorld de GoldenEye 007, faute que quelqu'un l'ait déjà fait. Missions, armes, gadgets, clés, chars et codes de triche deviennent des objets ; objectifs, fins de mission et objets ramassés, des emplacements. Il se joue sur BizHawk.",
         "en": "NotFamilyJules releases alpha 0.1 of the GoldenEye 007 APWorld on March 27, 2026, since no one else had done it. Missions, weapons, gadgets, keys, tanks and cheats become items; objectives, mission clears and pickups, locations. It runs on BizHawk."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Random Eye",
+        "en": "Random Eye"
+      },
+      "text": {
+        "fr": "La liste rando-list recense aussi Random Eye, « the true randomizer », de Murk-17, sur ModDB.",
+        "en": "The rando-list catalog also lists Murk-17's Random Eye, \"the true randomizer\", on ModDB."
       }
     }
   ],

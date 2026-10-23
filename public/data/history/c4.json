@@ -17,20 +17,6 @@
     },
     {
       "date": {
-        "fr": "Aujourd'hui",
-        "en": "Today"
-      },
-      "title": {
-        "fr": "Scripts de cartes",
-        "en": "Map scripts"
-      },
-      "text": {
-        "fr": "La liste rando-list recense pour le jeu les scripts de cartes du forum CivFanatics ainsi que les générateurs de cartes aléatoires de DragonEmperor et de low.",
-        "en": "The rando-list catalog lists the map scripts of the CivFanatics forum for the game, along with the random map generators by DragonEmperor and low."
-      }
-    },
-    {
-      "date": {
         "fr": "Mai 2026",
         "en": "May 2026"
       },
@@ -69,6 +55,20 @@
       "text": {
         "fr": "La version Alpha 0.3 sort le 18 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (5 versions publiées).",
         "en": "Alpha version 0.3 is released on October 18, 2026; it is the latest as of October 23, 2026 (5 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Scripts de cartes",
+        "en": "Map scripts"
+      },
+      "text": {
+        "fr": "La liste rando-list recense pour le jeu les scripts de cartes du forum CivFanatics ainsi que les générateurs de cartes aléatoires de DragonEmperor et de low.",
+        "en": "The rando-list catalog lists the map scripts of the CivFanatics forum for the game, along with the random map generators by DragonEmperor and low."
       }
     }
   ],

@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "League of Legends se joue en multiworld Archipelago : les parties classiques du jeu valident des emplacements.",
+    "en": "League of Legends can be played in an Archipelago multiworld: regular matches of the game complete locations."
+  },
+  "events": [
+    {
+      "date": "2009",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Riot Games sort League of Legends en 2009.",
+        "en": "Riot Games releases League of Legends in 2009."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2026",
+        "en": "March 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "kbab13reel publie le 20 mars 2026 la version 0.2.0 de LoL_AP. Un connecteur suit les parties jouées ; tours, inhibiteurs, éliminations, assistances ou Nexus détruit avec un champion donné deviennent des emplacements, et un mode ARAM est prévu.",
+        "en": "kbab13reel releases LoL_AP 0.2.0 on March 20, 2026. A connector tracks the matches played; towers, inhibitors, kills, assists or a Nexus destroyed with a given champion become locations, and an ARAM mode is available."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.2.6 sort le 18 septembre 2026 ; c'est la plus récente au 23 octobre 2026 (7 versions publiées).",
+        "en": "Version 0.2.6 is released on September 18, 2026; it is the latest as of October 23, 2026 (7 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — League of Legends",
+      "url": "https://www.igdb.com/games/league-of-legends"
+    },
+    {
+      "label": "GitHub — kbab13reel/Archipelago",
+      "url": "https://github.com/kbab13reel/Archipelago"
+    },
+    {
+      "label": "GitHub — kbab13reel/Archipelago (releases)",
+      "url": "https://github.com/kbab13reel/Archipelago/releases"
+    }
+  ]
+}

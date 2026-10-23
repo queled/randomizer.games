@@ -1,0 +1,79 @@
+{
+  "intro": {
+    "fr": "Custom Robo a un randomizer de pièces depuis 2023 et se joue en multiworld Archipelago depuis 2025.",
+    "en": "Custom Robo has had a parts randomizer since 2023 and has been playable in an Archipelago multiworld since 2025."
+  },
+  "events": [
+    {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Noise sort sur GameCube en 2004 Custom Robo, édité par Nintendo.",
+        "en": "Noise releases Custom Robo on GameCube in 2004, published by Nintendo."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2023",
+        "en": "August 2023"
+      },
+      "title": {
+        "fr": "Un randomizer de pièces",
+        "en": "A parts randomizer"
+      },
+      "text": {
+        "fr": "PoggieB publie le 11 août 2023 sur romhacking.net un outil qui remplace au hasard les pièces gagnées en combat dans le mode « A New Journey ». Il ajoute cinq pièces bonus au premier combat pour varier les débuts de partie.",
+        "en": "PoggieB posts a tool on romhacking.net on August 11, 2023 that randomly replaces the parts won in battle in \"A New Journey\" mode. It adds five bonus parts to the first battle to vary the start of each run."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2025",
+        "en": "November 2025"
+      },
+      "title": {
+        "fr": "Custom Robo AP",
+        "en": "Custom Robo AP"
+      },
+      "text": {
+        "fr": "Metaruler publie le 2 novembre 2025 la version 0.1 de Custom Robo AP, APWorld pour la version américaine du jeu, sur l'émulateur Dolphin.",
+        "en": "Metaruler releases version 0.1 of Custom Robo AP on November 2, 2025, an APWorld for the US version of the game, on the Dolphin emulator."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 1.0 sort le 21 septembre 2026 (6 versions publiées).",
+        "en": "Version 1.0 is released on September 21, 2026 (6 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Custom Robo",
+      "url": "https://www.igdb.com/games/custom-robo--1"
+    },
+    {
+      "label": "romhacking.net — Custom Robo Randomizer (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.romhacking.net/utilities/1778/"
+    },
+    {
+      "label": "GitHub — Metaruler/ArchipelagoCR",
+      "url": "https://github.com/Metaruler/ArchipelagoCR"
+    },
+    {
+      "label": "GitHub — Metaruler/ArchipelagoCR (releases)",
+      "url": "https://github.com/Metaruler/ArchipelagoCR/releases"
+    }
+  ]
+}

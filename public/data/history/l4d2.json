@@ -1,0 +1,76 @@
+{
+  "intro": {
+    "fr": "Left 4 Dead 2 a un générateur de cartes aléatoires et, depuis 2025, un APWorld en test public.",
+    "en": "Left 4 Dead 2 has a random map generator and, since 2025, an APWorld in public testing."
+  },
+  "events": [
+    {
+      "date": "2009",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Valve sort Left 4 Dead 2 en 2009.",
+        "en": "Valve releases Left 4 Dead 2 in 2009."
+      }
+    },
+    {
+      "date": "Outil",
+      "title": {
+        "fr": "MapGenerator",
+        "en": "MapGenerator"
+      },
+      "text": {
+        "fr": "Le site allemand hehoe.de propose MapGenerator, un outil qui assemble des tuiles de carte pour créer des cartes aléatoires de Left 4 Dead 2.",
+        "en": "The German site hehoe.de offers MapGenerator, a tool that assembles map tiles to create random Left 4 Dead 2 maps."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2025",
+        "en": "November 2025"
+      },
+      "title": {
+        "fr": "Test public",
+        "en": "Public testing"
+      },
+      "text": {
+        "fr": "yufiievershade publie le 10 novembre 2025 une première version alpha de test public de l'APWorld, suivie de la 0.02 le 18 novembre. L'auteur prévient que les bugs sont nombreux et que le Death Link n'est pas encore actif.",
+        "en": "yufiievershade releases a first public testing alpha of the APWorld on November 10, 2025, followed by 0.02 on November 18. The author warns that bugs are plentiful and Death Link is not active yet."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2025",
+        "en": "November 2025"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.02 sort le 18 novembre 2025 ; c'est la plus récente au 23 octobre 2026 (2 versions publiées).",
+        "en": "Version 0.02 is released on November 18, 2025; it is the latest as of October 23, 2026 (2 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Left 4 Dead 2",
+      "url": "https://www.igdb.com/games/left-4-dead-2"
+    },
+    {
+      "label": "hehoe.de — Tools",
+      "url": "https://ssl.hehoe.de/mcs/index.php?display=tools"
+    },
+    {
+      "label": "GitHub — yufiievershade/Left-4-Dead-2-Archipelago",
+      "url": "https://github.com/yufiievershade/Left-4-Dead-2-Archipelago"
+    },
+    {
+      "label": "GitHub — yufiievershade/Left-4-Dead-2-Archipelago (releases)",
+      "url": "https://github.com/yufiievershade/Left-4-Dead-2-Archipelago/releases"
+    }
+  ]
+}

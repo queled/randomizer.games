@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Keep Talking and Nobody Explodes se joue en multiworld Archipelago depuis 2024 : les manuels de désamorçage arrivent au fil de la partie.",
+    "en": "Keep Talking and Nobody Explodes has been playable in an Archipelago multiworld since 2024: the defusal manuals arrive over the course of the game."
+  },
+  "events": [
+    {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Steel Crate Games sort Keep Talking and Nobody Explodes en 2015.",
+        "en": "Steel Crate Games releases Keep Talking and Nobody Explodes in 2015."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2024",
+        "en": "May 2024"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "GreenPower713 publie le 16 mai 2024 la version 0.1.0 de l'APWorld. Elle s'accompagne d'un client « Expert Manuals » et de mods du Steam Workshop ; Linux n'est pas pris en charge.",
+        "en": "GreenPower713 releases version 0.1.0 of the APWorld on May 16, 2024. It comes with an \"Expert Manuals\" client and Steam Workshop mods; Linux is not supported."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.3.0c sort le 28 juillet 2026 ; c'est la plus récente au 23 octobre 2026 (11 versions publiées).",
+        "en": "Version 0.3.0c is released on July 28, 2026; it is the latest as of October 23, 2026 (11 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Keep Talking and Nobody Explodes",
+      "url": "https://www.igdb.com/games/keep-talking-and-nobody-explodes"
+    },
+    {
+      "label": "GitHub — GreenPower713/Archipelago",
+      "url": "https://github.com/GreenPower713/Archipelago"
+    },
+    {
+      "label": "GitHub — GreenPower713/Archipelago (releases)",
+      "url": "https://github.com/GreenPower713/Archipelago/releases"
+    }
+  ]
+}

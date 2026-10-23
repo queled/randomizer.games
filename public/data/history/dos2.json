@@ -1,0 +1,79 @@
+{
+  "intro": {
+    "fr": "Divinity: Original Sin 2 a eu un mod d'ennemis aléatoires dès 2017 et un APWorld en 2026.",
+    "en": "Divinity: Original Sin 2 got a random enemy mod as early as 2017 and an APWorld in 2026."
+  },
+  "events": [
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Larian Studios sort Divinity: Original Sin II en 2017.",
+        "en": "Larian Studios releases Divinity: Original Sin II in 2017."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2017",
+        "en": "October 2017"
+      },
+      "title": {
+        "fr": "Enemy Randomization",
+        "en": "Enemy Randomization"
+      },
+      "text": {
+        "fr": "Le 2 octobre 2017, Baardvaark publie sur Nexus Mods un mod qui donne aux ennemis des bonus aléatoires et permanents au début de chaque combat et améliore le butin.",
+        "en": "On October 2, 2017, Baardvaark posts a mod on Nexus Mods that gives enemies permanent random buffs at the start of each fight and improves loot."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Intaiachi publie le 10 juin 2026 la version 0.1.0 de l'APWorld de la Definitive Edition. Il s'appuie sur le Script Extender de Norbyte et sur un mod de jeu distribué sur GitHub et le Steam Workshop.",
+        "en": "Intaiachi releases version 0.1.0 of the Definitive Edition APWorld on June 10, 2026. It relies on Norbyte's Script Extender and a game mod distributed on GitHub and the Steam Workshop."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.9.1 sort le 17 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (13 versions publiées).",
+        "en": "Version 0.9.1 is released on October 17, 2026; it is the latest as of October 23, 2026 (13 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Divinity: Original Sin II",
+      "url": "https://www.igdb.com/games/divinity-original-sin-ii"
+    },
+    {
+      "label": "Nexus Mods — Enemy Randomization (DE)",
+      "url": "https://www.nexusmods.com/divinityoriginalsin2/mods/110"
+    },
+    {
+      "label": "GitHub — Intaiachi/ArchipelagoDOS2",
+      "url": "https://github.com/Intaiachi/ArchipelagoDOS2"
+    },
+    {
+      "label": "GitHub — Intaiachi/ArchipelagoDOS2 (releases)",
+      "url": "https://github.com/Intaiachi/ArchipelagoDOS2/releases"
+    }
+  ]
+}

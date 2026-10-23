@@ -1,0 +1,97 @@
+{
+  "intro": {
+    "fr": "Bartz24 randomise Final Fantasy XII The Zodiac Age depuis 2018, d'abord sur Nexus Mods, puis dans Archipelago depuis 2024.",
+    "en": "Bartz24 has been randomizing Final Fantasy XII The Zodiac Age since 2018, first on Nexus Mods, then in Archipelago since 2024."
+  },
+  "events": [
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Final Fantasy XII The Zodiac Age en 2017, version remaniée du jeu de 2006.",
+        "en": "Square Enix releases Final Fantasy XII The Zodiac Age in 2017, a remastered version of the 2006 game."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2018",
+        "en": "October 2018"
+      },
+      "title": {
+        "fr": "FF12 Randomizer",
+        "en": "FF12 Randomizer"
+      },
+      "text": {
+        "fr": "Le 29 octobre 2018, Bartz24 publie sur Nexus Mods le FF12 Randomizer : trésors, boutiques, ennemis, musique et bien plus.",
+        "en": "On October 29, 2018, Bartz24 posts the FF12 Randomizer on Nexus Mods: treasures, shops, enemies, music and much more."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2021",
+        "en": "May 2021"
+      },
+      "title": {
+        "fr": "Open World Randomizer",
+        "en": "Open World Randomizer"
+      },
+      "text": {
+        "fr": "Le 30 mai 2021, Bartz24 publie le FF12 Open World Randomizer : le monde est ouvert dès le départ et il faut réunir des objets placés au hasard pour finir le jeu.",
+        "en": "On May 30, 2021, Bartz24 releases the FF12 Open World Randomizer: the world is open from the start and you must gather randomly placed items to beat the game."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2024",
+        "en": "April 2024"
+      },
+      "title": {
+        "fr": "Dans Archipelago",
+        "en": "In Archipelago"
+      },
+      "text": {
+        "fr": "Bartz24 publie le 20 avril 2024 la préversion 0.1.0 de FF12 Open World Archipelago.",
+        "en": "Bartz24 publishes pre-release 0.1.0 of FF12 Open World Archipelago on April 20, 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.6.3 sort le 20 février 2026 ; c'est la plus récente au 23 octobre 2026 (25 versions publiées).",
+        "en": "Version 0.6.3 is released on February 20, 2026; it is the latest as of October 23, 2026 (25 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Final Fantasy XII: The Zodiac Age",
+      "url": "https://www.igdb.com/games/final-fantasy-xii-the-zodiac-age"
+    },
+    {
+      "label": "Nexus Mods — FF12 Randomizer",
+      "url": "https://www.nexusmods.com/finalfantasy12/mods/72"
+    },
+    {
+      "label": "Nexus Mods — FF12 Open World Randomizer",
+      "url": "https://www.nexusmods.com/finalfantasy12/mods/224"
+    },
+    {
+      "label": "GitHub — Bartz24/Archipelago",
+      "url": "https://github.com/Bartz24/Archipelago"
+    },
+    {
+      "label": "GitHub — Bartz24/Archipelago (releases)",
+      "url": "https://github.com/Bartz24/Archipelago/releases"
+    }
+  ]
+}

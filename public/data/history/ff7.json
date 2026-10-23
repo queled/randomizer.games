@@ -1,0 +1,79 @@
+{
+  "intro": {
+    "fr": "Final Fantasy VII a son randomizer, Godo, depuis 2020 ; un APWorld s'appuie depuis 2026 sur un autre randomizer, Gold Saucer.",
+    "en": "Final Fantasy VII has had its randomizer, Godo, since 2020; since 2026 an APWorld builds on another randomizer, Gold Saucer."
+  },
+  "events": [
+    {
+      "date": "1997",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square sort Final Fantasy VII en 1997.",
+        "en": "Square releases Final Fantasy VII in 1997."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2020",
+        "en": "January 2020"
+      },
+      "title": {
+        "fr": "Godo",
+        "en": "Godo"
+      },
+      "text": {
+        "fr": "Le 17 janvier 2020, Sega Chief publie sur les forums Qhimm Godo, randomizer et outil de réglage pour les versions PC 98 et Steam, alors en alpha.",
+        "en": "On January 17, 2020, Sega Chief posts Godo on the Qhimm forums, a randomizer and game tuner for the PC 98 and Steam versions, then in alpha."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "FF7pelago",
+        "en": "FF7pelago"
+      },
+      "text": {
+        "fr": "blazerwazey publie le 22 juin 2026 la version 0.0.1 de l'APWorld FF7pelago, pour la version Steam. Le randomizer Gold Saucer modifie les fichiers du jeu selon la seed, lancé via le gestionnaire de mods 7th Heaven.",
+        "en": "blazerwazey releases version 0.0.1 of the FF7pelago APWorld on June 22, 2026, for the Steam version. The Gold Saucer randomizer patches the game files from the seed, launched through the 7th Heaven mod manager."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.0.6 sort le 18 septembre 2026 ; c'est la plus récente au 23 octobre 2026 (7 versions publiées).",
+        "en": "Version 0.0.6 is released on September 18, 2026; it is the latest as of October 23, 2026 (7 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Final Fantasy VII",
+      "url": "https://www.igdb.com/games/final-fantasy-vii"
+    },
+    {
+      "label": "Qhimm — FF7 Randomiser - Godo",
+      "url": "https://forums.qhimm.com/index.php?topic=19468.0"
+    },
+    {
+      "label": "GitHub — blazerwazey/FF7pelago",
+      "url": "https://github.com/blazerwazey/FF7pelago"
+    },
+    {
+      "label": "GitHub — blazerwazey/FF7pelago (releases)",
+      "url": "https://github.com/blazerwazey/FF7pelago/releases"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "intro": {
+    "fr": "Super Mario Galaxy a des randomizers de galaxies depuis 2020 et un APWorld depuis octobre 2026.",
+    "en": "Super Mario Galaxy has had galaxy randomizers since 2020 and an APWorld since October 2026."
+  },
+  "events": [
+    {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Super Mario Galaxy sur Wii en 2007.",
+        "en": "Nintendo releases Super Mario Galaxy on Wii in 2007."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2020",
+        "en": "March 2020"
+      },
+      "title": {
+        "fr": "Randomizers de galaxies",
+        "en": "Galaxy randomizers"
+      },
+      "text": {
+        "fr": "Le 21 mars 2020, thegreatwaluigi présente sur YouTube des randomizers de galaxies pour Super Mario Galaxy 1 et 2, programmés par Super Hackio et distribués sous forme d'exécutables ; la vidéo est mise à jour en mars 2021.",
+        "en": "On March 21, 2020, thegreatwaluigi presents galaxy randomizers for Super Mario Galaxy 1 and 2 on YouTube, programmed by Super Hackio and distributed as executables; the video is updated in March 2021."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Super Mario Galaxy AP",
+        "en": "Super Mario Galaxy AP"
+      },
+      "text": {
+        "fr": "Joethepic, auteur de mondes « manuels » pour Mario Party 9 et Pikmin 3 en 2023, publie le 15 octobre 2026 la version 0.0.1 de Super Mario Galaxy AP, pour la version américaine sur l'émulateur Dolphin.",
+        "en": "Joethepic, author of \"manual\" worlds for Mario Party 9 and Pikmin 3 in 2023, releases version 0.0.1 of Super Mario Galaxy AP on October 15, 2026, for the US version on the Dolphin emulator."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Super Mario Galaxy",
+      "url": "https://www.igdb.com/games/super-mario-galaxy"
+    },
+    {
+      "label": "YouTube — Super Mario Galaxy 1 & 2 (Galaxy) Randomizer",
+      "url": "https://www.youtube.com/watch?v=4xXHTxTe9i8"
+    },
+    {
+      "label": "GitHub — Joethepic/Archipelago",
+      "url": "https://github.com/Joethepic/Archipelago"
+    },
+    {
+      "label": "GitHub — Joethepic/Archipelago (releases)",
+      "url": "https://github.com/Joethepic/Archipelago/releases?q=Super+Mario+Galaxy&expanded=true"
+    }
+  ]
+}

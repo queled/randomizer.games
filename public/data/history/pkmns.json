@@ -1,0 +1,101 @@
+{
+  "intro": {
+    "fr": "Pokémon Stadium a un éditeur-randomizer depuis 2016, a eu une course en location aléatoire à Frost Fatales 2022 et un APWorld depuis 2025.",
+    "en": "Pokémon Stadium has had an editor-randomizer since 2016, got a random rental run at Frost Fatales 2022, and an APWorld since 2025."
+  },
+  "events": [
+    {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "HAL Laboratory et Nintendo sortent Pokémon Stadium sur Nintendo 64 en 1999.",
+        "en": "HAL Laboratory and Nintendo release Pokémon Stadium on Nintendo 64 in 1999."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2016",
+        "en": "February 2016"
+      },
+      "title": {
+        "fr": "Stadium Editor",
+        "en": "Stadium Editor"
+      },
+      "text": {
+        "fr": "froggy25 publie sur les forums speedrun.com le Pokémon Stadium Editor, éditeur et randomizer pour la ROM américaine ; son code, sur GitHub (Guernouille/Stadium_Editor), date de février 2016.",
+        "en": "froggy25 posts the Pokémon Stadium Editor on the speedrun.com forums, an editor and randomizer for the US ROM; its code, on GitHub (Guernouille/Stadium_Editor), dates from February 2016."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2022",
+        "en": "March 2022"
+      },
+      "title": {
+        "fr": "Frost Fatales 2022",
+        "en": "Frost Fatales 2022"
+      },
+      "text": {
+        "fr": "Le 1er mars 2022, Skybilz court Pokémon Stadium en « Rental Randomizer », jusqu'à la victoire contre Erika, au marathon Frost Fatales 2022.",
+        "en": "On March 1, 2022, Skybilz runs Pokémon Stadium in \"Rental Randomizer\", up to defeating Erika, at the Frost Fatales 2022 marathon."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2025",
+        "en": "November 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "jciii91 publie le 8 novembre 2025 la version 0.1.0 de l'APWorld de Pokémon Stadium.",
+        "en": "jciii91 releases version 0.1.0 of the Pokémon Stadium APWorld on November 8, 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Après la 1.0.0 du 10 septembre 2026, la version 1.1.0 sort le 7 octobre ; c'est la plus récente au 23 octobre 2026 (24 versions publiées).",
+        "en": "After 1.0.0 on September 10, 2026, version 1.1.0 comes out on October 7; it is the latest as of October 23, 2026 (24 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Pokémon Stadium",
+      "url": "https://www.igdb.com/games/pokemon-stadium"
+    },
+    {
+      "label": "speedrun.com — Randomizer and Editor",
+      "url": "https://www.speedrun.com/pkmnstadium/thread/8ias0"
+    },
+    {
+      "label": "GitHub — Guernouille/Stadium_Editor",
+      "url": "https://github.com/Guernouille/Stadium_Editor"
+    },
+    {
+      "label": "Games Done Quick — Frost Fatales 2022, Pokémon Stadium",
+      "url": "https://tracker.gamesdonequick.com/tracker/run/5210"
+    },
+    {
+      "label": "GitHub — jciii91/Pokemon-Stadium",
+      "url": "https://github.com/jciii91/Pokemon-Stadium"
+    },
+    {
+      "label": "GitHub — jciii91/Pokemon-Stadium (releases)",
+      "url": "https://github.com/jciii91/Pokemon-Stadium/releases"
+    }
+  ]
+}

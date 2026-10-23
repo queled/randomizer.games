@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Donkey Kong Country Returns se joue en multiworld Archipelago depuis 2026, sans patch du jeu.",
+    "en": "Donkey Kong Country Returns has been playable in an Archipelago multiworld since 2026, without patching the game."
+  },
+  "events": [
+    {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Retro Studios sort Donkey Kong Country Returns sur Wii en 2010, édité par Nintendo.",
+        "en": "Retro Studios releases Donkey Kong Country Returns on Wii in 2010, published by Nintendo."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "CallmeZewo publie le 26 juin 2026 l'alpha 0.0.2 de l'APWorld. Il agit par injection en mémoire dans l'émulateur Dolphin, sans ISO modifiée.",
+        "en": "CallmeZewo releases alpha 0.0.2 of the APWorld on June 26, 2026. It works by memory injection in the Dolphin emulator, with no modified ISO."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.2.0-beta sort le 22 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (7 versions publiées).",
+        "en": "Version 0.2.0-beta is released on October 22, 2026; it is the latest as of October 23, 2026 (7 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Donkey Kong Country Returns",
+      "url": "https://www.igdb.com/games/donkey-kong-country-returns"
+    },
+    {
+      "label": "GitHub — CallmeZewo/DKCR_APWorld",
+      "url": "https://github.com/CallmeZewo/DKCR_APWorld"
+    },
+    {
+      "label": "GitHub — CallmeZewo/DKCR_APWorld (releases)",
+      "url": "https://github.com/CallmeZewo/DKCR_APWorld/releases"
+    }
+  ]
+}

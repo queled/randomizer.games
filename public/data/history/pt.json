@@ -1,0 +1,69 @@
+{
+  "intro": {
+    "fr": "Pizza Tower se joue en multiworld Archipelago depuis 2025 grâce au mod de Skizzers.",
+    "en": "Pizza Tower has been playable in an Archipelago multiworld since 2025 through Skizzers' mod."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Tour De Pizza sort Pizza Tower en 2023.",
+        "en": "Tour De Pizza releases Pizza Tower in 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2025",
+        "en": "June 2025"
+      },
+      "title": {
+        "fr": "Pizza Tower Archipelago",
+        "en": "Pizza Tower Archipelago"
+      },
+      "text": {
+        "fr": "Skizzers publie le 2 juin 2025 la version 1.0.0 de Pizza Tower Archipelago, sur GitHub et GameBanana. Toppins, clés de boss et même des techniques de Peppino deviennent des objets ; portes de niveaux, portes de boss et secrets peuvent aussi être randomisés.",
+        "en": "Skizzers releases version 1.0.0 of Pizza Tower Archipelago on June 2, 2025, on GitHub and GameBanana. Toppins, boss keys and even Peppino's moves become items; level gates, boss gates and secrets can be randomized too."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 1.3.3 sort le 26 mai 2026 ; c'est la plus récente au 23 octobre 2026 (14 versions publiées).",
+        "en": "Version 1.3.3 is released on May 26, 2026; it is the latest as of October 23, 2026 (14 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Pizza Tower",
+      "url": "https://www.igdb.com/games/pizza-tower"
+    },
+    {
+      "label": "GitHub — unsafetyskizzers/Archipelago",
+      "url": "https://github.com/unsafetyskizzers/Archipelago"
+    },
+    {
+      "label": "GitHub — unsafetyskizzers/Archipelago (releases)",
+      "url": "https://github.com/unsafetyskizzers/Archipelago/releases"
+    },
+    {
+      "label": "GameBanana — Pizza Tower Archipelago",
+      "url": "https://gamebanana.com/mods/598236"
+    },
+    {
+      "label": "rando-list — Pizza Tower",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Pizza_Tower.yml"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Iji, jeu gratuit de Daniel Remar, se joue en multiworld Archipelago depuis 2025 grâce à une version modifiée de son code source.",
+    "en": "Iji, Daniel Remar's free game, has been playable in an Archipelago multiworld since 2025 through a modified version of its source code."
+  },
+  "events": [
+    {
+      "date": "2008",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Daniel Remar sort Iji en 2008.",
+        "en": "Daniel Remar releases Iji in 2008."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2025",
+        "en": "March 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "MinishLink publie le 7 mars 2025 Iji Archipelago 1.0.1, avec l'aide de Ladybunne. Le randomizer modifie le code source du jeu ; pour des raisons de droits, la musique n'est pas incluse et se récupère sur le site de l'auteur.",
+        "en": "MinishLink releases Iji Archipelago 1.0.1 on March 7, 2025, with help from Ladybunne. The randomizer modifies the game's source code; for licensing reasons, the music is not included and is downloaded from the author's site."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 1.2.6 sort le 5 février 2026 ; c'est la plus récente au 23 octobre 2026 (15 versions publiées).",
+        "en": "Version 1.2.6 is released on February 5, 2026; it is the latest as of October 23, 2026 (15 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Iji",
+      "url": "https://www.igdb.com/games/iji"
+    },
+    {
+      "label": "GitHub — Minish-Link/Iji-Archipelago",
+      "url": "https://github.com/Minish-Link/Iji-Archipelago"
+    },
+    {
+      "label": "GitHub — Minish-Link/Iji-Archipelago (releases)",
+      "url": "https://github.com/Minish-Link/Iji-Archipelago/releases"
+    }
+  ]
+}

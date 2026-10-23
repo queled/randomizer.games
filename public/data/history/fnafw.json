@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "FNaF World se joue en multiworld Archipelago depuis 2026.",
+    "en": "FNaF World has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Scottgames sort FNaF World en 2016.",
+        "en": "Scottgames releases FNaF World in 2016."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "EviVirus publie le 27 mai 2026 la version 1.0.1 de FNaFW Archipelago, dans un dépôt qui accueille aussi Freddy Fazbear's Pizzeria Simulator.",
+        "en": "EviVirus releases FNaFW Archipelago 1.0.1 on May 27, 2026, in a repository that also hosts Freddy Fazbear's Pizzeria Simulator."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 1.2.3 sort le 7 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (9 versions publiées).",
+        "en": "Version 1.2.3 is released on October 7, 2026; it is the latest as of October 23, 2026 (9 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — FNaF World",
+      "url": "https://www.igdb.com/games/fnaf-world"
+    },
+    {
+      "label": "GitHub — EviVirus/Archipelago-FNaFW-FFPS",
+      "url": "https://github.com/EviVirus/Archipelago-FNaFW-FFPS"
+    },
+    {
+      "label": "GitHub — EviVirus/Archipelago-FNaFW-FFPS (releases)",
+      "url": "https://github.com/EviVirus/Archipelago-FNaFW-FFPS/releases"
+    }
+  ]
+}

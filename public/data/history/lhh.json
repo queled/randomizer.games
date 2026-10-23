@@ -1,0 +1,50 @@
+{
+  "intro": {
+    "fr": "Loonyland: Halloween Hill se joue en multiworld Archipelago depuis 2024, grâce à une version modifiée du moteur HamSandwich.",
+    "en": "Loonyland: Halloween Hill has been playable in an Archipelago multiworld since 2024, through a modified version of the HamSandwich engine."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Décembre 2024",
+        "en": "December 2024"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "AutomaticFrenzy publie le 13 décembre 2024 un « premier APWorld fonctionnel », avec un client tiré du moteur HamSandwich et un pack PopTracker.",
+        "en": "AutomaticFrenzy releases a \"first working apworld\" on December 13, 2024, with a client derived from the HamSandwich engine and a PopTracker pack."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.2.5 sort le 14 juin 2026 ; c'est la plus récente au 23 octobre 2026 (5 versions publiées).",
+        "en": "Version 0.2.5 is released on June 14, 2026; it is the latest as of October 23, 2026 (5 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — AutomaticFrenzy/Archipelago",
+      "url": "https://github.com/AutomaticFrenzy/Archipelago"
+    },
+    {
+      "label": "GitHub — AutomaticFrenzy/Archipelago (releases)",
+      "url": "https://github.com/AutomaticFrenzy/Archipelago/releases"
+    },
+    {
+      "label": "GitHub — AutomaticFrenzy/HamSandwich",
+      "url": "https://github.com/AutomaticFrenzy/HamSandwich"
+    }
+  ]
+}

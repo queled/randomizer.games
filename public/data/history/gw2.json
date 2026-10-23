@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Guild Wars 2, un MMO, se joue en multiworld Archipelago depuis 2024 grâce à un module BlishHUD.",
+    "en": "Guild Wars 2, an MMO, has been playable in an Archipelago multiworld since 2024 through a BlishHUD module."
+  },
+  "events": [
+    {
+      "date": "2012",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "ArenaNet sort Guild Wars 2 en 2012.",
+        "en": "ArenaNet releases Guild Wars 2 in 2012."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2024",
+        "en": "July 2024"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Feldar99 publie le 5 juillet 2024 l'alpha 0.1.0 de l'APWorld. Le client est un module de BlishHUD, l'outil d'interface superposée de la communauté.",
+        "en": "Feldar99 releases alpha 0.1.0 of the APWorld on July 5, 2024. The client is a module for BlishHUD, the community overlay tool."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.4.11-alpha sort le 28 juin 2026 ; c'est la plus récente au 23 octobre 2026 (19 versions publiées).",
+        "en": "Version 0.4.11-alpha is released on June 28, 2026; it is the latest as of October 23, 2026 (19 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Guild Wars 2",
+      "url": "https://www.igdb.com/games/guild-wars-2"
+    },
+    {
+      "label": "GitHub — Feldar99/Archipelago",
+      "url": "https://github.com/Feldar99/Archipelago"
+    },
+    {
+      "label": "GitHub — Feldar99/Archipelago (releases)",
+      "url": "https://github.com/Feldar99/Archipelago/releases"
+    }
+  ]
+}

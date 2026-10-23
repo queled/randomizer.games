@@ -1,0 +1,115 @@
+{
+  "intro": {
+    "fr": "Cas rare, le randomizer d'Axiom Verge, né dans sa communauté de speedrunners, est devenu en 2021 un mode officiel du jeu. Un APWorld est en bêta depuis 2025.",
+    "en": "In a rare case, the Axiom Verge randomizer, born in its speedrunning community, became an official game mode in 2021. An APWorld has been in beta since 2025."
+  },
+  "events": [
+    {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Thomas Happ sort Axiom Verge en 2015.",
+        "en": "Thomas Happ releases Axiom Verge in 2015."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2018",
+        "en": "September 2018"
+      },
+      "title": {
+        "fr": "AxiomRandomizer",
+        "en": "AxiomRandomizer"
+      },
+      "text": {
+        "fr": "Pozzum publie le 2 septembre 2018 la première version d'AxiomRandomizer, pour les versions Steam et Epic, avec VideoGameRoulette et Leemyy comme contributeurs. La version 0.7.5.0 sort en juin 2019.",
+        "en": "Pozzum releases the first version of AxiomRandomizer on September 2, 2018, for the Steam and Epic versions, with VideoGameRoulette and Leemyy as contributors. Version 0.7.5.0 comes out in June 2019."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2021",
+        "en": "January 2021"
+      },
+      "title": {
+        "fr": "Un mode officiel",
+        "en": "An official mode"
+      },
+      "text": {
+        "fr": "Le 15 janvier 2021, Thomas Happ annonce la première mise à jour gratuite du jeu : un mode Randomizer, en bêta ouverte. Thomas Happ y remercie Pozzum et des speedrunners (NoReset Games, VideoGameRoulette, GVirus, Willow, Leemyy, Jaku de Crowd Control), qui ont travaillé des années sur la version non officielle puis avec le développeur pour l'intégrer, en refusant toute rémunération.",
+        "en": "On January 15, 2021, Thomas Happ announces the game's first free update: a Randomizer mode, in open beta. Thomas Happ thanks Pozzum and speedrunners (NoReset Games, VideoGameRoulette, GVirus, Willow, Leemyy, Jaku from Crowd Control), who worked for years on the unofficial version and then with the developer to integrate it, refusing any compensation."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2021",
+        "en": "August 2021"
+      },
+      "title": {
+        "fr": "Version 1.48",
+        "en": "Version 1.48"
+      },
+      "text": {
+        "fr": "La version 1.48 du 17 août 2021 intègre le randomizer au jeu principal.",
+        "en": "Version 1.48 on August 17, 2021 integrates the randomizer into the main game."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2025",
+        "en": "April 2025"
+      },
+      "title": {
+        "fr": "APWorld",
+        "en": "APWorld"
+      },
+      "text": {
+        "fr": "mail-liam publie le 16 avril 2025 la première bêta d'un APWorld d'Axiom Verge.",
+        "en": "mail-liam releases the first beta of an Axiom Verge APWorld on April 16, 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La bêta 3.3 sort le 20 février 2026 ; c'est la plus récente au 23 octobre 2026 (6 versions publiées).",
+        "en": "Beta 3.3 comes out on February 20, 2026; it is the latest as of October 23, 2026 (6 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Axiom Verge",
+      "url": "https://www.igdb.com/games/axiom-verge"
+    },
+    {
+      "label": "GitHub — pozzum/AxiomRandomizer",
+      "url": "https://github.com/pozzum/AxiomRandomizer"
+    },
+    {
+      "label": "Axiom Verge — Announcing Axiom Verge's First Ever Free Content Update",
+      "url": "https://www.axiomverge.com/blog/announcing-axiom-verges-first-ever-free-content-update-in-open-beta-now"
+    },
+    {
+      "label": "Steam — Version 1.48",
+      "url": "https://store.steampowered.com/news/app/332200/view/2990940314641346963"
+    },
+    {
+      "label": "GitHub — mail-liam/Archipelago",
+      "url": "https://github.com/mail-liam/Archipelago"
+    },
+    {
+      "label": "GitHub — mail-liam/Archipelago (releases)",
+      "url": "https://github.com/mail-liam/Archipelago/releases"
+    }
+  ]
+}

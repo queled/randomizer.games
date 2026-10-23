@@ -1,0 +1,76 @@
+{
+  "intro": {
+    "fr": "Mega Man X6 se joue en multiworld Archipelago depuis 2026, grâce à l'auteur de l'APWorld de Mega Man X5.",
+    "en": "Mega Man X6 has been playable in an Archipelago multiworld since 2026, thanks to the author of the Mega Man X5 APWorld."
+  },
+  "events": [
+    {
+      "date": "2001",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Mega Man X6 sur PlayStation en 2001.",
+        "en": "Capcom releases Mega Man X6 on PlayStation in 2001."
+      }
+    },
+    {
+      "date": "Outil",
+      "title": {
+        "fr": "Tweaks Patcher",
+        "en": "Tweaks Patcher"
+      },
+      "text": {
+        "fr": "La liste rando-list recense le Tweaks Patcher de romhacking.net, outil de modification qui intègre un randomizer.",
+        "en": "The rando-list catalog lists the Tweaks Patcher from romhacking.net, a modding tool with a bundled randomizer."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Après une quinzaine de versions de son APWorld de Mega Man X5 en août, Shinnuu publie le 28 août 2026 la version 0.1.0 de celui de Mega Man X6, pour la version américaine sur BizHawk.",
+        "en": "After some fifteen versions of a Mega Man X5 APWorld in August, Shinnuu releases version 0.1.0 of a Mega Man X6 one on August 28, 2026, for the US version on BizHawk."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.4.1 sort le 19 septembre 2026 ; c'est la plus récente au 23 octobre 2026 (8 versions publiées).",
+        "en": "Version 0.4.1 is released on September 19, 2026; it is the latest as of October 23, 2026 (8 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Mega Man X6",
+      "url": "https://www.igdb.com/games/mega-man-x6"
+    },
+    {
+      "label": "rando-list — Mega Man",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Mega_Man.yml"
+    },
+    {
+      "label": "GitHub — Shinnuu/Archipelago",
+      "url": "https://github.com/Shinnuu/Archipelago"
+    },
+    {
+      "label": "GitHub — Shinnuu/Archipelago (releases)",
+      "url": "https://github.com/Shinnuu/Archipelago/releases?q=MMX6&expanded=true"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Anno 1800 se joue en multiworld Archipelago depuis 2026 ; l'APWorld a couvert tout le contenu du jeu en moins d'un mois.",
+    "en": "Anno 1800 has been playable in an Archipelago multiworld since 2026; the APWorld covered all of the game's content in under a month."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Ubisoft Blue Byte sort Anno 1800 en 2019.",
+        "en": "Ubisoft Blue Byte releases Anno 1800 in 2019."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Dark-Listener publie le 10 mai 2026 la première version de l'APWorld, 0.1.0. Les DLC arrivent dès le 23 mai, puis l'Arctique, Enbesa, le tourisme et les dirigeables, jusqu'à la version 1.0.0 « Full Content Release » du 2 juin.",
+        "en": "Dark-Listener releases the APWorld's first version, 0.1.0, on May 10, 2026. DLCs arrive from May 23, then the Arctic, Enbesa, tourism and airships, up to the 1.0.0 \"Full Content Release\" on June 2."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 1.5.0 sort le 9 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (17 versions publiées).",
+        "en": "Version 1.5.0 is released on October 9, 2026; it is the latest as of October 23, 2026 (17 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Anno 1800",
+      "url": "https://www.igdb.com/games/anno-1800"
+    },
+    {
+      "label": "GitHub — Dark-Listener/ArchipelagoA1800",
+      "url": "https://github.com/Dark-Listener/ArchipelagoA1800"
+    },
+    {
+      "label": "GitHub — Dark-Listener/ArchipelagoA1800 (releases)",
+      "url": "https://github.com/Dark-Listener/ArchipelagoA1800/releases"
+    }
+  ]
+}

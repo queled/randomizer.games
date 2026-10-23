@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Rift Wizard se joue en multiworld Archipelago depuis 2023.",
+    "en": "Rift Wizard has been playable in an Archipelago multiworld since 2023."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Dylan White sort Rift Wizard en 2021.",
+        "en": "Dylan White releases Rift Wizard in 2021."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2023",
+        "en": "May 2023"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "TheBigSalarius publie le 26 mai 2023 l'APWorld et son modèle de YAML (version 1.3.1). Le mod de jeu, à part, passe par le chargeur AAA_Loader.",
+        "en": "TheBigSalarius publishes the APWorld and its YAML template on May 26, 2023 (version 1.3.1). The separate game mod goes through the AAA_Loader mod loader."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Rift Wizard",
+      "url": "https://www.igdb.com/games/rift-wizard"
+    },
+    {
+      "label": "GitHub — TheBigSalarius/Archipelago",
+      "url": "https://github.com/TheBigSalarius/Archipelago"
+    },
+    {
+      "label": "GitHub — TheBigSalarius/Archipelago (releases)",
+      "url": "https://github.com/TheBigSalarius/Archipelago/releases"
+    },
+    {
+      "label": "GitHub — TheBigSalarius/RiftWizardArchipelagoMod",
+      "url": "https://github.com/TheBigSalarius/RiftWizardArchipelagoMod"
+    }
+  ]
+}

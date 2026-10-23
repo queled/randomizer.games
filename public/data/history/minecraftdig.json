@@ -1,0 +1,46 @@
+{
+  "intro": {
+    "fr": "Minecraft Dig est une variante du randomizer Minecraft d'Archipelago, maintenue à part pour Minecraft 1.19.4.",
+    "en": "Minecraft Dig is a variant of Archipelago's Minecraft randomizer, maintained separately for Minecraft 1.19.4."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Décembre 2025",
+        "en": "December 2025"
+      },
+      "title": {
+        "fr": "Dig apworld",
+        "en": "Dig apworld"
+      },
+      "text": {
+        "fr": "jacobmix publie le 22 décembre 2025 la version 0.0.3 du « Dig apworld » pour Minecraft 1.19.4, à côté de l'APWorld Minecraft principal pour la 1.20.4. Ce dernier est depuis réécrit pour NeoForge dans un autre projet, Dig restant tel quel.",
+        "en": "jacobmix releases version 0.0.3 of the \"Dig apworld\" for Minecraft 1.19.4 on December 22, 2025, alongside the main Minecraft APWorld for 1.20.4. The latter has since been rewritten for NeoForge in another project, while Dig stays as it is."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2026",
+        "en": "April 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.0.11 sort le 14 avril 2026 ; c'est la plus récente au 23 octobre 2026 (10 versions publiées).",
+        "en": "Version 0.0.11 is released on April 14, 2026; it is the latest as of October 23, 2026 (10 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — jacobmix/Minecraft_AP_Randomizer",
+      "url": "https://github.com/jacobmix/Minecraft_AP_Randomizer"
+    },
+    {
+      "label": "GitHub — jacobmix/Minecraft_AP_Randomizer (releases)",
+      "url": "https://github.com/jacobmix/Minecraft_AP_Randomizer/releases?q=dig"
+    }
+  ]
+}

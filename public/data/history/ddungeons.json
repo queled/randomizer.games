@@ -1,0 +1,76 @@
+{
+  "intro": {
+    "fr": "Dicey Dungeons a un mod d'équipement aléatoire signé de son créateur, et un APWorld depuis 2026.",
+    "en": "Dicey Dungeons has a random equipment mod made by its creator, and an APWorld since 2026."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Terry Cavanagh sort Dicey Dungeons en 2019.",
+        "en": "Terry Cavanagh releases Dicey Dungeons in 2019."
+      }
+    },
+    {
+      "date": "Mod",
+      "title": {
+        "fr": "Random Equipment!",
+        "en": "Random Equipment!"
+      },
+      "text": {
+        "fr": "Le mod Random Equipment!, publié sur itch.io par XAngelMoonX, rend tout l'équipement aléatoire, à taille égale et hors objets propres à un personnage. La page précise qu'il a été réalisé par « Terry himself ».",
+        "en": "The Random Equipment! mod, posted on itch.io by XAngelMoonX, makes all equipment random, at equal size and excluding character-specific items. The page states that it was made by \"Terry himself\"."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2026",
+        "en": "January 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Fylcoast publie le 25 janvier 2026 l'alpha 0.0.1 de l'APWorld de Dicey Dungeons, accompagné d'un pack PopTracker.",
+        "en": "Fylcoast releases alpha 0.0.1 of the Dicey Dungeons APWorld on January 25, 2026, along with a PopTracker pack."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.6.0-beta sort le 18 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (26 versions publiées).",
+        "en": "Version 0.6.0-beta is released on October 18, 2026; it is the latest as of October 23, 2026 (26 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Dicey Dungeons",
+      "url": "https://www.igdb.com/games/dicey-dungeons"
+    },
+    {
+      "label": "itch.io — Random Equipment! (archive)",
+      "url": "http://web.archive.org/web/2026/https://xangelmoonx.itch.io/random-equipment"
+    },
+    {
+      "label": "GitHub — Fylcoast/AP_diceydungeons",
+      "url": "https://github.com/Fylcoast/AP_diceydungeons"
+    },
+    {
+      "label": "GitHub — Fylcoast/AP_diceydungeons (releases)",
+      "url": "https://github.com/Fylcoast/AP_diceydungeons/releases"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "intro": {
+    "fr": "Hammerwatch se joue en multiworld Archipelago grâce au travail de Parcosmic, commencé en 2022.",
+    "en": "Hammerwatch can be played in an Archipelago multiworld thanks to Parcosmic's work, started in 2022."
+  },
+  "events": [
+    {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Crackshell sort Hammerwatch en 2013.",
+        "en": "Crackshell releases Hammerwatch in 2013."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2022",
+        "en": "September 2022"
+      },
+      "title": {
+        "fr": "Le dépôt",
+        "en": "The repository"
+      },
+      "text": {
+        "fr": "Parcosmic crée en septembre 2022 le dépôt Hammerwatch-Archipelago, accompagné d'un installateur du mod de jeu.",
+        "en": "Parcosmic creates the Hammerwatch-Archipelago repository in September 2022, along with an installer for the game mod."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2024",
+        "en": "August 2024"
+      },
+      "title": {
+        "fr": "Versions publiées",
+        "en": "Published releases"
+      },
+      "text": {
+        "fr": "La première version publiée sur la page du dépôt, 1.1.13, date du 30 août 2024.",
+        "en": "The first release published on the repository page, 1.1.13, dates from August 30, 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 4.1.4 sort le 24 septembre 2026 ; c'est la plus récente au 23 octobre 2026 (10 versions publiées).",
+        "en": "Version 4.1.4 is released on September 24, 2026; it is the latest as of October 23, 2026 (10 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Hammerwatch",
+      "url": "https://www.igdb.com/games/hammerwatch"
+    },
+    {
+      "label": "GitHub — Parcosmic/Hammerwatch-Archipelago",
+      "url": "https://github.com/Parcosmic/Hammerwatch-Archipelago"
+    },
+    {
+      "label": "GitHub — Parcosmic/Hammerwatch-Archipelago (releases)",
+      "url": "https://github.com/Parcosmic/Hammerwatch-Archipelago/releases"
+    },
+    {
+      "label": "GitHub — Parcosmic/HammerwatchAPMod",
+      "url": "https://github.com/Parcosmic/HammerwatchAPMod"
+    }
+  ]
+}

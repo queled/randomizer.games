@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Deep Rock Galactic se joue en multiworld Archipelago depuis 2025, grâce à un mod distribué sur mod.io.",
+    "en": "Deep Rock Galactic has been playable in an Archipelago multiworld since 2025, through a mod distributed on mod.io."
+  },
+  "events": [
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Ghost Ship Games sort Deep Rock Galactic en 2020.",
+        "en": "Ghost Ship Games releases Deep Rock Galactic in 2020."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2025",
+        "en": "March 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Cousinit117 publie le 8 mars 2025 sur GitHub une première version de test, l'alpha 1.0.7 ; le mod de jeu est distribué sur mod.io.",
+        "en": "Cousinit117 publishes a first test release on GitHub on March 8, 2025, alpha 1.0.7; the game mod is distributed on mod.io."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.20 sort le 2 septembre 2026 ; c'est la plus récente au 23 octobre 2026 (28 versions publiées).",
+        "en": "Version 0.20 is released on September 2, 2026; it is the latest as of October 23, 2026 (28 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Deep Rock Galactic",
+      "url": "https://www.igdb.com/games/deep-rock-galactic"
+    },
+    {
+      "label": "GitHub — Cousinit117/Deep-Rock-Galactic-AP",
+      "url": "https://github.com/Cousinit117/Deep-Rock-Galactic-AP"
+    },
+    {
+      "label": "GitHub — Cousinit117/Deep-Rock-Galactic-AP (releases)",
+      "url": "https://github.com/Cousinit117/Deep-Rock-Galactic-AP/releases"
+    }
+  ]
+}

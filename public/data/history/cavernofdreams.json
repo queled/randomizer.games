@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Cavern of Dreams se joue en multiworld Archipelago depuis 2024, en bêta.",
+    "en": "Cavern of Dreams has been playable in an Archipelago multiworld since 2024, in beta."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bynine sort Cavern of Dreams en 2023.",
+        "en": "Bynine releases Cavern of Dreams in 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2024",
+        "en": "August 2024"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "wu4 publie le 4 août 2024 la première bêta de l'APWorld de Cavern of Dreams.",
+        "en": "wu4 releases the first beta of the Cavern of Dreams APWorld on August 4, 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2025",
+        "en": "June 2025"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 10.3 sort le 27 juin 2025 ; c'est la plus récente au 23 octobre 2026 (10 versions publiées).",
+        "en": "Version 10.3 is released on June 27, 2025; it is the latest as of October 23, 2026 (10 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Cavern of Dreams",
+      "url": "https://www.igdb.com/games/cavern-of-dreams"
+    },
+    {
+      "label": "GitHub — wu4/Archipelago",
+      "url": "https://github.com/wu4/Archipelago"
+    },
+    {
+      "label": "GitHub — wu4/Archipelago (releases)",
+      "url": "https://github.com/wu4/Archipelago/releases"
+    }
+  ]
+}

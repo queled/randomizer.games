@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Parkitect se joue en multiworld Archipelago depuis 2025.",
+    "en": "Parkitect has been playable in an Archipelago multiworld since 2025."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Texel Raptor sort Parkitect en 2018.",
+        "en": "Texel Raptor releases Parkitect in 2018."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2025",
+        "en": "October 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "CrusherRL publie le 15 octobre 2025 la version 0.0.1 de l'APWorld de Parkitect.",
+        "en": "CrusherRL releases version 0.0.1 of the Parkitect APWorld on October 15, 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 1.7.0 sort le 4 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (15 versions publiées).",
+        "en": "Version 1.7.0 is released on October 4, 2026; it is the latest as of October 23, 2026 (15 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Parkitect",
+      "url": "https://www.igdb.com/games/parkitect"
+    },
+    {
+      "label": "GitHub — CrusherRL/AP_Parkitect_World",
+      "url": "https://github.com/CrusherRL/AP_Parkitect_World"
+    },
+    {
+      "label": "GitHub — CrusherRL/AP_Parkitect_World (releases)",
+      "url": "https://github.com/CrusherRL/AP_Parkitect_World/releases"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Castlevania: Legacy of Darkness se joue en multiworld Archipelago grâce à LiquidCat64, déjà auteur de l'APWorld de Castlevania 64.",
+    "en": "Castlevania: Legacy of Darkness can be played in an Archipelago multiworld thanks to LiquidCat64, already the author of the Castlevania 64 APWorld."
+  },
+  "events": [
+    {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Castlevania: Legacy of Darkness sur Nintendo 64 en 1999.",
+        "en": "Konami releases Castlevania: Legacy of Darkness on Nintendo 64 in 1999."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2024",
+        "en": "February 2024"
+      },
+      "title": {
+        "fr": "« But It's Just Castle Wall & Villa »",
+        "en": "\"But It's Just Castle Wall & Villa\""
+      },
+      "text": {
+        "fr": "Le 1er février 2024, LiquidCat64 publie CVLoDBIJCW&V (« Castlevania Legacy of Darkness But It's Just Castle Wall & Villa »), premier APWorld limité à deux niveaux, présenté comme la suite d'OoTBIJMQWT d'Alchav. Une deuxième version suit en mai.",
+        "en": "On February 1, 2024, LiquidCat64 releases CVLoDBIJCW&V (\"Castlevania Legacy of Darkness But It's Just Castle Wall & Villa\"), a first APWorld limited to two stages, presented as the sequel to Alchav's OoTBIJMQWT. A second version follows in May."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Le jeu complet arrive avec CVLoD apworld 1.0 le 13 février 2026. La version 2.0.2 sort le 14 septembre 2026 ; c'est la plus récente au 23 octobre 2026.",
+        "en": "The full game arrives with CVLoD apworld 1.0 on February 13, 2026. Version 2.0.2 comes out on September 14, 2026; it is the latest as of October 23, 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Castlevania: Legacy of Darkness",
+      "url": "https://www.igdb.com/games/castlevania-legacy-of-darkness"
+    },
+    {
+      "label": "GitHub — LiquidCat64/LiquidCatipelago",
+      "url": "https://github.com/LiquidCat64/LiquidCatipelago"
+    },
+    {
+      "label": "GitHub — LiquidCat64/LiquidCatipelago (releases)",
+      "url": "https://github.com/LiquidCat64/LiquidCatipelago/releases"
+    }
+  ]
+}

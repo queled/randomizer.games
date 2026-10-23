@@ -1,0 +1,83 @@
+{
+  "intro": {
+    "fr": "Mega Man Battle Network 6 fait partie des premiers jeux de la série à avoir eu un randomizer, en 2014 ; un APWorld existe depuis 2025.",
+    "en": "Mega Man Battle Network 6 was among the first games in the series to get a randomizer, in 2014; an APWorld has existed since 2025."
+  },
+  "events": [
+    {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort le jeu sur Game Boy Advance en 2005 au Japon, sous le nom Rockman EXE 6, puis en 2006 en Amérique du Nord en deux versions, Cybeast Gregar et Cybeast Falzar.",
+        "en": "Capcom releases the game on Game Boy Advance in 2005 in Japan, as Rockman EXE 6, then in 2006 in North America in two versions, Cybeast Gregar and Cybeast Falzar."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2014",
+        "en": "August 2014"
+      },
+      "title": {
+        "fr": "MMBN Randomizer",
+        "en": "MMBN Randomizer"
+      },
+      "text": {
+        "fr": "Le 9 août 2014, pour les huit ans du forum The Rockman EXE Zone, Prof. 9 publie le MMBN Randomizer, inspiré des randomizers Pokémon et écrit en Java. Il randomise les codes des puces, le dossier de départ, les virus, les puces lâchées, trouvées ou vendues, et fonctionne au départ avec Battle Network 5 et 6.",
+        "en": "On August 9, 2014, for The Rockman EXE Zone forum's eighth birthday, Prof. 9 releases the MMBN Randomizer, inspired by Pokémon randomizers and written in Java. It randomizes chip codes, the starting folder, viruses, and chips dropped, found or sold, and is initially compatible with Battle Network 5 and 6."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2025",
+        "en": "October 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "RischDev publie le 18 octobre 2025 la version 0.0.1 de l'APWorld de MMBN6, pour la ROM américaine de Cybeast Gregar sur BizHawk (la ROM de la Legacy Collection ne convient pas).",
+        "en": "RischDev releases version 0.0.1 of the MMBN6 APWorld on October 18, 2025, for the US Cybeast Gregar ROM on BizHawk (the Legacy Collection ROM does not work)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.2.1 sort le 9 septembre 2026 ; c'est la plus récente au 23 octobre 2026 (6 versions publiées).",
+        "en": "Version 0.2.1 is released on September 9, 2026; it is the latest as of October 23, 2026 (6 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Mega Man Battle Network 6: Cybeast Gregar",
+      "url": "https://www.igdb.com/games/mega-man-battle-network-6-cybeast-gregar"
+    },
+    {
+      "label": "IGDB — Rockman EXE 6: Dennoujuu Glaga",
+      "url": "https://www.igdb.com/games/rockman-exe-6-dennoujuu-glaga"
+    },
+    {
+      "label": "The Rockman EXE Zone — MMBN Randomizer (archive)",
+      "url": "http://web.archive.org/web/2026/https://forums.therockmanexezone.com/mmbn-randomizer-t15216.html"
+    },
+    {
+      "label": "GitHub — RischDev/Archipelago",
+      "url": "https://github.com/RischDev/Archipelago"
+    },
+    {
+      "label": "GitHub — RischDev/Archipelago (releases)",
+      "url": "https://github.com/RischDev/Archipelago/releases"
+    }
+  ]
+}

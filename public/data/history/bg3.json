@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Baldur's Gate 3 se joue en multiworld Archipelago depuis 2025.",
+    "en": "Baldur's Gate 3 has been playable in an Archipelago multiworld since 2025."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Larian Studios sort Baldur's Gate 3 en 2023.",
+        "en": "Larian Studios releases Baldur's Gate 3 in 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2025",
+        "en": "September 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "zane31415 publie le 15 septembre 2025 la version 0.1 de l'APWorld de Baldur's Gate 3, deux jours après avoir créé le dépôt ; une dizaine de versions suivent dans le mois.",
+        "en": "zane31415 releases version 0.1 of the Baldur's Gate 3 APWorld on September 15, 2025, two days after creating the repository; about ten versions follow within the month."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.8.0 sort le 19 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (31 versions publiées).",
+        "en": "Version 0.8.0 is released on October 19, 2026; it is the latest as of October 23, 2026 (31 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Baldur's Gate III",
+      "url": "https://www.igdb.com/games/baldurs-gate-iii"
+    },
+    {
+      "label": "GitHub — zane31415/ArchipelagoBG3",
+      "url": "https://github.com/zane31415/ArchipelagoBG3"
+    },
+    {
+      "label": "GitHub — zane31415/ArchipelagoBG3 (releases)",
+      "url": "https://github.com/zane31415/ArchipelagoBG3/releases"
+    }
+  ]
+}

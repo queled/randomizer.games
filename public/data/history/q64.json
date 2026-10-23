@@ -1,0 +1,101 @@
+{
+  "intro": {
+    "fr": "Quest 64 a son randomizer, Merrow, depuis 2021 ; il sert de base à un APWorld, et un portage recompilé du jeu a désormais son édition Archipelago.",
+    "en": "Quest 64 has had its randomizer, Merrow, since 2021; it is the basis of an APWorld, and a recompiled port of the game now has its own Archipelago edition."
+  },
+  "events": [
+    {
+      "date": "1998",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Imagineer sort Quest 64 sur Nintendo 64 en 1998.",
+        "en": "Imagineer releases Quest 64 on Nintendo 64 in 1998."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2021",
+        "en": "February 2021"
+      },
+      "title": {
+        "fr": "Merrow",
+        "en": "Merrow"
+      },
+      "text": {
+        "fr": "Hangedman crée le 11 février 2021 le dépôt de Merrow, randomizer et générateur de patchs IPS pour la version américaine de Quest 64. L'outil, gratuit et open source, propose de nombreuses options de randomisation, de difficulté et de confort.",
+        "en": "Hangedman creates the Merrow repository on February 11, 2021, a randomizer and IPS patch generator for the US version of Quest 64. The free, open-source tool offers many randomization, difficulty and quality-of-life options."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2025",
+        "en": "December 2025"
+      },
+      "title": {
+        "fr": "APWorld pour Merrow",
+        "en": "APWorld for Merrow"
+      },
+      "text": {
+        "fr": "VinArcadian crée le 30 décembre 2025 un APWorld fondé sur Merrow.",
+        "en": "VinArcadian creates an APWorld based on Merrow on December 30, 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Recompiled Archipelago Edition",
+        "en": "Recompiled Archipelago Edition"
+      },
+      "text": {
+        "fr": "FuzzynessUK publie le 30 septembre 2026 Quest 64: Recompiled Archipelago Edition 1.4.0, version Archipelago du portage natif Quest 64: Recompiled de Rainchus, construit avec N64: Recompiled.",
+        "en": "FuzzynessUK releases Quest 64: Recompiled Archipelago Edition 1.4.0 on September 30, 2026, an Archipelago version of Rainchus' native port Quest 64: Recompiled, built with N64: Recompiled."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 1.9.2 sort le 13 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (10 versions publiées).",
+        "en": "Version 1.9.2 is released on October 13, 2026; it is the latest as of October 23, 2026 (10 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Quest 64",
+      "url": "https://www.igdb.com/games/quest-64"
+    },
+    {
+      "label": "GitHub — hangedmandesign/merrow",
+      "url": "https://github.com/hangedmandesign/merrow"
+    },
+    {
+      "label": "itch.io — Merrow",
+      "url": "https://hangedman.itch.io/merrow"
+    },
+    {
+      "label": "GitHub — VinArcadian/Q64_APWorld",
+      "url": "https://github.com/VinArcadian/Q64_APWorld"
+    },
+    {
+      "label": "GitHub — FuzzynessUK/Quest64-Recomp",
+      "url": "https://github.com/FuzzynessUK/Quest64-Recomp"
+    },
+    {
+      "label": "GitHub — FuzzynessUK/Quest64-Recomp (releases)",
+      "url": "https://github.com/FuzzynessUK/Quest64-Recomp/releases"
+    }
+  ]
+}

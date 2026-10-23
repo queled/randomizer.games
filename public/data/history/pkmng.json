@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Pokémon Gaia, hack de Pokémon Rouge Feu, se randomise depuis 2019 avec une version adaptée de l'Universal Pokémon Randomizer.",
+    "en": "Pokémon Gaia, a Pokémon FireRed hack, has been randomizable since 2019 with an adapted version of the Universal Pokémon Randomizer."
+  },
+  "events": [
+    {
+      "date": "Hack",
+      "title": {
+        "fr": "Pokémon Gaia",
+        "en": "Pokémon Gaia"
+      },
+      "text": {
+        "fr": "Pokémon Gaia est un hack de Pokémon Rouge Feu présenté sur le forum PokéCommunity.",
+        "en": "Pokémon Gaia is a Pokémon FireRed hack presented on the PokéCommunity forum."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2019",
+        "en": "June 2019"
+      },
+      "title": {
+        "fr": "Fork Gaia",
+        "en": "Gaia fork"
+      },
+      "text": {
+        "fr": "Spherical Ice publie le 11 juin 2019 un fork de l'Universal Pokémon Randomizer de Dabomstew qui prend en charge Pokémon Gaia. Quatre autres versions suivent jusqu'au 22 juillet 2019.",
+        "en": "Spherical Ice releases a fork of Dabomstew's Universal Pokémon Randomizer supporting Pokémon Gaia on June 11, 2019. Four more versions follow until July 22, 2019."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — sphericalice/universal-pokemon-randomizer",
+      "url": "https://github.com/sphericalice/universal-pokemon-randomizer"
+    },
+    {
+      "label": "GitHub — sphericalice/universal-pokemon-randomizer (releases)",
+      "url": "https://github.com/sphericalice/universal-pokemon-randomizer/releases"
+    },
+    {
+      "label": "PokéCommunity — Pokémon Gaia Version",
+      "url": "https://www.pokecommunity.com/showthread.php?t=326118"
+    },
+    {
+      "label": "rando-list — Pokemon",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Pokemon.yml"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "intro": {
+    "fr": "PokéPark Wii: Pikachu's Adventure se joue en multiworld Archipelago depuis 2025.",
+    "en": "PokéPark Wii: Pikachu's Adventure has been playable in an Archipelago multiworld since 2025."
+  },
+  "events": [
+    {
+      "date": "2009",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Creatures Inc. sort PokéPark Wii: Pikachu's Adventure en 2009, édité par Nintendo.",
+        "en": "Creatures Inc. releases PokéPark Wii: Pikachu's Adventure in 2009, published by Nintendo."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2025",
+        "en": "May 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Mekurushi publie le 1er mai 2025 l'alpha 0.2.1 de l'APWorld, d'abord pour la version japonaise. Un patcheur, pokeparkrando, prépare l'ISO pour Dolphin.",
+        "en": "Mekurushi releases alpha 0.2.1 of the APWorld on May 1, 2025, first for the Japanese version. A patcher, pokeparkrando, prepares the ISO for Dolphin."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 1.2.8 sort le 24 septembre 2026 ; c'est la plus récente au 23 octobre 2026 (25 versions publiées).",
+        "en": "Version 1.2.8 is released on September 24, 2026; it is the latest as of October 23, 2026 (25 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — PokéPark Wii: Pikachu's Adventure",
+      "url": "https://www.igdb.com/games/pokepark-wii-pikachu-s-adventure"
+    },
+    {
+      "label": "GitHub — Mekurushi/Archipelago_Pokepark",
+      "url": "https://github.com/Mekurushi/Archipelago_Pokepark"
+    },
+    {
+      "label": "GitHub — Mekurushi/Archipelago_Pokepark (releases)",
+      "url": "https://github.com/Mekurushi/Archipelago_Pokepark/releases"
+    },
+    {
+      "label": "GitHub — Mekurushi/pokeparkrando",
+      "url": "https://github.com/Mekurushi/pokeparkrando"
+    }
+  ]
+}

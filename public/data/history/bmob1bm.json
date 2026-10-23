@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Black Market of Bulletphilia ~ 100th Black Market, le Touhou 18.5, se joue en multiworld Archipelago depuis 2026.",
+    "en": "Black Market of Bulletphilia ~ 100th Black Market, Touhou 18.5, has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Team Shanghai Alice sort Black Market of Bulletphilia ~ 100th Black Market en 2022.",
+        "en": "Team Shanghai Alice releases Black Market of Bulletphilia ~ 100th Black Market in 2022."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "furret78 publie le 8 février 2026 la version 0.1.0 de l'APWorld, marquée instable. Le jeu avait son fil de conception sur le serveur Discord officiel d'Archipelago.",
+        "en": "furret78 releases version 0.1.0 of the APWorld on February 8, 2026, labelled unstable. The game had its design thread on Archipelago's official Discord server."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.4.52 sort le 25 août 2026 ; c'est la plus récente au 23 octobre 2026 (22 versions publiées).",
+        "en": "Version 0.4.52 is released on August 25, 2026; it is the latest as of October 23, 2026 (22 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Black Market of Bulletphilia: 100th Black Market",
+      "url": "https://www.igdb.com/games/black-market-of-bulletphilia-100th-black-market"
+    },
+    {
+      "label": "GitHub — furret78/Archipelago",
+      "url": "https://github.com/furret78/Archipelago"
+    },
+    {
+      "label": "GitHub — furret78/Archipelago (releases)",
+      "url": "https://github.com/furret78/Archipelago/releases"
+    }
+  ]
+}

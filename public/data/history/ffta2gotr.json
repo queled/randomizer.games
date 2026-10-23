@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Final Fantasy Tactics A2: Grimoire of the Rift se joue en multiworld Archipelago depuis 2024.",
+    "en": "Final Fantasy Tactics A2: Grimoire of the Rift has been playable in an Archipelago multiworld since 2024."
+  },
+  "events": [
+    {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Final Fantasy Tactics A2: Grimoire of the Rift sur Nintendo DS en 2007.",
+        "en": "Square Enix releases Final Fantasy Tactics A2: Grimoire of the Rift on Nintendo DS in 2007."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2024",
+        "en": "October 2024"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Rurusachi publie le 16 octobre 2024 la préversion 0.0.1 de l'APWorld, pour la ROM américaine sur BizHawk. Les objets « porte » qui débloquent la progression sont des objets de butin, qu'il ne faut ni vendre ni jeter.",
+        "en": "Rurusachi publishes pre-release 0.0.1 of the APWorld on October 16, 2024, for the US ROM on BizHawk. The \"gate\" items that unlock progression are loot items, which must be neither sold nor discarded."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2025",
+        "en": "January 2025"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.0.9 sort le 30 janvier 2025 ; c'est la plus récente au 23 octobre 2026 (9 versions publiées).",
+        "en": "Version 0.0.9 is released on January 30, 2025; it is the latest as of October 23, 2026 (9 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Final Fantasy Tactics A2: Grimoire of the Rift",
+      "url": "https://www.igdb.com/games/final-fantasy-tactics-a2-grimoire-of-the-rift"
+    },
+    {
+      "label": "GitHub — Rurusachi/Archipelago",
+      "url": "https://github.com/Rurusachi/Archipelago"
+    },
+    {
+      "label": "GitHub — Rurusachi/Archipelago (releases)",
+      "url": "https://github.com/Rurusachi/Archipelago/releases"
+    }
+  ]
+}

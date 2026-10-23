@@ -1,0 +1,46 @@
+{
+  "intro": {
+    "fr": "ChecksMate est une variante d'échecs pensée pour Archipelago : une méta-progression façon roguelite, où l'on gagne des pièces au fil du multiworld.",
+    "en": "ChecksMate is a chess variant designed for Archipelago: a roguelite-style meta-progression where you earn pieces over the course of the multiworld."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Octobre 2023",
+        "en": "October 2023"
+      },
+      "title": {
+        "fr": "Le client",
+        "en": "The client"
+      },
+      "text": {
+        "fr": "chesslogic publie le 29 octobre 2023 un premier client ChecksMate, construit sur le moteur d'échecs ChessV. Le joueur commence avec un roi et la possibilité de recommencer, face à 16 pièces ; il trouve en route des pièces ordinaires et des pièces d'échecs féeriques.",
+        "en": "chesslogic releases a first ChecksMate client on October 29, 2023, built on the ChessV chess engine. The player starts with a king and the ability to try again, against 16 pieces; ordinary and fairy chess pieces are found along the way."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.3.2 sort le 17 juin 2026 ; c'est la plus récente au 23 octobre 2026 (34 versions publiées).",
+        "en": "Version 0.3.2 is released on June 17, 2026; it is the latest as of October 23, 2026 (34 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — chesslogic/chessv",
+      "url": "https://github.com/chesslogic/chessv"
+    },
+    {
+      "label": "GitHub — chesslogic/chessv (releases)",
+      "url": "https://github.com/chesslogic/chessv/releases"
+    }
+  ]
+}

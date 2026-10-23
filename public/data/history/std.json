@@ -1,0 +1,79 @@
+{
+  "intro": {
+    "fr": "Spyro the Dragon a eu un randomizer d'exigences en 2022 et un APWorld en 2025.",
+    "en": "Spyro the Dragon got a requirement randomizer in 2022 and an APWorld in 2025."
+  },
+  "events": [
+    {
+      "date": "1998",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Insomniac Games sort Spyro the Dragon sur PlayStation en 1998.",
+        "en": "Insomniac Games releases Spyro the Dragon on PlayStation in 1998."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2022",
+        "en": "November 2022"
+      },
+      "title": {
+        "fr": "Requirement Randomizer",
+        "en": "Requirement Randomizer"
+      },
+      "text": {
+        "fr": "Le 30 novembre 2022, OddKara met en ligne sur YouTube une démonstration d'un Requirement Randomizer pour Spyro 1.",
+        "en": "On November 30, 2022, OddKara uploads a demo of a Requirement Randomizer for Spyro 1 to YouTube."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2025",
+        "en": "August 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "gamefreq0 publie le 22 août 2025 une première alpha jouable de l'APWorld, pour la version américaine sur BizHawk. Le mélange des portails arrive quatre jours plus tard, avec l'alpha 0.2.1.",
+        "en": "gamefreq0 releases a first playable alpha of the APWorld on August 22, 2025, for the US version on BizHawk. Portal shuffle arrives four days later, with alpha 0.2.1."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2025",
+        "en": "September 2025"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "L'alpha 0.4.1 sort le 8 septembre 2025 ; c'est la plus récente au 23 octobre 2026 (13 versions publiées).",
+        "en": "Alpha 0.4.1 comes out on September 8, 2025; it is the latest as of October 23, 2026 (13 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Spyro the Dragon",
+      "url": "https://www.igdb.com/games/spyro-the-dragon"
+    },
+    {
+      "label": "YouTube — Spyro 1 Requirement Randomizer Demo",
+      "url": "https://www.youtube.com/watch?v=jYrPQZnwXSk"
+    },
+    {
+      "label": "GitHub — gamefreq0/Archipelago",
+      "url": "https://github.com/gamefreq0/Archipelago"
+    },
+    {
+      "label": "GitHub — gamefreq0/Archipelago (releases)",
+      "url": "https://github.com/gamefreq0/Archipelago/releases"
+    }
+  ]
+}

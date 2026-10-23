@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Crypt of the NecroDancer se joue en multiworld Archipelago depuis 2025.",
+    "en": "Crypt of the NecroDancer has been playable in an Archipelago multiworld since 2025."
+  },
+  "events": [
+    {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Brace Yourself Games sort Crypt of the NecroDancer en 2015.",
+        "en": "Brace Yourself Games releases Crypt of the NecroDancer in 2015."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2025",
+        "en": "August 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "lastingParadox publie le 19 août 2025 la version 0.1.0 de l'APWorld, qui demande l'extension SYNCHRONY.",
+        "en": "lastingParadox releases version 0.1.0 of the APWorld on August 19, 2025, which requires the SYNCHRONY expansion."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.8.3 sort le 18 septembre 2026 ; c'est la plus récente au 23 octobre 2026 (28 versions publiées).",
+        "en": "Version 0.8.3 is released on September 18, 2026; it is the latest as of October 23, 2026 (28 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Crypt of the NecroDancer",
+      "url": "https://www.igdb.com/games/crypt-of-the-necrodancer"
+    },
+    {
+      "label": "GitHub — lastingParadox/Archipelago-CotND",
+      "url": "https://github.com/lastingParadox/Archipelago-CotND"
+    },
+    {
+      "label": "GitHub — lastingParadox/Archipelago-CotND (releases)",
+      "url": "https://github.com/lastingParadox/Archipelago-CotND/releases"
+    }
+  ]
+}

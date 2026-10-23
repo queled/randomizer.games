@@ -1,0 +1,46 @@
+{
+  "intro": {
+    "fr": "Jigsaw Puzzle for Archipelago est un jeu de puzzle conçu pour Archipelago : les pièces du puzzle arrivent au fil du multiworld.",
+    "en": "Jigsaw Puzzle for Archipelago is a puzzle game designed for Archipelago: the puzzle pieces arrive over the course of the multiworld."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Février 2025",
+        "en": "February 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "spineraks publie le 8 février 2025 la version 0.0.2 de Jigsaw for AP, qui se joue dans le navigateur.",
+        "en": "spineraks releases version 0.0.2 of Jigsaw for AP on February 8, 2025, played in the browser."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.10.0 sort le 27 février 2026 ; c'est la plus récente au 23 octobre 2026 (25 versions publiées).",
+        "en": "Version 0.10.0 is released on February 27, 2026; it is the latest as of October 23, 2026 (25 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — spineraks-org/ArchipelagoJigsaw",
+      "url": "https://github.com/spineraks-org/ArchipelagoJigsaw"
+    },
+    {
+      "label": "GitHub — spineraks-org/ArchipelagoJigsaw (releases)",
+      "url": "https://github.com/spineraks-org/ArchipelagoJigsaw/releases"
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "intro": {
+    "fr": "Final Fantasy X se joue en multiworld Archipelago depuis 2026, grâce au travail de l'équipe FFX-AP.",
+    "en": "Final Fantasy X has been playable in an Archipelago multiworld since 2026, thanks to the FFX-AP team's work."
+  },
+  "events": [
+    {
+      "date": "2001",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square sort Final Fantasy X sur PlayStation 2 en 2001.",
+        "en": "Square releases Final Fantasy X on PlayStation 2 in 2001."
+      }
+    },
+    {
+      "date": "Outil",
+      "title": {
+        "fr": "FFXED",
+        "en": "FFXED"
+      },
+      "text": {
+        "fr": "La liste rando-list recense FFXED, un éditeur de sauvegardes qui peut randomiser le Sphérier.",
+        "en": "The rando-list catalog lists FFXED, a save editor that can randomize the Sphere Grid."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "L'équipe FFX-AP publie le 18 février 2026 la version 0.2.1 de son APWorld. Le monde est découpé en régions jouables dans n'importe quel ordre ; membres de l'équipe, chimères, régions et personnalisations deviennent des objets. Le mod repose sur le framework Fahrenheit de Peppy et Evelyn.",
+        "en": "The FFX-AP team releases version 0.2.1 of its APWorld on February 18, 2026. The world is split into regions playable in any order; party members, aeons, regions and customizations become items. The mod builds on Peppy and Evelyn's Fahrenheit framework."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La préversion 0.10.0 sort le 12 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (11 versions publiées).",
+        "en": "Pre-release 0.10.0 comes out on October 12, 2026; it is the latest as of October 23, 2026 (11 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Final Fantasy X",
+      "url": "https://www.igdb.com/games/final-fantasy-x"
+    },
+    {
+      "label": "rando-list — Final Fantasy",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Final_Fantasy.yml"
+    },
+    {
+      "label": "GitHub — FFX-AP/Archipelago",
+      "url": "https://github.com/FFX-AP/Archipelago"
+    },
+    {
+      "label": "GitHub — FFX-AP/Archipelago (releases)",
+      "url": "https://github.com/FFX-AP/Archipelago/releases"
+    },
+    {
+      "label": "GitHub — FFX-AP, Final Fantasy X (doc)",
+      "url": "https://github.com/FFX-AP/Archipelago/blob/ffx/worlds/ffx/docs/en_Final%20Fantasy%20X.md"
+    }
+  ]
+}

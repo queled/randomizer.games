@@ -1,0 +1,65 @@
+{
+  "intro": {
+    "fr": "Dome Keeper se joue en multiworld Archipelago depuis 2024 grâce à un mod du Steam Workshop.",
+    "en": "Dome Keeper has been playable in an Archipelago multiworld since 2024 through a Steam Workshop mod."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bippinbits sort Dome Keeper en 2022.",
+        "en": "Bippinbits releases Dome Keeper in 2022."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2024",
+        "en": "February 2024"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Arrcival publie le 22 février 2024 la version 0.6.0 de l'APWorld ; le mod de jeu s'installe depuis le Steam Workshop.",
+        "en": "Arrcival releases version 0.6.0 of the APWorld on February 22, 2024; the game mod is installed from the Steam Workshop."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 2.0.1 sort le 20 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (16 versions publiées).",
+        "en": "Version 2.0.1 is released on October 20, 2026; it is the latest as of October 23, 2026 (16 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Dome Keeper",
+      "url": "https://www.igdb.com/games/dome-keeper"
+    },
+    {
+      "label": "GitHub — Arrcival/ArchipelagoDK",
+      "url": "https://github.com/Arrcival/ArchipelagoDK"
+    },
+    {
+      "label": "GitHub — Arrcival/ArchipelagoDK (releases)",
+      "url": "https://github.com/Arrcival/ArchipelagoDK/releases"
+    },
+    {
+      "label": "Steam Workshop — Archipelago mod",
+      "url": "https://steamcommunity.com/sharedfiles/filedetails/?id=3148616716"
+    }
+  ]
+}

@@ -818,7 +818,7 @@ function displayTournamentInfo(tournament) {
   
   // End date will be updated after matches are loaded; a planned end already passed means nothing while it runs late
   const endPassed = tournament.endDate && new Date(tournament.endDate).getTime() < Date.now();
-  document.getElementById('end-date').textContent = status === 'en cours' && endPassed ? '-' : formatDate(tournament.endDate);
+  document.getElementById('end-date').textContent = !tournament.endDate || (status === 'en cours' && endPassed) ? '-' : formatDate(tournament.endDate);
   
   document.getElementById('tournament-type').textContent = formatTournamentTypeForDisplay(tournament);
   document.getElementById('participants-count').textContent = tournament.participantsCount || '0';

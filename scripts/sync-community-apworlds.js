@@ -53,7 +53,8 @@ const OVERRIDES = {
   // Variants, remakes and other spellings of a game of the site
   'DELTARUNE': 'deltarune',
   'Metroid Fusion': 'mf',
-  'Halo The Master Chief Collection': ['h3tmcc', 'hreatmcc'],
+  'Mother (Earthbound Beginnings)': 'eb',
+  'Halo The Master Chief Collection': 'hceatcc', // only Halo CE Anniversary so far
   'Final Fantasy XII: Open World': 'ff12',
   'Final Fantasy XII: Trial Mode': 'ff12',
   'Final Fantasy Tactics: Ivalice Island (FFT PSX)': 'fft',

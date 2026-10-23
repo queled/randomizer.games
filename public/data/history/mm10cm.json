@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Mega Man X: Command Mission sur GameCube et PlayStation 2 en 2004.",
+        "en": "Capcom releases Mega Man X: Command Mission on GameCube and PlayStation 2 in 2004."
+      }
+    },
+    {
       "date": {
         "fr": "Octobre 2025",
         "en": "October 2025"
@@ -48,6 +59,10 @@
     }
   ],
   "sources": [
+    {
+      "label": "IGDB — Mega Man X: Command Mission",
+      "url": "https://www.igdb.com/games/mega-man-x-command-mission"
+    },
     {
       "label": "GitHub — themogulAP/ArchipelagoCM",
       "url": "https://github.com/themogulAP/ArchipelagoCM"

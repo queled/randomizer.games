@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Mario Party Advance se joue en multiworld Archipelago depuis 2024 : ses quêtes deviennent des emplacements.",
+    "en": "Mario Party Advance has been playable in an Archipelago multiworld since 2024: its quests become locations."
+  },
+  "events": [
+    {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Hudson Soft sort Mario Party Advance sur Game Boy Advance en 2005.",
+        "en": "Hudson Soft releases Mario Party Advance on Game Boy Advance in 2005."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2024",
+        "en": "February 2024"
+      },
+      "title": {
+        "fr": "APWorld",
+        "en": "APWorld"
+      },
+      "text": {
+        "fr": "etherware-novice publie le 6 février 2024 une « première version potentiellement fonctionnelle » de l'APWorld (0.98), puis la 1.0 le 8 février, dans la branche mpadv de son fork d'Archipelago. Les quêtes de la ville, du désert, de la mer et des autres régions sont des emplacements ; les champignons de lancer et les hausses du lancer maximum font partie des objets. Selon le tableur communautaire des APWorlds, il est peu probable qu'il soit encore mis à jour.",
+        "en": "etherware-novice releases a \"first potentially working version\" of the APWorld (0.98) on February 6, 2024, then 1.0 on February 8, in the mpadv branch of their Archipelago fork. The quests of the town, desert, sea and other regions are locations; roll mushrooms and maximum roll increases are among the items. According to the community APWorld spreadsheet, it is unlikely to receive updates."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Mario Party Advance",
+      "url": "https://www.igdb.com/games/mario-party-advance"
+    },
+    {
+      "label": "GitHub — etherware-novice/candypelago (releases)",
+      "url": "https://github.com/etherware-novice/candypelago/releases"
+    },
+    {
+      "label": "GitHub — candypelago, branche mpadv",
+      "url": "https://github.com/etherware-novice/candypelago/tree/mpadv/worlds/mpadv"
+    }
+  ]
+}

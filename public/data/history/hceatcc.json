@@ -1,7 +1,7 @@
 {
   "intro": {
-    "fr": "CEER, le Halo CE Enemy Randomiser de Burnt-o, randomise les ennemis de Halo: Combat Evolved dans la Master Chief Collection.",
-    "en": "Burnt-o's CEER, the Halo CE Enemy Randomiser, randomizes the enemies of Halo: Combat Evolved in the Master Chief Collection."
+    "fr": "CEER, le Halo CE Enemy Randomiser de Burnt-o, randomise les ennemis de Halo: Combat Evolved dans la Master Chief Collection ; depuis 2026, le jeu se joue aussi en multiworld Archipelago.",
+    "en": "CEER, Burnt-o's Halo CE Enemy Randomiser, randomizes the enemies of Halo: Combat Evolved in the Master Chief Collection; since 2026, the game can also be played in an Archipelago multiworld."
   },
   "events": [
     {
@@ -25,12 +25,34 @@
         "fr": "Burnt-o publie la version 1.0 de CEER le 19 août 2022, puis la 2.0 en juin 2023 et la 2.0.4 en juillet. Le mod randomise les ennemis, peut les multiplier, et randomise aussi les textures et les sons.",
         "en": "Burnt-o releases CEER version 1.0 on August 19, 2022, then 2.0 in June 2023 and 2.0.4 in July. The mod randomizes enemies, can multiply them, and also randomizes textures and sounds."
       }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "AP Halo: MCC",
+        "en": "AP Halo: MCC"
+      },
+      "text": {
+        "fr": "spencer2585 publie le 9 juin 2026 la première alpha d'AP Halo: The Master Chief Collection, randomizer Archipelago pour la compilation, et documente son usage de l'IA. Seul Halo: Combat Evolved Anniversary est pris en charge pour l'instant : les missions, les crânes et les chapitres sont des emplacements, le déblocage des missions et des crânes des objets.",
+        "en": "spencer2585 releases the first alpha of AP Halo: The Master Chief Collection on June 9, 2026, an Archipelago randomizer for the collection, documenting how AI is used. Only Halo: Combat Evolved Anniversary is supported so far: missions, skulls and chapters are locations, mission and skull unlocks are items."
+      }
     }
   ],
   "sources": [
     {
       "label": "Burnt-o/CEER (GitHub)",
       "url": "https://github.com/Burnt-o/CEER"
+    },
+    {
+      "label": "GitHub — spencer2585/MCC-AP",
+      "url": "https://github.com/spencer2585/MCC-AP"
+    },
+    {
+      "label": "GitHub — MCC-AP, Randomization Documentation",
+      "url": "https://github.com/spencer2585/MCC-AP/blob/master/Docs/randomization.md"
     }
   ]
 }

@@ -4,6 +4,12 @@ let currentMatches = [];
 let currentRaces = [];
 let currentOptions = {};
 
+// Text of the page in the visitor's language, the English fallback while translations load
+function tdText(key, fallback, params = {}) {
+  const text = typeof i18n !== 'undefined' ? i18n.t(`tournamentDetail.${key}`, params, fallback) : fallback;
+  return String(text).replace(/\{(\w+)\}/g, (m, k) => (k in params ? params[k] : m));
+}
+
 // Listen for spoiler mode changes to re-render content dynamically
 window.addEventListener('spoilerModeChanged', () => {
   if (currentTournament) {
@@ -29,7 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const tournamentId = urlParams.get('id');
 
   if (!tournamentId) {
-    alert('ID de tournoi manquant');
+    alert(tdText('missingId', 'Missing tournament ID'));
     window.location.href = '/tournaments.html';
     return;
   }
@@ -187,7 +193,7 @@ async function loadTournamentDetails(tournamentId) {
     loadMatches(tournamentId);
   } catch (error) {
     console.error('Error loading tournament:', error);
-    alert('Error loading tournament');
+    alert(tdText('loadError', 'Error loading tournament'));
     window.location.href = '/tournaments.html';
   }
 }
@@ -833,7 +839,7 @@ function displayTournamentInfo(tournament) {
     if (participantsCard) {
       // Visual affordance
       try { participantsCard.style.cursor = 'pointer'; } catch (e) {}
-      try { participantsCard.title = 'Voir les participants'; } catch (e) {}
+      try { participantsCard.title = tdText('viewParticipants', 'View participants'); } catch (e) {}
       // Make accessible: allow focusing the card
       try { participantsCard.tabIndex = 0; } catch (e) {}
 
@@ -905,7 +911,7 @@ function displayParticipants(participants, matches = [], options = {}) {
   const container = document.getElementById('participants-list');
   
   if (!participants || participants.length === 0) {
-    container.innerHTML = '<p style="color: #9ca3af;">No participants</p>';
+    container.innerHTML = `<p style="color: #9ca3af;">${escHtml(tdText('noParticipants', 'No participants'))}</p>`;
     return;
   }
 
@@ -1139,7 +1145,7 @@ function displayParticipants(participants, matches = [], options = {}) {
                       : '#4b5563';
       rankBadge = `<div style="display: inline-flex; align-items: center; justify-content: center; min-width: 2.5rem; height: 2rem; background-color: ${rankColor}; color: white; border-radius: 0.25rem; font-weight: bold; margin-right: 1rem;">#${rank}</div>`;
     } else if (participant.seed) {
-      rankBadge = `<div style="display: inline-flex; align-items: center; justify-content: center; min-width: 2.5rem; height: 2rem; background-color: #4b5563; color: #d1d5db; border-radius: 0.25rem; font-size: 0.875rem; margin-right: 1rem;">Seed ${participant.seed}</div>`;
+      rankBadge = `<div style="display: inline-flex; align-items: center; justify-content: center; min-width: 2.5rem; height: 2rem; background-color: #4b5563; color: #d1d5db; border-radius: 0.25rem; font-size: 0.875rem; margin-right: 1rem;">${escHtml(tdText('seedN', 'Seed {n}', { n: participant.seed }))}</div>`;
     }
 
     // Find all matches for this participant
@@ -1612,7 +1618,7 @@ function createQualificationRaceCard(race) {
   const raceTitle = document.createElement('h3');
   raceTitle.style.cssText = 'font-size: 1rem; font-weight: bold; color: #fbbf24; margin-bottom: 0.25rem;';
   // Make the race name a clickable link to the internal race detail page
-  const raceName = race.name || 'Race de qualification';
+  const raceName = race.name || tdText('qualificationRace', 'Qualification race');
   const raceLinkElem = document.createElement('a');
   raceLinkElem.textContent = raceName;
   raceLinkElem.style.cssText = 'color: inherit; text-decoration: none; cursor: pointer;';
@@ -1753,7 +1759,7 @@ function createQualificationRaceCard(race) {
       }
 
       // Player name: link to internal player-detail; keep external userUrl as a small icon if present
-      const playerDisplayName = entrant.userName || 'Unknown';
+      const playerDisplayName = entrant.userName || (typeof i18n !== 'undefined' ? i18n.t('common.unknown') : 'Unknown');
       const playerLink = document.createElement('a');
       playerLink.style.cssText = 'color: #60a5fa; font-weight: 500; font-size: 0.875rem; text-decoration: none;';
       playerLink.textContent = playerDisplayName;
@@ -2443,12 +2449,12 @@ function attachMatchTooltip(card, match, parsedScores) {
     const origIdx = item.i;
     if (g.p1 > g.p2) cum1 += 1;
     else if (g.p2 > g.p1) cum2 += 1;
-    const winner = g.p1 > g.p2 ? p1 : (g.p2 > g.p1 ? p2 : 'Tie');
+    const winner = g.p1 > g.p2 ? p1 : (g.p2 > g.p1 ? p2 : tdText('tie', 'Tie'));
     // Keep the cumulative score in a single monospace token: "(1-0)" with no whitespace.
     const cum = `(${cum1}-${cum2})`;
     // Use flex: left label flexible (wraps only if needed), right block fixed width to keep score columns aligned
     return `<div style="display:flex; gap:0.5rem; align-items:center;">
-      <div style="flex:1; min-width:0; color:#9ca3af; overflow-wrap:anywhere; white-space:normal; word-break:break-word;">Manche ${origIdx + 1}${parsedScores && parsedScores.isSeriesOnly && g.ambiguous ? ' <span style=\"color:#6b7280; font-size:0.65rem; margin-left:0.25rem;\">(ordre non contractuel)</span>' : ''}</div>
+      <div style="flex:1; min-width:0; color:#9ca3af; overflow-wrap:anywhere; white-space:normal; word-break:break-word;">${escHtml(tdText('gameN', 'Game {n}', { n: origIdx + 1 }))}${parsedScores && parsedScores.isSeriesOnly && g.ambiguous ? ` <span style="color:#6b7280; font-size:0.65rem; margin-left:0.25rem;">${escHtml(tdText('gameOrderUnknown', '(order not guaranteed)'))}</span>` : ''}</div>
       <div style="display:flex; gap:0.5rem; align-items:center; width:260px; flex-shrink:0;">
         <div style="width:3.5rem; font-family: monospace; color:#C2CECF; text-align:left;">${g.p1}-${g.p2}</div>
         <div style="width:3.75rem; font-family: monospace; color:#d1d5db; text-align:left;">${cum}</div>
@@ -2762,7 +2768,7 @@ function createMatchCard(match, races = []) {
   let manchesHtml = '';
   if (isMultiRaceSeries) {
     manchesHtml = '<div style="margin-top: 0.75rem; border-top: 1px solid #374151; padding-top: 0.75rem;">';
-    manchesHtml += '<div style="font-size: 0.75rem; color: #6b7280; margin-bottom: 0.5rem;">Détail des manches :</div>';
+    manchesHtml += `<div style="font-size: 0.75rem; color: #6b7280; margin-bottom: 0.5rem;">${escHtml(tdText('gamesDetail', 'Games:'))}</div>`;
     
     matchRaces.forEach((race, idx) => {
       const raceLink = getRaceLinkHtml(race);
@@ -2775,7 +2781,7 @@ function createMatchCard(match, races = []) {
       manchesHtml += `
         <div role="link" tabindex="0" data-race-id="${race && race._id ? race._id : ''}" style="cursor:pointer;text-decoration:none;color:inherit;display:block;">
           <div class="match-manche" style="display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0.5rem; background: #111827; border-radius: 0.25rem; margin-bottom: 0.35rem; font-size: 0.8rem;">
-            <span style="color: #9ca3af; font-weight: 500;">Manche ${idx + 1}</span>
+            <span style="color: #9ca3af; font-weight: 500;">${escHtml(tdText('gameN', 'Game {n}', { n: idx + 1 }))}</span>
             <div class="spoiler-block match-manche-detail" style="display: flex; align-items: center; gap: 1rem;">
               <span class="${mancheWinner === 1 ? 'spoiler-winner' : ''}" style="color: ${mancheWinner === 1 ? '#fbbf24' : '#d1d5db'}; min-width: 80px;">${escHtml(sanitizeDisplayName(match.player1Name) || 'P1')}: <span style="color: #10b981; font-family: monospace;">${times.time1 || '-'}</span></span>
               <span class="${mancheWinner === 2 ? 'spoiler-winner' : ''}" style="color: ${mancheWinner === 2 ? '#fbbf24' : '#d1d5db'}; min-width: 80px;">${escHtml(sanitizeDisplayName(match.player2Name) || 'P2')}: <span style="color: #10b981; font-family: monospace;">${times.time2 || '-'}</span></span>
@@ -2825,7 +2831,7 @@ function createMatchCard(match, races = []) {
   card.innerHTML = `
     <div class="match-card-head" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
       <div style="font-size: 0.875rem; color: #9ca3af;">
-        ${match.completedAt ? formatDateTime(match.completedAt) : match.startedAt ? formatDateTime(match.startedAt) : match.scheduledAt ? escHtml(formatScheduledAt(match.scheduledAt)) : 'Not scheduled'}${match.groupId !== null && match.groupId !== undefined && match.round ? ` • Round ${match.round}` : ''}
+        ${match.completedAt ? formatDateTime(match.completedAt) : match.startedAt ? formatDateTime(match.startedAt) : match.scheduledAt ? escHtml(formatScheduledAt(match.scheduledAt)) : escHtml(tdText('notScheduled', 'Not scheduled'))}${match.groupId !== null && match.groupId !== undefined && match.round ? ` • ${escHtml(tdText('roundN', 'Round {n}', { n: match.round }))}` : ''}
       </div>
       <div class="match-card-links" style="display: flex; align-items: center; gap: 0.5rem;">
         <div class="match-card-media">${mergeRestreams(match.restreams, matchRaces).filter(s => s.vodUrl).map(restreamLinkHtml).join('')}${!isMultiRaceSeries ? singleRaceVodsHtml : ''}</div>
@@ -3110,7 +3116,7 @@ function switchTab(tabName) {
 }
 
 function formatDate(dateString) {
-  if (!dateString) return 'Undefined';
+  if (!dateString) return '-';
   const date = new Date(dateString);
   let locale = 'en-US';
   if (typeof i18n !== 'undefined' && typeof i18n.getLanguage === 'function') {
@@ -3128,9 +3134,9 @@ function formatScheduledAt(dateString) {
 }
 
 function formatDateTime(dateString) {
-  if (!dateString) return 'Undefined';
+  if (!dateString) return '-';
   const date = new Date(dateString);
-  if (isNaN(date.getTime())) return 'Undefined';
+  if (isNaN(date.getTime())) return '-';
   let locale = 'en-US';
   if (typeof i18n !== 'undefined' && typeof i18n.getLanguage === 'function') {
     const lang = i18n.getLanguage();
@@ -3169,7 +3175,7 @@ function formatTournamentType(type) {
     'exhibition': 'Exhibition',
     'custom_schedule': 'Custom Schedule'
   };
-  return types[type] || type || 'Undefined';
+  return types[type] || type || '-';
 }
 
 // Build a composite tournament type label from phases data when available
@@ -3194,7 +3200,7 @@ function formatTournamentTypeForDisplay(tournament) {
     const parts = sorted.map(p => {
       const name = translatePhaseName(p.name) || 'Phase';
       const bt = bracketTypeLabel(p.bracketType);
-      const pools = p.groupCount > 1 ? ` (${p.groupCount} pools)` : '';
+      const pools = p.groupCount > 1 ? ` (${tdText('poolsCount', '{n} pools', { n: p.groupCount })})` : '';
       return `${name} (${bt}${pools})`;
     });
     // Grouped Challonge brackets run side by side, start.gg phases follow each other
@@ -3207,7 +3213,7 @@ function formatTournamentTypeForDisplay(tournament) {
 function formatMatchState(state) {
   const keys = { 'complete': 'finished', 'open': 'ongoing', 'pending': 'pending' };
   const fallbacks = { 'complete': 'Finished', 'open': 'Ongoing', 'pending': 'Pending' };
-  if (!keys[state]) return state || 'Unknown';
+  if (!keys[state]) return state || (typeof i18n !== 'undefined' ? i18n.t('common.unknown') : 'Unknown');
   return typeof i18n !== 'undefined' ? i18n.t('status.' + keys[state]) : fallbacks[state];
 }
 
@@ -3380,6 +3386,12 @@ function displayGroupStages(groupMatches, participants, races = []) {
     .filter(v => v !== null && v !== undefined)
     .sort((a, b) => a - b);
   
+  // Qualified: the players drawn in the final stage (none highlighted before it is drawn)
+  const finalists = new Set();
+  (currentMatches || []).filter(m => m && (m.groupId === null || m.groupId === undefined)).forEach(m => {
+    [m.player1Name, m.player2Name].forEach(n => { if (n) finalists.add(normalizeName(n)); });
+  });
+
   // Create a grid container for all groups
   const gridContainer = document.createElement('div');
   gridContainer.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(min(400px, 100%), 1fr)); gap: 1.5rem;';
@@ -3473,12 +3485,12 @@ function displayGroupStages(groupMatches, participants, races = []) {
         const row = document.createElement('div');
         row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; background-color: #111827; border-radius: 0.25rem; margin-bottom: 0.25rem;';
         
-        const qualified = pos < 2; // Top 2 qualify
+        const qualified = finalists.has(normalizeName(standing.name));
         const nameStyle = qualified ? 'color: #fbbf24; font-weight: bold;' : 'color: #9ca3af;';
         
         row.innerHTML = `
           <span style="${nameStyle}">${pos + 1}. ${playerNameLinks(sanitizeDisplayName(standing.name), 'style="color: inherit; text-decoration: none;"')}</span>
-          <span style="color: #9ca3af; font-size: 0.875rem;">${standing.wins}V - ${standing.losses}D</span>
+          <span style="color: #9ca3af; font-size: 0.875rem;">${escHtml(tdText('record', '{wins}W - {losses}L', { wins: standing.wins, losses: standing.losses }))}</span>
         `;
         standingsTable.appendChild(row);
       });
@@ -3595,7 +3607,7 @@ function displayBracket(matches, tournament) {
   }
 
   if (!tournament) {
-    container.innerHTML = '<p style="color: #ef4444;">Error: missing tournament information</p>';
+    container.innerHTML = `<p style="color: #ef4444;">${escHtml(tdText('missingTournamentInfo', 'Error: missing tournament information'))}</p>`;
     return;
   }
 
@@ -3789,7 +3801,7 @@ function displayStandingsPhase(phaseMatches, container, isSwiss, phaseName = nul
         link.innerHTML = `${pos + 1}. ${playerNameLinks(sanitizeDisplayName(s.name), 'style="color: inherit; text-decoration: none;"')}`;
         const record = document.createElement('span');
         record.style.cssText = 'color: #9ca3af; font-size: 0.875rem;';
-        record.textContent = `${s.wins}V - ${s.losses}D`;
+        record.textContent = tdText('record', '{wins}W - {losses}L', { wins: s.wins, losses: s.losses });
         row.appendChild(link);
         row.appendChild(record);
         box.appendChild(row);
@@ -3807,7 +3819,7 @@ function displayStandingsPhase(phaseMatches, container, isSwiss, phaseName = nul
       [...byRound.keys()].sort((a, b) => a - b).forEach(round => {
         const header = document.createElement('div');
         header.style.cssText = 'color: #fbbf24; font-weight: bold; font-size: 0.9rem; margin-top: 0.5rem;';
-        header.textContent = `Round ${round}`;
+        header.textContent = tdText('roundN', 'Round {n}', { n: round });
         list.appendChild(header);
         byRound.get(round).sort((a, b) => getTime(a) - getTime(b)).forEach(m => list.appendChild(createCompactMatchCard(m, currentRaces)));
       });
@@ -3953,7 +3965,7 @@ function displaySpoilerGroupsOnly(groupMatches, participants, container) {
   // Create container for groups
   const spoilerGroupsContainer = document.createElement('div');
   spoilerGroupsContainer.className = 'spoiler-groups-container';
-  spoilerGroupsContainer.innerHTML = '<p style="color: #9ca3af; font-style: italic; margin-bottom: 1rem;">Group composition (alphabetical order):</p>';
+  spoilerGroupsContainer.innerHTML = `<p style="color: #9ca3af; font-style: italic; margin-bottom: 1rem;">${escHtml(tdText('groupComposition', 'Group composition (alphabetical order):'))}</p>`;
   
   const gridContainer = document.createElement('div');
   gridContainer.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;';
@@ -4075,7 +4087,7 @@ function displayPoolsBracket(matches, container, isDoubleElimination, phaseGroup
     const poolMatches = matches.filter(m => m.phaseGroup === poolId);
     
     if (poolMatches.length === 0) {
-      poolDiv.innerHTML = '<p style="color: #9ca3af;">No matches in this pool</p>';
+      poolDiv.innerHTML = `<p style="color: #9ca3af;">${escHtml(tdText('noMatchesInPool', 'No matches in this pool'))}</p>`;
     } else if (isDoubleElimination) {
       displayDoubleEliminationBracket(poolMatches, poolDiv, true);
     } else {
@@ -4093,7 +4105,7 @@ function displayPoolsBracket(matches, container, isDoubleElimination, phaseGroup
 function displaySingleEliminationBracket(matches, container) {
   // Ensure matches is an array
   if (!matches || !Array.isArray(matches)) {
-    container.innerHTML = '<p style="color: #9ca3af;">Error: invalid match data</p>';
+    container.innerHTML = `<p style="color: #9ca3af;">${escHtml(tdText('invalidMatchData', 'Error: invalid match data'))}</p>`;
     return;
   }
   
@@ -4113,7 +4125,7 @@ function displaySingleEliminationBracket(matches, container) {
 // Winners then losers bracket, with the same titles whether the bracket is a whole phase or one of its pools
 function displayDoubleEliminationBracket(matches, container, isPoolBracket = false) {
   if (!matches || !Array.isArray(matches)) {
-    container.innerHTML = '<p style="color: #9ca3af;">Error: invalid match data</p>';
+    container.innerHTML = `<p style="color: #9ca3af;">${escHtml(tdText('invalidMatchData', 'Error: invalid match data'))}</p>`;
     return;
   }
   const bracketMatches = matches.filter(Boolean);
@@ -4486,7 +4498,7 @@ function setupPathHighlighting(bracketContainer) {
         const firstSpan = div.querySelector('span');
         if (firstSpan) {
           const text = firstSpan.textContent.trim();
-          if (text && text !== 'TBD') {
+          if (text && text !== 'TBD' && text !== tdText('tbd', 'TBD')) {
             names.push(text);
           }
         }
@@ -4605,7 +4617,7 @@ function setupPathHighlighting(bracketContainer) {
         const firstSpan = row.querySelector('span');
         if (firstSpan) {
           const text = firstSpan.textContent.trim();
-          if (text && text !== 'TBD') {
+          if (text && text !== 'TBD' && text !== tdText('tbd', 'TBD')) {
             playerName = text;
           }
         }

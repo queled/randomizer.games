@@ -261,7 +261,11 @@ const pt = {
         dq: "DQ",
         inProgress: "Em Andamento",
         watchRestream: "Ver o restream",
-        restream: "Restream"
+        restream: "Restream",
+        noParticipants: "Nenhum participante",
+        noRace: "Nenhuma corrida indicada",
+        viewOn: "Ver no",
+        viewOnRacetime: "Ver no Racetime"
     },
     
     // Tournaments page

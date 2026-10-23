@@ -37,6 +37,11 @@
       .join('<br>');
   }
 
+  // Text of the page in the visitor's language, the English fallback while translations load
+  function tr(key, fallback) {
+    return (typeof i18n !== 'undefined' && i18n.t(key, {}, fallback)) || fallback;
+  }
+
   function qs(name){
     const m = location.search.match(new RegExp('[?&]'+name+'=([^&]+)'));
     return m ? decodeURIComponent(m[1]) : null;
@@ -70,12 +75,23 @@
   let liveStreams = new Map();
   let gamesById = {};
   let gamesBySlug = {};
+  let currentTournament = null;
 
   // Event listener for spoiler mode changes
   window.addEventListener('spoilerModeChanged', function(e) {
     updateParticipantsTitle();
     renderParticipants(currentEntrants);
     refreshDateTimeFields();
+  });
+
+  // Texts written by this script follow a language change
+  window.addEventListener('languageChanged', function() {
+    if (!currentRace) return;
+    refreshDateTimeFields();
+    renderStatus();
+    renderLinks();
+    updateParticipantsTitle();
+    renderParticipants(currentEntrants);
   });
 
   function isSpoilerModeEnabled() {
@@ -87,10 +103,12 @@
 
   function updateParticipantsTitle() {
     if (!participantsTitleEl) return;
-    const spoilerMode = sessionStorage.getItem('spoilerModeEnabled') === 'true';
-    participantsTitleEl.textContent = spoilerMode ? '👥 Participants' : '🏅 Classement';
+    // Written here from now on: the translation pass must not put "Ranking" back in spoiler-free mode
+    participantsTitleEl.removeAttribute('data-i18n');
+    participantsTitleEl.textContent = isSpoilerModeEnabled()
+      ? tr('raceDetail.participants', '👥 Participants')
+      : tr('raceDetail.ranking', '🏅 Ranking');
   }
-
 
 
   function getGameDisplayName(slug) {
@@ -150,7 +168,7 @@
     }
 
     const entrantsCount = Array.isArray(race?.entrants) ? race.entrants.length : 0;
-    const status = getStatusText(race?.status || 'finished');
+    const status = ENGLISH_STATUS[race?.status || 'finished'] || race?.status;
     const goal = race?.goal || race?.name || 'Race';
     const detailUrl = raceId
       ? `/race-detail.html?id=${encodeURIComponent(raceId)}`
@@ -294,10 +312,6 @@
     durationEl.textContent = spoilerMode ? '-' : formatDuration(currentRace.startedAt, currentRace.endedAt);
   }
 
-  window.addEventListener('languageChanged', function() {
-    refreshDateTimeFields();
-  });
-
   function formatDuration(startedAt, endedAt) {
     if (!startedAt || !endedAt) return '-';
     const start = new Date(startedAt).getTime();
@@ -305,6 +319,14 @@
     if (isNaN(start) || isNaN(end)) return '-';
     return formatMs(end - start);
   }
+
+  const ENGLISH_STATUS = {
+    'open': 'Open',
+    'invitational': 'Invitational',
+    'in_progress': 'In Progress',
+    'finished': 'Finished',
+    'cancelled': 'Cancelled'
+  };
 
   const statusColors = {
     'open': '#3b82f6',
@@ -322,18 +344,11 @@
         case 'in_progress': return i18n.t('status.race.ongoing');
         case 'finished': return i18n.t('status.race.finished');
         case 'cancelled': return i18n.t('status.race.cancelled');
-        default: return status;
+        default: return status === 'unknown' ? tr('common.unknown', 'Unknown') : status;
       }
     }
-    // Fallback si i18n non disponible
-    const statusTexts = {
-      'open': 'Open',
-      'invitational': 'Invitational',
-      'in_progress': 'In Progress',
-      'finished': 'Finished',
-      'cancelled': 'Cancelled'
-    };
-    return statusTexts[status] || status;
+    // Translations not loaded
+    return ENGLISH_STATUS[status] || status;
   }
 
   // Races imported from SpeedRunsLive are stored as /srl/<raceId>
@@ -505,7 +520,7 @@
 
   function renderParticipants(entrants) {
     if (!entrants || entrants.length === 0) {
-      participantsEl.innerHTML = '<p style="color:#9ca3af;">No participants</p>';
+      participantsEl.innerHTML = `<p style="color:#9ca3af;">${escapeHtml(tr('raceDetail.noParticipants', 'No participants'))}</p>`;
       return;
     }
 
@@ -513,14 +528,15 @@
     currentEntrants = entrants;
 
     // Check spoiler mode
-    const spoilerMode = sessionStorage.getItem('spoilerModeEnabled') === 'true';
+    const spoilerMode = isSpoilerModeEnabled();
+    const unknown = tr('common.unknown', 'Unknown');
 
     let sorted;
     if (spoilerMode) {
       // In spoiler mode: alphabetical order by name
       sorted = [...entrants].sort((a, b) => {
-        const nameA = (a.userName || 'Unknown').toLowerCase();
-        const nameB = (b.userName || 'Unknown').toLowerCase();
+        const nameA = (a.userName || unknown).toLowerCase();
+        const nameB = (b.userName || unknown).toLowerCase();
         return nameA.localeCompare(nameB);
       });
     } else {
@@ -544,7 +560,7 @@
     }
 
     const html = sorted.map((e, idx) => {
-      const name = e.userName || 'Unknown';
+      const name = escapeHtml(e.userName || unknown);
       const playerLink = e.userName ? `/player-detail.html?name=${encodeURIComponent(e.userName)}` : '#';
       
       if (spoilerMode) {
@@ -588,6 +604,35 @@
     participantsEl.innerHTML = html;
   }
 
+  function renderStatus() {
+    const status = currentRace.status || 'unknown';
+    statusEl.textContent = getStatusText(status);
+    statusEl.style.background = statusColors[status] || '#6b7280';
+    statusEl.style.color = 'white';
+  }
+
+  // The race room on racetime.gg or SpeedRunsLive, then the restreams found for it
+  function renderLinks() {
+    const race = currentRace;
+    const links = [];
+    const srlUrl = getSpeedRunsLiveRaceUrl(race.url);
+    if (srlUrl) {
+      links.push(`<a href="${escapeHtml(srlUrl)}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.6rem;background-color:#1F2937;color:#F0C850;font-weight:600;padding:0.75rem 1.5rem;border-radius:0.5rem;border:2px solid #F0C850;text-decoration:none;transition:all 0.2s;font-size:1rem;" data-hover-style="background:#374151" data-rest-style="background:#1F2937">${escapeHtml(tr('raceDetail.viewOn', 'View on'))}<span class="srl-logo" role="img" aria-label="SpeedRunsLive" style="--srl-logo-height:22px;"></span></a>`);
+    } else if (race.url) {
+      const safeRacetimeUrl = sanitizeExternalUrl(normalizeRacetimeRaceUrl(race.url, race.category));
+      if (safeRacetimeUrl) {
+        links.push(`<a href="${escapeHtml(safeRacetimeUrl)}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.5rem;background-color:#1F2937;color:#E3E6E6;font-weight:600;padding:0.75rem 1.5rem;border-radius:0.5rem;border:2px solid #E3E6E6;text-decoration:none;transition:all 0.2s;font-size:1rem;" data-hover-style="background:#374151" data-rest-style="background:#1F2937"><img src="/assets/racetime.svg" alt="Racetime" style="width:24px;height:24px;">${escapeHtml(tr('raceDetail.viewOnRacetime', 'View on Racetime'))}</a>`);
+      }
+    }
+    if (currentTournament) {
+      findRestreams(race, currentTournament)
+        .map(stream => renderRestreamLink(stream, LIVE_RACE_STATUSES.includes(race.status)))
+        .filter(Boolean)
+        .forEach(link => links.push(link));
+    }
+    linksEl.innerHTML = links.join('');
+  }
+
   async function load() {
     try {
       await loadGames();
@@ -598,11 +643,11 @@
         race = await fetchJson('/api/runs/' + encodeURIComponent(raceId));
       } else if (raceUrl) {
         // Try to find race by URL
-        const allRaces = await fetchJson('/api/runs?limit=1000');
-        race = (allRaces.races || []).find(r => r.url === raceUrl || r.url === '/' + raceUrl);
+        const found = await fetchJson('/api/runs?limit=1&url=' + encodeURIComponent(raceUrl));
+        race = (found.races || [])[0];
         if (!race) throw new Error('Race not found');
       } else {
-        gameEl.textContent = 'No race specified';
+        gameEl.textContent = tr('raceDetail.noRace', 'No race specified');
         return;
       }
 
@@ -620,10 +665,8 @@
       goalEl.textContent = race.goal || race.name || '';
       
       // Status
-      const status = race.status || 'unknown';
-      statusEl.textContent = getStatusText(status);
-      statusEl.style.background = statusColors[status] || '#6b7280';
-      statusEl.style.color = 'white';
+      currentRace = race;
+      renderStatus();
       
       // Info (seed info, etc.)
       if (race.info) {
@@ -634,7 +677,6 @@
       }
       
       // Times
-      currentRace = race;
       refreshDateTimeFields();
       
       // Entrants count
@@ -642,42 +684,24 @@
       entrantsCountEl.textContent = entrantsCount;
       
       // Links
-      const links = [];
-      const srlUrl = getSpeedRunsLiveRaceUrl(race.url);
-      if (srlUrl) {
-        links.push(`<a href="${escapeHtml(srlUrl)}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.6rem;background-color:#1F2937;color:#F0C850;font-weight:600;padding:0.75rem 1.5rem;border-radius:0.5rem;border:2px solid #F0C850;text-decoration:none;transition:all 0.2s;font-size:1rem;" data-hover-style="background:#374151" data-rest-style="background:#1F2937">Voir sur<span class="srl-logo" role="img" aria-label="SpeedRunsLive" style="--srl-logo-height:22px;"></span></a>`);
-      } else if (race.url) {
-        const racetimeUrl = normalizeRacetimeRaceUrl(race.url, race.category);
-        const safeRacetimeUrl = sanitizeExternalUrl(racetimeUrl);
-        if (safeRacetimeUrl) {
-          links.push(`<a href="${escapeHtml(safeRacetimeUrl)}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.5rem;background-color:#1F2937;color:#E3E6E6;font-weight:600;padding:0.75rem 1.5rem;border-radius:0.5rem;border:2px solid #E3E6E6;text-decoration:none;transition:all 0.2s;font-size:1rem;" data-hover-style="background:#374151" data-rest-style="background:#1F2937"><img src="/assets/racetime.svg" alt="Racetime" style="width:24px;height:24px;">Voir sur Racetime</a>`);
-        }
-      }
-      linksEl.innerHTML = links.join('');
+      currentRace = race;
+      renderLinks();
       
       // Tournament link
       if (race.tournamentId) {
         try {
-          const tournament = await fetchJson('/api/tournaments/' + encodeURIComponent(race.tournamentId));
-          if (tournament && tournament.name) {
-            tournamentNameEl.textContent = tournament.name;
+          currentTournament = await fetchJson('/api/tournaments/' + encodeURIComponent(race.tournamentId));
+          if (currentTournament && currentTournament.name) {
+            tournamentNameEl.textContent = currentTournament.name;
             tournamentNameEl.href = '/tournament-detail.html?id=' + encodeURIComponent(race.tournamentId);
             tournamentLinkDiv.style.display = 'block';
-            applyRaceSeo(race, gameDisplayName, tournament);
           }
-          const restreamLinks = findRestreams(race, tournament || {})
-            .map(stream => renderRestreamLink(stream, LIVE_RACE_STATUSES.includes(race.status))).filter(Boolean);
-          if (restreamLinks.length) {
-            linksEl.insertAdjacentHTML('beforeend', restreamLinks.join(''));
-          }
+          renderLinks();
         } catch (e) {
           // Tournament not found, ignore
         }
       }
-
-      if (!race.tournamentId) {
-        applyRaceSeo(race, gameDisplayName, null);
-      }
+      applyRaceSeo(race, gameDisplayName, currentTournament && currentTournament.name ? currentTournament : null);
       
       // Update title then participants
       updateParticipantsTitle();
@@ -701,6 +725,6 @@
   if (raceId || raceUrl) {
     load();
   } else {
-    gameEl.textContent = 'No race specified';
+    gameEl.textContent = tr('raceDetail.noRace', 'No race specified');
   }
 })();

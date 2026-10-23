@@ -35,6 +35,11 @@ router.get('/', async (req, res, next) => {
     }
     
     if (tournamentId) query.tournamentId = tournamentId;
+    // A race page opened from its racetime.gg room path, stored with a leading slash
+    if (typeof req.query.url === 'string' && req.query.url) {
+      const path = '/' + req.query.url.replace(/^https?:\/\/(?:www\.)?racetime\.gg/i, '').replace(/^\/+|\/+$/g, '');
+      query.url = path;
+    }
 
     // Use aggregation to prioritize ongoing/open races
     const races = await Race.aggregate([

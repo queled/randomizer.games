@@ -237,7 +237,11 @@ const en = {
         dq: "DQ",
         inProgress: "In Progress",
         watchRestream: "Watch the restream",
-        restream: "Restream"
+        restream: "Restream",
+        noParticipants: "No participants",
+        noRace: "No race specified",
+        viewOn: "View on",
+        viewOnRacetime: "View on Racetime"
     },
     
     // Tournaments page

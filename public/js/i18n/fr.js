@@ -225,7 +225,11 @@ const fr = {
         dq: "DQ",
         inProgress: "En cours",
         watchRestream: "Revoir le restream",
-        restream: "Restream"
+        restream: "Restream",
+        noParticipants: "Aucun participant",
+        noRace: "Aucune race indiquée",
+        viewOn: "Voir sur",
+        viewOnRacetime: "Voir sur Racetime"
     },
     
     // Tournaments page

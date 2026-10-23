@@ -205,12 +205,12 @@ const de = {
     // Race detail page
     raceDetail: {
         pageTitle: "Rennen - Randomizer",
-        start: "Start",
-        end: "Ende",
-        duration: "Dauer",
-        participants: "Teilnehmer",
-        ranking: "Rangliste",
-        partOfTournament: "Dieses Rennen ist Teil des Turniers:",
+        start: "📅 Start",
+        end: "🏁 Ende",
+        duration: "⏱️ Dauer",
+        participants: "👥 Teilnehmer",
+        ranking: "🏅 Rangliste",
+        partOfTournament: "🏆 Dieses Rennen ist Teil des Turniers: ",
         place: "Platz",
         player: "Spieler",
         time: "Zeit",
@@ -221,7 +221,11 @@ const de = {
         dq: "DQ",
         inProgress: "Laufend",
         watchRestream: "Restream ansehen",
-        restream: "Restream"
+        restream: "Restream",
+        noParticipants: "Keine Teilnehmer",
+        noRace: "Kein Rennen angegeben",
+        viewOn: "Ansehen auf",
+        viewOnRacetime: "Auf Racetime ansehen"
     },
     
     // Tournaments page

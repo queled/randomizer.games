@@ -38,6 +38,7 @@ const ACTIVE_TOURNAMENT_STATES = [
   'ACTIVE',
   'CREATED'
 ];
+const CREATED_LOOKBACK_DAYS = 90;
 
 function parseNumberFlag(args, flagName, fallback) {
   const index = args.indexOf(flagName);
@@ -82,8 +83,16 @@ async function main() {
     : opts.all
       ? sourceQuery
       : {
-          ...sourceQuery,
-          state: { $in: ACTIVE_TOURNAMENT_STATES }
+          $and: [
+            sourceQuery,
+            {
+              $or: [
+                { state: { $in: ACTIVE_TOURNAMENT_STATES } },
+                // start.gg event not started yet (stored lowercase), still near its start date
+                { state: 'created', startDate: { $gte: new Date(Date.now() - CREATED_LOOKBACK_DAYS * 24 * 60 * 60 * 1000) } }
+              ]
+            }
+          ]
         };
 
   const tournaments = await Tournament.find(query)

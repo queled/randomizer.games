@@ -2,6 +2,13 @@ const axios = require('axios');
 
 // 50 keeps team entrants and nested set slots well under start.gg's 1000-object request limit.
 const EVENT_PAGE_SIZE = 50;
+// start.gg allows 80 requests per minute per token: big events take many pages each
+const MIN_REQUEST_INTERVAL_MS = 800;
+const RATE_LIMIT_RETRY_MS = 60 * 1000;
+const RATE_LIMIT_RETRIES = 2;
+let lastRequestAt = 0;
+
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 const PARTICIPANT_FIELDS = 'gamerTag prefix user { id name slug }';
 const ENTRANT_FIELDS = `id name initialSeedNum participants { ${PARTICIPANT_FIELDS} }`;
@@ -104,7 +111,11 @@ class StartGGAPI {
   /**
    * Execute a GraphQL query
    */
-  async query(query, variables = {}) {
+  async query(query, variables = {}, attempt = 0) {
+    const wait = lastRequestAt + MIN_REQUEST_INTERVAL_MS - Date.now();
+    if (wait > 0) await sleep(wait);
+    lastRequestAt = Date.now();
+
     try {
       const response = await axios.post(
         this.baseURL,
@@ -128,6 +139,11 @@ class StartGGAPI {
 
       return response.data.data;
     } catch (error) {
+      if (error.response?.status === 429 && attempt < RATE_LIMIT_RETRIES) {
+        console.warn(`Start.gg rate limit reached, retrying in ${RATE_LIMIT_RETRY_MS / 1000}s`);
+        await sleep(RATE_LIMIT_RETRY_MS);
+        return this.query(query, variables, attempt + 1);
+      }
       console.error('Start.gg API error:', error.response?.data || error.message);
       throw error;
     }

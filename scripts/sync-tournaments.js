@@ -38,6 +38,9 @@ const RATE_LIMIT_MS = 1500;
 const HOUR_MS = 60 * 60 * 1000;
 // Played brackets the organizer has not finalized: often left like that for good
 const AWAITING_REVIEW_HOURS = 7 * 24;
+// start.gg keeps some events "created" for good once played without being started:
+// a "created" tournament is refreshed only around its start date
+const CREATED_LOOKBACK_DAYS = 90;
 
 function parseArgs() {
   const args = process.argv.slice(2);
@@ -88,8 +91,12 @@ async function updateActiveTournaments({ dryRun, challongeHours }) {
 
   // Find tournaments that are still active / not completed, or played but not finalized
   // by the organizer yet (Challonge "awaiting_review": no final ranks until then)
+  // Not started yet on start.gg ("created", stored lowercase): refreshed until it starts
   const activeTournaments = await Tournament.find({
-    state: { $in: ['pending', 'underway', 'in_progress', 'active', '1', '2', 'ACTIVE', 'CREATED', 'awaiting_review'] }
+    $or: [
+      { state: { $in: ['pending', 'underway', 'in_progress', 'active', '1', '2', 'ACTIVE', 'CREATED', 'awaiting_review'] } },
+      { state: 'created', startDate: { $gte: new Date(Date.now() - CREATED_LOOKBACK_DAYS * 24 * HOUR_MS) } }
+    ]
   }).lean();
 
   console.log(`\n🔄 Updating ${activeTournaments.length} active tournament(s)...`);

@@ -47,3 +47,46 @@ test('double elimination: one loss still in, out on the second loss', () => {
   ], [{ name: 'Bracket', bracketType: 'DOUBLE_ELIMINATION', phaseOrder: 1 }]);
   assert.deepEqual(ranksOf(ranks), { a: 1, c: 2, b: 3, d: 4 });
 });
+
+// Pools: a, b, c, d won theirs; e, f, g, h lost. Gold (a-d) is declared after Silver (e-h).
+const POOL_SETS = [
+  set('Pools', 1, 'a', 'e', 'a'), set('Pools', 1, 'b', 'f', 'b'),
+  set('Pools', 1, 'c', 'g', 'c'), set('Pools', 1, 'd', 'h', 'd')
+];
+const bracketSets = (gold, silver) => [
+  set(silver, 1, 'e', 'f', 'e'), set(silver, 1, 'g', 'h', 'g'), set(silver, 2, 'e', 'g', 'e'),
+  set(gold, 1, 'a', 'b', 'a'), set(gold, 1, 'c', 'd', 'c')
+];
+const parallelPhases = (gold, silver) => [
+  { name: 'Pools', bracketType: 'ROUND_ROBIN', phaseOrder: 1 },
+  { name: silver, bracketType: 'SINGLE_ELIMINATION', phaseOrder: 2 },
+  { name: gold, bracketType: 'SINGLE_ELIMINATION', phaseOrder: 3 }
+];
+
+test('parallel brackets: the last of the stronger one above the winner of the other', () => {
+  const ranks = computeProvisionalRanks([...POOL_SETS, ...bracketSets('Bracket A', 'Bracket B')],
+    parallelPhases('Bracket A', 'Bracket B'));
+  assert.deepEqual(ranksOf(ranks), { a: 1, c: 1, b: 3, d: 3, e: 5, g: 6, f: 7, h: 7 });
+});
+
+// Even pools: a and f won, so neither bracket's players won more
+const EVEN_POOLS = [set('Pools', 1, 'a', 'e', 'a'), set('Pools', 1, 'f', 'b', 'f')];
+const evenBrackets = (first, second) => [
+  ...EVEN_POOLS, set(first, 1, 'a', 'b', 'a'), set(second, 1, 'e', 'f', 'e')
+];
+
+test('parallel brackets: their names tell the stronger one', () => {
+  const phases = [
+    { name: 'Pools', bracketType: 'ROUND_ROBIN', phaseOrder: 1 },
+    { name: 'Gold', bracketType: 'SINGLE_ELIMINATION', phaseOrder: 2 },
+    { name: 'Silver', bracketType: 'SINGLE_ELIMINATION', phaseOrder: 3 }
+  ];
+  const ranks = computeProvisionalRanks(evenBrackets('Gold', 'Silver'), phases);
+  assert.deepEqual(ranksOf(ranks), { a: 1, b: 2, e: 3, f: 4 });
+});
+
+test('parallel brackets of unknown order share a tier', () => {
+  const ranks = computeProvisionalRanks(evenBrackets('Bracket A', 'Bracket B'), parallelPhases('Bracket A', 'Bracket B'));
+  // Ranked together: those still in by their earlier record, the knocked-out ones tied
+  assert.deepEqual(ranksOf(ranks), { a: 1, e: 2, b: 3, f: 3 });
+});

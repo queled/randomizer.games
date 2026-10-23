@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { computeProvisionalRanks } = require('../helpers/provisional-ranks');
+const { computeProvisionalRanks, strongestFirst } = require('../helpers/provisional-ranks');
 
 // 50 keeps team entrants and nested set slots well under start.gg's 1000-object request limit.
 const EVENT_PAGE_SIZE = 50;
@@ -23,13 +23,15 @@ const SET_FIELDS = `
 /**
  * start.gg ranks whoever reached a later phase first. With parallel final brackets
  * (e.g. Swiss → Gold + Silver), the Silver players are therefore placed above the Gold ones
- * when Silver comes later in phaseOrder. Re-rank such brackets by strength: the bracket whose
- * players won more in the stage feeding it comes first. Ties inside a bracket are kept.
+ * when Silver comes later in phaseOrder. Re-rank such brackets when their order is clear: by
+ * their names, or else the bracket whose players won more in the stage feeding it comes first.
+ * Ties inside a bracket are kept; brackets of unclear order keep start.gg's placements.
  */
 function rankParallelBrackets(standings, phases, sets) {
   if (!standings.length || phases.length < 3 || !sets.length) return standings;
 
   const orderOf = new Map(phases.map(p => [String(p.id), p.phaseOrder || 0]));
+  const nameOf = new Map(phases.map(p => [String(p.id), p.name]));
   const playersOf = new Map(phases.map(p => [String(p.id), new Set()]));
   const winsIn = new Map(); // `${phaseId}|${entrantId}` → wins
   for (const set of sets) {
@@ -70,10 +72,11 @@ function rankParallelBrackets(standings, phases, sets) {
       const players = [...playersOf.get(phaseId)];
       return players.reduce((sum, id) => sum + (winsIn.get(`${parent}|${id}`) || 0), 0) / (players.length || 1);
     };
+    // Order unclear (same names level, same strength): start.gg's placements stay
+    const ordered = strongestFirst(siblings, phaseId => nameOf.get(phaseId), strength);
+    if (!ordered) continue;
     const level = Math.min(...siblings.map(id => orderOf.get(id)));
-    [...siblings]
-      .sort((a, b) => strength(b) - strength(a) || orderOf.get(a) - orderOf.get(b))
-      .forEach((phaseId, tier) => placeOf.set(phaseId, { level, tier }));
+    ordered.forEach((phaseId, tier) => placeOf.set(phaseId, { level, tier }));
   }
   if (!placeOf.size) return standings;
 

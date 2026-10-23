@@ -3,7 +3,8 @@
  *
  * While an event runs, start.gg places each entrant where they would finish if knocked out now
  * (every pool player tied at the same place). Instead:
- * - an entrant who reached a later phase ranks above those still in an earlier one;
+ * - an entrant who reached a later phase ranks above those still in an earlier one, and the
+ *   players of a parallel bracket identified as the stronger one above those of the other;
  * - in a round robin / Swiss phase: more wins first, then fewer losses;
  * - in an elimination phase: entrants still in first (more wins first), then the eliminated
  *   ones by how far they went (double elimination: out on the second loss); entrants still in
@@ -16,6 +17,84 @@ const kindOf = bracketType => String(bracketType || '').toLowerCase().replace(/[
 const sideIds = m => [m.player1?.startggEntrantId, m.player2?.startggEntrantId]
   .map(id => (id == null || id === '' ? null : String(id)));
 
+// Parallel brackets named by level, strongest first (as on the tournament page)
+const BRACKET_LEVELS = [
+  /\b(upper|gold(en)?|hard|expert|advanced)\b/i,
+  /\b(middle|silver|medium|normal|intermediate)\b/i,
+  /\b(lower|bronze|easy|beginner|novice)\b/i
+];
+
+const allDistinct = values => new Set(values).size === values.length;
+
+/**
+ * Parallel brackets from strongest to weakest, when their order is clear: from their names
+ * (Gold > Silver > Bronze...), or else from how much their players won before. null otherwise.
+ */
+function strongestFirst(brackets, nameOf, strengthOf) {
+  const levels = brackets.map(b => BRACKET_LEVELS.findIndex(re => re.test(nameOf(b) || '')));
+  const strengths = brackets.map(strengthOf);
+  // Higher score, stronger bracket
+  const scores = !levels.includes(-1) && allDistinct(levels) ? levels.map(level => -level)
+    : allDistinct(strengths) ? strengths
+      : null;
+  if (!scores) return null;
+  return brackets.map((b, i) => ({ b, score: scores[i] })).sort((x, y) => y.score - x.score).map(({ b }) => b);
+}
+
+/**
+ * Tier of each phase: a later phase ranks above an earlier one. Parallel brackets fed by the
+ * same phase (e.g. pools → Gold + Silver) hold different players: when their order is clear,
+ * from their names or else from how much their players won in the feeding phase, the stronger
+ * one ranks above the other whatever their phaseOrder, so that the last of Gold stays above the
+ * first of Silver. When it is not, they share a tier and their players are ranked together.
+ * @returns Map phase name → tier
+ */
+function phaseTiers(order, matches) {
+  const tiers = new Map(order.map((name, i) => [name, i]));
+  const playersOf = new Map(order.map(name => [name, new Set()]));
+  const wins = new Map(); // `${phase}|${entrantId}` → wins
+  for (const m of matches) {
+    const name = m.phase || '';
+    for (const id of sideIds(m)) {
+      if (!id) continue;
+      playersOf.get(name).add(id);
+      if (id === String(m.winnerId)) wins.set(`${name}|${id}`, (wins.get(`${name}|${id}`) || 0) + 1);
+    }
+  }
+
+  // Each phase is fed by the earlier phase sharing the most players with it
+  const children = new Map();
+  order.forEach((name, i) => {
+    let parent = null;
+    let best = 0;
+    for (const earlier of order.slice(0, i)) {
+      const shared = [...playersOf.get(name)].filter(id => playersOf.get(earlier).has(id)).length;
+      if (shared > best) { best = shared; parent = earlier; }
+    }
+    if (parent) children.set(parent, [...(children.get(parent) || []), name]);
+  });
+
+  for (const [parent, kids] of children) {
+    // Brackets sharing players follow one another (e.g. a top 8 after the main bracket): not parallel
+    const parallel = kids.filter(name => kids.every(other => other === name
+      || ![...playersOf.get(name)].some(id => playersOf.get(other).has(id))));
+    if (parallel.length < 2) continue;
+
+    const ordered = strongestFirst(parallel, name => name, name => {
+      const players = [...playersOf.get(name)];
+      return players.reduce((sum, id) => sum + (wins.get(`${parent}|${id}`) || 0), 0) / players.length;
+    });
+    const slots = parallel.map(name => tiers.get(name)).sort((a, b) => a - b);
+    if (!ordered) {
+      parallel.forEach(name => tiers.set(name, slots[0]));
+      continue;
+    }
+    // The same slots, weakest bracket in the lowest one
+    ordered.reverse().forEach((name, i) => tiers.set(name, slots[i]));
+  }
+  return tiers;
+}
+
 /**
  * @param matches sets in the stored shape ({ phase, round, winnerId, player1/2.startggEntrantId })
  * @param phases [{ name, bracketType, phaseOrder }]
@@ -25,7 +104,8 @@ function computeProvisionalRanks(matches = [], phases = []) {
   const declared = [...phases].sort((a, b) => (a.phaseOrder || 0) - (b.phaseOrder || 0)).map(p => p.name);
   const order = [...declared];
   for (const m of matches) if (!order.includes(m.phase || '')) order.push(m.phase || '');
-  const tierOf = name => order.indexOf(name || '');
+  const tiers = phaseTiers(order, matches);
+  const tierOf = name => tiers.get(name || '');
 
   // Phase kind, from start.gg or from the sets when the phase is not declared
   const kinds = new Map();
@@ -51,19 +131,18 @@ function computeProvisionalRanks(matches = [], phases = []) {
     for (const id of sideIds(m)) {
       if (!id) continue;
       const s = stats.get(id);
-      if (!s || tier > s.tier) stats.set(id, { tier, wins: 0, losses: 0, out: 0, allWins: 0, allLosses: 0 });
+      if (!s || tier > s.tier) stats.set(id, { tier, phase: m.phase || '', wins: 0, losses: 0, out: 0, allWins: 0, allLosses: 0 });
     }
   }
   for (const m of matches) {
     if (m.winnerId == null) continue;
-    const tier = tierOf(m.phase);
     const kind = kinds.get(m.phase || '');
     for (const id of sideIds(m)) {
       const s = id && stats.get(id);
       if (!s) continue;
       if (id === String(m.winnerId)) s.allWins += 1;
       else s.allLosses += 1;
-      if (s.tier !== tier) continue;
+      if (s.phase !== (m.phase || '')) continue;
       if (id === String(m.winnerId)) { s.wins += 1; continue; }
       s.losses += 1;
       const round = m.round || 0;
@@ -74,7 +153,7 @@ function computeProvisionalRanks(matches = [], phases = []) {
   }
 
   const keyOf = s => {
-    const kind = kinds.get(order[s.tier]);
+    const kind = kinds.get(s.phase);
     const elimination = kind === 'singleelimination' || kind === 'doubleelimination';
     const stillIn = elimination && !s.out;
     // Higher first: phase, still in, how far, wins, fewer losses, then the whole record of those still in
@@ -96,4 +175,4 @@ function computeProvisionalRanks(matches = [], phases = []) {
   return ranks;
 }
 
-module.exports = { computeProvisionalRanks };
+module.exports = { computeProvisionalRanks, strongestFirst };

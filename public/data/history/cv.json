@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Code Vein a un randomizer d'ennemis, fusionné en 2020 avec un mod de compagnons.",
+    "en": "Code Vein has an enemy randomizer, merged in 2020 with a companion mod."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bandai Namco sort Code Vein en 2019.",
+        "en": "Bandai Namco releases Code Vein in 2019."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2020",
+        "en": "August 2020"
+      },
+      "title": {
+        "fr": "Party Randomizer 2",
+        "en": "Party Randomizer 2"
+      },
+      "text": {
+        "fr": "Le 10 août 2020, Clanzion publie sur Nexus Mods Party Randomizer 2, qui réunit son Enemy Randomizer et son Party Spawner pour qu'ils fonctionnent ensemble.",
+        "en": "On August 10, 2020, Clanzion posts Party Randomizer 2 on Nexus Mods, which merges their Enemy Randomizer and Party Spawner so they work together."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Code Vein",
+      "url": "https://www.igdb.com/games/code-vein"
+    },
+    {
+      "label": "Nexus Mods — Party Randomizer 2",
+      "url": "https://www.nexusmods.com/codevein/mods/409"
+    }
+  ]
+}

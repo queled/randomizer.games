@@ -16,17 +16,6 @@
       }
     },
     {
-      "date": "Outil",
-      "title": {
-        "fr": "Tweaks Patcher",
-        "en": "Tweaks Patcher"
-      },
-      "text": {
-        "fr": "La liste rando-list recense le Tweaks Patcher de romhacking.net, outil de modification qui intègre un randomizer.",
-        "en": "The rando-list catalog lists the Tweaks Patcher from romhacking.net, a modding tool with a bundled randomizer."
-      }
-    },
-    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"
@@ -52,6 +41,20 @@
       "text": {
         "fr": "La version 0.4.1 sort le 19 septembre 2026 ; c'est la plus récente au 23 octobre 2026 (8 versions publiées).",
         "en": "Version 0.4.1 is released on September 19, 2026; it is the latest as of October 23, 2026 (8 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Tweaks Patcher",
+        "en": "Tweaks Patcher"
+      },
+      "text": {
+        "fr": "La liste rando-list recense le Tweaks Patcher de romhacking.net, outil de modification qui intègre un randomizer.",
+        "en": "The rando-list catalog lists the Tweaks Patcher from romhacking.net, a modding tool with a bundled randomizer."
       }
     }
   ],

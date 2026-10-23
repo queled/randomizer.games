@@ -16,17 +16,6 @@
       }
     },
     {
-      "date": "Outil",
-      "title": {
-        "fr": "MapGenerator",
-        "en": "MapGenerator"
-      },
-      "text": {
-        "fr": "Le site allemand hehoe.de propose MapGenerator, un outil qui assemble des tuiles de carte pour créer des cartes aléatoires de Left 4 Dead 2.",
-        "en": "The German site hehoe.de offers MapGenerator, a tool that assembles map tiles to create random Left 4 Dead 2 maps."
-      }
-    },
-    {
       "date": {
         "fr": "Novembre 2025",
         "en": "November 2025"
@@ -52,6 +41,20 @@
       "text": {
         "fr": "La version 0.02 sort le 18 novembre 2025 ; c'est la plus récente au 23 octobre 2026 (2 versions publiées).",
         "en": "Version 0.02 is released on November 18, 2025; it is the latest as of October 23, 2026 (2 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "MapGenerator",
+        "en": "MapGenerator"
+      },
+      "text": {
+        "fr": "Le site allemand hehoe.de propose MapGenerator, un outil qui assemble des tuiles de carte pour créer des cartes aléatoires de Left 4 Dead 2.",
+        "en": "The German site hehoe.de offers MapGenerator, a tool that assembles map tiles to create random Left 4 Dead 2 maps."
       }
     }
   ],

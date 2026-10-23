@@ -1,0 +1,131 @@
+{
+  "intro": {
+    "fr": "Skyrim a une longue liste de mods aléatoires depuis 2013 : murs de mots, donjons, pierres, alchimie, objets, puis un randomizer de portes avec logique.",
+    "en": "Skyrim has had a long list of random mods since 2013: word walls, dungeons, standing stones, alchemy, items, then a door randomizer with logic."
+  },
+  "events": [
+    {
+      "date": "2011",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bethesda Game Studios sort The Elder Scrolls V: Skyrim en 2011.",
+        "en": "Bethesda Game Studios releases The Elder Scrolls V: Skyrim in 2011."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2013",
+        "en": "October 2013"
+      },
+      "title": {
+        "fr": "Murs de mots",
+        "en": "Murs de mots"
+      },
+      "text": {
+        "fr": "Word walls",
+        "en": "Le 2 octobre 2013, Sjogga publie sur Nexus Mods Randomized Word Walls, qui mélange les murs de mots. ChrRubin reprend l'idée en octobre 2020 avec un patcher zEdit qui mélange les cris obtenus."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2015",
+        "en": "January 2015"
+      },
+      "title": {
+        "fr": "Donjon aléatoire",
+        "en": "Donjon aléatoire"
+      },
+      "text": {
+        "fr": "Random dungeon",
+        "en": "Le 23 janvier 2015, umeboshi publie Fushigina Dungeon, des donjons générés aléatoirement façon rogue, sur cent étages."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2022",
+        "en": "July 2022"
+      },
+      "title": {
+        "fr": "ToxiRandomizer",
+        "en": "ToxiRandomizer"
+      },
+      "text": {
+        "fr": "Le 19 juillet 2022, Toxijuice publie ToxiRandomizer, qui randomise objets et équipements dans le monde et sur les PNJ, ainsi que leur agressivité.",
+        "en": "On July 19, 2022, Toxijuice releases ToxiRandomizer, which randomizes items and equipment in the world and on NPCs, as well as their aggression."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2022",
+        "en": "December 2022"
+      },
+      "title": {
+        "fr": "Skyrim World Randomizer",
+        "en": "Skyrim World Randomizer"
+      },
+      "text": {
+        "fr": "Le 10 décembre 2022, ddmlink, déjà auteur d'un randomizer pour Oblivion, publie Skyrim World Randomizer, qui change la destination des portes selon une seed et une logique ; il dépasse les 39 000 téléchargements.",
+        "en": "On December 10, 2022, ddmlink, already the author of an Oblivion randomizer, releases Skyrim World Randomizer, which changes door destinations using a seed and logic; it passes 39,000 downloads."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2023",
+        "en": "December 2023"
+      },
+      "title": {
+        "fr": "Alchimie",
+        "en": "Alchimie"
+      },
+      "text": {
+        "fr": "Alchemy",
+        "en": "Le 18 décembre 2023, powerofthree publie un plugin SKSE qui randomise les effets des ingrédients, après un premier patcher de ChrRubin en 2020 ; il est encore mis à jour en septembre 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — The Elder Scrolls V: Skyrim",
+      "url": "https://www.igdb.com/games/the-elder-scrolls-v-skyrim"
+    },
+    {
+      "label": "Nexus Mods — Randomized Word Walls",
+      "url": "https://www.nexusmods.com/skyrim/mods/43409"
+    },
+    {
+      "label": "Nexus Mods — Random Dungeon Generator - Fushigina Dungeon -",
+      "url": "https://www.nexusmods.com/skyrim/mods/61962"
+    },
+    {
+      "label": "Nexus Mods — ToxiRandomizer SE-AE-VR",
+      "url": "https://www.nexusmods.com/skyrimspecialedition/mods/70839"
+    },
+    {
+      "label": "Nexus Mods — Skyrim World Randomizer (WIP)",
+      "url": "https://www.nexusmods.com/skyrimspecialedition/mods/79974"
+    },
+    {
+      "label": "Nexus Mods — Alchemy Effect Randomizer SKSE",
+      "url": "https://www.nexusmods.com/skyrimspecialedition/mods/107301"
+    },
+    {
+      "label": "Nexus Mods — Word Walls Randomizer (zEdit Patcher)",
+      "url": "https://www.nexusmods.com/skyrimspecialedition/mods/41616"
+    },
+    {
+      "label": "Nexus Mods — Alchemy Effects Randomizer (zEdit Patcher)",
+      "url": "https://www.nexusmods.com/skyrimspecialedition/mods/41960"
+    },
+    {
+      "label": "Nexus Mods — Randomized Birthstones",
+      "url": "https://www.nexusmods.com/skyrimspecialedition/mods/23838"
+    },
+    {
+      "label": "Nexus Mods — Serpent's Modular Randomizer",
+      "url": "https://www.nexusmods.com/skyrimspecialedition/mods/81881"
+    }
+  ]
+}

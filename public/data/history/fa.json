@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Fable Anniversary a la même version du randomiseur de créatures que Fable: The Lost Chapters.",
+    "en": "Fable Anniversary has the same version of the creature randomiser as Fable: The Lost Chapters."
+  },
+  "events": [
+    {
+      "date": "2014",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Lionhead Studios sort Fable Anniversary en 2014, remake du premier Fable.",
+        "en": "Lionhead Studios releases Fable Anniversary in 2014, a remake of the first Fable."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2021",
+        "en": "April 2021"
+      },
+      "title": {
+        "fr": "Creature Generator Randomiser",
+        "en": "Creature Generator Randomiser"
+      },
+      "text": {
+        "fr": "Le 25 avril 2021, Wyntilda publie sur Nexus Mods une bêta qui randomise les apparitions de créatures non scriptées, le même jour que pour The Lost Chapters.",
+        "en": "On April 25, 2021, Wyntilda posts a beta on Nexus Mods that randomizes non-scripted creature spawns, the same day as for The Lost Chapters."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Fable Anniversary",
+      "url": "https://www.igdb.com/games/fable-anniversary"
+    },
+    {
+      "label": "Nexus Mods — Creature Generator Randomiser (Beta)",
+      "url": "https://www.nexusmods.com/fableanniversary/mods/43"
+    }
+  ]
+}

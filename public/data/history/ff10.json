@@ -16,17 +16,6 @@
       }
     },
     {
-      "date": "Outil",
-      "title": {
-        "fr": "FFXED",
-        "en": "FFXED"
-      },
-      "text": {
-        "fr": "La liste rando-list recense FFXED, un éditeur de sauvegardes qui peut randomiser le Sphérier.",
-        "en": "The rando-list catalog lists FFXED, a save editor that can randomize the Sphere Grid."
-      }
-    },
-    {
       "date": {
         "fr": "Février 2026",
         "en": "February 2026"
@@ -52,6 +41,20 @@
       "text": {
         "fr": "La préversion 0.10.0 sort le 12 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (11 versions publiées).",
         "en": "Pre-release 0.10.0 comes out on October 12, 2026; it is the latest as of October 23, 2026 (11 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "FFXED",
+        "en": "FFXED"
+      },
+      "text": {
+        "fr": "La liste rando-list recense FFXED, un éditeur de sauvegardes qui peut randomiser le Sphérier.",
+        "en": "The rando-list catalog lists FFXED, a save editor that can randomize the Sphere Grid."
       }
     }
   ],

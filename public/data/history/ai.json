@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Alien: Isolation a un mod qui mélange l'ordre de ses missions.",
+    "en": "Alien: Isolation has a mod that shuffles the order of its missions."
+  },
+  "events": [
+    {
+      "date": "2014",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Creative Assembly sort Alien: Isolation en 2014.",
+        "en": "Creative Assembly releases Alien: Isolation in 2014."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2023",
+        "en": "October 2023"
+      },
+      "title": {
+        "fr": "Mission Randomizer",
+        "en": "Mission Randomizer"
+      },
+      "text": {
+        "fr": "Le 8 octobre 2023, AnzuFutabaa publie sur Nexus Mods un mod qui tire au hasard l'ordre des missions 2 à 18, avec en option un Alien supplémentaire dans la plupart des missions.",
+        "en": "On October 8, 2023, AnzuFutabaa posts a mod on Nexus Mods that randomizes the order of missions 2 to 18, with an optional extra Alien in most missions."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Alien: Isolation",
+      "url": "https://www.igdb.com/games/alien-isolation"
+    },
+    {
+      "label": "Nexus Mods — Mission Randomizer",
+      "url": "https://www.nexusmods.com/alienisolation/mods/47"
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "intro": {
+    "fr": "Dark Souls III a une scène de randomizers fournie : objets, ennemis, mouvements, brumes, puis Archipelago dès 2022.",
+    "en": "Dark Souls III has a rich randomizer scene: items, enemies, movesets, fog gates, then Archipelago as early as 2022."
+  },
+  "events": [
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "FromSoftware sort Dark Souls III en 2016.",
+        "en": "FromSoftware releases Dark Souls III in 2016."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2017",
+        "en": "November 2017"
+      },
+      "title": {
+        "fr": "Premier randomiser",
+        "en": "First randomiser"
+      },
+      "text": {
+        "fr": "Le 30 novembre 2017, Yui publie sur Nexus Mods un randomiser de tous les objets du jeu, avec équipement automatique en option.",
+        "en": "On November 30, 2017, Yui posts on Nexus Mods a randomiser of every item in the game, with optional auto-equip."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2018",
+        "en": "November 2018"
+      },
+      "title": {
+        "fr": "Irregulator",
+        "en": "Irregulator"
+      },
+      "text": {
+        "fr": "Le 15 novembre 2018, TKGP publie Irregulator, qui randomise mouvements, statistiques, projectiles et plus encore.",
+        "en": "On November 15, 2018, TKGP releases Irregulator, which randomizes movesets, stats, projectiles and more."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2019",
+        "en": "May 2019"
+      },
+      "title": {
+        "fr": "Static Item and Enemy Randomizer",
+        "en": "Static Item and Enemy Randomizer"
+      },
+      "text": {
+        "fr": "Le 19 mai 2019, thefifthmatt publie le DS3 Static Item and Enemy Randomizer : objets, objets clés et boutiques compris, ennemis et tous les boss. Suivent un randomizer d'ennemis de GodFilm233 en mars 2020 et le Fog Gate Randomizer de thefifthmatt en mai 2020, dans l'esprit des randomizers d'entrées de Zelda.",
+        "en": "On May 19, 2019, thefifthmatt releases the DS3 Static Item and Enemy Randomizer: items, key items and shops included, enemies and every boss. GodFilm233's enemy randomizer follows in March 2020, and thefifthmatt's Fog Gate Randomizer in May 2020, in the spirit of Zelda entrance randomizers."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2022",
+        "en": "July 2022"
+      },
+      "title": {
+        "fr": "Dans Archipelago",
+        "en": "In Archipelago"
+      },
+      "text": {
+        "fr": "Le 20 juillet 2022, la contribution de Marechal-L qui ajoute Dark Souls III est intégrée à Archipelago ; le jeu arrive avec la version 0.3.4, le 5 août 2022.",
+        "en": "On July 20, 2022, Marechal-L's contribution adding Dark Souls III is merged into Archipelago; the game ships with version 0.3.4, on August 5, 2022."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2024",
+        "en": "August 2024"
+      },
+      "title": {
+        "fr": "Version 3.0",
+        "en": "Version 3.0"
+      },
+      "text": {
+        "fr": "Le 9 août 2024, nex3 fait intégrer la version 3.0.0 du monde Dark Souls III ; le monde indique ensuite les versions compatibles du randomizer statique, et une documentation de la randomisation des ennemis s'y ajoute en 2026.",
+        "en": "On August 9, 2024, nex3 gets version 3.0.0 of the Dark Souls III world merged; the world then lists the compatible versions of the static randomizer, and documentation of enemy randomization is added in 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Dark Souls III",
+      "url": "https://www.igdb.com/games/dark-souls-iii"
+    },
+    {
+      "label": "Nexus Mods — Item Randomiser and Auto-equip",
+      "url": "https://www.nexusmods.com/darksouls3/mods/241"
+    },
+    {
+      "label": "Nexus Mods — Irregulator",
+      "url": "https://www.nexusmods.com/darksouls3/mods/298"
+    },
+    {
+      "label": "Nexus Mods — DS3 Static Item and Enemy Randomizer",
+      "url": "https://www.nexusmods.com/darksouls3/mods/361"
+    },
+    {
+      "label": "Nexus Mods — Dark Souls 3 Enemy Randomizer",
+      "url": "https://www.nexusmods.com/darksouls3/mods/484"
+    },
+    {
+      "label": "Nexus Mods — DS3 Fog Gate Randomizer",
+      "url": "https://www.nexusmods.com/darksouls3/mods/551"
+    },
+    {
+      "label": "GitHub — Archipelago #769, Add the Dark Souls 3 World",
+      "url": "https://github.com/ArchipelagoMW/Archipelago/pull/769"
+    },
+    {
+      "label": "GitHub — Archipelago #3128, DS3: Version 3.0.0",
+      "url": "https://github.com/ArchipelagoMW/Archipelago/pull/3128"
+    },
+    {
+      "label": "Archipelago — Dark Souls III",
+      "url": "https://archipelago.gg/games/Dark%20Souls%20III/info/en"
+    }
+  ]
+}

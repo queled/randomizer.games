@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "L'île de Bitterblack de Dragon's Dogma: Dark Arisen a son randomizer depuis 2021.",
+    "en": "Dragon's Dogma: Dark Arisen's Bitterblack Isle has had its randomizer since 2021."
+  },
+  "events": [
+    {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Dragon's Dogma: Dark Arisen en 2013, avec l'île de Bitterblack.",
+        "en": "Capcom releases Dragon's Dogma: Dark Arisen in 2013, with Bitterblack Isle."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2021",
+        "en": "August 2021"
+      },
+      "title": {
+        "fr": "Bitterblack Isle Randomizer",
+        "en": "Bitterblack Isle Randomizer"
+      },
+      "text": {
+        "fr": "Le 17 août 2021, SpacetimeBSEmporium publie sur Nexus Mods une application Java qui randomise les ennemis, le contenu des coffres et la position des sculptures macabres dans les 24 zones de l'île.",
+        "en": "On August 17, 2021, SpacetimeBSEmporium posts a Java application on Nexus Mods that randomizes enemy spawns, chest contents and the positions of the Macabre Sculptures in each of the isle's 24 stages."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Dragon's Dogma: Dark Arisen",
+      "url": "https://www.igdb.com/games/dragons-dogma-dark-arisen"
+    },
+    {
+      "label": "Nexus Mods — DDDA Bitterblack Isle Randomizer",
+      "url": "https://www.nexusmods.com/dragonsdogma/mods/670"
+    }
+  ]
+}

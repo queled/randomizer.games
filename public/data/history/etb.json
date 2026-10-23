@@ -1,0 +1,32 @@
+{
+  "intro": {
+    "fr": "Escape the Backrooms, de Fancy Games, a un mod qui randomise ses niveaux et ses objets.",
+    "en": "Fancy Games' Escape the Backrooms has a mod that randomizes its levels and items."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Janvier 2024",
+        "en": "January 2024"
+      },
+      "title": {
+        "fr": "Randomizer Mod",
+        "en": "Randomizer Mod"
+      },
+      "text": {
+        "fr": "Le 18 janvier 2024, Reokin publie sur Nexus Mods un mod qui randomise les niveaux et les objets ; la version 2.2 date de mai 2024.",
+        "en": "On January 18, 2024, Reokin posts a mod on Nexus Mods that randomizes levels and items; version 2.2 dates from May 2024."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Escape the Backrooms",
+      "url": "https://www.igdb.com/games/escape-the-backrooms"
+    },
+    {
+      "label": "Nexus Mods — Randomizer Mod",
+      "url": "https://www.nexusmods.com/escapethebackrooms/mods/20"
+    }
+  ]
+}

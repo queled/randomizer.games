@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Resident Evil 5 a un mod de boss aléatoires pour son mode Mercenaires depuis 2020, et un randomizer complet depuis 2026.",
+    "en": "Resident Evil 5 has had a random boss mod for its Mercenaries mode since 2020, and a complete randomizer since 2026."
+  },
+  "events": [
+    {
+      "date": "2009",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Resident Evil 5 en 2009.",
+        "en": "Capcom releases Resident Evil 5 in 2009."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2020",
+        "en": "November 2020"
+      },
+      "title": {
+        "fr": "The Mercenaries Randomizer",
+        "en": "The Mercenaries Randomizer"
+      },
+      "text": {
+        "fr": "Le 14 novembre 2020, sebmercenary publie sur le forum Resident Evil Modding un mod qui randomise les boss du mode Mercenaries Reunion : chaque boss qui apparaît est tiré parmi huit possibilités.",
+        "en": "On November 14, 2020, sebmercenary posts a mod on the Resident Evil Modding forum that randomizes the bosses of Mercenaries Reunion: each boss that spawns is one of eight options."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2026",
+        "en": "January 2026"
+      },
+      "title": {
+        "fr": "Resident Evil 5 Randomizer",
+        "en": "Resident Evil 5 Randomizer"
+      },
+      "text": {
+        "fr": "Le 15 janvier 2026, Multi publie sur Nexus Mods un randomizer qui modifie les fichiers du jeu de nombreuses façons : ennemis, objets, éclairage, musique… ; il dépasse les 15 000 téléchargements en quelques semaines.",
+        "en": "On January 15, 2026, Multi posts a randomizer on Nexus Mods that changes the game files in many ways: enemies, items, lighting, music…; it passes 15,000 downloads within weeks."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Resident Evil 5",
+      "url": "https://www.igdb.com/games/resident-evil-5"
+    },
+    {
+      "label": "Nexus Mods — Resident Evil 5 Randomizer V1.4.0",
+      "url": "https://www.nexusmods.com/residentevil5goldedition/mods/787"
+    },
+    {
+      "label": "Resident Evil Modding — The Mercenaries Randomizer Mod",
+      "url": "https://residentevilmodding.boards.net/thread/14061/mercenaries-randomizer-mod"
+    }
+  ]
+}

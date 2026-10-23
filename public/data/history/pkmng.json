@@ -5,17 +5,6 @@
   },
   "events": [
     {
-      "date": "Hack",
-      "title": {
-        "fr": "Pokémon Gaia",
-        "en": "Pokémon Gaia"
-      },
-      "text": {
-        "fr": "Pokémon Gaia est un hack de Pokémon Rouge Feu présenté sur le forum PokéCommunity.",
-        "en": "Pokémon Gaia is a Pokémon FireRed hack presented on the PokéCommunity forum."
-      }
-    },
-    {
       "date": {
         "fr": "Juin 2019",
         "en": "June 2019"

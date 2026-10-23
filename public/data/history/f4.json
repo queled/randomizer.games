@@ -1,0 +1,109 @@
+{
+  "intro": {
+    "fr": "Fallout 4 n'a pas un randomizer unique mais une série de mods qui rendent aléatoires armes, statistiques, scénario ou figurines.",
+    "en": "Fallout 4 has no single randomizer but a series of mods that randomize weapons, stats, story beats or bobbleheads."
+  },
+  "events": [
+    {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bethesda Game Studios sort Fallout 4 en 2015.",
+        "en": "Bethesda Game Studios releases Fallout 4 in 2015."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2016",
+        "en": "February 2016"
+      },
+      "title": {
+        "fr": "Armes des ennemis",
+        "en": "Armes des ennemis"
+      },
+      "text": {
+        "fr": "Dès le 6 février 2016, Vanake14 publie sur Nexus Mods Enemy Weapon Randomizer, qui donne aux ennemis et PNJ des armes aussi variées que celles du joueur.",
+        "en": "As early as February 6, 2016, Vanake14 posts Enemy Weapon Randomizer on Nexus Mods, which gives enemies and NPCs weapons as varied as the player's."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2017",
+        "en": "January 2017"
+      },
+      "title": {
+        "fr": "Fallout 4 Randomizer",
+        "en": "Fallout 4 Randomizer"
+      },
+      "text": {
+        "fr": "Le 15 janvier 2017, WolfmanMODS publie Fallout 4 Randomizer, qui rend aléatoires certains aspects prévisibles des missions principales.",
+        "en": "On January 15, 2017, WolfmanMODS posts Fallout 4 Randomizer, which randomizes some otherwise predictable aspects of the main story missions."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2022",
+        "en": "March 2022"
+      },
+      "title": {
+        "fr": "Bobblehead Randomizer",
+        "en": "Bobblehead Randomizer"
+      },
+      "text": {
+        "fr": "Le 3 mars 2022, Yeti publie Bobblehead Randomizer, qui change l'emplacement des figurines.",
+        "en": "On March 3, 2022, Yeti posts Bobblehead Randomizer, which moves the bobbleheads around."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2023",
+        "en": "March 2023"
+      },
+      "title": {
+        "fr": "Statistiques aléatoires",
+        "en": "Statistiques aléatoires"
+      },
+      "text": {
+        "fr": "Random stats",
+        "en": "En 2023, Crazydeal publie des randomizers de statistiques d'armes et d'armures, encore mis à jour en 2025 et 2026, après d'autres mods de statistiques ou de qualité d'armes (Bwones et Phoynix, 2020)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Fallout 4",
+      "url": "https://www.igdb.com/games/fallout-4"
+    },
+    {
+      "label": "Nexus Mods — Enemy Weapon Randomizer",
+      "url": "https://www.nexusmods.com/fallout4/mods/9528"
+    },
+    {
+      "label": "Nexus Mods — Fallout 4 Randomizer",
+      "url": "https://www.nexusmods.com/fallout4/mods/21297"
+    },
+    {
+      "label": "Nexus Mods — Bobblehead Randomizer",
+      "url": "https://www.nexusmods.com/fallout4/mods/58541"
+    },
+    {
+      "label": "Nexus Mods — Crazy's Weapon Stat Randomizer",
+      "url": "https://www.nexusmods.com/fallout4/mods/69248"
+    },
+    {
+      "label": "Nexus Mods — Weapon Quality Randomizer",
+      "url": "https://www.nexusmods.com/fallout4/mods/44946"
+    },
+    {
+      "label": "Nexus Mods — Random Weapon Stats",
+      "url": "https://www.nexusmods.com/fallout4/mods/43223"
+    },
+    {
+      "label": "Nexus Mods — Crazy's Armor Overhaul and Stat Randomizer",
+      "url": "https://www.nexusmods.com/fallout4/mods/69102"
+    }
+  ]
+}

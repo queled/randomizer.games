@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Nioh 2 a un randomizer d'ennemis depuis 2022.",
+    "en": "Nioh 2 has had an enemy randomizer since 2022."
+  },
+  "events": [
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Team NINJA sort Nioh 2 en 2020.",
+        "en": "Team NINJA releases Nioh 2 in 2020."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2022",
+        "en": "November 2022"
+      },
+      "title": {
+        "fr": "Nioh 2 Enemy Randomizer",
+        "en": "Nioh 2 Enemy Randomizer"
+      },
+      "text": {
+        "fr": "Le 6 novembre 2022, rphii publie sur Nexus Mods un randomizer d'ennemis qui fonctionne dans les missions principales, le monde souterrain et le dojo, avec boss en option ; il est mis à jour jusqu'en mars 2025.",
+        "en": "On November 6, 2022, rphii posts an enemy randomizer on Nexus Mods that works in the main missions, the underworld and the dojo, with optional bosses; it is updated until March 2025."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Nioh 2",
+      "url": "https://www.igdb.com/games/nioh-2"
+    },
+    {
+      "label": "Nexus Mods — Nioh 2 Enemy Randomizer",
+      "url": "https://www.nexusmods.com/nioh2/mods/321"
+    }
+  ]
+}

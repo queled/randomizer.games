@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Digimon Story: Time Stranger a un randomizer de rencontres et de digivolutions depuis 2026.",
+    "en": "Digimon Story: Time Stranger has had an encounter and digivolution randomizer since 2026."
+  },
+  "events": [
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Media.Vision sort Digimon Story: Time Stranger en 2025.",
+        "en": "Media.Vision releases Digimon Story: Time Stranger in 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2026",
+        "en": "April 2026"
+      },
+      "title": {
+        "fr": "Encounter and Digivolution Randomizer",
+        "en": "Encounter and Digivolution Randomizer"
+      },
+      "text": {
+        "fr": "Le 17 avril 2026, HumanHooman publie sur Nexus Mods un mod qui randomise les rencontres et les digivolutions, avec un script pour tirer une nouvelle seed.",
+        "en": "On April 17, 2026, HumanHooman posts a mod on Nexus Mods that randomizes field encounters and digivolutions, with a script to reroll the seed."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Digimon Story: Time Stranger",
+      "url": "https://www.igdb.com/games/digimon-story-time-stranger"
+    },
+    {
+      "label": "Nexus Mods — Encounter and Digivolution Randomizer",
+      "url": "https://www.nexusmods.com/digimonstorytimestranger/mods/145"
+    }
+  ]
+}

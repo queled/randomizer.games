@@ -1,0 +1,65 @@
+{
+  "intro": {
+    "fr": "Blasphemous a eu son randomizer sur Nexus Mods en 2022, puis est entré dans Archipelago en 2023.",
+    "en": "Blasphemous got its randomizer on Nexus Mods in 2022, then joined Archipelago in 2023."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "The Game Kitchen sort Blasphemous en 2019.",
+        "en": "The Game Kitchen releases Blasphemous in 2019."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2022",
+        "en": "October 2022"
+      },
+      "title": {
+        "fr": "Item and Enemy Randomizer",
+        "en": "Item and Enemy Randomizer"
+      },
+      "text": {
+        "fr": "Le 3 octobre 2022, Damocles03 publie sur Nexus Mods un randomizer qui mélange tous les objets du jeu en garantissant qu'il reste finissable, puis les ennemis.",
+        "en": "On October 3, 2022, Damocles03 posts a randomizer on Nexus Mods that shuffles every item in the game while keeping it completable, then the enemies."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2023",
+        "en": "February 2023"
+      },
+      "title": {
+        "fr": "Dans Archipelago",
+        "en": "In Archipelago"
+      },
+      "text": {
+        "fr": "Le 24 février 2023, la contribution de TRPG0 qui ajoute Blasphemous est intégrée à Archipelago ; le jeu arrive avec la version 0.4.0, le 1er avril 2023.",
+        "en": "On February 24, 2023, TRPG0's contribution adding Blasphemous is merged into Archipelago; the game ships with version 0.4.0, on April 1, 2023."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Blasphemous",
+      "url": "https://www.igdb.com/games/blasphemous"
+    },
+    {
+      "label": "Nexus Mods — Item and Enemy Randomizer",
+      "url": "https://www.nexusmods.com/blasphemous/mods/15"
+    },
+    {
+      "label": "GitHub — Archipelago #1446, Blasphemous: Implement new game",
+      "url": "https://github.com/ArchipelagoMW/Archipelago/pull/1446"
+    },
+    {
+      "label": "Archipelago — Blasphemous",
+      "url": "https://archipelago.gg/games/Blasphemous/info/en"
+    }
+  ]
+}

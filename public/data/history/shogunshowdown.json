@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Shogun Showdown a un randomizer d'ennemis et de boss.",
+    "en": "Shogun Showdown has an enemy and boss randomizer."
+  },
+  "events": [
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Roboatino sort Shogun Showdown en 2024.",
+        "en": "Roboatino releases Shogun Showdown in 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2024",
+        "en": "February 2024"
+      },
+      "title": {
+        "fr": "Enemy Boss Randomizer",
+        "en": "Enemy Boss Randomizer"
+      },
+      "text": {
+        "fr": "Le 13 février 2024, The_Rot_Bot publie sur Nexus Mods un mod qui randomise ennemis, boss et invocations, et règle la fréquence des boss corrompus et des ennemis d'élite.",
+        "en": "On February 13, 2024, The_Rot_Bot posts a mod on Nexus Mods that randomizes enemies, bosses and summons, and controls how often corrupted bosses and elite enemies spawn."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Shogun Showdown",
+      "url": "https://www.igdb.com/games/shogun-showdown"
+    },
+    {
+      "label": "Nexus Mods — Enemy Boss Randomizer",
+      "url": "https://www.nexusmods.com/shogunshowdown/mods/6"
+    }
+  ]
+}

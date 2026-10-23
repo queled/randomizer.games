@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Le remake de System Shock a un mod de butin aléatoire depuis sa sortie.",
+    "en": "The System Shock remake has had a random loot mod since its release."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nightdive Studios sort en 2023 le remake de System Shock.",
+        "en": "Nightdive Studios releases the System Shock remake in 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2023",
+        "en": "June 2023"
+      },
+      "title": {
+        "fr": "Ironman - Item Randomizer",
+        "en": "Ironman - Item Randomizer"
+      },
+      "text": {
+        "fr": "Le 22 juin 2023, dreamvirtual publie sur Nexus Mods une refonte exigeante : butin randomisé et revu, mode hardcore, difficulté accrue. Le mod est encore mis à jour en avril 2026.",
+        "en": "On June 22, 2023, dreamvirtual posts a challenging overhaul on Nexus Mods: randomized and revamped loot, hardcore mode, harder difficulty. The mod is still updated in April 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — System Shock",
+      "url": "https://www.igdb.com/games/system-shock--1"
+    },
+    {
+      "label": "Nexus Mods — (2.1) Ironman - Item Randomizer",
+      "url": "https://www.nexusmods.com/systemshock2023/mods/55"
+    }
+  ]
+}

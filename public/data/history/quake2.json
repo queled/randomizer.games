@@ -1,0 +1,65 @@
+{
+  "intro": {
+    "fr": "Quake II a un mod de campagnes aléatoires, et le générateur de cartes OBLIGE le prend en charge.",
+    "en": "Quake II has a random campaign mod, and the OBLIGE map generator supports it."
+  },
+  "events": [
+    {
+      "date": "1997",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "id Software sort Quake II en 1997.",
+        "en": "id Software releases Quake II in 1997."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2021",
+        "en": "October 2021"
+      },
+      "title": {
+        "fr": "Quake 2 Campaign Randomizer",
+        "en": "Quake 2 Campaign Randomizer"
+      },
+      "text": {
+        "fr": "Le 5 octobre 2021, Callahan2 publie sur Nexus Mods un mod qui rend aléatoires les monstres et les objets des trois campagnes (jeu de base, The Reckoning, Ground Zero), avec des probabilités réglables.",
+        "en": "On October 5, 2021, Callahan2 posts a mod on Nexus Mods that randomizes monsters and pickups in the three campaigns (base game, The Reckoning, Ground Zero), with adjustable probabilities."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "OBLIGE",
+        "en": "OBLIGE"
+      },
+      "text": {
+        "fr": "La version 4.28 du générateur de niveaux OBLIGE prend en charge Hexen, Quake et Quake II, selon rando-list.",
+        "en": "Version 4.28 of the OBLIGE level generator supports Hexen, Quake and Quake II, according to rando-list."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Quake II",
+      "url": "https://www.igdb.com/games/quake-ii"
+    },
+    {
+      "label": "Nexus Mods — Quake 2 Campaign Randomizer",
+      "url": "https://www.nexusmods.com/quake2/mods/6"
+    },
+    {
+      "label": "SourceForge — OBLIGE 4.28",
+      "url": "https://sourceforge.net/projects/oblige/files/Oblige/4.28/"
+    },
+    {
+      "label": "rando-list — Quake",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Quake.yml"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "intro": {
+    "fr": "Fallout: New Vegas a eu ses premiers mods aléatoires dès 2013 ; le New Vegas Randomizer de 2021 se présente comme « peut-être le premier grand randomizer du jeu ».",
+    "en": "Fallout: New Vegas got its first random mods in 2013; the 2021 New Vegas Randomizer describes itself as \"possibly the game's first major randomizer\"."
+  },
+  "events": [
+    {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Obsidian Entertainment sort Fallout: New Vegas en 2010.",
+        "en": "Obsidian Entertainment releases Fallout: New Vegas in 2010."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2013",
+        "en": "October 2013"
+      },
+      "title": {
+        "fr": "Skill Check Randomizer",
+        "en": "Skill Check Randomizer"
+      },
+      "text": {
+        "fr": "Le 27 octobre 2013, Luke Gevaerts publie sur Nexus Mods un plugin qui randomise les tests de compétence des dialogues.",
+        "en": "On October 27, 2013, Luke Gevaerts posts a plugin on Nexus Mods that randomizes the dialogue skill checks."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2021",
+        "en": "January 2021"
+      },
+      "title": {
+        "fr": "New Vegas Randomizer",
+        "en": "New Vegas Randomizer"
+      },
+      "text": {
+        "fr": "Le 22 janvier 2021, Josie publie le New Vegas Randomizer, téléchargé près de 100 000 fois sur Nexus Mods.",
+        "en": "On January 22, 2021, Josie releases the New Vegas Randomizer, downloaded nearly 100,000 times on Nexus Mods."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2021",
+        "en": "November 2021"
+      },
+      "title": {
+        "fr": "World Randomizer",
+        "en": "World Randomizer"
+      },
+      "text": {
+        "fr": "Le 30 novembre 2021, Honest Signal publie un randomizer des portes, qui relie le monde autrement à chaque partie ; il est encore mis à jour en janvier 2026.",
+        "en": "On November 30, 2021, Honest Signal releases a door randomizer that connects the world differently each time; it is still updated in January 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Fallout: New Vegas",
+      "url": "https://www.igdb.com/games/fallout-new-vegas"
+    },
+    {
+      "label": "Nexus Mods — Skill Check Randomizer",
+      "url": "https://www.nexusmods.com/newvegas/mods/53420"
+    },
+    {
+      "label": "Nexus Mods — New Vegas Randomizer",
+      "url": "https://www.nexusmods.com/newvegas/mods/70845"
+    },
+    {
+      "label": "Nexus Mods — World Randomizer for NV (aka Door Randomizer)",
+      "url": "https://www.nexusmods.com/newvegas/mods/74554"
+    }
+  ]
+}

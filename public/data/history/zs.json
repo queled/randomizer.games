@@ -1,0 +1,32 @@
+{
+  "intro": {
+    "fr": "ZERO Sievert, de CABO Studio, a un mod qui randomise les armes et armures des PNJ.",
+    "en": "CABO Studio's ZERO Sievert has a mod that randomizes NPCs' guns and armor."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Septembre 2023",
+        "en": "September 2023"
+      },
+      "title": {
+        "fr": "Gun and Armor Randomizer",
+        "en": "Gun and Armor Randomizer"
+      },
+      "text": {
+        "fr": "Le 14 septembre 2023, Jan publie sur Nexus Mods un mod qui randomise les armes, ou les armes et armures, de tous les PNJ, boss compris.",
+        "en": "On September 14, 2023, Jan posts a mod on Nexus Mods that randomizes the guns, or guns and armor, of all NPCs, bosses included."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Zero Sievert",
+      "url": "https://www.igdb.com/games/zero-sievert"
+    },
+    {
+      "label": "Nexus Mods — Gun and Armor Randomizer",
+      "url": "https://www.nexusmods.com/zerosievert/mods/25"
+    }
+  ]
+}

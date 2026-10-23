@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Legend of Grimrock a eu un générateur de donjons aléatoires dès la fin 2012.",
+    "en": "Legend of Grimrock got a random dungeon generator as early as late 2012."
+  },
+  "events": [
+    {
+      "date": "2012",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Almost Human sort Legend of Grimrock en 2012.",
+        "en": "Almost Human releases Legend of Grimrock in 2012."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2012",
+        "en": "December 2012"
+      },
+      "title": {
+        "fr": "Random Dungeon",
+        "en": "Random Dungeon"
+      },
+      "text": {
+        "fr": "Le 16 décembre 2012, Roman Adler publie sur Nexus Mods Random Dungeon : 12 niveaux générés entièrement au hasard à chaque nouvelle partie.",
+        "en": "On December 16, 2012, Roman Adler posts Random Dungeon on Nexus Mods: 12 levels, generated completely at random each time you restart."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Legend of Grimrock",
+      "url": "https://www.igdb.com/games/legend-of-grimrock"
+    },
+    {
+      "label": "Nexus Mods — Random Dungeon",
+      "url": "https://www.nexusmods.com/grimrock/mods/148"
+    }
+  ]
+}

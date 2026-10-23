@@ -1,0 +1,76 @@
+{
+  "intro": {
+    "fr": "Le Resident Evil 4 de 2005 a plusieurs randomizers, dont un complet sorti en attendant le remake.",
+    "en": "The 2005 Resident Evil 4 has several randomizers, including a complete one released while waiting for the remake."
+  },
+  "events": [
+    {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Resident Evil 4 en 2005.",
+        "en": "Capcom releases Resident Evil 4 in 2005."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2021",
+        "en": "July 2021"
+      },
+      "title": {
+        "fr": "Rando Items 9000",
+        "en": "Rando Items 9000"
+      },
+      "text": {
+        "fr": "Le 29 juillet 2021, ike9000 publie sur Nexus Mods un mod qui randomise ou remplace les objets fixes du jeu, très configurable.",
+        "en": "On July 29, 2021, ike9000 posts a mod on Nexus Mods that randomizes or replaces the game's static items, with extensive configuration."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Enemy/Merchant Randomizer",
+        "en": "Enemy/Merchant Randomizer"
+      },
+      "text": {
+        "fr": "Un autre mod de 2022, publié sur ModDB, randomise la plupart des ennemis, boss compris, leurs PV, la boutique du marchand, l'inventaire de départ et les améliorations d'armes.",
+        "en": "Another 2022 mod, posted on ModDB, randomizes most enemy spawns, boss fights included, enemy HP, the Merchant's stock, the starting inventory and weapon upgrades."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2022",
+        "en": "November 2022"
+      },
+      "title": {
+        "fr": "Item Randomizer",
+        "en": "Item Randomizer"
+      },
+      "text": {
+        "fr": "Le 22 novembre 2022, naitsircNH publie un randomizer d'objets complet, objets clés et trésors compris, « pour patienter jusqu'au remake ».",
+        "en": "On November 22, 2022, naitsircNH releases a complete item randomizer, key items and treasures included, \"to ease the wait for the remake\"."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Resident Evil 4",
+      "url": "https://www.igdb.com/games/resident-evil-4"
+    },
+    {
+      "label": "Nexus Mods — Rando Items 9000",
+      "url": "https://www.nexusmods.com/residentevil4/mods/99"
+    },
+    {
+      "label": "Nexus Mods — Resident Evil 4 Item Randomizer",
+      "url": "https://www.nexusmods.com/residentevil4/mods/210"
+    },
+    {
+      "label": "ModDB — RE4 Enemy/Merchant Randomizer (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.moddb.com/mods/re4randomizer"
+    }
+  ]
+}

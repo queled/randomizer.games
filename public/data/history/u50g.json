@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Grimstone, l'un des jeux de la compilation UFO 50, a son randomizer.",
+    "en": "Grimstone, one of the games in the UFO 50 collection, has its randomizer."
+  },
+  "events": [
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Mossmouth sort UFO 50 en 2024, compilation de 50 jeux dont Grimstone.",
+        "en": "Mossmouth releases UFO 50 in 2024, a collection of 50 games including Grimstone."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2025",
+        "en": "January 2025"
+      },
+      "title": {
+        "fr": "Grimstone Randomizer",
+        "en": "Grimstone Randomizer"
+      },
+      "text": {
+        "fr": "Le Grimstone Randomizer de Tazius est distribué sur le Discord de la communauté UFO 50. Le 18 janvier 2025, Nesdraug publie sur Nexus Mods une variante, Posse Plus, qui permet d'avoir plusieurs personnages du même type dans son équipe.",
+        "en": "Tazius' Grimstone Randomizer is distributed on the UFO 50 community Discord. On January 18, 2025, Nesdraug posts a variant on Nexus Mods, Posse Plus, which allows several characters of the same type in the posse."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — UFO 50",
+      "url": "https://www.igdb.com/games/ufo-50"
+    },
+    {
+      "label": "Nexus Mods — Grimstone Randomizer - Posse Plus",
+      "url": "https://www.nexusmods.com/ufo50/mods/4"
+    }
+  ]
+}

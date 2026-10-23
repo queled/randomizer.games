@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Dead Rising 2: Off the Record a un randomizer d'objets, de modèles de personnages et de statistiques.",
+    "en": "Dead Rising 2: Off the Record has a randomizer for items, character models and stats."
+  },
+  "events": [
+    {
+      "date": "2011",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Dead Rising 2: Off the Record en 2011.",
+        "en": "Capcom releases Dead Rising 2: Off the Record in 2011."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2023",
+        "en": "August 2023"
+      },
+      "title": {
+        "fr": "Dead Rising 2 OTR Randomizer",
+        "en": "Dead Rising 2 OTR Randomizer"
+      },
+      "text": {
+        "fr": "Le 14 août 2023, Fairy With a Pan publie sur Nexus Mods un programme qui randomise objets, modèles des PNJ et statistiques des objets ; chaque niveau et chaque objet peut être activé ou non.",
+        "en": "On August 14, 2023, Fairy With a Pan posts a program on Nexus Mods that randomizes items, NPC models and item stats; every level and item can be toggled."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Dead Rising 2: Off the Record",
+      "url": "https://www.igdb.com/games/dead-rising-2-off-the-record"
+    },
+    {
+      "label": "Nexus Mods — Dead rising 2 OTR Randomizer",
+      "url": "https://www.nexusmods.com/deadrising2offtherecord/mods/23"
+    }
+  ]
+}

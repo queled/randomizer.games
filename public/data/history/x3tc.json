@@ -1,0 +1,58 @@
+{
+  "intro": {
+    "fr": "X3: Terran Conflict a des mods à galaxies générées aléatoirement.",
+    "en": "X3: Terran Conflict has mods with randomly generated galaxies."
+  },
+  "events": [
+    {
+      "date": "2008",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Egosoft sort X3: Terran Conflict en 2008.",
+        "en": "Egosoft releases X3: Terran Conflict in 2008."
+      }
+    },
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Mayhem",
+        "en": "Mayhem"
+      },
+      "text": {
+        "fr": "Mayhem, mod de X3: Terran Conflict publié sur ModDB en 2016, fait du joueur le chef d'un empire en guerre ; sa version 3 est livrée avec un outil qui génère des galaxies à l'infini.",
+        "en": "Mayhem, an X3: Terran Conflict mod posted on ModDB in 2016, makes the player the leader of a rising empire at war; its version 3 comes with a tool that generates an infinity of galaxies."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2023",
+        "en": "June 2023"
+      },
+      "title": {
+        "fr": "Map Generator",
+        "en": "Map Generator"
+      },
+      "text": {
+        "fr": "Le 11 juin 2023, Joubarbe publie sur Nexus Mods un générateur procédural de cartes pour X3: Farnham's Legacy, qui laisse le jeu intact mais crée des galaxies aléatoires.",
+        "en": "On June 11, 2023, Joubarbe posts a procedural map generator for X3: Farnham's Legacy on Nexus Mods, which leaves the game untouched but creates random galaxies."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — X3: Terran Conflict",
+      "url": "https://www.igdb.com/games/x3-terran-conflict"
+    },
+    {
+      "label": "Nexus Mods — Map Generator",
+      "url": "https://www.nexusmods.com/x3terranconflict/mods/121"
+    },
+    {
+      "label": "ModDB — Mayhem (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.moddb.com/mods/mayhem"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Project Wingman a un randomizer d'avions et d'armements.",
+    "en": "Project Wingman has a plane and loadout randomizer."
+  },
+  "events": [
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sector D2 sort Project Wingman en 2020.",
+        "en": "Sector D2 releases Project Wingman in 2020."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2022",
+        "en": "February 2022"
+      },
+      "title": {
+        "fr": "Project Wingman - Randomizer",
+        "en": "Project Wingman - Randomizer"
+      },
+      "text": {
+        "fr": "Le 20 février 2022, FalconLuma publie sur Nexus Mods un randomizer des avions et de leurs armements ; il demande l'outil Project Sicario Merger.",
+        "en": "On February 20, 2022, FalconLuma posts a plane and loadout randomizer on Nexus Mods; it requires the Project Sicario Merger tool."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Project Wingman",
+      "url": "https://www.igdb.com/games/project-wingman"
+    },
+    {
+      "label": "Nexus Mods — Project Wingman - Randomizer",
+      "url": "https://www.nexusmods.com/projectwingman/mods/355"
+    }
+  ]
+}

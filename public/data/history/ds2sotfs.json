@@ -1,0 +1,115 @@
+{
+  "intro": {
+    "fr": "Dark Souls II: Scholar of the First Sin a eu une série de randomizers depuis 2018 et se joue aussi en multiworld sur MultiworldGG.",
+    "en": "Dark Souls II: Scholar of the First Sin has had a series of randomizers since 2018 and can also be played in a multiworld on MultiworldGG."
+  },
+  "events": [
+    {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "FromSoftware sort Dark Souls II: Scholar of the First Sin en 2015, version enrichie du jeu de 2014.",
+        "en": "FromSoftware releases Dark Souls II: Scholar of the First Sin in 2015, an expanded version of the 2014 game."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2018",
+        "en": "May 2018"
+      },
+      "title": {
+        "fr": "Item Randomizer REMIX",
+        "en": "Item Randomizer REMIX"
+      },
+      "text": {
+        "fr": "Le 21 mai 2018, jklm84 publie sur Nexus Mods une nouvelle version du randomizer d'emplacements d'objets de Jgwman, avec randomisation des clés.",
+        "en": "On May 21, 2018, jklm84 posts on Nexus Mods a new version of Jgwman's item location randomizer, with key randomization."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2022",
+        "en": "November 2022"
+      },
+      "title": {
+        "fr": "Ran-door-mizer",
+        "en": "Ran-door-mizer"
+      },
+      "text": {
+        "fr": "Le 14 novembre 2022, EViLeleven publie un mod inspiré du Fog Gate Randomizer : des portes aux emplacements des brumes mènent chacune à une autre porte.",
+        "en": "On November 14, 2022, EViLeleven posts a mod inspired by the Fog Gate Randomizer: doors at fog gate locations each lead to another door."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2023",
+        "en": "July 2023"
+      },
+      "title": {
+        "fr": "Scrambler",
+        "en": "Scrambler"
+      },
+      "text": {
+        "fr": "Le 16 juillet 2023, Vawser publie Dark Souls II Scrambler, randomiseur d'objets, d'ennemis et de paramètres.",
+        "en": "On July 16, 2023, Vawser posts Dark Souls II Scrambler, an item, enemy and param randomiser."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2024",
+        "en": "September 2024"
+      },
+      "title": {
+        "fr": "Enemy and Item",
+        "en": "Enemy and Item"
+      },
+      "text": {
+        "fr": "Le 7 septembre 2024, chainsboyo publie un randomizer d'ennemis, de boss, de boutiques et d'objets, encore mis à jour en septembre 2026 (version 3.6.0).",
+        "en": "On September 7, 2024, chainsboyo posts an enemy, boss, shop and item randomizer, still updated in September 2026 (version 3.6.0)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Dark Souls II figure parmi les jeux de MultiworldGG.",
+        "en": "Dark Souls II is among MultiworldGG's games."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Dark Souls II: Scholar of the First Sin",
+      "url": "https://www.igdb.com/games/dark-souls-ii-scholar-of-the-first-sin"
+    },
+    {
+      "label": "Nexus Mods — Item Randomizer REMIX for SotFS",
+      "url": "https://www.nexusmods.com/darksouls2/mods/774"
+    },
+    {
+      "label": "Nexus Mods — SotFS ran-door-mizer",
+      "url": "https://www.nexusmods.com/darksouls2/mods/1108"
+    },
+    {
+      "label": "Nexus Mods — Dark Souls II Scrambler - Randomiser",
+      "url": "https://www.nexusmods.com/darksouls2/mods/1163"
+    },
+    {
+      "label": "Nexus Mods — Dark Souls II Randomizer (Enemy and Item)",
+      "url": "https://www.nexusmods.com/darksouls2/mods/1317"
+    },
+    {
+      "label": "Multiworld — Dark Souls II",
+      "url": "https://multiworld.gg/games/Dark%20Souls%20II/info/en"
+    }
+  ]
+}

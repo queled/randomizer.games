@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Fallen Enchantress a un mod qui randomise les capacités de ses monstres.",
+    "en": "Fallen Enchantress has a mod that randomizes its monsters' abilities."
+  },
+  "events": [
+    {
+      "date": "2012",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Stardock sort Fallen Enchantress en 2012.",
+        "en": "Stardock releases Fallen Enchantress in 2012."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2013",
+        "en": "April 2013"
+      },
+      "title": {
+        "fr": "Randomized Monsters",
+        "en": "Randomized Monsters"
+      },
+      "text": {
+        "fr": "Le 22 avril 2013, BeelzebossErik publie sur Nexus Mods un mod qui, à chaque lancement de l'outil Shrill, tire au hasard les capacités des monstres communs.",
+        "en": "On April 22, 2013, BeelzebossErik posts a mod on Nexus Mods that randomizes common monsters' abilities every time the Shrill tool is launched."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Fallen Enchantress",
+      "url": "https://www.igdb.com/games/fallen-enchantress"
+    },
+    {
+      "label": "Nexus Mods — Randomized Monsters",
+      "url": "https://www.nexusmods.com/fallenenchantress/mods/55"
+    }
+  ]
+}

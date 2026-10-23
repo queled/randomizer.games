@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Broforce a un mod qui transforme ses ennemis en d'autres ennemis, voire en boss.",
+    "en": "Broforce has a mod that turns its enemies into other enemies, or even bosses."
+  },
+  "events": [
+    {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Free Lives sort Broforce en 2015.",
+        "en": "Free Lives releases Broforce in 2015."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2022",
+        "en": "May 2022"
+      },
+      "title": {
+        "fr": "Randomizer Mod",
+        "en": "Randomizer Mod"
+      },
+      "text": {
+        "fr": "Le 28 mai 2022, Alex Neargarder publie sur Nexus Mods un mod qui randomise les ennemis en d'autres ennemis ou en boss ; la version 2.0.5 date de juillet 2024.",
+        "en": "On May 28, 2022, Alex Neargarder posts a mod on Nexus Mods that randomizes enemies into other enemies or bosses; version 2.0.5 dates from July 2024."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Broforce",
+      "url": "https://www.igdb.com/games/broforce"
+    },
+    {
+      "label": "Nexus Mods — Randomizer Mod",
+      "url": "https://www.nexusmods.com/broforce/mods/22"
+    }
+  ]
+}

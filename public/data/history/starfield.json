@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Starfield a un mod qui puise les armes des ennemis dans une réserve aléatoire.",
+    "en": "Starfield has a mod that draws enemy weapons from a random pool."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bethesda Game Studios sort Starfield en 2023.",
+        "en": "Bethesda Game Studios releases Starfield in 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2023",
+        "en": "December 2023"
+      },
+      "title": {
+        "fr": "Enemy Weapon Randomizer",
+        "en": "Enemy Weapon Randomizer"
+      },
+      "text": {
+        "fr": "Le 7 décembre 2023, BasedGodAce publie sur Nexus Mods un mod qui fait piocher les ennemis dans une réserve d'armes aléatoire.",
+        "en": "On December 7, 2023, BasedGodAce posts a mod on Nexus Mods that makes enemies draw from a random weapon pool."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Starfield",
+      "url": "https://www.igdb.com/games/starfield"
+    },
+    {
+      "label": "Nexus Mods — Enemy Weapon Randomizer",
+      "url": "https://www.nexusmods.com/starfield/mods/7514"
+    }
+  ]
+}

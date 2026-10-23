@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Star Wars Jedi: Fallen Order a un outil de randomisation des ennemis.",
+    "en": "Star Wars Jedi: Fallen Order has an enemy randomization tool."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Respawn Entertainment sort Star Wars Jedi: Fallen Order en 2019.",
+        "en": "Respawn Entertainment releases Star Wars Jedi: Fallen Order in 2019."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2020",
+        "en": "August 2020"
+      },
+      "title": {
+        "fr": "Enemy Randomizer",
+        "en": "Enemy Randomizer"
+      },
+      "text": {
+        "fr": "Le 10 août 2020, AlexPo publie sur Nexus Mods un outil qui randomise ou remplace les ennemis du jeu.",
+        "en": "On August 10, 2020, AlexPo posts a tool on Nexus Mods that randomizes or replaces the game's enemies."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Star Wars Jedi: Fallen Order",
+      "url": "https://www.igdb.com/games/star-wars-jedi-fallen-order"
+    },
+    {
+      "label": "Nexus Mods — Enemy Randomizer",
+      "url": "https://www.nexusmods.com/starwarsjedifallenorder/mods/209"
+    }
+  ]
+}

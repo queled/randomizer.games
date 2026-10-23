@@ -1,0 +1,79 @@
+{
+  "intro": {
+    "fr": "Oblivion a eu un randomizer de quêtes inspiré de ceux de Zelda en 2020, puis des randomizers de conteneurs, de PNJ et d'équipement.",
+    "en": "Oblivion got a quest randomizer inspired by Zelda ones in 2020, then container, NPC and equipment randomizers."
+  },
+  "events": [
+    {
+      "date": "2006",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bethesda Game Studios sort The Elder Scrolls IV: Oblivion en 2006.",
+        "en": "Bethesda Game Studios releases The Elder Scrolls IV: Oblivion in 2006."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2020",
+        "en": "September 2020"
+      },
+      "title": {
+        "fr": "Randomized Oblivion Mod",
+        "en": "Randomized Oblivion Mod"
+      },
+      "text": {
+        "fr": "Le 11 septembre 2020, ddmlink publie sur Nexus Mods un mod inspiré des randomizers de Zelda : objets et récompenses de quêtes sont mélangés, avec un journal de spoiler qui permet de recréer une partie.",
+        "en": "On September 11, 2020, ddmlink posts a mod on Nexus Mods inspired by Zelda randomizers: quest items and rewards are shuffled, with a spoiler log that lets you recreate a seed."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2021",
+        "en": "November 2021"
+      },
+      "title": {
+        "fr": "Oblivion Randomizer",
+        "en": "Oblivion Randomizer"
+      },
+      "text": {
+        "fr": "Le 28 novembre 2021, lost cause publie un randomizer des conteneurs, des PNJ et des créatures, encore mis à jour en décembre 2025.",
+        "en": "On November 28, 2021, lost cause releases a container, NPC and creature randomizer, still updated in December 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2023",
+        "en": "November 2023"
+      },
+      "title": {
+        "fr": "Armures et armes",
+        "en": "Armures et armes"
+      },
+      "text": {
+        "fr": "Armor and weapons",
+        "en": "En novembre 2023, tarlazo publie un mod où les PNJ portent au hasard armures et armes de leur niveau ou en dessous."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — The Elder Scrolls IV: Oblivion",
+      "url": "https://www.igdb.com/games/the-elder-scrolls-iv-oblivion"
+    },
+    {
+      "label": "Nexus Mods — Randomized Oblivion Mod",
+      "url": "https://www.nexusmods.com/oblivion/mods/49970"
+    },
+    {
+      "label": "Nexus Mods — Oblivion Randomizer",
+      "url": "https://www.nexusmods.com/oblivion/mods/51582"
+    },
+    {
+      "label": "Nexus Mods — Leveled Armors and Weapons Randomizer",
+      "url": "https://www.nexusmods.com/oblivion/mods/53582"
+    }
+  ]
+}

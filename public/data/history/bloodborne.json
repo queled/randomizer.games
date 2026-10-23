@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Bloodborne a son randomizer depuis 2022, toujours mis à jour en 2026.",
+    "en": "Bloodborne has had its randomizer since 2022, still updated in 2026."
+  },
+  "events": [
+    {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "FromSoftware sort Bloodborne sur PlayStation 4 en 2015.",
+        "en": "FromSoftware releases Bloodborne on PlayStation 4 in 2015."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2022",
+        "en": "April 2022"
+      },
+      "title": {
+        "fr": "Bloodborne Randomizer",
+        "en": "Bloodborne Randomizer"
+      },
+      "text": {
+        "fr": "Le 20 avril 2022, Sepukkake publie sur Nexus Mods le Bloodborne Randomizer. Le mod est encore mis à jour en juillet 2026 (version 4.5.2), avec une contribution de Smertin123 sur la logique des objets clés.",
+        "en": "On April 20, 2022, Sepukkake posts the Bloodborne Randomizer on Nexus Mods. The mod is still updated in July 2026 (version 4.5.2), with a contribution by Smertin123 to the key item logic."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Bloodborne",
+      "url": "https://www.igdb.com/games/bloodborne"
+    },
+    {
+      "label": "Nexus Mods — Bloodborne Randomizer",
+      "url": "https://www.nexusmods.com/bloodborne/mods/15"
+    }
+  ]
+}

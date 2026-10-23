@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Dragon's Dogma 2 a eu un randomizer de butin quelques semaines après sa sortie.",
+    "en": "Dragon's Dogma 2 got a loot randomizer a few weeks after its release."
+  },
+  "events": [
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Dragon's Dogma 2 en 2024.",
+        "en": "Capcom releases Dragon's Dogma 2 in 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2024",
+        "en": "April 2024"
+      },
+      "title": {
+        "fr": "Randomizer",
+        "en": "Randomizer"
+      },
+      "text": {
+        "fr": "Le 15 avril 2024, 0xffa publie sur Nexus Mods un mod qui randomise les objets lâchés, sans toucher aux objets de quête.",
+        "en": "On April 15, 2024, 0xffa posts a mod on Nexus Mods that randomizes item drops, leaving quest items alone."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Dragon's Dogma II",
+      "url": "https://www.igdb.com/games/dragons-dogma-ii"
+    },
+    {
+      "label": "Nexus Mods — Randomizer",
+      "url": "https://www.nexusmods.com/dragonsdogma2/mods/611"
+    }
+  ]
+}

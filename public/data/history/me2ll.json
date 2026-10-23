@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "La version Legendary Edition de Mass Effect 2 a son randomizer, signé ME3Tweaks.",
+    "en": "The Legendary Edition of Mass Effect 2 has its randomizer, made by ME3Tweaks."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "BioWare sort Mass Effect Legendary Edition en 2021, qui réunit la trilogie remastérisée.",
+        "en": "BioWare releases Mass Effect Legendary Edition in 2021, bringing together the remastered trilogy."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2023",
+        "en": "November 2023"
+      },
+      "title": {
+        "fr": "LE2R",
+        "en": "LE2R"
+      },
+      "text": {
+        "fr": "Le 7 novembre 2023, ME3Tweaks publie sur Nexus Mods le Mass Effect 2 Legendary Edition Randomizer.",
+        "en": "On November 7, 2023, ME3Tweaks posts the Mass Effect 2 Legendary Edition Randomizer on Nexus Mods."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Mass Effect 2",
+      "url": "https://www.igdb.com/games/mass-effect-2--1"
+    },
+    {
+      "label": "Nexus Mods — Mass Effect 2 Legendary Edition Randomizer (LE2R)",
+      "url": "https://www.nexusmods.com/masseffectlegendaryedition/mods/1952"
+    }
+  ]
+}

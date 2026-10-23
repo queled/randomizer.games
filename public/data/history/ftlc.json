@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Fable: The Lost Chapters a un randomiseur des créatures qui apparaissent dans le monde.",
+    "en": "Fable: The Lost Chapters has a randomiser for the creatures that spawn in the world."
+  },
+  "events": [
+    {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Lionhead Studios sort Fable: The Lost Chapters en 2005.",
+        "en": "Lionhead Studios releases Fable: The Lost Chapters in 2005."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2021",
+        "en": "April 2021"
+      },
+      "title": {
+        "fr": "Creature Generator Randomiser",
+        "en": "Creature Generator Randomiser"
+      },
+      "text": {
+        "fr": "Le 25 avril 2021, Wyntilda publie sur Nexus Mods une bêta qui randomise les apparitions de créatures non scriptées, « au cas où vous voudriez affronter un troll des glaces à Greatwood ».",
+        "en": "On April 25, 2021, Wyntilda posts a beta on Nexus Mods that randomizes non-scripted creature spawns, \"in case you felt like battling an Ice Troll in Greatwood\"."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Fable: The Lost Chapters",
+      "url": "https://www.igdb.com/games/fable-the-lost-chapters"
+    },
+    {
+      "label": "Nexus Mods — Creature Generator Randomiser (Beta)",
+      "url": "https://www.nexusmods.com/fablethelostchapters/mods/458"
+    }
+  ]
+}

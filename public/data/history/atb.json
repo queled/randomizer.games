@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Amnesia: The Bunker randomise déjà en partie ses plaques d'identité ; un mod pousse cette randomisation plus loin.",
+    "en": "Amnesia: The Bunker already partly randomizes its dog tags; a mod pushes that randomization further."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Frictional Games sort Amnesia: The Bunker en 2023.",
+        "en": "Frictional Games releases Amnesia: The Bunker in 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2023",
+        "en": "July 2023"
+      },
+      "title": {
+        "fr": "Dog Tag Randomizer",
+        "en": "Dog Tag Randomizer"
+      },
+      "text": {
+        "fr": "Le 9 juillet 2023, Saint Conqueror Lenin publie sur Nexus Mods un mod qui étend la randomisation limitée des plaques d'identité du jeu, pour varier davantage les parties.",
+        "en": "On July 9, 2023, Saint Conqueror Lenin posts a mod on Nexus Mods that expands the game's limited dog tag randomization, for more varied playthroughs."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Amnesia: The Bunker",
+      "url": "https://www.igdb.com/games/amnesia-the-bunker"
+    },
+    {
+      "label": "Nexus Mods — Dog Tag Randomizer",
+      "url": "https://www.nexusmods.com/amnesiathebunker/mods/3"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Sifu a eu son randomizer d'ennemis et d'armes un mois après sa sortie.",
+    "en": "Sifu got its enemy and weapon randomizer a month after its release."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sloclap sort Sifu en 2022.",
+        "en": "Sloclap releases Sifu in 2022."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2022",
+        "en": "March 2022"
+      },
+      "title": {
+        "fr": "Sifu Randomizer Mod",
+        "en": "Sifu Randomizer Mod"
+      },
+      "text": {
+        "fr": "Le 21 mars 2022, KangieDanie publie sur Nexus Mods un mod qui randomise les ennemis et les armes à chaque partie.",
+        "en": "On March 21, 2022, KangieDanie posts a mod on Nexus Mods that randomizes enemies and weapons in every run."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Sifu",
+      "url": "https://www.igdb.com/games/sifu"
+    },
+    {
+      "label": "Nexus Mods — Sifu Randomizer Mod",
+      "url": "https://www.nexusmods.com/sifu/mods/296"
+    }
+  ]
+}

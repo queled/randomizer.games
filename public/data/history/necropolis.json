@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Necropolis a un mod qui tire au hasard l'arme de départ.",
+    "en": "Necropolis has a mod that randomizes the starting weapon."
+  },
+  "events": [
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Harebrained Schemes sort Necropolis en 2016.",
+        "en": "Harebrained Schemes releases Necropolis in 2016."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2020",
+        "en": "November 2020"
+      },
+      "title": {
+        "fr": "Weapon Randomizer",
+        "en": "Weapon Randomizer"
+      },
+      "text": {
+        "fr": "Le 29 novembre 2020, Gr Armpit publie sur Nexus Mods un mod qui randomise l'arme au début de chaque nouvelle partie.",
+        "en": "On November 29, 2020, Gr Armpit posts a mod on Nexus Mods that randomizes your weapon when you start a new game."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Necropolis",
+      "url": "https://www.igdb.com/games/necropolis"
+    },
+    {
+      "label": "Nexus Mods — Weapon Randomizer",
+      "url": "https://www.nexusmods.com/necropolis/mods/10"
+    }
+  ]
+}

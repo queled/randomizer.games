@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Yakuza: Like a Dragon a son randomizer d'ennemis et de compétences depuis 2023.",
+    "en": "Yakuza: Like a Dragon has had its enemy and skill randomizer since 2023."
+  },
+  "events": [
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Ryu Ga Gotoku Studio sort Yakuza: Like a Dragon en 2020.",
+        "en": "Ryu Ga Gotoku Studio releases Yakuza: Like a Dragon in 2020."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2023",
+        "en": "April 2023"
+      },
+      "title": {
+        "fr": "Yakuza 7 Randomizer",
+        "en": "Yakuza 7 Randomizer"
+      },
+      "text": {
+        "fr": "Le 18 avril 2023, Zoo publie sur Nexus Mods un randomizer qui permet de randomiser les ennemis, les compétences, ou les deux.",
+        "en": "On April 18, 2023, Zoo posts a randomizer on Nexus Mods that can randomize enemies, skills, or both."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Yakuza: Like a Dragon",
+      "url": "https://www.igdb.com/games/yakuza-like-a-dragon"
+    },
+    {
+      "label": "Nexus Mods — Yakuza 7 Randomizer",
+      "url": "https://www.nexusmods.com/yakuzalikeadragon/mods/147"
+    }
+  ]
+}

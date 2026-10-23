@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "XCOM: Enemy Unknown a un mod qui rend sa couche tactique plus aléatoire.",
+    "en": "XCOM: Enemy Unknown has a mod that makes its tactical layer more random."
+  },
+  "events": [
+    {
+      "date": "2012",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Firaxis Games sort XCOM: Enemy Unknown en 2012.",
+        "en": "Firaxis Games releases XCOM: Enemy Unknown in 2012."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2014",
+        "en": "September 2014"
+      },
+      "title": {
+        "fr": "XCOM Randomized",
+        "en": "XCOM Randomized"
+      },
+      "text": {
+        "fr": "Le 30 septembre 2014, wghost81 publie sur Nexus Mods XCOM Randomized, qui rend les missions tactiques plus aléatoires que dans le jeu de base ; la version 4.0 date de juillet 2015.",
+        "en": "On September 30, 2014, wghost81 posts XCOM Randomized on Nexus Mods, which makes tactical missions more random than in the base game; version 4.0 dates from July 2015."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — XCOM: Enemy Unknown",
+      "url": "https://www.igdb.com/games/xcom-enemy-unknown"
+    },
+    {
+      "label": "Nexus Mods — XCOM Randomized",
+      "url": "https://www.nexusmods.com/xcom/mods/499"
+    }
+  ]
+}

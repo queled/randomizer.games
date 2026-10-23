@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Pseudoregalia a un randomizer complet depuis 2023 et se joue aussi en multiworld sur MultiworldGG.",
+    "en": "Pseudoregalia has had a complete randomizer since 2023 and can also be played in a multiworld on MultiworldGG."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "rittzler sort Pseudoregalia en 2023.",
+        "en": "rittzler releases Pseudoregalia in 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2023",
+        "en": "September 2023"
+      },
+      "title": {
+        "fr": "pseudoregalia rando",
+        "en": "pseudoregalia rando"
+      },
+      "text": {
+        "fr": "Le 5 septembre 2023, spuds publie sur Nexus Mods un randomizer complet qui mélange capacités, soins et clés en gardant le jeu finissable ; il est mis à jour jusqu'en décembre 2025 (version 1.8.6).",
+        "en": "On September 5, 2023, spuds posts a complete randomizer on Nexus Mods that shuffles abilities, health pickups and keys while keeping the game beatable; it is updated until December 2025 (version 1.8.6)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Pseudoregalia figure parmi les jeux de MultiworldGG.",
+        "en": "Pseudoregalia is among MultiworldGG's games."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Pseudoregalia",
+      "url": "https://www.igdb.com/games/pseudoregalia"
+    },
+    {
+      "label": "Nexus Mods — pseudoregalia rando",
+      "url": "https://www.nexusmods.com/pseudoregalia/mods/11"
+    },
+    {
+      "label": "Multiworld — Pseudoregalia",
+      "url": "https://multiworld.gg/games/Pseudoregalia/info/en"
+    }
+  ]
+}

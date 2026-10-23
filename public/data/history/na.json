@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "NieR: Automata a un randomizer d'ennemis depuis fin 2023, doublé d'un outil de modding.",
+    "en": "NieR: Automata has had an enemy randomizer since late 2023, which doubles as a modding tool."
+  },
+  "events": [
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "PlatinumGames sort NieR: Automata en 2017, édité par Square Enix.",
+        "en": "PlatinumGames releases NieR: Automata in 2017, published by Square Enix."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2023",
+        "en": "December 2023"
+      },
+      "title": {
+        "fr": "NAER",
+        "en": "NAER"
+      },
+      "text": {
+        "fr": "Le 24 décembre 2023, Vluurie et RaiderB publient sur Nexus Mods NAER, qui randomise les ennemis, ajuste niveaux et statistiques et gère les mods ; la version 3.6.0 date de septembre 2024.",
+        "en": "On December 24, 2023, Vluurie and RaiderB post NAER on Nexus Mods, which randomizes enemies, adjusts levels and stats and manages mods; version 3.6.0 dates from September 2024."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — NieR: Automata",
+      "url": "https://www.igdb.com/games/nier-automata"
+    },
+    {
+      "label": "Nexus Mods — NAER - NieR Automata Enemy Randomizer and Universal Modding Tool",
+      "url": "https://www.nexusmods.com/nierautomata/mods/565"
+    }
+  ]
+}

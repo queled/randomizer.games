@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Demon's Souls a un randomiseur d'objets depuis 2020.",
+    "en": "Demon's Souls has had an item randomiser since 2020."
+  },
+  "events": [
+    {
+      "date": "2009",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "FromSoftware sort Demon's Souls sur PlayStation 3 en 2009.",
+        "en": "FromSoftware releases Demon's Souls on PlayStation 3 in 2009."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2020",
+        "en": "May 2020"
+      },
+      "title": {
+        "fr": "DemonsSouls Item Randomiser",
+        "en": "DemonsSouls Item Randomiser"
+      },
+      "text": {
+        "fr": "Le 2 mai 2020, Keeko publie sur Nexus Mods un randomiseur des objets trouvés dans le monde ou lâchés par les ennemis, avec plusieurs options.",
+        "en": "On May 2, 2020, Keeko posts on Nexus Mods a randomiser of the items found in the world or dropped by enemies, with several options."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Demon's Souls",
+      "url": "https://www.igdb.com/games/demon-s-souls"
+    },
+    {
+      "label": "Nexus Mods — DemonsSouls Item Randomiser",
+      "url": "https://www.nexusmods.com/demonssouls/mods/22"
+    }
+  ]
+}

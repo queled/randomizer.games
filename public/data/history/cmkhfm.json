@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Critical Mix, mod de Kingdom Hearts Final Mix, a son randomizer depuis 2023.",
+    "en": "Critical Mix, a Kingdom Hearts Final Mix mod, has had its randomizer since 2023."
+  },
+  "events": [
+    {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort en 2013 la version HD de Kingdom Hearts Final Mix, que modifie Critical Mix.",
+        "en": "Square Enix releases the HD version of Kingdom Hearts Final Mix in 2013, which Critical Mix modifies."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2023",
+        "en": "February 2023"
+      },
+      "title": {
+        "fr": "Critical Mix Randomizer",
+        "en": "Critical Mix Randomizer"
+      },
+      "text": {
+        "fr": "Le 17 février 2023, Xendra publie sur Nexus Mods le Critical Mix Randomizer : récompenses, Keyblades, montées de niveau, emplacements des emblèmes et plus encore. Une ancienne version existait pour la PS2.",
+        "en": "On February 17, 2023, Xendra posts the Critical Mix Randomizer on Nexus Mods: rewards, Keyblades, level-ups, emblem locations and more. An older version existed for the PS2."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Kingdom Hearts Final Mix",
+      "url": "https://www.igdb.com/games/kingdom-hearts-final-mix--1"
+    },
+    {
+      "label": "Nexus Mods — Critical Mix Randomizer",
+      "url": "https://www.nexusmods.com/kingdomheartsfinalmix/mods/96"
+    },
+    {
+      "label": "rando-list — Kingdom Hearts",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Kingdom_Hearts.yml"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "OpenMW, moteur libre qui fait tourner Morrowind, a ses propres randomizers depuis 2023.",
+    "en": "OpenMW, the open-source engine that runs Morrowind, has had its own randomizers since 2023."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bethesda Game Studios sort The Elder Scrolls III: Morrowind en 2002 ; OpenMW en est une réimplémentation libre.",
+        "en": "Bethesda Game Studios releases The Elder Scrolls III: Morrowind in 2002; OpenMW is an open-source reimplementation of it."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2023",
+        "en": "September 2023"
+      },
+      "title": {
+        "fr": "World Randomizer",
+        "en": "World Randomizer"
+      },
+      "text": {
+        "fr": "Le 3 septembre 2023, Diject publie sur Nexus Mods deux mods pour OpenMW : Morrowind World Randomizer (objets des inventaires et conteneurs, créatures, objets du décor…) et Fancy Door Randomizer, qui téléporte vers la destination d'une autre porte.",
+        "en": "On September 3, 2023, Diject posts two mods for OpenMW on Nexus Mods: Morrowind World Randomizer (items in inventories and containers, creature spawns, exterior objects…) and Fancy Door Randomizer, which teleports you to another door's destination."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — The Elder Scrolls III: Morrowind",
+      "url": "https://www.igdb.com/games/the-elder-scrolls-iii-morrowind"
+    },
+    {
+      "label": "Nexus Mods — Morrowind World Randomizer for OpenMW",
+      "url": "https://www.nexusmods.com/morrowind/mods/53454"
+    },
+    {
+      "label": "Nexus Mods — Fancy Door Randomizer for OpenMW",
+      "url": "https://www.nexusmods.com/morrowind/mods/53455"
+    }
+  ]
+}

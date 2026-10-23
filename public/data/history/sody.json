@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "State of Decay a un outil qui randomise les traits de ses personnages.",
+    "en": "State of Decay has a tool that randomizes its characters' traits."
+  },
+  "events": [
+    {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Undead Labs sort State of Decay en 2013.",
+        "en": "Undead Labs releases State of Decay in 2013."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2014",
+        "en": "June 2014"
+      },
+      "title": {
+        "fr": "Character Randomizer",
+        "en": "Character Randomizer"
+      },
+      "text": {
+        "fr": "Le 21 juin 2014, TacoMagic publie sur Nexus Mods un outil qui randomise les traits des personnages dans le fichier characters.xml.",
+        "en": "On June 21, 2014, TacoMagic posts a tool on Nexus Mods that randomizes character traits in the characters.xml file."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — State of Decay",
+      "url": "https://www.igdb.com/games/state-of-decay"
+    },
+    {
+      "label": "Nexus Mods — Character Randomizer",
+      "url": "https://www.nexusmods.com/stateofdecay/mods/135"
+    }
+  ]
+}

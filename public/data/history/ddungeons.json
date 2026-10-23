@@ -16,17 +16,6 @@
       }
     },
     {
-      "date": "Mod",
-      "title": {
-        "fr": "Random Equipment!",
-        "en": "Random Equipment!"
-      },
-      "text": {
-        "fr": "Le mod Random Equipment!, publié sur itch.io par XAngelMoonX, rend tout l'équipement aléatoire, à taille égale et hors objets propres à un personnage. La page précise qu'il a été réalisé par « Terry himself ».",
-        "en": "The Random Equipment! mod, posted on itch.io by XAngelMoonX, makes all equipment random, at equal size and excluding character-specific items. The page states that it was made by \"Terry himself\"."
-      }
-    },
-    {
       "date": {
         "fr": "Janvier 2026",
         "en": "January 2026"
@@ -52,6 +41,20 @@
       "text": {
         "fr": "La version 0.6.0-beta sort le 18 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (26 versions publiées).",
         "en": "Version 0.6.0-beta is released on October 18, 2026; it is the latest as of October 23, 2026 (26 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Random Equipment!",
+        "en": "Random Equipment!"
+      },
+      "text": {
+        "fr": "Le mod Random Equipment!, publié sur itch.io par XAngelMoonX, rend tout l'équipement aléatoire, à taille égale et hors objets propres à un personnage. La page précise qu'il a été réalisé par « Terry himself ».",
+        "en": "The Random Equipment! mod, posted on itch.io by XAngelMoonX, makes all equipment random, at equal size and excluding character-specific items. The page states that it was made by \"Terry himself\"."
       }
     }
   ],

@@ -1,0 +1,97 @@
+{
+  "intro": {
+    "fr": "Morrowind a une série de mods aléatoires depuis 2017 : objets légendaires, créatures, portes, butin à la Diablo.",
+    "en": "Morrowind has had a series of random mods since 2017: legendary items, creatures, doors, Diablo-style loot."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bethesda Game Studios sort The Elder Scrolls III: Morrowind en 2002.",
+        "en": "Bethesda Game Studios releases The Elder Scrolls III: Morrowind in 2002."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2017",
+        "en": "June 2017"
+      },
+      "title": {
+        "fr": "The Morrowind Randomizer",
+        "en": "The Morrowind Randomizer"
+      },
+      "text": {
+        "fr": "Le 1er juin 2017, mort et Greatness7 publient sur Nexus Mods un mod qui randomise l'emplacement de 49 objets légendaires.",
+        "en": "On June 1, 2017, mort and Greatness7 post a mod on Nexus Mods that randomizes the locations of 49 legendary items."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2019",
+        "en": "November 2019"
+      },
+      "title": {
+        "fr": "4NM_RANDOMIZER",
+        "en": "4NM_RANDOMIZER"
+      },
+      "text": {
+        "fr": "En novembre 2019, Axemagister publie 4NM_RANDOMIZER, qui fixe les statistiques des créatures entre 80 et 120 % de la normale.",
+        "en": "In November 2019, Axemagister releases 4NM_RANDOMIZER, which sets creature stats at 80–120% of normal."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2020",
+        "en": "July 2020"
+      },
+      "title": {
+        "fr": "Door Randomizer",
+        "en": "Door Randomizer"
+      },
+      "text": {
+        "fr": "En juillet 2020, Celediel publie Door Randomizer, qui randomise la destination des portes.",
+        "en": "In July 2020, Celediel releases Door Randomizer, which randomizes door destinations."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2022",
+        "en": "May 2022"
+      },
+      "title": {
+        "fr": "DRIP",
+        "en": "DRIP"
+      },
+      "text": {
+        "fr": "En mai 2022, Merlord publie DRIP, qui ajoute un butin façon Diablo II avec plus d'une centaine de modificateurs ; il est mis à jour jusqu'en janvier 2025.",
+        "en": "In May 2022, Merlord releases DRIP, which adds Diablo II-style loot with over a hundred modifiers; it is updated until January 2025."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — The Elder Scrolls III: Morrowind",
+      "url": "https://www.igdb.com/games/the-elder-scrolls-iii-morrowind"
+    },
+    {
+      "label": "Nexus Mods — The Morrowind Randomizer",
+      "url": "https://www.nexusmods.com/morrowind/mods/44989"
+    },
+    {
+      "label": "Nexus Mods — 4NM_RANDOMIZER",
+      "url": "https://www.nexusmods.com/morrowind/mods/47306"
+    },
+    {
+      "label": "Nexus Mods — Door Randomizer",
+      "url": "https://www.nexusmods.com/morrowind/mods/48632"
+    },
+    {
+      "label": "Nexus Mods — DRIP - Dynamic Randomised Item Properties",
+      "url": "https://www.nexusmods.com/morrowind/mods/51242"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Pathologic 2 a un mod qui tire au hasard l'état de ses quartiers.",
+    "en": "Pathologic 2 has a mod that randomizes the state of its districts."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Ice-Pick Lodge sort Pathologic 2 en 2019.",
+        "en": "Ice-Pick Lodge releases Pathologic 2 in 2019."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2020",
+        "en": "February 2020"
+      },
+      "title": {
+        "fr": "District Randomizer",
+        "en": "District Randomizer"
+      },
+      "text": {
+        "fr": "Le 20 février 2020, FonzieD publie sur Nexus Mods un mod qui randomise l'état des quartiers : bandits, infectés ou normaux.",
+        "en": "On February 20, 2020, FonzieD posts a mod on Nexus Mods that randomizes the status of districts: bandits, infected or normal."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Pathologic 2",
+      "url": "https://www.igdb.com/games/pathologic-2"
+    },
+    {
+      "label": "Nexus Mods — District Randomizer Mod",
+      "url": "https://www.nexusmods.com/pathologic2/mods/6"
+    }
+  ]
+}

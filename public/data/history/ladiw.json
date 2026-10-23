@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Like a Dragon: Infinite Wealth a eu son randomizer d'ennemis et de compétences un mois après sa sortie.",
+    "en": "Like a Dragon: Infinite Wealth got its enemy and skill randomizer a month after its release."
+  },
+  "events": [
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Ryu Ga Gotoku Studio sort Like a Dragon: Infinite Wealth en 2024.",
+        "en": "Ryu Ga Gotoku Studio releases Like a Dragon: Infinite Wealth in 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2024",
+        "en": "February 2024"
+      },
+      "title": {
+        "fr": "Infinite Wealth Randomizer",
+        "en": "Infinite Wealth Randomizer"
+      },
+      "text": {
+        "fr": "Le 17 février 2024, Zoo, déjà auteur du randomizer de Yakuza: Like a Dragon, publie sur Nexus Mods celui d'Infinite Wealth, qui randomise ennemis et compétences.",
+        "en": "On February 17, 2024, Zoo, already the author of the Yakuza: Like a Dragon randomizer, posts the Infinite Wealth one on Nexus Mods, which randomizes enemies and skills."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Like a Dragon: Infinite Wealth",
+      "url": "https://www.igdb.com/games/like-a-dragon-infinite-wealth"
+    },
+    {
+      "label": "Nexus Mods — Infinite Wealth Randomizer",
+      "url": "https://www.nexusmods.com/likeadragoninfinitewealth/mods/145"
+    }
+  ]
+}

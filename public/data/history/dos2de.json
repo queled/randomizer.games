@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "La Definitive Edition de Divinity: Original Sin 2 a sa version du mod Enemy Randomization depuis 2018.",
+    "en": "The Definitive Edition of Divinity: Original Sin 2 has had its version of the Enemy Randomization mod since 2018."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Larian Studios publie en 2018 la Definitive Edition de Divinity: Original Sin II, sorti en 2017.",
+        "en": "Larian Studios releases the Definitive Edition of Divinity: Original Sin II in 2018, the game having come out in 2017."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2018",
+        "en": "September 2018"
+      },
+      "title": {
+        "fr": "Enemy Randomization",
+        "en": "Enemy Randomization"
+      },
+      "text": {
+        "fr": "Le 1er septembre 2018, Baardvaark publie sur Nexus Mods la version Definitive Edition de son mod : ennemis renforcés au hasard, avec copie d'ennemis en option. Il est aussi sur le Steam Workshop.",
+        "en": "On September 1, 2018, Baardvaark posts the Definitive Edition version of their mod on Nexus Mods: enemies get random buffs, with optional enemy copying. It is also on the Steam Workshop."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Divinity: Original Sin II",
+      "url": "https://www.igdb.com/games/divinity-original-sin-ii"
+    },
+    {
+      "label": "Nexus Mods — Enemy Randomization",
+      "url": "https://www.nexusmods.com/divinityoriginalsin2definitiveedition/mods/9"
+    }
+  ]
+}

@@ -700,6 +700,8 @@ function displayCalendar(tournament) {
 
 function updateEndDateFromMatches(matches, races = []) {
   if (!matches || matches.length === 0) return;
+  // The last match played is only the end date once the tournament is over
+  if (getTournamentStatus(currentTournament) !== 'terminé') return;
 
   // Build quick lookup for races by matchId and by normalized URL
   const byMatchId = new Map();
@@ -807,8 +809,9 @@ function displayTournamentInfo(tournament) {
   // Dates and info
   document.getElementById('start-date').textContent = formatDate(tournament.startDate);
   
-  // End date will be updated after matches are loaded
-  document.getElementById('end-date').textContent = formatDate(tournament.endDate);
+  // End date will be updated after matches are loaded; a planned end already passed means nothing while it runs late
+  const endPassed = tournament.endDate && new Date(tournament.endDate).getTime() < Date.now();
+  document.getElementById('end-date').textContent = status === 'en cours' && endPassed ? '-' : formatDate(tournament.endDate);
   
   document.getElementById('tournament-type').textContent = formatTournamentTypeForDisplay(tournament);
   document.getElementById('participants-count').textContent = tournament.participantsCount || '0';

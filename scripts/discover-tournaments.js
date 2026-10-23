@@ -418,7 +418,7 @@ function cleanDescription(description) {
 
 // ─── Start.gg Discovery ─────────────────────────────────────────────────────
 
-async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun, games, tournamentSlugs = [], discoveredVia = null, trustSource = false, forceGame = false }) {
+async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun, games, tournamentSlugs = [], discoveredVia = null, trustSource = false, forceGame = false, reimport = false }) {
   if (!process.env.STARTGG_API_TOKEN) {
     console.warn('⚠️  STARTGG_API_TOKEN not set – skipping start.gg discovery');
     return { found: 0, imported: 0, skipped: 0, errors: 0 };
@@ -462,7 +462,8 @@ async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun,
     const accepted = matched || forceGame || (trustSource ? Boolean(findMatchingGame(tournament, [game])) : isRandomizerTournament(tournament, [game]));
     if (!accepted) return;
 
-    if (isAlreadyImported(tournament)) {
+    // Slugs given by hand are imported again: events missed the first time (multi-game events) come in
+    if (isAlreadyImported(tournament) && !reimport) {
       console.log(`         ↪ Already imported: ${tournament.name} (${tournament.slug})`);
       stats.skipped++;
       return;
@@ -478,7 +479,7 @@ async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun,
     }
 
     try {
-      await importStartGGTournament(api, tournament, { game, discoveredVia });
+      await importStartGGTournament(api, tournament, { game, discoveredVia, forceGame });
       stats.imported++;
     } catch (err) {
       console.error(`         ❌ Error importing ${tournament.slug}: ${err.message}`);
@@ -596,7 +597,7 @@ function isRandomizerTournament(tournament, searchTerms) {
 /**
  * Import a full tournament from start.gg (fetches detailed data then saves)
  */
-async function importStartGGTournament(api, tournamentPreview, { game = null, discoveredVia = null } = {}) {
+async function importStartGGTournament(api, tournamentPreview, { game = null, discoveredVia = null, forceGame = false } = {}) {
   const slug = tournamentPreview.slug.startsWith('tournament/') ? tournamentPreview.slug : `tournament/${tournamentPreview.slug}`;
 
   console.log(`      ⬇️  Importing: ${tournamentPreview.name}`);
@@ -610,9 +611,11 @@ async function importStartGGTournament(api, tournamentPreview, { game = null, di
 
   // Skip sibling events tagged with another videogame (e.g. a non-randomizer side event)
   const videogameId = Number(game?.integrations?.startgg?.videogameId);
-  const events = Number.isFinite(videogameId)
-    ? tournamentData.events.filter(event => Number(event.game?.id) === videogameId)
-    : tournamentData.events;
+  // Except in a multi-game event (e.g. SpeedGaming Live): its other randomizer events go to their own game
+  const multiGame = !forceGame && new Set(tournamentData.events.map(event => event.game?.id).filter(Boolean)).size > 1;
+  const isOwnEvent = event => (Number.isFinite(videogameId) ? Number(event.game?.id) === videogameId : !multiGame);
+  const events = tournamentData.events.filter(event => isOwnEvent(event)
+    || (multiGame && RANDOMIZER_SIGNAL_PATTERN.test(normalizeText(event.name))));
 
   // Some organisers mirror a bracket in a second event (e.g. registrations full of DQs + a
   // "Results Data" copy with the real scores, often under shortened tags): keep the copy with results
@@ -641,13 +644,22 @@ async function importStartGGTournament(api, tournamentPreview, { game = null, di
   }
 
   for (const event of keptEvents) {
+    const ownEvent = isOwnEvent(event);
+    // Another game's event of a multi-game tournament: the game tied to its start.gg videogame, else its name
+    const videogameGame = !ownEvent && event.game?.id
+      ? await Game.findOne({ 'integrations.startgg.videogameId': { $in: [Number(event.game.id), String(event.game.id)] } }).select('id').lean()
+      : null;
     // Try to match to a game in our DB
     const matchForGame = await findGameForTournament({
-      providedGameSlug: game ? game.id : null,
+      providedGameSlug: ownEvent ? (game ? game.id : null) : (videogameGame ? videogameGame.id : null),
       providedGameId: event.game?.id,
-      tournamentName: StartGGAPI.eventTournamentName(tournamentData.name, event.name),
+      tournamentName: ownEvent ? StartGGAPI.eventTournamentName(tournamentData.name, event.name) : event.name,
       tournamentDescription: event.game?.name || ''
     });
+    if (!ownEvent && !matchForGame) {
+      console.log(`         ⏭️  Skipped "${event.name}": no randomizer of ours for it`);
+      continue;
+    }
 
     const participants = StartGGAPI.buildParticipants(event);
 
@@ -1268,7 +1280,8 @@ async function main() {
       dryRun: opts.dryRun,
       games,
       tournamentSlugs: opts.startggSlugs,
-      forceGame: Boolean(opts.game && opts.startggSlugs.length && games?.length === 1)
+      forceGame: Boolean(opts.game && opts.startggSlugs.length && games?.length === 1),
+      reimport: opts.startggSlugs.length > 0
     });
   }
 

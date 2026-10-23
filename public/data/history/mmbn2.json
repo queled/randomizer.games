@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Mega Man Battle Network 2 a un outil de personnalisation, Network Customizer, qui sert aussi de randomizer.",
+    "en": "Mega Man Battle Network 2 has a customization tool, Network Customizer, that also works as a randomizer."
+  },
+  "events": [
+    {
+      "date": "2001",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Mega Man Battle Network 2 sur Game Boy Advance en 2001.",
+        "en": "Capcom releases Mega Man Battle Network 2 on Game Boy Advance in 2001."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2019",
+        "en": "December 2019"
+      },
+      "title": {
+        "fr": "Network Customizer",
+        "en": "Network Customizer"
+      },
+      "text": {
+        "fr": "seeliefae publie en décembre 2019 Network Customizer V2, page web qui personnalise de nombreux aspects de la version nord-américaine du jeu ; rando-list le classe parmi les randomizers.",
+        "en": "seeliefae releases Network Customizer V2 in December 2019, a web page that customizes many aspects of the North American version of the game; rando-list lists it among randomizers."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Mega Man Battle Network 2",
+      "url": "https://www.igdb.com/games/mega-man-battle-network-2"
+    },
+    {
+      "label": "Network Customizer V2",
+      "url": "https://devonfae.github.io/NETCUST2/"
+    },
+    {
+      "label": "GitHub — devonfae/NETCUST2",
+      "url": "https://github.com/devonfae/NETCUST2"
+    },
+    {
+      "label": "rando-list — Mega Man",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Mega_Man.yml"
+    }
+  ]
+}

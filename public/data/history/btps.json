@@ -1,0 +1,65 @@
+{
+  "intro": {
+    "fr": "Borderlands: The Pre-Sequel a des mods de randomisation et se joue en multiworld Archipelago depuis 2026, grâce à un fork de Bouncy Loot God.",
+    "en": "Borderlands: The Pre-Sequel has randomization mods and has been playable in an Archipelago multiworld since 2026, through a fork of Bouncy Loot God."
+  },
+  "events": [
+    {
+      "date": "2014",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "2K Australia et Gearbox Software sortent Borderlands: The Pre-Sequel en 2014.",
+        "en": "2K Australia and Gearbox Software release Borderlands: The Pre-Sequel in 2014."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2017",
+        "en": "March 2017"
+      },
+      "title": {
+        "fr": "BLCMods",
+        "en": "BLCMods"
+      },
+      "text": {
+        "fr": "Le dépôt communautaire BLCMods, créé en mars 2017, rassemble des mods pour la série, dont des randomizers. La liste rando-list recense aussi un randomizer d'armes de Turk pour Cheat Engine.",
+        "en": "The BLCMods community repository, created in March 2017, gathers mods for the series, including randomizers. The rando-list catalog also lists a gun randomizer by Turk for Cheat Engine."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Bouncy Loot God pour The Pre-Sequel",
+        "en": "Bouncy Loot God for The Pre-Sequel"
+      },
+      "text": {
+        "fr": "Adaptor-Face crée le 9 mai 2026 un fork de Bouncy Loot God, l'intégration Archipelago de Borderlands 2 d'EdricY, et y ajoute un APWorld pour The Pre-Sequel ; la version 0.2.0 sort le 19 mai.",
+        "en": "Adaptor-Face creates a fork of Bouncy Loot God, EdricY's Archipelago integration of Borderlands 2, on May 9, 2026, adding an APWorld for The Pre-Sequel; version 0.2.0 comes out on May 19."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Borderlands: The Pre-Sequel",
+      "url": "https://www.igdb.com/games/borderlands-the-pre-sequel"
+    },
+    {
+      "label": "GitHub — BLCM/BLCMods",
+      "url": "https://github.com/BLCM/BLCMods"
+    },
+    {
+      "label": "GitHub — Adaptor-Face/Bouncy-Loot-God (releases)",
+      "url": "https://github.com/Adaptor-Face/Bouncy-Loot-God/releases"
+    },
+    {
+      "label": "rando-list — Borderlands",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Borderlands.yml"
+    }
+  ]
+}

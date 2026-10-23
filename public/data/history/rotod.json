@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Return of the Obra Dinn se joue en multiworld Archipelago depuis 2026.",
+    "en": "Return of the Obra Dinn has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Lucas Pope sort Return of the Obra Dinn en 2018.",
+        "en": "Lucas Pope releases Return of the Obra Dinn in 2018."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2026",
+        "en": "April 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Le projet obra-dinn-archipelago, créé sur GitLab le 25 avril 2026, publie le 27 avril la préversion 0.2.0-rc.1 de son APWorld.",
+        "en": "The obra-dinn-archipelago project, created on GitLab on April 25, 2026, publishes pre-release 0.2.0-rc.1 of its APWorld on April 27."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.5.0 sort le 12 juillet 2026 ; c'est la plus récente au 24 octobre 2026 (13 versions publiées).",
+        "en": "Version 0.5.0 is released on July 12, 2026; it is the latest as of October 24, 2026 (13 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Return of the Obra Dinn",
+      "url": "https://www.igdb.com/games/return-of-the-obra-dinn"
+    },
+    {
+      "label": "GitLab — obra-dinn-archipelago/world",
+      "url": "https://gitlab.com/obra-dinn-archipelago/world"
+    },
+    {
+      "label": "GitLab — obra-dinn-archipelago/world (releases)",
+      "url": "https://gitlab.com/obra-dinn-archipelago/world/-/releases"
+    }
+  ]
+}

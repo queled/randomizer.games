@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Stardust, romhack de Super Metroid, a son randomizer, réalisé par ironrusty (randorandy).",
+    "en": "Stardust, a Super Metroid romhack, has its randomizer, made by ironrusty (randorandy)."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Mai 2023",
+        "en": "May 2023"
+      },
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "En mai 2023, ironrusty publie un randomizer de Stardust. Une porte verrouillée garantit le Morph et les Bombes dans la zone de départ ; le dernier réservoir d'énergie de Tourian et les deux premiers objets de la fuite restent à leur place.",
+        "en": "In May 2023, ironrusty releases a Stardust randomizer. A locked door guarantees Morph and Bombs in the early area; the final Tourian E-Tank and the first two items of the escape stay in place."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "randorandy — Stardust Rando",
+      "url": "https://randorandy.github.io/stardustRando/"
+    },
+    {
+      "label": "GitHub — randorandy/stardustRando",
+      "url": "https://github.com/randorandy/stardustRando"
+    },
+    {
+      "label": "randorandy — Super Metroid hack randomizers",
+      "url": "https://randorandy.github.io/"
+    }
+  ]
+}

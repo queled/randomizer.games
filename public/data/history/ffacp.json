@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Final Fight Anniversary Edition CPS2, hack de Final Fight, a un éditeur qui intègre un randomizer.",
+    "en": "Final Fight Anniversary Edition CPS2, a Final Fight hack, has an editor with a bundled randomizer."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Août 2023",
+        "en": "August 2023"
+      },
+      "title": {
+        "fr": "FFAEE-C2",
+        "en": "FFAEE-C2"
+      },
+      "text": {
+        "fr": "gamehackfan publie en août 2023 FFAEE-C2, éditeur pour le jeu d'arcade Final Fight Anniversary Edition CPS2, mis à jour jusqu'en juillet 2024 ; rando-list le recense comme éditeur avec randomizer intégré.",
+        "en": "gamehackfan releases FFAEE-C2 in August 2023, an editor for the arcade game Final Fight Anniversary Edition CPS2, updated until July 2024; rando-list lists it as an editor with a bundled randomizer."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "FFAEE-C2",
+      "url": "https://gamehackfan.github.io/ffaee-c2/"
+    },
+    {
+      "label": "GitHub — gamehackfan/ffaee-c2",
+      "url": "https://github.com/gamehackfan/ffaee-c2"
+    },
+    {
+      "label": "rando-list — Final Fight",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Final_Fight.yml"
+    }
+  ]
+}

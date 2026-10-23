@@ -1,0 +1,80 @@
+{
+  "intro": {
+    "fr": "Strife se randomise avec les mods de la scène GZDoom et le générateur de niveaux Obsidian.",
+    "en": "Strife can be randomized with GZDoom-scene mods and the Obsidian level generator."
+  },
+  "events": [
+    {
+      "date": "1996",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Rogue Entertainment sort Strife: Quest for the Sigil en 1996, sur le moteur de DOOM.",
+        "en": "Rogue Entertainment releases Strife: Quest for the Sigil in 1996, on the DOOM engine."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2019",
+        "en": "May 2019"
+      },
+      "title": {
+        "fr": "Custom Doom",
+        "en": "Custom Doom"
+      },
+      "text": {
+        "fr": "Le 12 mai 2019, m8f publie sur le forum ZDoom la suite officielle de Custom Doom d'Accensus : un mod de difficulté sur mesure pour GZDoom qui propose aussi des options de randomisation.",
+        "en": "On May 12, 2019, m8f posts on the ZDoom forum the official continuation of Accensus' Custom Doom: a make-your-own-difficulty mod for GZDoom that also offers randomization options."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Universal Entropy",
+        "en": "Universal Entropy"
+      },
+      "text": {
+        "fr": "Universal Entropy, publié sur ModDB en 2020, randomise pour GZDoom, avec n'importe quel IWAD, la taille, les PV, les dégâts, la vitesse et les projectiles de chaque monstre, ainsi que les objets.",
+        "en": "Universal Entropy, posted on ModDB in 2020, randomizes for GZDoom, with any IWAD, each monster's size, HP, damage, speed and missiles, as well as pickups."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2020",
+        "en": "December 2020"
+      },
+      "title": {
+        "fr": "Obsidian",
+        "en": "Obsidian"
+      },
+      "text": {
+        "fr": "Le générateur de niveaux OBLIGE d'Andrew Apted crée des niveaux aléatoires pour les jeux id Tech 0 et 1. Sa suite communautaire, Obsidian, démarre en décembre 2020 sur GitHub et prend en charge Strife.",
+        "en": "Andrew Apted's OBLIGE level maker generates random levels for id Tech 0 and 1 games. Its community continuation, Obsidian, starts in December 2020 on GitHub and supports Strife."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Strife: Quest for the Sigil",
+      "url": "https://www.igdb.com/games/strife-quest-for-the-sigil"
+    },
+    {
+      "label": "ZDoom — Custom Doom (archive)",
+      "url": "http://web.archive.org/web/2022/https://forum.zdoom.org/viewtopic.php?f=43&t=64678"
+    },
+    {
+      "label": "ModDB — Universal Entropy (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.moddb.com/mods/universal-entropy"
+    },
+    {
+      "label": "Obsidian Level Generator (archive)",
+      "url": "http://web.archive.org/web/2026/https://obsidian-level-maker.github.io/index.html"
+    },
+    {
+      "label": "GitHub — obsidian-level-maker/Obsidian",
+      "url": "https://github.com/obsidian-level-maker/Obsidian"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Escape II, romhack de Super Metroid, a son randomizer, réalisé par ironrusty (randorandy).",
+    "en": "Escape II, a Super Metroid romhack, has its randomizer, made by ironrusty (randorandy)."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Février 2023",
+        "en": "February 2023"
+      },
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "En février 2023, ironrusty publie un randomizer pour la version 1.9 d'Escape II, fondé sur une version antérieure de SubversionRando et l'algorithme de beauxq, avec l'aide de strotlog pour l'extraction des données. La porte secrète vers Tourian mène aux statues, ce qui rend les boss nécessaires.",
+        "en": "In February 2023, ironrusty releases a randomizer for Escape II 1.9, based on an earlier version of SubversionRando and beauxq's algorithm, with strotlog's help for data mining. The secret door to Tourian leads to the statues instead, making the bosses required."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "randorandy — Escape II Rando",
+      "url": "https://randorandy.github.io/Escape2Rando/"
+    },
+    {
+      "label": "GitHub — randorandy/Escape2Rando",
+      "url": "https://github.com/randorandy/Escape2Rando"
+    },
+    {
+      "label": "randorandy — Super Metroid hack randomizers",
+      "url": "https://randorandy.github.io/"
+    }
+  ]
+}

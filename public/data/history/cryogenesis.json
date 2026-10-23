@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Cryogenesis, romhack de Super Metroid de Onnyks, a son randomizer, réalisé par ironrusty (randorandy).",
+    "en": "Cryogenesis, a Super Metroid romhack by Onnyks, has its randomizer, made by ironrusty (randorandy)."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Janvier 2023",
+        "en": "January 2023"
+      },
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "En janvier 2023, ironrusty publie un randomizer pour la version 1.0 de Cryogenesis, construit sur le moteur de SubversionRando et son remplissage « assumed fill ». Il ajoute la Plasma et le Speed Booster au hack ; il faut le Météorite pour sortir logiquement de sa zone.",
+        "en": "In January 2023, ironrusty releases a randomizer for Cryogenesis 1.0, built on the SubversionRando engine and its assumed fill. It adds Plasma and Speed Booster to the hack; the Meteorite is needed to logically leave its area."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "randorandy — Cryogenesis Rando",
+      "url": "https://randorandy.github.io/cryogenesis-rando/"
+    },
+    {
+      "label": "GitHub — randorandy/cryogenesis-rando",
+      "url": "https://github.com/randorandy/cryogenesis-rando"
+    },
+    {
+      "label": "randorandy — Super Metroid hack randomizers",
+      "url": "https://randorandy.github.io/"
+    }
+  ]
+}

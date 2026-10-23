@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Hebereke, sorti en Occident sous le nom Ufouria: The Saga, a son randomizer depuis 2020, une page web de vinheim3.",
+    "en": "Hebereke, released in the West as Ufouria: The Saga, has had its randomizer since 2020, a web page by vinheim3."
+  },
+  "events": [
+    {
+      "date": "1991",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sunsoft sort Hebereke sur Famicom en 1991.",
+        "en": "Sunsoft releases Hebereke on Famicom in 1991."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2020",
+        "en": "October 2020"
+      },
+      "title": {
+        "fr": "Hebereke/Ufouria Randomizer",
+        "en": "Hebereke/Ufouria Randomizer"
+      },
+      "text": {
+        "fr": "vinheim3 publie le 23 octobre 2020, dans son dépôt de randomizers, le Hebereke/Ufouria Randomizer : une page web qui randomise une ROM non modifiée du jeu, avec journal de spoiler par sphères. Dernière mise à jour en décembre 2020.",
+        "en": "vinheim3 publishes the Hebereke/Ufouria Randomizer in their randomizers repository on October 23, 2020: a web page that randomizes an unmodified ROM of the game, with a sphere-based spoiler log. Last updated in December 2020."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Hebereke",
+      "url": "https://www.igdb.com/games/hebereke"
+    },
+    {
+      "label": "GitHub — vinheim3/randomizers, ufouria.html",
+      "url": "https://github.com/vinheim3/randomizers/blob/main/ufouria.html"
+    },
+    {
+      "label": "rando-list — Multi-series",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Multi-series.yml"
+    }
+  ]
+}

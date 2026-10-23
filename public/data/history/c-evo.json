@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "C-evo, jeu de stratégie libre inspiré de Civilization, a un générateur de cartes modifié par Sam Trenholme.",
+    "en": "C-evo, a free strategy game inspired by Civilization, has a map generator modified by Sam Trenholme."
+  },
+  "events": [
+    {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Steffen Gerlach publie C-evo en 1999.",
+        "en": "Steffen Gerlach releases C-evo in 1999."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2017",
+        "en": "April 2017"
+      },
+      "title": {
+        "fr": "map_gen",
+        "en": "map_gen"
+      },
+      "text": {
+        "fr": "Sam Trenholme publie en avril 2017 sur GitHub sa version du générateur de cartes d'Ulrich Krüger pour C-evo ; elle est mise à jour jusqu'en mai 2021.",
+        "en": "Sam Trenholme publishes on GitHub in April 2017 a version of Ulrich Krüger's map generator for C-evo; it is updated until May 2021."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — C-evo",
+      "url": "https://www.igdb.com/games/c-evo"
+    },
+    {
+      "label": "GitHub — samboy/c-evo-mapgen",
+      "url": "https://github.com/samboy/c-evo-mapgen"
+    },
+    {
+      "label": "rando-list — Civilization",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Civilization.yml"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Wolfenstein 3D fait partie des jeux pour lesquels le générateur de niveaux Obsidian, suite d'OBLIGE, crée des niveaux aléatoires.",
+    "en": "Wolfenstein 3D is among the games for which the Obsidian level generator, OBLIGE's successor, creates random levels."
+  },
+  "events": [
+    {
+      "date": "1992",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "id Software sort Wolfenstein 3D en 1992.",
+        "en": "id Software releases Wolfenstein 3D in 1992."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2020",
+        "en": "December 2020"
+      },
+      "title": {
+        "fr": "Obsidian",
+        "en": "Obsidian"
+      },
+      "text": {
+        "fr": "Le générateur de niveaux OBLIGE d'Andrew Apted crée des niveaux aléatoires pour les jeux id Tech 0 et 1. Sa suite communautaire, Obsidian, démarre en décembre 2020 sur GitHub et prend en charge Wolfenstein 3D.",
+        "en": "Andrew Apted's OBLIGE level maker generates random levels for id Tech 0 and 1 games. Its community continuation, Obsidian, starts in December 2020 on GitHub and supports Wolfenstein 3D."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Wolfenstein 3D",
+      "url": "https://www.igdb.com/games/wolfenstein-3d--1"
+    },
+    {
+      "label": "Obsidian Level Generator (archive)",
+      "url": "http://web.archive.org/web/2026/https://obsidian-level-maker.github.io/index.html"
+    },
+    {
+      "label": "GitHub — obsidian-level-maker/Obsidian",
+      "url": "https://github.com/obsidian-level-maker/Obsidian"
+    }
+  ]
+}

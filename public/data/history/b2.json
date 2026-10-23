@@ -1,0 +1,69 @@
+{
+  "intro": {
+    "fr": "Borderlands 2 a des mods de randomisation dans le dépôt communautaire BLCMods et se joue en multiworld Archipelago depuis 2025 avec Bouncy Loot God.",
+    "en": "Borderlands 2 has randomization mods in the BLCMods community repository and has been playable in an Archipelago multiworld since 2025 with Bouncy Loot God."
+  },
+  "events": [
+    {
+      "date": "2012",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Gearbox Software sort Borderlands 2 en 2012.",
+        "en": "Gearbox Software releases Borderlands 2 in 2012."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2017",
+        "en": "March 2017"
+      },
+      "title": {
+        "fr": "BLCMods",
+        "en": "BLCMods"
+      },
+      "text": {
+        "fr": "Le dépôt communautaire BLCMods, créé en mars 2017, rassemble des mods pour la série, dont plusieurs randomizers (compétences, mods de classe, armes).",
+        "en": "The BLCMods community repository, created in March 2017, gathers mods for the series, including several randomizers (skills, class mods, weapons)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2025",
+        "en": "November 2025"
+      },
+      "title": {
+        "fr": "Bouncy Loot God",
+        "en": "Bouncy Loot God"
+      },
+      "text": {
+        "fr": "EdricY publie le 22 novembre 2025 la version 0.0 de Bouncy Loot God, intégration Archipelago de Borderlands 2 : un APWorld et un mod pour le gestionnaire de mods de la communauté. La version 0.5.5 sort le 16 août 2026, suivie de versions expérimentales.",
+        "en": "EdricY releases version 0.0 of Bouncy Loot God on November 22, 2025, an Archipelago integration of Borderlands 2: an APWorld and a mod for the community mod manager. Version 0.5.5 comes out on August 16, 2026, followed by experimental builds."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Borderlands 2",
+      "url": "https://www.igdb.com/games/borderlands-2"
+    },
+    {
+      "label": "GitHub — BLCM/BLCMods",
+      "url": "https://github.com/BLCM/BLCMods"
+    },
+    {
+      "label": "GitHub — EdricY/Bouncy-Loot-God",
+      "url": "https://github.com/EdricY/Bouncy-Loot-God"
+    },
+    {
+      "label": "GitHub — EdricY/Bouncy-Loot-God (releases)",
+      "url": "https://github.com/EdricY/Bouncy-Loot-God/releases"
+    },
+    {
+      "label": "rando-list — Borderlands",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Borderlands.yml"
+    }
+  ]
+}

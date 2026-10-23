@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Dream Dazia se joue en multiworld Archipelago depuis 2026.",
+    "en": "Dream Dazia has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Dream Dazia, RPG 2D d'inspiration rétro, sort en 2025.",
+        "en": "Dream Dazia, a retro-inspired 2D RPG, comes out in 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2026",
+        "en": "January 2026"
+      },
+      "title": {
+        "fr": "APWorld",
+        "en": "APWorld"
+      },
+      "text": {
+        "fr": "Warr1024 crée le 29 janvier 2026 le dépôt GitLab du randomizer Archipelago : trésors, récompenses de quêtes et butins de boss sont mélangés, et l'accès aux six temples, aux clés, aux quêtes secondaires, au dirigeable et à la zone post-jeu dépend d'objets. Dernière mise à jour en août 2026.",
+        "en": "Warr1024 creates the GitLab repository of the Archipelago randomizer on January 29, 2026: treasures, quest rewards and boss drops are shuffled, and access to the six temples, keys, side quests, the airship and the post-game area depends on items. Last updated in August 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Dream Dazia",
+      "url": "https://www.igdb.com/games/dream-dazia"
+    },
+    {
+      "label": "GitLab — Warr1024/dream-dazia-archipelago",
+      "url": "https://gitlab.com/Warr1024/dream-dazia-archipelago"
+    }
+  ]
+}

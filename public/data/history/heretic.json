@@ -1,0 +1,120 @@
+{
+  "intro": {
+    "fr": "Heretic partage plusieurs randomizers de DOOM et fait partie des jeux d'Archipelago depuis 2023.",
+    "en": "Heretic shares several DOOM randomizers and has been one of Archipelago's games since 2023."
+  },
+  "events": [
+    {
+      "date": "1994",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Raven Software sort Heretic en 1994, sur le moteur de DOOM.",
+        "en": "Raven Software releases Heretic in 1994, on the DOOM engine."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2019",
+        "en": "May 2019"
+      },
+      "title": {
+        "fr": "Custom Doom",
+        "en": "Custom Doom"
+      },
+      "text": {
+        "fr": "Le 12 mai 2019, m8f publie sur le forum ZDoom la suite officielle de Custom Doom d'Accensus : un mod de difficulté sur mesure pour GZDoom qui propose aussi des options de randomisation.",
+        "en": "On May 12, 2019, m8f posts on the ZDoom forum the official continuation of Accensus' Custom Doom: a make-your-own-difficulty mod for GZDoom that also offers randomization options."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Universal Entropy",
+        "en": "Universal Entropy"
+      },
+      "text": {
+        "fr": "Universal Entropy, publié sur ModDB en 2020, randomise pour GZDoom, avec n'importe quel IWAD, la taille, les PV, les dégâts, la vitesse et les projectiles de chaque monstre, ainsi que les objets.",
+        "en": "Universal Entropy, posted on ModDB in 2020, randomizes for GZDoom, with any IWAD, each monster's size, HP, damage, speed and missiles, as well as pickups."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2020",
+        "en": "December 2020"
+      },
+      "title": {
+        "fr": "Obsidian",
+        "en": "Obsidian"
+      },
+      "text": {
+        "fr": "Le générateur de niveaux OBLIGE d'Andrew Apted crée des niveaux aléatoires pour les jeux id Tech 0 et 1. Sa suite communautaire, Obsidian, démarre en décembre 2020 sur GitHub et prend en charge Heretic.",
+        "en": "Andrew Apted's OBLIGE level maker generates random levels for id Tech 0 and 1 games. Its community continuation, Obsidian, starts in December 2020 on GitHub and supports Heretic."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2021",
+        "en": "July 2021"
+      },
+      "title": {
+        "fr": "MOShuffle",
+        "en": "MOShuffle"
+      },
+      "text": {
+        "fr": "Le 11 juillet 2021, Cutmanmike publie sur le forum ZDoom MOShuffle, qui mélange l'ordre des niveaux.",
+        "en": "On July 11, 2021, Cutmanmike posts MOShuffle on the ZDoom forum, which shuffles the order of the levels."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2023",
+        "en": "November 2023"
+      },
+      "title": {
+        "fr": "Dans Archipelago",
+        "en": "In Archipelago"
+      },
+      "text": {
+        "fr": "Le 25 novembre 2023, la contribution de Daivuk qui ajoute Heretic est intégrée à Archipelago ; le jeu arrive avec la version 0.4.4, le 3 janvier 2024. Il figure aussi parmi les jeux de MultiworldGG.",
+        "en": "On November 25, 2023, Daivuk's contribution adding Heretic is merged into Archipelago; the game ships with version 0.4.4, on January 3, 2024. It is also among MultiworldGG's games."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Heretic",
+      "url": "https://www.igdb.com/games/heretic"
+    },
+    {
+      "label": "ZDoom — Custom Doom (archive)",
+      "url": "http://web.archive.org/web/2022/https://forum.zdoom.org/viewtopic.php?f=43&t=64678"
+    },
+    {
+      "label": "ModDB — Universal Entropy (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.moddb.com/mods/universal-entropy"
+    },
+    {
+      "label": "ZDoom — MOShuffle (archive)",
+      "url": "http://web.archive.org/web/2026/https://forum.zdoom.org/viewtopic.php?f=43&t=72760"
+    },
+    {
+      "label": "Obsidian Level Generator (archive)",
+      "url": "http://web.archive.org/web/2026/https://obsidian-level-maker.github.io/index.html"
+    },
+    {
+      "label": "GitHub — obsidian-level-maker/Obsidian",
+      "url": "https://github.com/obsidian-level-maker/Obsidian"
+    },
+    {
+      "label": "GitHub — Archipelago #2256",
+      "url": "https://github.com/ArchipelagoMW/Archipelago/pull/2256"
+    },
+    {
+      "label": "Archipelago — Heretic",
+      "url": "https://archipelago.gg/games/Heretic/info/en"
+    }
+  ]
+}

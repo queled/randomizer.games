@@ -1,0 +1,153 @@
+{
+  "intro": {
+    "fr": "DOOM II partage les randomizers de la série et fait partie des jeux d'Archipelago depuis 2023.",
+    "en": "DOOM II shares the series' randomizers and has been one of Archipelago's games since 2023."
+  },
+  "events": [
+    {
+      "date": "1994",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "id Software sort DOOM II: Hell on Earth en 1994.",
+        "en": "id Software releases DOOM II: Hell on Earth in 1994."
+      }
+    },
+    {
+      "date": "2019",
+      "title": {
+        "fr": "The Populator",
+        "en": "The Populator"
+      },
+      "text": {
+        "fr": "Andrew Apted, l'auteur d'OBLIGE, publie en 2019 The Populator, qui remplace monstres et armes des niveaux classiques de DOOM en simulant les combats pour fournir assez de santé et de munitions.",
+        "en": "Andrew Apted, the author of OBLIGE, releases The Populator in 2019, which replaces the monsters and weapons of classic DOOM levels, simulating the battles to provide enough health and ammo."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2019",
+        "en": "May 2019"
+      },
+      "title": {
+        "fr": "Custom Doom",
+        "en": "Custom Doom"
+      },
+      "text": {
+        "fr": "Le 12 mai 2019, m8f publie sur le forum ZDoom la suite officielle de Custom Doom d'Accensus : un mod de difficulté sur mesure pour GZDoom qui propose aussi des options de randomisation.",
+        "en": "On May 12, 2019, m8f posts on the ZDoom forum the official continuation of Accensus' Custom Doom: a make-your-own-difficulty mod for GZDoom that also offers randomization options."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2019",
+        "en": "May 2019"
+      },
+      "title": {
+        "fr": "VDP-MonsterRandomizer",
+        "en": "VDP-MonsterRandomizer"
+      },
+      "text": {
+        "fr": "Le 22 mai 2019, un randomizer de monstres « Vanilla Doom Plus » paraît sur le forum Doomworld ; il est mis à jour jusqu'en septembre 2022.",
+        "en": "On May 22, 2019, a \"Vanilla Doom Plus\" monster randomizer appears on the Doomworld forum; it is updated until September 2022."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Universal Entropy",
+        "en": "Universal Entropy"
+      },
+      "text": {
+        "fr": "Universal Entropy, publié sur ModDB en 2020, randomise pour GZDoom, avec n'importe quel IWAD, la taille, les PV, les dégâts, la vitesse et les projectiles de chaque monstre, ainsi que les objets.",
+        "en": "Universal Entropy, posted on ModDB in 2020, randomizes for GZDoom, with any IWAD, each monster's size, HP, damage, speed and missiles, as well as pickups."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2020",
+        "en": "March 2020"
+      },
+      "title": {
+        "fr": "Vandomizer",
+        "en": "Vandomizer"
+      },
+      "text": {
+        "fr": "Le 14 mars 2020 paraît sur Doomworld Vandomizer, un randomizer « vanilla » pour GZDoom : il ne mélange que les éléments existants du jeu, ennemis et munitions par paliers ou entièrement.",
+        "en": "On March 14, 2020, Vandomizer appears on Doomworld, a \"vanilla\" randomizer for GZDoom: it only shuffles the game's existing things, enemies and ammo by tier or fully."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2020",
+        "en": "December 2020"
+      },
+      "title": {
+        "fr": "Obsidian",
+        "en": "Obsidian"
+      },
+      "text": {
+        "fr": "Le générateur de niveaux OBLIGE d'Andrew Apted crée des niveaux aléatoires pour les jeux id Tech 0 et 1. Sa suite communautaire, Obsidian, démarre en décembre 2020 sur GitHub et prend en charge DOOM II.",
+        "en": "Andrew Apted's OBLIGE level maker generates random levels for id Tech 0 and 1 games. Its community continuation, Obsidian, starts in December 2020 on GitHub and supports DOOM II."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2023",
+        "en": "November 2023"
+      },
+      "title": {
+        "fr": "Dans Archipelago",
+        "en": "In Archipelago"
+      },
+      "text": {
+        "fr": "Le 24 novembre 2023, la contribution de Daivuk qui ajoute DOOM II est intégrée à Archipelago ; le jeu arrive avec la version 0.4.4, le 3 janvier 2024. Il figure aussi parmi les jeux de MultiworldGG.",
+        "en": "On November 24, 2023, Daivuk's contribution adding DOOM II is merged into Archipelago; the game ships with version 0.4.4, on January 3, 2024. It is also among MultiworldGG's games."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Doom II: Hell on Earth",
+      "url": "https://www.igdb.com/games/doom-ii-hell-on-earth"
+    },
+    {
+      "label": "ZDoom — Custom Doom (archive)",
+      "url": "http://web.archive.org/web/2022/https://forum.zdoom.org/viewtopic.php?f=43&t=64678"
+    },
+    {
+      "label": "Doomworld — VDP-MonsterRandomizer (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.doomworld.com/forum/topic/106432-vdp-monsterrandomizer-updated-august-12th/"
+    },
+    {
+      "label": "GitLab — andwj/populate",
+      "url": "https://gitlab.com/andwj/populate"
+    },
+    {
+      "label": "Doomworld — Vandomizer",
+      "url": "https://www.doomworld.com/forum/topic/112713-v104-vandomizer-a-vanilla-randomizer-for-gzdoom/"
+    },
+    {
+      "label": "ModDB — Universal Entropy (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.moddb.com/mods/universal-entropy"
+    },
+    {
+      "label": "Obsidian Level Generator (archive)",
+      "url": "http://web.archive.org/web/2026/https://obsidian-level-maker.github.io/index.html"
+    },
+    {
+      "label": "GitHub — obsidian-level-maker/Obsidian",
+      "url": "https://github.com/obsidian-level-maker/Obsidian"
+    },
+    {
+      "label": "GitHub — Archipelago #2255",
+      "url": "https://github.com/ArchipelagoMW/Archipelago/pull/2255"
+    },
+    {
+      "label": "Archipelago — DOOM II",
+      "url": "https://archipelago.gg/games/DOOM%20II/info/en"
+    }
+  ]
+}

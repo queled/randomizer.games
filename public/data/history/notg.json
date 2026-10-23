@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "NES Open Tournament Golf a un mode aléatoire sous forme de script Lua pour l'émulateur FCEUX.",
+    "en": "NES Open Tournament Golf has a random mode as a Lua script for the FCEUX emulator."
+  },
+  "events": [
+    {
+      "date": "1991",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo et HAL Laboratory sortent NES Open Tournament Golf en 1991.",
+        "en": "Nintendo and HAL Laboratory release NES Open Tournament Golf in 1991."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2016",
+        "en": "January 2016"
+      },
+      "title": {
+        "fr": "NES Open Random Mode",
+        "en": "NES Open Random Mode"
+      },
+      "text": {
+        "fr": "Turbulent Eddie publie le 31 janvier 2016 un script Lua pour FCEUX qui rend aléatoires la force et la direction du vent, et en option la visée.",
+        "en": "Turbulent Eddie publishes a Lua script for FCEUX on January 31, 2016 that randomizes wind speed and direction, and optionally aiming."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — NES Open Tournament Golf",
+      "url": "https://www.igdb.com/games/nes-open-tournament-golf"
+    },
+    {
+      "label": "GitHub Gist — NES Open Random Mode",
+      "url": "https://gist.github.com/TurbulentEddie/4e8fb8e52f64a99dfeb0"
+    },
+    {
+      "label": "rando-list — Golf",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Golf.yml"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "intro": {
+    "fr": "Citadel, jeu du moteur libre Luanti, se joue en multiworld Archipelago grâce à un mod client distribué sur ContentDB.",
+    "en": "Citadel, a game for the open-source Luanti engine, can be played in an Archipelago multiworld through a client mod distributed on ContentDB."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Novembre 2025",
+        "en": "November 2025"
+      },
+      "title": {
+        "fr": "Archipelago for Citadel",
+        "en": "Archipelago for Citadel"
+      },
+      "text": {
+        "fr": "Le projet citadel-archipelago est créé sur GitLab le 23 novembre 2025. Le mod de Warr1024, publié sur ContentDB, relie Citadel à un serveur Archipelago (réception d'objets, emplacements, chat) et embarque l'APWorld ; il s'appuie sur la bibliothèque arclib. Dernière mise à jour en juin 2026.",
+        "en": "The citadel-archipelago project is created on GitLab on November 23, 2025. Warr1024's mod, published on ContentDB, connects Citadel to an Archipelago server (item reception, location checks, chat) and ships the APWorld; it relies on the arclib library. Last updated in June 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "ContentDB — Archipelago for Citadel",
+      "url": "https://content.luanti.org/packages/Warr1024/citadel_archipelago/"
+    },
+    {
+      "label": "GitLab — sztest/citadel-archipelago",
+      "url": "https://gitlab.com/sztest/citadel-archipelago"
+    }
+  ]
+}

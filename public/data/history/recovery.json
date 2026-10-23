@@ -1,0 +1,36 @@
+{
+  "intro": {
+    "fr": "Recovery, romhack de Super Metroid de MetroidNerd9001, a son randomizer, réalisé par ironrusty (randorandy).",
+    "en": "Recovery, a Super Metroid romhack by MetroidNerd9001, has its randomizer, made by ironrusty (randorandy)."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Mai 2023",
+        "en": "May 2023"
+      },
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "En mai 2023, ironrusty publie un randomizer de Recovery, sans protection contre certains blocages.",
+        "en": "In May 2023, ironrusty releases a Recovery randomizer, with no softlock protection for some items."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "randorandy — Recovery Rando",
+      "url": "https://randorandy.github.io/recoveryRando/"
+    },
+    {
+      "label": "GitHub — randorandy/recoveryRando",
+      "url": "https://github.com/randorandy/recoveryRando"
+    },
+    {
+      "label": "randorandy — Super Metroid hack randomizers",
+      "url": "https://randorandy.github.io/"
+    }
+  ]
+}

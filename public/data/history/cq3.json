@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Chex Quest 3 fait partie des jeux pour lesquels le générateur de niveaux Obsidian, suite d'OBLIGE, crée des niveaux aléatoires.",
+    "en": "Chex Quest 3 is among the games for which the Obsidian level generator, OBLIGE's successor, creates random levels."
+  },
+  "events": [
+    {
+      "date": "2008",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Charles Jacobi sort Chex Quest 3 en 2008, suite non officielle des jeux Chex Quest.",
+        "en": "Charles Jacobi releases Chex Quest 3 in 2008, an unofficial sequel to the Chex Quest games."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2020",
+        "en": "December 2020"
+      },
+      "title": {
+        "fr": "Obsidian",
+        "en": "Obsidian"
+      },
+      "text": {
+        "fr": "Le générateur de niveaux OBLIGE d'Andrew Apted crée des niveaux aléatoires pour les jeux id Tech 0 et 1. Sa suite communautaire, Obsidian, démarre en décembre 2020 sur GitHub et prend en charge Chex Quest 3.",
+        "en": "Andrew Apted's OBLIGE level maker generates random levels for id Tech 0 and 1 games. Its community continuation, Obsidian, starts in December 2020 on GitHub and supports Chex Quest 3."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Chex Quest 3",
+      "url": "https://www.igdb.com/games/chex-quest-3"
+    },
+    {
+      "label": "Obsidian Level Generator (archive)",
+      "url": "http://web.archive.org/web/2026/https://obsidian-level-maker.github.io/index.html"
+    },
+    {
+      "label": "GitHub — obsidian-level-maker/Obsidian",
+      "url": "https://github.com/obsidian-level-maker/Obsidian"
+    }
+  ]
+}

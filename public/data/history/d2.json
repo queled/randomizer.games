@@ -1,0 +1,69 @@
+{
+  "intro": {
+    "fr": "Diablo II a un randomizer intégré à D2 Mod Maker depuis 2020, et un autre, de Sunbeam, depuis 2021.",
+    "en": "Diablo II has had a randomizer built into D2 Mod Maker since 2020, and another one, by Sunbeam, since 2021."
+  },
+  "events": [
+    {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Blizzard North sort Diablo II en 2000.",
+        "en": "Blizzard North releases Diablo II in 2000."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2020",
+        "en": "July 2020"
+      },
+      "title": {
+        "fr": "D2 Mod Maker",
+        "en": "D2 Mod Maker"
+      },
+      "text": {
+        "fr": "tlentz publie le 8 juillet 2020 la version 0.1.6 de D2 Mod Maker, outil qui modifie Diablo II à partir d'un fichier de configuration, avec un randomizer d'objets et un générateur. La version 0.6.0 sort en mars 2021 ; le projet n'est plus maintenu.",
+        "en": "tlentz releases D2 Mod Maker 0.1.6 on July 8, 2020, a tool that modifies Diablo II from a config file, with an item randomizer and generator. Version 0.6.0 comes out in March 2021; the project is no longer maintained."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2021",
+        "en": "April 2021"
+      },
+      "title": {
+        "fr": "D2Randomizer",
+        "en": "D2Randomizer"
+      },
+      "text": {
+        "fr": "Le 17 avril 2021, Sunbeam annonce sur Twitter son D2Randomizer, distribué sur MediaFire, avec une assistance sur son serveur Discord.",
+        "en": "On April 17, 2021, Sunbeam announces their D2Randomizer on Twitter, distributed on MediaFire, with support on their Discord server."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Diablo II",
+      "url": "https://www.igdb.com/games/diablo-ii"
+    },
+    {
+      "label": "GitHub — tlentz/d2modmaker",
+      "url": "https://github.com/tlentz/d2modmaker"
+    },
+    {
+      "label": "GitHub — tlentz/d2modmaker (releases)",
+      "url": "https://github.com/tlentz/d2modmaker/releases"
+    },
+    {
+      "label": "Twitter — Sunbeam",
+      "url": "https://twitter.com/SunbeamX11/status/1383417309201453058"
+    },
+    {
+      "label": "rando-list — Diablo",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Diablo.yml"
+    }
+  ]
+}

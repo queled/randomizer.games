@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Mother 3 a un randomizer depuis 2016, qui puise aussi dans les sprites et décors inutilisés du jeu.",
+    "en": "Mother 3 has had a randomizer since 2016, which also draws on the game's unused sprites and backgrounds."
+  },
+  "events": [
+    {
+      "date": "2006",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "HAL Laboratory et Brownie Brown sortent Mother 3 sur Game Boy Advance en 2006, au Japon.",
+        "en": "HAL Laboratory and Brownie Brown release Mother 3 on Game Boy Advance in 2006, in Japan."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2016",
+        "en": "October 2016"
+      },
+      "title": {
+        "fr": "Mother 3 Randomizer",
+        "en": "Mother 3 Randomizer"
+      },
+      "text": {
+        "fr": "lorenzooone crée en octobre 2016 le dépôt du Mother 3 Randomizer et le présente sur le forum Starmen.Net : objets, ennemis modifiés, musique, équipement, sprites et décors de combat inutilisés, avec un menu pour choisir ce qui est randomisé.",
+        "en": "lorenzooone creates the Mother 3 Randomizer repository in October 2016 and presents it on the Starmen.Net forum: items, modified enemies, music, equipment, unused battle sprites and backgrounds, with a menu to choose what gets randomized."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Mother 3",
+      "url": "https://www.igdb.com/games/mother-3"
+    },
+    {
+      "label": "GitHub — lorenzooone/MOTHER-3-Randomizer",
+      "url": "https://github.com/lorenzooone/MOTHER-3-Randomizer"
+    },
+    {
+      "label": "Starmen.Net — Mother 3 Randomizer (archive)",
+      "url": "http://web.archive.org/web/2026/https://forum.starmen.net/forum/Community/PKHack/Mother-3-Randomizer-Version-0-0-1"
+    },
+    {
+      "label": "rando-list — EarthBound",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/EarthBound.yml"
+    }
+  ]
+}

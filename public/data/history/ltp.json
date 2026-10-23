@@ -1,0 +1,32 @@
+{
+  "intro": {
+    "fr": "LISA: The Pointless, jeu de fans inspiré de LISA, a un randomizer depuis 2020.",
+    "en": "LISA: The Pointless, a fan game inspired by LISA, has had a randomizer since 2020."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juillet 2020",
+        "en": "July 2020"
+      },
+      "title": {
+        "fr": "LISA: The Pointless Randomizer",
+        "en": "LISA: The Pointless Randomizer"
+      },
+      "text": {
+        "fr": "Le 15 juillet 2020, TrueCobalion publie sur Game Jolt LISA: The Pointless Randomizer.",
+        "en": "On July 15, 2020, TrueCobalion publishes LISA: The Pointless Randomizer on Game Jolt."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Game Jolt — LISA: The Pointless Randomizer",
+      "url": "https://gamejolt.com/games/PointlessRandomizer/516789"
+    },
+    {
+      "label": "rando-list — Lisa",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Lisa.yml"
+    }
+  ]
+}

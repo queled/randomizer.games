@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Inazuma Eleven 3: Team Ogre Attacks! a un randomizer partagé par la communauté Victory Road.",
+    "en": "Inazuma Eleven 3: Team Ogre Attacks! has a randomizer shared by the Victory Road community."
+  },
+  "events": [
+    {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "LEVEL-5 sort Inazuma Eleven 3: Team Ogre Attacks! sur Nintendo DS en 2010.",
+        "en": "LEVEL-5 releases Inazuma Eleven 3: Team Ogre Attacks! on Nintendo DS in 2010."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Ultimate Randomizer",
+        "en": "Ultimate Randomizer"
+      },
+      "text": {
+        "fr": "L'Ultimate Randomizer, qui couvre les trois premiers Inazuma Eleven sur DS, est distribué sur Mega ; l'assistance et les futures versions passent par le serveur Discord de Victory Road.",
+        "en": "The Ultimate Randomizer, which covers the first three Inazuma Eleven games on DS, is distributed on Mega; support and future versions go through the Victory Road Discord server."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Inazuma Eleven 3: Team Ogre Attacks!",
+      "url": "https://www.igdb.com/games/inazuma-eleven-3-team-ogre-attacks"
+    },
+    {
+      "label": "rando-list — Inazuma Eleven",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Inazuma_Eleven.yml"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Mega Man 5 a une version « Endless » qui enchaîne les salles, par le hacker japonais Rock5easily.",
+    "en": "Mega Man 5 has an \"Endless\" version that chains rooms, by Japanese hacker Rock5easily."
+  },
+  "events": [
+    {
+      "date": "1992",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Mega Man 5 sur NES en 1992.",
+        "en": "Capcom releases Mega Man 5 on the NES in 1992."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2008",
+        "en": "December 2008"
+      },
+      "title": {
+        "fr": "Rockman 5 Endless",
+        "en": "Rockman 5 Endless"
+      },
+      "text": {
+        "fr": "Rock5easily publie le 15 décembre 2008 « Rockman 5 Endless », patch IPS que rando-list recense comme randomizer ; suivent des versions Endless de Rockman 4 (2009) et Rockman 3 (2010).",
+        "en": "Rock5easily releases \"Rockman 5 Endless\" on December 15, 2008, an IPS patch that rando-list lists as a randomizer; Endless versions of Rockman 4 (2009) and Rockman 3 (2010) follow."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Mega Man 5",
+      "url": "https://www.igdb.com/games/mega-man-5"
+    },
+    {
+      "label": "Rock5easily — patchs IPS",
+      "url": "https://www.himaq5.xyz/rock5easily/ips.html"
+    },
+    {
+      "label": "rando-list — Mega Man",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Mega_Man.yml"
+    }
+  ]
+}

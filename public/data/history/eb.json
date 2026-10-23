@@ -1,0 +1,62 @@
+{
+  "intro": {
+    "fr": "EarthBound Beginnings, le premier Mother, a un randomizer depuis 2014 et se joue en multiworld Archipelago via un APWorld communautaire.",
+    "en": "EarthBound Beginnings, the first Mother, has had a randomizer since 2014 and can be played in an Archipelago multiworld through a community APWorld."
+  },
+  "events": [
+    {
+      "date": "1989",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Ape sort Mother sur Famicom en 1989 ; il sort en Occident en 2015 sous le nom EarthBound Beginnings.",
+        "en": "Ape releases Mother on the Famicom in 1989; it comes out in the West in 2015 as EarthBound Beginnings."
+      }
+    },
+    {
+      "date": "2014",
+      "title": {
+        "fr": "EarthBound Zero Randomizer",
+        "en": "EarthBound Zero Randomizer"
+      },
+      "text": {
+        "fr": "L'EarthBound Zero Randomizer, conçu pour la fête des 25 ans de Mother, est publié sur le forum Starmen.Net et mis à jour en septembre 2014 puis en mars 2015 ; rando-list l'attribue à Agent Ape. Il mélange la version NES et s'inspire du Reshuffler d'EarthBound de Tomato.",
+        "en": "The EarthBound Zero Randomizer, made for the Mother 25th Anniversary fanfest, is posted on the Starmen.Net forum and updated in September 2014 and March 2015; rando-list credits it to Agent Ape. It shuffles the NES version and is inspired by Tomato's EarthBound Reshuffler."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2025",
+        "en": "June 2025"
+      },
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "Un APWorld de Mother (EarthBound Beginnings) est distribué depuis juin 2025 sur le serveur Discord d'Archipelago, où son fil est ouvert le 14 juin 2025.",
+        "en": "A Mother (EarthBound Beginnings) APWorld has been distributed since June 2025 on the Archipelago Discord server, where its thread opens on June 14, 2025."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Mother",
+      "url": "https://www.igdb.com/games/mother--4"
+    },
+    {
+      "label": "IGDB — EarthBound Beginnings",
+      "url": "https://www.igdb.com/games/earthbound-beginnings"
+    },
+    {
+      "label": "Starmen.Net — EarthBound Zero Randomizer (archive)",
+      "url": "http://web.archive.org/web/2026/https://forum.starmen.net/forum/Community/PKHack/EarthBound-Zero-Randomizer-Updated-9-6-14"
+    },
+    {
+      "label": "rando-list — EarthBound",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/EarthBound.yml"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Les randomizers de Donkey Kong recensés par rando-list sont des romhacks de la version arcade, publiés sur donkeykonghacks.net.",
+    "en": "The Donkey Kong randomizers listed by rando-list are romhacks of the arcade version, published on donkeykonghacks.net."
+  },
+  "events": [
+    {
+      "date": "1981",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Donkey Kong en arcade en 1981 ; le jeu est ensuite porté sur NES.",
+        "en": "Nintendo releases Donkey Kong in arcades in 1981; the game is later ported to the NES."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2021",
+        "en": "June 2021"
+      },
+      "title": {
+        "fr": "Tableaux tirés au hasard",
+        "en": "Random boards"
+      },
+      "text": {
+        "fr": "Le site donkeykonghacks.net publie plusieurs romhacks de la version arcade qui tirent les tableaux au hasard : Donkey Kong Randomized Edition, où chaque tableau est un niveau et un écran choisis au hasard, ou Barrelpalooza (16 juin 2021), aux douze variantes de tonneaux tirées dans un ordre aléatoire.",
+        "en": "The donkeykonghacks.net site publishes several arcade romhacks that pick boards at random: Donkey Kong Randomized Edition, where each board is a randomly chosen level and screen, or Barrelpalooza (June 16, 2021), with twelve barrel variations in random order."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Donkey Kong RNDMZR",
+        "en": "Donkey Kong RNDMZR"
+      },
+      "text": {
+        "fr": "Dans Donkey Kong RNDMZR, du même site, les tableaux sont construits par des algorithmes aléatoires : 49 000 variantes possibles pour celui des tonneaux.",
+        "en": "In Donkey Kong RNDMZR, from the same site, boards are built by randomization algorithms: 49,000 possible variations for the barrels board."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Donkey Kong",
+      "url": "https://www.igdb.com/games/donkey-kong"
+    },
+    {
+      "label": "Donkey Kong Hacks",
+      "url": "https://www.donkeykonghacks.net/"
+    },
+    {
+      "label": "rando-list — Donkey Kong",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Donkey_Kong.yml"
+    }
+  ]
+}

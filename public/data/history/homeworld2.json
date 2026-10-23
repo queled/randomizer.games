@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Homeworld 2 a un mod qui remplace la production de vaisseaux par des flottes aléatoires à capturer.",
+    "en": "Homeworld 2 has a mod that replaces ship production with random fleets to capture."
+  },
+  "events": [
+    {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Relic Entertainment sort Homeworld 2 en 2003.",
+        "en": "Relic Entertainment releases Homeworld 2 in 2003."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2007",
+        "en": "June 2007"
+      },
+      "title": {
+        "fr": "Capturable Fleets Mod",
+        "en": "Capturable Fleets Mod"
+      },
+      "text": {
+        "fr": "Le Capturable Fleets Mod, publié sur ModDB en juin 2007, place au début de la partie des flottes aléatoires que chaque joueur peut capturer, au lieu de récolter des ressources et de construire.",
+        "en": "The Capturable Fleets Mod, posted on ModDB in June 2007, places random fleets on the map at the start that any player can capture, instead of gathering resources and building."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Homeworld 2",
+      "url": "https://www.igdb.com/games/homeworld-2"
+    },
+    {
+      "label": "ModDB — Capturable Fleets Mod (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.moddb.com/mods/capturable-fleets-mod"
+    },
+    {
+      "label": "rando-list — Homeworld",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Homeworld.yml"
+    }
+  ]
+}

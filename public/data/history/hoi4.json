@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Hearts of Iron IV a un randomizer sur le Steam Workshop depuis 2019.",
+    "en": "Hearts of Iron IV has had a randomizer on the Steam Workshop since 2019."
+  },
+  "events": [
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Paradox Development Studio sort Hearts of Iron IV en 2016.",
+        "en": "Paradox Development Studio releases Hearts of Iron IV in 2016."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2019",
+        "en": "March 2019"
+      },
+      "title": {
+        "fr": "Hearts of Iron 4 Randomizer",
+        "en": "Hearts of Iron 4 Randomizer"
+      },
+      "text": {
+        "fr": "Le 18 mars 2019, Drowse publie sur le Steam Workshop un randomizer qui bouleverse la partie de base à chaque nouvelle partie ; il est mis à jour pour la version 1.7 du jeu.",
+        "en": "On March 18, 2019, Drowse publishes a randomizer on the Steam Workshop that radically alters the vanilla game every playthrough; it is updated for the game's version 1.7."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Hearts of Iron IV",
+      "url": "https://www.igdb.com/games/hearts-of-iron-iv"
+    },
+    {
+      "label": "Steam Workshop — Hearts of Iron 4 Randomizer",
+      "url": "https://steamcommunity.com/sharedfiles/filedetails/?id=1687085898"
+    },
+    {
+      "label": "rando-list — Hearts of Iron",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Hearts_of_Iron.yml"
+    }
+  ]
+}

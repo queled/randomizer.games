@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Jade Cocoon: Story of the Tamamayu a un randomizer complet, mis à jour depuis 2024.",
+    "en": "Jade Cocoon: Story of the Tamamayu has a complete randomizer, updated since 2024."
+  },
+  "events": [
+    {
+      "date": "1998",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Genki sort Jade Cocoon: Story of the Tamamayu sur PlayStation en 1998.",
+        "en": "Genki releases Jade Cocoon: Story of the Tamamayu on PlayStation in 1998."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2024",
+        "en": "January 2024"
+      },
+      "title": {
+        "fr": "Jade Cocoon Randomizer",
+        "en": "Jade Cocoon Randomizer"
+      },
+      "text": {
+        "fr": "Meos, dont le dépôt existe depuis décembre 2022, publie le 5 janvier 2024 la version 2.2.0 du Jade Cocoon Randomizer : sbires, boss, trésors, boutiques, animations, musiques, voix, contenu inutilisé, mode Nuzlocke. La version 2.5.0 sort le 27 septembre 2026.",
+        "en": "Meos, whose repository dates from December 2022, releases Jade Cocoon Randomizer 2.2.0 on January 5, 2024: minions, bosses, treasures, shops, animations, music, voices, unused content, Nuzlocke mode. Version 2.5.0 comes out on September 27, 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Jade Cocoon: Story of the Tamamayu",
+      "url": "https://www.igdb.com/games/jade-cocoon-story-of-the-tamamayu"
+    },
+    {
+      "label": "GitHub — Meos4/Jade-Cocoon-Randomizer",
+      "url": "https://github.com/Meos4/Jade-Cocoon-Randomizer"
+    },
+    {
+      "label": "romhacking.net — Jade Cocoon Randomizer (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.romhacking.net/utilities/1655/"
+    },
+    {
+      "label": "rando-list — Jade Cocoon",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Jade_Cocoon.yml"
+    }
+  ]
+}

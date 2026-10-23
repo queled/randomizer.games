@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Super Mario Galaxy 2 a un randomizer de galaxies depuis 2020, réalisé en même temps que celui du premier épisode.",
+    "en": "Super Mario Galaxy 2 has had a galaxy randomizer since 2020, made alongside the first game's."
+  },
+  "events": [
+    {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Super Mario Galaxy 2 sur Wii en 2010.",
+        "en": "Nintendo releases Super Mario Galaxy 2 on Wii in 2010."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2020",
+        "en": "March 2020"
+      },
+      "title": {
+        "fr": "Randomizers de galaxies",
+        "en": "Galaxy randomizers"
+      },
+      "text": {
+        "fr": "Le 21 mars 2020, thegreatwaluigi présente sur YouTube des randomizers de galaxies pour Super Mario Galaxy 1 et 2, programmés par Super Hackio ; la vidéo est mise à jour en mars 2021.",
+        "en": "On March 21, 2020, thegreatwaluigi presents galaxy randomizers for Super Mario Galaxy 1 and 2 on YouTube, programmed by Super Hackio; the video is updated in March 2021."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Super Mario Galaxy 2",
+      "url": "https://www.igdb.com/games/super-mario-galaxy-2"
+    },
+    {
+      "label": "YouTube — Super Mario Galaxy 1 & 2 (Galaxy) Randomizer",
+      "url": "https://www.youtube.com/watch?v=4xXHTxTe9i8"
+    },
+    {
+      "label": "rando-list — Mario",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Mario.yml"
+    }
+  ]
+}

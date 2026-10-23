@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Half-Life a eu un générateur de cartes aléatoires, Randmap, que sa communauté cherchait encore à préserver en 2010.",
+    "en": "Half-Life had a random map generator, Randmap, which its community was still trying to preserve in 2010."
+  },
+  "events": [
+    {
+      "date": "1998",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Valve sort Half-Life en 1998.",
+        "en": "Valve releases Half-Life in 1998."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2010",
+        "en": "May 2010"
+      },
+      "title": {
+        "fr": "Randmap",
+        "en": "Randmap"
+      },
+      "text": {
+        "fr": "Le 12 mai 2010, sur le forum ValveTime, un joueur qui hébergeait Randmap cherche une copie complète du générateur de cartes aléatoires ; un autre membre retrouve la version 4.00 sur FileFront.",
+        "en": "On May 12, 2010, on the ValveTime forum, a player who used to host Randmap looks for a full copy of the random map generator; another member finds version 4.00 on FileFront."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Half-Life",
+      "url": "https://www.igdb.com/games/half-life"
+    },
+    {
+      "label": "ValveTime — Randmap and its whereabouts (archive)",
+      "url": "https://web.archive.org/web/20190926074638/http://www.valvetime.net/threads/randmap-and-its-whereabouts.169050/"
+    },
+    {
+      "label": "rando-list — Half-Life",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Half-Life.yml"
+    }
+  ]
+}

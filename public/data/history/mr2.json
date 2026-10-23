@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Monster Rancher 2 a un hack qui change le fonctionnement de son sanctuaire de génération de monstres.",
+    "en": "Monster Rancher 2 has a hack that changes how its monster-generating shrine works."
+  },
+  "events": [
+    {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Tecmo sort Monster Rancher 2 sur PlayStation en 1999.",
+        "en": "Tecmo releases Monster Rancher 2 on PlayStation in 1999."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2017",
+        "en": "June 2017"
+      },
+      "title": {
+        "fr": "Seasonal Shrine",
+        "en": "Seasonal Shrine"
+      },
+      "text": {
+        "fr": "Le 11 juin 2017, STARWIN publie sur romhacking.net Seasonal Shrine : au lieu de lire un CD, le sanctuaire génère un monstre selon l'année, la saison et le nom du joueur, comme avec un CD tiré au hasard.",
+        "en": "On June 11, 2017, STARWIN posts Seasonal Shrine on romhacking.net: instead of reading a CD, the shrine generates a monster from the current year, season and player name, as if a random CD were inserted."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Monster Rancher 2",
+      "url": "https://www.igdb.com/games/monster-rancher-2"
+    },
+    {
+      "label": "romhacking.net — Seasonal Shrine (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.romhacking.net/hacks/3482/"
+    },
+    {
+      "label": "rando-list — Monster Rancher",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Monster_Rancher.yml"
+    }
+  ]
+}

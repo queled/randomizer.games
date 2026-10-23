@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Mega Man Battle Network 5 fait partie des deux premiers jeux pris en charge par le MMBN Randomizer, en 2014.",
+    "en": "Mega Man Battle Network 5 was one of the first two games supported by the MMBN Randomizer, in 2014."
+  },
+  "events": [
+    {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Mega Man Battle Network 5, en deux versions (Team Protoman et Team Colonel), sur Game Boy Advance en 2004.",
+        "en": "Capcom releases Mega Man Battle Network 5, in two versions (Team Protoman and Team Colonel), on Game Boy Advance in 2004."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2014",
+        "en": "August 2014"
+      },
+      "title": {
+        "fr": "MMBN Randomizer",
+        "en": "MMBN Randomizer"
+      },
+      "text": {
+        "fr": "Le 9 août 2014, pour les huit ans du forum The Rockman EXE Zone, Prof. 9 publie le MMBN Randomizer, écrit en Java et compatible au départ avec Battle Network 5 et 6 : codes des puces, dossier de départ, virus, puces lâchées, trouvées ou vendues.",
+        "en": "On August 9, 2014, for The Rockman EXE Zone forum's eighth birthday, Prof. 9 releases the MMBN Randomizer, written in Java and initially compatible with Battle Network 5 and 6: chip codes, starting folder, viruses, chips dropped, found or sold."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Mega Man Battle Network 5: Team Protoman",
+      "url": "https://www.igdb.com/games/mega-man-battle-network-5-team-protoman"
+    },
+    {
+      "label": "The Rockman EXE Zone — MMBN Randomizer (archive)",
+      "url": "http://web.archive.org/web/2026/https://forums.therockmanexezone.com/mmbn-randomizer-t15216.html"
+    }
+  ]
+}

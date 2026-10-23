@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Half-Life 2 a un créateur de cartes aléatoires pour son mode solo.",
+    "en": "Half-Life 2 has a random map creator for its single-player mode."
+  },
+  "events": [
+    {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Valve sort Half-Life 2 en 2004.",
+        "en": "Valve releases Half-Life 2 in 2004."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "HL2 Random Map Creator",
+        "en": "HL2 Random Map Creator"
+      },
+      "text": {
+        "fr": "Le Half-Life 2 Random Map Creator de Hannes L., publié sur GameFront, génère des cartes solo remplies de zombies ; il demande une ancienne version du jeu.",
+        "en": "Hannes L.'s Half-Life 2 Random Map Creator, posted on GameFront, generates single-player maps full of zombies; it requires an older version of the game."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Half-Life 2",
+      "url": "https://www.igdb.com/games/half-life-2"
+    },
+    {
+      "label": "GameFront — Half-Life 2: Random Map Creator (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.gamefront.com/games/half-life-2/file/half-life-2-random-map-creator"
+    },
+    {
+      "label": "rando-list — Half-Life",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Half-Life.yml"
+    }
+  ]
+}

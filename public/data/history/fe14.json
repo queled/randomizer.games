@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Fire Emblem Fates a un randomizer depuis fin 2016.",
+    "en": "Fire Emblem Fates has had a randomizer since late 2016."
+  },
+  "events": [
+    {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Intelligent Systems sort Fire Emblem Fates sur Nintendo 3DS en 2015.",
+        "en": "Intelligent Systems releases Fire Emblem Fates on Nintendo 3DS in 2015."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2016",
+        "en": "December 2016"
+      },
+      "title": {
+        "fr": "Fire Emblem Fates Randomizer",
+        "en": "Fire Emblem Fates Randomizer"
+      },
+      "text": {
+        "fr": "Le 7 décembre 2016, thane98 ouvre sur GBAtemp le fil de son Fire Emblem Fates Randomizer, alors en développement ; il compte plus de 1 400 réponses.",
+        "en": "On December 7, 2016, thane98 opens the thread for their Fire Emblem Fates Randomizer on GBAtemp, then a work in progress; it gathers over 1,400 replies."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Fire Emblem Fates: Birthright",
+      "url": "https://www.igdb.com/games/fire-emblem-fates-birthright"
+    },
+    {
+      "label": "GBAtemp — Fire Emblem Fates Randomizer (archive)",
+      "url": "http://web.archive.org/web/2026/https://gbatemp.net/threads/wip-fire-emblem-fates-randomizer.452268/"
+    },
+    {
+      "label": "rando-list — Fire Emblem",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Fire_Emblem.yml"
+    }
+  ]
+}

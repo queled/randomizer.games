@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Environmental Station Alpha a un randomizer, partagé avec les outils de sa communauté de speedrun.",
+    "en": "Environmental Station Alpha has a randomizer, shared among its speedrun community's tools."
+  },
+  "events": [
+    {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Hempuli sort Environmental Station Alpha en 2015.",
+        "en": "Hempuli releases Environmental Station Alpha in 2015."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "ESA Randomizer",
+        "en": "ESA Randomizer"
+      },
+      "text": {
+        "fr": "mokesmoe propose dans les ressources de speedrun.com l'ESA Randomizer, avec un serveur Discord dédié.",
+        "en": "mokesmoe offers the ESA Randomizer in the speedrun.com resources, with a dedicated Discord server."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Environmental Station Alpha",
+      "url": "https://www.igdb.com/games/environmental-station-alpha"
+    },
+    {
+      "label": "speedrun.com — Environmental Station Alpha, Resources",
+      "url": "https://www.speedrun.com/esalpha/resources"
+    },
+    {
+      "label": "rando-list — Environmental Station Alpha",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Environmental_Station_Alpha.yml"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Galaga a un romhack qui rend aléatoires les vagues d'ennemis.",
+    "en": "Galaga has a romhack that randomizes its enemy waves."
+  },
+  "events": [
+    {
+      "date": "1981",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Namco sort Galaga en arcade en 1981.",
+        "en": "Namco releases Galaga in arcades in 1981."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2024",
+        "en": "April 2024"
+      },
+      "title": {
+        "fr": "Galaga Wave Mixer",
+        "en": "Galaga Wave Mixer"
+      },
+      "text": {
+        "fr": "Le 2 avril 2024, donkeykonghacks.net publie Galaga Wave Mixer : chaque vague suit l'une de 24 trajectoires tirées au hasard, parfois inversées ou retardées, et les stages bonus sont eux aussi randomisés, avec une seed différente à chaque partie.",
+        "en": "On April 2, 2024, donkeykonghacks.net releases Galaga Wave Mixer: each wave follows one of 24 randomly picked pathways, sometimes mirrored or delayed, and the challenging stages are randomized too, with a different seed each game."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Galaga",
+      "url": "https://www.igdb.com/games/galaga"
+    },
+    {
+      "label": "Donkey Kong Hacks — Other arcade romhacks",
+      "url": "https://donkeykonghacks.net/page_other.html"
+    },
+    {
+      "label": "rando-list — Galaga",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Galaga.yml"
+    }
+  ]
+}

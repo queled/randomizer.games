@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Kid Icarus a un randomizer web, puis Kid Randomicus, qui l'intègre directement dans la ROM.",
+    "en": "Kid Icarus has a web randomizer, then Kid Randomicus, which builds it directly into the ROM."
+  },
+  "events": [
+    {
+      "date": "1986",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Kid Icarus en 1986.",
+        "en": "Nintendo releases Kid Icarus in 1986."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2021",
+        "en": "November 2021"
+      },
+      "title": {
+        "fr": "Kid Randomicus",
+        "en": "Kid Randomicus"
+      },
+      "text": {
+        "fr": "toddcblank publie le 28 novembre 2021 la version 1.0.0 de Kid Randomicus, ROM hack qui reprend le randomizer web de Rumbleminze et FruitBatSalad : écrans, portes, ennemis et objets de chaque niveau sont tirés au hasard, et un chemin est garanti dans les forteresses. La version 1.0.8 sort en août 2022.",
+        "en": "toddcblank releases Kid Randomicus 1.0.0 on November 28, 2021, a ROM hack implementing Rumbleminze and FruitBatSalad's web randomizer: each level's screens, doors, enemies and items are randomized, and a path is guaranteed in the fortresses. Version 1.0.8 comes out in August 2022."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Kid Icarus",
+      "url": "https://www.igdb.com/games/kid-icarus"
+    },
+    {
+      "label": "GitHub — toddcblank/kid_randomicus",
+      "url": "https://github.com/toddcblank/kid_randomicus"
+    },
+    {
+      "label": "romhacking.net — Kid Icarus Randomizer (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.romhacking.net/hacks/6447/"
+    },
+    {
+      "label": "rando-list — Kid Icarus",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Kid_Icarus.yml"
+    }
+  ]
+}

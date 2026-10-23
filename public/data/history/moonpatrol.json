@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Moon Patrol a un romhack qui génère au hasard terrains et ennemis.",
+    "en": "Moon Patrol has a romhack that generates terrain and enemies at random."
+  },
+  "events": [
+    {
+      "date": "1982",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Irem sort Moon Patrol en arcade en 1982.",
+        "en": "Irem releases Moon Patrol in arcades in 1982."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2025",
+        "en": "February 2025"
+      },
+      "title": {
+        "fr": "Unknown Territories",
+        "en": "Unknown Territories"
+      },
+      "text": {
+        "fr": "Le 8 février 2025, donkeykonghacks.net publie Moon Patrol Unknown Territories : terrain et ennemis sont générés au hasard avec une seed différente à chaque mission, et de nouveaux ennemis apparaissent.",
+        "en": "On February 8, 2025, donkeykonghacks.net releases Moon Patrol Unknown Territories: terrain and enemies are generated at random with a different seed for each mission, and new enemies appear."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Moon Patrol",
+      "url": "https://www.igdb.com/games/moon-patrol"
+    },
+    {
+      "label": "Donkey Kong Hacks — Other arcade romhacks",
+      "url": "https://donkeykonghacks.net/page_other.html"
+    },
+    {
+      "label": "rando-list — Moon Patrol",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Moon_Patrol.yml"
+    }
+  ]
+}

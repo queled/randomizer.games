@@ -1,0 +1,32 @@
+{
+  "intro": {
+    "fr": "Rockman 3: Winternight, hack de Mega Man 3, a une version « Endless » qui enchaîne des salles.",
+    "en": "Rockman 3: Winternight, a Mega Man 3 hack, has an \"Endless\" version that chains rooms."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Août 2018",
+        "en": "August 2018"
+      },
+      "title": {
+        "fr": "Winternight Endless Version",
+        "en": "Winternight Endless Version"
+      },
+      "text": {
+        "fr": "Le 7 août 2018 paraît sur romhacking.net Rockman 3: Winternight Endless Version, jeu sans fin fondé sur les scènes de Winternight où l'objectif est le meilleur score ; rando-list le recense comme randomizer.",
+        "en": "On August 7, 2018, Rockman 3: Winternight Endless Version appears on romhacking.net, an endless game built on Winternight's scenes where the goal is the highest score; rando-list lists it as a randomizer."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "romhacking.net — Rockman 3: Winternight Endless Version (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.romhacking.net/hacks/4106/"
+    },
+    {
+      "label": "rando-list — Mega Man",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Mega_Man.yml"
+    }
+  ]
+}

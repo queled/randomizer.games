@@ -1,0 +1,32 @@
+{
+  "intro": {
+    "fr": "Deep Freeze, hack de Metroid: Zero Mission, peut être randomisé avec MZM Randomizer Plus.",
+    "en": "Deep Freeze, a Metroid: Zero Mission hack, can be randomized with MZM Randomizer Plus."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Novembre 2019",
+        "en": "November 2019"
+      },
+      "title": {
+        "fr": "MZM Randomizer Plus",
+        "en": "MZM Randomizer Plus"
+      },
+      "text": {
+        "fr": "Le 6 novembre 2019, Cpt.Glitch publie MZM Randomizer Plus, extension du randomizer de biospark qui permet aussi de randomiser certains hacks ; rando-list y rattache Deep Freeze. Le programme est mis à jour jusqu'en décembre 2024.",
+        "en": "On November 6, 2019, Cpt.Glitch releases MZM Randomizer Plus, an extension of biospark's randomizer that can also randomize some hacks; rando-list links Deep Freeze to it. The program is updated until December 2024."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Metroid Construction — MZMR Plus (archive)",
+      "url": "http://web.archive.org/web/2026/https://forum.metroidconstruction.com/index.php/topic,5051.0.html"
+    },
+    {
+      "label": "rando-list — Metroid",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Metroid.yml"
+    }
+  ]
+}

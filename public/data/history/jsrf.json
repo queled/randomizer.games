@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Jet Set Radio Future a un randomizer, un exécutable modifié partagé sur Discord en 2020.",
+    "en": "Jet Set Radio Future has a randomizer, a modified executable shared on Discord in 2020."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Smilebit sort Jet Set Radio Future sur Xbox en 2002.",
+        "en": "Smilebit releases Jet Set Radio Future on Xbox in 2002."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2020",
+        "en": "September 2020"
+      },
+      "title": {
+        "fr": "Randomizer de fusecv",
+        "en": "fusecv's randomizer"
+      },
+      "text": {
+        "fr": "fusecv partage sur Discord un exécutable randomisé du jeu : la documentation d'une première version date de septembre 2020, la version recensée par rando-list d'octobre 2020.",
+        "en": "fusecv shares a randomized executable of the game on Discord: documentation for a first version dates from September 2020, the version listed by rando-list from October 2020."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Jet Set Radio Future",
+      "url": "https://www.igdb.com/games/jet-set-radio-future"
+    },
+    {
+      "label": "rando-list — Jet Set Radio",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Jet_Set_Radio.yml"
+    }
+  ]
+}

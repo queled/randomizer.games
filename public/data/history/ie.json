@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Inazuma Eleven a un randomizer partagé par la communauté Victory Road.",
+    "en": "Inazuma Eleven has a randomizer shared by the Victory Road community."
+  },
+  "events": [
+    {
+      "date": "2008",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "LEVEL-5 sort Inazuma Eleven sur Nintendo DS en 2008.",
+        "en": "LEVEL-5 releases Inazuma Eleven on Nintendo DS in 2008."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Ultimate Randomizer",
+        "en": "Ultimate Randomizer"
+      },
+      "text": {
+        "fr": "L'Ultimate Randomizer, qui couvre les trois premiers Inazuma Eleven sur DS, est distribué sur Mega ; l'assistance et les futures versions passent par le serveur Discord de Victory Road.",
+        "en": "The Ultimate Randomizer, which covers the first three Inazuma Eleven games on DS, is distributed on Mega; support and future versions go through the Victory Road Discord server."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Inazuma Eleven",
+      "url": "https://www.igdb.com/games/inazuma-eleven"
+    },
+    {
+      "label": "rando-list — Inazuma Eleven",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Inazuma_Eleven.yml"
+    }
+  ]
+}

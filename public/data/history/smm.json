@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Sin of Mana, hack de Seiken Densetsu 3, a son randomizer, distribué avec le hack.",
+    "en": "Sin of Mana, a Seiken Densetsu 3 hack, has its randomizer, distributed along with the hack."
+  },
+  "events": [
+    {
+      "date": "1995",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square sort Seiken Densetsu 3 sur Super Famicom en 1995, connu en Occident sous le nom Trials of Mana.",
+        "en": "Square releases Seiken Densetsu 3 on Super Famicom in 1995, known in the West as Trials of Mana."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2017",
+        "en": "May 2017"
+      },
+      "title": {
+        "fr": "Sin of Mana",
+        "en": "Sin of Mana"
+      },
+      "text": {
+        "fr": "praetarius5018 publie le 9 mai 2017 sur New Game Plus Sin of Mana, hack qui revoit l'équipement, les classes, les formules et l'IA des boss ; un randomizer est proposé en téléchargement à part, et le hack est mis à jour jusqu'en mai 2021.",
+        "en": "praetarius5018 posts Sin of Mana on New Game Plus on May 9, 2017, a hack that reworks equipment, classes, formulas and boss AI; a randomizer is offered as a separate download, and the hack is updated until May 2021."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Trials of Mana (1995)",
+      "url": "https://www.igdb.com/games/trials-of-mana--1"
+    },
+    {
+      "label": "New Game Plus — Seiken Densetsu 3: Sin of Mana (archive)",
+      "url": "http://web.archive.org/web/2026/http://ngplus.net/index.php?/files/file/28-seiken-densetsu-3-sin-of-mana/"
+    },
+    {
+      "label": "rando-list — Mana",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Mana.yml"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "intro": {
+    "fr": "Kid Chameleon a deux randomizers : un patch qui enchaîne des niveaux au hasard et un randomizer web.",
+    "en": "Kid Chameleon has two randomizers: a patch that chains random levels and a web randomizer."
+  },
+  "events": [
+    {
+      "date": "1992",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sega Technical Institute sort Kid Chameleon sur Mega Drive en 1992.",
+        "en": "Sega Technical Institute releases Kid Chameleon on Mega Drive in 1992."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2023",
+        "en": "February 2023"
+      },
+      "title": {
+        "fr": "Kid Chameleon Level Randomizer",
+        "en": "Kid Chameleon Level Randomizer"
+      },
+      "text": {
+        "fr": "Le 2 février 2023 paraît sur romhacking.net un patch qui donne un niveau aléatoire, boss compris, à chaque fois, avec trois vies et sans continue ; la version 1.1 évite les doublons.",
+        "en": "On February 2, 2023, a patch appears on romhacking.net that gives a random level, bosses included, each time, with three lives and no continues; version 1.1 prevents duplicates."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "KCR",
+        "en": "KCR"
+      },
+      "text": {
+        "fr": "Le Kid Chameleon Randomizer (KCR), en ligne en version 0.5.8, mélange l'ordre des niveaux, peut ne laisser qu'une sortie par niveau et propose des préréglages jusqu'au mode Kaizo.",
+        "en": "The Kid Chameleon Randomizer (KCR), online at version 0.5.8, shuffles stage order, can leave only one exit per level and offers presets up to a Kaizo mode."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Kid Chameleon",
+      "url": "https://www.igdb.com/games/kid-chameleon"
+    },
+    {
+      "label": "romhacking.net — Kid Chameleon Level Randomizer (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.romhacking.net/hacks/7490/"
+    },
+    {
+      "label": "Kid Chameleon Randomizer",
+      "url": "https://kidchameleonrandomizer.pythonanywhere.com/"
+    },
+    {
+      "label": "rando-list — Kid Chameleon",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Kid_Chameleon.yml"
+    }
+  ]
+}

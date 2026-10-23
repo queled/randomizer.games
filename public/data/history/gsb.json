@@ -1,0 +1,44 @@
+{
+  "intro": {
+    "fr": "Gratuitous Space Battles a un générateur de galaxies aléatoires pour son mode Campagne.",
+    "en": "Gratuitous Space Battles has a random galaxy generator for its Campaign mode."
+  },
+  "events": [
+    {
+      "date": "2009",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Positech Games sort Gratuitous Space Battles en 2009.",
+        "en": "Positech Games releases Gratuitous Space Battles in 2009."
+      }
+    },
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Galaxy generator",
+        "en": "Galaxy generator"
+      },
+      "text": {
+        "fr": "Un petit programme publié sur ModDB en 2016 crée des galaxies aléatoires pour le mode Campagne.",
+        "en": "A small program posted on ModDB in 2016 creates random galaxies for the Campaign mode."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Gratuitous Space Battles",
+      "url": "https://www.igdb.com/games/gratuitous-space-battles"
+    },
+    {
+      "label": "ModDB — GSB Galaxy generator (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.moddb.com/mods/gsb-galaxy-generator"
+    },
+    {
+      "label": "rando-list — Gratuitous Space Battles",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Gratuitous_Space_Battles.yml"
+    }
+  ]
+}

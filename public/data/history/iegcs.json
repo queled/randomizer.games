@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Inazuma Eleven GO Chrono Stones a un randomizer, Pixzer, depuis 2022.",
+    "en": "Inazuma Eleven GO Chrono Stones has had a randomizer, Pixzer, since 2022."
+  },
+  "events": [
+    {
+      "date": "2012",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "LEVEL-5 sort Inazuma Eleven GO Chrono Stones, en deux versions (Wildfire et Thunderflash), sur Nintendo 3DS en 2012.",
+        "en": "LEVEL-5 releases Inazuma Eleven GO Chrono Stones, in two versions (Wildfire and Thunderflash), on Nintendo 3DS in 2012."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2022",
+        "en": "April 2022"
+      },
+      "title": {
+        "fr": "Pixzer",
+        "en": "Pixzer"
+      },
+      "text": {
+        "fr": "Le randomizer Pixzer est mis en ligne sur MediaFire le 19 avril 2022 ; l'assistance passe par le serveur Discord de Victory Road.",
+        "en": "The Pixzer randomizer is uploaded to MediaFire on April 19, 2022; support goes through the Victory Road Discord server."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Inazuma Eleven GO: Chrono Stones - Wildfire",
+      "url": "https://www.igdb.com/games/inazuma-eleven-go-chrono-stones-wildfire"
+    },
+    {
+      "label": "MediaFire — Pixzer",
+      "url": "https://www.mediafire.com/file/z9qmtis8cgwgfdw/Pixzer.rar/file"
+    },
+    {
+      "label": "rando-list — Inazuma Eleven",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Inazuma_Eleven.yml"
+    }
+  ]
+}

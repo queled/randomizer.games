@@ -1,0 +1,87 @@
+{
+  "intro": {
+    "fr": "Lies of P a eu trois petits randomizers sur Nexus Mods début 2024, puis un mod Archipelago complet, Lies of AP, à partir de 2025.",
+    "en": "Lies of P got three small randomizers on Nexus Mods in early 2024, then a full Archipelago mod, Lies of AP, from 2025."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Round8 Studio sort Lies of P en 2023, édité par Neowiz.",
+        "en": "Round8 Studio releases Lies of P in 2023, published by Neowiz."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2024",
+        "en": "January 2024"
+      },
+      "title": {
+        "fr": "Trois randomizers",
+        "en": "Three randomizers"
+      },
+      "text": {
+        "fr": "Les 20 et 21 janvier 2024, kmacdone publie sur Nexus Mods trois mods séparés : objets au sol et dans les coffres, objets des boutiques, et armes de départ.",
+        "en": "On January 20 and 21, 2024, kmacdone posts three separate mods on Nexus Mods: items on the ground and in chests, shop items, and starting weapons."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2025",
+        "en": "August 2025"
+      },
+      "title": {
+        "fr": "Lies of AP",
+        "en": "Lies of AP"
+      },
+      "text": {
+        "fr": "Xtruh publie le 17 août 2025 la première version de Lies of AP, mod Archipelago où clés, armes, pièces de pantin, amulettes et matériaux sont randomisés. Le contenu téléchargeable devient accessible dès le Path of the Pilgrim.",
+        "en": "Xtruh releases the first version of Lies of AP on August 17, 2025, an Archipelago mod in which keys, weapons, puppet parts, amulets and materials are randomized. The DLC becomes available as soon as the Path of the Pilgrim."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2026",
+        "en": "March 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.1.7 sort le 17 mars 2026 ; c'est la plus récente au 23 octobre 2026 (8 versions publiées).",
+        "en": "Version 0.1.7 is released on March 17, 2026; it is the latest as of October 23, 2026 (8 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Lies of P",
+      "url": "https://www.igdb.com/games/lies-of-p"
+    },
+    {
+      "label": "Nexus Mods — Item Randomizer",
+      "url": "https://www.nexusmods.com/liesofp/mods/117"
+    },
+    {
+      "label": "Nexus Mods — Shop Item Randomizer",
+      "url": "https://www.nexusmods.com/liesofp/mods/118"
+    },
+    {
+      "label": "Nexus Mods — Starting Weapon Randomizer",
+      "url": "https://www.nexusmods.com/liesofp/mods/119"
+    },
+    {
+      "label": "GitHub — Xtruh/LiesOfAP",
+      "url": "https://github.com/Xtruh/LiesOfAP"
+    },
+    {
+      "label": "GitHub — Xtruh/LiesOfAP (releases)",
+      "url": "https://github.com/Xtruh/LiesOfAP/releases"
+    }
+  ]
+}

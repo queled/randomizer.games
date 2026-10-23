@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Star Wars: Knights of the Old Republic se joue en multiworld Archipelago depuis septembre 2026, grâce à un mod en alpha.",
+    "en": "Star Wars: Knights of the Old Republic has been playable in an Archipelago multiworld since September 2026, through a mod in alpha."
+  },
+  "events": [
+    {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "BioWare sort Star Wars: Knights of the Old Republic en 2003, édité par LucasArts.",
+        "en": "BioWare releases Star Wars: Knights of the Old Republic in 2003, published by LucasArts."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "KOTOR Archipelago",
+        "en": "KOTOR Archipelago"
+      },
+      "text": {
+        "fr": "Firebringer92 publie le 4 septembre 2026 les premières versions du KOTOR Archipelago Randomizer. Le mod, réservé à la version Steam sous Windows, réécrit des fichiers du jeu et s'appuie sur un extender maison et du NWScript généré qui dialogue avec Archipelago.",
+        "en": "Firebringer92 releases the first versions of the KOTOR Archipelago Randomizer on September 4, 2026. The mod, limited to the Steam version on Windows, rewrites game files and relies on a custom extender and generated NWScript that talks to Archipelago."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.1.9 sort le 15 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (9 versions publiées).",
+        "en": "Version 0.1.9 is released on October 15, 2026; it is the latest as of October 23, 2026 (9 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Star Wars: Knights of the Old Republic",
+      "url": "https://www.igdb.com/games/star-wars-knights-of-the-old-republic"
+    },
+    {
+      "label": "GitHub — Firebringer92/Archipelago-Fire",
+      "url": "https://github.com/Firebringer92/Archipelago-Fire"
+    },
+    {
+      "label": "GitHub — Archipelago-Fire, KotoR README",
+      "url": "https://github.com/Firebringer92/Archipelago-Fire/blob/main/KotoR/Docs/README.md"
+    }
+  ]
+}

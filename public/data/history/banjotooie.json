@@ -1,0 +1,97 @@
+{
+  "intro": {
+    "fr": "Banjo-Tooie est arrivé dans le multiworld en 2024 avec l'APWorld de jjjj12212, et a un randomizer en solo depuis la fin de la même année.",
+    "en": "Banjo-Tooie entered the multiworld in 2024 with jjjj12212's APWorld, and has had a solo randomizer since the end of that year."
+  },
+  "events": [
+    {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Rare sort Banjo-Tooie sur Nintendo 64 en 2000.",
+        "en": "Rare releases Banjo-Tooie on Nintendo 64 in 2000."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2024",
+        "en": "March 2024"
+      },
+      "title": {
+        "fr": "Archipelago Banjo-Tooie",
+        "en": "Archipelago Banjo-Tooie"
+      },
+      "text": {
+        "fr": "jjjj12212 crée le dépôt Archipelago-BanjoTooie en février 2024 et publie le 3 mars la bêta 0.5, pour la version américaine du jeu. Les versions s'enchaînent : la 1.0 en avril, la 2.0 en septembre, la 3.0 en octobre 2024.",
+        "en": "jjjj12212 creates the Archipelago-BanjoTooie repository in February 2024 and releases beta 0.5 on March 3, for the US version of the game. Releases come in quick succession: 1.0 in April, 2.0 in September, 3.0 in October 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2024",
+        "en": "December 2024"
+      },
+      "title": {
+        "fr": "Version 4.0",
+        "en": "Version 4.0"
+      },
+      "text": {
+        "fr": "La version 4.0, le 25 décembre 2024, est la première à ne plus porter la mention bêta. Jiggies, notes, rayons de miel, pages de Cheato, Jinjos, techniques, tickets ou silos d'Isle O' Hag se randomisent, avec des objectifs variés : vaincre Hag-1, mini-jeux, boss, familles de Jinjos, chasse aux jetons Mumbo.",
+        "en": "Version 4.0, on December 25, 2024, is the first without the beta label. Jiggies, notes, honeycombs, Cheato pages, Jinjos, moves, tickets or Isle O' Hag silos can be randomized, with various goals: beating Hag-1, mini-games, bosses, Jinjo families, a Mumbo token hunt."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2024",
+        "en": "December 2024"
+      },
+      "title": {
+        "fr": "Tooie Randomizer",
+        "en": "Tooie Randomizer"
+      },
+      "text": {
+        "fr": "Le 1er décembre 2024, Zenpock publie la version 1.0.0 d'un randomizer en solo écrit en C++, fondé sur le GEDecompressorTool de SubDrag ; il produit une ROM randomisée de la version américaine. La 1.2.4 sort le 2 octobre 2026.",
+        "en": "On December 1, 2024, Zenpock releases version 1.0.0 of a solo randomizer written in C++, based on SubDrag's GEDecompressorTool; it produces a randomized ROM of the US version. Version 1.2.4 comes out on October 2, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "L'APWorld en est à la version 4.13.1, publiée le 26 août 2026 : la plus récente au 23 octobre 2026, sur plus de 90 versions. Le jeu figure aussi parmi ceux de MultiworldGG.",
+        "en": "The APWorld is at version 4.13.1, released on August 26, 2026: the latest as of October 23, 2026, out of more than 90 releases. The game is also among MultiworldGG's games."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Banjo-Tooie",
+      "url": "https://www.igdb.com/games/banjo-tooie"
+    },
+    {
+      "label": "GitHub — jjjj12212/Archipelago-BanjoTooie",
+      "url": "https://github.com/jjjj12212/Archipelago-BanjoTooie"
+    },
+    {
+      "label": "GitHub — jjjj12212/Archipelago-BanjoTooie (releases)",
+      "url": "https://github.com/jjjj12212/Archipelago-BanjoTooie/releases"
+    },
+    {
+      "label": "GitHub — Zenpock/Tooie-Randomizer",
+      "url": "https://github.com/Zenpock/Tooie-Randomizer"
+    },
+    {
+      "label": "Multiworld — Banjo-Tooie",
+      "url": "https://multiworld.gg/games/Banjo-Tooie/info/en"
+    }
+  ]
+}

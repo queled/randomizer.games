@@ -1,0 +1,104 @@
+{
+  "intro": {
+    "fr": "Age of Empires II a une longue tradition de scripts de cartes aléatoires ; sa Definitive Edition se joue aussi en multiworld Archipelago grâce à un APWorld communautaire, Ageipelago.",
+    "en": "Age of Empires II has a long tradition of random map scripts; its Definitive Edition can also be played in an Archipelago multiworld through a community APWorld, Ageipelago."
+  },
+  "events": [
+    {
+      "date": "2017",
+      "title": {
+        "fr": "HyperRandom",
+        "en": "HyperRandom"
+      },
+      "text": {
+        "fr": "Le 9 février 2017, Zetnus présente HyperRandom sur les forums Age of Kings Heaven : un script de cartes aléatoires unique, bourré de conditions, qui fait varier le terrain, la part de terre et les zones pour produire des cartes à la fois variées et équilibrées. Il prévoit ensuite la prise en charge du contenu de la Definitive Edition.",
+        "en": "On February 9, 2017, Zetnus presents HyperRandom on the Age of Kings Heaven forums: a single random map script packed with conditionals, which varies the base terrain, land share and zones to produce maps that are both varied and balanced. Support for Definitive Edition content is planned later."
+      }
+    },
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu",
+        "en": "The game"
+      },
+      "text": {
+        "fr": "Age of Empires II: Definitive Edition, version remaniée du jeu de 1999, sort en novembre 2019.",
+        "en": "Age of Empires II: Definitive Edition, a remastered version of the 1999 game, is released in November 2019."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2025",
+        "en": "November 2025"
+      },
+      "title": {
+        "fr": "Ageipelago",
+        "en": "Ageipelago"
+      },
+      "text": {
+        "fr": "dmwever crée le dépôt GitHub Ageipelago, qui héberge le randomizer Archipelago du jeu.",
+        "en": "dmwever creates the Ageipelago GitHub repository, home of the game's Archipelago randomizer."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2025",
+        "en": "December 2025"
+      },
+      "title": {
+        "fr": "Preuve de concept",
+        "en": "Proof of concept"
+      },
+      "text": {
+        "fr": "Première version, 0.0.1, présentée comme une preuve de concept instable et sans logique.",
+        "en": "First release, 0.0.1, presented as an unstable proof of concept with no logic."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Alpha jouable",
+        "en": "Playable alpha"
+      },
+      "text": {
+        "fr": "La version 0.1.0, « Attila the Hun », est la première alpha jouable.",
+        "en": "Version 0.1.0, \"Attila the Hun\", is the first playable alpha."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Après « The Building Update » (0.2.1) en juin, la version 0.2.3 sort en septembre 2026 ; c'est la plus récente au 23 octobre 2026 (10 versions publiées).",
+        "en": "After \"The Building Update\" (0.2.1) in June, version 0.2.3 comes out in September 2026; it is the latest as of October 23, 2026 (10 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Age of Kings Heaven — Project: HyperRandom",
+      "url": "https://aok.heavengames.com/cgi-bin/forums/display.cgi?action=ct&f=28,44641,,365"
+    },
+    {
+      "label": "IGDB — Age of Empires II: Definitive Edition",
+      "url": "https://www.igdb.com/games/age-of-empires-ii-definitive-edition"
+    },
+    {
+      "label": "GitHub — dmwever/Ageipelago",
+      "url": "https://github.com/dmwever/Ageipelago"
+    },
+    {
+      "label": "GitHub — dmwever/Ageipelago (releases)",
+      "url": "https://github.com/dmwever/Ageipelago/releases"
+    }
+  ]
+}

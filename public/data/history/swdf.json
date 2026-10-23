@@ -1,0 +1,79 @@
+{
+  "intro": {
+    "fr": "Star Wars: Dark Forces se randomise depuis 2021 avec l'outil Randomizer de Dark Forces Showcase, une collection d'outils de modding de The-MAZZTer.",
+    "en": "Star Wars: Dark Forces has been randomizable since 2021 with the Randomizer tool of Dark Forces Showcase, a set of modding tools by The-MAZZTer."
+  },
+  "events": [
+    {
+      "date": "1995",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "LucasArts sort Star Wars: Dark Forces en 1995.",
+        "en": "LucasArts releases Star Wars: Dark Forces in 1995."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2021",
+        "en": "July 2021"
+      },
+      "title": {
+        "fr": "Dark Forces Showcase",
+        "en": "Dark Forces Showcase"
+      },
+      "text": {
+        "fr": "The-MAZZTer publie le 17 juillet 2021 la première version de Dark Forces Showcase, bibliothèques .NET et Unity pour les formats de fichiers du jeu, accompagnées d'outils.",
+        "en": "The-MAZZTer releases the first version of Dark Forces Showcase on July 17, 2021, .NET and Unity libraries for the game's file formats, along with tools."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2021",
+        "en": "September 2021"
+      },
+      "title": {
+        "fr": "Le Randomizer",
+        "en": "The Randomizer"
+      },
+      "text": {
+        "fr": "La version 0.3 du 26 septembre 2021 ajoute l'outil Randomizer : il remplace ennemis et objets d'un niveau par un assortiment aléatoire, aux emplacements d'origine ou à de nouveaux emplacements.",
+        "en": "Version 0.3 on September 26, 2021 adds the Randomizer tool: it replaces a level's enemies and items with a random assortment, at the original spawn points or at new ones."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2024",
+        "en": "March 2024"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 1.1.3.8 sort le 31 mars 2024 ; c'est la plus récente au 23 octobre 2026. L'outil est aussi utilisable en ligne.",
+        "en": "Version 1.1.3.8 is released on March 31, 2024; it is the latest as of October 23, 2026. The tool can also be used online."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Star Wars: Dark Forces",
+      "url": "https://www.igdb.com/games/star-wars-dark-forces"
+    },
+    {
+      "label": "GitHub — The-MAZZTer/DarkForces",
+      "url": "https://github.com/The-MAZZTer/DarkForces"
+    },
+    {
+      "label": "GitHub — The-MAZZTer/DarkForces (releases)",
+      "url": "https://github.com/The-MAZZTer/DarkForces/releases"
+    },
+    {
+      "label": "Dark Forces Showcase (version web)",
+      "url": "https://the-mazzter.github.io/DarkForcesSite/"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "intro": {
+    "fr": "Scrokkpelago est un jeu de poker conçu pour Archipelago, jouable dans le navigateur.",
+    "en": "Scrokkpelago is a poker game designed for Archipelago, playable in the browser."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Scrokkpelago",
+        "en": "Scrokkpelago"
+      },
+      "text": {
+        "fr": "monkeymanboy publie le 2 octobre 2026 le code de l'APWorld de Scrokkpelago, jouable sur scrokkle.io. On y collecte des cartes pour former des mains de poker sur une grille de mots croisés ; les emplacements sont la première utilisation de chaque carte et la première main de chaque type. Options : tuiles de départ, joker, piège qui vide la grille, jetons d'indice.",
+        "en": "monkeymanboy publishes the code of the Scrokkpelago APWorld on October 2, 2026, playable on scrokkle.io. You collect cards to make poker hands on a crossword-like board; the locations are the first use of each card and the first hand of each type. Options: starting tiles, a joker, a board-clearing trap, hint tokens."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — monkeymanboy/Scrokkpelago.apworld",
+      "url": "https://github.com/monkeymanboy/Scrokkpelago.apworld"
+    },
+    {
+      "label": "scrokkle.io — Scrokkpelago",
+      "url": "https://scrokkle.io/ap/"
+    }
+  ]
+}

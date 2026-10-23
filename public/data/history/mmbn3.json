@@ -1,0 +1,83 @@
+{
+  "intro": {
+    "fr": "Mega Man Battle Network 3 a un randomizer en Python depuis 2017 et fait partie des jeux officiels d'Archipelago depuis 2023.",
+    "en": "Mega Man Battle Network 3 has had a Python randomizer since 2017 and has been one of Archipelago's official games since 2023."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Mega Man Battle Network 3 White et Blue sur Game Boy Advance en 2002.",
+        "en": "Capcom releases Mega Man Battle Network 3 White and Blue on Game Boy Advance in 2002."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2017",
+        "en": "September 2017"
+      },
+      "title": {
+        "fr": "Le randomizer de X Kirby",
+        "en": "X Kirby's randomizer"
+      },
+      "text": {
+        "fr": "Le 6 septembre 2017, X Kirby publie sur New Game Plus un script Python 2 qui randomise les deux versions du jeu. Il reprend un randomizer plus ancien trouvé sur GitHub (prix des codes Numberman, dossiers de puces, données mystère, formations de virus) et y ajoute des multiplicateurs de dégâts et de PV.",
+        "en": "On September 6, 2017, X Kirby posts on New Game Plus a Python 2 script that randomizes both versions of the game. It builds on an older randomizer found on GitHub (Numberman code prizes, chip folders, mystery data, virus formations) and adds damage and HP multipliers."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2022",
+        "en": "December 2022"
+      },
+      "title": {
+        "fr": "Un tracker",
+        "en": "A tracker"
+      },
+      "text": {
+        "fr": "MisterIbis publie en décembre 2022 la première version d'un pack PopTracker pour le randomizer Archipelago du jeu, alors en test ; le pack est mis à jour jusqu'en avril 2025.",
+        "en": "MisterIbis releases the first version of a PopTracker pack for the game's Archipelago randomizer, then in testing, in December 2022; the pack is updated until April 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2023",
+        "en": "June 2023"
+      },
+      "title": {
+        "fr": "Dans Archipelago",
+        "en": "In Archipelago"
+      },
+      "text": {
+        "fr": "Le 29 juin 2023, la contribution de digiholic qui ajoute Mega Man Battle Network 3 est intégrée à Archipelago. Le jeu arrive avec la version 0.4.2, publiée le 1er septembre 2023.",
+        "en": "On June 29, 2023, digiholic's contribution adding Mega Man Battle Network 3 is merged into Archipelago. The game ships with version 0.4.2, released on September 1, 2023."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Mega Man Battle Network 3 White",
+      "url": "https://www.igdb.com/games/mega-man-battle-network-3-white"
+    },
+    {
+      "label": "New Game Plus — Mega Man Battle Network 3 Randomizer (archive)",
+      "url": "http://web.archive.org/web/2019/http://ngplus.net/index.php?/files/file/37-mega-man-battle-network-3-randomizer/"
+    },
+    {
+      "label": "GitHub — MisterIbis/MMBN3_AP_Tracker",
+      "url": "https://github.com/MisterIbis/MMBN3_AP_Tracker"
+    },
+    {
+      "label": "GitHub — Archipelago #1198, Mega Man Battle Network 3: Implement New Game",
+      "url": "https://github.com/ArchipelagoMW/Archipelago/pull/1198"
+    },
+    {
+      "label": "Archipelago — MegaMan Battle Network 3",
+      "url": "https://archipelago.gg/games/MegaMan%20Battle%20Network%203/info/en"
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "intro": {
+    "fr": "The Guardian Legend a un randomizer depuis 2021, celui de fireball87, et un APWorld depuis 2024.",
+    "en": "The Guardian Legend has had a randomizer since 2021, fireball87's, and an APWorld since 2024."
+  },
+  "events": [
+    {
+      "date": "1988",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Compile sort The Guardian Legend sur NES en 1988, un mélange d'exploration à la Zelda et de phases de shoot'em up.",
+        "en": "Compile releases The Guardian Legend on the NES in 1988, a mix of Zelda-like exploration and shoot-'em-up segments."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2021",
+        "en": "January 2021"
+      },
+      "title": {
+        "fr": "GuardianLegendRando",
+        "en": "GuardianLegendRando"
+      },
+      "text": {
+        "fr": "fireball87 crée le 1er janvier 2021 le dépôt GuardianLegendRando, randomizer écrit en PHP. Le générateur en ligne, hébergé sur Synchrocade, produit un patch IPS appliqué dans le navigateur à la ROM du joueur.",
+        "en": "fireball87 creates the GuardianLegendRando repository on January 1, 2021, a randomizer written in PHP. The online generator, hosted on Synchrocade, produces an IPS patch applied in the browser to the player's ROM."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2023",
+        "en": "December 2023"
+      },
+      "title": {
+        "fr": "Portage en Rust",
+        "en": "Rust port"
+      },
+      "text": {
+        "fr": "Le 27 décembre 2023, fireball87 lance un portage partiel en Rust, réalisé avec l'aide d'une IA, destiné à remplacer à terme le projet PHP.",
+        "en": "On December 27, 2023, fireball87 starts a partial port to Rust, made with the help of an AI, meant to eventually supersede the PHP project."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2024",
+        "en": "March 2024"
+      },
+      "title": {
+        "fr": "APWorld",
+        "en": "APWorld"
+      },
+      "text": {
+        "fr": "CoreZer0 publie le 19 mars 2024 la version 0.3.0 de TGL for Archipelago. Armes secondaires, améliorations, Landers rouges et bleus et clés des zones sont mélangés ; les objets des autres jeux prennent l'apparence d'une puce rouge.",
+        "en": "CoreZer0 releases version 0.3.0 of TGL for Archipelago on March 19, 2024. Subweapons, upgrades, red and blue Landers and area keys are shuffled; items from other games look like a red chip."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2026",
+        "en": "January 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.7.0 sort le 29 janvier 2026 ; c'est la plus récente au 23 octobre 2026 (6 versions publiées).",
+        "en": "Version 0.7.0 is released on January 29, 2026; it is the latest as of October 23, 2026 (6 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — The Guardian Legend",
+      "url": "https://www.igdb.com/games/the-guardian-legend"
+    },
+    {
+      "label": "GitHub — fireball87/GuardianLegendRando",
+      "url": "https://github.com/fireball87/GuardianLegendRando"
+    },
+    {
+      "label": "GitHub — fireball87/RustGuardianLegendRando",
+      "url": "https://github.com/fireball87/RustGuardianLegendRando"
+    },
+    {
+      "label": "Synchrocade — Guardian Legend Randomizer",
+      "url": "https://www.synchrocade.com/tgl"
+    },
+    {
+      "label": "GitHub — CoreZer0/TheGuardianLegend-AP",
+      "url": "https://github.com/CoreZer0/TheGuardianLegend-AP"
+    }
+  ]
+}

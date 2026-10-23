@@ -1,0 +1,69 @@
+{
+  "intro": {
+    "fr": "Halo 3, dans sa version The Master Chief Collection, a un mod qui distribue des armes au hasard aux ennemis ; un randomizer Archipelago existe pour la compilation, mais il ne couvre encore que le premier Halo.",
+    "en": "Halo 3, in its Master Chief Collection version, has a mod that hands out random weapons to enemies; an Archipelago randomizer exists for the collection, but it only covers the first Halo so far."
+  },
+  "events": [
+    {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bungie sort Halo 3 le 25 septembre 2007. Le jeu rejoint en 2014 Halo: The Master Chief Collection, de 343 Industries.",
+        "en": "Bungie releases Halo 3 on September 25, 2007. The game joins 343 Industries' Halo: The Master Chief Collection in 2014."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2023",
+        "en": "May 2023"
+      },
+      "title": {
+        "fr": "Armes au hasard",
+        "en": "Random weapons"
+      },
+      "text": {
+        "fr": "Le 12 mai 2023, Yeti publie sur Nexus Mods le Halo 3 NPC Weapon Randomizer : « tout va bien jusqu'à ce qu'un Grunt de cinq centimètres sorte un fusil de précision ».",
+        "en": "On May 12, 2023, Yeti posts the Halo 3 NPC Weapon Randomizer on Nexus Mods: \"It's all fun and games until the 2 inch grunt with the sniper rifle shows up.\""
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "AP Halo: MCC",
+        "en": "AP Halo: MCC"
+      },
+      "text": {
+        "fr": "spencer2585 publie le 9 juin 2026 la première alpha d'un randomizer Archipelago pour The Master Chief Collection, et documente son usage de l'IA. La version 1.2.0 ne randomise que Halo: Combat Evolved (missions, crânes, chapitres) ; Halo 3 n'y est pas encore.",
+        "en": "spencer2585 releases the first alpha of an Archipelago randomizer for The Master Chief Collection on June 9, 2026, documenting how AI is used. Version 1.2.0 only randomizes Halo: Combat Evolved (missions, skulls, chapters); Halo 3 is not in it yet."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Halo 3",
+      "url": "https://www.igdb.com/games/halo-3"
+    },
+    {
+      "label": "IGDB — Halo: The Master Chief Collection",
+      "url": "https://www.igdb.com/games/halo-the-master-chief-collection"
+    },
+    {
+      "label": "Nexus Mods — Halo 3 NPC Weapon Randomzier",
+      "url": "https://www.nexusmods.com/halothemasterchiefcollection/mods/2326"
+    },
+    {
+      "label": "GitHub — spencer2585/MCC-AP",
+      "url": "https://github.com/spencer2585/MCC-AP"
+    },
+    {
+      "label": "GitHub — MCC-AP, Randomization Documentation",
+      "url": "https://github.com/spencer2585/MCC-AP/blob/master/Docs/randomization.md"
+    }
+  ]
+}

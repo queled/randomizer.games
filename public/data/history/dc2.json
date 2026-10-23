@@ -1,0 +1,93 @@
+{
+  "intro": {
+    "fr": "Dark Cloud 2 a eu son randomizer de coffres en 2021, par l'auteur de celui du premier épisode ; un APWorld est en développement depuis 2024.",
+    "en": "Dark Cloud 2 got its chest randomizer in 2021, from the author of the first game's; an APWorld has been in development since 2024."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "LEVEL-5 sort Dark Cloud 2 sur PlayStation 2 en 2002.",
+        "en": "LEVEL-5 releases Dark Cloud 2 on PlayStation 2 in 2002."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2021",
+        "en": "March 2021"
+      },
+      "title": {
+        "fr": "Chest Randomizer",
+        "en": "Chest Randomizer"
+      },
+      "text": {
+        "fr": "Le 13 mars 2021, RSWordofWind, auteur du randomizer de coffres du premier Dark Cloud, présente sur Reddit celui de Dark Cloud 2, premier mod de l'auteur pour ce jeu. Il fonctionne sur l'émulateur PCSX2.",
+        "en": "On March 13, 2021, RSWordofWind, author of the first Dark Cloud's chest randomizer, presents Dark Cloud 2's on Reddit, the author's first mod for this game. It runs on the PCSX2 emulator."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2024",
+        "en": "April 2024"
+      },
+      "title": {
+        "fr": "DC2AP",
+        "en": "DC2AP"
+      },
+      "text": {
+        "fr": "ArsonAssassin crée le dépôt DC2AP, l'APWorld de Dark Cloud 2.",
+        "en": "ArsonAssassin creates the DC2AP repository, Dark Cloud 2's APWorld."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2024",
+        "en": "September 2024"
+      },
+      "title": {
+        "fr": "Première préversion",
+        "en": "First pre-release"
+      },
+      "text": {
+        "fr": "Publication de la préversion 0.0.1.",
+        "en": "Pre-release 0.0.1 is published."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La préversion 0.1.0.0 sort le 18 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (5 versions publiées, toutes des préversions).",
+        "en": "Pre-release 0.1.0.0 comes out on October 18, 2026; it is the latest as of October 23, 2026 (5 versions released, all pre-releases)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Dark Cloud 2",
+      "url": "https://www.igdb.com/games/dark-cloud-2"
+    },
+    {
+      "label": "Reddit — [DC2] Introducing: Dark Cloud 2 Chest Randomizer!",
+      "url": "https://www.reddit.com/r/DarkCloud/comments/m4f253/dc2_introducing_dark_cloud_2_chest_randomizer/"
+    },
+    {
+      "label": "GitHub — ArsonAssassin/DC2AP",
+      "url": "https://github.com/ArsonAssassin/DC2AP"
+    },
+    {
+      "label": "GitHub — ArsonAssassin/DC2AP (releases)",
+      "url": "https://github.com/ArsonAssassin/DC2AP/releases"
+    }
+  ]
+}

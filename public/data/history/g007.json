@@ -1,0 +1,79 @@
+{
+  "intro": {
+    "fr": "GoldenEye 007 a son randomizer depuis 2017, Janus ; en 2026, un APWorld l'amène dans Archipelago.",
+    "en": "GoldenEye 007 has had a randomizer since 2017, Janus; in 2026, an APWorld brings it into Archipelago."
+  },
+  "events": [
+    {
+      "date": "1997",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Rare sort GoldenEye 007 sur Nintendo 64 en 1997.",
+        "en": "Rare releases GoldenEye 007 on Nintendo 64 in 1997."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2017",
+        "en": "July 2017"
+      },
+      "title": {
+        "fr": "Janus",
+        "en": "Janus"
+      },
+      "text": {
+        "fr": "Le 13 juillet 2017, K1lo présente sur le forum ShootersForever Janus (référence au film), un outil qui crée une copie randomisée de la ROM : armes des ennemis, armes de départ, ennemis promus officiers, méchants de la saga qui surgissent en cours de partie, cartes d'accès redistribuées dans Facility et Bunker 2.",
+        "en": "On July 13, 2017, K1lo presents Janus (a reference to the film) on the ShootersForever forum, a tool that creates a randomized copy of the ROM: enemy weapons, starting weapons, enemies promoted to officers, Bond villains popping up mid-game, keycards redistributed in Facility and Bunker 2."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Random Eye",
+        "en": "Random Eye"
+      },
+      "text": {
+        "fr": "La liste rando-list recense aussi Random Eye, « the true randomizer », de Murk-17, sur ModDB.",
+        "en": "The rando-list catalog also lists Murk-17's Random Eye, \"the true randomizer\", on ModDB."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2026",
+        "en": "March 2026"
+      },
+      "title": {
+        "fr": "APWorld",
+        "en": "APWorld"
+      },
+      "text": {
+        "fr": "NotFamilyJules publie le 27 mars 2026 la version alpha 0.1 de l'APWorld de GoldenEye 007, faute que quelqu'un l'ait déjà fait. Missions, armes, gadgets, clés, chars et codes de triche deviennent des objets ; objectifs, fins de mission et objets ramassés, des emplacements. Il se joue sur BizHawk.",
+        "en": "NotFamilyJules releases alpha 0.1 of the GoldenEye 007 APWorld on March 27, 2026, since no one else had done it. Missions, weapons, gadgets, keys, tanks and cheats become items; objectives, mission clears and pickups, locations. It runs on BizHawk."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — GoldenEye 007",
+      "url": "https://www.igdb.com/games/goldeneye-007"
+    },
+    {
+      "label": "ShootersForever — Tool for randomising Goldeneye",
+      "url": "http://www.shootersforever.com/forums_message_boards/viewtopic.php?t=7267"
+    },
+    {
+      "label": "rando-list — James Bond",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/James_Bond.yml"
+    },
+    {
+      "label": "GitHub — NotFamilyJules/goldeneye_ap",
+      "url": "https://github.com/NotFamilyJules/goldeneye_ap"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "intro": {
+    "fr": "Le jeu du film Bob l'éponge se randomise avec l'outil intégré à Industrial Park, l'éditeur de la communauté Heavy Iron Modding.",
+    "en": "The SpongeBob SquarePants Movie game is randomized with the tool built into Industrial Park, the Heavy Iron Modding community's editor."
+  },
+  "events": [
+    {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Heavy Iron Studios sort The SpongeBob SquarePants Movie sur GameCube, Xbox et PlayStation 2 en 2004, édité par THQ.",
+        "en": "Heavy Iron Studios releases The SpongeBob SquarePants Movie on GameCube, Xbox and PlayStation 2 in 2004, published by THQ."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2018",
+        "en": "May 2018"
+      },
+      "title": {
+        "fr": "Industrial Park",
+        "en": "Industrial Park"
+      },
+      "text": {
+        "fr": "igorseabra4 publie les premières préversions d'Industrial Park, éditeur des archives HIP/HOP des jeux Heavy Iron, à commencer par Battle for Bikini Bottom. La prise en charge du jeu du film s'étoffe au printemps 2019.",
+        "en": "igorseabra4 publishes the first previews of Industrial Park, an editor for the HIP/HOP archives of Heavy Iron games, starting with Battle for Bikini Bottom. Support for the Movie game grows in spring 2019."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2019",
+        "en": "July 2019"
+      },
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "À partir de juillet 2019, les notes de version enchaînent les mises à jour de l'outil Randomizer d'Industrial Park : téléporteurs, ennemis, puis en août personnage aléatoire à chaque apparition. Selon le wiki Heavy Iron Modding, il fonctionne sur Battle for Bikini Bottom, Scooby-Doo: Night of 100 Frights et le jeu du film, au mieux sur GameCube.",
+        "en": "From July 2019, the release notes pile up updates to Industrial Park's Randomizer tool: warps, enemies, then in August a random character on every spawn. According to the Heavy Iron Modding wiki, it works on Battle for Bikini Bottom, Scooby-Doo: Night of 100 Frights and the Movie game, best on GameCube."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2026",
+        "en": "March 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Industrial Park v2026.03.06 sort le 6 mars 2026 ; c'est la plus récente au 23 octobre 2026.",
+        "en": "Industrial Park v2026.03.06 is released on March 6, 2026; it is the latest as of October 23, 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — The SpongeBob SquarePants Movie",
+      "url": "https://www.igdb.com/games/the-spongebob-squarepants-movie"
+    },
+    {
+      "label": "GitHub — igorseabra4/IndustrialPark",
+      "url": "https://github.com/igorseabra4/IndustrialPark"
+    },
+    {
+      "label": "GitHub — igorseabra4/IndustrialPark (releases)",
+      "url": "https://github.com/igorseabra4/IndustrialPark/releases"
+    },
+    {
+      "label": "Heavy Iron Modding — Randomizer",
+      "url": "https://heavyironmodding.org/wiki/Randomizer"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Ys VIII: Lacrimosa of Dana se joue en multiworld Archipelago depuis 2026, grâce à un APWorld communautaire.",
+    "en": "Ys VIII: Lacrimosa of Dana has been playable in an Archipelago multiworld since 2026, through a community APWorld."
+  },
+  "events": [
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nihon Falcom sort Ys VIII: Lacrimosa of Dana en 2016.",
+        "en": "Nihon Falcom releases Ys VIII: Lacrimosa of Dana in 2016."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "junglechief87 publie le 11 mai 2026 la bêta 0.8.0 de l'APWorld, pour la version Steam. Membres de l'équipe, naufragés, objets et certains événements deviennent des objets ; les épisodes du passé de Dana sont convertis en objets.",
+        "en": "junglechief87 releases the 0.8.0 beta of the APWorld on May 11, 2026, for the Steam version. Party members, castaways, items and some events become items; Dana's past episodes are converted into items."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La bêta 1.2.1 sort le 29 juillet 2026 ; c'est la plus récente au 23 octobre 2026 (29 versions publiées en moins de trois mois).",
+        "en": "The 1.2.1 beta comes out on July 29, 2026; it is the latest as of October 23, 2026 (29 versions released in under three months)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Ys VIII: Lacrimosa of Dana",
+      "url": "https://www.igdb.com/games/ys-viii-lacrimosa-of-dana"
+    },
+    {
+      "label": "GitHub — junglechief87/Ys-8-AP-World",
+      "url": "https://github.com/junglechief87/Ys-8-AP-World"
+    },
+    {
+      "label": "GitHub — junglechief87/Ys-8-AP-World (releases)",
+      "url": "https://github.com/junglechief87/Ys-8-AP-World/releases"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "ANTONBLAST se joue en multiworld Archipelago depuis 2026 grâce à un mod communautaire.",
+    "en": "ANTONBLAST has been playable in an Archipelago multiworld since 2026 through a community mod."
+  },
+  "events": [
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Summitsphere sort ANTONBLAST en 2024.",
+        "en": "Summitsphere releases ANTONBLAST in 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Le mod Archipelago",
+        "en": "The Archipelago mod"
+      },
+      "text": {
+        "fr": "Haeromax publie le 16 juin 2026 sur GameBanana ANTONBLAST Archipelago, mod qui se joue en multiworld ou seul comme randomizer. Les crédits citent aussi plusieurs contributeurs et l'équipe de développement du jeu.",
+        "en": "Haeromax posts ANTONBLAST Archipelago on GameBanana on June 16, 2026, a mod played in a multiworld or alone as a randomizer. The credits also name several contributors and the game's development team."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Refonte",
+        "en": "Overhaul"
+      },
+      "text": {
+        "fr": "Une mise à jour de refonte suit début août 2026, avec le client publié sur GitHub ; c'est la plus récente au 23 octobre 2026.",
+        "en": "An overhaul update follows in early August 2026, with the client published on GitHub; it is the latest as of October 23, 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Antonblast",
+      "url": "https://www.igdb.com/games/antonblast"
+    },
+    {
+      "label": "GameBanana — ANTONBLAST Archipelago",
+      "url": "https://gamebanana.com/mods/686523"
+    },
+    {
+      "label": "GitHub — ishaeromax/AP-Antonblast-Client",
+      "url": "https://github.com/ishaeromax/AP-Antonblast-Client"
+    }
+  ]
+}

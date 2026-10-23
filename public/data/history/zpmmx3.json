@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Zero Project est un hack de Mega Man X3. La liste rando-list lui rattache le randomizer de Mega Man X3 publié par vinheim3 en 2022, qui accepte aussi une ROM « Zero Mod ».",
+    "en": "Zero Project is a Mega Man X3 hack. The rando-list catalog links it to the Mega Man X3 randomizer released by vinheim3 in 2022, which also accepts a \"Zero Mod\" ROM."
+  },
+  "events": [
+    {
+      "date": "1995",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Mega Man X3 sort sur Super Nintendo en 1995, développé par Minakuchi Engineering pour Capcom.",
+        "en": "Mega Man X3 comes out on Super Nintendo in 1995, developed by Minakuchi Engineering for Capcom."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2022",
+        "en": "June 2022"
+      },
+      "title": {
+        "fr": "Mega Man X3 Item Randomizer",
+        "en": "Mega Man X3 Item Randomizer"
+      },
+      "text": {
+        "fr": "vinheim3 ajoute le 25 juin 2022 une bêta du randomizer de Mega Man X3 à son dépôt de randomizers, page web à ouvrir en local. Il accepte une ROM normale ou une ROM « Zero Mod » et propose aussi PV et faiblesses des boss, ennemis et couleurs aléatoires. Dernière mise à jour en août 2022.",
+        "en": "vinheim3 adds a beta of the Mega Man X3 randomizer to their randomizers repository on June 25, 2022, a web page to open locally. It accepts a regular ROM or a \"Zero Mod\" ROM and also offers random boss HP and weaknesses, enemies and colours. Last updated in August 2022."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Mega Man X3",
+      "url": "https://www.igdb.com/games/mega-man-x3"
+    },
+    {
+      "label": "GitHub — vinheim3/randomizers",
+      "url": "https://github.com/vinheim3/randomizers"
+    },
+    {
+      "label": "GitHub — vinheim3/randomizers, megaManX3.html",
+      "url": "https://github.com/vinheim3/randomizers/blob/main/megaManX3.html"
+    },
+    {
+      "label": "rando-list — Mega Man",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Mega_Man.yml"
+    }
+  ]
+}

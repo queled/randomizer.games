@@ -1,0 +1,102 @@
+{
+  "intro": {
+    "fr": "Elden Ring a eu ses premiers randomizers quelques semaines après sa sortie. Le plus utilisé, celui de thefifthmatt, est passé à Archipelago en 2026.",
+    "en": "Elden Ring got its first randomizers within weeks of its release. The most widely used one, by thefifthmatt, moved to Archipelago in 2026."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "FromSoftware sort Elden Ring le 25 février 2022.",
+        "en": "FromSoftware releases Elden Ring on February 25, 2022."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2022",
+        "en": "March 2022"
+      },
+      "title": {
+        "fr": "Premiers randomizers",
+        "en": "First randomizers"
+      },
+      "text": {
+        "fr": "Le 10 mars 2022, Yui publie sur Nexus Mods un randomiseur d'objets et de paramètres. Le 28 mars, thefifthmatt, auteur des randomizers de Dark Souls III et de Sekiro, publie l'Item and Enemy Randomizer, qui mélange objets, boutiques, boss et ennemis, objets clés compris.",
+        "en": "On March 10, 2022, Yui posts an item and param randomiser on Nexus Mods. On March 28, thefifthmatt, author of the Dark Souls III and Sekiro randomizers, releases the Item and Enemy Randomizer, which shuffles items, shops, bosses and enemies, key items included."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Invocations et butin",
+        "en": "Summons and loot"
+      },
+      "text": {
+        "fr": "D'autres mods suivent : Summon Randomizer de king bore haha (mai 2022) pour les cendres d'esprit, puis Elden Loot de Heinarc (décembre 2022) pour le butin courant.",
+        "en": "Other mods follow: king bore haha's Summon Randomizer (May 2022) for spirit ashes, then Heinarc's Elden Loot (December 2022) for common loot."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2023",
+        "en": "April 2023"
+      },
+      "title": {
+        "fr": "Fog Gate Randomizer",
+        "en": "Fog Gate Randomizer"
+      },
+      "text": {
+        "fr": "Le 1er avril 2023, thefifthmatt publie le Fog Gate Randomizer : chaque brume mène à une autre brume tirée au hasard. Il fait suite à ses versions pour Dark Souls (2019) et Dark Souls III (2020), avec plus de portes et d'options que les deux réunies.",
+        "en": "On April 1, 2023, thefifthmatt releases the Fog Gate Randomizer: each fog gate leads to another one picked at random. It follows the author's versions for Dark Souls (2019) and Dark Souls III (2020), with more gates and options than both combined."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "Le 12 octobre 2026, gracenotes publie dans le dépôt SoulsRandomizers la version 0.1.0 de l'Elden Ring Archipelago Randomizer. La 0.1.3 suit le 20 octobre. Le randomizer de Nexus Mods, lui, en est à la version 0.12.2.",
+        "en": "On October 12, 2026, gracenotes publishes version 0.1.0 of the Elden Ring Archipelago Randomizer in the SoulsRandomizers repository. Version 0.1.3 follows on October 20. The Nexus Mods randomizer, for its part, is at version 0.12.2."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Elden Ring",
+      "url": "https://www.igdb.com/games/elden-ring"
+    },
+    {
+      "label": "Nexus Mods — Item and param randomiser",
+      "url": "https://www.nexusmods.com/eldenring/mods/97"
+    },
+    {
+      "label": "Nexus Mods — Elden Ring Item and Enemy Randomizer",
+      "url": "https://www.nexusmods.com/eldenring/mods/428"
+    },
+    {
+      "label": "Nexus Mods — Summon Randomizer",
+      "url": "https://www.nexusmods.com/eldenring/mods/982"
+    },
+    {
+      "label": "Nexus Mods — Elden Loot",
+      "url": "https://www.nexusmods.com/eldenring/mods/2683"
+    },
+    {
+      "label": "Nexus Mods — Elden Ring Fog Gate Randomizer",
+      "url": "https://www.nexusmods.com/eldenring/mods/3295"
+    },
+    {
+      "label": "GitHub — thefifthmatt/SoulsRandomizers (releases)",
+      "url": "https://github.com/thefifthmatt/SoulsRandomizers/releases"
+    }
+  ]
+}

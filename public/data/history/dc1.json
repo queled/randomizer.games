@@ -1,0 +1,115 @@
+{
+  "intro": {
+    "fr": "Le randomizer de Dark Cloud naît en 2020 de l'envie d'un speedrunner de pimenter les courses ; il est devenu en 2025 un randomizer Archipelago à part entière.",
+    "en": "The Dark Cloud randomizer was born in 2020 from a speedrunner's wish to spice up races; in 2025 it became a full Archipelago randomizer."
+  },
+  "events": [
+    {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "LEVEL-5 sort Dark Cloud sur PlayStation 2 en 2000.",
+        "en": "LEVEL-5 releases Dark Cloud on PlayStation 2 in 2000."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2020",
+        "en": "March 2020"
+      },
+      "title": {
+        "fr": "Chest Randomizer",
+        "en": "Chest Randomizer"
+      },
+      "text": {
+        "fr": "Le 6 mars 2020, RSWordofWind publie sur Reddit un randomizer de coffres pour émulateur. Speedrunneur du jeu, son auteur voulait un vrai randomizer pour les courses ; les valeurs du jeu ont été trouvées avec Cheat Engine sur PCSX2.",
+        "en": "On March 6, 2020, RSWordofWind posts a chest randomizer for emulator on Reddit. Its author, a speedrunner of the game, wanted a true randomizer for races; the game's values were found with Cheat Engine on PCSX2."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2020",
+        "en": "April 2020"
+      },
+      "title": {
+        "fr": "Mise à jour et ennemis",
+        "en": "Update and enemies"
+      },
+      "text": {
+        "fr": "La version 1.02 du 14 avril randomise aussi les étages cachés, avec six objets inutilisés du jeu. Le 22 avril suit un randomizer d'ennemis, réservé à la version NTSC-U.",
+        "en": "Version 1.02 on April 14 also randomizes the back floors, with six unused items from the game. An enemy randomizer follows on April 22, for the NTSC-U version only."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2025",
+        "en": "June 2025"
+      },
+      "title": {
+        "fr": "DC1AP",
+        "en": "DC1AP"
+      },
+      "text": {
+        "fr": "Lizardman175 crée le dépôt DC1AP, randomizer de Dark Cloud pour Archipelago.",
+        "en": "Lizardman175 creates the DC1AP repository, a Dark Cloud randomizer for Archipelago."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2025",
+        "en": "September 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de DC1AP 0.1.0 : un fichier .apworld et un client qui se connecte au jeu lancé sur PCSX2.",
+        "en": "DC1AP 0.1.0 is released: an .apworld file and a client that connects to the game running on PCSX2."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.6.1 sort le 11 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (28 versions publiées).",
+        "en": "Version 0.6.1 is released on October 11, 2026; it is the latest as of October 23, 2026 (28 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Dark Cloud",
+      "url": "https://www.igdb.com/games/dark-cloud"
+    },
+    {
+      "label": "Reddit — Dark Cloud 1 Chest Randomizer! (for emulator)",
+      "url": "https://www.reddit.com/r/DarkCloud/comments/fehbj6/dark_cloud_1_chest_randomizer_for_emulator/"
+    },
+    {
+      "label": "Reddit — Dark Cloud Chest Randomizer V.1.02 update",
+      "url": "https://www.reddit.com/r/DarkCloud/comments/g141j0/dark_cloud_chest_randomizer_v102_update_upcoming/"
+    },
+    {
+      "label": "Reddit — Dark Cloud 1 Enemy Randomizer! (Emulator)",
+      "url": "https://www.reddit.com/r/DarkCloud/comments/g6aqab/dark_cloud_1_enemy_randomizer_emulator/"
+    },
+    {
+      "label": "GitHub — Lizardman175/DC1AP",
+      "url": "https://github.com/Lizardman175/DC1AP"
+    },
+    {
+      "label": "GitHub — Lizardman175/DC1AP (releases)",
+      "url": "https://github.com/Lizardman175/DC1AP/releases"
+    }
+  ]
+}

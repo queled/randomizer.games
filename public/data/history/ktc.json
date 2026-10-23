@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Kingdom Two Crowns a un mod Archipelago depuis 2025, encore en préversion.",
+    "en": "Kingdom Two Crowns has had an Archipelago mod since 2025, still in pre-release."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Noio et Coatsink sortent Kingdom Two Crowns en 2018, édité par Raw Fury.",
+        "en": "Noio and Coatsink release Kingdom Two Crowns in 2018, published by Raw Fury."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2025",
+        "en": "November 2025"
+      },
+      "title": {
+        "fr": "Première préversion",
+        "en": "First pre-release"
+      },
+      "text": {
+        "fr": "Catalyss publie le 2 novembre 2025 la première préversion du mod. Coffres, gemmes, portails détruits, ermites et montures sont des emplacements ; améliorations du château et des murs, âges de pierre et de fer, statues, ermites et montures, des objets. Le but est de vaincre la Cupidité sur toutes les îles. Faute de chargeur de mods, l'installation passe par BepInEx.",
+        "en": "Catalyss publishes the mod's first pre-release on November 2, 2025. Chests, gems, destroyed portals, hermits and mounts are locations; castle and wall upgrades, stone and iron ages, statues, hermits and mounts are items. The goal is to defeat the Greed on every island. With no mod loader available, installation goes through BepInEx."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Kingdom Two Crowns",
+      "url": "https://www.igdb.com/games/kingdom-two-crowns"
+    },
+    {
+      "label": "GitHub — Catalyss/Archipelago-Kingdom2Crown",
+      "url": "https://github.com/Catalyss/Archipelago-Kingdom2Crown"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "intro": {
+    "fr": "Pokémon HeartGold et SoulSilver ont reçu en août 2026 deux APWorlds indépendants, à quelques jours d'écart.",
+    "en": "Pokémon HeartGold and SoulSilver got two independent APWorlds in August 2026, a few days apart."
+  },
+  "events": [
+    {
+      "date": "2009",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Game Freak sort Pokémon HeartGold et SoulSilver sur Nintendo DS en 2009, remakes d'Or et Argent.",
+        "en": "Game Freak releases Pokémon HeartGold and SoulSilver on Nintendo DS in 2009, remakes of Gold and Silver."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "L'APWorld de SingeKiller",
+        "en": "SingeKiller's APWorld"
+      },
+      "text": {
+        "fr": "SingeKiller publie le 10 août 2026 la version 0.1.0 d'un APWorld pour la version américaine : rencontres sauvages, équipes des dresseurs, évolutions, statistiques, objets au sol et cachés, cadeaux, CT et CS sont randomisables. Son README, en français, précise l'usage d'une IA pour les tests, relus à la main.",
+        "en": "SingeKiller releases version 0.1.0 of an APWorld for the US version on August 10, 2026: wild encounters, trainer teams, evolutions, stats, ground and hidden items, gifts, TMs and HMs can be randomized. Its README, in French, states that AI was used for testing, reviewed by hand."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "L'APWorld de ljtpetersen",
+        "en": "ljtpetersen's APWorld"
+      },
+      "text": {
+        "fr": "Le 23 août 2026, ljtpetersen publie la version 0.0.1 d'une autre implémentation Archipelago des deux jeux.",
+        "en": "On August 23, 2026, ljtpetersen releases version 0.0.1 of another Archipelago implementation of both games."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernières versions",
+        "en": "Latest releases"
+      },
+      "text": {
+        "fr": "SingeKiller publie la 0.2.5 le 18 septembre et ljtpetersen la 0.0.8 le 22 septembre 2026, les plus récentes au 23 octobre 2026.",
+        "en": "SingeKiller releases 0.2.5 on September 18 and ljtpetersen 0.0.8 on September 22, 2026, the latest as of October 23, 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Pokémon HeartGold Version",
+      "url": "https://www.igdb.com/games/pokemon-heartgold-version"
+    },
+    {
+      "label": "GitHub — SingeKiller/Pok-HeartGold_Apworld",
+      "url": "https://github.com/SingeKiller/Pok-HeartGold_Apworld"
+    },
+    {
+      "label": "GitHub — ljtpetersen/hgss_archipelago",
+      "url": "https://github.com/ljtpetersen/hgss_archipelago"
+    },
+    {
+      "label": "GitHub — ljtpetersen/hgss_archipelago (releases)",
+      "url": "https://github.com/ljtpetersen/hgss_archipelago/releases"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "intro": {
+    "fr": "Shellipelago est un petit jeu conçu pour Archipelago : sa seule raison d'être est de trouver des emplacements pour les autres joueurs du multiworld.",
+    "en": "Shellipelago is a small game designed for Archipelago: its only purpose is to find locations for the other players in the multiworld."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Premières versions",
+        "en": "First releases"
+      },
+      "text": {
+        "fr": "ethentianknight crée le dépôt le 22 juin 2026 et publie le même jour la première version ; une dizaine suivent en trois semaines. Le jeu se joue dans le navigateur, sur itch.io ou sur un miroir.",
+        "en": "ethentianknight creates the repository on June 22, 2026 and publishes the first version the same day; about ten more follow within three weeks. The game runs in the browser, on itch.io or on a mirror."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Plando",
+        "en": "Plando"
+      },
+      "text": {
+        "fr": "La version 1.15 du 17 septembre 2026 ajoute la prise en charge du plando ; c'est la plus récente au 23 octobre 2026 (13 versions publiées).",
+        "en": "Version 1.15 on September 17, 2026 adds plando support; it is the latest as of October 23, 2026 (13 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — ethentianknight/shellipelago",
+      "url": "https://github.com/ethentianknight/shellipelago"
+    },
+    {
+      "label": "GitHub — ethentianknight/shellipelago (releases)",
+      "url": "https://github.com/ethentianknight/shellipelago/releases"
+    },
+    {
+      "label": "itch.io — Shellipelago",
+      "url": "https://dragonsidestudios.itch.io/shellipelago"
+    }
+  ]
+}

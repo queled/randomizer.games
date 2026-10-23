@@ -1,0 +1,93 @@
+{
+  "intro": {
+    "fr": "Civilization IV génère déjà ses cartes au hasard, et sa communauté a écrit de nombreux scripts de cartes ; un mod le relie aussi à Archipelago depuis 2026.",
+    "en": "Civilization IV already generates its maps at random, and its community has written many map scripts; since 2026 a mod also connects it to Archipelago."
+  },
+  "events": [
+    {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Firaxis Games sort Sid Meier's Civilization IV en 2005.",
+        "en": "Firaxis Games releases Sid Meier's Civilization IV in 2005."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Scripts de cartes",
+        "en": "Map scripts"
+      },
+      "text": {
+        "fr": "La liste rando-list recense pour le jeu les scripts de cartes du forum CivFanatics ainsi que les générateurs de cartes aléatoires de DragonEmperor et de low.",
+        "en": "The rando-list catalog lists the map scripts of the CivFanatics forum for the game, along with the random map generators by DragonEmperor and low."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Le mod Archipelago",
+        "en": "The Archipelago mod"
+      },
+      "text": {
+        "fr": "VincentBorchardt crée le dépôt Civ4-Archipelago-Mod, « une tentative de mod pour Civ4 qui intègre les connexions Archipelago ».",
+        "en": "VincentBorchardt creates the Civ4-Archipelago-Mod repository, \"an attempt at making a mod for Civ4 that integrates Archipelago connections\"."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Première alpha",
+        "en": "First alpha"
+      },
+      "text": {
+        "fr": "Publication de la version 0.1 Alpha Test.",
+        "en": "Version 0.1 Alpha Test is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version Alpha 0.3 sort le 18 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (5 versions publiées).",
+        "en": "Alpha version 0.3 is released on October 18, 2026; it is the latest as of October 23, 2026 (5 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Sid Meier's Civilization IV",
+      "url": "https://www.igdb.com/games/sid-meier-s-civilization-iv"
+    },
+    {
+      "label": "rando-list — Civilization",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Civilization.yml"
+    },
+    {
+      "label": "GitHub — VincentBorchardt/Civ4-Archipelago-Mod",
+      "url": "https://github.com/VincentBorchardt/Civ4-Archipelago-Mod"
+    },
+    {
+      "label": "GitHub — VincentBorchardt/Civ4-Archipelago-Mod (releases)",
+      "url": "https://github.com/VincentBorchardt/Civ4-Archipelago-Mod/releases"
+    }
+  ]
+}

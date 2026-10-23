@@ -1,0 +1,97 @@
+{
+  "intro": {
+    "fr": "Doom Eternal a eu son randomizer d'ennemis dès 2021 et se joue en multiworld Archipelago depuis 2026.",
+    "en": "Doom Eternal got its enemy randomizer as early as 2021 and has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "id Software sort Doom Eternal en 2020.",
+        "en": "id Software releases Doom Eternal in 2020."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2021",
+        "en": "February 2021"
+      },
+      "title": {
+        "fr": "Enemy Randomizer",
+        "en": "Enemy Randomizer"
+      },
+      "text": {
+        "fr": "Le 20 février 2021, proteh publie sur Nexus Mods un randomizer qui change chaque rencontre du jeu de base et du DLC, rencontres secrètes et Slayer Gates comprises, à chaque partie, rechargement ou nouvel essai.",
+        "en": "On February 20, 2021, proteh posts on Nexus Mods a randomizer that changes every encounter in the base game and the DLC, secret encounters and Slayer Gates included, on every playthrough, reload or retry."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2021",
+        "en": "December 2021"
+      },
+      "title": {
+        "fr": "Mode Horde",
+        "en": "Horde Mode"
+      },
+      "text": {
+        "fr": "Le 22 décembre 2021, Konvaz publie Horde Mode Randomizer, qui randomise les apparitions de démons du mode Horde.",
+        "en": "On December 22, 2021, Konvaz posts Horde Mode Randomizer, which randomizes the demon spawns of Horde Mode."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "DOOM Eternal Archipelago",
+        "en": "DOOM Eternal Archipelago"
+      },
+      "text": {
+        "fr": "snowzzrra publie le 8 juillet 2026 une première pré-alpha de DOOM Eternal Archipelago. Le mod couvre les 13 missions de base ou les 19 de la saga complète, avec 437 emplacements (secrets, Slayer Gates, défis…) et 132 types d'objets (armes, mods, runes, améliorations de l'armure…).",
+        "en": "snowzzrra releases a first pre-alpha of DOOM Eternal Archipelago on July 8, 2026. The mod covers the 13 base missions or the 19 of the full saga, with 437 locations (secrets, Slayer Gates, challenges…) and 132 item types (weapons, mods, runes, suit upgrades…)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Bêta",
+        "en": "Beta"
+      },
+      "text": {
+        "fr": "La bêta 0.6.7 sort le 23 octobre 2026 (27 versions publiées).",
+        "en": "Beta 0.6.7 comes out on October 23, 2026 (27 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Doom Eternal",
+      "url": "https://www.igdb.com/games/doom-eternal"
+    },
+    {
+      "label": "Nexus Mods — Enemy Randomizer",
+      "url": "https://www.nexusmods.com/doometernal/mods/170"
+    },
+    {
+      "label": "Nexus Mods — Horde Mode Randomizer",
+      "url": "https://www.nexusmods.com/doometernal/mods/924"
+    },
+    {
+      "label": "GitHub — snowzzrra/DoomEternal-AP-Mod",
+      "url": "https://github.com/snowzzrra/DoomEternal-AP-Mod"
+    },
+    {
+      "label": "GitHub — snowzzrra/DoomEternal-AP-Mod (releases)",
+      "url": "https://github.com/snowzzrra/DoomEternal-AP-Mod/releases"
+    }
+  ]
+}

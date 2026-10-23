@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Le Willow de la NES a son randomizer depuis 2020, une page web de vinheim3.",
+    "en": "The NES Willow has had a randomizer since 2020, a web page by vinheim3."
+  },
+  "events": [
+    {
+      "date": "1989",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Willow sur NES en 1989, d'après le film.",
+        "en": "Capcom releases Willow on the NES in 1989, based on the film."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2020",
+        "en": "November 2020"
+      },
+      "title": {
+        "fr": "Willow Randomizer",
+        "en": "Willow Randomizer"
+      },
+      "text": {
+        "fr": "vinheim3 publie le 19 novembre 2020 le Willow Randomizer, page web à ouvrir en local. Il mélange les objets avec une logique et un journal de spoiler, et propose le lieu de départ, l'ocarina au départ, un multiplicateur d'expérience, des déplacements rapides ou le mode « un coup, un mort ». Dernière mise à jour en décembre 2020.",
+        "en": "vinheim3 releases the Willow Randomizer on November 19, 2020, a web page to open locally. It shuffles items with logic and a spoiler log, and offers the starting location, a starting ocarina, an experience multiplier, fast movement or one-hit KO mode. Last updated in December 2020."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Willow",
+      "url": "https://www.igdb.com/games/willow--1"
+    },
+    {
+      "label": "GitHub — vinheim3/randomizers, willow.html",
+      "url": "https://github.com/vinheim3/randomizers/blob/main/willow.html"
+    },
+    {
+      "label": "rando-list — Willow",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Willow.yml"
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "intro": {
+    "fr": "Dwarf Fortress génère déjà son monde au hasard ; ses joueurs l'ont poussé plus loin avec des scripts de création aléatoire, puis l'ont relié à Archipelago en 2026.",
+    "en": "Dwarf Fortress already generates its world at random; its players pushed that further with random creation scripts, then connected it to Archipelago in 2026."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Février 2011",
+        "en": "February 2011"
+      },
+      "title": {
+        "fr": "Plantes aléatoires",
+        "en": "Random plants"
+      },
+      "text": {
+        "fr": "Le 2 février 2011, sphal publie sur le Dwarf Fortress File Depot un script qui crée pour chaque monde 70 à 80 plantes aléatoires, comestibles, brassables, tinctoriales ou parfois toxiques.",
+        "en": "On February 2, 2011, sphal posts a script on the Dwarf Fortress File Depot that creates 70 to 80 random plants for each world, edible, brewable, dye-yielding or sometimes poisonous."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Sur Steam",
+        "en": "On Steam"
+      },
+      "text": {
+        "fr": "Kitfox Games publie le 6 décembre 2022 la version Steam de Dwarf Fortress, jeu de Bay 12 Games.",
+        "en": "Kitfox Games releases the Steam version of Bay 12 Games' Dwarf Fortress on December 6, 2022."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Dwarfipelago",
+        "en": "Dwarfipelago"
+      },
+      "text": {
+        "fr": "La version 1.0.0 de Dwarfipelago sort le 2 juin 2026. Le mod, qui passe par DFHack, envoie des objets aux autres joueurs quand la forteresse atteint des jalons économiques et de production, et reçoit en échange marchandises, ressources et pièges.",
+        "en": "Dwarfipelago 1.0.0 is released on June 2, 2026. The mod, built on DFHack, sends items to other players when the fortress reaches economic and production milestones, and receives trade goods, resources and traps in return."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Version 2.0",
+        "en": "Version 2.0"
+      },
+      "text": {
+        "fr": "Avec la 2.0.0 du 8 septembre 2026, la boutique devient une vraie caravane d'une civilisation « Archipelago ». La 2.1.2 sort le 23 octobre 2026 (18 versions publiées).",
+        "en": "With 2.0.0 on September 8, 2026, the shop becomes a real caravan from an \"Archipelago\" civilization. Version 2.1.2 comes out on October 23, 2026 (18 versions released)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Autres scripts",
+        "en": "Other scripts"
+      },
+      "text": {
+        "fr": "La liste rando-list recense aussi les « Random Raw Scripts » du forum Bay 12.",
+        "en": "The rando-list catalog also lists the \"Random Raw Scripts\" from the Bay 12 forum."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Dwarf Fortress File Depot — Random plant creation script",
+      "url": "https://dffd.bay12games.com/file.php?id=3752"
+    },
+    {
+      "label": "IGDB — Dwarf Fortress",
+      "url": "https://www.igdb.com/games/dwarf-fortress--1"
+    },
+    {
+      "label": "GitHub — EthanTheBrave/Dwarfipelago",
+      "url": "https://github.com/EthanTheBrave/Dwarfipelago"
+    },
+    {
+      "label": "GitHub — EthanTheBrave/Dwarfipelago (releases)",
+      "url": "https://github.com/EthanTheBrave/Dwarfipelago/releases"
+    },
+    {
+      "label": "rando-list — Slaves to Armok",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Slaves_to_Armok.yml"
+    }
+  ]
+}

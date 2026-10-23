@@ -1,0 +1,94 @@
+{
+  "intro": {
+    "fr": "Scooby-Doo! Night of 100 Frights se randomise depuis 2019 avec l'outil d'Industrial Park, et se joue en multiworld Archipelago depuis 2024.",
+    "en": "Scooby-Doo! Night of 100 Frights has been randomizable since 2019 with Industrial Park's tool, and playable in an Archipelago multiworld since 2024."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Heavy Iron Studios sort Scooby-Doo! Night of 100 Frights en 2002, édité par THQ.",
+        "en": "Heavy Iron Studios releases Scooby-Doo! Night of 100 Frights in 2002, published by THQ."
+      }
+    },
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Industrial Park",
+        "en": "Industrial Park"
+      },
+      "text": {
+        "fr": "Industrial Park, l'éditeur d'igorseabra4 pour les jeux Heavy Iron, inclut à partir de 2019 un outil Randomizer. Selon le wiki Heavy Iron Modding, il fonctionne sur Night of 100 Frights, au mieux sur GameCube.",
+        "en": "Industrial Park, igorseabra4's editor for Heavy Iron games, includes a Randomizer tool from 2019. According to the Heavy Iron Modding wiki, it works on Night of 100 Frights, best on GameCube."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2024",
+        "en": "March 2024"
+      },
+      "title": {
+        "fr": "APWorld",
+        "en": "APWorld"
+      },
+      "text": {
+        "fr": "vgm5 crée le 1er mars 2024 le dépôt de l'APWorld de Night of 100 Frights, qui se joue sur Dolphin. L'alpha 0.0.1 sort le 26 mars, puis la bêta 0.1.0 et ses clés randomisées en avril.",
+        "en": "vgm5 creates the Night of 100 Frights APWorld repository on March 1, 2024, played on Dolphin. Alpha 0.0.1 comes out on March 26, then beta 0.1.0 with randomized keys in April."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2025",
+        "en": "February 2025"
+      },
+      "title": {
+        "fr": "Version 1.0",
+        "en": "Version 1.0"
+      },
+      "text": {
+        "fr": "La version complète 1.0.0, « Snacksanity », sort le 24 février 2025.",
+        "en": "The full 1.0.0 release, \"Snacksanity\", comes out on February 24, 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 1.4.2 sort le 23 octobre 2026 (48 versions publiées).",
+        "en": "Version 1.4.2 is released on October 23, 2026 (48 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Scooby-Doo! Night of 100 Frights",
+      "url": "https://www.igdb.com/games/scooby-doo-night-of-100-frights"
+    },
+    {
+      "label": "GitHub — igorseabra4/IndustrialPark (releases)",
+      "url": "https://github.com/igorseabra4/IndustrialPark/releases"
+    },
+    {
+      "label": "Heavy Iron Modding — Randomizer",
+      "url": "https://heavyironmodding.org/wiki/Randomizer"
+    },
+    {
+      "label": "GitHub — vgm5/Night_Of_100_Frights_ap_world",
+      "url": "https://github.com/vgm5/Night_Of_100_Frights_ap_world"
+    },
+    {
+      "label": "GitHub — vgm5/Night_Of_100_Frights_ap_world (releases)",
+      "url": "https://github.com/vgm5/Night_Of_100_Frights_ap_world/releases"
+    }
+  ]
+}

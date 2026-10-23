@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Space Engineers a un APWorld communautaire, distribué sur le serveur Discord d'Archipelago.",
+    "en": "Space Engineers has a community APWorld, distributed on the Archipelago Discord server."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Keen Software House sort Space Engineers en version finale en 2019.",
+        "en": "Keen Software House releases the full version of Space Engineers in 2019."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2023",
+        "en": "September 2023"
+      },
+      "title": {
+        "fr": "APWorld",
+        "en": "APWorld"
+      },
+      "text": {
+        "fr": "Le fil consacré à l'APWorld de Space Engineers est ouvert le 10 septembre 2023 sur le serveur Discord d'Archipelago, d'où il est distribué.",
+        "en": "The thread for the Space Engineers APWorld opens on September 10, 2023 on the Archipelago Discord server, where it is distributed."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Space Engineers",
+      "url": "https://www.igdb.com/games/space-engineers"
+    }
+  ]
+}

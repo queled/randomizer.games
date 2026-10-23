@@ -1,0 +1,32 @@
+{
+  "intro": {
+    "fr": "Secmod, mod de System Shock 2, est compatible avec le SS2 Randomiser selon rando-list.",
+    "en": "Secmod, a System Shock 2 mod, is compatible with the SS2 Randomiser according to rando-list."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "SS2 Randomiser",
+        "en": "SS2 Randomiser"
+      },
+      "text": {
+        "fr": "Le SS2 Randomiser de Sarge945, publié sur systemshock.org, randomise l'emplacement des ennemis, du butin et de la plupart des objets de quête en cherchant à paraître naturel et sans situation bloquante ; rando-list l'associe aussi au mod Secmod. Le fil est archivé dès mai 2023.",
+        "en": "Sarge945's SS2 Randomiser, posted on systemshock.org, randomizes the locations of enemies, loot and most quest items, aiming to feel natural and with no failure states; rando-list also links it to the Secmod mod. The thread is archived as early as May 2023."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "systemshock.org — SS2 Randomiser (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.systemshock.org/index.php?topic=12152.0"
+    },
+    {
+      "label": "rando-list — System Shock",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/System_Shock.yml"
+    }
+  ]
+}

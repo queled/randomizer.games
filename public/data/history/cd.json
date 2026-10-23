@@ -1,0 +1,46 @@
+{
+  "intro": {
+    "fr": "Christmas Delivery, rebaptisé Deliveko, est un jeu de livraison de colis conçu pour Archipelago.",
+    "en": "Christmas Delivery, renamed Deliveko, is a parcel delivery game designed for Archipelago."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Octobre 2025",
+        "en": "October 2025"
+      },
+      "title": {
+        "fr": "Christmas Delivery",
+        "en": "Christmas Delivery"
+      },
+      "text": {
+        "fr": "ObsidianMakerDevelopment publie le 29 octobre 2025 la première version de l'APWorld : on livre des colis à des maisons colorées en gérant son rayon de vol et en évitant les obstacles.",
+        "en": "ObsidianMakerDevelopment releases the first version of the APWorld on October 29, 2025: you deliver parcels to colorful houses while managing your flight range and avoiding obstacles."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2025",
+        "en": "December 2025"
+      },
+      "title": {
+        "fr": "Deliveko",
+        "en": "Deliveko"
+      },
+      "text": {
+        "fr": "Le 23 décembre 2025, le jeu devient Deliveko, avec des colis progressifs et des thèmes de Noël, d'Halloween ou neutre (version v2025.6, la dixième).",
+        "en": "On December 23, 2025, the game becomes Deliveko, with progressive parcels and Christmas, Halloween or neutral themes (version v2025.6, the tenth)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Moyskley Tech — christmasdeliveryapworld",
+      "url": "https://git.moyskleytech.com/ObsidianMakerDevelopment/christmasdeliveryapworld"
+    },
+    {
+      "label": "Moyskley Tech — christmasdeliveryapworld (releases)",
+      "url": "https://git.moyskleytech.com/ObsidianMakerDevelopment/christmasdeliveryapworld/releases"
+    }
+  ]
+}

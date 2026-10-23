@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Kingdom Hearts 358/2 Days a un APWorld communautaire, distribué sur le serveur Discord d'Archipelago.",
+    "en": "Kingdom Hearts 358/2 Days has a community APWorld, distributed on the Archipelago Discord server."
+  },
+  "events": [
+    {
+      "date": "2009",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "h.a.n.d. sort Kingdom Hearts 358/2 Days sur Nintendo DS en 2009.",
+        "en": "h.a.n.d. releases Kingdom Hearts 358/2 Days on Nintendo DS in 2009."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2023",
+        "en": "March 2023"
+      },
+      "title": {
+        "fr": "APWorld",
+        "en": "APWorld"
+      },
+      "text": {
+        "fr": "Le fil consacré à l'APWorld de Kingdom Hearts 358/2 Days est ouvert le 20 mars 2023 sur le serveur Discord d'Archipelago, d'où il est distribué.",
+        "en": "The thread for the Kingdom Hearts 358/2 Days APWorld opens on March 20, 2023 on the Archipelago Discord server, where it is distributed."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Kingdom Hearts 358/2 Days",
+      "url": "https://www.igdb.com/games/kingdom-hearts-358-2-days"
+    }
+  ]
+}

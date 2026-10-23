@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Tecmo Super Bowl a une version « Salary Cap Random Match » pour des matchs entre amis à équipes tirées au hasard.",
+    "en": "Tecmo Super Bowl has a \"Salary Cap Random Match\" version for games between friends with random rosters."
+  },
+  "events": [
+    {
+      "date": "1991",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Tecmo sort Tecmo Super Bowl sur NES en 1991.",
+        "en": "Tecmo releases Tecmo Super Bowl on the NES in 1991."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2019",
+        "en": "February 2019"
+      },
+      "title": {
+        "fr": "Salary Cap Random Match",
+        "en": "Salary Cap Random Match"
+      },
+      "text": {
+        "fr": "Le 14 février 2019, bruddog publie sur tecmobowl.org Tecmo Super Bowl Salary Cap Random Match, ROM modifiée pour des matchs entre deux joueurs sous plafond salarial ; la version 5.0.0 est publiée en février 2021.",
+        "en": "On February 14, 2019, bruddog posts Tecmo Super Bowl Salary Cap Random Match on tecmobowl.org, a modified ROM for two-player games under a salary cap; version 5.0.0 is published in February 2021."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Tecmo Super Bowl",
+      "url": "https://www.igdb.com/games/tecmo-super-bowl--1"
+    },
+    {
+      "label": "tecmobowl.org — Tecmo Super Bowl Salary Cap Random Match",
+      "url": "https://tecmobowl.org/files/file/599-tecmo-super-bowl-salary-cap-random-match/"
+    },
+    {
+      "label": "rando-list — Tecmo Bowl",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Tecmo_Bowl.yml"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Metroid Prime Origins se court en randomizer sur racetime.gg depuis 2026.",
+    "en": "Metroid Prime Origins has been raced as a randomizer on racetime.gg since 2026."
+  },
+  "events": [
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Courses",
+        "en": "Races"
+      },
+      "text": {
+        "fr": "La première course recensée sur ce site a lieu le 31 août 2026 sur racetime.gg ; on en compte 18, toutes en 2026.",
+        "en": "The first race listed on this site takes place on August 31, 2026 on racetime.gg; there are 18, all in 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Catégorie racetime",
+        "en": "racetime category"
+      },
+      "text": {
+        "fr": "La catégorie racetime.gg « Metroid Prime Origins Randomizer » propose deux objectifs, vaincre Meta Ridley ou finir le jeu, en mode Classic ou Remix.",
+        "en": "The racetime.gg \"Metroid Prime Origins Randomizer\" category offers two goals, beating Meta Ridley or beating the game, in Classic or Remix mode."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "racetime.gg — Metroid Prime Origins Randomizer",
+      "url": "https://racetime.gg/mporg"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Yu-Gi-Oh! GX Duel Academy a un APWorld communautaire, distribué sur le serveur Discord d'Archipelago.",
+    "en": "Yu-Gi-Oh! GX Duel Academy has a community APWorld, distributed on the Archipelago Discord server."
+  },
+  "events": [
+    {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Yu-Gi-Oh! GX Duel Academy sur Game Boy Advance en 2005.",
+        "en": "Konami releases Yu-Gi-Oh! GX Duel Academy on Game Boy Advance in 2005."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2025",
+        "en": "March 2025"
+      },
+      "title": {
+        "fr": "APWorld",
+        "en": "APWorld"
+      },
+      "text": {
+        "fr": "Le fil consacré à l'APWorld de Yu-Gi-Oh! GX Duel Academy est ouvert le 2 mars 2025 sur le serveur Discord d'Archipelago, d'où il est distribué.",
+        "en": "The thread for the Yu-Gi-Oh! GX Duel Academy APWorld opens on March 2, 2025 on the Archipelago Discord server, where it is distributed."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Yu-Gi-Oh! GX: Duel Academy",
+      "url": "https://www.igdb.com/games/yu-gi-oh-gx-duel-academy"
+    }
+  ]
+}

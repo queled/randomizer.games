@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Vintage Story se joue en multiworld Archipelago depuis fin 2025 grâce à un mod.",
+    "en": "Vintage Story has been playable in an Archipelago multiworld since late 2025 through a mod."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Anego Studios sort Vintage Story en 2018.",
+        "en": "Anego Studios releases Vintage Story in 2018."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2025",
+        "en": "December 2025"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Le 11 décembre 2025, VoidSpawned et Crabsoft publient sur la base de mods du jeu un mod qui relie Vintage Story à Archipelago, livré avec son APWorld : des objets du jeu peuvent arriver d'autres jeux, et les marchands peuvent vendre des objets d'autres joueurs. Il est mis à jour jusqu'en août 2026.",
+        "en": "On December 11, 2025, VoidSpawned and Crabsoft publish on the game's mod database a mod that connects Vintage Story to Archipelago, shipped with its APWorld: game items can arrive from other games, and traders can sell other players' items. It is updated until August 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Vintage Story",
+      "url": "https://www.igdb.com/games/vintage-story"
+    },
+    {
+      "label": "Vintage Story Mod DB — Archipelago",
+      "url": "https://mods.vintagestory.at/show/mod/37027"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Kabuto Park a un APWorld communautaire, distribué sur le serveur Discord d'Archipelago.",
+    "en": "Kabuto Park has a community APWorld, distributed on the Archipelago Discord server."
+  },
+  "events": [
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Doot sort Kabuto Park en 2025.",
+        "en": "Doot releases Kabuto Park in 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2025",
+        "en": "April 2025"
+      },
+      "title": {
+        "fr": "APWorld",
+        "en": "APWorld"
+      },
+      "text": {
+        "fr": "Le fil consacré à l'APWorld de Kabuto Park est ouvert le 1er avril 2025 sur le serveur Discord d'Archipelago, d'où il est distribué.",
+        "en": "The thread for the Kabuto Park APWorld opens on April 1, 2025 on the Archipelago Discord server, where it is distributed."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Kabuto Park",
+      "url": "https://www.igdb.com/games/kabuto-park"
+    }
+  ]
+}

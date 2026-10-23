@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Le remake de Resident Evil a un randomizer, celui de la version HD Remaster de Benn Powell, et sa catégorie racetime.gg.",
+    "en": "The Resident Evil remake has a randomizer, Benn Powell's for the HD Remaster, and its racetime.gg category."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort le remake de Resident Evil sur GameCube en 2002.",
+        "en": "Capcom releases the Resident Evil remake on GameCube in 2002."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Randomizer",
+        "en": "Randomizer"
+      },
+      "text": {
+        "fr": "La catégorie racetime.gg « Resident Evil (Remake) Randomizer » sert aux courses du randomizer de Resident Evil HD Remaster de Benn Powell, avec Chris ou Jill.",
+        "en": "The racetime.gg \"Resident Evil (Remake) Randomizer\" category hosts races of Benn Powell's Resident Evil HD Remaster randomizer, as Chris or Jill."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Resident Evil (2002)",
+      "url": "https://www.igdb.com/games/resident-evil--1"
+    },
+    {
+      "label": "racetime.gg — Resident Evil (Remake) Randomizer",
+      "url": "https://racetime.gg/residentevilhd-rando"
+    }
+  ]
+}

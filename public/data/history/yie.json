@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Yoku's Island Express se joue en multiworld Archipelago depuis 2025.",
+    "en": "Yoku's Island Express has been playable in an Archipelago multiworld since 2025."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Villa Gorilla sort Yoku's Island Express en 2018.",
+        "en": "Villa Gorilla releases Yoku's Island Express in 2018."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2025",
+        "en": "February 2025"
+      },
+      "title": {
+        "fr": "APWorld",
+        "en": "APWorld"
+      },
+      "text": {
+        "fr": "emakman publie le 18 février 2025 la version 0.0.1 de l'APWorld de Yoku's Island Express, sur le serveur Git de makuluni, accompagné d'un mod de jeu ; la 0.0.4 sort le 14 juillet 2025 et le mod est encore mis à jour en décembre 2025.",
+        "en": "emakman releases version 0.0.1 of the Yoku's Island Express APWorld on February 18, 2025, on makuluni's Git server, along with a game mod; version 0.0.4 comes out on July 14, 2025 and the mod is still updated in December 2025."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Yoku's Island Express",
+      "url": "https://www.igdb.com/games/yokus-island-express"
+    },
+    {
+      "label": "makuluni — YokuAPWorld (releases)",
+      "url": "https://git.makuluni.com/Archipelago/YokuAPWorld/releases"
+    },
+    {
+      "label": "makuluni — YokuArchipelagoMod",
+      "url": "https://git.makuluni.com/Archipelago/YokuArchipelagoMod"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "Sweet Defeat est un jeu créé pour l'Archipelago Game Jam.",
+    "en": "Sweet Defeat is a game made for the Archipelago Game Jam."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Sweet Defeat",
+        "en": "Sweet Defeat"
+      },
+      "text": {
+        "fr": "Sweet Defeat, d'Interested, funkyloader, notsoclasy et cosmo, est publié sur itch.io pour l'Archipelago Game Jam : on y incarne un canard d'une petite ville du Wisconsin. Son journal de développement est mis à jour en septembre 2025.",
+        "en": "Sweet Defeat, by Interested, funkyloader, notsoclasy and cosmo, is published on itch.io for the Archipelago Game Jam: you play a duck from a small town in Wisconsin. Its devlog is updated in September 2025."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "itch.io — Sweet Defeat (archive)",
+      "url": "http://web.archive.org/web/2026/https://interestedsc2.itch.io/sweet-defeat"
+    }
+  ]
+}

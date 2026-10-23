@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Blasphemous 2 a un APWorld communautaire, distribué sur le serveur Discord d'Archipelago.",
+    "en": "Blasphemous 2 has a community APWorld, distributed on the Archipelago Discord server."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "The Game Kitchen sort Blasphemous 2 en 2023.",
+        "en": "The Game Kitchen releases Blasphemous 2 in 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2025",
+        "en": "July 2025"
+      },
+      "title": {
+        "fr": "APWorld",
+        "en": "APWorld"
+      },
+      "text": {
+        "fr": "Le fil consacré à l'APWorld de Blasphemous 2 est ouvert le 27 juillet 2025 sur le serveur Discord d'Archipelago, d'où il est distribué.",
+        "en": "The thread for the Blasphemous 2 APWorld opens on July 27, 2025 on the Archipelago Discord server, where it is distributed."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Blasphemous II",
+      "url": "https://www.igdb.com/games/blasphemous-ii"
+    }
+  ]
+}

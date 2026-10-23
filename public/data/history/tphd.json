@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Twilight Princess HD a son Beta Quest depuis 2017 : les zones de chargement y sont randomisées.",
+    "en": "Twilight Princess HD has had its Beta Quest since 2017: loading zones are randomized."
+  },
+  "events": [
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort The Legend of Zelda: Twilight Princess HD sur Wii U en 2016.",
+        "en": "Nintendo releases The Legend of Zelda: Twilight Princess HD on Wii U in 2016."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2017",
+        "en": "April 2017"
+      },
+      "title": {
+        "fr": "Beta Quest",
+        "en": "Beta Quest"
+      },
+      "text": {
+        "fr": "Le 9 avril 2017, dragonbane annonce sur YouTube la sortie d'un Beta Quest et d'un mode Bingo pour Twilight Princess HD. Le code des zones de chargement randomisées est publié sur GitHub par la communauté ZSR TP en septembre 2019.",
+        "en": "On April 9, 2017, dragonbane announces on YouTube the release of a Beta Quest and a Bingo mode for Twilight Princess HD. The code for the randomized loading zones is published on GitHub by the ZSR TP community in September 2019."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — The Legend of Zelda: Twilight Princess HD",
+      "url": "https://www.igdb.com/games/the-legend-of-zelda-twilight-princess-hd"
+    },
+    {
+      "label": "YouTube — Twilight Princess HD - Beta Quest and Bingo RELEASED",
+      "url": "https://www.youtube.com/watch?v=ql7qzX1mPIY"
+    },
+    {
+      "label": "GitHub — zsrtp/TPHD-BetaQuest",
+      "url": "https://github.com/zsrtp/TPHD-BetaQuest"
+    },
+    {
+      "label": "rando-list — The Legend of Zelda",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/The_Legend_of_Zelda.yml"
+    }
+  ]
+}

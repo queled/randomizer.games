@@ -1,0 +1,62 @@
+{
+  "intro": {
+    "fr": "Bomberman Tournament a un randomizer en ligne et une catégorie racetime.gg où il se court depuis 2023.",
+    "en": "Bomberman Tournament has an online randomizer and a racetime.gg category where it has been raced since 2023."
+  },
+  "events": [
+    {
+      "date": "2001",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Hudson Soft sort Bomberman Tournament sur Game Boy Advance en 2001.",
+        "en": "Hudson Soft releases Bomberman Tournament on Game Boy Advance in 2001."
+      }
+    },
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Courses",
+        "en": "Races"
+      },
+      "text": {
+        "fr": "La première course recensée sur ce site a lieu le 4 juillet 2023 sur racetime.gg ; on en compte 10, toutes en 2023.",
+        "en": "The first race listed on this site takes place on July 4, 2023 on racetime.gg; there are 10, all in 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Bomberman Tournament Randomizer",
+        "en": "Bomberman Tournament Randomizer"
+      },
+      "text": {
+        "fr": "Le Bomberman Tournament Randomizer se génère en ligne sur btrando.surge.sh ; sa catégorie racetime.gg a pour objectif de vaincre BrainBomber.",
+        "en": "The Bomberman Tournament Randomizer is generated online at btrando.surge.sh; its racetime.gg category's goal is to defeat BrainBomber."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Bomberman Tournament",
+      "url": "https://www.igdb.com/games/bomberman-tournament"
+    },
+    {
+      "label": "Bomberman Tournament Randomizer",
+      "url": "https://btrando.surge.sh/"
+    },
+    {
+      "label": "rando-list — Multi-series",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Multi-series.yml"
+    },
+    {
+      "label": "racetime.gg — BTR",
+      "url": "https://racetime.gg/bmtr"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "La version remastérisée de Turok par Nightdive Studios a un randomizer depuis 2020.",
+    "en": "Nightdive Studios' remastered Turok has had a randomizer since 2020."
+  },
+  "events": [
+    {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nightdive Studios sort en 2015 la version remastérisée de Turok: Dinosaur Hunter.",
+        "en": "Nightdive Studios releases the remastered version of Turok: Dinosaur Hunter in 2015."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2020",
+        "en": "November 2020"
+      },
+      "title": {
+        "fr": "Randomizer",
+        "en": "Randomizer"
+      },
+      "text": {
+        "fr": "Le 27 novembre 2020, Turok Sanctum publie le Randomizer de Behemoth, aussi sur le Steam Workshop : point de départ aléatoire parmi les points de téléportation, objets, ennemis et portails des salles bonus mélangés, portails du hub déjà activés au hasard.",
+        "en": "On November 27, 2020, Turok Sanctum publishes Behemoth's Randomizer, also on the Steam Workshop: random starting spawn among the warp points, shuffled items, enemy spawns and bonus room portals, hub portals randomly pre-activated."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Turok",
+      "url": "https://www.igdb.com/games/turok--1"
+    },
+    {
+      "label": "Turok Sanctum — Randomizer",
+      "url": "https://turoksanctum.com/randomizer/"
+    },
+    {
+      "label": "rando-list — Turok",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Turok.yml"
+    }
+  ]
+}

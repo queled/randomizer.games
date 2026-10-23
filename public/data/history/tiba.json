@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "Time is broken again est un jeu créé pour la première Archipelago Game Jam, jouable uniquement avec Archipelago.",
+    "en": "Time is broken again is a game made for the first Archipelago Game Jam, playable only with Archipelago."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Time is broken again",
+        "en": "Time is broken again"
+      },
+      "text": {
+        "fr": "Foxolotl713 publie sur itch.io Time is broken again, créé pour la toute première Archipelago Game Jam ; le jeu, jouable dans le navigateur ou sous Windows, ne fonctionne pour l'instant qu'avec Archipelago.",
+        "en": "Foxolotl713 publishes Time is broken again on itch.io, made for the very first Archipelago Game Jam; the game, playable in the browser or on Windows, currently only works with Archipelago."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "itch.io — Time is broken again (archive)",
+      "url": "http://web.archive.org/web/2026/https://foxolotl713.itch.io/time-is-broken-again"
+    }
+  ]
+}

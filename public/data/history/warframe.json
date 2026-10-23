@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Warframe a un APWorld communautaire, distribué sur le serveur Discord AP After Dark.",
+    "en": "Warframe has a community APWorld, distributed on the AP After Dark Discord server."
+  },
+  "events": [
+    {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Digital Extremes sort Warframe en 2013.",
+        "en": "Digital Extremes releases Warframe in 2013."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "APWorld",
+        "en": "APWorld"
+      },
+      "text": {
+        "fr": "Le fil consacré à l'APWorld de Warframe est ouvert le 9 février 2026 sur le serveur Discord AP After Dark (18+), d'où il est distribué.",
+        "en": "The thread for the Warframe APWorld opens on February 9, 2026 on the AP After Dark (18+) Discord server, where it is distributed."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Warframe",
+      "url": "https://www.igdb.com/games/warframe"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Zexion se court en randomizer sur racetime.gg depuis 2025.",
+    "en": "Zexion has been raced as a randomizer on racetime.gg since 2025."
+  },
+  "events": [
+    {
+      "date": "2025-2026",
+      "title": {
+        "fr": "Courses",
+        "en": "Races"
+      },
+      "text": {
+        "fr": "La première course recensée sur ce site a lieu le 20 juillet 2025 sur racetime.gg ; on en compte 8 au total (2025 : 1, 2026 : 7).",
+        "en": "The first race listed on this site takes place on July 20, 2025 on racetime.gg; there are 8 in all (2025: 1, 2026: 7)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Catégorie racetime",
+        "en": "racetime category"
+      },
+      "text": {
+        "fr": "La catégorie racetime.gg « Zexion Randomizer » a pour objectif de finir le jeu en mode Randomizer.",
+        "en": "The racetime.gg \"Zexion Randomizer\" category's goal is to beat the game in Randomizer mode."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "racetime.gg — Zexion Randomizer",
+      "url": "https://racetime.gg/zexrando"
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "intro": {
+    "fr": "System Shock 2 a eu un premier randomiser dès 2010, puis celui de Sarge945, et un APWorld depuis 2025.",
+    "en": "System Shock 2 had a first randomiser as early as 2010, then Sarge945's, and an APWorld since 2025."
+  },
+  "events": [
+    {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Irrational Games et Looking Glass Studios sortent System Shock 2 en 1999.",
+        "en": "Irrational Games and Looking Glass Studios release System Shock 2 in 1999."
+      }
+    },
+    {
+      "date": "2010",
+      "title": {
+        "fr": "Zygoptera Randomiser",
+        "en": "Zygoptera Randomiser"
+      },
+      "text": {
+        "fr": "Le SS2 Zygoptera Randomiser a son fil sur systemshock.org, archivé dès décembre 2010.",
+        "en": "The SS2 Zygoptera Randomiser has its thread on systemshock.org, archived as early as December 2010."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2025",
+        "en": "August 2025"
+      },
+      "title": {
+        "fr": "APWorld",
+        "en": "APWorld"
+      },
+      "text": {
+        "fr": "Partatio crée le 23 août 2025 sur Codeberg le dépôt SS2-Apworld et publie la version 0.4.0 le 25 août ; la 0.5.2 sort le 28 juillet 2026.",
+        "en": "Partatio creates the SS2-Apworld repository on Codeberg on August 23, 2025 and releases version 0.4.0 on August 25; version 0.5.2 comes out on July 28, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "SS2 Randomiser",
+        "en": "SS2 Randomiser"
+      },
+      "text": {
+        "fr": "Le SS2 Randomiser de Sarge945, publié sur systemshock.org, randomise l'emplacement des ennemis, du butin et de la plupart des objets de quête en cherchant à paraître naturel et sans situation bloquante ; rando-list l'associe aussi au mod Secmod. Le fil est archivé dès mai 2023.",
+        "en": "Sarge945's SS2 Randomiser, posted on systemshock.org, randomizes the locations of enemies, loot and most quest items, aiming to feel natural and with no failure states; rando-list also links it to the Secmod mod. The thread is archived as early as May 2023."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — System Shock 2",
+      "url": "https://www.igdb.com/games/system-shock-2"
+    },
+    {
+      "label": "systemshock.org — SS2 Zygoptera Randomiser (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.systemshock.org/index.php?topic=67.0"
+    },
+    {
+      "label": "systemshock.org — SS2 Randomiser (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.systemshock.org/index.php?topic=12152.0"
+    },
+    {
+      "label": "Codeberg — Partatio/SS2-Apworld",
+      "url": "https://codeberg.org/Partatio/SS2-Apworld"
+    },
+    {
+      "label": "rando-list — System Shock",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/System_Shock.yml"
+    }
+  ]
+}

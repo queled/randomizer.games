@@ -1,0 +1,39 @@
+{
+  "intro": {
+    "fr": "Splintered se court en randomizer sur racetime.gg depuis 2025.",
+    "en": "Splintered has been raced as a randomizer on racetime.gg since 2025."
+  },
+  "events": [
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Courses",
+        "en": "Races"
+      },
+      "text": {
+        "fr": "La première course recensée sur ce site a lieu le 27 mars 2025 sur racetime.gg ; on en compte 7, toutes en 2025.",
+        "en": "The first race listed on this site takes place on March 27, 2025 on racetime.gg; there are 7, all in 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Catégorie racetime",
+        "en": "racetime category"
+      },
+      "text": {
+        "fr": "La catégorie racetime.gg « Splintered » a pour objectif de finir le jeu en randomizer.",
+        "en": "The racetime.gg \"Splintered\" category's goal is to beat the game in randomizer."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "racetime.gg — Splintered",
+      "url": "https://racetime.gg/splintered"
+    }
+  ]
+}

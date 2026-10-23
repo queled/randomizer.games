@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Rimworld se joue en multiworld avec MultiworldGG.",
+    "en": "Rimworld can be played in a multiworld with MultiworldGG."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Ludeon Studios sort RimWorld en 2018.",
+        "en": "Ludeon Studios releases RimWorld in 2018."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2025",
+        "en": "June 2025"
+      },
+      "title": {
+        "fr": "MultiworldGG",
+        "en": "MultiworldGG"
+      },
+      "text": {
+        "fr": "Le monde Rimworld (PhantomOfAres) est ajouté à MultiworldGG le 23 juin 2025. La recherche y est l'élément randomisé principal : chaque technologie devient un objet à recevoir.",
+        "en": "The Rimworld world (PhantomOfAres) is added to MultiworldGG on June 23, 2025. Research is the main randomized element: each technology becomes an item to receive."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — RimWorld",
+      "url": "https://www.igdb.com/games/rimworld"
+    },
+    {
+      "label": "GitHub — MultiworldGG, worlds/rimworld",
+      "url": "https://github.com/MultiworldGG/MultiworldGG/tree/main/worlds/rimworld"
+    }
+  ]
+}

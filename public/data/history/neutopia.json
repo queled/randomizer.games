@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Neutopia a un randomizer depuis 2020, par konkers.",
+    "en": "Neutopia has had a randomizer since 2020, by konkers."
+  },
+  "events": [
+    {
+      "date": "1989",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Hudson Soft sort Neutopia sur PC Engine en 1989.",
+        "en": "Hudson Soft releases Neutopia on PC Engine in 1989."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2020",
+        "en": "June 2020"
+      },
+      "title": {
+        "fr": "Neutopia Randomizer",
+        "en": "Neutopia Randomizer"
+      },
+      "text": {
+        "fr": "konkers crée fin juin 2020 un dépôt d'outils de modification de la ROM de Neutopia, puis met en ligne le Neutopia Randomizer sur neutopia.run.",
+        "en": "konkers creates a repository of Neutopia ROM hacking utilities in late June 2020, then puts the Neutopia Randomizer online at neutopia.run."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Neutopia",
+      "url": "https://www.igdb.com/games/neutopia"
+    },
+    {
+      "label": "GitHub — konkers/neutopia",
+      "url": "https://github.com/konkers/neutopia"
+    },
+    {
+      "label": "Neutopia Randomizer",
+      "url": "https://neutopia.run/"
+    },
+    {
+      "label": "rando-list — Neutopia",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Neutopia.yml"
+    }
+  ]
+}

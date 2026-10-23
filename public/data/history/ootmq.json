@@ -1,0 +1,65 @@
+{
+  "intro": {
+    "fr": "Les donjons de Master Quest font partie du randomizer d'Ocarina of Time depuis sa version 4.0, en 2019.",
+    "en": "Master Quest's dungeons have been part of the Ocarina of Time randomizer since its version 4.0, in 2019."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo publie en 2002 The Legend of Zelda: Ocarina of Time - Master Quest, version aux donjons remaniés, sur GameCube.",
+        "en": "Nintendo releases The Legend of Zelda: Ocarina of Time - Master Quest in 2002, a version with reworked dungeons, on GameCube."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2019",
+        "en": "February 2019"
+      },
+      "title": {
+        "fr": "Version 4.0",
+        "en": "Version 4.0"
+      },
+      "text": {
+        "fr": "La version 4.0 du randomizer d'Ocarina of Time, publiée le 6 février 2019, ajoute un curseur qui fixe le nombre de donjons Master Quest dans la partie ; à partir de la version 5.0, on peut aussi choisir lesquels.",
+        "en": "Version 4.0 of the Ocarina of Time randomizer, released on February 6, 2019, adds a slider setting how many Master Quest dungeons appear in the game; from version 5.0, players can also choose which ones."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "OoT Randomizer",
+        "en": "OoT Randomizer"
+      },
+      "text": {
+        "fr": "Le générateur en ligne ootrandomizer.com propose ces réglages, comme le monde Ocarina of Time d'Archipelago, qui s'appuie sur le même randomizer.",
+        "en": "The ootrandomizer.com online generator offers these settings, as does Archipelago's Ocarina of Time world, which builds on the same randomizer."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — The Legend of Zelda: Ocarina of Time - Master Quest",
+      "url": "https://www.igdb.com/games/the-legend-of-zelda-ocarina-of-time-master-quest"
+    },
+    {
+      "label": "GitHub — OoT-Randomizer, CHANGELOG",
+      "url": "https://github.com/OoTRandomizer/OoT-Randomizer/blob/Dev/CHANGELOG.md"
+    },
+    {
+      "label": "OoT Randomizer",
+      "url": "https://ootrandomizer.com/"
+    },
+    {
+      "label": "rando-list — The Legend of Zelda",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/The_Legend_of_Zelda.yml"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "intro": {
+    "fr": "Streets of Rage 2 Syndicate Wars, hack de Streets of Rage 2, profite d'un éditeur de niveaux qui randomise les ennemis.",
+    "en": "Streets of Rage 2 Syndicate Wars, a Streets of Rage 2 hack, benefits from a level editor that randomizes enemies."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juillet 2021",
+        "en": "July 2021"
+      },
+      "title": {
+        "fr": "SoR2 Level Editor",
+        "en": "SoR2 Level Editor"
+      },
+      "text": {
+        "fr": "gsaurus publie le 31 juillet 2021 sur romhacking.net un éditeur de niveaux de Streets of Rage 2 qui randomise aussi l'apparition des ennemis ; avec le hack Syndicate Wars, tous les types de personnages peuvent apparaître.",
+        "en": "gsaurus releases a Streets of Rage 2 level editor on romhacking.net on July 31, 2021 that also randomizes enemy spawns; with the Syndicate Wars hack, every character type can be spawned."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "rando-list — Streets of Rage",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Streets_of_Rage.yml"
+    },
+    {
+      "label": "romhacking.net — SoR2 Level Editor (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.romhacking.net/utilities/1634/"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Lingo 2 se joue en multiworld Archipelago depuis 2025.",
+    "en": "Lingo 2 has been playable in an Archipelago multiworld since 2025."
+  },
+  "events": [
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Brendon Wildes sort Lingo 2 en 2025.",
+        "en": "Brendon Wildes releases Lingo 2 in 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2025",
+        "en": "September 2025"
+      },
+      "title": {
+        "fr": "Version 7.0",
+        "en": "Version 7.0"
+      },
+      "text": {
+        "fr": "La version 7.0.0 du projet lingo2-archipelago, la plus ancienne de son journal des modifications, date du 30 septembre 2025 ; un APWorld et une modification du jeu permettent de le jouer en multiworld.",
+        "en": "Version 7.0.0 of the lingo2-archipelago project, the oldest in its changelog, dates from September 30, 2025; an APWorld and a game modification let it be played in a multiworld."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 9.4.0 sort le 20 juillet 2026 ; c'est la plus récente au 24 octobre 2026.",
+        "en": "Version 9.4.0 comes out on July 20, 2026; it is the latest as of October 24, 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Lingo 2",
+      "url": "https://www.igdb.com/games/lingo-2"
+    },
+    {
+      "label": "lingo2-archipelago",
+      "url": "https://code.fourisland.com/lingo2-archipelago/about/"
+    },
+    {
+      "label": "lingo2-archipelago — CHANGELOG",
+      "url": "https://code.fourisland.com/lingo2-archipelago/about/CHANGELOG.md"
+    }
+  ]
+}

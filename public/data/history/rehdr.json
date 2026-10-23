@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Resident Evil HD Remaster a un randomizer d'objets et d'ennemis, joué en marathon à Flame Fatales 2024.",
+    "en": "Resident Evil HD Remaster has an item and enemy randomizer, played at the Flame Fatales 2024 marathon."
+  },
+  "events": [
+    {
+      "date": "2014",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort fin 2014 Resident Evil HD Remaster, version HD du remake de 2002.",
+        "en": "Capcom releases Resident Evil HD Remaster in late 2014, an HD version of the 2002 remake."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Randomizer",
+        "en": "Randomizer"
+      },
+      "text": {
+        "fr": "La liste rando-list recense le randomizer de Benn Powell, publié sur benn-gaming.co.uk.",
+        "en": "The rando-list catalog lists Benn Powell's randomizer, published on benn-gaming.co.uk."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2024",
+        "en": "August 2024"
+      },
+      "title": {
+        "fr": "Flame Fatales 2024",
+        "en": "Flame Fatales 2024"
+      },
+      "text": {
+        "fr": "Le 19 août 2024, marphoria court le jeu en « Randomizer (Items + Enemies) » au marathon Flame Fatales 2024.",
+        "en": "On August 19, 2024, marphoria runs the game in \"Randomizer (Items + Enemies)\" at the Flame Fatales 2024 marathon."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Resident Evil (HD Remaster)",
+      "url": "https://www.igdb.com/games/resident-evil--3"
+    },
+    {
+      "label": "Games Done Quick — Flame Fatales 2024, Resident Evil HD Remaster",
+      "url": "https://tracker.gamesdonequick.com/tracker/run/6393"
+    },
+    {
+      "label": "rando-list — Resident Evil",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Resident_Evil.yml"
+    }
+  ]
+}

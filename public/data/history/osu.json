@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "osu! se joue en multiworld avec MultiworldGG.",
+    "en": "osu! can be played in a multiworld with MultiworldGG."
+  },
+  "events": [
+    {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "ppy sort osu! en 2007.",
+        "en": "ppy releases osu! in 2007."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2025",
+        "en": "April 2025"
+      },
+      "title": {
+        "fr": "MultiworldGG",
+        "en": "MultiworldGG"
+      },
+      "text": {
+        "fr": "Le monde osu! (Kanave, Taoshi, Weagle) fait partie de MultiworldGG dès sa première publication, fin avril 2025.",
+        "en": "The osu! world (Kanave, Taoshi, Weagle) is part of MultiworldGG from its first release, in late April 2025."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — osu!",
+      "url": "https://www.igdb.com/games/osu"
+    },
+    {
+      "label": "Multiworld — osu!",
+      "url": "https://multiworld.gg/games/osu!/info/en"
+    },
+    {
+      "label": "GitHub — MultiworldGG, worlds/osu",
+      "url": "https://github.com/MultiworldGG/MultiworldGG/tree/main/worlds/osu"
+    }
+  ]
+}

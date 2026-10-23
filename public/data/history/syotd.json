@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Spyro: Year of the Dragon a un randomiser depuis 2023.",
+    "en": "Spyro: Year of the Dragon has had a randomiser since 2023."
+  },
+  "events": [
+    {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Insomniac Games sort Spyro: Year of the Dragon sur PlayStation en 2000.",
+        "en": "Insomniac Games releases Spyro: Year of the Dragon on PlayStation in 2000."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2023",
+        "en": "January 2023"
+      },
+      "title": {
+        "fr": "Spyro 3 Randomiser",
+        "en": "Spyro 3 Randomiser"
+      },
+      "text": {
+        "fr": "Le 19 janvier 2023, hwd405 annonce sur Twitter la version 1.1.0 du Spyro 3 Randomiser : nouveaux emplacements pour les œufs, exigences randomisées, couleurs des portails, des textes, des voleurs, de Spyro et Sparx, niveaux de fin de partie mélangés.",
+        "en": "On January 19, 2023, hwd405 announces Spyro 3 Randomiser 1.1.0 on Twitter: new egg locations, randomized requirements, portal, text, thief, Spyro and Sparx colours, shuffled late-game levels."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Spyro: Year of the Dragon",
+      "url": "https://www.igdb.com/games/spyro-year-of-the-dragon"
+    },
+    {
+      "label": "Twitter — hwd405",
+      "url": "https://twitter.com/hwd405/status/1617036701980889088"
+    },
+    {
+      "label": "rando-list — Spyro",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Spyro.yml"
+    }
+  ]
+}

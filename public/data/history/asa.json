@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "A Space Archipelago est un jeu idle de gestion pensé pour être joué seul ou dans un multiworld Archipelago.",
+    "en": "A Space Archipelago is an idle management game designed to be played alone or in an Archipelago multiworld."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "A Space Archipelago",
+        "en": "A Space Archipelago"
+      },
+      "text": {
+        "fr": "Berserker66 publie le 11 octobre 2026 sur itch.io A Space Archipelago, jeu de gestion « idle » de science-fiction autour du traitement des ressources et de l'automatisation : environ 30 heures en partie classique, ou des parties randomisées en multiworld grâce à l'APWorld fourni.",
+        "en": "Berserker66 releases A Space Archipelago on itch.io on October 11, 2026, a sci-fi \"idle\" management game about resource processing and automation: about 30 hours as a regular game, or randomized runs in multiworlds with the included APWorld."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "itch.io — A Space Archipelago (archive)",
+      "url": "http://web.archive.org/web/2026/https://berserker66.itch.io/space-archipelago"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Shining Force II a un hack « brouillé » depuis 2009, et d'autres hacks aléatoires.",
+    "en": "Shining Force II has had a \"scrambled\" hack since 2009, and other random hacks."
+  },
+  "events": [
+    {
+      "date": "1993",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Camelot sort Shining Force II sur Mega Drive en 1993.",
+        "en": "Camelot releases Shining Force II on Mega Drive in 1993."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2009",
+        "en": "October 2009"
+      },
+      "title": {
+        "fr": "Scrambled Force II",
+        "en": "Scrambled Force II"
+      },
+      "text": {
+        "fr": "Le 31 octobre 2009, BigNailCow publie pour Halloween sur le forum Shining Force Central Scrambled Force II, hack et outil de randomisation en Python qui propose un monde « bizarro » de Shining Force II.",
+        "en": "On October 31, 2009, BigNailCow posts Scrambled Force II for Halloween on the Shining Force Central forum, a hack and Python randomizer tool offering a \"bizarro\" Shining Force II world."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Shining Chaos Prelude",
+        "en": "Shining Chaos Prelude"
+      },
+      "text": {
+        "fr": "La liste rando-list recense aussi le hack Shining Chaos Prelude, sur romhacking.net.",
+        "en": "The rando-list catalog also lists the Shining Chaos Prelude hack, on romhacking.net."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Shining Force II",
+      "url": "https://www.igdb.com/games/shining-force-ii"
+    },
+    {
+      "label": "Shining Force Central — Scrambled Force II (archive)",
+      "url": "http://web.archive.org/web/2026/https://forums.shiningforcecentral.com/viewtopic.php?f=5&t=15502"
+    },
+    {
+      "label": "rando-list — Shining",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Shining.yml"
+    }
+  ]
+}

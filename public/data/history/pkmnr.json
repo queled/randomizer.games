@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Pokémon Rejuvenation, jeu de fans, a eu un pack de défis avec plusieurs randomizers pour sa version 12.",
+    "en": "Pokémon Rejuvenation, a fan game, got a challenge pack with several randomizers for its version 12."
+  },
+  "events": [
+    {
+      "date": "2014",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Pokémon Rejuvenation, jeu de fans de la communauté Reborn, paraît à partir de 2014.",
+        "en": "Pokémon Rejuvenation, a fan game from the Reborn community, comes out from 2014."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2020",
+        "en": "May 2020"
+      },
+      "title": {
+        "fr": "Challenge Pack",
+        "en": "Challenge Pack"
+      },
+      "text": {
+        "fr": "Le 7 mai 2020, Haru publie sur le forum Reborn le Rejuvenation V12 Challenge Pack, choisi au début d'une partie : Nuzlocke, partie en solo et randomizers de Pokémon, d'objets, de capacités, de types, de talents et de dresseurs. L'auteur prévient que le pack est instable et annonce une version pour la V13.",
+        "en": "On May 7, 2020, Haru posts the Rejuvenation V12 Challenge Pack on the Reborn forum, chosen at the start of a save: Nuzlocke, solo run and randomizers for Pokémon, items, movesets, types, abilities and trainers. The author warns that the pack is buggy and announces a version for V13."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Pokémon Rejuvenation",
+      "url": "https://www.igdb.com/games/pokemon-rejuvenation"
+    },
+    {
+      "label": "Reborn Evolved — Rejuvenation V12 Challenge Pack",
+      "url": "https://www.rebornevo.com/forums/topic/51568-rejuvenation-v12-challenge-pack/"
+    },
+    {
+      "label": "rando-list — Pokemon",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Pokemon.yml"
+    }
+  ]
+}

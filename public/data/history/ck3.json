@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Crusader Kings III se joue en multiworld Archipelago depuis 2026 grâce à un mod du Steam Workshop.",
+    "en": "Crusader Kings III has been playable in an Archipelago multiworld since 2026 through a Steam Workshop mod."
+  },
+  "events": [
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Paradox Development Studio sort Crusader Kings III en 2020.",
+        "en": "Paradox Development Studio releases Crusader Kings III in 2020."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Ck3 Archipelago randomization",
+        "en": "Ck3 Archipelago randomization"
+      },
+      "text": {
+        "fr": "Le 2 août 2026 paraît sur le Steam Workshop un mod qui relie une campagne de Crusader Kings III à un multiworld : mécaniques, bonus et casus belli se débloquent grâce aux objets des autres joueurs, et les serments accomplis envoient des checks.",
+        "en": "On August 2, 2026, a mod appears on the Steam Workshop that connects a Crusader Kings III campaign to a multiworld: mechanics, perks and casus belli are unlocked through other players' items, and completed oaths send checks."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Crusader Kings III",
+      "url": "https://www.igdb.com/games/crusader-kings-iii"
+    },
+    {
+      "label": "Steam Workshop — Ck3 Archipelago randomization",
+      "url": "https://steamcommunity.com/sharedfiles/filedetails/?id=3776198575"
+    }
+  ]
+}

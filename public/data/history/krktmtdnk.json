@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Keroro RPG: Kishi to Musha to Densetsu no Kaizoku a un patch de traduction anglaise accompagné d'un randomizer optionnel.",
+    "en": "Keroro RPG: Kishi to Musha to Densetsu no Kaizoku has an English translation patch that comes with an optional randomizer."
+  },
+  "events": [
+    {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Le RPG Keroro sur Nintendo DS sort au Japon.",
+        "en": "The Keroro RPG comes out on Nintendo DS in Japan."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "English Patch + Optional Randomizer",
+        "en": "English Patch + Optional Randomizer"
+      },
+      "text": {
+        "fr": "Dawnbomb publie sur Crystal Mods un patch qui traduit en anglais une grande partie des menus, accompagné d'un randomizer de sa conception.",
+        "en": "Dawnbomb publishes a patch on Crystal Mods translating much of the menus into English, along with a randomizer of their own design."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Keroro RPG: Kishi to Busha to Densetsu no Kaizoku",
+      "url": "https://www.igdb.com/games/keroro-rpg-kishi-to-busha-to-densetsu-no-kaizoku"
+    },
+    {
+      "label": "Crystal Mods — Tales of Keroro English Patch + Optional Randomizer",
+      "url": "https://www.crystalmods.com/index.php/game_mods/tales-of-keroro-english-patch/"
+    },
+    {
+      "label": "rando-list — Sgt. Frog",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Sgt._Frog.yml"
+    }
+  ]
+}

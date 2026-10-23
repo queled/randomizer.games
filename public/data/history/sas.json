@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Salt and Sanctuary a un randomizer d'ennemis et de butin depuis 2019.",
+    "en": "Salt and Sanctuary has had an enemy and loot randomizer since 2019."
+  },
+  "events": [
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Ska Studios sort Salt and Sanctuary en 2016.",
+        "en": "Ska Studios releases Salt and Sanctuary in 2016."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2019",
+        "en": "June 2019"
+      },
+      "title": {
+        "fr": "Randomizer",
+        "en": "Randomizer"
+      },
+      "text": {
+        "fr": "Le 18 juin 2019, coppie publie sur Reddit un randomizer d'ennemis et de butin : boss entre eux, ennemis entre eux, conteneurs entre eux ; les runes rejoignent le butin et cinq emplacements sont ajoutés pour les remplacer.",
+        "en": "On June 18, 2019, coppie posts an enemy and loot randomizer on Reddit: bosses among bosses, enemies among enemies, containers among containers; runes join the loot table and five locations are added to replace them."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Salt and Sanctuary",
+      "url": "https://www.igdb.com/games/salt-and-sanctuary"
+    },
+    {
+      "label": "Reddit — Randomizer",
+      "url": "https://www.reddit.com/r/saltandsanctuary/comments/c28z64/randomizer/"
+    },
+    {
+      "label": "rando-list — Salt and Sanctuary",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Salt_and_Sanctuary.yml"
+    }
+  ]
+}

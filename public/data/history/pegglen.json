@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Peggle Nights se joue en multiworld avec MultiworldGG.",
+    "en": "Peggle Nights can be played in a multiworld with MultiworldGG."
+  },
+  "events": [
+    {
+      "date": "2008",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "PopCap Games sort Peggle Nights en 2008.",
+        "en": "PopCap Games releases Peggle Nights in 2008."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2026",
+        "en": "March 2026"
+      },
+      "title": {
+        "fr": "MultiworldGG",
+        "en": "MultiworldGG"
+      },
+      "text": {
+        "fr": "Le monde Peggle Nights (SerpentAI) est ajouté à MultiworldGG le 3 mars 2026. Comme pour Peggle Deluxe, niveaux, maîtres, balles et bonus se débloquent au fil du multiworld ; il faut réunir assez de pions de l'ombre.",
+        "en": "The Peggle Nights world (SerpentAI) is added to MultiworldGG on March 3, 2026. As with Peggle Deluxe, levels, masters, balls and bonuses are unlocked over the multiworld; enough Shadow Pegs must be collected."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Peggle Nights",
+      "url": "https://www.igdb.com/games/peggle-nights"
+    },
+    {
+      "label": "Multiworld — Peggle Nights",
+      "url": "https://multiworld.gg/games/Peggle%20Nights/info/en"
+    },
+    {
+      "label": "GitHub — MultiworldGG, worlds/peggle_nights",
+      "url": "https://github.com/MultiworldGG/MultiworldGG/tree/main/worlds/peggle_nights"
+    }
+  ]
+}

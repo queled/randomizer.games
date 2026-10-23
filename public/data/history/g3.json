@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "Les jeux Pokémon de troisième génération ont eu dès 2013 le Reasonable Randomizer, qui limite le hasard pour garder des parties cohérentes.",
+    "en": "The third-generation Pokémon games got the Reasonable Randomizer as early as 2013, which limits randomness to keep playthroughs consistent."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Janvier 2013",
+        "en": "January 2013"
+      },
+      "title": {
+        "fr": "Reasonable Randomizer",
+        "en": "Reasonable Randomizer"
+      },
+      "text": {
+        "fr": "En janvier 2013, les versions 1.2 et 1.3 du Gen 3 Reasonable Randomizer paraissent sur Google Code : un programme Java qui modifie starters, Pokémon sauvages, équipes des dresseurs et capacités de Rouge Feu, Vert Feuille, Émeraude, Rubis et Saphir, en limitant les tirages selon le stade d'évolution, la puissance, l'habitat ou les types.",
+        "en": "In January 2013, versions 1.2 and 1.3 of the Gen 3 Reasonable Randomizer come out on Google Code: a Java program that modifies starters, wild Pokémon, trainer teams and movesets in FireRed, LeafGreen, Emerald, Ruby and Sapphire, limiting picks by evolution stage, strength, habitat or types."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Google Code Archive — pokemon-reasonable-randomizer",
+      "url": "https://code.google.com/archive/p/pokemon-reasonable-randomizer/"
+    }
+  ]
+}

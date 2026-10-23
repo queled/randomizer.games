@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Super Mario Bros.: The Lost Levels fait partie d'un randomizer qui mélange les niveaux de cinq jeux Mario.",
+    "en": "Super Mario Bros.: The Lost Levels is part of a randomizer that mixes the levels of five Mario games."
+  },
+  "events": [
+    {
+      "date": "1986",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Super Mario Bros. 2 sur Famicom Disk System en 1986 ; le jeu est ensuite connu en Occident sous le nom The Lost Levels.",
+        "en": "Nintendo releases Super Mario Bros. 2 on the Famicom Disk System in 1986; the game later becomes known in the West as The Lost Levels."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Crossgame Randomizer",
+        "en": "Crossgame Randomizer"
+      },
+      "text": {
+        "fr": "Le Super Mario All-Stars Crossgame Randomizer de ColPanic, sur itch.io, randomise la ROM Super Mario All-Stars + Super Mario World en utilisant la carte de Super Mario Bros. 3 comme point central ; les niveaux peuvent venir des cinq jeux. Sa version 2.0 découple aussi physique, graphismes de Mario et bonus de leurs jeux d'origine.",
+        "en": "ColPanic's Super Mario All-Stars Crossgame Randomizer, on itch.io, randomizes the Super Mario All-Stars + Super Mario World ROM, using the Super Mario Bros. 3 map as a hub; levels can come from all five games. Its version 2.0 also decouples physics, Mario graphics and power-ups from their original games."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Super Mario Bros.: The Lost Levels",
+      "url": "https://www.igdb.com/games/super-mario-bros-the-lost-levels"
+    },
+    {
+      "label": "itch.io — Super Mario All-Stars Crossgame Randomizer (archive)",
+      "url": "http://web.archive.org/web/2026/https://colpanic.itch.io/super-mario-all-stars-crossgame-randomizer"
+    },
+    {
+      "label": "rando-list — Mario",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Mario.yml"
+    }
+  ]
+}

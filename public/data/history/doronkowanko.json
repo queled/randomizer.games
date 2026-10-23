@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "DORONKO WANKO se joue en multiworld avec MultiworldGG.",
+    "en": "DORONKO WANKO can be played in a multiworld with MultiworldGG."
+  },
+  "events": [
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Bandai Namco Studios sort DORONKO WANKO en 2024.",
+        "en": "Bandai Namco Studios releases DORONKO WANKO in 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2025",
+        "en": "April 2025"
+      },
+      "title": {
+        "fr": "MultiworldGG",
+        "en": "MultiworldGG"
+      },
+      "text": {
+        "fr": "Le monde DORONKO WANKO (Vendily) fait partie de MultiworldGG dès sa première publication, fin avril 2025. Les objets de livraison y sont reçus dès qu'ils sont collectés, au lieu d'attendre des paliers de dégâts.",
+        "en": "The DORONKO WANKO world (Vendily) is part of MultiworldGG from its first release, in late April 2025. Delivery items are received when they are collected, rather than at damage milestones."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Doronko Wanko",
+      "url": "https://www.igdb.com/games/doronko-wanko"
+    },
+    {
+      "label": "GitHub — MultiworldGG, worlds/doronko_wanko",
+      "url": "https://github.com/MultiworldGG/MultiworldGG/tree/main/worlds/doronko_wanko"
+    }
+  ]
+}

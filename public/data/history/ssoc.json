@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "S.T.A.L.K.E.R.: Shadow of Chernobyl a un randomizer simple depuis 2022.",
+    "en": "S.T.A.L.K.E.R.: Shadow of Chernobyl has had a simple randomizer since 2022."
+  },
+  "events": [
+    {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "GSC Game World sort S.T.A.L.K.E.R.: Shadow of Chernobyl en 2007.",
+        "en": "GSC Game World releases S.T.A.L.K.E.R.: Shadow of Chernobyl in 2007."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2022",
+        "en": "September 2022"
+      },
+      "title": {
+        "fr": "Simple Randomizer",
+        "en": "Simple Randomizer"
+      },
+      "text": {
+        "fr": "Le 26 septembre 2022, ned0emo publie sur ModDB un outil de randomisation simple pour le jeu, mis à jour jusqu'en mai 2024.",
+        "en": "On September 26, 2022, ned0emo posts a simple randomization tool for the game on ModDB, updated until May 2024."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — S.T.A.L.K.E.R.: Shadow of Chernobyl",
+      "url": "https://www.igdb.com/games/s-t-a-l-k-e-r-shadow-of-chernobyl"
+    },
+    {
+      "label": "ModDB — Simple randomizer for Shadow of Chernobyl (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.moddb.com/games/stalker/downloads/simple-randomizer-for-shadow-of-chernobyl"
+    },
+    {
+      "label": "rando-list — S.T.A.L.K.E.R.",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/S.T.A.L.K.E.R..yml"
+    }
+  ]
+}

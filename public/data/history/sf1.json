@@ -1,0 +1,65 @@
+{
+  "intro": {
+    "fr": "Star Fox a un générateur de niveaux aléatoires depuis 2017, et un randomizer depuis 2023.",
+    "en": "Star Fox has had a random level generator since 2017, and a randomizer since 2023."
+  },
+  "events": [
+    {
+      "date": "1993",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo et Argonaut Software sortent Star Fox sur Super Nintendo en 1993.",
+        "en": "Nintendo and Argonaut Software release Star Fox on Super Nintendo in 1993."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2017",
+        "en": "August 2017"
+      },
+      "title": {
+        "fr": "Peppy's Tool",
+        "en": "Peppy's Tool"
+      },
+      "text": {
+        "fr": "Le 27 août 2017 sort la version 1.0 de Peppy's Tool, qui génère de nouveaux niveaux aléatoires à partir des objets et événements du jeu.",
+        "en": "On August 27, 2017, version 1.0 of Peppy's Tool comes out, generating new random levels from the game's objects and events."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2023",
+        "en": "November 2023"
+      },
+      "title": {
+        "fr": "Star Fox Randomizer",
+        "en": "Star Fox Randomizer"
+      },
+      "text": {
+        "fr": "Le 5 novembre 2023, kandowontu publie sur Patreon une première version de son Star Fox Randomizer.",
+        "en": "On November 5, 2023, kandowontu posts an early release of their Star Fox Randomizer on Patreon."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Star Fox",
+      "url": "https://www.igdb.com/games/star-fox"
+    },
+    {
+      "label": "Qubed Studios — Peppy's Tool (archive)",
+      "url": "http://web.archive.org/web/2026/https://qubedstudios.rustedlogic.net/PeppysTool.htm"
+    },
+    {
+      "label": "Patreon — Star Fox Randomizer (archive)",
+      "url": "http://web.archive.org/web/2023/https://www.patreon.com/posts/star-fox-92309645"
+    },
+    {
+      "label": "rando-list — Star Fox",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Star_Fox.yml"
+    }
+  ]
+}

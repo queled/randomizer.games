@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "CartogrAP est un jeu conçu pour Archipelago lors d'une game jam.",
+    "en": "CartogrAP is a game designed for Archipelago during a game jam."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "CartogrAP",
+        "en": "CartogrAP"
+      },
+      "text": {
+        "fr": "xMcacutt et Callme_Zero publient en juin 2026 sur itch.io CartogrAP, créé pour l'« Archipelago Game Jam: The Async » : on part d'une petite région et on agrandit un paysage de cases généré procéduralement, en obtenant des objets qui débloquent de nouvelles régions. Le jeu est mis à jour en septembre 2026.",
+        "en": "xMcacutt and Callme_Zero release CartogrAP on itch.io in June 2026, made for the \"Archipelago Game Jam: The Async\": you start in a small region and expand a procedurally generated landscape of squares, getting items that unlock new regions. The game is updated in September 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "itch.io — CartogrAP (archive)",
+      "url": "http://web.archive.org/web/2026/https://xmcacutt.itch.io/cartograp"
+    }
+  ]
+}

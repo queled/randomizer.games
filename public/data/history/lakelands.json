@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "Lakelands est un petit metroidvania créé pour la première Archipelago Game Jam.",
+    "en": "Lakelands is a short metroidvania made for the first Archipelago Game Jam."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Lakelands",
+        "en": "Lakelands"
+      },
+      "text": {
+        "fr": "Lakelands, de ninjakakes, est un court jeu de plates-formes de type metroidvania créé pour la première Archipelago Game Jam ; en mode randomizer, le but est d'atteindre la fin de la dernière zone. Il reprend le moteur du précédent jeu de son auteur, Pumpkin Crawler.",
+        "en": "Lakelands, by ninjakakes, is a short metroidvania platformer made for the first Archipelago Game Jam; in randomizer mode, the goal is to reach the end of the last area. It reuses the engine of its author's previous game, Pumpkin Crawler."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "itch.io — Lakelands (archive)",
+      "url": "http://web.archive.org/web/2026/https://ninjakakes.itch.io/lakelands"
+    }
+  ]
+}

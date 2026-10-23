@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Le jeu d'arcade Pretty Soldier Sailor Moon a un éditeur web qui intègre un randomizer.",
+    "en": "The Pretty Soldier Sailor Moon arcade game has a web editor with a bundled randomizer."
+  },
+  "events": [
+    {
+      "date": "1995",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Gazelle sort en arcade Pretty Soldier Sailor Moon en 1995.",
+        "en": "Gazelle releases the Pretty Soldier Sailor Moon arcade game in 1995."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2022",
+        "en": "April 2022"
+      },
+      "title": {
+        "fr": "PSSME",
+        "en": "PSSME"
+      },
+      "text": {
+        "fr": "GameHackFan publie le 27 avril 2022 sur romhacking.net un éditeur web du jeu : santé des personnages, niveaux, et un randomizer qui tire le nombre, le type et la position des ennemis sans toucher aux boss.",
+        "en": "GameHackFan releases a web editor for the game on romhacking.net on April 27, 2022: character health, levels, and a randomizer that picks the number, type and position of enemies without replacing the bosses."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Pretty Soldier Sailor Moon",
+      "url": "https://www.igdb.com/games/pretty-soldier-sailor-moon"
+    },
+    {
+      "label": "romhacking.net — PSSME (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.romhacking.net/utilities/1600/"
+    },
+    {
+      "label": "rando-list — Sailor Moon",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Sailor_Moon.yml"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Streets of Rage 4 a un outil d'échange de personnages, d'objets et de niveaux, avec des préréglages de randomisation.",
+    "en": "Streets of Rage 4 has a tool for swapping characters, items and levels, with randomizer presets."
+  },
+  "events": [
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Dotemu, Lizardcube et Guard Crush Games sortent Streets of Rage 4 en 2020.",
+        "en": "Dotemu, Lizardcube and Guard Crush Games release Streets of Rage 4 in 2020."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2021",
+        "en": "May 2021"
+      },
+      "title": {
+        "fr": "SOR4 Character Swapper",
+        "en": "SOR4 Character Swapper"
+      },
+      "text": {
+        "fr": "honganqi crée le 27 mai 2021 sur SourceForge un outil qui modifie Streets of Rage 4 en échangeant personnages, objets, éléments destructibles ou niveaux ; ses préréglages de randomizer sont encore expérimentaux.",
+        "en": "honganqi creates a tool on SourceForge on May 27, 2021 that modifies Streets of Rage 4 by swapping characters, items, breakables or levels; its randomizer presets are still experimental."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Streets of Rage 4",
+      "url": "https://www.igdb.com/games/streets-of-rage-4"
+    },
+    {
+      "label": "SourceForge — SOR4 Character Swapper",
+      "url": "https://sourceforge.net/projects/sor4-character-swapper/"
+    },
+    {
+      "label": "rando-list — Streets of Rage",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Streets_of_Rage.yml"
+    }
+  ]
+}

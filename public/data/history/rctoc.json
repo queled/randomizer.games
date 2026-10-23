@@ -1,0 +1,32 @@
+{
+  "intro": {
+    "fr": "Ratchet & Clank: The Odd Couple se joue en multiworld avec MultiworldGG.",
+    "en": "Ratchet & Clank: The Odd Couple can be played in a multiworld with MultiworldGG."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "MultiworldGG",
+        "en": "MultiworldGG"
+      },
+      "text": {
+        "fr": "Le monde Ratchet & Clank: The Odd Couple est ajouté à MultiworldGG le 11 octobre 2026.",
+        "en": "The Ratchet & Clank: The Odd Couple world is added to MultiworldGG on October 11, 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Ratchet & Clank: The Odd Couple",
+      "url": "https://multiworld.gg/games/Ratchet%20%26%20Clank%3A%20The%20Odd%20Couple/info/en"
+    },
+    {
+      "label": "GitHub — MultiworldGG, worlds/rac_odd_couple",
+      "url": "https://github.com/MultiworldGG/MultiworldGG/tree/main/worlds/rac_odd_couple"
+    }
+  ]
+}

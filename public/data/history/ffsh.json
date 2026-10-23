@@ -1,0 +1,32 @@
+{
+  "intro": {
+    "fr": "Flipwitch Forbidden Sex Hex se joue en multiworld avec MultiworldGG.",
+    "en": "Flipwitch Forbidden Sex Hex can be played in a multiworld with MultiworldGG."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Septembre 2025",
+        "en": "September 2025"
+      },
+      "title": {
+        "fr": "MultiworldGG",
+        "en": "MultiworldGG"
+      },
+      "text": {
+        "fr": "Le monde Flipwitch Forbidden Sex Hex est ajouté à MultiworldGG le 12 septembre 2025.",
+        "en": "The Flipwitch Forbidden Sex Hex world is added to MultiworldGG on September 12, 2025."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Multiworld — Flipwitch Forbidden Sex Hex",
+      "url": "https://multiworld.gg/games/Flipwitch%20Forbidden%20Sex%20Hex/info/en"
+    },
+    {
+      "label": "GitHub — MultiworldGG, worlds/flipwitch",
+      "url": "https://github.com/MultiworldGG/MultiworldGG/tree/main/worlds/flipwitch"
+    }
+  ]
+}

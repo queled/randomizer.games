@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Skies of Arcadia Legends a un randomizer en ligne, sur Game Tools Collection.",
+    "en": "Skies of Arcadia Legends has an online randomizer, on Game Tools Collection."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Overworks sort Skies of Arcadia Legends sur GameCube en 2002.",
+        "en": "Overworks releases Skies of Arcadia Legends on GameCube in 2002."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Randomizer",
+        "en": "Randomizer"
+      },
+      "text": {
+        "fr": "Game Tools Collection, le site de RyudoSynbios, propose un randomizer qui modifie directement une image .gcm ou .iso du jeu dans le navigateur.",
+        "en": "Game Tools Collection, RyudoSynbios' site, offers a randomizer that modifies a .gcm or .iso image of the game directly in the browser."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Skies of Arcadia Legends",
+      "url": "https://www.igdb.com/games/skies-of-arcadia-legends"
+    },
+    {
+      "label": "Game Tools Collection — Skies of Arcadia Legends Randomizer",
+      "url": "https://game-tools-collection.com/skies-of-arcadia-legends-gc/randomizer"
+    },
+    {
+      "label": "rando-list — Skies of Arcadia",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Skies_of_Arcadia.yml"
+    }
+  ]
+}

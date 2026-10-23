@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "Against the Storm se joue en multiworld avec MultiworldGG.",
+    "en": "Against the Storm can be played in a multiworld with MultiworldGG."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Eremite Games sort Against the Storm en 2023.",
+        "en": "Eremite Games releases Against the Storm in 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2025",
+        "en": "April 2025"
+      },
+      "title": {
+        "fr": "MultiworldGG",
+        "en": "MultiworldGG"
+      },
+      "text": {
+        "fr": "Le monde Against the Storm (Ryguy9999) fait partie de MultiworldGG dès sa première publication, fin avril 2025. Les ressources y sont bloquées jusqu'à la réception de l'objet correspondant ; plans, recettes et biomes peuvent aussi être mélangés, et les emplacements sont des hauts faits sur mesure.",
+        "en": "The Against the Storm world (Ryguy9999) is part of MultiworldGG from its first release, in late April 2025. Resources are blocked until their item is received; blueprints, recipes and biomes can be shuffled too, and locations are custom deeds."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Against the Storm",
+      "url": "https://www.igdb.com/games/against-the-storm"
+    },
+    {
+      "label": "GitHub — MultiworldGG, worlds/against_the_storm",
+      "url": "https://github.com/MultiworldGG/MultiworldGG/tree/main/worlds/against_the_storm"
+    }
+  ]
+}

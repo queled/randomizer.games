@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Peggle Deluxe se joue en multiworld avec MultiworldGG.",
+    "en": "Peggle Deluxe can be played in a multiworld with MultiworldGG."
+  },
+  "events": [
+    {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "PopCap Games sort Peggle en 2007.",
+        "en": "PopCap Games releases Peggle in 2007."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2026",
+        "en": "March 2026"
+      },
+      "title": {
+        "fr": "MultiworldGG",
+        "en": "MultiworldGG"
+      },
+      "text": {
+        "fr": "Le monde Peggle Deluxe (SerpentAI) est ajouté à MultiworldGG le 3 mars 2026. Niveaux, compositions de pions, maîtres Peggle, balles de départ et bonus s'y débloquent au fil du multiworld ; il faut réunir assez de pions dorés.",
+        "en": "The Peggle Deluxe world (SerpentAI) is added to MultiworldGG on March 3, 2026. Levels, peg compositions, Peggle masters, starting balls and bonuses are unlocked over the multiworld; enough Gold Pegs must be collected."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Peggle Deluxe",
+      "url": "https://www.igdb.com/games/peggle-deluxe"
+    },
+    {
+      "label": "Multiworld — Peggle Deluxe",
+      "url": "https://multiworld.gg/games/Peggle%20Deluxe/info/en"
+    },
+    {
+      "label": "GitHub — MultiworldGG, worlds/peggle_deluxe",
+      "url": "https://github.com/MultiworldGG/MultiworldGG/tree/main/worlds/peggle_deluxe"
+    }
+  ]
+}

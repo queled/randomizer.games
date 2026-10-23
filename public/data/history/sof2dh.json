@@ -1,0 +1,44 @@
+{
+  "intro": {
+    "fr": "Soldier of Fortune II a un générateur de missions aléatoires intégré, que la communauté a étendu.",
+    "en": "Soldier of Fortune II has a built-in random mission generator, which the community has expanded."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Raven Software sort Soldier of Fortune II: Double Helix en 2002 ; la Gold Edition suit en 2003.",
+        "en": "Raven Software releases Soldier of Fortune II: Double Helix in 2002; the Gold Edition follows in 2003."
+      }
+    },
+    {
+      "date": "2016",
+      "title": {
+        "fr": "RMG Expansion",
+        "en": "RMG Expansion"
+      },
+      "text": {
+        "fr": "SoF2 RMG Expansion and SP Tweaks Mod, publié sur ModDB en 2016, ajoute des options à la création de missions aléatoires et des armes du multijoueur à la campagne.",
+        "en": "SoF2 RMG Expansion and SP Tweaks Mod, posted on ModDB in 2016, adds options to random mission creation and multiplayer weapons to the campaign."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Soldier of Fortune II: Double Helix - Gold Edition",
+      "url": "https://www.igdb.com/games/soldier-of-fortune-ii-double-helix-gold-edition"
+    },
+    {
+      "label": "ModDB — SoF2 RMG Expansion and SP Tweaks Mod (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.moddb.com/mods/sof2-rmg-expansion-and-sp-tweaks-mod"
+    },
+    {
+      "label": "rando-list — Soldier of Fortune",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Soldier_of_Fortune.yml"
+    }
+  ]
+}

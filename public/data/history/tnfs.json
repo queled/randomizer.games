@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "The Need for Speed a un générateur de circuits aléatoires, RandTrack.",
+    "en": "The Need for Speed has a random track generator, RandTrack."
+  },
+  "events": [
+    {
+      "date": "1994",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "EA Canada sort The Need for Speed en 1994.",
+        "en": "EA Canada releases The Need for Speed in 1994."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2014",
+        "en": "July 2014"
+      },
+      "title": {
+        "fr": "RandTrack",
+        "en": "RandTrack"
+      },
+      "text": {
+        "fr": "Le projet RandTrack est créé sur SourceForge le 20 juillet 2014 : il génère des circuits aléatoires pour le jeu, surtout testé avec la Special Edition. Sa deuxième version publique ne gère bien que trois des circuits.",
+        "en": "The RandTrack project is created on SourceForge on July 20, 2014: it generates random race tracks for the game, mostly tested with the Special Edition. Its second public release only handles three of the tracks well."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — The Need for Speed",
+      "url": "https://www.igdb.com/games/the-need-for-speed"
+    },
+    {
+      "label": "RandTrack",
+      "url": "https://randtrack.sourceforge.net/"
+    },
+    {
+      "label": "rando-list — Need for Speed",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Need_for_Speed.yml"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Shining Force III a un randomizer distribué par le projet de traduction de la communauté.",
+    "en": "Shining Force III has a randomizer distributed by the community translation project."
+  },
+  "events": [
+    {
+      "date": "1997",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Camelot sort Shining Force III sur Saturn en 1997.",
+        "en": "Camelot releases Shining Force III on Saturn in 1997."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Randomizer de Lyaka",
+        "en": "Lyaka's randomizer"
+      },
+      "text": {
+        "fr": "Le serveur de mods du Shining Force III Translation Project propose un randomizer de Lyaka, mis à jour en avril 2026, parmi d'autres mods ; le projet en parlait dans son rapport de mai 2022.",
+        "en": "The Shining Force III Translation Project's mod server offers a randomizer by Lyaka, updated in April 2026, among other mods; the project mentioned it in its May 2022 progress report."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Shining Force III",
+      "url": "https://www.igdb.com/games/shining-force-iii"
+    },
+    {
+      "label": "Shining Force III Translation Project — Mods",
+      "url": "https://sf3transftp.shiningforcecentral.com/Mods/"
+    },
+    {
+      "label": "rando-list — Shining",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Shining.yml"
+    }
+  ]
+}

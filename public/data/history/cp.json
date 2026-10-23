@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Crystal Project se joue en multiworld avec MultiworldGG.",
+    "en": "Crystal Project can be played in a multiworld with MultiworldGG."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Andrew Willman sort Crystal Project en 2022.",
+        "en": "Andrew Willman releases Crystal Project in 2022."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2025",
+        "en": "August 2025"
+      },
+      "title": {
+        "fr": "MultiworldGG",
+        "en": "MultiworldGG"
+      },
+      "text": {
+        "fr": "Le monde Crystal Project (Dragons but also Rabbits, FabulaFey, Emerassi) est ajouté à MultiworldGG le 6 août 2025.",
+        "en": "The Crystal Project world (Dragons but also Rabbits, FabulaFey, Emerassi) is added to MultiworldGG on August 6, 2025."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Crystal Project",
+      "url": "https://www.igdb.com/games/crystal-project"
+    },
+    {
+      "label": "Multiworld — Crystal Project",
+      "url": "https://multiworld.gg/games/Crystal%20Project/info/en"
+    },
+    {
+      "label": "GitHub — MultiworldGG, worlds/crystal_project",
+      "url": "https://github.com/MultiworldGG/MultiworldGG/tree/main/worlds/crystal_project"
+    }
+  ]
+}

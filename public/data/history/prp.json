@@ -1,0 +1,28 @@
+{
+  "intro": {
+    "fr": "Piranesi Restoration Project, jeu du moteur libre Luanti, se joue en multiworld Archipelago grâce à un mod client.",
+    "en": "Piranesi Restoration Project, a game for the open-source Luanti engine, can be played in an Archipelago multiworld through a client mod."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Novembre 2025",
+        "en": "November 2025"
+      },
+      "title": {
+        "fr": "Archipelago for Piranesi",
+        "en": "Archipelago for Piranesi"
+      },
+      "text": {
+        "fr": "Warr1024 publie sur ContentDB Archipelago for Piranesi, qui relie le jeu à un serveur Archipelago ; la plus ancienne version listée date de novembre 2025, la plus récente de juin 2026.",
+        "en": "Warr1024 publishes Archipelago for Piranesi on ContentDB, which connects the game to an Archipelago server; the oldest listed release dates from November 2025, the latest from June 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "ContentDB — Archipelago for Piranesi",
+      "url": "https://content.luanti.org/packages/Warr1024/piranesi_archipelago/"
+    }
+  ]
+}

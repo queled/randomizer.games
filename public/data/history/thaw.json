@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Tony Hawk's American Wasteland se joue en multiworld Archipelago depuis 2026, quartier par quartier.",
+    "en": "Tony Hawk's American Wasteland has been playable in an Archipelago multiworld since 2026, one district at a time."
+  },
+  "events": [
+    {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Neversoft sort Tony Hawk's American Wasteland en 2005, édité par Activision.",
+        "en": "Neversoft releases Tony Hawk's American Wasteland in 2005, published by Activision."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2026",
+        "en": "March 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "TheLivingShadow97 publie le 14 mars 2026 la version 0.0.1 de l'APWorld, limitée à Hollywood. Beverly Hills arrive en juillet, Downtown et le Death Link en septembre.",
+        "en": "TheLivingShadow97 releases version 0.0.1 of the APWorld on March 14, 2026, limited to Hollywood. Beverly Hills arrives in July, Downtown and Death Link in September."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.0.4, de petites corrections de logique, sort le 20 septembre 2026 ; c'est la plus récente au 23 octobre 2026.",
+        "en": "Version 0.0.4, with small logic fixes, comes out on September 20, 2026; it is the latest as of October 23, 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Tony Hawk's American Wasteland",
+      "url": "https://www.igdb.com/games/tony-hawk-s-american-wasteland"
+    },
+    {
+      "label": "GitHub — TheLivingShadow97/THAWAP",
+      "url": "https://github.com/TheLivingShadow97/THAWAP"
+    },
+    {
+      "label": "GitHub — TheLivingShadow97/THAWAP (releases)",
+      "url": "https://github.com/TheLivingShadow97/THAWAP/releases"
+    }
+  ]
+}

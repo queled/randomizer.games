@@ -1,0 +1,65 @@
+{
+  "intro": {
+    "fr": "Caves of Qud se joue en multiworld Archipelago depuis 2026.",
+    "en": "Caves of Qud has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Freehold Games sort Caves of Qud en 2024.",
+        "en": "Freehold Games releases Caves of Qud in 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2026",
+        "en": "January 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "SabreCat publie le 23 janvier 2026 la version 0.7.1 du randomizer, reprise d'un mod de lonesurv1vor. Gains d'expérience, étapes des quêtes, objets à livrer et objets de lore sont des emplacements ; les gains de niveau (PV, points de mutation, de compétence…) deviennent des objets.",
+        "en": "SabreCat releases version 0.7.1 of the randomizer, a continuation of a mod by lonesurv1vor. XP gains, quest steps, item deliveries and lore items are locations; level-up gains (HP, mutation points, skill points…) become items on January 23, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.8.2 sort le 15 juillet 2026 ; c'est la plus récente au 23 octobre 2026 (5 versions publiées).",
+        "en": "Version 0.8.2 is released on July 15, 2026; it is the latest as of October 23, 2026 (5 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Caves of Qud",
+      "url": "https://www.igdb.com/games/caves-of-qud"
+    },
+    {
+      "label": "GitHub — SabreCat/CavesOfQudArchipelagoRandomizer",
+      "url": "https://github.com/SabreCat/CavesOfQudArchipelagoRandomizer"
+    },
+    {
+      "label": "GitHub — SabreCat/CavesOfQudArchipelagoRandomizer (releases)",
+      "url": "https://github.com/SabreCat/CavesOfQudArchipelagoRandomizer/releases"
+    },
+    {
+      "label": "GitHub — lonesurv1vor/CavesOfQudArchipelagoRandomizer",
+      "url": "https://github.com/lonesurv1vor/CavesOfQudArchipelagoRandomizer"
+    }
+  ]
+}

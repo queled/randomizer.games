@@ -1,0 +1,65 @@
+{
+  "intro": {
+    "fr": "La version Nintendo DS de Sonic Colors se joue en multiworld Archipelago depuis 2026.",
+    "en": "The Nintendo DS version of Sonic Colors has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sonic Colors sort en 2010 : Sonic Team développe la version Wii et Dimps la version Nintendo DS.",
+        "en": "Sonic Colors comes out in 2010: Sonic Team develops the Wii version and Dimps the Nintendo DS version."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2026",
+        "en": "April 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "SilicDev publie le 7 avril 2026 la version 0.1.0 de l'APWorld de Sonic Colours (DS), pour la ROM européenne sur BizHawk.",
+        "en": "SilicDev releases version 0.1.0 of the Sonic Colours (DS) APWorld on April 7, 2026, for the European ROM on BizHawk."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.2.4 sort le 26 août 2026 ; c'est la plus récente au 23 octobre 2026 (6 versions publiées).",
+        "en": "Version 0.2.4 is released on August 26, 2026; it is the latest as of October 23, 2026 (6 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Sonic Colors (DS)",
+      "url": "https://www.igdb.com/games/sonic-colors--1"
+    },
+    {
+      "label": "IGDB — Sonic Colors (Wii)",
+      "url": "https://www.igdb.com/games/sonic-colors"
+    },
+    {
+      "label": "GitHub — SilicDev/Archipelago",
+      "url": "https://github.com/SilicDev/Archipelago"
+    },
+    {
+      "label": "GitHub — SilicDev/Archipelago (releases)",
+      "url": "https://github.com/SilicDev/Archipelago/releases"
+    }
+  ]
+}

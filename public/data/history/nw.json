@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Neon White se joue en multiworld Archipelago depuis 2026.",
+    "en": "Neon White has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Ben Esposito sort Neon White en 2022.",
+        "en": "Ben Esposito releases Neon White in 2022."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Badhamknibbs publie le 12 septembre 2026 la version 0.1.0, première version officielle de l'APWorld, pour la version Steam via MelonLoader.",
+        "en": "Badhamknibbs releases version 0.1.0, the first formal release of the APWorld, for the Steam version through MelonLoader on September 12, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.1.1 sort le 13 septembre 2026 ; c'est la plus récente au 23 octobre 2026 (2 versions publiées).",
+        "en": "Version 0.1.1 is released on September 13, 2026; it is the latest as of October 23, 2026 (2 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Neon White",
+      "url": "https://www.igdb.com/games/neon-white"
+    },
+    {
+      "label": "GitHub — Badhamknibbs/ArchipelagoNeonWhite",
+      "url": "https://github.com/Badhamknibbs/ArchipelagoNeonWhite"
+    },
+    {
+      "label": "GitHub — Badhamknibbs/ArchipelagoNeonWhite (releases)",
+      "url": "https://github.com/Badhamknibbs/ArchipelagoNeonWhite/releases"
+    }
+  ]
+}

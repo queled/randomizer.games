@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Geometry Dash se joue en multiworld Archipelago depuis 2026.",
+    "en": "Geometry Dash has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "RobTop Games sort Geometry Dash en 2013.",
+        "en": "RobTop Games releases Geometry Dash in 2013."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2026",
+        "en": "March 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "matorblal-byte publie le 15 mars 2026 l'alpha 1 de l'APWorld, mod non officiel et inachevé.",
+        "en": "matorblal-byte releases alpha 1 of the APWorld, an unofficial and unfinished mod on March 15, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2026",
+        "en": "April 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 1.0.0-alpha.12 sort le 26 avril 2026 ; c'est la plus récente au 23 octobre 2026 (13 versions publiées).",
+        "en": "Version 1.0.0-alpha.12 is released on April 26, 2026; it is the latest as of October 23, 2026 (13 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Geometry Dash",
+      "url": "https://www.igdb.com/games/geometry-dash"
+    },
+    {
+      "label": "GitHub — matorblal-byte/ArchipelagoGD2",
+      "url": "https://github.com/matorblal-byte/ArchipelagoGD2"
+    },
+    {
+      "label": "GitHub — matorblal-byte/ArchipelagoGD2 (releases)",
+      "url": "https://github.com/matorblal-byte/ArchipelagoGD2/releases"
+    }
+  ]
+}

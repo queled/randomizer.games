@@ -1,0 +1,65 @@
+{
+  "intro": {
+    "fr": "The Legend of Dragoon se joue en multiworld Archipelago depuis 2026.",
+    "en": "The Legend of Dragoon has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "SCE Japan Studio sort The Legend of Dragoon en 1999.",
+        "en": "SCE Japan Studio releases The Legend of Dragoon in 1999."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2026",
+        "en": "January 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "pkolb-dev publie le 11 janvier 2026 la préversion 0.0.2 de l'APWorld. Il repose sur Severed Chains, le portage PC du jeu développé par la communauté Legend of Dragoon, et demande les quatre disques de la version nord-américaine.",
+        "en": "pkolb-dev releases pre-release 0.0.2 of the APWorld. It relies on Severed Chains, the PC port of the game developed by the Legend of Dragoon community, and requires all four discs of the North American version on January 11, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 2.0.0 sort le 11 août 2026 ; c'est la plus récente au 23 octobre 2026 (6 versions publiées).",
+        "en": "Version 2.0.0 is released on August 11, 2026; it is the latest as of October 23, 2026 (6 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — The Legend of Dragoon",
+      "url": "https://www.igdb.com/games/the-legend-of-dragoon"
+    },
+    {
+      "label": "GitHub — pkolb-dev/Archipelago",
+      "url": "https://github.com/pkolb-dev/Archipelago"
+    },
+    {
+      "label": "GitHub — pkolb-dev/Archipelago (releases)",
+      "url": "https://github.com/pkolb-dev/Archipelago/releases"
+    },
+    {
+      "label": "Legend of Dragoon — Severed Chains",
+      "url": "https://legendofdragoon.org/projects/severed-chains/"
+    }
+  ]
+}

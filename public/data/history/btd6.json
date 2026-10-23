@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Bloons TD 6 se joue en multiworld Archipelago depuis 2026.",
+    "en": "Bloons TD 6 has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Ninja Kiwi sort Bloons TD 6 en 2018.",
+        "en": "Ninja Kiwi releases Bloons TD 6 in 2018."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Matt41321 publie le 25 février 2026 la version 0.3.4 du Bloons AP World.",
+        "en": "Matt41321 releases version 0.3.4 of the Bloons AP World on February 25, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.8.3 sort le 8 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (22 versions publiées).",
+        "en": "Version 0.8.3 is released on October 8, 2026; it is the latest as of October 23, 2026 (22 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Bloons TD 6",
+      "url": "https://www.igdb.com/games/bloons-td-6"
+    },
+    {
+      "label": "GitHub — Matt41321/Archipelago",
+      "url": "https://github.com/Matt41321/Archipelago"
+    },
+    {
+      "label": "GitHub — Matt41321/Archipelago (releases)",
+      "url": "https://github.com/Matt41321/Archipelago/releases"
+    }
+  ]
+}

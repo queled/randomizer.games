@@ -1,0 +1,46 @@
+{
+  "intro": {
+    "fr": "Wynncraft, MMORPG joué sur un serveur Minecraft, a son APWorld depuis 2026.",
+    "en": "Wynncraft, an MMORPG played on a Minecraft server, has had its APWorld since 2026."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Avril 2026",
+        "en": "April 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "EpicPuppy613 publie le 16 avril 2026 la version 0.1.0 de l'APWorld de Wynncraft.",
+        "en": "EpicPuppy613 releases version 0.1.0 of the Wynncraft APWorld on April 16, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.4.7 sort le 2 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (17 versions publiées).",
+        "en": "Version 0.4.7 is released on October 2, 2026; it is the latest as of October 23, 2026 (17 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — EpicPuppy613/Wynncraft-APWorld",
+      "url": "https://github.com/EpicPuppy613/Wynncraft-APWorld"
+    },
+    {
+      "label": "GitHub — EpicPuppy613/Wynncraft-APWorld (releases)",
+      "url": "https://github.com/EpicPuppy613/Wynncraft-APWorld/releases"
+    }
+  ]
+}

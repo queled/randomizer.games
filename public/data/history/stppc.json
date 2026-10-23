@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "La collection de casse-tête de Simon Tatham se joue en multiworld Archipelago depuis 2026, en préalpha.",
+    "en": "Simon Tatham's puzzle collection has been playable in an Archipelago multiworld since 2026, in pre-alpha."
+  },
+  "events": [
+    {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Simon Tatham publie en 2004 la Portable Puzzle Collection, recueil de petits casse-tête libres.",
+        "en": "Simon Tatham publishes the Portable Puzzle Collection in 2004, a set of small free puzzle games."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "ishanpm publie le 3 août 2026 la préalpha 0.1.16 de l'APWorld.",
+        "en": "ishanpm releases pre-alpha 0.1.16 of the APWorld on August 3, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.1.20-prealpha sort le 4 septembre 2026 ; c'est la plus récente au 23 octobre 2026 (3 versions publiées).",
+        "en": "Version 0.1.20-prealpha is released on September 4, 2026; it is the latest as of October 23, 2026 (3 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Simon Tatham's Portable Puzzle Collection",
+      "url": "https://www.igdb.com/games/simon-tathams-portable-puzzle-collection"
+    },
+    {
+      "label": "GitHub — ishanpm/Archipelago-sgtpuzzles",
+      "url": "https://github.com/ishanpm/Archipelago-sgtpuzzles"
+    },
+    {
+      "label": "GitHub — ishanpm/Archipelago-sgtpuzzles (releases)",
+      "url": "https://github.com/ishanpm/Archipelago-sgtpuzzles/releases"
+    }
+  ]
+}

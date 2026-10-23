@@ -1,0 +1,65 @@
+{
+  "intro": {
+    "fr": "Q-Up se joue en multiworld Archipelago depuis 2026.",
+    "en": "Q-Up has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Everybody House Games sort Q-Up en 2025.",
+        "en": "Everybody House Games releases Q-Up in 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "cxve publie le 5 juillet 2026 la préversion 1.0.1 de Q-AP, avec un mod BepInEx.",
+        "en": "cxve releases Q-AP pre-release 1.0.1, with a BepInEx mod on July 5, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 3.0.1 sort le 23 septembre 2026 ; c'est la plus récente au 23 octobre 2026 (7 versions publiées).",
+        "en": "Version 3.0.1 is released on September 23, 2026; it is the latest as of October 23, 2026 (7 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Q-Up",
+      "url": "https://www.igdb.com/games/q-up"
+    },
+    {
+      "label": "GitHub — cxve/q-ap-world",
+      "url": "https://github.com/cxve/q-ap-world"
+    },
+    {
+      "label": "GitHub — cxve/q-ap-world (releases)",
+      "url": "https://github.com/cxve/q-ap-world/releases"
+    },
+    {
+      "label": "GitHub — cxve/q-ap-mod",
+      "url": "https://github.com/cxve/q-ap-mod"
+    }
+  ]
+}

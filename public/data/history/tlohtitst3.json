@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "The Legend of Heroes: Trails in the Sky the 3rd se joue en multiworld Archipelago depuis 2025.",
+    "en": "The Legend of Heroes: Trails in the Sky the 3rd has been playable in an Archipelago multiworld since 2025."
+  },
+  "events": [
+    {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nihon Falcom sort The Legend of Heroes: Trails in the Sky the 3rd en 2007.",
+        "en": "Nihon Falcom releases The Legend of Heroes: Trails in the Sky the 3rd in 2007."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2025",
+        "en": "March 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "L'équipe Archipelago-Trails-in-the-Sky-the-3rd publie le 8 mars 2025 l'alpha 0.0.1. Le mod passe par les outils LB-ARK et Factoria de la communauté Aureole-Suite.",
+        "en": "The Archipelago-Trails-in-the-Sky-the-3rd team releases alpha 0.0.1 on March 8, 2025. The mod relies on the Aureole-Suite community's LB-ARK and Factoria tools."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.1.7 sort le 4 mai 2026 ; c'est la plus récente au 23 octobre 2026 (10 versions publiées).",
+        "en": "Version 0.1.7 is released on May 4, 2026; it is the latest as of October 23, 2026 (10 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — The Legend of Heroes: Trails in the Sky the 3rd",
+      "url": "https://www.igdb.com/games/the-legend-of-heroes-trails-in-the-sky-the-3rd"
+    },
+    {
+      "label": "GitHub — Archipelago-Trails-in-the-Sky-the-3rd/Archipelago-Trails-in-the-Sky-the-3rd",
+      "url": "https://github.com/Archipelago-Trails-in-the-Sky-the-3rd/Archipelago-Trails-in-the-Sky-the-3rd"
+    },
+    {
+      "label": "GitHub — Archipelago-Trails-in-the-Sky-the-3rd/Archipelago-Trails-in-the-Sky-the-3rd (releases)",
+      "url": "https://github.com/Archipelago-Trails-in-the-Sky-the-3rd/Archipelago-Trails-in-the-Sky-the-3rd/releases"
+    }
+  ]
+}

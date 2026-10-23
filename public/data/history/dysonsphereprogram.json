@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Dyson Sphere Program se joue en multiworld Archipelago depuis 2026.",
+    "en": "Dyson Sphere Program has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Youthcat Studio sort Dyson Sphere Program en 2021.",
+        "en": "Youthcat Studio releases Dyson Sphere Program in 2021."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2026",
+        "en": "January 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "BloodStainedCrow publie le 15 janvier 2026 la préversion 0.2.0-rc1 de l'APWorld, en alpha, qui passe par un mod BepInEx.",
+        "en": "BloodStainedCrow releases pre-release 0.2.0-rc1 of the APWorld, in alpha, which relies on a BepInEx mod on January 15, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2026",
+        "en": "January 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.2.0rc4 sort le 22 janvier 2026 ; c'est la plus récente au 23 octobre 2026 (4 versions publiées).",
+        "en": "Version 0.2.0rc4 is released on January 22, 2026; it is the latest as of October 23, 2026 (4 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Dyson Sphere Program",
+      "url": "https://www.igdb.com/games/dyson-sphere-program"
+    },
+    {
+      "label": "GitHub — BloodStainedCrow/Archipelago-DSP",
+      "url": "https://github.com/BloodStainedCrow/Archipelago-DSP"
+    },
+    {
+      "label": "GitHub — BloodStainedCrow/Archipelago-DSP (releases)",
+      "url": "https://github.com/BloodStainedCrow/Archipelago-DSP/releases"
+    }
+  ]
+}

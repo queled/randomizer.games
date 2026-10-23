@@ -1,0 +1,68 @@
+{
+  "intro": {
+    "fr": "YARG, jeu de rythme libre à instruments en plastique, se joue en multiworld Archipelago depuis fin 2025.",
+    "en": "YARG, the open-source plastic-instrument rhythm game, has been playable in an Archipelago multiworld since late 2025."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Décembre 2025",
+        "en": "December 2025"
+      },
+      "title": {
+        "fr": "YARGArchipelago",
+        "en": "YARGArchipelago"
+      },
+      "text": {
+        "fr": "energymaster22 publie le 22 décembre 2025 la première version de l'APWorld de YARG et de son client, YARGAPClient. La version 1.3.0 sort le 3 octobre 2026.",
+        "en": "energymaster22 releases the first version of the YARG APWorld and its client, YARGAPClient, on December 22, 2025. Version 1.3.0 comes out on October 3, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2026",
+        "en": "January 2026"
+      },
+      "title": {
+        "fr": "Un plugin",
+        "en": "A plugin"
+      },
+      "text": {
+        "fr": "Thedrummonger publie le 28 janvier 2026 la version 2.0.0 d'un plugin Archipelago pour YARG, mis à jour jusqu'en juin.",
+        "en": "Thedrummonger releases version 2.0.0 of an Archipelago plugin for YARG on January 28, 2026, updated until June."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Setlists Guitar Hero et Rock Band",
+        "en": "Guitar Hero and Rock Band setlists"
+      },
+      "text": {
+        "fr": "GirlWithoutAFairy publie à partir du 8 février 2026 un fork qui reprend les listes de morceaux de Guitar Hero, en commençant par le premier épisode, puis de Rock Band ; la mise à jour du 8 octobre 2026 couvre Warriors of Rock et l'ensemble des setlists.",
+        "en": "From February 8, 2026, GirlWithoutAFairy releases a fork that recreates the song lists of Guitar Hero, starting with the first game, then Rock Band; the October 8, 2026 update covers Warriors of Rock and all setlists."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — energymaster22/YARGArchipelago",
+      "url": "https://github.com/energymaster22/YARGArchipelago"
+    },
+    {
+      "label": "GitHub — energymaster22/YARGAPClient",
+      "url": "https://github.com/energymaster22/YARGAPClient"
+    },
+    {
+      "label": "GitHub — Thedrummonger/YargArchipelagoPluginV2",
+      "url": "https://github.com/Thedrummonger/YargArchipelagoPluginV2"
+    },
+    {
+      "label": "GitHub — GirlWithoutAFairy/YARGArchipelago-GH-and-RB-forks (releases)",
+      "url": "https://github.com/GirlWithoutAFairy/YARGArchipelago-GH-and-RB-forks/releases"
+    }
+  ]
+}

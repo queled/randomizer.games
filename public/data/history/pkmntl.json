@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Pokémon Trozei!, sorti en Europe sous le nom Pokémon Link!, se joue en multiworld Archipelago depuis 2026.",
+    "en": "Pokémon Trozei!, released in Europe as Pokémon Link!, has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Genius Sonority sort Pokémon Trozei! sur Nintendo DS en 2005, édité par Nintendo.",
+        "en": "Genius Sonority releases Pokémon Trozei! on Nintendo DS in 2005, published by Nintendo."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "WCutePy publie le 27 juin 2026 la bêta 0.0.1 de l'APWorld, pour la ROM européenne (Pokémon Link) sur BizHawk.",
+        "en": "WCutePy releases beta 0.0.1 of the APWorld on June 27, 2026, for the European ROM (Pokémon Link) on BizHawk."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.0.3 sort le 30 août 2026 ; c'est la plus récente au 23 octobre 2026 (3 versions publiées).",
+        "en": "Version 0.0.3 is released on August 30, 2026; it is the latest as of October 23, 2026 (3 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Pokémon Trozei!",
+      "url": "https://www.igdb.com/games/pokemon-trozei"
+    },
+    {
+      "label": "GitHub — WCutePy/ArchipelagoAlmia",
+      "url": "https://github.com/WCutePy/ArchipelagoAlmia"
+    },
+    {
+      "label": "GitHub — WCutePy/ArchipelagoAlmia (releases)",
+      "url": "https://github.com/WCutePy/ArchipelagoAlmia/releases"
+    }
+  ]
+}

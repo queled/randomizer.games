@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Slay the Princess: The Pristine Cut se joue en multiworld Archipelago depuis 2026.",
+    "en": "Slay the Princess: The Pristine Cut has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Black Tabby Games sort Slay the Princess: The Pristine Cut en 2024.",
+        "en": "Black Tabby Games releases Slay the Princess: The Pristine Cut in 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2026",
+        "en": "April 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Overlord-Draconic-Fire publie le 12 avril 2026 la version 0.1.0 de l'APWorld.",
+        "en": "Overlord-Draconic-Fire releases version 0.1.0 of the APWorld on April 12, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 1.2.1 sort le 8 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (18 versions publiées).",
+        "en": "Version 1.2.1 is released on October 8, 2026; it is the latest as of October 23, 2026 (18 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Slay the Princess: The Pristine Cut",
+      "url": "https://www.igdb.com/games/slay-the-princess-the-pristine-cut"
+    },
+    {
+      "label": "GitHub — Overlord-Draconic-Fire/Archipelago",
+      "url": "https://github.com/Overlord-Draconic-Fire/Archipelago"
+    },
+    {
+      "label": "GitHub — Overlord-Draconic-Fire/Archipelago (releases)",
+      "url": "https://github.com/Overlord-Draconic-Fire/Archipelago/releases"
+    }
+  ]
+}

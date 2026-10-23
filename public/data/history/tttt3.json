@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Ty the Tasmanian Tiger 3: Night of the Quinkan se joue en multiworld Archipelago depuis 2026.",
+    "en": "Ty the Tasmanian Tiger 3: Night of the Quinkan has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Krome Studios sort en 2018 la version PC de Ty the Tasmanian Tiger 3: Night of the Quinkan, sorti à l'origine en 2005.",
+        "en": "Krome Studios releases the PC version of Ty the Tasmanian Tiger 3: Night of the Quinkan in 2018, originally released in 2005."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2026",
+        "en": "January 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "xMcacutt publie le 23 janvier 2026 la version 1.1.0 de l'APWorld.",
+        "en": "xMcacutt releases version 1.1.0 of the APWorld on January 23, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 1.2.1 sort le 14 février 2026 ; c'est la plus récente au 23 octobre 2026 (3 versions publiées).",
+        "en": "Version 1.2.1 is released on February 14, 2026; it is the latest as of October 23, 2026 (3 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Ty the Tasmanian Tiger 3: Night of the Quinkan",
+      "url": "https://www.igdb.com/games/ty-the-tasmanian-tiger-3-night-of-the-quinkan--1"
+    },
+    {
+      "label": "GitHub — xMcacutt-Archipelago/Archipelago-TyTheTasmanianTiger3",
+      "url": "https://github.com/xMcacutt-Archipelago/Archipelago-TyTheTasmanianTiger3"
+    },
+    {
+      "label": "GitHub — xMcacutt-Archipelago/Archipelago-TyTheTasmanianTiger3 (releases)",
+      "url": "https://github.com/xMcacutt-Archipelago/Archipelago-TyTheTasmanianTiger3/releases"
+    }
+  ]
+}

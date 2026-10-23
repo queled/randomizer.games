@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Control se joue en multiworld Archipelago depuis 2026.",
+    "en": "Control has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Remedy Entertainment sort Control en 2019.",
+        "en": "Remedy Entertainment releases Control in 2019."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Alias-Cynestal publie le 19 juillet 2026 la version 1.0.0 de l'APWorld.",
+        "en": "Alias-Cynestal releases version 1.0.0 of the APWorld on July 19, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 1.2.0 sort le 13 août 2026 ; c'est la plus récente au 23 octobre 2026 (4 versions publiées).",
+        "en": "Version 1.2.0 is released on August 13, 2026; it is the latest as of October 23, 2026 (4 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Control",
+      "url": "https://www.igdb.com/games/control"
+    },
+    {
+      "label": "GitHub — Alias-Cynestal/Archipelago",
+      "url": "https://github.com/Alias-Cynestal/Archipelago"
+    },
+    {
+      "label": "GitHub — Alias-Cynestal/Archipelago (releases)",
+      "url": "https://github.com/Alias-Cynestal/Archipelago/releases"
+    }
+  ]
+}

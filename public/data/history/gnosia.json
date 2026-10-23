@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Gnosia se joue en multiworld Archipelago depuis 2026.",
+    "en": "Gnosia has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Petit Depotto sort Gnosia en 2019.",
+        "en": "Petit Depotto releases Gnosia in 2019."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Mat8071 publie le 16 mai 2026 la version 0.1.0 de l'APWorld.",
+        "en": "Mat8071 releases version 0.1.0 of the APWorld on May 16, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.2.0-beta.1 sort le 17 août 2026 ; c'est la plus récente au 23 octobre 2026 (6 versions publiées).",
+        "en": "Version 0.2.0-beta.1 is released on August 17, 2026; it is the latest as of October 23, 2026 (6 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Gnosia",
+      "url": "https://www.igdb.com/games/gnosia"
+    },
+    {
+      "label": "GitHub — Mat8071/Gnosia-Archipelago-Randomizer",
+      "url": "https://github.com/Mat8071/Gnosia-Archipelago-Randomizer"
+    },
+    {
+      "label": "GitHub — Mat8071/Gnosia-Archipelago-Randomizer (releases)",
+      "url": "https://github.com/Mat8071/Gnosia-Archipelago-Randomizer/releases"
+    }
+  ]
+}

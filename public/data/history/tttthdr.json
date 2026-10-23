@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "TY the Tasmanian Tiger HD se joue en multiworld Archipelago depuis 2025.",
+    "en": "TY the Tasmanian Tiger HD has been playable in an Archipelago multiworld since 2025."
+  },
+  "events": [
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Krome Studios sort en 2016 TY the Tasmanian Tiger HD, version remaniée du jeu de 2002.",
+        "en": "Krome Studios releases TY the Tasmanian Tiger HD in 2016, a remastered version of the 2002 game."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2025",
+        "en": "February 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "xMcacutt publie le 6 février 2025 la version 1.0.0 de l'APWorld. Le même auteur a depuis publié ceux de TY 3, Unfair Flips, KeyWe, Melatonin et d'autres jeux.",
+        "en": "xMcacutt releases version 1.0.0 of the APWorld on February 6, 2025. The same author has since released APWorlds for TY 3, Unfair Flips, KeyWe, Melatonin and other games."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 1.5.0 sort le 18 mai 2026 ; c'est la plus récente au 23 octobre 2026 (31 versions publiées).",
+        "en": "Version 1.5.0 is released on May 18, 2026; it is the latest as of October 23, 2026 (31 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — TY the Tasmanian Tiger HD",
+      "url": "https://www.igdb.com/games/ty-the-tasmanian-tiger-hd"
+    },
+    {
+      "label": "GitHub — xMcacutt/Archipelago-TyTheTasmanianTiger",
+      "url": "https://github.com/xMcacutt/Archipelago-TyTheTasmanianTiger"
+    },
+    {
+      "label": "GitHub — xMcacutt/Archipelago-TyTheTasmanianTiger (releases)",
+      "url": "https://github.com/xMcacutt/Archipelago-TyTheTasmanianTiger/releases"
+    }
+  ]
+}

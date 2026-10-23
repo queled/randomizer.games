@@ -1,0 +1,75 @@
+{
+  "intro": {
+    "fr": "Ender Magnolia: Bloom in the Mist se joue en multiworld Archipelago depuis 2026, grâce à l'auteur de l'APWorld d'Ender Lilies.",
+    "en": "Ender Magnolia: Bloom in the Mist has been playable in an Archipelago multiworld since 2026, thanks to the author of the Ender Lilies APWorld."
+  },
+  "events": [
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Adglobe et Live Wire sortent Ender Magnolia: Bloom in the Mist en 2025, suite d'Ender Lilies.",
+        "en": "Adglobe and Live Wire release Ender Magnolia: Bloom in the Mist in 2025, the sequel to Ender Lilies."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2023",
+        "en": "October 2023"
+      },
+      "title": {
+        "fr": "Ender Lilies",
+        "en": "Ender Lilies"
+      },
+      "text": {
+        "fr": "Trexounay publie en octobre 2023 un premier APWorld pour Ender Lilies, le jeu précédent.",
+        "en": "Trexounay releases a first APWorld for Ender Lilies, the previous game, in October 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Trexounay publie le 25 juillet 2026 la préversion 0.0.1 de l'APWorld d'Ender Magnolia, dans le même dépôt.",
+        "en": "Trexounay publishes pre-release 0.0.1 of the Ender Magnolia APWorld on July 25, 2026, in the same repository."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.1.8 sort le 19 septembre 2026 ; c'est la plus récente au 23 octobre 2026 (16 versions publiées).",
+        "en": "Version 0.1.8 is released on September 19, 2026; it is the latest as of October 23, 2026 (16 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Ender Magnolia: Bloom in the Mist",
+      "url": "https://www.igdb.com/games/ender-magnolia-bloom-in-the-mist"
+    },
+    {
+      "label": "GitHub — Trexounay/EnderLilies.Archipelago",
+      "url": "https://github.com/Trexounay/EnderLilies.Archipelago"
+    },
+    {
+      "label": "GitHub — Trexounay/EnderLilies.Archipelago (releases)",
+      "url": "https://github.com/Trexounay/EnderLilies.Archipelago/releases"
+    }
+  ]
+}

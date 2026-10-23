@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Factorio, déjà présent dans Archipelago, s'y joue aussi avec les Bob's Mods depuis 2025.",
+    "en": "Factorio, already part of Archipelago, can also be played there with Bob's Mods since 2025."
+  },
+  "events": [
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Wube Software sort Factorio en version 1.0 en 2020.",
+        "en": "Wube Software releases Factorio 1.0 in 2020."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2025",
+        "en": "October 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Osiris32-and-a-half publie le 11 octobre 2025 la version 1.1.0 de BobFactorioAP, variante du monde Factorio d'Archipelago adaptée aux Bob's Mods, une série de mods qui étoffent l'arbre technologique.",
+        "en": "Osiris32-and-a-half releases version 1.1.0 of BobFactorioAP, a variant of Archipelago's Factorio world adapted to Bob's Mods, a set of mods that expand the tech tree on October 11, 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 2.3.1 sort le 11 septembre 2026 ; c'est la plus récente au 23 octobre 2026 (23 versions publiées).",
+        "en": "Version 2.3.1 is released on September 11, 2026; it is the latest as of October 23, 2026 (23 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Factorio",
+      "url": "https://www.igdb.com/games/factorio"
+    },
+    {
+      "label": "GitHub — Osiris32-and-a-half/BobFactorioAP",
+      "url": "https://github.com/Osiris32-and-a-half/BobFactorioAP"
+    },
+    {
+      "label": "GitHub — Osiris32-and-a-half/BobFactorioAP (releases)",
+      "url": "https://github.com/Osiris32-and-a-half/BobFactorioAP/releases"
+    }
+  ]
+}

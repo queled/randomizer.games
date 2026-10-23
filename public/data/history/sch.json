@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Smushi Come Home se joue en multiworld Archipelago depuis 2025.",
+    "en": "Smushi Come Home has been playable in an Archipelago multiworld since 2025."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "SomeHumbleOnion sort Smushi Come Home en 2023.",
+        "en": "SomeHumbleOnion releases Smushi Come Home in 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2025",
+        "en": "November 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "xMcacutt publie le 27 novembre 2025 la version 1.0.1 de l'APWorld.",
+        "en": "xMcacutt releases version 1.0.1 of the APWorld on November 27, 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2026",
+        "en": "January 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 1.0.9 sort le 12 janvier 2026 ; c'est la plus récente au 23 octobre 2026 (10 versions publiées).",
+        "en": "Version 1.0.9 is released on January 12, 2026; it is the latest as of October 23, 2026 (10 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Smushi Come Home",
+      "url": "https://www.igdb.com/games/smushi-come-home"
+    },
+    {
+      "label": "GitHub — xMcacutt-Archipelago/Archipelago-SmushiComeHome",
+      "url": "https://github.com/xMcacutt-Archipelago/Archipelago-SmushiComeHome"
+    },
+    {
+      "label": "GitHub — xMcacutt-Archipelago/Archipelago-SmushiComeHome (releases)",
+      "url": "https://github.com/xMcacutt-Archipelago/Archipelago-SmushiComeHome/releases"
+    }
+  ]
+}

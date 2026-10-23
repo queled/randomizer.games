@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Burger Shop 2 se joue en multiworld Archipelago depuis 2026.",
+    "en": "Burger Shop 2 has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2009",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "GoBit Games sort Burger Shop 2 en 2009.",
+        "en": "GoBit Games releases Burger Shop 2 in 2009."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "zsiegel701 publie le 16 juin 2026 la version 0.1.1 de l'APWorld, pour la version Steam sous Windows.",
+        "en": "zsiegel701 releases version 0.1.1 of the APWorld, for the Steam version on Windows on June 16, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.3.2 sort le 9 août 2026 ; c'est la plus récente au 23 octobre 2026 (8 versions publiées).",
+        "en": "Version 0.3.2 is released on August 9, 2026; it is the latest as of October 23, 2026 (8 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Burger Shop 2",
+      "url": "https://www.igdb.com/games/burger-shop-2"
+    },
+    {
+      "label": "GitHub — zsiegel701/Burger-Shop-Archipelago",
+      "url": "https://github.com/zsiegel701/Burger-Shop-Archipelago"
+    },
+    {
+      "label": "GitHub — zsiegel701/Burger-Shop-Archipelago (releases)",
+      "url": "https://github.com/zsiegel701/Burger-Shop-Archipelago/releases"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Silver Daze se joue en multiworld Archipelago depuis fin 2025.",
+    "en": "Silver Daze has been playable in an Archipelago multiworld since late 2025."
+  },
+  "events": [
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Silver Daze sort en 2025.",
+        "en": "Silver Daze comes out in 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2025",
+        "en": "December 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "udime123 publie le 8 décembre 2025 la version 0.5.0 de l'APWorld. Un fichier placé dans le dossier du jeu ajoute un mode Archipelago au menu Nouvelle partie.",
+        "en": "udime123 releases version 0.5.0 of the APWorld on December 8, 2025. A file placed in the game folder adds an Archipelago mode to the New Game menu."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.7.4 sort le 5 août 2026 ; c'est la plus récente au 23 octobre 2026 (10 versions publiées).",
+        "en": "Version 0.7.4 is released on August 5, 2026; it is the latest as of October 23, 2026 (10 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Silver Daze",
+      "url": "https://www.igdb.com/games/silver-daze"
+    },
+    {
+      "label": "GitHub — udime123/Silver-Daze-APWorld",
+      "url": "https://github.com/udime123/Silver-Daze-APWorld"
+    },
+    {
+      "label": "GitHub — udime123/Silver-Daze-APWorld (releases)",
+      "url": "https://github.com/udime123/Silver-Daze-APWorld/releases"
+    }
+  ]
+}

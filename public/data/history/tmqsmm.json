@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "The Magical Quest Starring Mickey Mouse se joue en multiworld Archipelago depuis octobre 2026.",
+    "en": "The Magical Quest Starring Mickey Mouse has been playable in an Archipelago multiworld since October 2026."
+  },
+  "events": [
+    {
+      "date": "1992",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort The Magical Quest Starring Mickey Mouse en 1992.",
+        "en": "Capcom releases The Magical Quest Starring Mickey Mouse in 1992."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Abimo25 publie le 11 octobre 2026 la version 0.1.0 de Magical Quest AP, pour la ROM américaine sur snes9x-nwa ou BizHawk.",
+        "en": "Abimo25 releases Magical Quest AP 0.1.0, for the US ROM on snes9x-nwa or BizHawk on October 11, 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — The Magical Quest Starring Mickey Mouse",
+      "url": "https://www.igdb.com/games/the-magical-quest-starring-mickey-mouse"
+    },
+    {
+      "label": "GitHub — Abimo25/MagicalQuestAP",
+      "url": "https://github.com/Abimo25/MagicalQuestAP"
+    },
+    {
+      "label": "GitHub — Abimo25/MagicalQuestAP (releases)",
+      "url": "https://github.com/Abimo25/MagicalQuestAP/releases"
+    }
+  ]
+}

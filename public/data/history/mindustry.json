@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Mindustry se joue en multiworld Archipelago depuis 2024.",
+    "en": "Mindustry has been playable in an Archipelago multiworld since 2024."
+  },
+  "events": [
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Anuken sort Mindustry en 2017.",
+        "en": "Anuken releases Mindustry in 2017."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2024",
+        "en": "August 2024"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "JohnMahglass publie le 20 août 2024 la préversion 0.1.0 de l'APWorld.",
+        "en": "JohnMahglass releases pre-release 0.1.0 of the APWorld on August 20, 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.5.0 sort le 24 février 2026 ; c'est la plus récente au 23 octobre 2026 (8 versions publiées).",
+        "en": "Version 0.5.0 is released on February 24, 2026; it is the latest as of October 23, 2026 (8 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Mindustry",
+      "url": "https://www.igdb.com/games/mindustry"
+    },
+    {
+      "label": "GitHub — JohnMahglass/Archipelago-Mindustry",
+      "url": "https://github.com/JohnMahglass/Archipelago-Mindustry"
+    },
+    {
+      "label": "GitHub — JohnMahglass/Archipelago-Mindustry (releases)",
+      "url": "https://github.com/JohnMahglass/Archipelago-Mindustry/releases"
+    }
+  ]
+}

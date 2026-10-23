@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Kerbal Space Program se joue en multiworld Archipelago depuis 2026, à titre expérimental.",
+    "en": "Kerbal Space Program has been playable in an Archipelago multiworld since 2026, on an experimental basis."
+  },
+  "events": [
+    {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Squad sort Kerbal Space Program en 2015.",
+        "en": "Squad releases Kerbal Space Program in 2015."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2026",
+        "en": "April 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "nickdavies publie le 18 avril 2026 une première alpha, 0.1.1, pour le jeu sans mods. La version 0.9.0 ajoute pièges, Death Link et bonus.",
+        "en": "nickdavies releases a first alpha, 0.1.1, on April 18, 2026, for the unmodded game. Version 0.9.0 adds traps, Death Link and buffs."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.9.0 sort le 6 septembre 2026 ; c'est la plus récente au 23 octobre 2026 (32 versions publiées).",
+        "en": "Version 0.9.0 is released on September 6, 2026; it is the latest as of October 23, 2026 (32 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Kerbal Space Program",
+      "url": "https://www.igdb.com/games/kerbal-space-program"
+    },
+    {
+      "label": "GitHub — nickdavies/Archipelago",
+      "url": "https://github.com/nickdavies/Archipelago"
+    },
+    {
+      "label": "GitHub — nickdavies/Archipelago (releases)",
+      "url": "https://github.com/nickdavies/Archipelago/releases"
+    }
+  ]
+}

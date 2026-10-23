@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Hyperdimension Neptunia Re;Birth3: V Generation se joue en multiworld Archipelago depuis 2026.",
+    "en": "Hyperdimension Neptunia Re;Birth3: V Generation has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2014",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Compile Heart sort Hyperdimension Neptunia Re;Birth3: V Generation en 2014.",
+        "en": "Compile Heart releases Hyperdimension Neptunia Re;Birth3: V Generation in 2014."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "vegemiiBG publie le 10 mai 2026 la version 0.1 de l'APWorld.",
+        "en": "vegemiiBG releases version 0.1 of the APWorld on May 10, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.2.0 sort le 31 août 2026 ; c'est la plus récente au 23 octobre 2026 (11 versions publiées).",
+        "en": "Version 0.2.0 is released on August 31, 2026; it is the latest as of October 23, 2026 (11 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Hyperdimension Neptunia Re;Birth3: V Generation",
+      "url": "https://www.igdb.com/games/hyperdimension-neptunia-re-birth3-v-generation"
+    },
+    {
+      "label": "GitHub — vegemiiBG/Archipelago-NepRb3",
+      "url": "https://github.com/vegemiiBG/Archipelago-NepRb3"
+    },
+    {
+      "label": "GitHub — vegemiiBG/Archipelago-NepRb3 (releases)",
+      "url": "https://github.com/vegemiiBG/Archipelago-NepRb3/releases"
+    }
+  ]
+}

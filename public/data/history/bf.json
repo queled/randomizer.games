@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Blue Fire se joue en multiworld Archipelago depuis 2026.",
+    "en": "Blue Fire has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "ROBI Studios sort Blue Fire en 2021.",
+        "en": "ROBI Studios releases Blue Fire in 2021."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Nebulea-dev publie le 21 juin 2026 la version 0.1.0 de l'APWorld.",
+        "en": "Nebulea-dev releases version 0.1.0 of the APWorld on June 21, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.6.0 sort le 3 septembre 2026 ; c'est la plus récente au 23 octobre 2026 (6 versions publiées).",
+        "en": "Version 0.6.0 is released on September 3, 2026; it is the latest as of October 23, 2026 (6 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Blue Fire",
+      "url": "https://www.igdb.com/games/blue-fire"
+    },
+    {
+      "label": "GitHub — Nebulea-dev/Archipelago-BlueFire",
+      "url": "https://github.com/Nebulea-dev/Archipelago-BlueFire"
+    },
+    {
+      "label": "GitHub — Nebulea-dev/Archipelago-BlueFire (releases)",
+      "url": "https://github.com/Nebulea-dev/Archipelago-BlueFire/releases"
+    }
+  ]
+}

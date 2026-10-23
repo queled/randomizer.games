@@ -1,0 +1,46 @@
+{
+  "intro": {
+    "fr": "Crosswords est un jeu de mots croisés conçu pour Archipelago.",
+    "en": "Crosswords is a crossword game designed for Archipelago."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "jm771 publie le 28 mai 2026 la version 0.1.0 de l'APWorld, construit à partir de Jigsaw Puzzle for Archipelago.",
+        "en": "jm771 releases version 0.1.0 of the APWorld on May 28, 2026, built from Jigsaw Puzzle for Archipelago."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.1.6 sort le 9 septembre 2026 ; c'est la plus récente au 23 octobre 2026 (6 versions publiées).",
+        "en": "Version 0.1.6 is released on September 9, 2026; it is the latest as of October 23, 2026 (6 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — jm771/apworld_crossword",
+      "url": "https://github.com/jm771/apworld_crossword"
+    },
+    {
+      "label": "GitHub — jm771/apworld_crossword (releases)",
+      "url": "https://github.com/jm771/apworld_crossword/releases"
+    }
+  ]
+}

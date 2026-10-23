@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "KeyWe se joue en multiworld Archipelago depuis 2025.",
+    "en": "KeyWe has been playable in an Archipelago multiworld since 2025."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Stonewheat & Sons sort KeyWe en 2021.",
+        "en": "Stonewheat & Sons releases KeyWe in 2021."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2025",
+        "en": "November 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "xMcacutt publie le 20 novembre 2025 la version 1.0.1 de l'APWorld.",
+        "en": "xMcacutt releases version 1.0.1 of the APWorld on November 20, 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2026",
+        "en": "March 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 1.1.0 sort le 29 mars 2026 ; c'est la plus récente au 23 octobre 2026 (5 versions publiées).",
+        "en": "Version 1.1.0 is released on March 29, 2026; it is the latest as of October 23, 2026 (5 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — KeyWe",
+      "url": "https://www.igdb.com/games/keywe"
+    },
+    {
+      "label": "GitHub — xMcacutt-Archipelago/Archipelago-KeyWe",
+      "url": "https://github.com/xMcacutt-Archipelago/Archipelago-KeyWe"
+    },
+    {
+      "label": "GitHub — xMcacutt-Archipelago/Archipelago-KeyWe (releases)",
+      "url": "https://github.com/xMcacutt-Archipelago/Archipelago-KeyWe/releases"
+    }
+  ]
+}

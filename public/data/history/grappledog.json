@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Grapple Dog se joue en multiworld Archipelago depuis 2026.",
+    "en": "Grapple Dog has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Medallion Games sort Grapple Dog en 2022.",
+        "en": "Medallion Games releases Grapple Dog in 2022."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "ProfDeCube publie le 27 février 2026 la version 1.2.1 de l'APWorld.",
+        "en": "ProfDeCube releases version 1.2.1 of the APWorld on February 27, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2026",
+        "en": "March 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 1.3.2 sort le 6 mars 2026 ; c'est la plus récente au 23 octobre 2026 (3 versions publiées).",
+        "en": "Version 1.3.2 is released on March 6, 2026; it is the latest as of October 23, 2026 (3 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Grapple Dog",
+      "url": "https://www.igdb.com/games/grapple-dog"
+    },
+    {
+      "label": "GitHub — ProfDeCube-org/Archipelago-GrappleDog",
+      "url": "https://github.com/ProfDeCube-org/Archipelago-GrappleDog"
+    },
+    {
+      "label": "GitHub — ProfDeCube-org/Archipelago-GrappleDog (releases)",
+      "url": "https://github.com/ProfDeCube-org/Archipelago-GrappleDog/releases"
+    }
+  ]
+}

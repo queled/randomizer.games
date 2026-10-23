@@ -1,0 +1,79 @@
+{
+  "intro": {
+    "fr": "Yooka-Laylee se joue en multiworld Archipelago depuis 2023 grâce au mod YLRandomizer.",
+    "en": "Yooka-Laylee has been playable in an Archipelago multiworld since 2023 through the YLRandomizer mod."
+  },
+  "events": [
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Playtonic sort Yooka-Laylee en 2017.",
+        "en": "Playtonic releases Yooka-Laylee in 2017."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2023",
+        "en": "June 2023"
+      },
+      "title": {
+        "fr": "YLRandomizer",
+        "en": "YLRandomizer"
+      },
+      "text": {
+        "fr": "SunnyBat publie le 13 juin 2023 la première bêta de YLRandomizer, mod qui intègre le jeu à Archipelago ; seules les Pagies sont alors randomisées.",
+        "en": "SunnyBat releases the first beta of YLRandomizer on June 13, 2023, a mod that integrates the game into Archipelago; only Pagies are randomized at that point."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2023",
+        "en": "August 2023"
+      },
+      "title": {
+        "fr": "APWorld",
+        "en": "APWorld"
+      },
+      "text": {
+        "fr": "Awareqwx publie le 21 août 2023 la bêta 3 de l'APWorld correspondant.",
+        "en": "Awareqwx publishes beta 3 of the matching APWorld on August 21, 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2025",
+        "en": "September 2025"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La bêta 8 sort le 17 septembre 2025 ; c'est la plus récente au 23 octobre 2026.",
+        "en": "Beta 8 comes out on September 17, 2025; it is the latest as of October 23, 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Yooka-Laylee",
+      "url": "https://www.igdb.com/games/yooka-laylee"
+    },
+    {
+      "label": "GitHub — SunnyBat/YLRandomizer",
+      "url": "https://github.com/SunnyBat/YLRandomizer"
+    },
+    {
+      "label": "GitHub — Awareqwx/Archipelago",
+      "url": "https://github.com/Awareqwx/Archipelago"
+    },
+    {
+      "label": "GitHub — Awareqwx/Archipelago (releases)",
+      "url": "https://github.com/Awareqwx/Archipelago/releases"
+    }
+  ]
+}

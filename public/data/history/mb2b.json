@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Mount & Blade II: Bannerlord se joue en multiworld Archipelago depuis 2026.",
+    "en": "Mount & Blade II: Bannerlord has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "TaleWorlds sort Mount & Blade II: Bannerlord en 2020.",
+        "en": "TaleWorlds releases Mount & Blade II: Bannerlord in 2020."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "dghalfor publie le 26 juin 2026 une première version (0.1.0) de l'APWorld.",
+        "en": "dghalfor releases a first version (0.1.0) of the APWorld on June 26, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.4.0 sort le 11 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (6 versions publiées).",
+        "en": "Version 0.4.0 is released on October 11, 2026; it is the latest as of October 23, 2026 (6 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Mount & Blade II: Bannerlord",
+      "url": "https://www.igdb.com/games/mount-and-blade-ii-bannerlord"
+    },
+    {
+      "label": "GitHub — dghalfor/Bannerlord-APWorld",
+      "url": "https://github.com/dghalfor/Bannerlord-APWorld"
+    },
+    {
+      "label": "GitHub — dghalfor/Bannerlord-APWorld (releases)",
+      "url": "https://github.com/dghalfor/Bannerlord-APWorld/releases"
+    }
+  ]
+}

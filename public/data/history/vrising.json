@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "V Rising se joue en multiworld Archipelago depuis 2026.",
+    "en": "V Rising has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Stunlock Studios sort V Rising en 2024.",
+        "en": "Stunlock Studios releases V Rising in 2024."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "dghalfor publie le 13 mai 2026 une seconde preuve de concept (0.0.2) de l'APWorld : armes, sorts et objets des stations de connaissance et des boss sont randomisés.",
+        "en": "dghalfor releases a second proof of concept (0.0.2) of the APWorld: weapons, spells and items from knowledge stations and bosses are randomized on May 13, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.3.3 sort le 9 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (15 versions publiées).",
+        "en": "Version 0.3.3 is released on October 9, 2026; it is the latest as of October 23, 2026 (15 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — V Rising",
+      "url": "https://www.igdb.com/games/v-rising"
+    },
+    {
+      "label": "GitHub — dghalfor/V-Rising-APWorld",
+      "url": "https://github.com/dghalfor/V-Rising-APWorld"
+    },
+    {
+      "label": "GitHub — dghalfor/V-Rising-APWorld (releases)",
+      "url": "https://github.com/dghalfor/V-Rising-APWorld/releases"
+    }
+  ]
+}

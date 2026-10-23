@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "LEGO Rock Raiders se joue en multiworld Archipelago depuis 2026, à travers Manic Miners, son remake réalisé par des fans.",
+    "en": "LEGO Rock Raiders has been playable in an Archipelago multiworld since 2026, through Manic Miners, its fan-made remake."
+  },
+  "events": [
+    {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "LEGO Rock Raiders sort en 1999. Manic Miners, remake réalisé par Baraklava sous Unreal Engine, en restaure le contenu coupé et en remasterise les campagnes.",
+        "en": "LEGO Rock Raiders comes out in 1999. Manic Miners, a remake made by Baraklava in Unreal Engine, restores its cut content and remasters its campaigns."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2026",
+        "en": "April 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "fogmike publie le 2 avril 2026 la version 1.0.1 de l'APWorld de Manic Miners.",
+        "en": "fogmike releases version 1.0.1 of the Manic Miners APWorld on April 2, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 1.5.2 sort le 26 août 2026 ; c'est la plus récente au 23 octobre 2026 (14 versions publiées).",
+        "en": "Version 1.5.2 is released on August 26, 2026; it is the latest as of October 23, 2026 (14 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — fogmike/Archipelago_ManicMiners",
+      "url": "https://github.com/fogmike/Archipelago_ManicMiners"
+    },
+    {
+      "label": "GitHub — fogmike/Archipelago_ManicMiners (releases)",
+      "url": "https://github.com/fogmike/Archipelago_ManicMiners/releases"
+    },
+    {
+      "label": "GitHub — Manic Miners (doc)",
+      "url": "https://github.com/fogmike/Archipelago_ManicMiners/blob/main/worlds/manicminers/docs/en_ManicMiners.md"
+    }
+  ]
+}

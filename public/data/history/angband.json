@@ -1,0 +1,46 @@
+{
+  "intro": {
+    "fr": "Angband, roguelike libre, se joue en multiworld Archipelago depuis 2026 grâce à une version modifiée du jeu.",
+    "en": "Angband, a free roguelike, has been playable in an Archipelago multiworld since 2026 through a modified build of the game."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "zane31415, déjà auteur de l'APWorld de Baldur's Gate 3, publie le 23 juin 2026 la version 0.1.0 d'APangband, version d'Angband 4.2.5 compatible Archipelago.",
+        "en": "zane31415, already the author of the Baldur's Gate 3 APWorld, releases APangband 0.1.0 on June 23, 2026, an Archipelago-enabled build of Angband 4.2.5."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.4.0 sort le 25 septembre 2026 ; c'est la plus récente au 23 octobre 2026 (5 versions publiées).",
+        "en": "Version 0.4.0 is released on September 25, 2026; it is the latest as of October 23, 2026 (5 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — zane31415/APangband",
+      "url": "https://github.com/zane31415/APangband"
+    },
+    {
+      "label": "GitHub — zane31415/APangband (releases)",
+      "url": "https://github.com/zane31415/APangband/releases"
+    }
+  ]
+}

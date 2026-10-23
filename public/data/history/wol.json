@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "West of Loathing se joue en multiworld Archipelago depuis 2026.",
+    "en": "West of Loathing has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Asymmetric sort West of Loathing en 2017.",
+        "en": "Asymmetric releases West of Loathing in 2017."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "La version 0.3.1 de WOLAP, mod client qui relie le jeu à Archipelago, paraît le 3 octobre 2026 ; le projet se dit stable et jouable, avec d'autres options de randomisation prévues.",
+        "en": "WOLAP 0.3.1, a client mod that connects the game to Archipelago, comes out on October 3, 2026; the project describes itself as stable and playable, with more randomization options planned."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.3.5-alpha sort le 22 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (6 versions publiées).",
+        "en": "Version 0.3.5-alpha is released on October 22, 2026; it is the latest as of October 23, 2026 (6 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — West of Loathing",
+      "url": "https://www.igdb.com/games/west-of-loathing"
+    },
+    {
+      "label": "GitHub — TylerJG92/WOLAP",
+      "url": "https://github.com/TylerJG92/WOLAP"
+    },
+    {
+      "label": "GitHub — TylerJG92/WOLAP (releases)",
+      "url": "https://github.com/TylerJG92/WOLAP/releases"
+    }
+  ]
+}

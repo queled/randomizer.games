@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Mario Kart Wii se joue en multiworld Archipelago depuis 2026.",
+    "en": "Mario Kart Wii has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2008",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Mario Kart Wii en 2008.",
+        "en": "Nintendo releases Mario Kart Wii in 2008."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "toent publie le 23 février 2026 la préversion 0.0.1 de MKWii AP.",
+        "en": "toent releases MKWii AP pre-release 0.0.1 on February 23, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.3.2 sort le 18 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (20 versions publiées).",
+        "en": "Version 0.3.2 is released on October 18, 2026; it is the latest as of October 23, 2026 (20 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Mario Kart Wii",
+      "url": "https://www.igdb.com/games/mario-kart-wii"
+    },
+    {
+      "label": "GitHub — toent/Archipelago-MKWii",
+      "url": "https://github.com/toent/Archipelago-MKWii"
+    },
+    {
+      "label": "GitHub — toent/Archipelago-MKWii (releases)",
+      "url": "https://github.com/toent/Archipelago-MKWii/releases"
+    }
+  ]
+}

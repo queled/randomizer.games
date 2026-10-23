@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Beat Saber se joue en multiworld Archipelago depuis 2026, sur PC VR.",
+    "en": "Beat Saber has been playable in an Archipelago multiworld since 2026, on PC VR."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Beat Games sort Beat Saber en 2018.",
+        "en": "Beat Games releases Beat Saber in 2018."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2026",
+        "en": "January 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "CurrentlyPending publie le 29 janvier 2026 l'alpha 0.0.1 de BeatSaberAP, mod client pour la version 1.40.8 du jeu, installée via BSManager.",
+        "en": "CurrentlyPending releases BeatSaberAP alpha 0.0.1 on January 29, 2026, a client mod for version 1.40.8 of the game, installed through BSManager."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.1.1 sort le 26 mai 2026 ; c'est la plus récente au 23 octobre 2026 (7 versions publiées).",
+        "en": "Version 0.1.1 is released on May 26, 2026; it is the latest as of October 23, 2026 (7 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Beat Saber",
+      "url": "https://www.igdb.com/games/beat-saber"
+    },
+    {
+      "label": "GitHub — CurrentlyPending/BeatSaberAP",
+      "url": "https://github.com/CurrentlyPending/BeatSaberAP"
+    },
+    {
+      "label": "GitHub — CurrentlyPending/BeatSaberAP (releases)",
+      "url": "https://github.com/CurrentlyPending/BeatSaberAP/releases"
+    }
+  ]
+}

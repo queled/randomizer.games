@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Shovel Knight Pocket Dungeon se joue en multiworld Archipelago depuis 2025.",
+    "en": "Shovel Knight Pocket Dungeon has been playable in an Archipelago multiworld since 2025."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Vine et Yacht Club Games sortent Shovel Knight Pocket Dungeon en 2021.",
+        "en": "Vine and Yacht Club Games release Shovel Knight Pocket Dungeon in 2021."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2025",
+        "en": "December 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Mitchell1711 publie le 9 décembre 2025 la version 0.1.0 de l'APWorld, pour la version Steam.",
+        "en": "Mitchell1711 releases version 0.1.0 of the APWorld, for the Steam version on December 9, 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 1.0.0 sort le 16 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (8 versions publiées).",
+        "en": "Version 1.0.0 is released on October 16, 2026; it is the latest as of October 23, 2026 (8 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Shovel Knight: Pocket Dungeon",
+      "url": "https://www.igdb.com/games/shovel-knight-pocket-dungeon"
+    },
+    {
+      "label": "GitHub — Mitchell1711/Archipelago",
+      "url": "https://github.com/Mitchell1711/Archipelago"
+    },
+    {
+      "label": "GitHub — Mitchell1711/Archipelago (releases)",
+      "url": "https://github.com/Mitchell1711/Archipelago/releases"
+    }
+  ]
+}

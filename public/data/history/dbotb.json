@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Deathbulge: Battle of the Bands se joue en multiworld Archipelago depuis 2026.",
+    "en": "Deathbulge: Battle of the Bands has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Five Houses sort Deathbulge: Battle of the Bands en 2023.",
+        "en": "Five Houses releases Deathbulge: Battle of the Bands in 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "neverhelios publie le 24 mai 2026 un « premier APWorld fonctionnel », version 0.1.0.",
+        "en": "neverhelios releases a \"first functional apworld\", version 0.1.0 on May 24, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.3.0 sort le 24 septembre 2026 ; c'est la plus récente au 23 octobre 2026 (2 versions publiées).",
+        "en": "Version 0.3.0 is released on September 24, 2026; it is the latest as of October 23, 2026 (2 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Deathbulge: Battle of the Bands",
+      "url": "https://www.igdb.com/games/deathbulge-battle-of-the-bands"
+    },
+    {
+      "label": "GitHub — neverhelios/Archipelago",
+      "url": "https://github.com/neverhelios/Archipelago"
+    },
+    {
+      "label": "GitHub — neverhelios/Archipelago (releases)",
+      "url": "https://github.com/neverhelios/Archipelago/releases"
+    }
+  ]
+}

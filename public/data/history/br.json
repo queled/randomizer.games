@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Buckshot Roulette se joue en multiworld Archipelago depuis fin 2025.",
+    "en": "Buckshot Roulette has been playable in an Archipelago multiworld since late 2025."
+  },
+  "events": [
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Mike Klubnika sort Buckshot Roulette en 2023.",
+        "en": "Mike Klubnika releases Buckshot Roulette in 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2025",
+        "en": "December 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "asdfwyay publie le 24 décembre 2025 la préversion 0.0.1 d'APBuckshot, pour la version Steam, avec un client fondé sur une version modifiée de GameMaker Loader.",
+        "en": "asdfwyay publishes pre-release 0.0.1 of APBuckshot on December 24, 2025, for the Steam version, with a client built on a modified GameMaker Loader."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.4.1 sort le 11 mai 2026 ; c'est la plus récente au 23 octobre 2026 (11 versions publiées).",
+        "en": "Version 0.4.1 is released on May 11, 2026; it is the latest as of October 23, 2026 (11 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Buckshot Roulette",
+      "url": "https://www.igdb.com/games/buckshot-roulette"
+    },
+    {
+      "label": "GitHub — asdfwyay/APBuckshot",
+      "url": "https://github.com/asdfwyay/APBuckshot"
+    },
+    {
+      "label": "GitHub — asdfwyay/APBuckshot (releases)",
+      "url": "https://github.com/asdfwyay/APBuckshot/releases"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "intro": {
+    "fr": "Stacklands se joue en multiworld Archipelago depuis 2023 ; le mod d'origine de chandler05 est repris depuis 2025 par JammyGeeza.",
+    "en": "Stacklands has been playable in an Archipelago multiworld since 2023; chandler05's original mod has been continued by JammyGeeza since 2025."
+  },
+  "events": [
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sokpop Collective sort Stacklands en 2022.",
+        "en": "Sokpop Collective releases Stacklands in 2022."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2023",
+        "en": "October 2023"
+      },
+      "title": {
+        "fr": "Le mod de chandler05",
+        "en": "chandler05's mod"
+      },
+      "text": {
+        "fr": "chandler05 publie en octobre 2023 deux versions d'un mod Archipelago pour Stacklands.",
+        "en": "chandler05 releases two versions of an Archipelago mod for Stacklands in October 2023."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2025",
+        "en": "February 2025"
+      },
+      "title": {
+        "fr": "La reprise",
+        "en": "The continuation"
+      },
+      "text": {
+        "fr": "JammyGeeza reprend le développement le 24 février 2025 (version 0.0.4). Toutes les quêtes sont des emplacements, et les objets de progression sont des idées (plans) qui permettent de fabriquer ce qui est nécessaire.",
+        "en": "JammyGeeza takes over development on February 24, 2025 (version 0.0.4). Every quest is a location, and progression items are ideas (blueprints) used to craft what is needed."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.2.6 sort le 13 août 2026 ; c'est la plus récente au 23 octobre 2026 (29 versions publiées).",
+        "en": "Version 0.2.6 is released on August 13, 2026; it is the latest as of October 23, 2026 (29 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Stacklands",
+      "url": "https://www.igdb.com/games/stacklands"
+    },
+    {
+      "label": "GitHub — chandler05/Stacklands-Randomizer",
+      "url": "https://github.com/chandler05/Stacklands-Randomizer"
+    },
+    {
+      "label": "GitHub — JammyGeeza/Stacklands-Randomizer",
+      "url": "https://github.com/JammyGeeza/Stacklands-Randomizer"
+    },
+    {
+      "label": "GitHub — JammyGeeza/Stacklands-Randomizer (releases)",
+      "url": "https://github.com/JammyGeeza/Stacklands-Randomizer/releases"
+    }
+  ]
+}

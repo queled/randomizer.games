@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Kirby Air Ride se joue en multiworld Archipelago depuis 2025.",
+    "en": "Kirby Air Ride has been playable in an Archipelago multiworld since 2025."
+  },
+  "events": [
+    {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "HAL Laboratory sort Kirby Air Ride en 2003.",
+        "en": "HAL Laboratory releases Kirby Air Ride in 2003."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2025",
+        "en": "June 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "DeDeDeK publie le 17 juin 2025 la version 0.0.1 de KARchipelago, jouable en multiworld ou seul, avec un pack PopTracker.",
+        "en": "DeDeDeK releases KARchipelago 0.0.1, playable in a multiworld or solo, with a PopTracker pack on June 17, 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 1.2.1-TEST sort le 25 septembre 2026 ; c'est la plus récente au 23 octobre 2026 (18 versions publiées).",
+        "en": "Version 1.2.1-TEST is released on September 25, 2026; it is the latest as of October 23, 2026 (18 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Kirby Air Ride",
+      "url": "https://www.igdb.com/games/kirby-air-ride"
+    },
+    {
+      "label": "GitHub — DeDeDeK/KARchipelago",
+      "url": "https://github.com/DeDeDeK/KARchipelago"
+    },
+    {
+      "label": "GitHub — DeDeDeK/KARchipelago (releases)",
+      "url": "https://github.com/DeDeDeK/KARchipelago/releases"
+    }
+  ]
+}

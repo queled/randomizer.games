@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "TOEM: A Photo Adventure se joue en multiworld Archipelago depuis 2025.",
+    "en": "TOEM: A Photo Adventure has been playable in an Archipelago multiworld since 2025."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Something We Made sort TOEM en 2021.",
+        "en": "Something We Made releases TOEM in 2021."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2025",
+        "en": "October 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "bbernardoni publie le 25 octobre 2025 la version 1.0.1 du mod de TOEM pour Archipelago, qui passe par BepInEx.",
+        "en": "bbernardoni releases version 1.0.1 of the TOEM mod for Archipelago on October 25, 2025, which relies on BepInEx."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2026",
+        "en": "July 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 2.1.0 sort le 28 juillet 2026 ; c'est la plus récente au 23 octobre 2026 (14 versions publiées).",
+        "en": "Version 2.1.0 is released on July 28, 2026; it is the latest as of October 23, 2026 (14 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Toem",
+      "url": "https://www.igdb.com/games/toem"
+    },
+    {
+      "label": "GitHub — bbernardoni/Archipelago.TOEM",
+      "url": "https://github.com/bbernardoni/Archipelago.TOEM"
+    },
+    {
+      "label": "GitHub — bbernardoni/Archipelago.TOEM (releases)",
+      "url": "https://github.com/bbernardoni/Archipelago.TOEM/releases"
+    }
+  ]
+}

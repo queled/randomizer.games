@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Cash Cleaner Simulator se joue en multiworld Archipelago depuis 2026.",
+    "en": "Cash Cleaner Simulator has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Mind Control sort Cash Cleaner Simulator en 2025.",
+        "en": "Mind Control releases Cash Cleaner Simulator in 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2026",
+        "en": "January 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "aymeric-duchein publie le 22 janvier 2026 une première version de test de l'APWorld, 0.0.1.",
+        "en": "aymeric-duchein releases a first playtest release of the APWorld, 0.0.1 on January 22, 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Cash Cleaner Simulator",
+      "url": "https://www.igdb.com/games/cash-cleaner-simulator"
+    },
+    {
+      "label": "GitHub — aymeric-duchein/Archipelago-ccs",
+      "url": "https://github.com/aymeric-duchein/Archipelago-ccs"
+    },
+    {
+      "label": "GitHub — aymeric-duchein/Archipelago-ccs (releases)",
+      "url": "https://github.com/aymeric-duchein/Archipelago-ccs/releases"
+    }
+  ]
+}

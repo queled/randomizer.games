@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Scooby-Doo! Unmasked se joue en multiworld Archipelago depuis 2026.",
+    "en": "Scooby-Doo! Unmasked has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "A2M sort Scooby-Doo! Unmasked en 2005.",
+        "en": "A2M releases Scooby-Doo! Unmasked in 2005."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Its-Retro publie le 6 août 2026 la version 0.1.0 de l'APWorld, pour la version nord-américaine PlayStation 2 sur PCSX2.",
+        "en": "Its-Retro releases version 0.1.0 of the APWorld, for the North American PlayStation 2 release on PCSX2 on August 6, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.2.1 sort le 16 août 2026 ; c'est la plus récente au 23 octobre 2026 (3 versions publiées).",
+        "en": "Version 0.2.1 is released on August 16, 2026; it is the latest as of October 23, 2026 (3 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Scooby-Doo! Unmasked",
+      "url": "https://www.igdb.com/games/scooby-doo-unmasked"
+    },
+    {
+      "label": "GitHub — Its-Retro/Archipelago",
+      "url": "https://github.com/Its-Retro/Archipelago"
+    },
+    {
+      "label": "GitHub — Its-Retro/Archipelago (releases)",
+      "url": "https://github.com/Its-Retro/Archipelago/releases"
+    }
+  ]
+}

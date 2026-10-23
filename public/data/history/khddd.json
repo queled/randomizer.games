@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Kingdom Hearts 3D: Dream Drop Distance se joue en multiworld Archipelago depuis 2025.",
+    "en": "Kingdom Hearts 3D: Dream Drop Distance has been playable in an Archipelago multiworld since 2025."
+  },
+  "events": [
+    {
+      "date": "2012",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Kingdom Hearts 3D: Dream Drop Distance en 2012.",
+        "en": "Square Enix releases Kingdom Hearts 3D: Dream Drop Distance in 2012."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2025",
+        "en": "November 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "LuxMake publie le 30 novembre 2025 la version 0.0.1 de KH DDD AP.",
+        "en": "LuxMake releases KH DDD AP 0.0.1 on November 30, 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2026",
+        "en": "March 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.0.6 sort le 27 mars 2026 ; c'est la plus récente au 23 octobre 2026 (6 versions publiées).",
+        "en": "Version 0.0.6 is released on March 27, 2026; it is the latest as of October 23, 2026 (6 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Kingdom Hearts 3D: Dream Drop Distance",
+      "url": "https://www.igdb.com/games/kingdom-hearts-3d-dream-drop-distance"
+    },
+    {
+      "label": "GitHub — LuxMake/Archipelago-KHDDD",
+      "url": "https://github.com/LuxMake/Archipelago-KHDDD"
+    },
+    {
+      "label": "GitHub — LuxMake/Archipelago-KHDDD (releases)",
+      "url": "https://github.com/LuxMake/Archipelago-KHDDD/releases"
+    }
+  ]
+}

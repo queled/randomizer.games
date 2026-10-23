@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Monster Hunter Rise se joue en multiworld Archipelago depuis 2026 : chaque grand monstre ne peut être chassé qu'avec sa licence, un objet du multiworld.",
+    "en": "Monster Hunter Rise has been playable in an Archipelago multiworld since 2026: each large monster can only be hunted with its license, an item in the multiworld."
+  },
+  "events": [
+    {
+      "date": "2021",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Monster Hunter Rise en 2021, suivi de l'extension Sunbreak.",
+        "en": "Capcom releases Monster Hunter Rise in 2021, followed by the Sunbreak expansion."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "LittleLudroth publie le 14 septembre 2026 la version 0.2.0 du randomizer, pour Rise et Sunbreak. L'auteur déconseille de jouer en ligne avec le mod, susceptible d'être vu comme de la triche.",
+        "en": "LittleLudroth releases version 0.2.0 of the randomizer for Rise and Sunbreak on September 14, 2026. The author advises against playing online with the mod, which may be seen as cheating."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.5.0 sort le 22 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (11 versions publiées).",
+        "en": "Version 0.5.0 is released on October 22, 2026; it is the latest as of October 23, 2026 (11 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Monster Hunter Rise",
+      "url": "https://www.igdb.com/games/monster-hunter-rise"
+    },
+    {
+      "label": "GitHub — LittleLudroth/MHRise-APWorld",
+      "url": "https://github.com/LittleLudroth/MHRise-APWorld"
+    },
+    {
+      "label": "GitHub — LittleLudroth/MHRise-APWorld (releases)",
+      "url": "https://github.com/LittleLudroth/MHRise-APWorld/releases"
+    }
+  ]
+}

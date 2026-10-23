@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Spelunker se joue en multiworld Archipelago depuis 2024, grâce à un APWorld distribué sur le Discord d'Archipelago.",
+    "en": "Spelunker has been playable in an Archipelago multiworld since 2024, through an APWorld distributed on the Archipelago Discord."
+  },
+  "events": [
+    {
+      "date": "1983",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "MicroGraphicImage sort Spelunker en 1983 ; Brøderbund et Irem l'éditent ensuite.",
+        "en": "MicroGraphicImage releases Spelunker in 1983; Brøderbund and Irem later publish it."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2024",
+        "en": "May 2024"
+      },
+      "title": {
+        "fr": "APWorld",
+        "en": "APWorld"
+      },
+      "text": {
+        "fr": "PinkSwitch, auteur d'autres APWorlds (EarthBound, Castlevania sur DS), développe celui de Spelunker du 9 au 13 mai 2024 dans une branche de son dépôt. Il se joue sur BizHawk avec une ROM anglaise.",
+        "en": "PinkSwitch, author of other APWorlds (EarthBound, Castlevania on DS), develops the Spelunker one from May 9 to 13, 2024 in a branch of their repository. It runs on BizHawk with an English ROM."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Spelunker",
+      "url": "https://www.igdb.com/games/spelunker"
+    },
+    {
+      "label": "GitHub — PinkSwitch/Archipelago (branche spelunker)",
+      "url": "https://github.com/PinkSwitch/Archipelago/tree/spelunker"
+    },
+    {
+      "label": "GitHub — PinkSwitch/Archipelago, Spelunker Setup Guide",
+      "url": "https://github.com/PinkSwitch/Archipelago/blob/spelunker/worlds/spelunker/docs/setup_en.md"
+    }
+  ]
+}

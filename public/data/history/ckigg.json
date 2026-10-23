@@ -1,0 +1,83 @@
+{
+  "intro": {
+    "fr": "Commander Keen in Goodbye, Galaxy! se joue en multiworld Archipelago depuis 2026, grâce au moteur libre Omnispeak.",
+    "en": "Commander Keen in Goodbye, Galaxy! has been playable in an Archipelago multiworld since 2026, through the open-source Omnispeak engine."
+  },
+  "events": [
+    {
+      "date": "1991",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "id Software sort Commander Keen in Goodbye, Galaxy! en 1991, édité par Apogee.",
+        "en": "id Software releases Commander Keen in Goodbye, Galaxy! in 1991, published by Apogee."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2026",
+        "en": "March 2026"
+      },
+      "title": {
+        "fr": "Archipelago-Keen",
+        "en": "Archipelago-Keen"
+      },
+      "text": {
+        "fr": "kodbyte publie le 2 mars 2026 la version 0.0.1 d'Archipelago-Keen, avec OmnispeakAP, une version d'Omnispeak reliée à Archipelago, pour les fichiers du jeu achetés sur Steam ou GOG. Les deux dépôts sont archivés depuis.",
+        "en": "kodbyte releases Archipelago-Keen 0.0.1 on March 2, 2026, with OmnispeakAP, a build of Omnispeak connected to Archipelago, for game files bought on Steam or GOG. Both repositories have since been archived."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "La reprise",
+        "en": "The continuation"
+      },
+      "text": {
+        "fr": "Joxtacy poursuit le projet dans un fork et publie la version 0.0.5 le 20 mai 2026.",
+        "en": "Joxtacy continues the project in a fork and releases version 0.0.5 on May 20, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.0.9-rc.1 sort le 12 juin 2026 ; c'est la plus récente au 23 octobre 2026 (8 versions publiées).",
+        "en": "Version 0.0.9-rc.1 is released on June 12, 2026; it is the latest as of October 23, 2026 (8 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Commander Keen: Goodbye Galaxy!",
+      "url": "https://www.igdb.com/games/commander-keen-goodbye-galaxy"
+    },
+    {
+      "label": "GitHub — kodbyte/Archipelago-Keen",
+      "url": "https://github.com/kodbyte/Archipelago-Keen"
+    },
+    {
+      "label": "GitHub — kodbyte/omnispeak-ap",
+      "url": "https://github.com/kodbyte/omnispeak-ap"
+    },
+    {
+      "label": "GitHub — Joxtacy/Archipelago-Keen",
+      "url": "https://github.com/Joxtacy/Archipelago-Keen"
+    },
+    {
+      "label": "GitHub — Joxtacy/Archipelago-Keen (releases)",
+      "url": "https://github.com/Joxtacy/Archipelago-Keen/releases"
+    }
+  ]
+}

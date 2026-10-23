@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "The Talos Principle: Reawakened se joue en multiworld Archipelago depuis 2026.",
+    "en": "The Talos Principle: Reawakened has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Croteam sort The Talos Principle: Reawakened en 2025.",
+        "en": "Croteam releases The Talos Principle: Reawakened in 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "johnso48 publie le 20 février 2026 la version 1.0.4 de l'APWorld.",
+        "en": "johnso48 releases version 1.0.4 of the APWorld on February 20, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 1.4.0 sort le 26 juin 2026 ; c'est la plus récente au 23 octobre 2026 (8 versions publiées).",
+        "en": "Version 1.4.0 is released on June 26, 2026; it is the latest as of October 23, 2026 (8 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — The Talos Principle: Reawakened",
+      "url": "https://www.igdb.com/games/the-talos-principle-reawakened"
+    },
+    {
+      "label": "GitHub — johnso48/TalosPrincipleArchipelago",
+      "url": "https://github.com/johnso48/TalosPrincipleArchipelago"
+    },
+    {
+      "label": "GitHub — johnso48/TalosPrincipleArchipelago (releases)",
+      "url": "https://github.com/johnso48/TalosPrincipleArchipelago/releases"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "A Robot Named Fight! se joue en multiworld Archipelago depuis 2023, grâce à un mod BepInEx distribué sur le Discord d'Archipelago.",
+    "en": "A Robot Named Fight! has been playable in an Archipelago multiworld since 2023, through a BepInEx mod distributed on the Archipelago Discord."
+  },
+  "events": [
+    {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Morningstar Game Studio sort A Robot Named Fight! en 2017.",
+        "en": "Morningstar Game Studio releases A Robot Named Fight! in 2017."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2023",
+        "en": "November 2023"
+      },
+      "title": {
+        "fr": "APWorld",
+        "en": "APWorld"
+      },
+      "text": {
+        "fr": "BetaSprite développe l'APWorld du jeu à partir du 7 novembre 2023 ; les derniers changements datent de septembre 2024.",
+        "en": "BetaSprite develops the game's APWorld from November 7, 2023; the latest changes date from September 2024."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — A Robot Named Fight",
+      "url": "https://www.igdb.com/games/a-robot-named-fight"
+    },
+    {
+      "label": "GitHub — BetaSprite/ARNFArchipelago",
+      "url": "https://github.com/BetaSprite/ARNFArchipelago"
+    },
+    {
+      "label": "GitHub — ARNFArchipelago, Setup Guide",
+      "url": "https://github.com/BetaSprite/ARNFArchipelago/blob/main/worlds/ARNF/docs/setup_en.md"
+    }
+  ]
+}

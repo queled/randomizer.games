@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Baba Is You se joue en multiworld Archipelago depuis 2026 : chaque mot qu'on pousse est un objet à recevoir.",
+    "en": "Baba Is You has been playable in an Archipelago multiworld since 2026: every pushable word is an item to receive."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Hempuli sort Baba Is You en 2019.",
+        "en": "Hempuli releases Baba Is You in 2019."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Babapelago",
+        "en": "Babapelago"
+      },
+      "text": {
+        "fr": "EmilyEmmi publie le 13 février 2026 la bêta 1.0 de Babapelago. Tant qu'un mot n'est pas reçu, il reste grisé et immobile ; fleurs, pétales, clés de mondes et orbes bonus complètent la liste des objets.",
+        "en": "EmilyEmmi releases Babapelago beta 1.0 on February 13, 2026. Until a word is received, it stays grey and immovable; blossoms, petals, world keys and bonus orbs complete the item list."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 3.5h sort le 15 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (10 versions publiées).",
+        "en": "Version 3.5h is released on October 15, 2026; it is the latest as of October 23, 2026 (10 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Baba Is You",
+      "url": "https://www.igdb.com/games/baba-is-you"
+    },
+    {
+      "label": "GitHub — EmilyEmmi/Babapelago",
+      "url": "https://github.com/EmilyEmmi/Babapelago"
+    },
+    {
+      "label": "GitHub — EmilyEmmi/Babapelago (releases)",
+      "url": "https://github.com/EmilyEmmi/Babapelago/releases"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Dragon Quest IX: Sentinels of the Starry Skies se joue en multiworld Archipelago depuis 2026.",
+    "en": "Dragon Quest IX: Sentinels of the Starry Skies has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2009",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "LEVEL-5 sort Dragon Quest IX: Sentinels of the Starry Skies en 2009.",
+        "en": "LEVEL-5 releases Dragon Quest IX: Sentinels of the Starry Skies in 2009."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2026",
+        "en": "April 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "L'équipe DQIX publie le 9 avril 2026 la version 0.0.6 de son APWorld.",
+        "en": "The DQIX team releases version 0.0.6 of its APWorld on April 9, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.2.0 sort le 20 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (7 versions publiées).",
+        "en": "Version 0.2.0 is released on October 20, 2026; it is the latest as of October 23, 2026 (7 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Dragon Quest IX: Sentinels of the Starry Skies",
+      "url": "https://www.igdb.com/games/dragon-quest-ix-sentinels-of-the-starry-skies"
+    },
+    {
+      "label": "GitHub — DQIX/ArchipelagoDQIX",
+      "url": "https://github.com/DQIX/ArchipelagoDQIX"
+    },
+    {
+      "label": "GitHub — DQIX/ArchipelagoDQIX (releases)",
+      "url": "https://github.com/DQIX/ArchipelagoDQIX/releases"
+    }
+  ]
+}

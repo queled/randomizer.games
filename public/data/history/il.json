@@ -1,0 +1,46 @@
+{
+  "intro": {
+    "fr": "Idle Loops, jeu incrémental gratuit dans le navigateur, se joue en multiworld Archipelago depuis 2026.",
+    "en": "Idle Loops, a free incremental browser game, has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "IHaveNoFunnyName publie le 23 mai 2026 la version 0.1.0 de l'APWorld. Le mod s'installe dans le navigateur via une extension de type Tampermonkey.",
+        "en": "IHaveNoFunnyName releases version 0.1.0 of the APWorld on May 23, 2026. The mod is installed in the browser through a Tampermonkey-like extension."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.4.7 sort le 6 septembre 2026 ; c'est la plus récente au 23 octobre 2026 (10 versions publiées).",
+        "en": "Version 0.4.7 is released on September 6, 2026; it is the latest as of October 23, 2026 (10 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "GitHub — IHaveNoFunnyName/Archipelago",
+      "url": "https://github.com/IHaveNoFunnyName/Archipelago"
+    },
+    {
+      "label": "GitHub — IHaveNoFunnyName/Archipelago (releases)",
+      "url": "https://github.com/IHaveNoFunnyName/Archipelago/releases"
+    }
+  ]
+}

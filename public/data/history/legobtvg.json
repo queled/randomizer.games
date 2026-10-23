@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "LEGO Batman: The Videogame se joue en multiworld Archipelago depuis 2025.",
+    "en": "LEGO Batman: The Videogame has been playable in an Archipelago multiworld since 2025."
+  },
+  "events": [
+    {
+      "date": "2008",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Traveller's Tales sort LEGO Batman: The Videogame en 2008.",
+        "en": "Traveller's Tales releases LEGO Batman: The Videogame in 2008."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2025",
+        "en": "August 2025"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "ZAPaDASH04 publie le 16 août 2025 l'alpha 0.1.1 de l'APWorld.",
+        "en": "ZAPaDASH04 releases alpha 0.1.1 of the APWorld on August 16, 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2025",
+        "en": "September 2025"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.2.0-alpha sort le 26 septembre 2025 ; c'est la plus récente au 23 octobre 2026 (3 versions publiées).",
+        "en": "Version 0.2.0-alpha is released on September 26, 2025; it is the latest as of October 23, 2026 (3 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — LEGO Batman: The Videogame",
+      "url": "https://www.igdb.com/games/lego-batman-the-videogame"
+    },
+    {
+      "label": "GitHub — ZAPaDASH04/LEGO-Batman-APworld",
+      "url": "https://github.com/ZAPaDASH04/LEGO-Batman-APworld"
+    },
+    {
+      "label": "GitHub — ZAPaDASH04/LEGO-Batman-APworld (releases)",
+      "url": "https://github.com/ZAPaDASH04/LEGO-Batman-APworld/releases"
+    }
+  ]
+}

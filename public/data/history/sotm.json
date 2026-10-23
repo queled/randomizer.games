@@ -1,0 +1,65 @@
+{
+  "intro": {
+    "fr": "Sentinels of the Multiverse se joue en multiworld Archipelago depuis 2024, sur la table comme à l'écran : le client ne se connecte pas au jeu.",
+    "en": "Sentinels of the Multiverse has been playable in an Archipelago multiworld since 2024, on the table or on screen: the client does not connect to the game."
+  },
+  "events": [
+    {
+      "date": "2014",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Handelabra Games sort en 2014 l'adaptation en jeu vidéo du jeu de cartes Sentinels of the Multiverse.",
+        "en": "Handelabra Games releases the video game adaptation of the Sentinels of the Multiverse card game in 2014."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2024",
+        "en": "May 2024"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Totox00 publie le 19 mai 2024 la version 0.0.1 de l'APWorld. Le jeu pouvant se jouer en carton, sur Steam ou sur Tabletop Simulator, un client web sert à noter soi-même les résultats et à recevoir les objets.",
+        "en": "Totox00 releases version 0.0.1 of the APWorld on May 19, 2024. As the game can be played with cardboard, on Steam or on Tabletop Simulator, a web client is used to log results by hand and receive items."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2026",
+        "en": "June 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.4.6 sort le 11 juin 2026 ; c'est la plus récente au 23 octobre 2026 (18 versions publiées).",
+        "en": "Version 0.4.6 is released on June 11, 2026; it is the latest as of October 23, 2026 (18 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Sentinels of the Multiverse: The Video Game",
+      "url": "https://www.igdb.com/games/sentinels-of-the-multiverse-the-video-game"
+    },
+    {
+      "label": "GitHub — Totox00/Archipelago-sotm",
+      "url": "https://github.com/Totox00/Archipelago-sotm"
+    },
+    {
+      "label": "GitHub — Totox00/Archipelago-sotm (releases)",
+      "url": "https://github.com/Totox00/Archipelago-sotm/releases"
+    },
+    {
+      "label": "Sentinels of the Multiverse — client web Archipelago",
+      "url": "https://totox00.github.io/ap-sotm-client/index.html"
+    }
+  ]
+}

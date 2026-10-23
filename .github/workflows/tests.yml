@@ -1,0 +1,31 @@
+# Workflow: Tests
+# Lance les tests des helpers (npm test) à chaque push et pull request.
+# Aucun accès à la base : les tests ne portent que sur du code pur.
+
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout du projet
+        uses: actions/checkout@v7
+
+      - name: Configuration de Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: 'npm'
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Tests
+        run: npm test

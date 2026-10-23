@@ -582,9 +582,10 @@ function scoreExtractedAgainstMatch(race, match, extracted, options = {}) {
 
     const stage = extracted.stageInfo.stage;
     const round = Number(match?.round || 0);
-    if (stage === 'openers' && round === 1) total += 160;
-    if (stage === 'winners' && round === 2) total += 160;
-    if (stage === 'losers' && round < 0) total += 160;
+    // Singular, as parseRaceStageInfo() reads it ("Openers" → "opener")
+    if (stage === 'opener' && round === 1) total += 160;
+    if (stage === 'winner' && round === 2) total += 160;
+    if (stage === 'loser' && round < 0) total += 160;
     if (stage === 'decider' && round < 0) total += 140;
     if (stage === 'tiebreaker' && round < 0) total += 140;
   }

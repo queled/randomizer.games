@@ -26,7 +26,8 @@ Follow [Running it locally](README.md#running-it-locally) in the README. [docs/A
    - never commit `.env` or secrets; add new variables to `.env.example` with a comment;
    - scripts that write to the database should offer a `--dry-run` mode.
 4. Check your change:
-   - there is no automated test suite yet: run the site (`npm run dev`) and go through the pages you touched, in a narrow (mobile) window as well;
+   - run `npm test` (the helpers' tests in `test/`; add one when you change their logic);
+   - run the site (`npm run dev`) and go through the pages you touched, in a narrow (mobile) window as well;
    - run `npm run check-security`;
    - for a script, run it with `--dry-run` first.
 5. Write commit messages in the [Conventional Commits](https://www.conventionalcommits.org) format: `feat: …`, `fix: …`, `docs: …`, `refactor: …`, `chore: …`.

@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Super Castlevania IV a un randomizer depuis 2016, écrit par l'auteur d'un éditeur du jeu.",
+    "en": "Super Castlevania IV has had a randomizer since 2016, written by the author of an editor for the game."
+  },
+  "events": [
+    {
+      "date": "1991",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Super Castlevania IV sur Super Nintendo en 1991.",
+        "en": "Konami releases Super Castlevania IV on Super Nintendo in 1991."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2016",
+        "en": "August 2016"
+      },
+      "title": {
+        "fr": "Super Castlevania 4 Randomizer",
+        "en": "Super Castlevania 4 Randomizer"
+      },
+      "text": {
+        "fr": "Le 14 août 2016, RedGuy présente sur le forum de romhacking.net un randomizer qui modifie la santé de Simon et des ennemis, l'ordre des niveaux, les chronomètres et les objets des bougies, avec un mode statique et un mode dynamique ; il repose sur le code de son éditeur du jeu.",
+        "en": "On August 14, 2016, RedGuy presents on the romhacking.net forum a randomizer that changes Simon's and enemies' health, level order, timers and candle drops, with static and dynamic modes; it is built on the code of RedGuy's editor for the game."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Super Castlevania IV",
+      "url": "https://www.igdb.com/games/super-castlevania-iv"
+    },
+    {
+      "label": "romhacking.net — Super Castlevania 4 Randomizer (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.romhacking.net/forum/index.php?topic=22494.0"
+    },
+    {
+      "label": "rando-list — Castlevania",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Castlevania.yml"
+    }
+  ]
+}

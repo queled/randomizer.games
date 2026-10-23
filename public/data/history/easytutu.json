@@ -1,0 +1,50 @@
+{
+  "intro": {
+    "fr": "EasyTutu, mod qui porte le premier Baldur's Gate dans le moteur de Baldur's Gate II, est pris en charge par Item Randomiser.",
+    "en": "EasyTutu, a mod that ports the first Baldur's Gate to the Baldur's Gate II engine, is supported by Item Randomiser."
+  },
+  "events": [
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Item Randomiser",
+        "en": "Item Randomiser"
+      },
+      "text": {
+        "fr": "Item Randomiser, de Wisp, randomise à grande échelle les trésors de Baldur's Gate et Baldur's Gate II, à chaque nouvelle partie ou à l'installation ; il existe pour EasyTutu, Baldur's Gate Trilogy et Baldur's Gate II.",
+        "en": "Wisp's Item Randomiser randomizes treasure on a large scale in Baldur's Gate and Baldur's Gate II, at each new game or at install time; it exists for EasyTutu, Baldur's Gate Trilogy and Baldur's Gate II."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Sword Coast Stratagems",
+        "en": "Sword Coast Stratagems"
+      },
+      "text": {
+        "fr": "La collection de mods Sword Coast Stratagems peut randomiser le labyrinthe de Watcher's Keep dans Baldur's Gate II, selon rando-list.",
+        "en": "The Sword Coast Stratagems mod collection can randomize the Watcher's Keep maze in Baldur's Gate II, according to rando-list."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Gibberlings Three — Item Randomiser (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.gibberlings3.net/mods/items/item_rand/"
+    },
+    {
+      "label": "Gibberlings Three — Sword Coast Stratagems",
+      "url": "https://www.gibberlings3.net/mods/tweaks/scs/"
+    },
+    {
+      "label": "rando-list — Baldurs Gate",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Baldurs_Gate.yml"
+    }
+  ]
+}

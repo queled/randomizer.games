@@ -1,0 +1,66 @@
+{
+  "intro": {
+    "fr": "Chex Quest, sur le moteur de DOOM, profite des mods de randomisation de la scène GZDoom.",
+    "en": "Chex Quest, on the DOOM engine, benefits from the GZDoom scene's randomization mods."
+  },
+  "events": [
+    {
+      "date": "1997",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Digital Café sort en 1997 Chex Quest, conversion totale non violente de DOOM conçue comme promotion des céréales Chex ; c'est le premier jeu vidéo offert dans une boîte de céréales.",
+        "en": "Digital Café releases Chex Quest in 1997, a non-violent total conversion of DOOM designed as a Chex cereal promotion; it is the first video game ever included as a cereal box prize."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2019",
+        "en": "May 2019"
+      },
+      "title": {
+        "fr": "Custom Doom",
+        "en": "Custom Doom"
+      },
+      "text": {
+        "fr": "Le 12 mai 2019, m8f publie sur le forum ZDoom la suite officielle de Custom Doom d'Accensus, mod de difficulté sur mesure qui propose aussi de la randomisation.",
+        "en": "On May 12, 2019, m8f posts on the ZDoom forum the official continuation of Accensus' Custom Doom, a make-your-own-difficulty mod that also offers randomization."
+      }
+    },
+    {
+      "date": "2020",
+      "title": {
+        "fr": "Universal Entropy",
+        "en": "Universal Entropy"
+      },
+      "text": {
+        "fr": "Universal Entropy, publié sur ModDB en 2020, randomise pour GZDoom, avec n'importe quel IWAD, la taille, les PV, les dégâts et la vitesse des monstres, ainsi que les objets.",
+        "en": "Universal Entropy, posted on ModDB in 2020, randomizes for GZDoom, with any IWAD, monsters' size, HP, damage and speed, as well as pickups."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Chex Quest",
+      "url": "https://www.igdb.com/games/chex-quest"
+    },
+    {
+      "label": "Wikipedia — Chex Quest",
+      "url": "https://en.wikipedia.org/wiki/Chex_Quest"
+    },
+    {
+      "label": "ZDoom — Custom Doom (archive)",
+      "url": "http://web.archive.org/web/2022/https://forum.zdoom.org/viewtopic.php?f=43&t=64678"
+    },
+    {
+      "label": "ModDB — Universal Entropy (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.moddb.com/mods/universal-entropy"
+    },
+    {
+      "label": "rando-list — Multi-series",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Multi-series.yml"
+    }
+  ]
+}

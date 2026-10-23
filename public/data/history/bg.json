@@ -1,0 +1,65 @@
+{
+  "intro": {
+    "fr": "Baldur's Gate: Enhanced Edition a un randomizer d'ennemis et profite des mods de randomisation de la communauté Infinity Engine.",
+    "en": "Baldur's Gate: Enhanced Edition has an enemy randomizer and benefits from the Infinity Engine community's randomization mods."
+  },
+  "events": [
+    {
+      "date": "2012",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Overhaul Games sort Baldur's Gate: Enhanced Edition en 2012, version remaniée du jeu de 1998.",
+        "en": "Overhaul Games releases Baldur's Gate: Enhanced Edition in 2012, a remastered version of the 1998 game."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2021",
+        "en": "December 2021"
+      },
+      "title": {
+        "fr": "Enemy Randomizer",
+        "en": "Enemy Randomizer"
+      },
+      "text": {
+        "fr": "Le 17 décembre 2021, GuardianAnubite publie sur le site des Gibberlings Three l'Enemy Randomizer, qui change le placement des ennemis sans importance (sans quête, dialogue ni événement) en gardant les rencontres d'une force comparable.",
+        "en": "On December 17, 2021, GuardianAnubite posts the Enemy Randomizer on the Gibberlings Three site, which changes the placement of unimportant enemies (no quests, dialogue or events) while keeping encounters roughly as strong."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Item Randomiser",
+        "en": "Item Randomiser"
+      },
+      "text": {
+        "fr": "Item Randomiser, de Wisp, randomise à grande échelle les trésors de Baldur's Gate et Baldur's Gate II, à chaque nouvelle partie ou à l'installation ; il existe pour EasyTutu, Baldur's Gate Trilogy et Baldur's Gate II.",
+        "en": "Wisp's Item Randomiser randomizes treasure on a large scale in Baldur's Gate and Baldur's Gate II, at each new game or at install time; it exists for EasyTutu, Baldur's Gate Trilogy and Baldur's Gate II."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Baldur's Gate: Enhanced Edition",
+      "url": "https://www.igdb.com/games/baldur-s-gate-enhanced-edition"
+    },
+    {
+      "label": "Gibberlings Three — Enemy Randomizer (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.gibberlings3.net/files/file/1031-enemy-randomizer/"
+    },
+    {
+      "label": "Gibberlings Three — Item Randomiser (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.gibberlings3.net/mods/items/item_rand/"
+    },
+    {
+      "label": "rando-list — Baldurs Gate",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Baldurs_Gate.yml"
+    }
+  ]
+}

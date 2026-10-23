@@ -1,0 +1,112 @@
+{
+  "intro": {
+    "fr": "Metroid: Zero Mission a un randomizer de portes dès 2013, puis le randomizer de biospark en 2017, toujours mis à jour en 2023, et se joue en multiworld sur MultiworldGG.",
+    "en": "Metroid: Zero Mission got a door randomizer as early as 2013, then biospark's randomizer in 2017, still updated in 2023, and can be played in a multiworld on MultiworldGG."
+  },
+  "events": [
+    {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Metroid: Zero Mission sur Game Boy Advance en 2004.",
+        "en": "Nintendo releases Metroid: Zero Mission on Game Boy Advance in 2004."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2013",
+        "en": "September 2013"
+      },
+      "title": {
+        "fr": "Quantum Deluxe Boogaloo",
+        "en": "Quantum Deluxe Boogaloo"
+      },
+      "text": {
+        "fr": "Le 19 septembre 2013, CanOfWorms présente sur le forum Metroid Construction un hack qui rend aléatoire la sortie de chaque porte ; la version 2 de janvier 2016 ajoute des règles pour éviter les situations impossibles.",
+        "en": "On September 19, 2013, CanOfWorms presents on the Metroid Construction forum a hack that randomizes the exit of every door; version 2, in January 2016, adds rules to avoid impossible situations."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2017",
+        "en": "December 2017"
+      },
+      "title": {
+        "fr": "MZM Randomizer",
+        "en": "MZM Randomizer"
+      },
+      "text": {
+        "fr": "Le 21 décembre 2017, biospark publie le MZM Randomizer sur le forum Metroid Construction. La version 1.5.0, du 10 août 2023, introduit un nouveau système de placement avec une logique personnalisable de Dragonfangs.",
+        "en": "On December 21, 2017, biospark releases the MZM Randomizer on the Metroid Construction forum. Version 1.5.0, of August 10, 2023, introduces a new placement system with customizable logic by Dragonfangs."
+      }
+    },
+    {
+      "date": "2018-2023",
+      "title": {
+        "fr": "Courses",
+        "en": "Races"
+      },
+      "text": {
+        "fr": "La première course recensée sur ce site a lieu le 23 juillet 2018 sur SpeedRunsLive ; on en compte 13 au total (2018 : 11, 2020 : 1, 2023 : 1).",
+        "en": "The first race listed on this site takes place on July 23, 2018 on SpeedRunsLive; there are 13 in all (2018: 11, 2020: 1, 2023: 1)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2019",
+        "en": "November 2019"
+      },
+      "title": {
+        "fr": "MZMR Plus",
+        "en": "MZMR Plus"
+      },
+      "text": {
+        "fr": "Le 6 novembre 2019, Cpt.Glitch publie MZM Randomizer Plus, extension qui ajoute la randomisation des textes, des boss, de la musique et des statistiques des ennemis, et prend en charge certains hacks.",
+        "en": "On November 6, 2019, Cpt.Glitch releases MZM Randomizer Plus, an extension that adds text, boss, music and enemy stat randomization, and supports some ROM hacks."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Multiworld",
+        "en": "Multiworld"
+      },
+      "text": {
+        "fr": "Metroid: Zero Mission figure parmi les jeux de MultiworldGG.",
+        "en": "Metroid: Zero Mission is among MultiworldGG's games."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Metroid: Zero Mission",
+      "url": "https://www.igdb.com/games/metroid-zero-mission"
+    },
+    {
+      "label": "Metroid Construction — Quantum Deluxe Boogaloo (archive)",
+      "url": "http://web.archive.org/web/2026/https://forum.metroidconstruction.com/index.php/topic,2765.0.html"
+    },
+    {
+      "label": "Metroid Construction — MZM Randomizer (archive)",
+      "url": "http://web.archive.org/web/2026/https://forum.metroidconstruction.com/index.php/topic,4559.0.html"
+    },
+    {
+      "label": "Metroid Construction — MZMR Plus (archive)",
+      "url": "http://web.archive.org/web/2026/https://forum.metroidconstruction.com/index.php/topic,5051.0.html"
+    },
+    {
+      "label": "Multiworld — Metroid: Zero Mission",
+      "url": "https://multiworld.gg/games/Metroid:%20Zero%20Mission/info/en"
+    },
+    {
+      "label": "racetime.gg — MZMR",
+      "url": "https://racetime.gg/mzmr"
+    }
+  ]
+}

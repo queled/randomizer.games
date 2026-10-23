@@ -1,0 +1,43 @@
+{
+  "intro": {
+    "fr": "The Battle of Olympus a un randomizer d'objets intégré à un hack, sans outil externe.",
+    "en": "The Battle of Olympus has an item randomizer built into a hack, with no external tool."
+  },
+  "events": [
+    {
+      "date": "1988",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Infinity sort The Battle of Olympus en 1988.",
+        "en": "Infinity releases The Battle of Olympus in 1988."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2024",
+        "en": "January 2024"
+      },
+      "title": {
+        "fr": "Item Randomizer",
+        "en": "Item Randomizer"
+      },
+      "text": {
+        "fr": "clymax publie sur romhacking.net un randomizer d'objets intégré au hack Explorer Edition : mode automatique avec une seed différente à chaque redémarrage ou seed choisie, départ rapide au temple de Zeus, lieu de départ aléatoire en option, compatibilité RetroAchievements (version 1.41 du 3 janvier 2024).",
+        "en": "clymax posts on romhacking.net an item randomizer built into the Explorer Edition hack: auto mode with a new seed on each reset or a chosen seed, quick start at Zeus' temple, optional random starting location, RetroAchievements support (version 1.41 of January 3, 2024)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — The Battle of Olympus",
+      "url": "https://www.igdb.com/games/the-battle-of-olympus"
+    },
+    {
+      "label": "romhacking.net — Battle of Olympus: Item Randomizer (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.romhacking.net/hacks/8283/"
+    }
+  ]
+}

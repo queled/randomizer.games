@@ -55,6 +55,17 @@
       }
     },
     {
+      "date": "2026",
+      "title": {
+        "fr": "Courses",
+        "en": "Races"
+      },
+      "text": {
+        "fr": "La première course recensée sur ce site a lieu le 27 février 2026 sur racetime.gg ; c'est la seule à ce jour.",
+        "en": "The first race listed on this site takes place on February 27, 2026 on racetime.gg; it is the only one so far."
+      }
+    },
+    {
       "date": {
         "fr": "Octobre 2026",
         "en": "October 2026"
@@ -89,6 +100,10 @@
     {
       "label": "GitHub — vgm5/Night_Of_100_Frights_ap_world (releases)",
       "url": "https://github.com/vgm5/Night_Of_100_Frights_ap_world/releases"
+    },
+    {
+      "label": "racetime.gg — SDN100F",
+      "url": "https://racetime.gg/sdn100f"
     }
   ]
 }

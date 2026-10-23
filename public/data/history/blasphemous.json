@@ -42,6 +42,17 @@
         "fr": "Le 24 février 2023, la contribution de TRPG0 qui ajoute Blasphemous est intégrée à Archipelago ; le jeu arrive avec la version 0.4.0, le 1er avril 2023.",
         "en": "On February 24, 2023, TRPG0's contribution adding Blasphemous is merged into Archipelago; the game ships with version 0.4.0, on April 1, 2023."
       }
+    },
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Courses",
+        "en": "Races"
+      },
+      "text": {
+        "fr": "La première course recensée sur ce site a lieu le 4 avril 2025 sur racetime.gg ; on en compte 5, toutes en 2025.",
+        "en": "The first race listed on this site takes place on April 4, 2025 on racetime.gg; there are 5, all in 2025."
+      }
     }
   ],
   "sources": [
@@ -60,6 +71,10 @@
     {
       "label": "Archipelago — Blasphemous",
       "url": "https://archipelago.gg/games/Blasphemous/info/en"
+    },
+    {
+      "label": "racetime.gg — blaspherando",
+      "url": "https://racetime.gg/blaspherando"
     }
   ]
 }

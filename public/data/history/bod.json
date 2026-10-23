@@ -1,0 +1,59 @@
+{
+  "intro": {
+    "fr": "Blade of Darkness a deux mods qui ajoutent une part de hasard : un créateur d'ennemis aléatoires et le tirage d'armes en multijoueur.",
+    "en": "Blade of Darkness has two mods that add randomness: a random enemy creator and random weapon picks in multiplayer."
+  },
+  "events": [
+    {
+      "date": "2001",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Rebel Act Studios sort Severance: Blade of Darkness en 2001.",
+        "en": "Rebel Act Studios releases Severance: Blade of Darkness in 2001."
+      }
+    },
+    {
+      "date": "2014",
+      "title": {
+        "fr": "Metal Mod",
+        "en": "Metal Mod"
+      },
+      "text": {
+        "fr": "Metal Mod, publié sur ModDB en 2014, ajoute notamment un choix d'arme aléatoire en multijoueur.",
+        "en": "Metal Mod, posted on ModDB in 2014, adds among other things a random weapon choice in multiplayer."
+      }
+    },
+    {
+      "date": "2015",
+      "title": {
+        "fr": "Gorentity Mod",
+        "en": "Gorentity Mod"
+      },
+      "text": {
+        "fr": "Gorentity Mod, publié sur ModDB en 2015 et encore mis à jour en 2025, est un mod gore qui intègre un Random Enemy Creator.",
+        "en": "Gorentity Mod, posted on ModDB in 2015 and still updated in 2025, is a gore mod that includes a Random Enemy Creator."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Severance: Blade of Darkness",
+      "url": "https://www.igdb.com/games/severance-blade-of-darkness-39b9fd63-b987-42d4-849c-7ea35fd69682"
+    },
+    {
+      "label": "ModDB — Metal Mod (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.moddb.com/mods/metal-mod"
+    },
+    {
+      "label": "ModDB — Gorentity Mod (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.moddb.com/mods/gorentity-mod-2015"
+    },
+    {
+      "label": "rando-list — Blade of Darkness",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Blade_of_Darkness.yml"
+    }
+  ]
+}

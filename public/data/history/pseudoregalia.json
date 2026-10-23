@@ -16,6 +16,17 @@
       }
     },
     {
+      "date": "2023",
+      "title": {
+        "fr": "Courses",
+        "en": "Races"
+      },
+      "text": {
+        "fr": "La première course recensée sur ce site a lieu le 7 octobre 2023 sur racetime.gg ; on en compte 3, toutes en 2023.",
+        "en": "The first race listed on this site takes place on October 7, 2023 on racetime.gg; there are 3, all in 2023."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2023",
         "en": "September 2023"
@@ -56,6 +67,10 @@
     {
       "label": "Multiworld — Pseudoregalia",
       "url": "https://multiworld.gg/games/Pseudoregalia/info/en"
+    },
+    {
+      "label": "racetime.gg — Pseudo",
+      "url": "https://racetime.gg/pseudoregalia"
     }
   ]
 }

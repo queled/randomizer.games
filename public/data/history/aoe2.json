@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Age of Empires II a une longue tradition de scripts de cartes aléatoires, dont HyperRandom.",
+    "en": "Age of Empires II has a long tradition of random map scripts, including HyperRandom."
+  },
+  "events": [
+    {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Ensemble Studios sort Age of Empires II: The Age of Kings en 1999.",
+        "en": "Ensemble Studios releases Age of Empires II: The Age of Kings in 1999."
+      }
+    },
+    {
+      "date": {
+        "fr": "Février 2017",
+        "en": "February 2017"
+      },
+      "title": {
+        "fr": "HyperRandom",
+        "en": "HyperRandom"
+      },
+      "text": {
+        "fr": "Le 9 février 2017, Zetnus présente HyperRandom sur les forums Age of Kings Heaven : un script de cartes aléatoires unique qui fait varier terrain, part de terre et zones pour des cartes variées et équilibrées, au-delà de MegaRandom.",
+        "en": "On February 9, 2017, Zetnus presents HyperRandom on the Age of Kings Heaven forums: a single random map script that varies terrain, land share and zones for varied and balanced maps, going beyond MegaRandom."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Age of Empires II: The Age of Kings",
+      "url": "https://www.igdb.com/games/age-of-empires-ii-the-age-of-kings"
+    },
+    {
+      "label": "Age of Kings Heaven — Project: HyperRandom",
+      "url": "https://aok.heavengames.com/cgi-bin/forums/display.cgi?action=ct&f=28,44641,,365"
+    },
+    {
+      "label": "rando-list — Age of Empires",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Age_of_Empires.yml"
+    }
+  ]
+}

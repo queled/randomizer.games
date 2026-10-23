@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "La version Mega Drive de Dick Tracy a un hack qui tire ses niveaux au hasard.",
+    "en": "The Mega Drive version of Dick Tracy has a hack that picks its levels at random."
+  },
+  "events": [
+    {
+      "date": "1991",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sega sort Dick Tracy sur Mega Drive en 1991.",
+        "en": "Sega releases Dick Tracy on Mega Drive in 1991."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2023",
+        "en": "August 2023"
+      },
+      "title": {
+        "fr": "Dick Tracy Arcade",
+        "en": "Dick Tracy Arcade"
+      },
+      "text": {
+        "fr": "Le 9 août 2023, BillyTime! Games publie Dick Tracy Arcade, patch qui propose trois niveaux tirés au hasard (un niveau A, un niveau B, puis un boss), avec trois vies et sans continue ; la version 1.2 date de mars 2026.",
+        "en": "On August 9, 2023, BillyTime! Games releases Dick Tracy Arcade, a patch offering three random stages (one stage A, one stage B, then a boss), with three lives and no continues; version 1.2 dates from March 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Dick Tracy (Genesis)",
+      "url": "https://www.igdb.com/games/dick-tracy--5"
+    },
+    {
+      "label": "romhacks.org — Dick Tracy Arcade (archive)",
+      "url": "http://web.archive.org/web/2026/https://romhacks.org/romhacks/dick-tracy-arcade-genesis/"
+    },
+    {
+      "label": "rando-list — Dick Tracy",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Dick_Tracy.yml"
+    }
+  ]
+}

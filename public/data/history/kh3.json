@@ -1,0 +1,77 @@
+{
+  "intro": {
+    "fr": "Kingdom Hearts III a son randomizer depuis 2022, et une version Archipelago fondée sur le mod Garden of Assemblage.",
+    "en": "Kingdom Hearts III has had its randomizer since 2022, and an Archipelago version based on the Garden of Assemblage mod."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Kingdom Hearts III en 2019.",
+        "en": "Square Enix releases Kingdom Hearts III in 2019."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Courses",
+        "en": "Races"
+      },
+      "text": {
+        "fr": "La première course recensée sur ce site a lieu le 30 janvier 2022 sur racetime.gg ; on en compte 9, toutes en 2022.",
+        "en": "The first race listed on this site takes place on January 30, 2022 on racetime.gg; there are 9, all in 2022."
+      }
+    },
+    {
+      "date": "2023",
+      "title": {
+        "fr": "KH3 Randomizer",
+        "en": "KH3 Randomizer"
+      },
+      "text": {
+        "fr": "Le randomizer officiel de la communauté, créé par WaterKH et CriticPerfect, a une application web, archivée en mars 2023 en version 1.3.4 ; la randomisation des ennemis n'est disponible que dans le client hors ligne.",
+        "en": "The community's official randomizer, created by WaterKH and CriticPerfect, has a web app, archived in March 2023 at version 1.3.4; enemy randomization is only available in the offline client."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Archipelago",
+        "en": "Archipelago"
+      },
+      "text": {
+        "fr": "Kingdom Hearts III se joue aussi sur Archipelago grâce à un client qui s'appuie sur le mod Garden of Assemblage, dont le randomizer reprend largement celui d'origine.",
+        "en": "Kingdom Hearts III can also be played on Archipelago through a client built on the Garden of Assemblage mod, whose randomizer is largely based on the original one."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Kingdom Hearts III",
+      "url": "https://www.igdb.com/games/kingdom-hearts-iii"
+    },
+    {
+      "label": "KH3 Randomizer (archive)",
+      "url": "http://web.archive.org/web/2023/https://kh3-randomizer-2ivd7.ondigitalocean.app/"
+    },
+    {
+      "label": "ap.aesais.net — Kingdom Hearts III",
+      "url": "https://ap.aesais.net/games/kingdom-hearts-iii?lang=en"
+    },
+    {
+      "label": "rando-list — Kingdom Hearts",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Kingdom_Hearts.yml"
+    },
+    {
+      "label": "racetime.gg — KH3R",
+      "url": "https://racetime.gg/kh3r"
+    }
+  ]
+}

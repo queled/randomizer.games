@@ -30,6 +30,17 @@
       }
     },
     {
+      "date": "2021",
+      "title": {
+        "fr": "Courses",
+        "en": "Races"
+      },
+      "text": {
+        "fr": "La première course recensée sur ce site a lieu le 15 janvier 2021 sur racetime.gg ; c'est la seule à ce jour.",
+        "en": "The first race listed on this site takes place on January 15, 2021 on racetime.gg; it is the only one so far."
+      }
+    },
+    {
       "date": {
         "fr": "Décembre 2022",
         "en": "December 2022"
@@ -78,6 +89,10 @@
     {
       "label": "Archipelago — MegaMan Battle Network 3",
       "url": "https://archipelago.gg/games/MegaMan%20Battle%20Network%203/info/en"
+    },
+    {
+      "label": "racetime.gg — MMBN3",
+      "url": "https://racetime.gg/mmbn3"
     }
   ]
 }

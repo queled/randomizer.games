@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Civilization IV: Colonization a des scripts de cartes communautaires, dont FaireWeather, qui simule tectonique et climat.",
+    "en": "Civilization IV: Colonization has community map scripts, including FaireWeather, which simulates tectonics and climate."
+  },
+  "events": [
+    {
+      "date": "2008",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Firaxis Games sort Sid Meier's Civilization IV: Colonization en 2008.",
+        "en": "Firaxis Games releases Sid Meier's Civilization IV: Colonization in 2008."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2008",
+        "en": "September 2008"
+      },
+      "title": {
+        "fr": "FaireWeather.py",
+        "en": "FaireWeather.py"
+      },
+      "text": {
+        "fr": "Le 30 septembre 2008, cephalo publie sur CivFanatics FaireWeather, script de cartes qui simule la tectonique des plaques et des régimes de vents et de pluies, sur le modèle de son script PerfectWorld pour Civilization IV.",
+        "en": "On September 30, 2008, cephalo posts FaireWeather on CivFanatics, a map script that simulates plate tectonics and wind and rainfall patterns, modelled on their PerfectWorld script for Civilization IV."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Sid Meier's Civilization IV: Colonization",
+      "url": "https://www.igdb.com/games/sid-meier-s-civilization-iv-colonization"
+    },
+    {
+      "label": "CivFanatics — FaireWeather.py (archive)",
+      "url": "http://web.archive.org/web/2026/https://forums.civfanatics.com/threads/mapscript-faireweather-py-for-colonization.293491/"
+    },
+    {
+      "label": "rando-list — Civilization",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Civilization.yml"
+    }
+  ]
+}

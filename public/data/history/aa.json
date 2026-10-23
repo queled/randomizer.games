@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "America's Army a un petit outil de randomisation des armes pour les administrateurs de serveur.",
+    "en": "America's Army has a small weapon randomization tool for server admins."
+  },
+  "events": [
+    {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "L'armée américaine publie America's Army en 2002.",
+        "en": "The U.S. Army releases America's Army in 2002."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Weapon Randomizer",
+        "en": "Weapon Randomizer"
+      },
+      "text": {
+        "fr": "Le Weapon Randomizer V1.5 de [KIL]_Anger_[SA], publié sur GameFront, génère un fichier de commandes d'administration qui changent au hasard les armes des joueurs.",
+        "en": "[KIL]_Anger_[SA]'s Weapon Randomizer V1.5, posted on GameFront, generates a file of admin commands that randomly change players' weapons."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — America's Army",
+      "url": "https://www.igdb.com/games/america-s-army"
+    },
+    {
+      "label": "GameFront — Weapon Randomizer V1.5 (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.gamefront.com/games/america-s-army/file/weapon-randomizer-v1-5"
+    },
+    {
+      "label": "rando-list — Americas Army",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Americas_Army.yml"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Age of Mythology: Extended Edition compte des centaines de scripts de cartes aléatoires sur le Steam Workshop.",
+    "en": "Age of Mythology: Extended Edition has hundreds of random map scripts on the Steam Workshop."
+  },
+  "events": [
+    {
+      "date": "2014",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Skybox Labs sort Age of Mythology: Extended Edition en 2014, version remaniée du jeu d'Ensemble Studios de 2002.",
+        "en": "Skybox Labs releases Age of Mythology: Extended Edition in 2014, a remastered version of Ensemble Studios' 2002 game."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Scripts de cartes",
+        "en": "Map scripts"
+      },
+      "text": {
+        "fr": "Le Steam Workshop du jeu compte plus de 200 scripts de cartes aléatoires.",
+        "en": "The game's Steam Workshop has over 200 random map scripts."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Age of Mythology: Extended Edition",
+      "url": "https://www.igdb.com/games/age-of-mythology-extended-edition"
+    },
+    {
+      "label": "Steam Workshop — Random Map Scripts",
+      "url": "https://steamcommunity.com/workshop/browse/?appid=266840&requiredtags%5B%5D=Random+Map+Scripts"
+    },
+    {
+      "label": "rando-list — Age of Empires",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Age_of_Empires.yml"
+    }
+  ]
+}

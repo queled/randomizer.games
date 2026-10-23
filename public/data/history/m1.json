@@ -1,0 +1,95 @@
+{
+  "intro": {
+    "fr": "Le premier Metroid a ses randomizers depuis 2017, dont un croisement avec le premier Zelda.",
+    "en": "The first Metroid has had randomizers since 2017, including a crossover with the first Zelda."
+  },
+  "events": [
+    {
+      "date": "1986",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo sort Metroid au Japon en 1986, puis sur NES en Amérique du Nord en 1987.",
+        "en": "Nintendo releases Metroid in Japan in 1986, then on the NES in North America in 1987."
+      }
+    },
+    {
+      "date": {
+        "fr": "Janvier 2017",
+        "en": "January 2017"
+      },
+      "title": {
+        "fr": "Nestroid Randomizer",
+        "en": "Nestroid Randomizer"
+      },
+      "text": {
+        "fr": "snarfblam publie sur romhacking.net le Nestroid Randomizer, qui randomise l'emplacement des objets et les connexions des ascenseurs (version 1.1 du 24 janvier 2017).",
+        "en": "snarfblam posts the Nestroid Randomizer on romhacking.net, which randomizes item locations and elevator connections (version 1.1 of January 24, 2017)."
+      }
+    },
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Zelda 1 / Metroid 1",
+        "en": "Zelda 1 / Metroid 1"
+      },
+      "text": {
+        "fr": "Le site du projet Zelda 1 / Metroid 1, en ligne en 2018, présente un randomizer qui réunit les deux jeux NES : des portails font passer de l'un à l'autre, et l'équipement des deux jeux est mélangé entre les deux mondes.",
+        "en": "The Zelda 1 / Metroid 1 project's site, online in 2018, presents a randomizer that combines both NES games: portals switch from one to the other, and both games' equipment is shuffled across both worlds."
+      }
+    },
+    {
+      "date": "2019-2026",
+      "title": {
+        "fr": "Courses",
+        "en": "Races"
+      },
+      "text": {
+        "fr": "La première course recensée sur ce site a lieu le 31 août 2019 sur SpeedRunsLive ; on en compte 21 au total (2019 : 1, 2026 : 20).",
+        "en": "The first race listed on this site takes place on August 31, 2019 on SpeedRunsLive; there are 21 in all (2019: 1, 2026: 20)."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2020",
+        "en": "August 2020"
+      },
+      "title": {
+        "fr": "Metrandomizer",
+        "en": "Metrandomizer"
+      },
+      "text": {
+        "fr": "Hex4F publie Metrandomizer, qui réorganise complètement la carte de Zèbes, avec des options de confort (version 07b du 9 août 2020).",
+        "en": "Hex4F releases Metrandomizer, which completely rearranges the layout of Zebes, with quality-of-life options (version 07b of August 9, 2020)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Metroid",
+      "url": "https://www.igdb.com/games/metroid"
+    },
+    {
+      "label": "romhacking.net — Nestroid Randomizer (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.romhacking.net/utilities/1257/"
+    },
+    {
+      "label": "Zelda 1 / Metroid 1",
+      "url": "https://z1m1.info/"
+    },
+    {
+      "label": "romhacking.net — Metrandomizer (archive)",
+      "url": "http://web.archive.org/web/2026/https://www.romhacking.net/utilities/1437/"
+    },
+    {
+      "label": "rando-list — Multi-series",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Multi-series.yml"
+    },
+    {
+      "label": "racetime.gg — M1R",
+      "url": "https://racetime.gg/m1r"
+    }
+  ]
+}

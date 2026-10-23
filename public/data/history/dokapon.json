@@ -1,0 +1,51 @@
+{
+  "intro": {
+    "fr": "Dokapon Kingdom a un randomizer depuis 2019, par l'auteur de celui de Mega Man Battle Network 3.",
+    "en": "Dokapon Kingdom has had a randomizer since 2019, by the author of the Mega Man Battle Network 3 one."
+  },
+  "events": [
+    {
+      "date": "2007",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sting sort Dokapon Kingdom en 2007.",
+        "en": "Sting releases Dokapon Kingdom in 2007."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2019",
+        "en": "July 2019"
+      },
+      "title": {
+        "fr": "Dokapon Kingdom Randomizer",
+        "en": "Dokapon Kingdom Randomizer"
+      },
+      "text": {
+        "fr": "Le 30 juillet 2019, X Kirby publie sur New Game Plus un randomizer en Python pour les versions Wii et PC du jeu, extraites au préalable ; une version en C# suit sur GitHub. Il est mis à jour jusqu'en janvier 2025.",
+        "en": "On July 30, 2019, X Kirby posts on New Game Plus a Python randomizer for the Wii and PC versions of the game, once extracted; a C# version follows on GitHub. It is updated until January 2025."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Dokapon Kingdom",
+      "url": "https://www.igdb.com/games/dokapon-kingdom"
+    },
+    {
+      "label": "New Game Plus — Dokapon Kingdom Randomizer (archive)",
+      "url": "http://web.archive.org/web/2026/http://ngplus.net/index.php?/files/file/53-dokapon-kingdom-randomizer/"
+    },
+    {
+      "label": "GitHub — XKirby/Dokapon-Kingdom-Randomizer",
+      "url": "https://github.com/XKirby/Dokapon-Kingdom-Randomizer"
+    },
+    {
+      "label": "rando-list — Dokapon",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Dokapon.yml"
+    }
+  ]
+}

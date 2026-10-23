@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Citadel, classique de l'Acorn BBC Micro, a un randomiseur d'objets depuis fin 2017.",
+    "en": "Citadel, an Acorn BBC Micro classic, has had an item randomiser since late 2017."
+  },
+  "events": [
+    {
+      "date": "1985",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Superior Software publie en 1985 Citadel, jeu de plates-formes et d'énigmes de Michael Jakobsen pour BBC Micro, porté ensuite sur Acorn Electron.",
+        "en": "Superior Software releases Citadel in 1985, a platform and puzzle game by Michael Jakobsen for the BBC Micro, later ported to the Acorn Electron."
+      }
+    },
+    {
+      "date": {
+        "fr": "Décembre 2017",
+        "en": "December 2017"
+      },
+      "title": {
+        "fr": "Citadel Item Randomiser",
+        "en": "Citadel Item Randomiser"
+      },
+      "text": {
+        "fr": "En décembre 2017, Diminished présente sur le forum stardot le Citadel Item Randomiser, inspiré des randomizers de Zelda et Metroid, qui place les objets en évitant les blocages ; la version 0.4, nettement améliorée, suit en janvier 2018.",
+        "en": "In December 2017, Diminished presents the Citadel Item Randomiser on the stardot forum, inspired by Zelda and Metroid randomizers, placing items while avoiding deadlocks; the much-improved version 0.4 follows in January 2018."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "Wikipedia — Citadel (video game)",
+      "url": "https://en.wikipedia.org/wiki/Citadel_(video_game)"
+    },
+    {
+      "label": "stardot — Citadel Item Randomiser (archive)",
+      "url": "http://web.archive.org/web/2026/https://stardot.org.uk/forums/viewtopic.php?f=1&t=14318"
+    },
+    {
+      "label": "rando-list — Citadel",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Citadel.yml"
+    }
+  ]
+}

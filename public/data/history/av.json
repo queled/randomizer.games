@@ -30,6 +30,17 @@
       }
     },
     {
+      "date": "2020",
+      "title": {
+        "fr": "Courses",
+        "en": "Races"
+      },
+      "text": {
+        "fr": "La première course recensée sur ce site a lieu le 10 mai 2020 sur racetime.gg ; c'est la seule à ce jour.",
+        "en": "The first race listed on this site takes place on May 10, 2020 on racetime.gg; it is the only one so far."
+      }
+    },
+    {
       "date": {
         "fr": "Janvier 2021",
         "en": "January 2021"
@@ -110,6 +121,10 @@
     {
       "label": "GitHub — mail-liam/Archipelago (releases)",
       "url": "https://github.com/mail-liam/Archipelago/releases"
+    },
+    {
+      "label": "racetime.gg — AV",
+      "url": "https://racetime.gg/axiomverge"
     }
   ]
 }

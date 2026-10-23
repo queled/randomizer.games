@@ -30,6 +30,17 @@
       }
     },
     {
+      "date": "2024",
+      "title": {
+        "fr": "Courses",
+        "en": "Races"
+      },
+      "text": {
+        "fr": "La première course recensée sur ce site a lieu le 2 novembre 2024 sur racetime.gg ; on en compte 3, toutes en 2024.",
+        "en": "The first race listed on this site takes place on November 2, 2024 on racetime.gg; there are 3, all in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Novembre 2025",
         "en": "November 2025"
@@ -74,6 +85,10 @@
     {
       "label": "GitHub — Metaruler/ArchipelagoCR (releases)",
       "url": "https://github.com/Metaruler/ArchipelagoCR/releases"
+    },
+    {
+      "label": "racetime.gg — CRBR",
+      "url": "https://racetime.gg/crrando"
     }
   ]
 }

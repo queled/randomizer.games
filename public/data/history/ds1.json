@@ -1,0 +1,124 @@
+{
+  "intro": {
+    "fr": "Dark Souls a une scène de randomizers active depuis 2017 : objets, ennemis, brumes, statistiques, sur la version d'origine comme sur Remastered.",
+    "en": "Dark Souls has had an active randomizer scene since 2017: items, enemies, fog gates, stats, on the original version as well as Remastered."
+  },
+  "events": [
+    {
+      "date": "2011",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "FromSoftware sort Dark Souls en 2011.",
+        "en": "FromSoftware releases Dark Souls in 2011."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juillet 2017",
+        "en": "July 2017"
+      },
+      "title": {
+        "fr": "Item Randomizer",
+        "en": "Item Randomizer"
+      },
+      "text": {
+        "fr": "Le 23 juillet 2017, HotPocketRemix publie sur Nexus Mods le Dark Souls Item Randomizer : trésors, boutiques, cadeaux et butins des PNJ et des boss sont mélangés. Il est porté sur Remastered en août 2018.",
+        "en": "On July 23, 2017, HotPocketRemix posts the Dark Souls Item Randomizer on Nexus Mods: treasures, shops, NPC gifts and drops, and boss drops are shuffled. It is ported to Remastered in August 2018."
+      }
+    },
+    {
+      "date": {
+        "fr": "Avril 2018",
+        "en": "April 2018"
+      },
+      "title": {
+        "fr": "Enemy Randomizer",
+        "en": "Enemy Randomizer"
+      },
+      "text": {
+        "fr": "Le 29 avril 2018, rycheNhavalys publie un randomizer qui remplace au hasard ennemis et boss ; il dépasse les 200 000 téléchargements.",
+        "en": "On April 29, 2018, rycheNhavalys releases a randomizer that randomly replaces enemies and bosses; it passes 200,000 downloads."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2019",
+        "en": "October 2019"
+      },
+      "title": {
+        "fr": "Fog Gate Randomizer",
+        "en": "Fog Gate Randomizer"
+      },
+      "text": {
+        "fr": "Le 16 octobre 2019, thefifthmatt publie pour Remastered le Fog Gate Randomizer, qui change la destination des brumes dans l'esprit des randomizers d'entrées de Zelda. Le même auteur publie en avril 2025 un randomizer d'ennemis avec mise à l'échelle par zone.",
+        "en": "On October 16, 2019, thefifthmatt releases the Fog Gate Randomizer for Remastered, which changes where fog gates lead in the spirit of Zelda entrance randomizers. The same author releases an enemy randomizer with area scaling in April 2025."
+      }
+    },
+    {
+      "date": "2023",
+      "title": {
+        "fr": "Courses",
+        "en": "Races"
+      },
+      "text": {
+        "fr": "La première course recensée sur ce site a lieu le 12 août 2023 sur racetime.gg ; c'est la seule à ce jour.",
+        "en": "The first race listed on this site takes place on August 12, 2023 on racetime.gg; it is the only one so far."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2026",
+        "en": "August 2026"
+      },
+      "title": {
+        "fr": "Nouveaux outils",
+        "en": "New tools"
+      },
+      "text": {
+        "fr": "En 2026 paraissent un fork de l'Item Randomizer, un randomizer de statistiques et le DS1 Enemy and Item Randomizer de kellernz1, qui randomise aussi la progression.",
+        "en": "In 2026 come a fork of the Item Randomizer, a stat randomizer and kellernz1's DS1 Enemy and Item Randomizer, which also randomizes progression."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Dark Souls",
+      "url": "https://www.igdb.com/games/dark-souls"
+    },
+    {
+      "label": "Nexus Mods — Dark Souls Item Randomizer",
+      "url": "https://www.nexusmods.com/darksouls/mods/1305"
+    },
+    {
+      "label": "Nexus Mods — Dark Souls Enemy Randomizer",
+      "url": "https://www.nexusmods.com/darksouls/mods/1407"
+    },
+    {
+      "label": "Nexus Mods — Fog Gate Randomizer",
+      "url": "https://www.nexusmods.com/darksoulsremastered/mods/165"
+    },
+    {
+      "label": "Nexus Mods — Matt's DS1 Enemy Randomizer",
+      "url": "https://www.nexusmods.com/darksoulsremastered/mods/922"
+    },
+    {
+      "label": "Nexus Mods — Dark Souls Item Randomizer - Fork",
+      "url": "https://www.nexusmods.com/darksoulsremastered/mods/1401"
+    },
+    {
+      "label": "Nexus Mods — DSR Stat Randomizer",
+      "url": "https://www.nexusmods.com/darksoulsremastered/mods/1425"
+    },
+    {
+      "label": "Nexus Mods — DS1 Enemy and Item Randomizer",
+      "url": "https://www.nexusmods.com/darksoulsremastered/mods/1430"
+    },
+    {
+      "label": "racetime.gg — DS1",
+      "url": "https://racetime.gg/darksouls"
+    }
+  ]
+}

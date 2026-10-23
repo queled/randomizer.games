@@ -417,7 +417,9 @@ function buildCalendarEvents(tournament) {
     list.forEach(m => {
       const group = m.phaseGroup && (standings || byPhase.size > 1)
         ? `${t('group', 'Group')} ${m.phaseGroup}` : null;
-      roundLabel.set(m, [phase ? translatePhaseName(phase) : null, group, labels ? labels.label(m.round) : null].filter(Boolean).join(' • '));
+      const round = labels ? labels.label(m.round)
+        : isStandingsPhase(tournament, phase) && m.round > 0 ? `${t('roundNumber', 'Round')} ${m.round}` : null;
+      roundLabel.set(m, [phase ? translatePhaseName(phase) : null, group, round].filter(Boolean).join(' • '));
     });
   });
 
@@ -2077,11 +2079,15 @@ function displayMatches(matches, tournament, races = []) {
       // A phase split into pools (start.gg phase groups) lists each pool on its own, like start.gg
       const pools = [...new Set(phaseMatches.map(m => m.phaseGroup).filter(Boolean))]
         .sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0) || String(a).localeCompare(String(b)));
-      if (pools.length > 1 && !isStandingsPhase(tournament, phaseName)) {
+      // Round robin groups keep their start.gg number, as in the standings tables; a Swiss phase stays in one list
+      const phaseKind = getPhaseKind(tournament, phaseName);
+      if (pools.length > 1 && phaseKind !== 'swiss') {
         pools.forEach((poolId, poolIdx) => {
           const poolHeader = document.createElement('h4');
           poolHeader.style.cssText = 'font-size: 1.15rem; font-weight: bold; margin-top: 1.75rem; margin-bottom: 0.25rem; color: #60a5fa;';
-          poolHeader.textContent = `${i18n.t('tournamentDetail.pool') || 'Pool'} ${String.fromCharCode('A'.charCodeAt(0) + poolIdx)}`;
+          poolHeader.textContent = phaseKind === 'roundrobin'
+            ? (/^division\s/i.test(poolId) ? poolId : `${i18n.t('tournamentDetail.group') || 'Group'} ${poolId}`)
+            : `${i18n.t('tournamentDetail.pool') || 'Pool'} ${String.fromCharCode('A'.charCodeAt(0) + poolIdx)}`;
           container.appendChild(poolHeader);
           renderRounds(phaseMatches.filter(m => m.phaseGroup === poolId));
         });
@@ -4652,7 +4658,11 @@ function getBracketRoundLabels(matches, isDoubleElimination) {
       .forEach(p => { if (p && p !== 'TBD') players.add(String(p)); });
   });
   const firstRoundSets = list.filter(m => m.round === 1).length;
-  const size = 2 ** Math.ceil(Math.log2(Math.max(players.size, firstRoundSets * 2, 2)));
+  // Byes thin out round 1 (12 players: 4 sets, then 4 quarter-finals): a later round can show the bracket is wider
+  const setsPerRound = {};
+  if (!isDE) list.forEach(m => { if (m.round > 0) setsPerRound[m.round] = (setsPerRound[m.round] || 0) + 1; });
+  const widestRound = Math.max(0, ...Object.entries(setsPerRound).map(([r, n]) => n * 2 ** r));
+  const size = 2 ** Math.ceil(Math.log2(Math.max(players.size, firstRoundSets * 2, widestRound, 2)));
   const winnersFinalRound = Math.log2(size);
 
   const labels = {};

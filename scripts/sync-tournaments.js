@@ -178,8 +178,23 @@ async function updateActiveTournaments({ dryRun, challongeHours }) {
 
         const participants = StartGGAPI.buildParticipants(event);
 
+        // Phases are often set up after the event is created: refresh them with the sets
+        const phases = (event.phases || []).map(phase => ({
+          startggPhaseId: phase.id,
+          name: phase.name,
+          bracketType: phase.bracketType,
+          phaseOrder: phase.phaseOrder,
+          numSeeds: phase.numSeeds,
+          groupCount: phase.groupCount,
+          state: phase.state
+        }));
+        const phaseFields = phases.length
+          ? { phases, tournamentType: String(phases[0].bracketType || '').toLowerCase() || tournament.tournamentType }
+          : {};
+
         await Tournament.findByIdAndUpdate(tournament._id, {
           $set: {
+            ...phaseFields,
             state: event.state?.toLowerCase?.() || String(event.state || tournament.state),
             participantsCount: event.numEntrants || participants.length,
             participants,

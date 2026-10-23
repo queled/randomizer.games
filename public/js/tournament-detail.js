@@ -920,6 +920,10 @@ function displayParticipants(participants, matches = [], options = {}) {
   const opt = (options && typeof options === 'object' && !Array.isArray(options)) ? options : {};
   const rankOnly = !!opt.rankOnly;
   participants = groupTeamParticipants(participants);
+  // start.gg places an ongoing event's entrants where they would finish if knocked out now: no ranking yet
+  if (currentTournament && currentTournament.startggId && currentTournament.status === 'en cours') {
+    participants = participants.map(p => ({ ...p, finalRank: null }));
+  }
 
   // Best-effort ranking when Challonge doesn't provide finalRank yet (e.g. awaiting_review).
   // Only used when rankOnly=true (Groups→SE).

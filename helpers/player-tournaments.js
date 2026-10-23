@@ -134,7 +134,7 @@ async function buildPlayerTournaments({ Tournament, Match, userId, names }) {
 
   const [tournaments, labelFor] = await Promise.all([
     Tournament.find(participantQuery({ userId, names: cleanNames }))
-      .select('name gameName gameSlug gameId startDate endDate state status participantsCount participants matches.player1.startggEntrantId matches.player2.startggEntrantId matches.winnerId matches.phaseGroup midosHouse.schedule.startAt game')
+      .select('name gameName gameSlug gameId startggId startDate endDate state status participantsCount participants matches.player1.startggEntrantId matches.player2.startggEntrantId matches.winnerId matches.phaseGroup midosHouse.schedule.startAt game')
       .populate('game', 'id name official.name randomizer')
       .lean(),
     loadGameLabels()
@@ -163,7 +163,9 @@ async function buildPlayerTournaments({ Tournament, Match, userId, names }) {
   }
 
   return entries.map(({ t, participant, status }) => {
-    let rank = Number(participant.finalRank) > 0 ? Number(participant.finalRank) : null;
+    // start.gg places an ongoing event's entrants where they would finish if knocked out now
+    const provisional = status === 'ongoing' && t.startggId != null;
+    let rank = !provisional && Number(participant.finalRank) > 0 ? Number(participant.finalRank) : null;
     let rankComputed = false;
     if (!rank && toCompute.some(e => e.t === t)) {
       rank = computeRankFromMatches(t.participants, participant, matchesByTournament.get(String(t._id)) || []);

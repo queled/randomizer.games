@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { computeProvisionalRanks } = require('../helpers/provisional-ranks');
 
 // 50 keeps team entrants and nested set slots well under start.gg's 1000-object request limit.
 const EVENT_PAGE_SIZE = 50;
@@ -447,6 +448,17 @@ class StartGGAPI {
     const participants = [];
     const seen = new Set();
     const sources = event?.standings?.length ? event.standings : event?.entrants || [];
+    // Until the event is over, ranks come from the sets played so far
+    const provisional = event && String(event.state || '').toUpperCase() !== 'COMPLETED'
+      && (event.sets || []).some(set => set.winnerId != null)
+      ? computeProvisionalRanks((event.sets || []).map(set => ({
+        phase: set.phase?.name || null,
+        round: set.round,
+        winnerId: set.winnerId,
+        player1: { startggEntrantId: set.entrants?.[0]?.id },
+        player2: { startggEntrantId: set.entrants?.[1]?.id }
+      })), event.phases || [])
+      : null;
     for (const entry of sources) {
       const entrantId = String(entry.entrantId ?? entry.id ?? '');
       const team = teams.has(entrantId) ? (entry.entrantName || entry.name) : null;
@@ -457,11 +469,12 @@ class StartGGAPI {
         participants.push({
           name,
           seed: entry.seed || null,
-          finalRank: entry.placement || null,
+          finalRank: (provisional ? provisional.get(entrantId) : entry.placement) || null,
           startggUserId: p.userId,
           startggUserSlug: p.userSlug,
           prefix: p.prefix,
-          ...(team ? { team, startggEntrantId: entrantId } : {})
+          ...(entrantId ? { startggEntrantId: entrantId } : {}),
+          ...(team ? { team } : {})
         });
       }
     }

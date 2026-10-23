@@ -343,6 +343,7 @@ const fr = {
         roundOf32: "Seizièmes de finale",
         roundOf64: "Trente-deuxièmes de finale",
         roundNumber: "Tour",
+        provisionalRank: "Classement provisoire, d’après les résultats actuels",
         finalStage: "Phase finale — Simple élimination",
         groupStage: "Phase de groupes",
         group: "Groupe",

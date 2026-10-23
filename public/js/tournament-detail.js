@@ -920,10 +920,6 @@ function displayParticipants(participants, matches = [], options = {}) {
   const opt = (options && typeof options === 'object' && !Array.isArray(options)) ? options : {};
   const rankOnly = !!opt.rankOnly;
   participants = groupTeamParticipants(participants);
-  // start.gg places an ongoing event's entrants where they would finish if knocked out now: no ranking yet
-  if (currentTournament && currentTournament.startggId && currentTournament.status === 'en cours') {
-    participants = participants.map(p => ({ ...p, finalRank: null }));
-  }
 
   // Best-effort ranking when Challonge doesn't provide finalRank yet (e.g. awaiting_review).
   // Only used when rankOnly=true (Groups→SE).
@@ -1142,7 +1138,10 @@ function displayParticipants(participants, matches = [], options = {}) {
                       : participant.finalRank === 2 ? '#9ca3af'
                       : participant.finalRank === 3 ? '#cd7f32'
                       : '#4b5563';
-      rankBadge = `<div style="display: inline-flex; align-items: center; justify-content: center; min-width: 2.5rem; height: 2rem; background-color: ${rankColor}; color: white; border-radius: 0.25rem; font-weight: bold; margin-right: 1rem;">#${participant.finalRank}</div>`;
+      // An ongoing event's rank comes from the sets played so far
+      const provisional = currentTournament && currentTournament.status === 'en cours';
+      const rankTitle = provisional ? ` title="${escHtml(tdText('provisionalRank', 'Provisional rank, from the results so far'))}"` : '';
+      rankBadge = `<div${rankTitle} style="display: inline-flex; align-items: center; justify-content: center; min-width: 2.5rem; height: 2rem; background-color: ${rankColor}; color: white; border-radius: 0.25rem; font-weight: bold; margin-right: 1rem;">#${participant.finalRank}</div>`;
     } else if (rankOnly) {
       const rank = idx + 1;
       const rankColor = rank === 1 ? '#fbbf24'

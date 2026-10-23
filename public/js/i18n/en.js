@@ -355,6 +355,7 @@ const en = {
         roundOf32: "Round of 32",
         roundOf64: "Round of 64",
         roundNumber: "Round",
+        provisionalRank: "Provisional rank, from the results so far",
         finalStage: "Finals — Single Elimination",
         groupStage: "Group Stage",
         group: "Group",

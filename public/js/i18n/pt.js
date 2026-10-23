@@ -379,6 +379,7 @@ const pt = {
         roundOf32: "16 avos de Final",
         roundOf64: "32 avos de Final",
         roundNumber: "Rodada",
+        provisionalRank: "Classificação provisória, com base nos resultados atuais",
         finalStage: "Finais — Eliminação Simples",
         groupStage: "Fase de Grupos",
         group: "Grupo",

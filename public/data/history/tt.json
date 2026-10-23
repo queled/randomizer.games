@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Teamfight Tactics se joue en multiworld Archipelago depuis 2026.",
+    "en": "Teamfight Tactics has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Riot Games sort Teamfight Tactics en 2019.",
+        "en": "Riot Games releases Teamfight Tactics in 2019."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Alpaka623 publie le 18 octobre 2026 la version 0.5.4 de TFT Archipelago. Le jeu ne pouvant pas être modifié, l'application est une surcouche qui masque les boutons verrouillés ; les checks s'obtiennent en finissant dans le top 4 avec certaines compositions.",
+        "en": "Alpaka623 releases TFT Archipelago 0.5.4. As the game cannot be modded, the app is an overlay that blocks locked buttons; checks are earned by finishing top 4 with certain board compositions on October 18, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.5.5 sort le 21 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (2 versions publiées).",
+        "en": "Version 0.5.5 is released on October 21, 2026; it is the latest as of October 23, 2026 (2 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Teamfight Tactics",
+      "url": "https://www.igdb.com/games/teamfight-tactics"
+    },
+    {
+      "label": "GitHub — Alpaka623/tft-archipelago-releases",
+      "url": "https://github.com/Alpaka623/tft-archipelago-releases"
+    },
+    {
+      "label": "GitHub — Alpaka623/tft-archipelago-releases (releases)",
+      "url": "https://github.com/Alpaka623/tft-archipelago-releases/releases"
+    }
+  ]
+}

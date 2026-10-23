@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Khimera: Destroy All Monster Girls se joue en multiworld Archipelago depuis 2026.",
+    "en": "Khimera: Destroy All Monster Girls has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Suits & Sandals sort Khimera: Destroy All Monster Girls en 2016.",
+        "en": "Suits & Sandals releases Khimera: Destroy All Monster Girls in 2016."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Troloze publie le 23 octobre 2026 la version 0.1.0 du randomizer, pour Windows, compatible avec les versions Steam et itch.io du jeu.",
+        "en": "Troloze releases version 0.1.0 of the randomizer, for Windows, compatible with the Steam and itch.io builds of the game on October 23, 2026."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Khimera: Destroy All Monster Girls",
+      "url": "https://www.igdb.com/games/khimera-destroy-all-monster-girls"
+    },
+    {
+      "label": "GitHub — Troloze/KhimeraDAMG-AP",
+      "url": "https://github.com/Troloze/KhimeraDAMG-AP"
+    },
+    {
+      "label": "GitHub — Troloze/KhimeraDAMG-AP (releases)",
+      "url": "https://github.com/Troloze/KhimeraDAMG-AP/releases"
+    }
+  ]
+}

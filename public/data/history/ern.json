@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Elden Ring Nightreign se joue en multiworld Archipelago depuis 2026.",
+    "en": "Elden Ring Nightreign has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "FromSoftware sort Elden Ring Nightreign en 2025.",
+        "en": "FromSoftware releases Elden Ring Nightreign in 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "jacksonstubblefield publie le 1er octobre 2026 l'alpha 0.3.5 de l'APWorld, pour la version Steam : le client lit la mémoire du jeu et peut révéler les Seigneurs de la nuit secondaires à mesure que leurs accès sont reçus.",
+        "en": "jacksonstubblefield releases alpha 0.3.5 of the APWorld, for the Steam version: the client reads the game's memory and can reveal secondary Nightlords as their access items are received on October 1, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.4.7 sort le 23 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (6 versions publiées).",
+        "en": "Version 0.4.7 is released on October 23, 2026; it is the latest as of October 23, 2026 (6 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Elden Ring Nightreign",
+      "url": "https://www.igdb.com/games/elden-ring-nightreign"
+    },
+    {
+      "label": "GitHub — jacksonstubblefield/nightreign-ap",
+      "url": "https://github.com/jacksonstubblefield/nightreign-ap"
+    },
+    {
+      "label": "GitHub — jacksonstubblefield/nightreign-ap (releases)",
+      "url": "https://github.com/jacksonstubblefield/nightreign-ap/releases"
+    }
+  ]
+}

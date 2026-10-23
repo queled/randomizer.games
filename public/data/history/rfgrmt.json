@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Red Faction: Guerrilla Re-Mars-tered se joue en multiworld Archipelago depuis 2026.",
+    "en": "Red Faction: Guerrilla Re-Mars-tered has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2018",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Kaiko sort Red Faction: Guerrilla Re-Mars-tered en 2018.",
+        "en": "Kaiko releases Red Faction: Guerrilla Re-Mars-tered in 2018."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Haywire32 publie le 22 septembre 2026 la version 0.5.0 du randomizer, pour l'édition Steam : les secteurs se débloquent par objets, et jusqu'à 1 059 emplacements (missions, actions de guérilla, achats, gisements, panneaux…) sont possibles.",
+        "en": "Haywire32 releases version 0.5.0 of the randomizer, for the Steam edition: sectors unlock through items, with up to 1,059 locations (missions, guerrilla actions, purchases, ore deposits, billboards…) on September 22, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.6.4 sort le 22 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (7 versions publiées).",
+        "en": "Version 0.6.4 is released on October 22, 2026; it is the latest as of October 23, 2026 (7 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Red Faction: Guerrilla Re-Mars-tered",
+      "url": "https://www.igdb.com/games/red-faction-guerrilla-re-mars-tered"
+    },
+    {
+      "label": "GitHub — Haywire32/RFG-AP",
+      "url": "https://github.com/Haywire32/RFG-AP"
+    },
+    {
+      "label": "GitHub — Haywire32/RFG-AP (releases)",
+      "url": "https://github.com/Haywire32/RFG-AP/releases"
+    }
+  ]
+}

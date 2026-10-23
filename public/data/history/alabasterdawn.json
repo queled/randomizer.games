@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Alabaster Dawn se joue en multiworld Archipelago depuis 2026.",
+    "en": "Alabaster Dawn has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Radical Fish Games sort Alabaster Dawn en 2026.",
+        "en": "Radical Fish Games releases Alabaster Dawn in 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Satisha10 publie le 16 septembre 2026 l'alpha 0.1.0 de son client Archipelago, qui couvre le contenu des versions 0.2 du jeu.",
+        "en": "Satisha10 releases alpha 0.1.0 of their Archipelago client, which covers the content of the game's 0.2 versions on September 16, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.2.1 sort le 11 octobre 2026 ; c'est la plus récente au 23 octobre 2026 (3 versions publiées).",
+        "en": "Version 0.2.1 is released on October 11, 2026; it is the latest as of October 23, 2026 (3 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Alabaster Dawn",
+      "url": "https://www.igdb.com/games/alabaster-dawn--1"
+    },
+    {
+      "label": "GitHub — Satisha10/AlabasterDawnAPClient",
+      "url": "https://github.com/Satisha10/AlabasterDawnAPClient"
+    },
+    {
+      "label": "GitHub — Satisha10/AlabasterDawnAPClient (releases)",
+      "url": "https://github.com/Satisha10/AlabasterDawnAPClient/releases"
+    }
+  ]
+}

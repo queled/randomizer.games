@@ -1,0 +1,65 @@
+{
+  "intro": {
+    "fr": "PAC-MAN WORLD 2 Re-PAC se joue en multiworld Archipelago depuis 2026.",
+    "en": "PAC-MAN WORLD 2 Re-PAC has been playable in an Archipelago multiworld since 2026."
+  },
+  "events": [
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Now Production sort PAC-MAN WORLD 2 Re-PAC en 2025.",
+        "en": "Now Production releases PAC-MAN WORLD 2 Re-PAC in 2025."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "DepressingChild publie le 24 septembre 2026 la version 0.1.0 du PMW2RP AP World.",
+        "en": "DepressingChild releases PMW2RP AP World 0.1.0 on September 24, 2026."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2026",
+        "en": "September 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "La version 0.1.2 sort le 28 septembre 2026 ; c'est la plus récente au 23 octobre 2026 (3 versions publiées).",
+        "en": "Version 0.1.2 is released on September 28, 2026; it is the latest as of October 23, 2026 (3 versions released)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Pac-Man World 2 Re-Pac",
+      "url": "https://www.igdb.com/games/pac-man-world-2-re-pac"
+    },
+    {
+      "label": "GitHub — DepressingChild/Archipelago",
+      "url": "https://github.com/DepressingChild/Archipelago"
+    },
+    {
+      "label": "GitHub — DepressingChild/Archipelago (releases)",
+      "url": "https://github.com/DepressingChild/Archipelago/releases"
+    },
+    {
+      "label": "GitHub — DThaiPome/PMW2RP-Archipelago-Central",
+      "url": "https://github.com/DThaiPome/PMW2RP-Archipelago-Central"
+    }
+  ]
+}

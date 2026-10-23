@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Legend of Grimrock 2 a un randomizer depuis 2020, sous forme de mod du donjon de base.",
+    "en": "Legend of Grimrock 2 has had a randomizer since 2020, as a mod of the default dungeon."
+  },
+  "events": [
+    {
+      "date": "2014",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Almost Human sort Legend of Grimrock 2 en 2014.",
+        "en": "Almost Human releases Legend of Grimrock 2 in 2014."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2020",
+        "en": "November 2020"
+      },
+      "title": {
+        "fr": "Grimrock 2 Randomizer",
+        "en": "Grimrock 2 Randomizer"
+      },
+      "text": {
+        "fr": "Le 3 novembre 2020, 7Soul présente sur le forum officiel la bêta de son Grimrock 2 Randomizer, mod du donjon de base : objets mélangés par catégories, statistiques aléatoires, attaques spéciales randomisées.",
+        "en": "On November 3, 2020, 7Soul presents the beta of the Grimrock 2 Randomizer on the official forum, a mod of the default dungeon: items shuffled by category, random stats, randomized special attacks."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Legend of Grimrock 2",
+      "url": "https://www.igdb.com/games/legend-of-grimrock-2"
+    },
+    {
+      "label": "Grimrock Forum — [Beta] Grimrock 2 Randomizer (archive)",
+      "url": "http://web.archive.org/web/2024/https://www.grimrock.net/forum/viewtopic.php?f=23&t=18602"
+    },
+    {
+      "label": "rando-list — Legend of Grimrock",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Legend_of_Grimrock.yml"
+    }
+  ]
+}

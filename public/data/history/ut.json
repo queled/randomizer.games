@@ -1,0 +1,44 @@
+{
+  "intro": {
+    "fr": "Unreal Tournament a un mutator qui tire ses cartes au hasard, remplacé ensuite par XMaps.",
+    "en": "Unreal Tournament has a mutator that picks its maps at random, later replaced by XMaps."
+  },
+  "events": [
+    {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Epic Games sort Unreal Tournament en 1999.",
+        "en": "Epic Games releases Unreal Tournament in 1999."
+      }
+    },
+    {
+      "date": "2002",
+      "title": {
+        "fr": "Map Randomizer",
+        "en": "Map Randomizer"
+      },
+      "text": {
+        "fr": "Le mutator Map Randomizer de gweb, archivé dès 2002, choisit au hasard la carte suivante sans jamais rejouer une carte avant d'avoir épuisé la liste ; son auteur le remplace ensuite par XMaps.",
+        "en": "gweb's Map Randomizer mutator, archived as early as 2002, picks the next map at random without replaying a map before the list is exhausted; its author later replaces it with XMaps."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Unreal Tournament",
+      "url": "https://www.igdb.com/games/unreal-tournament"
+    },
+    {
+      "label": "gweb — Map Randomizer (archive)",
+      "url": "http://web.archive.org/web/2024/https://www.gweb.me.uk/gweb/ut_mr.htm"
+    },
+    {
+      "label": "rando-list — Unreal",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Unreal.yml"
+    }
+  ]
+}

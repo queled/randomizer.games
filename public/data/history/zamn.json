@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Zombies Ate My Neighbors a un hack qui en fait un roguelike aux niveaux tirés au hasard.",
+    "en": "Zombies Ate My Neighbors has a hack that turns it into a roguelike with random levels."
+  },
+  "events": [
+    {
+      "date": "1993",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "LucasArts sort Zombies Ate My Neighbors en 1993.",
+        "en": "LucasArts releases Zombies Ate My Neighbors in 1993."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2022",
+        "en": "June 2022"
+      },
+      "title": {
+        "fr": "Zombies Ate My Roguelike",
+        "en": "Zombies Ate My Roguelike"
+      },
+      "text": {
+        "fr": "BillyTime! Games publie sur romhacking.net Zombies Ate My Roguelike, inspiré de The Binding of Isaac : un niveau aléatoire par palier sur cinq paliers, avec une seule vie, jusqu'au niveau Monsters Among Us (version 3.0 du 29 juin 2022).",
+        "en": "BillyTime! Games releases Zombies Ate My Roguelike on romhacking.net, inspired by The Binding of Isaac: a random level per tier across five tiers, with only one life, up to the Monsters Among Us level (version 3.0 of June 29, 2022)."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Zombies Ate My Neighbors",
+      "url": "https://www.igdb.com/games/zombies-ate-my-neighbors"
+    },
+    {
+      "label": "romhacking.net — Zombies Ate My Roguelike (archive)",
+      "url": "http://web.archive.org/web/2022/https://www.romhacking.net/hacks/6960/"
+    },
+    {
+      "label": "rando-list — Zombies Ate My Neighbors",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Zombies_Ate_My_Neighbors.yml"
+    }
+  ]
+}

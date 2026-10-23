@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Freeway, sur Atari 2600, a un randomizer de circulation depuis 2006.",
+    "en": "Freeway, on the Atari 2600, has had a traffic randomizer since 2006."
+  },
+  "events": [
+    {
+      "date": "1981",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Activision sort Freeway sur Atari 2600 en 1981.",
+        "en": "Activision releases Freeway on the Atari 2600 in 1981."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2006",
+        "en": "March 2006"
+      },
+      "title": {
+        "fr": "Freeway Randomizer",
+        "en": "Freeway Randomizer"
+      },
+      "text": {
+        "fr": "Le 21 mars 2006, Steve Englehardt publie sur romhacking.net un outil qui génère un code source de Freeway aux trajectoires, au nombre et à la vitesse des voitures aléatoires.",
+        "en": "On March 21, 2006, Steve Englehardt releases a tool on romhacking.net that generates Freeway source code with random car patterns, numbers per lane and speeds."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Freeway",
+      "url": "https://www.igdb.com/games/freeway"
+    },
+    {
+      "label": "romhacking.net — Freeway Randomizer (archive)",
+      "url": "http://web.archive.org/web/2022/https://www.romhacking.net/utilities/720/"
+    },
+    {
+      "label": "rando-list — Freeway",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Freeway.yml"
+    }
+  ]
+}

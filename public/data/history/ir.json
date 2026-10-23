@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Imperator: Rome a un générateur de mods « Shattered World » qui crée des mondes morcelés aléatoires.",
+    "en": "Imperator: Rome has a \"Shattered World\" mod generator that creates random fragmented worlds."
+  },
+  "events": [
+    {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Paradox Development Studio sort Imperator: Rome en 2019.",
+        "en": "Paradox Development Studio releases Imperator: Rome in 2019."
+      }
+    },
+    {
+      "date": {
+        "fr": "Juin 2019",
+        "en": "June 2019"
+      },
+      "title": {
+        "fr": "Shattered World mod generator",
+        "en": "Shattered World mod generator"
+      },
+      "text": {
+        "fr": "Le 19 juin 2019, Hori873 publie sur le forum Paradox un générateur open source de mods « Shattered World » pour Imperator ; l'auteur indique en février 2020 ne plus le mettre à jour.",
+        "en": "On June 19, 2019, Hori873 posts an open-source \"Shattered World\" mod generator for Imperator on the Paradox forum; in February 2020 the author says it is no longer being updated."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Imperator: Rome",
+      "url": "https://www.igdb.com/games/imperator-rome"
+    },
+    {
+      "label": "Paradox — Shattered World mod generator (archive)",
+      "url": "http://web.archive.org/web/2022/https://forum.paradoxplaza.com/forum/threads/tool-shattered-world-mod-generator.1191906/"
+    },
+    {
+      "label": "rando-list — Rome",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Rome.yml"
+    }
+  ]
+}

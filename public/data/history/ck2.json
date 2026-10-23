@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Crusader Kings II a des générateurs de cartes aléatoires pour ses modes Shattered World et Random World.",
+    "en": "Crusader Kings II has random map generators for its Shattered World and Random World modes."
+  },
+  "events": [
+    {
+      "date": "2012",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Paradox Development Studio sort Crusader Kings II en 2012.",
+        "en": "Paradox Development Studio releases Crusader Kings II in 2012."
+      }
+    },
+    {
+      "date": {
+        "fr": "Novembre 2018",
+        "en": "November 2018"
+      },
+      "title": {
+        "fr": "Holy Fury Map Generator",
+        "en": "Holy Fury Map Generator"
+      },
+      "text": {
+        "fr": "Le 17 novembre 2018, yemmlie101 publie sur le forum Paradox un outil qui génère une carte entière aléatoire pour les modes Shattered World et Random World de l'extension Holy Fury, à partir d'une seed ou d'un tracé dessiné. Il s'inspire de l'ancien CK2 History Generator.",
+        "en": "On November 17, 2018, yemmlie101 posts on the Paradox forum a tool that generates an entire random map for the Holy Fury expansion's Shattered World and Random World modes, from a seed or a drawn outline. It is based on the old CK2 History Generator."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Crusader Kings II",
+      "url": "https://www.igdb.com/games/crusader-kings-ii"
+    },
+    {
+      "label": "Paradox — CK2 Holy Fury Map Generator (archive)",
+      "url": "http://web.archive.org/web/2022/https://forum.paradoxplaza.com/forum/threads/tool-ck2-holy-fury-map-generator.1129166/"
+    },
+    {
+      "label": "rando-list — Crusader Kings",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Crusader_Kings.yml"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Victoria II a des générateurs de mondes aléatoires réalisés par sa communauté.",
+    "en": "Victoria II has random world generators made by its community."
+  },
+  "events": [
+    {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Paradox Interactive sort Victoria II en 2010.",
+        "en": "Paradox Interactive releases Victoria II in 2010."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Random World Generator",
+        "en": "Random World Generator"
+      },
+      "text": {
+        "fr": "Le Random World Generator de Jefferson Pinheiro, dont la page est archivée en janvier 2021, tire au hasard noms des généraux, drapeaux, populations, cultures, religions, diplomatie, régions et partis politiques. La liste rando-list recense aussi celui de FortTell, publié sur le forum Paradox.",
+        "en": "Jefferson Pinheiro's Random World Generator, whose page is archived in January 2021, randomizes generals' names, flags, populations, cultures, religions, diplomacy, regions and political parties. The rando-list catalog also lists FortTell's, posted on the Paradox forum."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Victoria II",
+      "url": "https://www.igdb.com/games/victoria-ii"
+    },
+    {
+      "label": "Random World Generator (archive)",
+      "url": "https://web.archive.org/web/20210125171855/https://www.magiadosdoces.com/jeff/v2rwg.html"
+    },
+    {
+      "label": "rando-list — Victoria",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Victoria.yml"
+    }
+  ]
+}

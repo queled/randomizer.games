@@ -1,0 +1,47 @@
+{
+  "intro": {
+    "fr": "Contra, sur NES, a un randomizer depuis 2023.",
+    "en": "Contra, on the NES, has had a randomizer since 2023."
+  },
+  "events": [
+    {
+      "date": "1988",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Konami sort Contra sur NES en 1988.",
+        "en": "Konami releases Contra on the NES in 1988."
+      }
+    },
+    {
+      "date": {
+        "fr": "Septembre 2023",
+        "en": "September 2023"
+      },
+      "title": {
+        "fr": "Contra Randomizer",
+        "en": "Contra Randomizer"
+      },
+      "text": {
+        "fr": "Azeryn partage sur Discord, le 2 septembre 2023, l'installateur du Contra Randomizer, documenté sur un site Google dédié.",
+        "en": "Azeryn shares the Contra Randomizer installer on Discord on September 2, 2023, documented on a dedicated Google site."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Contra",
+      "url": "https://www.igdb.com/games/contra"
+    },
+    {
+      "label": "Contra Randomizer — Features",
+      "url": "https://sites.google.com/view/contrarandomizer/features"
+    },
+    {
+      "label": "rando-list — Contra",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Contra.yml"
+    }
+  ]
+}

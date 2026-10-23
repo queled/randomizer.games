@@ -1,0 +1,61 @@
+{
+  "intro": {
+    "fr": "Final Fantasy V Advance a plusieurs randomizers, dont un hack qui ajoute une Ancient Cave.",
+    "en": "Final Fantasy V Advance has several randomizers, including a hack that adds an Ancient Cave."
+  },
+  "events": [
+    {
+      "date": "2006",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Square Enix sort Final Fantasy V Advance sur Game Boy Advance en 2006.",
+        "en": "Square Enix releases Final Fantasy V Advance on Game Boy Advance in 2006."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2014",
+        "en": "August 2014"
+      },
+      "title": {
+        "fr": "Ancient Cave",
+        "en": "Ancient Cave"
+      },
+      "text": {
+        "fr": "Le 13 août 2014, x0_000 présente sur le forum de romhacking.net un hack de Final Fantasy V Advance qui ajoute une Ancient Cave ; il est mis à jour jusqu'en octobre 2018.",
+        "en": "On August 13, 2014, x0_000 presents on the romhacking.net forum a Final Fantasy V Advance hack that adds an Ancient Cave; it is updated until October 2018."
+      }
+    },
+    {
+      "date": {
+        "fr": "Aujourd'hui",
+        "en": "Today"
+      },
+      "title": {
+        "fr": "Autres randomizers",
+        "en": "Other randomizers"
+      },
+      "text": {
+        "fr": "La liste rando-list recense aussi le randomizer « Spicy », qui peut randomiser les capacités de chaque job, et celui de DarkJDL, distribué sur Discord.",
+        "en": "The rando-list catalog also lists the \"Spicy\" randomizer, which can randomize each job's abilities, and DarkJDL's, distributed on Discord."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "IGDB — Final Fantasy V Advance",
+      "url": "https://www.igdb.com/games/final-fantasy-v-advance"
+    },
+    {
+      "label": "romhacking.net — Final Fantasy V Advance Hack + Ancient Cave (archive)",
+      "url": "http://web.archive.org/web/2022/https://www.romhacking.net/forum/index.php?topic=18507.0"
+    },
+    {
+      "label": "rando-list — Final Fantasy",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Final_Fantasy.yml"
+    }
+  ]
+}

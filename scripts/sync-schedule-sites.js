@@ -250,6 +250,9 @@ async function syncEvent(ev, { dryRun }, stats, syncedIds) {
       tournament.midosHouse?.pastRestreams || [],
       races.past.filter(r => r.startAt && r.restreams.length)
     );
+    const pastStarts = races.past
+      .filter(r => r.startAt && r.startggSetId)
+      .map(r => ({ startggSetId: r.startggSetId, startAt: r.startAt, game: r.game || undefined }));
     console.log(`   ✅ ${label} → ${tournament.name} : ${schedule.length} race(s) planifiée(s), ${pastRestreams.length} race(s) passée(s) restreamée(s)`);
 
     syncedIds.push(tournament._id);
@@ -267,7 +270,8 @@ async function syncEvent(ev, { dryRun }, stats, syncedIds) {
         'midosHouse.url': ev.url,
         'midosHouse.lastSync': new Date(),
         'midosHouse.schedule': schedule,
-        'midosHouse.pastRestreams': pastRestreams
+        'midosHouse.pastRestreams': pastRestreams,
+        'midosHouse.pastStarts': pastStarts
       }
     });
   }

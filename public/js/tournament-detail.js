@@ -448,11 +448,20 @@ function buildCalendarEvents(tournament) {
   // Scheduled races: a played one is already there from its racetime.gg room
   const playedRooms = new Set(events.map(e => roomPath(e.roomUrl)).filter(Boolean));
   const now = Date.now();
+  // Start times of the matches played without a racetime.gg race (offline, in person)
+  const playedStarts = new Map();
+  const addPlayedStart = (m, r) => {
+    if (!playedStarts.has(m)) playedStarts.set(m, []);
+    playedStarts.get(m).push(r);
+  };
   ((tournament.midosHouse && tournament.midosHouse.schedule) || []).forEach(r => {
     if (!r.startAt || (r.roomUrl && playedRooms.has(roomPath(r.roomUrl)))) return;
     const m = r.startggSetId ? matchBySet.get(String(r.startggSetId)) : matchOfPlayers(r.entrants);
-    // Gone from the schedule at the next sync once played
-    if (m && m.completedAt && new Date(r.startAt).getTime() < now) return;
+    // Played but still listed as upcoming: at its time once passed, a later time is not the right one
+    if (m && m.completedAt) {
+      if (new Date(r.startAt).getTime() < now) addPlayedStart(m, r);
+      return;
+    }
     const sameRace = m && events.some(e => e.target === matchKey(m) && Math.abs(new Date(e.at) - new Date(r.startAt)) < 3 * 3600 * 1000);
     if (sameRace) return;
     events.push({
@@ -468,6 +477,29 @@ function buildCalendarEvents(tournament) {
       restreams: r.restreams || []
     });
   });
+
+  // Matches played without a racetime.gg race: at the time Mido's House gave, else when the result was reported
+  ((tournament.midosHouse && tournament.midosHouse.pastStarts) || []).forEach(r => {
+    const m = r.startggSetId ? matchBySet.get(String(r.startggSetId)) : null;
+    if (m && m.completedAt && r.startAt) addPlayedStart(m, r);
+  });
+  const withRace = new Set(events.map(e => e.target).filter(Boolean));
+  if (tournament.midosHouse) {
+    (currentMatches || []).forEach(m => {
+      if (!m.completedAt || withRace.has(matchKey(m))) return;
+      (playedStarts.get(m) || [{ startAt: m.completedAt }]).forEach(r => {
+        events.push({
+          at: r.startAt,
+          players: [m.player1Name || (m.player1 && m.player1.name), m.player2Name || (m.player2 && m.player2.name)],
+          round: roundLabel.get(m),
+          game: r.game || null,
+          kind: 'match',
+          target: matchKey(m),
+          restreams: m.restreams || []
+        });
+      });
+    });
+  }
 
   // Tie-breaks, qualifiers and races with no match
   (currentRaces || []).forEach(race => {

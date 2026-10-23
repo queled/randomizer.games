@@ -310,7 +310,15 @@ const tournamentSchema = new mongoose.Schema({
     // Upcoming races, replaced on each sync: a race leaves it once played
     schedule: [midosHouseRaceSchema],
     // Played races that were restreamed, kept once the event is over
-    pastRestreams: [midosHouseRaceSchema]
+    pastRestreams: [midosHouseRaceSchema],
+    // Start times of the played races, replaced on each sync: places on the calendar
+    // the matches played without a racetime.gg race (offline, in person)
+    pastStarts: [{
+      _id: false,
+      startggSetId: String,
+      startAt: Date,
+      game: Number
+    }]
   },
   // Async series of the tournament on alttprasyncs.com (sync-alttpr-asyncs.js):
   // practice seeds, or qualifiers with their results (live and async together)

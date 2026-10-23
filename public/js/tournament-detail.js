@@ -136,9 +136,10 @@ function applyTournamentSeo(tournament) {
     || 'Randomizer game';
   const status = getTournamentStatus(tournament);
   const participantsCount = Number(tournament.participantsCount) || (Array.isArray(tournament.participants) ? tournament.participants.length : 0);
+  const statusLabel = { 'à venir': 'Upcoming', 'en cours': 'Ongoing' }[status] || 'Finished';
   const description = [
     `${tournament.name} on Randomizer.`,
-    `${status} ${tournamentGame} tournament with ${participantsCount} participants.`,
+    `${statusLabel} ${tournamentGame} tournament with ${participantsCount} participants.`,
     'Explore bracket, participants and linked races.'
   ].join(' ');
   const detailUrl = `/tournament-detail.html?id=${encodeURIComponent(tournament._id || tournament.id)}`;
@@ -2130,57 +2131,6 @@ function displayMatches(matches, tournament, races = []) {
     // Groups after finals
     const gsHeader = document.createElement('h3');
     gsHeader.style.cssText = 'font-size: 1.25rem; font-weight: bold; margin-top: 2rem; margin-bottom: 1rem;';
-    gsHeader.textContent = 'Group Stage';
-    gsHeader.classList.add('text-gold');
-    container.appendChild(gsHeader);
-
-    const groupIds = Array.from(new Set(groupStageMatches.map(m => m.groupId)))
-      .filter(v => v !== null && v !== undefined)
-      .sort((a, b) => (a - b));
-
-    groupIds.forEach((gid, idx) => {
-      const groupTitle = document.createElement('h4');
-      groupTitle.style.cssText = 'font-size: 1rem; font-weight: bold; margin-top: 1rem; margin-bottom: 0.75rem; color: #9ca3af;';
-      const letter = String.fromCharCode('A'.charCodeAt(0) + (idx % 26));
-      groupTitle.textContent = `${i18n.t('tournamentDetail.group') || 'Group'} ${letter}`;
-      container.appendChild(groupTitle);
-
-      groupStageMatches
-        .filter(m => m.groupId === gid)
-        .slice()
-        .sort((a, b) => {
-          const ta = getMatchTime(a);
-          const tb = getMatchTime(b);
-          if (tb !== ta) return tb - ta;
-          return (b.challongeId || 0) - (a.challongeId || 0);
-        })
-        .forEach(m => container.appendChild(createMatchCard(m, races)));
-    });
-
-    return;
-  }
-
-  if (hasGroupsThenFinal && isGroupsThenFinalSE) {
-    // For this format: finals first, newest -> oldest
-    const finalsHeader = document.createElement('h3');
-    finalsHeader.style.cssText = 'font-size: 1.25rem; font-weight: bold; margin-top: 0.5rem; margin-bottom: 1rem;';
-    finalsHeader.textContent = i18n.t('tournamentDetail.finalStage') || 'Finals — Single Elimination';
-    finalsHeader.classList.add('text-gold');
-    container.appendChild(finalsHeader);
-
-    finalStageMatches
-      .slice()
-      .sort((a, b) => {
-        const ta = getMatchTime(a);
-        const tb = getMatchTime(b);
-        if (tb !== ta) return tb - ta;
-        return (b.challongeId || 0) - (a.challongeId || 0);
-      })
-      .forEach(m => container.appendChild(createMatchCard(m, races)));
-
-    // Groups after finals
-    const gsHeader = document.createElement('h3');
-    gsHeader.style.cssText = 'font-size: 1.25rem; font-weight: bold; margin-top: 2rem; margin-bottom: 1rem;';
     gsHeader.textContent = i18n.t('tournamentDetail.groupStage') || 'Group Stage';
     gsHeader.classList.add('text-gold');
     container.appendChild(gsHeader);
@@ -2216,7 +2166,7 @@ function displayMatches(matches, tournament, races = []) {
   if (hasGroupsThenFinal) {
     const finalsHeader = document.createElement('h3');
     finalsHeader.style.cssText = 'font-size: 1.25rem; font-weight: bold; margin-top: 0.5rem; margin-bottom: 1rem;';
-    finalsHeader.textContent = i18n.t('tournamentDetail.finalStage') || 'Finals — Single Elimination';
+    finalsHeader.textContent = `${translatePhaseName('Finals')} — ${formatTournamentType('double elimination')}`;
     finalsHeader.classList.add('text-gold');
     container.appendChild(finalsHeader);
 
@@ -2816,7 +2766,6 @@ function createMatchCard(match, races = []) {
     
     matchRaces.forEach((race, idx) => {
       const raceLink = getRaceLinkHtml(race);
-      const raceDetailUrl = race && race._id ? '/race-detail.html?id=' + encodeURIComponent(race._id) : '#';
       const times = getTimesFromRace(race);
       
       // Determine manche winner from race
@@ -2982,8 +2931,6 @@ function goToMatchById(id) {
 }
 
 // Helpers to map race entrant times to match players
-function rTrim(s, ch) { if (!s) return s; while (s.endsWith(ch)) s = s.slice(0, -1); return s; }
-
 function normalizeName(s){
   if (!s) return '';
   try {
@@ -3004,7 +2951,7 @@ function findEntrantTime(race, playerName){
 
   for (const ent of race.entrants) {
     // Entrant name can be nested under different keys depending on source
-    const rawName = (ent.user && (ent.user.name || ent.user.id)) || ent.name || ent.displayName || '';
+    const rawName = (ent.user && (ent.user.name || ent.user.id)) || ent.userName || ent.name || ent.displayName || '';
     const uname = normalizeName(rawName);
     if (!uname) continue;
     const entrantTokens = uname.split(' ').filter(Boolean);
@@ -3159,6 +3106,7 @@ function switchTab(tabName) {
   activeBtn.style.color = '#fbbf24';
   activeBtn.style.borderBottomColor = '#fbbf24';
   activeBtn.classList.add('active');
+  if (tabName === 'bracket') redrawVisibleBrackets();
 }
 
 function formatDate(dateString) {
@@ -3273,66 +3221,7 @@ function sanitizeDisplayName(s) {
   } catch (e) { return s; }
 }
 
-function parseRaceParticipants(text){
-  if (!text) return [];
-  // Trim leading labels like 'Bracket ...:'
-  const afterColon = text.split(':').pop().trim();
-  // common separators: vs, v, - , ◦
-  const sep = /\s+vs\.?\s+|\s+v\.?\s+|\s+-\s+|\s+—\s+|\s+vs\s+|\s+\u2022\s+/i;
-  const parts = text.split(sep).map(p=>p.trim()).filter(Boolean);
-  if (parts.length >= 2) return parts.slice(0,2);
-  // if no clear separator, try splitting by comma
-  const comma = text.split(',').map(p=>p.trim()).filter(Boolean);
-  if (comma.length >= 2) return comma.slice(0,2);
-  return [];
-}
 
-function getTimeFromEntrant(race, index){
-  try{
-    const ent = (race.entrants||[])[index];
-    if (!ent) return null;
-    if (ent.finishTime) {
-      const pretty = prettifyDurationString(ent.finishTime);
-      // if prettified is zero-length, treat as unknown (don't assume DNF automatically)
-      if (pretty === '0:00' || pretty === '0:00:00') return null;
-      return pretty;
-    }
-    // support finishTimeMs (milliseconds) if present
-    if (ent.finishTimeMs || ent.finishTimeMs === 0) {
-      const msVal = Number(ent.finishTimeMs);
-      if (!isNaN(msVal) && msVal > 0) return formatMs(msVal);
-      // zero or invalid, treat as unknown
-      return null;
-    }
-    // if finishTime missing, but finishedAt and race.startedAt exist, compute duration
-    if (ent.finishedAt && race.startedAt) {
-      const start = new Date(race.startedAt).getTime();
-      const fin = new Date(ent.finishedAt).getTime();
-      if (!isNaN(start) && !isNaN(fin)){
-        const ms = fin - start;
-        // if duration is negative or clearly invalid, return null
-        if (ms <= 0) return null;
-        return formatMs(ms);
-      }
-    }
-    // if finishedAt exists but no race startedAt, try using race.endedAt as reference (less reliable)
-    if (ent.finishedAt && race.endedAt) {
-      const end = new Date(race.endedAt).getTime();
-      const fin = new Date(ent.finishedAt).getTime();
-      if (!isNaN(end) && !isNaN(fin)){
-        const ms = fin - (end - 1); // best-effort: if finishedAt equals endedAt, avoid zero
-        if (ms <= 0) return null;
-        return formatMs(ms);
-      }
-    }
-    // as last resort, interpret status flags indicating DNF
-    if (ent.status) {
-      const st = ent.status.toString().toLowerCase();
-      if (st.includes('dnf') || st.includes('forfeit') || st.includes('forfeited') || st.includes('quit') || st.includes('disqual')) return 'DNF';
-    }
-  }catch(e){}
-  return null;
-}
 
 function getTimeFromEntrantObj(ent, race){
     try{
@@ -3470,13 +3359,6 @@ function raceWinnerSide(match, race){
   return p1 < p2 ? 1 : 2;
 }
 
-function getRoundName(round) {
-  if (round > 0) return `Round ${round}`;
-  if (round === -1) return 'Finals';
-  if (round === -2) return 'Semifinals';
-  if (round === -3) return 'Quarterfinals';
-  return `Round ${round}`;
-}
 
 function displayGroupStages(groupMatches, participants, races = []) {
   const container = document.getElementById('group-stages-container');
@@ -3641,10 +3523,8 @@ function createCompactMatchCard(match, races = []) {
     goToMatchById(match.challongeId || match.id || match._id || match.matchId || '');
   });
   
-  const player1Winner = match.winnerId === match.player1Id || 
-                        (match.player1Name && match.winnerId && isMatchWinner(match, match.player1Name));
-  const player2Winner = match.winnerId === match.player2Id ||
-                        (match.player2Name && match.winnerId && isMatchWinner(match, match.player2Name));
+  const player1Winner = match.winnerId === match.player1Id;
+  const player2Winner = match.winnerId === match.player2Id;
   
   // Calculate display scores
   let displayScore1 = null;
@@ -3704,11 +3584,6 @@ function createCompactMatchCard(match, races = []) {
   return card;
 }
 
-// Helper to check if a player name matches the winner
-function isMatchWinner(match, playerName) {
-  // This is a simplified check - can be improved
-  return false;
-}
 
 function displayBracket(matches, tournament) {
   const container = document.getElementById('bracket-container');
@@ -4183,29 +4058,8 @@ function displayPoolsBracket(matches, container, isDoubleElimination, phaseGroup
       const poolDiv = poolsContent.querySelector(`[data-pool="${poolId}"]`);
       if (poolDiv) {
         poolDiv.style.display = 'block';
-        // Redraw SVG connectors for this pool now that it's visible
-        setTimeout(() => {
-          poolDiv.querySelectorAll('.bracket-section, .phase-bracket-container').forEach(section => {
-            const bracketHTML = section.querySelector('.bracket-container');
-            const svg = section.querySelector('svg');
-            if (bracketHTML && svg) {
-              // Re-trigger connector drawing
-              const roundCols = bracketHTML.querySelectorAll('[data-round-index]');
-              const totalRounds = roundCols.length;
-              // Gather round data from the DOM
-              const sortedRounds = [];
-              const byRound = {};
-              roundCols.forEach(col => {
-                const round = parseInt(col.getAttribute('data-round'));
-                sortedRounds.push(round);
-                byRound[round] = [];
-              });
-              const bracketType = section.classList.contains('loser-bracket-section') ? 'loser' : 'winner';
-              const isPoolBracket = true;
-              drawBracketConnectors(bracketHTML, svg, totalRounds, bracketType, byRound, sortedRounds, isPoolBracket);
-            }
-          });
-        }, 50);
+        // Its connectors were drawn while it was hidden
+        redrawVisibleBrackets(poolDiv);
       }
     });
     
@@ -4351,8 +4205,29 @@ function displayBracketSection(matches, container, bracketType = 'winner', isDou
   container.appendChild(bracketScroll);
   
   // Draw connector lines after a brief delay to ensure elements are rendered
-  setTimeout(() => drawBracketConnectors(bracketHTML, svg, sortedRounds.length, bracketType, byRound, sortedRounds, isPoolBracket), 50);
+  bracketHTML.dataset.bracketType = bracketType;
+  if (isPoolBracket) bracketHTML.dataset.poolBracket = '1';
+  setTimeout(() => drawBracketConnectors(bracketHTML, svg, bracketType, isPoolBracket), 50);
 }
+
+// Connectors are measured on screen: a bracket drawn in a hidden tab or pool, or before a resize,
+// needs them drawn again once shown
+function redrawVisibleBrackets(root = document.getElementById('bracket-container')) {
+  if (!root) return;
+  requestAnimationFrame(() => {
+    root.querySelectorAll('.bracket-container').forEach(bracketHTML => {
+      if (!bracketHTML.offsetParent) return;
+      const svg = bracketHTML.parentElement && bracketHTML.parentElement.querySelector(':scope > svg');
+      drawBracketConnectors(bracketHTML, svg, bracketHTML.dataset.bracketType || 'winner', bracketHTML.dataset.poolBracket === '1');
+    });
+  });
+}
+
+let bracketResizeTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(bracketResizeTimer);
+  bracketResizeTimer = setTimeout(() => redrawVisibleBrackets(), 150);
+});
 
 function createRoundColumn(matches, round, width, label, roundIndex = 0, isGrandFinal = false) {
   const roundColumn = document.createElement('div');
@@ -4399,7 +4274,7 @@ function createRoundColumn(matches, round, width, label, roundIndex = 0, isGrand
   return roundColumn;
 }
 
-function drawBracketConnectors(bracketContainer, svg, totalRounds, bracketType = 'winner', roundsData = {}, sortedRounds = [], isPoolBracket = false) {
+function drawBracketConnectors(bracketContainer, svg, bracketType = 'winner', isPoolBracket = false) {
   if (!bracketContainer || !svg) return;
   
   const rounds = bracketContainer.querySelectorAll('[data-round-index]');
@@ -4417,9 +4292,6 @@ function drawBracketConnectors(bracketContainer, svg, totalRounds, bracketType =
     
     const currentMatches = currentRound.querySelectorAll('.bracket-match-wrapper');
     const nextMatches = nextRound.querySelectorAll('.bracket-match-wrapper');
-    
-    const isLoserBracket = bracketType === 'loser';
-    const currentRoundNumber = sortedRounds ? sortedRounds[i] : null;
     
     // For losers brackets in pools: in DE, some losers rounds have cross-bracket seeding
     // from the winners bracket, so 1-to-1 connectors may not be perfectly accurate.
@@ -4572,24 +4444,31 @@ function drawHorizontalConnector(fromMatch, toMatch, svg, bracketRect) {
 function setupPathHighlighting(bracketContainer) {
   if (!bracketContainer) return;
   
+  // Connectors are drawn again when the bracket is shown: the hover handlers are attached once
+  // and read the connectors in place
+  if (bracketContainer.dataset.pathHighlighting) return;
+  bracketContainer.dataset.pathHighlighting = '1';
+
   const allMatchWrappers = bracketContainer.querySelectorAll('.bracket-match-wrapper');
   const svg = bracketContainer.parentElement.querySelector('svg');
   if (!svg) return;
-  
-  // Build a map of match connections: matchId -> [previous match IDs where player came from]
-  const matchConnections = new Map();
-  const allConnectors = svg.querySelectorAll('.bracket-connector');
-  
-  allConnectors.forEach(connector => {
-    const fromMatchId = connector.getAttribute('data-from-match');
-    const toMatchId = connector.getAttribute('data-to-match');
-    if (fromMatchId && toMatchId) {
-      if (!matchConnections.has(toMatchId)) {
-        matchConnections.set(toMatchId, []);
+  const connectors = () => svg.querySelectorAll('.bracket-connector');
+
+  // Map of match connections: matchId -> [previous match IDs where player came from]
+  const getConnections = () => {
+    const matchConnections = new Map();
+    connectors().forEach(connector => {
+      const fromMatchId = connector.getAttribute('data-from-match');
+      const toMatchId = connector.getAttribute('data-to-match');
+      if (fromMatchId && toMatchId) {
+        if (!matchConnections.has(toMatchId)) {
+          matchConnections.set(toMatchId, []);
+        }
+        matchConnections.get(toMatchId).push(fromMatchId);
       }
-      matchConnections.get(toMatchId).push(fromMatchId);
-    }
-  });
+    });
+    return matchConnections;
+  };
   
   // Helper to get player names from a match card
   const getPlayerNames = (matchCard) => {
@@ -4636,7 +4515,7 @@ function setupPathHighlighting(bracketContainer) {
     });
     
     // Reset all connectors
-    allConnectors.forEach(connector => {
+    connectors().forEach(connector => {
       connector.style.stroke = '#4b5563';
       connector.style.opacity = '0.6';
       connector.style.strokeWidth = '2';
@@ -4649,6 +4528,7 @@ function setupPathHighlighting(bracketContainer) {
     // Trace player's path backwards through the bracket
     const playerPath = new Set();
     playerPath.add(startMatchId);
+    const matchConnections = getConnections();
     
     const traceBackwards = (matchId) => {
       const previousMatches = matchConnections.get(matchId) || [];
@@ -4691,7 +4571,7 @@ function setupPathHighlighting(bracketContainer) {
     });
     
     // Highlight connectors in the path
-    allConnectors.forEach(connector => {
+    connectors().forEach(connector => {
       const fromMatchId = connector.getAttribute('data-from-match');
       const toMatchId = connector.getAttribute('data-to-match');
       
@@ -4906,35 +4786,19 @@ function createBracketMatchCard(match, isFinal = false) {
   if (match.raceUrls && match.raceUrls.length >= 2 && typeof currentRaces !== 'undefined' && currentRaces.length > 0) {
     const matchRaces = findRacesForMatch(match, currentRaces);
     if (matchRaces.length >= 2) {
-      // Build games from actual race results
-      const p1Name = (match.player1Name || '').toLowerCase();
-      const p2Name = (match.player2Name || '').toLowerCase();
+      // Build games from actual race results, the winner found as in the matches tab
       const realGames = [];
       let cum1 = 0, cum2 = 0;
       for (const race of matchRaces) {
-        if (!race.entrants || race.entrants.length < 2) {
-          realGames.push({ p1: 0, p2: 0, ambiguous: false });
-          continue;
-        }
-        // Find winner: entrant with place === 1
-        const winner = race.entrants.find(e => e.place === 1);
-        if (!winner) {
-          realGames.push({ p1: 0, p2: 0, ambiguous: false });
-          continue;
-        }
-        const winnerName = (winner.user?.name || winner.userName || '').toLowerCase();
-        // Match winner to player1 or player2
-        const isP1 = winnerName === p1Name || p1Name.includes(winnerName) || winnerName.includes(p1Name);
-        const isP2 = winnerName === p2Name || p2Name.includes(winnerName) || winnerName.includes(p2Name);
-        if (isP1) {
+        const side = race.entrants && race.entrants.length >= 2 ? raceWinnerSide(match, race) : null;
+        if (side === 1) {
           realGames.push({ p1: 1, p2: 0, ambiguous: false });
           cum1++;
-        } else if (isP2) {
+        } else if (side === 2) {
           realGames.push({ p1: 0, p2: 1, ambiguous: false });
           cum2++;
         } else {
-          // Couldn't determine — use player aliases if available, else fallback
-          realGames.push({ p1: 0, p2: 0, ambiguous: true });
+          realGames.push({ p1: 0, p2: 0, ambiguous: false });
         }
       }
       tooltipScores = {

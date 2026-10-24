@@ -42,6 +42,7 @@ run_schedule_sites() {
   local status=0
   timeout 8m node scripts/sync-schedule-sites.js || status=$?
   timeout 5m node scripts/sync-midos-league.js --current || status=$?
+  timeout 5m node scripts/sync-midos-events.js --active || status=$?
   timeout 2m node scripts/sync-speedrace.js || status=$?
   timeout 3m node scripts/sync-localhorst.js || status=$?
   timeout 3m node scripts/sync-ical-restreams.js || status=$?

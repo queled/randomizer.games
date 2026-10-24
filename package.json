@@ -24,6 +24,8 @@
     "sync:schedule-sites:dry": "node scripts/sync-schedule-sites.js --dry-run",
     "sync:midos-league": "node scripts/sync-midos-league.js",
     "sync:midos-league:dry": "node scripts/sync-midos-league.js --dry-run",
+    "sync:midos-events": "node scripts/sync-midos-events.js",
+    "sync:midos-events:dry": "node scripts/sync-midos-events.js --dry-run --verbose",
     "sync:speedrace": "node scripts/sync-speedrace.js",
     "sync:speedrace:dry": "node scripts/sync-speedrace.js --dry-run",
     "sync:localhorst": "node scripts/sync-localhorst.js",

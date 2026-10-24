@@ -2622,8 +2622,8 @@ function winnerOnlyScore(match) {
 // Times of the match's two players in one of its races
 function matchTimesFromRace(match, race, isMultiRaceSeries = false) {
   const isTeamMatch = !!(match.player1Members && match.player1Members.length && match.player2Members && match.player2Members.length);
-  const player1Winner = match.winnerId === match.player1Id;
-  const player2Winner = match.winnerId === match.player2Id;
+  const player1Winner = match.winnerId != null && match.winnerId === match.player1Id;
+  const player2Winner = match.winnerId != null && match.winnerId === match.player2Id;
   let t1 = null, t2 = null;
   if (!race) return { time1: t1, time2: t2 };
   if (isTeamMatch) {
@@ -2766,8 +2766,8 @@ function createMatchCard(match, races = []) {
     [displayScore1, displayScore2] = winnerOnlyScore(match) || [null, null];
   }
 
-  const player1Winner = match.winnerId === match.player1Id;
-  const player2Winner = match.winnerId === match.player2Id;
+  const player1Winner = match.winnerId != null && match.winnerId === match.player1Id;
+  const player2Winner = match.winnerId != null && match.winnerId === match.player2Id;
 
   const getRaceLinkHtml = raceLinkHtml;
 
@@ -3544,8 +3544,8 @@ function createCompactMatchCard(match, races = []) {
     goToMatchById(match.challongeId || match.id || match._id || match.matchId || '');
   });
   
-  const player1Winner = match.winnerId === match.player1Id;
-  const player2Winner = match.winnerId === match.player2Id;
+  const player1Winner = match.winnerId != null && match.winnerId === match.player1Id;
+  const player2Winner = match.winnerId != null && match.winnerId === match.player2Id;
   
   // Calculate display scores
   let displayScore1 = null;
@@ -4744,8 +4744,8 @@ function createBracketMatchCard(match, isFinal = false) {
   
   card.style.cssText = cardStyle;
   
-  const player1Winner = match.winnerId === match.player1Id;
-  const player2Winner = match.winnerId === match.player2Id;
+  const player1Winner = match.winnerId != null && match.winnerId === match.player1Id;
+  const player2Winner = match.winnerId != null && match.winnerId === match.player2Id;
   
   const padding = isFinal ? '0.75rem 1rem' : '0.35rem 0.5rem';
   const playerStyle = (isWinner, withDivider) => [

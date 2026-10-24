@@ -49,7 +49,7 @@ En production, la base MongoDB tourne sur le même serveur que le site et n'éco
 | `racetime` | toutes les 5 min | `sync-racetime-global.js` : nouvelles courses, finalisation des courses bloquées « en cours » depuis plus de 24 h, rattrapage des courses terminées entre deux exécutions |
 | `tournaments-update` | toutes les 15 min | `sync-tournaments.js --update-only` met à jour les tournois actifs, puis `auto-link-tournaments.js` rattache les courses aux matchs, et les tie-breaks de poule (room « tie-break » entre joueurs d'une même poule) à leur poule |
 | `race-vods` | toutes les 30 min | `sync-race-vods.js` : VOD Twitch des joueurs de chaque race, puis `sync-race-restreams.js` : restreams absents de Mido's House, trouvés par le titre Twitch (voir plus bas) |
-| `schedule-sites` | toutes les 15 min | `sync-schedule-sites.js` : horaires et restreams des races des tournois de Mido's House et Hyrule Town Hall, rattachement des courses par leur room, VOD Twitch des restreams, puis `sync-midos-league.js --current` : saison en cours de l'OoTR League, puis `sync-speedrace.js` : VOD saisies sur Speedrace, puis `sync-localhorst.js` : restreams planifiés sur localhorst, puis `sync-ical-restreams.js` : restreams des calendriers iCal (voir plus bas) |
+| `schedule-sites` | toutes les 15 min | `sync-schedule-sites.js` : horaires et restreams des races des tournois de Mido's House et Hyrule Town Hall, rattachement des courses par leur room, VOD Twitch des restreams, puis `sync-midos-league.js --current` : saison en cours de l'OoTR League, puis `sync-midos-events.js --active` : tournois Mido's House sans bracket en cours, puis `sync-speedrace.js` : VOD saisies sur Speedrace, puis `sync-localhorst.js` : restreams planifiés sur localhorst, puis `sync-ical-restreams.js` : restreams des calendriers iCal (voir plus bas) |
 | `rando-list` | tous les jours à 6h | met à jour la copie locale de rando-list ; si `check-rando-list-changes.js` signale un nouveau commit, `sync-rando-list.js --detect-new` met à jour le cache et les ressources, puis signale les nouveaux jeux, à créer depuis le panneau admin |
 | `archipelago` | tous les jours à 6h20 | `sync-archipelago-games.js` : jeux listés sur [archipelago.gg](https://archipelago.gg/games) et [multiworld.gg](https://multiworld.gg/games) ; ajoute à chaque jeu sa page sur ces sites, le guide d'installation et le wiki (page vérifiée sur le wiki, titre corrigé ou lien retiré quand elle n'existe pas), crée les jeux absents (puis catégorie Twitch et année de sortie) et retire les liens des jeux qui en sont partis, puis `sync-community-apworlds.js` : APWorlds du tableur communautaire (voir plus bas) |
 | `tournaments-discover` | tous les jours à 7h | `discover-tournaments.js --since <il y a 2 jours> --max-pages 3` : nouveaux tournois sur start.gg et Challonge, et ceux liés depuis Mido's House, Hyrule Town Hall et SpeedGaming, puis `sync-alttpr-asyncs.js` : séries async ALTTPR, puis `sync-alttpr-league.js --current` : saison en cours de l'ALTTPR League, puis `sync-gdq-runs.js` : runs randomizer des marathons GDQ (voir plus bas) |
@@ -112,7 +112,7 @@ Pour reprendre les événements terminés (une seule fois) : `node scripts/sync-
 
 `discover-tournaments.js --source hth` importe les tournois start.gg liés depuis les événements de Hyrule Town Hall. Le jeu vient de la page `/games/<slug>` de l'événement : ses slugs sont des catégories racetime.gg, et seul un slug qui est la catégorie d'un de nos jeux (`integrations.racetime.gameSlug(s)` : `alttpr`, `twwr`, `mmr`) mène à un import. Les tournois speedrun (`botw`, `tp`, dont les randomizers sont `botwr` et `tpr`) sont ignorés. La source fait partie de la découverte quotidienne.
 
-Un événement sans sets start.gg (Challonge, bracket géré sur Mido's House) est rattaché au tournoi auquel sont liées ses races racetime.gg, si au moins 5 d'entre elles (et un tiers de ses rooms) y mènent : c'est le cas des Standard S6 et S7 et des RSL S2 et S3. Les restreams y sont reliés aux matchs par leur room racetime.gg. Les autres événements (Tournoi Francophone, Scrubs, SpeedGaming…) n'ont pas de tournoi en base et sont ignorés. La league a son propre script (ci-dessous).
+Un événement sans sets start.gg (Challonge, bracket géré sur Mido's House) est rattaché au tournoi auquel sont liées ses races racetime.gg, si au moins 5 d'entre elles (et un tiers de ses rooms) y mènent : c'est le cas des Standard S6 et S7 et des RSL S2 et S3. Les restreams y sont reliés aux matchs par leur room racetime.gg. Les autres événements (Tournoi Francophone S4-S5, Scrubs, SpeedGaming…) n'ont pas de tournoi en base et sont ignorés. La league et les tournois sans aucun bracket ont leur propre script (ci-dessous).
 
 ### OoTR League
 
@@ -122,6 +122,20 @@ L'[OoTR League](https://league.ootrandomizer.com) fait s'affronter en 1 contre 1
 - les races de l'objectif de la saison (« League Season 10 ») dont l'info commence par « Div 7D: A vs B » : la League ouvre aussi des rooms que Mido's House ne liste pas. Les races d'entraînement du même objectif (plusieurs joueurs, sans division) sont écartées.
 
 Seules les races à deux joueurs, non annulées, comptent ; le vainqueur est celui qui finit premier. Une race déjà rattachée à un autre tournoi y reste. Les races retenues reçoivent le `tournamentId` de la saison. La page du tournoi montre victoires et défaites par division, pas les points officiels de la League. Mido's House ne connaît la League qu'à partir de la saison 4.
+
+### Tournois sans bracket start.gg ni Challonge
+
+Certains événements de Mido's House n'ont aucun bracket ailleurs : le site apparie lui-même les joueurs. `sync-midos-events.js` en fait des tournois (`source.type: 'midos-house'`, `source.externalId: '<série>/<événement>'`) pour les événements listés dans sa constante `EVENTS` (RSL S6, 12 MQ, SlugCentral Open 2026, Tournoi Francophone S6). Un événement dont la page lie un bracket start.gg ou Challonge, ou déjà en base depuis un bracket, est écarté : c'est ce bracket qu'il faut importer.
+
+- Les phases et rounds viennent de l'API GraphQL (`phase: "Top 8"`, `round: "Semifinal"`) ; `EVENTS` donne le type de chaque phase (`ROUND_ROBIN`, `SWISS`, `SINGLE_ELIMINATION`, `DOUBLE_ELIMINATION`) et l'ordre des rounds d'élimination (rounds perdants négatifs, à partir de -1). En poules, le round est le groupe.
+- Les races d'une paire dans un round forment un match (BO3 = 3 races) ; le vainqueur d'une race est celui qui finit premier sur racetime.gg, celui du match le côté qui en gagne le plus, une fois les manches restantes incapables de changer le résultat. Un match d'élimination sans résultat (forfait) revient au seul des deux qui joue un round suivant.
+- Une room annulée est remplacée par la course que ses deux joueurs ont terminée dans une autre room, à un jour près ; les rooms absentes de la base sont lues sur racetime.gg pour connaître leurs joueurs.
+- Les races marquées tie-break, ou à plus de deux côtés, sont rattachées comme tie-breaks de leur groupe (`tiebreak: true`).
+- Événements par équipes (`teams`) : chaque côté est une équipe Mido's House, le joueur de chaque course retrouvé dans la room ; `perRace` fait un match par course (SlugCentral Open : un point par course gagnée en suisse).
+- Les rounds pas encore appariés d'une simple élimination ont des matchs d'attente (vainqueurs déjà connus, TBD sinon), comme sur start.gg.
+- Les async se jouent hors racetime.gg : Mido's House ne publie pas leur résultat, ces matchs restent sans vainqueur.
+
+Les rangs viennent de `helpers/provisional-ranks.js`. La tâche `schedule-sites` relance le script avec `--active` (événements pas encore terminés). `--dry-run --verbose` affiche les brackets et le top 8 reconstruits, à vérifier avant d'ajouter un événement à `EVENTS`.
 
 En routine, `--current` reprend la dernière saison en base et la suivante, dès que Mido's House la connaît. Sans option, le script reprend toutes les saisons.
 
@@ -281,6 +295,7 @@ Les scripts qui écrivent en base proposent un mode `--dry-run` (ou n'écrivent 
 | `sync-race-vods.js` | `sync:race-vods` (+ `:dry`) | VOD Twitch des joueurs de chaque race (tâche `race-vods`) |
 | `sync-schedule-sites.js` | `sync:schedule-sites` (+ `:dry`) | Horaires, restreams et VOD Mido's House et Hyrule Town Hall (tâche `schedule-sites`) |
 | `sync-midos-league.js` | `sync:midos-league` (+ `:dry`) | Saisons de l'OoTR League en tournois (tâche `schedule-sites`, avec `--current`) |
+| `sync-midos-events.js` | `sync:midos-events` (+ `:dry`) | Tournois de Mido's House sans bracket start.gg ni Challonge (tâche `schedule-sites`, avec `--active`) |
 | `sync-speedrace.js` | `sync:speedrace` (+ `:dry`) | VOD Speedrace des restreams Mido's House (tâche `schedule-sites`) |
 | `sync-localhorst.js` | `sync:localhorst` (+ `:dry`) | Restreams planifiés sur alttp.localhorst.tv (tâche `schedule-sites`) |
 | `sync-ical-restreams.js` | `sync:ical-restreams` (+ `:dry`) | Restreams des calendriers iCal des chaînes de restream (tâche `schedule-sites`) |

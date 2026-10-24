@@ -5,7 +5,8 @@
  * (every pool player tied at the same place). Instead:
  * - an entrant who reached a later phase ranks above those still in an earlier one, and the
  *   players of a parallel bracket identified as the stronger one above those of the other;
- * - in a round robin / Swiss phase: more wins first, then fewer losses;
+ * - in a round robin / Swiss phase: more wins first, then fewer losses (Swiss: then the wins of
+ *   the opponents met, the Buchholz score);
  * - in an elimination phase: entrants still in first (more wins first), then the eliminated
  *   ones by how far they went (double elimination: out on the second loss); entrants still in
  *   are then told apart by their record in the earlier phases.
@@ -131,7 +132,7 @@ function computeProvisionalRanks(matches = [], phases = []) {
     for (const id of sideIds(m)) {
       if (!id) continue;
       const s = stats.get(id);
-      if (!s || tier > s.tier) stats.set(id, { tier, phase: m.phase || '', wins: 0, losses: 0, out: 0, allWins: 0, allLosses: 0 });
+      if (!s || tier > s.tier) stats.set(id, { tier, phase: m.phase || '', wins: 0, losses: 0, out: 0, allWins: 0, allLosses: 0, buchholz: 0 });
     }
   }
   for (const m of matches) {
@@ -152,12 +153,28 @@ function computeProvisionalRanks(matches = [], phases = []) {
     }
   }
 
+  // Swiss: the wins in the phase of each opponent met there
+  const phaseWins = new Map(); // `${phase}|${entrantId}` → wins
+  for (const m of matches) {
+    if (m.winnerId != null) phaseWins.set(`${m.phase || ''}|${m.winnerId}`, (phaseWins.get(`${m.phase || ''}|${m.winnerId}`) || 0) + 1);
+  }
+  for (const m of matches) {
+    const phase = m.phase || '';
+    if (m.winnerId == null || kinds.get(phase) !== 'swiss') continue;
+    const [p1, p2] = sideIds(m);
+    if (!p1 || !p2) continue;
+    [[p1, p2], [p2, p1]].forEach(([id, opponent]) => {
+      const s = stats.get(id);
+      if (s && s.phase === phase) s.buchholz += phaseWins.get(`${phase}|${opponent}`) || 0;
+    });
+  }
+
   const keyOf = s => {
     const kind = kinds.get(s.phase);
     const elimination = kind === 'singleelimination' || kind === 'doubleelimination';
     const stillIn = elimination && !s.out;
-    // Higher first: phase, still in, how far, wins, fewer losses, then the whole record of those still in
-    return [s.tier, stillIn ? 1 : 0, s.out, s.wins, -s.losses, stillIn ? s.allWins : 0, stillIn ? -s.allLosses : 0];
+    // Higher first: phase, still in, how far, wins, fewer losses, Buchholz, then the whole record of those still in
+    return [s.tier, stillIn ? 1 : 0, s.out, s.wins, -s.losses, s.buchholz, stillIn ? s.allWins : 0, stillIn ? -s.allLosses : 0];
   };
   const compare = (a, b) => {
     const ka = keyOf(a);

@@ -90,3 +90,12 @@ test('parallel brackets of unknown order share a tier', () => {
   // Ranked together: those still in by their earlier record, the knocked-out ones tied
   assert.deepEqual(ranksOf(ranks), { a: 1, e: 2, b: 3, f: 3 });
 });
+
+test('Swiss: equal records told apart by the wins of the opponents met', () => {
+  const ranks = computeProvisionalRanks([
+    set('Swiss', 1, 'a', 'b', 'a'), set('Swiss', 1, 'c', 'e', 'c'), set('Swiss', 1, 'f', 'd'),
+    set('Swiss', 2, 'b', 'd', 'b'), set('Swiss', 2, 'f', 'c', 'f'), set('Swiss', 2, 'e', 'd', 'e')
+  ], [{ name: 'Swiss', bracketType: 'SWISS', phaseOrder: 1 }]);
+  // At 1-1, c met e and f (one win each), b and e met opponents with one win in all
+  assert.deepEqual(ranksOf(ranks), { a: 1, f: 1, c: 3, b: 4, e: 4, d: 6 });
+});

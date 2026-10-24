@@ -25,7 +25,8 @@ const admin = {
   historyDirty: false,
   historyLang: 'fr',
   dashboardStats: null,
-  syncHistory: [],
+  syncLogJob: null,
+  syncJobsTimer: null,
   players: [],
   playersPage: 1,
   // Race-linking state
@@ -314,7 +315,7 @@ const admin = {
         break;
       case 'sync':
         this.loadSyncGames();
-        this.loadSyncHistory();
+        this.loadSyncJobs();
         break;
       case 'players':
         this.loadPlayers();
@@ -346,9 +347,11 @@ const admin = {
       
       const stats = await response.json();
       
-      document.getElementById('stat-games').textContent = stats.games.enabled;
+      document.getElementById('stat-games').textContent = this.formatNumber(stats.games.enabled);
       document.getElementById('stat-races').textContent = this.formatNumber(stats.races);
+      document.getElementById('stat-races-week').textContent = `+${this.formatNumber(stats.racesThisWeek || 0)} ces 7 jours`;
       document.getElementById('stat-tournaments').textContent = this.formatNumber(stats.tournaments);
+      document.getElementById('stat-tournaments-ongoing').textContent = `${this.formatNumber(stats.tournamentsOngoing || 0)} en cours`;
       document.getElementById('stat-players').textContent = this.formatNumber(stats.players);
       
       // Store stats for filtering
@@ -357,6 +360,36 @@ const admin = {
       // Alerts
       const alertsEl = document.getElementById('dashboard-alerts');
       let alertsHtml = '';
+      
+      if (stats.failingJobs?.length) {
+        alertsHtml += `
+          <div class="alert alert-danger">
+            <span class="alert-icon">🚨</span>
+            <span class="alert-text">${stats.failingJobs.length} tâche(s) planifiée(s) à vérifier : ${stats.failingJobs.map(j => this.escapeHtml(j.label)).join(', ')}</span>
+            <button class="btn btn-sm btn-outline" data-click="navigateTo" data-args="${admin.attrArgs(["sync"])}">Voir</button>
+          </div>
+        `;
+      }
+      
+      if (stats.games.withoutHistory > 0) {
+        alertsHtml += `
+          <div class="alert alert-info">
+            <span class="alert-icon">📜</span>
+            <span class="alert-text">${this.formatNumber(stats.games.withoutHistory)} jeu(x) activé(s) sans histoire</span>
+            <button class="btn btn-sm btn-outline" data-click="navigateToGamesWithFilter" data-args="${admin.attrArgs(["history"])}">Voir</button>
+          </div>
+        `;
+      }
+      
+      if (stats.games.withoutCover > 0) {
+        alertsHtml += `
+          <div class="alert alert-info">
+            <span class="alert-icon">🖼️</span>
+            <span class="alert-text">${this.formatNumber(stats.games.withoutCover)} jeu(x) activé(s) sans jaquette</span>
+            <button class="btn btn-sm btn-outline" data-click="navigateToGamesWithFilter" data-args="${admin.attrArgs(["cover"])}">Voir</button>
+          </div>
+        `;
+      }
       
       if (stats.games.needingResources > 0) {
         alertsHtml += `
@@ -378,12 +411,44 @@ const admin = {
         `;
       }
       
-      alertsEl.innerHTML = alertsHtml;
+      alertsEl.innerHTML = alertsHtml || `
+        <div class="alert alert-success">
+          <span class="alert-icon">✓</span>
+          <span class="alert-text">Rien à signaler</span>
+        </div>
+      `;
+      
+      const origins = { 'rando-list': 'rando-list', archipelago: 'Archipelago', apworld: 'APWorld', manual: 'à la main', 'csv-import': 'CSV', seed: 'seed' };
+      const recent = stats.games.recent || [];
+      document.getElementById('dashboard-recent-games').innerHTML = recent.length ? `
+        <table class="table table-compact">
+          <tbody>
+            ${recent.map(g => `
+              <tr>
+                <td>${this.escapeHtml(g.name)} <code class="text-muted">${this.escapeHtml(g.id)}</code></td>
+                <td><span class="badge badge-muted">${this.escapeHtml(origins[g.origin] || g.origin)}</span></td>
+                <td class="text-muted" title="${this.escapeHtml(this.formatDateTime(g.createdAt))}">${this.formatRelativeTime(g.createdAt)}</td>
+                <td class="table-actions">
+                  <a class="btn btn-sm btn-ghost" href="/game-detail.html?id=${encodeURIComponent(g.id)}" target="_blank" rel="noopener" title="Page publique">↗</a>
+                  <button class="btn btn-sm btn-ghost" data-click="editGame" data-args="${admin.attrArgs([g.id])}" title="Modifier">✏️</button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      ` : '<p class="text-muted">Aucun nouveau jeu cette semaine.</p>';
       
     } catch (error) {
       console.error('Error loading dashboard:', error);
       this.showToast('Erreur lors du chargement', 'error');
     }
+  },
+  
+  navigateToGamesWithFilter(missing) {
+    document.getElementById('games-filter-missing').value = missing;
+    document.getElementById('games-filter-enabled').value = 'true';
+    this.gamesPage = 1;
+    this.navigateTo('games');
   },
   
   // Navigate to resources with a specific filter
@@ -400,11 +465,15 @@ const admin = {
     try {
       const search = document.getElementById('games-search').value;
       const enabled = document.getElementById('games-filter-enabled').value;
-      const limit = this.gamesLimit === 'all' ? 9999 : this.gamesLimit;
+      const limit = this.gamesLimit === 'all' ? 5000 : this.gamesLimit;
       
       const params = new URLSearchParams({ page: this.gamesPage, limit });
       if (search) params.append('search', search);
       if (enabled) params.append('enabled', enabled);
+      for (const [param, id] of [['missing', 'games-filter-missing'], ['source', 'games-filter-source'], ['sort', 'games-sort']]) {
+        const value = document.getElementById(id).value;
+        if (value) params.append(param, value);
+      }
       
       const response = await fetch(`/api/admin/games?${params}`, {
         headers: { 'Authorization': `Bearer ${this.token}` }
@@ -442,27 +511,41 @@ const admin = {
       const hasOfficialSite = game.resources?.officialSite?.url || game.resources?.sites?.length > 0;
       const sitesCount = game.resources?.sites?.length || 0;
       
+      const label = game.randomizer?.displayName || game.randomizer?.shortName || game.name;
+      const integrations = game.integrations || {};
+      const badges = [
+        game.hasHistory ? '<span class="badge badge-success" title="Histoire">📜</span>' : '<span class="badge badge-muted" title="Pas d\'histoire">📜</span>',
+        hasOfficialSite ? `<span class="badge badge-success" title="Sites">🌐 ${sitesCount}</span>` : '<span class="badge badge-warning" title="Aucun site">🌐 0</span>',
+        integrations.twitch?.categoryId ? '<span class="badge badge-success" title="Catégorie Twitch">📺</span>' : '',
+        integrations.archipelago?.enabled ? '<span class="badge badge-info" title="Archipelago">AP</span>' : '',
+        integrations.multiworld?.enabled ? '<span class="badge badge-info" title="Multiworld">MW</span>' : '',
+        integrations.apworld?.enabled ? '<span class="badge badge-info" title="APWorld communautaire">APW</span>' : '',
+        (game.categories || []).length ? `<span class="badge badge-muted" title="Catégories">🏷️ ${game.categories.length}</span>` : ''
+      ].filter(Boolean).join(' ');
+      
       return `
         <tr>
+          <td class="game-cover-cell">${game.hasCover
+            ? `<img class="game-cover-thumb" src="/assets/${encodeURIComponent(game.id)}.png" alt="" loading="lazy">`
+            : '<span class="game-cover-missing" title="Pas de jaquette">?</span>'}</td>
           <td><code>${this.escapeHtml(game.id)}</code></td>
-          <td>${this.escapeHtml(game.name)}</td>
-          <td>${this.escapeHtml(game.randomizer?.shortName || game.name)}</td>
+          <td>
+            <strong>${this.escapeHtml(label)}</strong>
+            ${label !== game.name ? `<div class="text-muted table-sub">${this.escapeHtml(game.name)}</div>` : ''}
+          </td>
           <td>
             ${hasRacetime 
               ? `<span class="badge badge-success" title="${this.escapeHtml(racetimeSlug)}">✓ ${this.escapeHtml(racetimeSlug)}</span>` 
               : '<span class="badge badge-muted">-</span>'}
           </td>
-          <td>
-            ${hasOfficialSite 
-              ? `<span class="badge badge-success">${sitesCount} site(s)</span>` 
-              : '<span class="badge badge-warning">Aucun</span>'}
-          </td>
+          <td><div class="game-badges">${badges}</div></td>
           <td>
             ${game.enabled !== false 
               ? '<span class="badge badge-success">Activé</span>' 
               : '<span class="badge badge-danger">Désactivé</span>'}
           </td>
           <td>
+            <a class="btn btn-sm btn-ghost" href="/game-detail.html?id=${encodeURIComponent(game.id)}" target="_blank" rel="noopener" title="Page publique">↗</a>
             <button class="btn btn-sm btn-ghost" data-click="editGame" data-args="${admin.attrArgs([String(game.id)])}" title="Modifier">
               ✏️
             </button>
@@ -517,6 +600,7 @@ const admin = {
     document.getElementById('game-id').disabled = false;
     this.loadGameExtras({});
     this.setHistory(null);
+    this.renderCover();
     document.getElementById('game-modal').style.display = 'flex';
     this.switchFormTab('basic');
   },
@@ -558,6 +642,7 @@ const admin = {
       document.getElementById('game-randolist-enabled').checked = game.integrations?.randoList?.enabled || false;
       document.getElementById('game-randolist-identifier').value = game.integrations?.randoList?.randomizerIdentifier || '';
       this.loadGameExtras(game);
+      this.renderCover();
       
       const historyResponse = await fetch(`/api/admin/games/${encodeURIComponent(game.id)}/history`, {
         headers: { 'Authorization': `Bearer ${this.token}` }
@@ -576,6 +661,8 @@ const admin = {
   closeGameModal() {
     document.getElementById('game-modal').style.display = 'none';
     this.currentGame = null;
+    // The cover and the history are saved apart from the form
+    if (this.currentSection === 'games') this.loadGames();
   },
   
   switchFormTab(tabName) {
@@ -793,6 +880,87 @@ const admin = {
       }
     }
     return next;
+  },
+
+  // ----- Cover -----
+
+  renderCover() {
+    const game = this.currentGame;
+    const preview = document.getElementById('game-cover-preview');
+    preview.innerHTML = game?.hasCover
+      ? `<img src="/assets/${encodeURIComponent(game.id)}.png?v=${Date.now()}" alt="">`
+      : '<span>Pas de jaquette</span>';
+    document.getElementById('game-cover-pick').classList.toggle('disabled', !game);
+    document.getElementById('game-cover-file').disabled = !game;
+    document.getElementById('game-cover-delete').style.display = game?.hasCover ? '' : 'none';
+    document.getElementById('game-cover-note').textContent = game ? '' : 'Enregistrez d\'abord le jeu pour lui ajouter une jaquette.';
+  },
+
+  // Centred 3:4 crop of the image, as a PNG of the size of the IGDB covers
+  coverDataUrl(file) {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        const width = 264;
+        const height = 352;
+        const scale = Math.max(width / img.naturalWidth, height / img.naturalHeight);
+        const w = img.naturalWidth * scale;
+        const h = img.naturalHeight * scale;
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, (width - w) / 2, (height - h) / 2, w, h);
+        URL.revokeObjectURL(url);
+        resolve(canvas.toDataURL('image/png'));
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error('Image illisible'));
+      };
+      img.src = url;
+    });
+  },
+
+  async uploadCover() {
+    const input = document.getElementById('game-cover-file');
+    const file = input.files?.[0];
+    const game = this.currentGame;
+    input.value = '';
+    if (!file || !game) return;
+    if (game.hasCover && !confirm('Remplacer la jaquette actuelle ?')) return;
+    try {
+      const response = await fetch(`/api/admin/games/${encodeURIComponent(game.id)}/cover`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${this.token}` },
+        body: JSON.stringify({ dataUrl: await this.coverDataUrl(file) })
+      });
+      if (!response.ok) throw new Error((await response.json().catch(() => ({}))).error || 'Échec de l\'envoi');
+      game.hasCover = true;
+      this.renderCover();
+      this.showToast('Jaquette enregistrée', 'success');
+    } catch (error) {
+      this.showToast(error.message, 'error');
+    }
+  },
+
+  async deleteCover() {
+    const game = this.currentGame;
+    if (!game?.hasCover || !confirm('Supprimer la jaquette de ce jeu ?')) return;
+    try {
+      const response = await fetch(`/api/admin/games/${encodeURIComponent(game.id)}/cover`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${this.token}` }
+      });
+      if (!response.ok) throw new Error();
+      game.hasCover = false;
+      this.renderCover();
+      this.showToast('Jaquette supprimée', 'success');
+    } catch {
+      this.showToast('Erreur lors de la suppression de la jaquette', 'error');
+    }
   },
 
   // ----- Categories -----
@@ -1043,7 +1211,7 @@ const admin = {
       + (this.history.intro[lang] ? 0 : 1);
     const state = !this.historyExists && !events.length
       ? 'Pas encore d\'histoire : ajoutez un événement pour en créer une.'
-      : `${events.length} événement(s)${missing ? ` · ${missing} champ(s) à compléter dans cette langue (repli sur l'anglais)` : ' · complet dans cette langue'}`;
+      : `${events.length} événement(s)${missing ? ` · ${missing} élément(s) incomplet(s) dans cette langue (repli sur l'anglais)` : ' · complet dans cette langue'}`;
     el.textContent = state + (this.historyDirty ? ' · modifications à enregistrer' : '');
   },
 
@@ -1095,9 +1263,14 @@ const admin = {
   },
 
   viewGameResources(gameId) {
-    this.currentResourcesFilter = null;
+    this.currentResourcesFilter = '';
+    document.getElementById('resources-game-search').value = '';
     this.navigateTo('resources');
-    document.getElementById('resources-game-select').value = gameId;
+    const select = document.getElementById('resources-game-select');
+    if (![...select.options].some(o => o.value === gameId)) {
+      select.add(new Option(gameId, gameId));
+    }
+    select.value = gameId;
     this.loadGameResources(gameId);
   },
   
@@ -1105,66 +1278,68 @@ const admin = {
   
   async loadGamesForSelect() {
     try {
-      const response = await fetch('/api/admin/games?limit=200', {
+      const response = await fetch('/api/admin/games?limit=5000&fields=light&enabled=true', {
         headers: { 'Authorization': `Bearer ${this.token}` }
       });
       
       if (!response.ok) throw new Error('Failed to load games');
       
       const data = await response.json();
+      this.allGamesForResources = data.games;
       
-      // Store games for filtering
-      this.allGamesForResources = data.games.filter(g => g.enabled !== false);
-      
-      const select = document.getElementById('resources-game-select');
       const filterSelect = document.getElementById('resources-filter');
-      const currentValue = select.value;
-      
-      // Apply filter if coming from dashboard
-      let filteredGames = this.allGamesForResources;
-      if (this.currentResourcesFilter === 'no-official-site') {
-        filteredGames = filteredGames.filter(g => 
-          !g.resources?.officialSite?.url
-        );
-        if (filterSelect) filterSelect.value = 'no-official-site';
-      } else if (this.currentResourcesFilter === 'multiple-sites') {
-        filteredGames = filteredGames.filter(g => 
-          (g.resources?.sites?.length > 1) && !g.resources?.officialSite?.url
-        );
-        if (filterSelect) filterSelect.value = 'multiple-sites';
-      }
-      
-      select.innerHTML = '<option value="">Sélectionner un jeu...</option>' +
-        filteredGames
-          .map(g => {
-            const hasSite = g.resources?.officialSite?.url;
-            const sitesCount = g.resources?.sites?.length || 0;
-            let status = hasSite ? '✓' : (sitesCount > 1 ? `⚠️ ${sitesCount} sites` : '✗');
-            return `<option value="${this.escapeHtml(g.id)}">${this.escapeHtml(g.name)} [${status}]</option>`;
-          })
-          .join('');
-      
-      // Update games count in filter section
-      const gamesCountEl = document.getElementById('resources-games-count');
-      if (gamesCountEl) {
-        gamesCountEl.textContent = `${filteredGames.length} jeux`;
-      }
-      
-      if (currentValue && filteredGames.find(g => g.id === currentValue)) {
-        select.value = currentValue;
-      }
-      
-      // Clear filter after applying
+      // Coming from the dashboard
+      if (this.currentResourcesFilter !== null && filterSelect) filterSelect.value = this.currentResourcesFilter || '';
       this.currentResourcesFilter = null;
-      
+      this.renderResourcesGameOptions();
     } catch (error) {
       console.error('Error loading games for select:', error);
     }
   },
+
+  // Options of the game picker, by the filter and the search box
+  renderResourcesGameOptions() {
+    const select = document.getElementById('resources-game-select');
+    const filter = document.getElementById('resources-filter')?.value || '';
+    const search = (document.getElementById('resources-game-search')?.value || '').trim().toLowerCase();
+    const currentValue = select.value;
+    
+    let filteredGames = this.allGamesForResources || [];
+    if (filter === 'no-official-site') {
+      filteredGames = filteredGames.filter(g => !g.resources?.officialSite?.url);
+    } else if (filter === 'multiple-sites') {
+      filteredGames = filteredGames.filter(g => (g.resources?.sites?.length > 1) && !g.resources?.officialSite?.url);
+    }
+    if (search) {
+      filteredGames = filteredGames.filter(g => [g.id, g.name, g.randomizer?.shortName, g.randomizer?.displayName]
+        .some(v => String(v || '').toLowerCase().includes(search)));
+    }
+    
+    select.innerHTML = `<option value="">Sélectionner un jeu... (${filteredGames.length})</option>` +
+      filteredGames
+        .map(g => {
+          const hasSite = g.resources?.officialSite?.url;
+          const sitesCount = g.resources?.sites?.length || 0;
+          const status = hasSite ? '✓' : (sitesCount > 1 ? `⚠️ ${sitesCount} sites` : '✗');
+          const label = g.randomizer?.displayName || g.randomizer?.shortName || g.name;
+          return `<option value="${this.escapeHtml(g.id)}">${this.escapeHtml(label)} (${this.escapeHtml(g.id)}) [${status}]</option>`;
+        })
+        .join('');
+    
+    const gamesCountEl = document.getElementById('resources-games-count');
+    if (gamesCountEl) gamesCountEl.textContent = `${filteredGames.length} jeux`;
+    
+    if (currentValue && filteredGames.some(g => g.id === currentValue)) {
+      select.value = currentValue;
+    } else if (filteredGames.length === 1 && search) {
+      // A search down to one game opens it
+      select.value = filteredGames[0].id;
+      this.loadGameResources(filteredGames[0].id);
+    }
+  },
   
-  applyResourcesFilter(filter) {
-    this.currentResourcesFilter = filter || null;
-    this.loadGamesForSelect();
+  applyResourcesFilter() {
+    this.renderResourcesGameOptions();
   },
   
   async loadGameResources(gameId) {
@@ -1177,6 +1352,9 @@ const admin = {
       
       const data = await response.json();
       this.currentGame = { id: gameId, resources: data.resources };
+      const publicLink = document.getElementById('resources-public-link');
+      publicLink.href = `/game-detail.html?id=${encodeURIComponent(gameId)}`;
+      publicLink.style.display = '';
       
       document.getElementById('resources-placeholder').style.display = 'none';
       document.getElementById('resources-editor').style.display = 'block';
@@ -1336,6 +1514,7 @@ const admin = {
           </div>
           ${resources.officialSite?.url === site.url ? '<span class="resource-type">officiel</span>' : ''}
           <span class="resource-source">${this.escapeHtml(site.source || 'manual')}</span>
+          ${site.apworldStatus ? `<span class="badge badge-${{ stable: 'success', unstable: 'warning', broken: 'danger' }[site.apworldStatus] || 'muted'}" title="Statut de l'APWorld">${{ stable: 'stable', unstable: 'instable', broken: 'cassé' }[site.apworldStatus] || this.escapeHtml(site.apworldStatus)}</span>` : ''}
           <button class="btn btn-sm btn-ghost" data-click="openResourceModal" data-args="${admin.attrArgs(["site", i])}" title="Modifier">✏️</button>
           <button class="btn btn-sm btn-ghost btn-danger" data-click="removeSite" data-args="${admin.attrArgs([i])}" title="Supprimer">×</button>
         </div>
@@ -2192,76 +2371,134 @@ const admin = {
   
   async loadSyncGames() {
     try {
-      const response = await fetch('/api/admin/games?limit=200', {
+      const response = await fetch('/api/admin/games?limit=5000&fields=light&source=racetime&enabled=true', {
         headers: { 'Authorization': `Bearer ${this.token}` }
       });
       
       if (!response.ok) throw new Error('Failed to load games');
       
       const data = await response.json();
-      
       const select = document.getElementById('sync-racetime-game');
-      select.innerHTML = '<option value="">Tous les jeux</option>' +
+      const current = select.value;
+      select.innerHTML = '<option value="">Sélectionner un jeu...</option>' +
         data.games
-          .filter(g => g.enabled !== false && g.integrations?.racetime?.enabled)
-          .map(g => `<option value="${this.escapeHtml(g.integrations.racetime.gameSlug)}">${this.escapeHtml(g.name)}</option>`)
+          .filter(g => g.integrations?.racetime?.gameSlug)
+          .map(g => `<option value="${this.escapeHtml(g.id)}" data-slug="${this.escapeHtml(g.integrations.racetime.gameSlug)}">${this.escapeHtml(g.randomizer?.shortName || g.name)} (${this.escapeHtml(g.integrations.racetime.gameSlug)})</option>`)
           .join('');
-      
+      select.value = current;
     } catch (error) {
       console.error('Error loading games for sync:', error);
     }
   },
-  
-  async triggerSync(type, linkGames = false) {
+
+  // Scheduled tasks, refreshed every 30 s while the tab is on screen
+  async loadSyncJobs() {
+    clearTimeout(this.syncJobsTimer);
+    this.syncJobsTimer = setTimeout(() => {
+      if (this.currentSection === 'sync' && !document.hidden) this.loadSyncJobs();
+    }, 30 * 1000);
     try {
-      const response = await fetch(`/api/admin/sync/${type}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.token}`
-        },
-        body: JSON.stringify({ linkGames })
+      const response = await fetch('/api/admin/jobs', {
+        headers: { 'Authorization': `Bearer ${this.token}` }
       });
-      
-      if (!response.ok) throw new Error('Failed to trigger sync');
-      
-      const data = await response.json();
-      this.showToast(`Synchronisation lancée (PID: ${data.pid})`, 'success');
-      
-      // Add to log
-      this.addSyncLog(`${type} sync started`, 'info');
-      
-    } catch (error) {
-      this.showToast('Erreur lors du lancement de la synchronisation', 'error');
+      if (!response.ok) throw new Error();
+      const { jobs } = await response.json();
+      this.renderSyncJobs(jobs);
+      if (this.syncLogJob) this.refreshSyncLog();
+    } catch {
+      document.getElementById('sync-jobs-body').innerHTML = '<tr><td colspan="6" class="text-center text-muted">Impossible de lire l\'état des tâches</td></tr>';
     }
+  },
+
+  renderSyncJobs(jobs) {
+    document.getElementById('sync-jobs-updated').textContent = `Mis à jour à ${new Date().toLocaleTimeString('fr-FR')}`;
+    const states = {
+      ok: ['success', '✓ ok'],
+      running: ['warning', '⏳ en cours'],
+      late: ['warning', '⚠️ en retard'],
+      error: ['danger', '✗ en échec'],
+      unknown: ['muted', '— jamais lancée']
+    };
+    document.getElementById('sync-jobs-body').innerHTML = jobs.map(job => {
+      const [badge, text] = states[job.state] || states.unknown;
+      const frequency = job.everyMinutes >= 1440 ? 'tous les jours' : `toutes les ${job.everyMinutes} min`;
+      const last = job.startedAt
+        ? `<span title="${this.escapeHtml(this.formatDateTime(job.startedAt))}">${this.formatRelativeTime(job.startedAt)}</span>${job.durationMs ? ` <span class="text-muted">· ${this.formatDuration(job.durationMs)}</span>` : ''}`
+        : '<span class="text-muted">-</span>';
+      const detail = job.exitCode && job.state !== 'running'
+        ? `<div class="text-muted table-sub">code ${job.exitCode}${job.consecutiveFailures > 1 ? `, ${job.consecutiveFailures} échecs de suite` : ''}</div>`
+        : '';
+      return `
+        <tr>
+          <td><strong>${this.escapeHtml(job.label)}</strong><div class="text-muted table-sub"><code>${this.escapeHtml(job.name)}</code></div></td>
+          <td>${frequency}</td>
+          <td><span class="badge badge-${badge}">${text}</span>${detail}</td>
+          <td>${last}</td>
+          <td>${job.nextRunAt ? `${this.formatClock(job.nextRunAt)} <span class="text-muted">(${this.formatUntil(job.nextRunAt)})</span>` : '-'}</td>
+          <td class="table-actions">
+            <button class="btn btn-sm btn-primary" data-click="runJob" data-args="${admin.attrArgs([job.name, job.label])}" ${job.state === 'running' ? 'disabled' : ''}>▶ Lancer</button>
+            <button class="btn btn-sm btn-outline" data-click="showSyncLog" data-args="${admin.attrArgs([job.name, job.label])}">📜 Journal</button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  },
+
+  async runJob(name, label) {
+    if (!confirm(`Lancer « ${label} » maintenant ?`)) return;
+    try {
+      const response = await fetch(`/api/admin/jobs/${encodeURIComponent(name)}/run`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${this.token}` }
+      });
+      if (!response.ok) throw new Error();
+      this.showToast(`« ${label} » lancée`, 'success');
+      this.syncLogJob = { name, label };
+      // The status file says "running" once the script has started
+      setTimeout(() => this.loadSyncJobs(), 1500);
+      this.showSyncLog(name, label);
+    } catch {
+      this.showToast('Erreur lors du lancement de la tâche', 'error');
+    }
+  },
+
+  showSyncLog(name, label) {
+    this.syncLogJob = { name, label };
+    document.getElementById('sync-log-title').textContent = `📜 Journal : ${label}`;
+    document.getElementById('sync-log-panel').style.display = '';
+    this.refreshSyncLog();
+  },
+
+  async refreshSyncLog() {
+    if (!this.syncLogJob) return;
+    const pre = document.getElementById('sync-log-content');
+    try {
+      const response = await fetch(`/api/admin/jobs/${encodeURIComponent(this.syncLogJob.name)}/log`, {
+        headers: { 'Authorization': `Bearer ${this.token}` }
+      });
+      if (!response.ok) throw new Error();
+      const { lines } = await response.json();
+      const atBottom = pre.scrollTop + pre.clientHeight >= pre.scrollHeight - 20;
+      pre.textContent = lines.length ? lines.join('\n') : 'Journal vide (la tâche n\'a jamais tourné sur ce serveur).';
+      if (atBottom) pre.scrollTop = pre.scrollHeight;
+    } catch {
+      pre.textContent = 'Impossible de lire le journal.';
+    }
+  },
+
+  closeSyncLog() {
+    this.syncLogJob = null;
+    document.getElementById('sync-log-panel').style.display = 'none';
   },
   
   async triggerRacetimeSync() {
-    const gameSlug = document.getElementById('sync-racetime-game').value;
-    
-    try {
-      const url = gameSlug 
-        ? `/api/admin/sync/racetime/${gameSlug}`
-        : '/api/admin/sync/racetime/all';
-      
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.token}`
-        },
-        body: JSON.stringify({ maxPages: 10 })
-      });
-      
-      if (!response.ok) throw new Error('Failed to trigger sync');
-      
-      const data = await response.json();
-      this.showToast(`Synchronisation racetime lancée`, 'success');
-      this.addSyncLog(`Racetime sync started for ${gameSlug || 'all games'}`, 'info');
-      
-    } catch (error) {
-      this.showToast('Erreur lors du lancement', 'error');
+    const select = document.getElementById('sync-racetime-game');
+    const option = select.selectedOptions[0];
+    if (!select.value || !option?.dataset.slug) {
+      this.showToast('Sélectionnez un jeu', 'error');
+      return;
     }
+    this.triggerFullResync(select.value, option.dataset.slug);
   },
   
   async triggerFullResync(gameId, racetimeSlug) {
@@ -2284,7 +2521,6 @@ const admin = {
       if (!response.ok) throw new Error('Échec du lancement de la resync');
       
       this.showToast(`Resync complète lancée pour ${gameId} en arrière-plan`, 'success');
-      this.addSyncLog(`🔄 Resync complète lancée: ${gameId} (${racetimeSlug})`, 'info');
       
     } catch (error) {
       console.error('Error triggering full resync:', error);
@@ -2292,25 +2528,6 @@ const admin = {
     }
   },
 
-  addSyncLog(message, type = 'info') {
-    const logContent = document.getElementById('sync-log-content');
-    const timestamp = new Date().toLocaleTimeString();
-    const typeColors = { info: '#60a5fa', success: '#10b981', error: '#ef4444' };
-    
-    const logEntry = document.createElement('div');
-    logEntry.className = 'log-entry';
-    logEntry.innerHTML = `
-      <span class="log-time">${timestamp}</span>
-      <span class="log-message" style="color: ${typeColors[type] || typeColors.info}">${this.escapeHtml(message)}</span>
-    `;
-    
-    // Remove placeholder if present
-    const placeholder = logContent.querySelector('.text-muted');
-    if (placeholder) placeholder.remove();
-    
-    logContent.insertBefore(logEntry, logContent.firstChild);
-  },
-  
   // ==================== UTILITIES ====================
   
   showToast(message, type = 'info') {
@@ -2328,9 +2545,7 @@ const admin = {
   },
   
   formatNumber(num) {
-    if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-    if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-    return num.toString();
+    return Number(num || 0).toLocaleString('fr-FR');
   },
   
   escapeHtml(str) {
@@ -2460,66 +2675,21 @@ const admin = {
     return 'à l\'instant';
   },
   
-  // ==================== SYNC HISTORY ====================
-  
-  async loadSyncHistory() {
-    try {
-      const response = await fetch('/api/admin/sync/history', {
-        headers: { 'Authorization': `Bearer ${this.token}` }
-      });
-      
-      if (!response.ok) {
-        // API might not exist yet, show placeholder
-        this.renderSyncHistory([]);
-        return;
-      }
-      
-      const data = await response.json();
-      this.syncHistory = data.history || [];
-      this.renderSyncHistory(this.syncHistory);
-      
-    } catch (error) {
-      console.error('Error loading sync history:', error);
-      this.renderSyncHistory([]);
-    }
-  },
-  
-  renderSyncHistory(history) {
-    const container = document.getElementById('sync-history-content');
-    if (!container) return;
-    
-    if (history.length === 0) {
-      container.innerHTML = '<p class="text-muted">Aucun historique de synchronisation disponible</p>';
-      return;
-    }
-    
-    container.innerHTML = history.slice(0, 10).map(entry => `
-      <div class="sync-history-item ${entry.status}">
-        <div class="sync-history-header">
-          <span class="sync-history-type">${this.escapeHtml(entry.type)}</span>
-          <span class="sync-history-status badge badge-${entry.status === 'success' ? 'success' : entry.status === 'error' ? 'danger' : 'warning'}">
-            ${entry.status === 'success' ? '✓' : entry.status === 'error' ? '✗' : '⏳'}
-          </span>
-        </div>
-        <div class="sync-history-meta">
-          <span>${this.formatRelativeTime(entry.completedAt || entry.startedAt)}</span>
-          ${entry.itemsProcessed ? `<span>• ${entry.itemsProcessed} éléments</span>` : ''}
-          ${entry.duration ? `<span>• ${this.formatDuration(entry.duration)}</span>` : ''}
-        </div>
-        ${entry.error ? `<div class="sync-history-error">${this.escapeHtml(entry.error)}</div>` : ''}
-      </div>
-    `).join('');
-  },
-  
   // ==================== PLAYERS ====================
   
   async loadPlayers(page = 1) {
     this.playersPage = page;
     
     try {
-      const search = document.getElementById('players-search')?.value || '';
+      const params = new URLSearchParams({
+        page,
+        limit: 50,
+        search: document.getElementById('players-search')?.value || '',
+        filter: document.getElementById('players-filter')?.value || '',
+        sort: document.getElementById('players-sort')?.value || ''
+      });
       
-      const response = await fetch(`/api/admin/players?page=${page}&limit=50&search=${encodeURIComponent(search)}`, {
+      const response = await fetch(`/api/admin/players?${params}`, {
         headers: { 'Authorization': `Bearer ${this.token}` }
       });
       
@@ -2540,12 +2710,16 @@ const admin = {
             <span class="stat-mini-label">Total</span>
           </div>
           <div class="stat-mini">
-            <span class="stat-mini-value">${this.formatNumber(data.stats.withRacetime)}</span>
-            <span class="stat-mini-label">Avec Racetime</span>
-          </div>
-          <div class="stat-mini">
             <span class="stat-mini-value">${this.formatNumber(data.stats.withTwitch)}</span>
             <span class="stat-mini-label">Avec Twitch</span>
+          </div>
+          <div class="stat-mini">
+            <span class="stat-mini-value">${this.formatNumber(data.stats.withAliases)}</span>
+            <span class="stat-mini-label">Avec alias</span>
+          </div>
+          <div class="stat-mini">
+            <span class="stat-mini-value">${this.formatNumber(data.stats.deleted)}</span>
+            <span class="stat-mini-label">Comptes supprimés</span>
           </div>
         `;
       }
@@ -2571,11 +2745,14 @@ const admin = {
     
     tbody.innerHTML = players.map(player => `
       <tr>
-        <td>${this.escapeHtml(player.name)}</td>
         <td>
-          ${player.racetimeUrl 
-            ? this.renderExternalLink(this.sanitizeRacetimeUrl(player.racetimeUrl), '✓ Lié', 'badge badge-success') 
-            : '<span class="badge badge-muted">-</span>'}
+          <span class="player-cell">
+            <a href="/player-detail.html?id=${encodeURIComponent(player.userId)}" target="_blank" rel="noopener">${this.escapeHtml(player.name)}</a>
+            ${player.racetimeDeletedAt ? '<span class="badge badge-danger" title="Compte supprimé de racetime.gg">supprimé</span>' : ''}
+          </span>
+        </td>
+        <td>
+          ${this.renderExternalLink(this.sanitizeRacetimeUrl(player.racetimeUrl || `/user/${encodeURIComponent(player.userId)}`), '↗ Profil', 'badge badge-success')}
         </td>
         <td>
           ${player.twitch 
@@ -2585,8 +2762,8 @@ const admin = {
         <td>${(player.aliases || []).length
           ? (player.aliases || []).map(a => `<span class="badge badge-muted">${this.escapeHtml(a)}</span>`).join(' ')
           : '<span class="text-muted">-</span>'}</td>
-        <td>${player.stats?.totalRaces || 0}</td>
-        <td>${player.stats?.totalWins || 0}</td>
+        <td>${this.formatNumber(player.stats?.totalRaces || 0)}</td>
+        <td>${this.formatNumber(player.stats?.totalWins || 0)}</td>
         <td>
           <button class="btn btn-sm btn-ghost" data-click="editPlayer" data-args="${admin.attrArgs([String(player.userId)])}" title="Modifier">
             ✏️
@@ -2610,6 +2787,7 @@ const admin = {
       document.getElementById('player-id').value = player.userId || player._id;
       document.getElementById('player-name').value = player.name || '';
       document.getElementById('player-racetime-url').value = player.racetimeUrl || '';
+      document.getElementById('player-racetime-link').href = this.sanitizeRacetimeUrl(player.racetimeUrl || '') || '#';
       document.getElementById('player-twitch').value = player.twitch || '';
       document.getElementById('player-aliases').value = (player.aliases || []).join('\n');
       
@@ -2628,8 +2806,6 @@ const admin = {
   async savePlayer() {
     const playerId = document.getElementById('player-id').value;
     const data = {
-      name: document.getElementById('player-name').value,
-      racetimeUrl: document.getElementById('player-racetime-url').value,
       twitch: document.getElementById('player-twitch').value,
       aliases: document.getElementById('player-aliases').value.split('\n').map(a => a.trim()).filter(Boolean)
     };
@@ -3679,114 +3855,107 @@ const admin = {
   // ==================== STATISTICS ====================
   
   async loadStatistics() {
+    const container = document.getElementById('statistics-content');
     try {
-      const response = await fetch('/api/admin/analytics', {
+      const response = await fetch('/api/admin/content-stats', {
         headers: { 'Authorization': `Bearer ${this.token}` }
       });
-      
-      // Analytics might not be implemented yet
-      if (!response.ok) {
-        this.renderStatisticsPlaceholder();
-        return;
-      }
-      
-      const data = await response.json();
-      this.renderStatistics(data);
-      
+      if (!response.ok) throw new Error();
+      this.renderStatistics(await response.json());
     } catch (error) {
       console.error('Error loading statistics:', error);
-      this.renderStatisticsPlaceholder();
+      container.innerHTML = '<div class="alert alert-danger"><span class="alert-icon">⚠️</span><span class="alert-text">Impossible de charger les statistiques</span></div>';
     }
   },
   
-  renderStatisticsPlaceholder() {
-    const container = document.getElementById('statistics-content');
-    if (!container) return;
-    
-    container.innerHTML = `
-      <div class="placeholder-box">
-        <div class="placeholder-icon">📊</div>
-        <h3>Statistiques à venir</h3>
-        <p class="text-muted">
-          Les statistiques de visite seront disponibles une fois le site en ligne.<br>
-          Intégration prévue : Google Analytics, Plausible ou Umami.
-        </p>
-        <div class="stats-preview">
-          <div class="stat-preview-card">
-            <span class="stat-preview-icon">👁️</span>
-            <span class="stat-preview-label">Visites</span>
-          </div>
-          <div class="stat-preview-card">
-            <span class="stat-preview-icon">📄</span>
-            <span class="stat-preview-label">Pages vues</span>
-          </div>
-          <div class="stat-preview-card">
-            <span class="stat-preview-icon">👤</span>
-            <span class="stat-preview-label">Visiteurs uniques</span>
-          </div>
-          <div class="stat-preview-card">
-            <span class="stat-preview-icon">⏱️</span>
-            <span class="stat-preview-label">Durée moyenne</span>
-          </div>
-        </div>
-      </div>
-    `;
+  // Horizontal bars: label, bar, value
+  renderBars(rows) {
+    const max = Math.max(1, ...rows.map(r => r.value));
+    return `<div class="stat-bars">${rows.map(r => `
+      <div class="stat-bar-row">
+        <span class="stat-bar-label">${r.label}</span>
+        <span class="stat-bar-track"><span class="stat-bar-fill" style="width: ${(100 * r.value / max).toFixed(1)}%"></span></span>
+        <span class="stat-bar-value">${this.formatNumber(r.value)}</span>
+      </div>`).join('')}</div>`;
   },
   
   renderStatistics(data) {
     const container = document.getElementById('statistics-content');
-    if (!container) return;
+    const c = data.catalog;
+    // Share of the enabled games, with the filter of the Games tab showing the others
+    const coverage = [
+      ['📜 Histoire', c.withHistory, 'history'],
+      ['🖼️ Jaquette', c.withCover, 'cover'],
+      ['🌐 Site officiel', c.withOfficialSite, 'official-site'],
+      ['📺 Catégorie Twitch', c.withTwitch, 'twitch'],
+      ['🏁 racetime.gg', c.withRacetime, 'racetime'],
+      ['🏷️ Catégories', c.withCategories, null]
+    ];
+    const sources = [
+      ['rando-list', c.onRandoList],
+      ['Archipelago', c.onArchipelago],
+      ['Multiworld', c.onMultiworld],
+      ['APWorld communautaire', c.onApworld]
+    ];
+    const monthLabel = m => new Date(`${m}-01T00:00:00Z`).toLocaleDateString('fr-FR', { month: 'short', year: 'numeric', timeZone: 'UTC' });
     
     container.innerHTML = `
       <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon">👁️</div>
-          <div>
-            <div class="stat-value">${this.formatNumber(data.pageViews || 0)}</div>
-            <div class="stat-label">Pages vues (30j)</div>
-          </div>
+        <div class="stat-card"><div class="stat-icon">🎮</div><div>
+          <div class="stat-value">${this.formatNumber(c.games)}</div><div class="stat-label">Jeux activés</div>
+        </div></div>
+        <div class="stat-card"><div class="stat-icon">👥</div><div>
+          <div class="stat-value">${this.formatNumber(data.players.total)}</div><div class="stat-label">Joueurs</div>
+          <div class="stat-sub">${this.formatNumber(data.players.activeLast30Days)} actifs sur 30 jours</div>
+        </div></div>
+        <div class="stat-card"><div class="stat-icon">📺</div><div>
+          <div class="stat-value">${this.formatNumber(data.players.withTwitch)}</div><div class="stat-label">Joueurs avec Twitch</div>
+        </div></div>
+      </div>
+      
+      <div class="stats-columns mt-4">
+        <div class="card">
+          <h3 class="card-title">📚 Fiches complètes</h3>
+          <table class="table table-compact">
+            <tbody>
+              ${coverage.map(([label, value, missing]) => {
+                const percent = c.games ? Math.round(100 * value / c.games) : 0;
+                return `
+                  <tr>
+                    <td>${label}</td>
+                    <td class="stat-coverage"><span class="stat-bar-track"><span class="stat-bar-fill" style="width: ${percent}%"></span></span></td>
+                    <td class="nowrap">${this.formatNumber(value)} <span class="text-muted">(${percent} %)</span></td>
+                    <td>${missing && value < c.games ? `<button class="btn btn-sm btn-ghost" data-click="navigateToGamesWithFilter" data-args="${admin.attrArgs([missing])}">${this.formatNumber(c.games - value)} manquants →</button>` : ''}</td>
+                  </tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+          <h3 class="card-title mt-4">🧩 Jeux par source</h3>
+          ${this.renderBars(sources.map(([label, value]) => ({ label: this.escapeHtml(label), value })))}
         </div>
-        <div class="stat-card">
-          <div class="stat-icon">👤</div>
-          <div>
-            <div class="stat-value">${this.formatNumber(data.uniqueVisitors || 0)}</div>
-            <div class="stat-label">Visiteurs uniques</div>
-          </div>
+        
+        <div class="card">
+          <h3 class="card-title">🏁 Courses par mois</h3>
+          ${this.renderBars(data.racesByMonth.map(m => ({ label: monthLabel(m.month), value: m.races })))}
         </div>
-        <div class="stat-card">
-          <div class="stat-icon">⏱️</div>
-          <div>
-            <div class="stat-value">${data.avgSessionDuration || '-'}</div>
-            <div class="stat-label">Durée moyenne</div>
-          </div>
+        
+        <div class="card">
+          <h3 class="card-title">🔥 Jeux les plus joués (30 jours)</h3>
+          ${data.topCategories.length ? this.renderBars(data.topCategories.map(g => ({
+            label: g.gameId
+              ? `<a href="/game-detail.html?id=${encodeURIComponent(g.gameId)}" target="_blank" rel="noopener">${this.escapeHtml(g.name)}</a>`
+              : this.escapeHtml(g.name),
+            value: g.races
+          }))) : '<p class="text-muted">Aucune course sur 30 jours.</p>'}
         </div>
-        <div class="stat-card">
-          <div class="stat-icon">📈</div>
-          <div>
-            <div class="stat-value">${data.bounceRate || '-'}%</div>
-            <div class="stat-label">Taux de rebond</div>
-          </div>
+        
+        <div class="card">
+          <h3 class="card-title">🏆 Tournois par année</h3>
+          ${this.renderBars(data.tournamentsByYear.map(y => ({ label: String(y.year), value: y.tournaments })))}
         </div>
       </div>
       
-      ${data.topPages ? `
-        <div class="card mt-4">
-          <h3 class="card-title">📄 Pages les plus vues</h3>
-          <table class="table">
-            <thead>
-              <tr><th>Page</th><th>Vues</th></tr>
-            </thead>
-            <tbody>
-              ${data.topPages.map(p => `
-                <tr>
-                  <td>${this.escapeHtml(p.path)}</td>
-                  <td>${this.formatNumber(p.views)}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        </div>
-      ` : ''}
+      <p class="text-muted form-note mt-4">Pas de statistiques de visite : aucun outil d'audience n'est branché sur le site.</p>
     `;
   },
   
@@ -4072,9 +4241,11 @@ const admin = {
     const source = document.getElementById('tm-source-filter')?.value || '';
     const game = document.getElementById('tm-game-filter')?.value || '';
     const limit = document.getElementById('tm-limit')?.value || 20;
+    const status = document.getElementById('tm-status-filter')?.value || '';
+    const sort = document.getElementById('tm-sort')?.value || '';
 
     try {
-      const params = new URLSearchParams({ page: this.tmPage, limit, search, source, game });
+      const params = new URLSearchParams({ page: this.tmPage, limit, search, source, game, status, sort });
       const response = await fetch(`/api/admin/tournaments-mgmt?${params}`, {
         headers: { 'Authorization': `Bearer ${this.token}` }
       });
@@ -4125,11 +4296,13 @@ const admin = {
     }
 
     body.innerHTML = tournaments.map(t => {
-      const sourceIcon = t.source === 'startgg' ? '🟣' : t.source === 'challonge' ? '🟠' : '❓';
-      const sourceName = t.source === 'startgg' ? 'start.gg' : t.source === 'challonge' ? 'Challonge' : t.source;
-      const stateClass = t.state === 'complete' || t.state === 'completed' ? 'success' : t.state === 'underway' || t.state === 'active' ? 'warning' : 'muted';
-      const stateLabel = t.state || 'n/a';
-      const date = t.startDate ? new Date(t.startDate).toLocaleDateString('fr-FR') : '-';
+      const sourceIcon = t.source === 'startgg' ? '🟣' : t.source === 'challonge' ? '🟠' : '🔵';
+      const sourceName = t.sourceLabel || t.source;
+      const statusClass = { 'terminé': 'muted', 'en cours': 'warning', 'à venir': 'info' }[t.status] || 'muted';
+      const formatDay = d => new Date(d).toLocaleDateString('fr-FR');
+      const date = t.startDate
+        ? `${formatDay(t.startDate)}${t.endDate && formatDay(t.endDate) !== formatDay(t.startDate) ? ` → ${formatDay(t.endDate)}` : ''}`
+        : '-';
       const gameName = t.gameShortName || t.gameSlug || t.gameName || '-';
       const externalUrl = t.url || (t.startggSlug ? `https://start.gg/${t.startggSlug}` : null);
 
@@ -4138,19 +4311,33 @@ const admin = {
           <strong>${this.escapeHtml(t.name)}</strong>
           ${externalUrl ? `<br>${this.renderExternalLink(externalUrl, `↗ Voir sur ${sourceName}`, 'text-muted', 'style="font-size:0.75rem;"')}` : ''}
         </td>
-        <td><span class="badge badge-${t.source === 'startgg' ? 'info' : 'warning'}">${sourceIcon} ${this.escapeHtml(sourceName)}</span></td>
+        <td>
+          <span class="badge badge-${t.source === 'startgg' ? 'info' : t.source === 'challonge' ? 'warning' : 'muted'}">${sourceIcon} ${this.escapeHtml(sourceName)}</span>
+          ${t.scheduleSite ? `<div class="text-muted table-sub">+ ${this.escapeHtml(t.scheduleSite)}</div>` : ''}
+        </td>
         <td>${this.escapeHtml(gameName)}</td>
         <td>${t.participantsCount || '-'}</td>
         <td>${t.matchCount || '-'}</td>
-        <td><span class="badge badge-${stateClass}">${this.escapeHtml(stateLabel)}</span></td>
+        <td>
+          <span class="badge badge-${statusClass}">${this.escapeHtml(t.status || '-')}</span>
+          ${t.state ? `<div class="text-muted table-sub" title="État donné par la plateforme">${this.escapeHtml(t.state)}</div>` : ''}
+        </td>
         <td>${date}</td>
         <td class="table-actions">
+          <a class="btn btn-sm btn-outline" href="/tournament-detail.html?id=${encodeURIComponent(t._id)}" target="_blank" rel="noopener" title="Page publique">↗</a>
+          <button class="btn btn-sm btn-outline" data-click="tmOpenLinking" data-args="${admin.attrArgs([String(t._id)])}" title="Rattacher les courses">🔗</button>
           <button class="btn btn-sm btn-outline" data-click="tmShowDetail" data-args="${admin.attrArgs([String(t._id)])}" title="Détails">👁</button>
           <button class="btn btn-sm btn-outline" data-click="tmShowEditGame" data-args="${admin.attrArgs([String(t._id), String(t.gameSlug || '')])}" title="Modifier le jeu">🎮</button>
           <button class="btn btn-sm btn-danger" data-click="tmDeleteTournament" data-args="${admin.attrArgs([String(t._id), String(t.name)])}" title="Supprimer">🗑️</button>
         </td>
       </tr>`;
     }).join('');
+  },
+
+  // The tournament in the Race ↔ Match tab
+  tmOpenLinking(id) {
+    this.navigateTo('race-linking');
+    this.rlSelectTournament(id);
   },
 
   tmRenderPagination(page, totalPages, total) {

@@ -161,6 +161,9 @@ a:hover {
 }
 
 .main-content {
+  /* #admin-app is a flex container: without this, each tab is as narrow as its content */
+  flex: 1;
+  min-width: 0;
   margin-left: var(--sidebar-width);
   padding: 2rem;
   min-height: 100vh;
@@ -2055,4 +2058,213 @@ a:hover {
   .tm-detail-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* ==================== ADMIN TABS REVIEW (dashboard, games, sync, statistics) ==================== */
+
+.alert-danger {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.alert-success {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-info {
+  background: rgba(96, 165, 250, 0.15);
+  color: var(--admin-info);
+}
+
+.stat-sub,
+.table-sub {
+  font-size: 0.75rem;
+  color: var(--admin-text-muted);
+  margin-top: 0.125rem;
+}
+
+.table-actions {
+  white-space: nowrap;
+}
+
+.table-actions .btn {
+  text-decoration: none;
+}
+
+.table-compact td {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.game-cover-cell {
+  width: 44px;
+}
+
+.game-cover-thumb,
+.game-cover-missing {
+  display: block;
+  width: 33px;
+  height: 44px;
+  border-radius: 3px;
+  object-fit: cover;
+  background: var(--admin-surface-hover);
+}
+
+.game-cover-missing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--admin-text-muted);
+  font-size: 0.8125rem;
+}
+
+.game-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  max-width: 260px;
+}
+
+.cover-editor {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--admin-border);
+}
+
+.cover-preview {
+  flex: 0 0 132px;
+  height: 176px;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--admin-bg);
+  border: 1px solid var(--admin-border);
+  color: var(--admin-text-muted);
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+.cover-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cover-editor-body {
+  flex: 1;
+}
+
+.cover-editor-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.btn.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.player-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-title-row .card-title {
+  margin: 0 auto 0 0;
+}
+
+.sync-log-pre {
+  max-height: 420px;
+  overflow: auto;
+  margin: 0;
+  padding: 0.875rem;
+  border-radius: 6px;
+  background: var(--admin-bg);
+  border: 1px solid var(--admin-border);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.stats-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 1rem;
+}
+
+.stat-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.stat-bar-row {
+  display: grid;
+  grid-template-columns: minmax(110px, 38%) 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.stat-bar-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stat-bar-track {
+  display: block;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--admin-surface-hover);
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: var(--admin-primary);
+}
+
+.stat-bar-value {
+  min-width: 3.5rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-coverage {
+  width: 35%;
+}
+
+.table .badge {
+  white-space: nowrap;
+}
+
+#sync-jobs-body td:nth-child(5) {
+  white-space: nowrap;
+}
+
+.game-form textarea.form-input {
+  font-family: inherit;
+}
+
+.nowrap {
+  white-space: nowrap;
 }

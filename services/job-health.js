@@ -76,17 +76,17 @@ function readStatus(name) {
 }
 
 // Last lines of the task's log, from the start of its last run
-function readLogTail(name) {
+function readLogTail(name, maxLines = LOG_TAIL_LINES, maxBytes = LOG_TAIL_BYTES) {
   let fd;
   try {
     fd = fs.openSync(path.join(logDir(), `${name}.log`), 'r');
     const { size } = fs.fstatSync(fd);
-    const length = Math.min(size, LOG_TAIL_BYTES);
+    const length = Math.min(size, maxBytes);
     const buffer = Buffer.alloc(length);
     fs.readSync(fd, buffer, 0, length, size - length);
     const lines = buffer.toString('utf8').split('\n').filter(Boolean);
     const lastStart = lines.map((line) => line.includes(`début ${name}`)).lastIndexOf(true);
-    return lines.slice(Math.max(lastStart, 0)).slice(-LOG_TAIL_LINES);
+    return lines.slice(Math.max(lastStart, 0)).slice(-maxLines);
   } catch {
     return [];
   } finally {
@@ -188,4 +188,9 @@ async function getJobsHealth(models, now = Date.now()) {
   });
 }
 
-module.exports = { JOBS, getJobsHealth, jobState };
+// The whole last run of a task, for the admin's Synchronisation tab
+function readJobLog(name) {
+  return readLogTail(name, 400, 64 * 1024);
+}
+
+module.exports = { JOBS, getJobsHealth, jobState, readJobLog };

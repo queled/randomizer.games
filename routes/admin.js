@@ -18,11 +18,13 @@ const { Game, Tournament, Match, Race, Player } = require('../models');
 const { normalizePlayerName } = require('../helpers/player-aliases');
 const { syncParticipantAccounts } = require('../helpers/participant-accounts');
 const { fillMissingFinalRanks } = require('../helpers/bracket-ranks');
-const { getJobsHealth } = require('../services/job-health');
+const { JOBS, getJobsHealth, readJobLog } = require('../services/job-health');
 const { computeLinkCoverage, summarizeCoverage } = require('../services/link-coverage');
 const { mergeGames, changeGameId } = require('../services/game-merge');
 const { invalidateGamesWithStats } = require('./games');
 const { readHistory, writeHistory, deleteHistory, renameHistory } = require('../helpers/game-history');
+const { coverIds, historyIds, writeCover, deleteCover, renameCover } = require('../helpers/game-covers');
+const { calculateTournamentStatus } = require('../helpers/tournament-status');
 
 function escapeRegex(value) {
   return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -135,7 +137,7 @@ router.get('/session', requireAdmin, (req, res) => {
  */
 router.get('/games', requireAdmin, async (req, res, next) => {
   try {
-    const { search, enabled, limit = 50, page = 1 } = req.query;
+    const { search, enabled, missing, source, sort, fields, limit = 50, page = 1 } = req.query;
     
     const query = {};
     
@@ -144,32 +146,72 @@ router.get('/games', requireAdmin, async (req, res, next) => {
       query.$or = [
         { id: { $regex: safeSearch, $options: 'i' } },
         { name: { $regex: safeSearch, $options: 'i' } },
-        { 'randomizer.shortName': { $regex: safeSearch, $options: 'i' } }
+        { 'official.name': { $regex: safeSearch, $options: 'i' } },
+        { 'randomizer.displayName': { $regex: safeSearch, $options: 'i' } },
+        { 'randomizer.shortName': { $regex: safeSearch, $options: 'i' } },
+        { 'integrations.racetime.gameSlug': { $regex: safeSearch, $options: 'i' } }
       ];
     }
     
-    if (enabled !== undefined) {
-      query.enabled = enabled === 'true';
+    if (enabled !== undefined && enabled !== '') {
+      query.enabled = enabled === 'true' ? { $ne: false } : false;
     }
+
+    const [covers, histories] = await Promise.all([coverIds(), historyIds()]);
+
+    // What a game lacks: its files (history, cover) or an integration
+    const missingFilters = {
+      history: { id: { $nin: [...histories] } },
+      cover: { id: { $nin: [...covers] } },
+      racetime: { 'integrations.racetime.enabled': { $ne: true } },
+      twitch: { 'integrations.twitch.categoryId': { $in: [null, ''] } },
+      'official-site': { 'resources.officialSite.url': { $in: [null, ''] } }
+    };
+    const sourceFilters = {
+      apworld: { 'integrations.apworld.enabled': true },
+      archipelago: { 'integrations.archipelago.enabled': true },
+      multiworld: { 'integrations.multiworld.enabled': true },
+      'rando-list': { 'integrations.randoList.enabled': true },
+      racetime: { 'integrations.racetime.enabled': true },
+      manual: { 'source.origin': 'manual' }
+    };
+    const and = [missingFilters[missing], sourceFilters[source]].filter(Boolean);
+    if (and.length) query.$and = and;
+
+    const sorts = {
+      recent: { createdAt: -1 },
+      updated: { updatedAt: -1 },
+      id: { id: 1 }
+    };
     
-    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const limitNum = Math.min(5000, Math.max(1, parseInt(limit, 10) || 50));
+    const pageNum = Math.max(1, parseInt(page, 10) || 1);
+    // Light: what the game pickers need, without the resources and categories
+    const projection = fields === 'light'
+      ? 'id name enabled randomizer.shortName randomizer.displayName resources.officialSite.url resources.sites.url integrations.racetime.gameSlug'
+      : null;
     
     const [games, total] = await Promise.all([
       Game.find(query)
-        .sort({ name: 1 })
-        .skip(skip)
-        .limit(parseInt(limit))
+        .select(projection)
+        .sort(sorts[sort] || { name: 1 })
+        .skip((pageNum - 1) * limitNum)
+        .limit(limitNum)
         .lean(),
       Game.countDocuments(query)
     ]);
     
     res.json({
-      games,
+      games: games.map(game => ({
+        ...game,
+        hasCover: covers.has(game.id),
+        hasHistory: histories.has(game.id)
+      })),
       pagination: {
         total,
-        page: parseInt(page),
-        limit: parseInt(limit),
-        pages: Math.ceil(total / parseInt(limit))
+        page: pageNum,
+        limit: limitNum,
+        pages: Math.ceil(total / limitNum)
       }
     });
   } catch (error) {
@@ -195,8 +237,11 @@ router.get('/games/:id', requireAdmin, async (req, res, next) => {
       Tournament.countDocuments({ $or: [{ game: game._id }, { gameId: game.id }] })
     ]);
     
+    const [covers, histories] = await Promise.all([coverIds(), historyIds()]);
     res.json({
       ...game,
+      hasCover: covers.has(game.id),
+      hasHistory: histories.has(game.id),
       _stats: {
         races: raceCount,
         tournaments: tournamentCount
@@ -296,6 +341,7 @@ router.post('/games/:id/change-id', requireAdmin, async (req, res, next) => {
     try {
       await changeGameId(oldId, newId);
       await renameHistory(oldId, newId);
+      await renameCover(oldId, newId);
     } catch (error) {
       if (error.status) return res.status(error.status).json({ error: error.message });
       throw error;
@@ -403,6 +449,36 @@ router.delete('/games/:id', requireAdmin, async (req, res, next) => {
     
     res.json({ success: true });
   } catch (error) {
+    next(error);
+  }
+});
+
+// ==================== COVER ====================
+
+/**
+ * PUT /api/admin/games/:id/cover
+ * Replace the game's cover (public/assets/<id>.png) with a PNG data URL
+ */
+router.put('/games/:id/cover', requireAdmin, async (req, res, next) => {
+  try {
+    if (!await Game.exists({ id: req.params.id })) {
+      return res.status(404).json({ error: 'Game not found' });
+    }
+    res.json({ success: true, ...(await writeCover(req.params.id, req.body?.dataUrl)) });
+  } catch (error) {
+    if (error.status) return res.status(error.status).json({ error: error.message });
+    next(error);
+  }
+});
+
+/**
+ * DELETE /api/admin/games/:id/cover
+ */
+router.delete('/games/:id/cover', requireAdmin, async (req, res, next) => {
+  try {
+    res.json({ success: await deleteCover(req.params.id) });
+  } catch (error) {
+    if (error.status) return res.status(error.status).json({ error: error.message });
     next(error);
   }
 });
@@ -749,57 +825,68 @@ router.patch('/games/:id/integrations/rando-list', requireAdmin, async (req, res
  */
 router.get('/stats', requireAdmin, async (req, res, next) => {
   try {
+    const enabled = { enabled: { $ne: false } };
+    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const [covers, histories] = await Promise.all([coverIds(), historyIds()]);
     const [
       totalGames,
       enabledGames,
       totalRaces,
-      totalTournaments
+      racesThisWeek,
+      totalTournaments,
+      totalPlayers,
+      gamesNeedingResources,
+      gamesWithMultipleSites,
+      gamesWithoutHistory,
+      gamesWithoutCover,
+      recentGames,
+      openTournaments,
+      jobs
     ] = await Promise.all([
       Game.countDocuments(),
-      Game.countDocuments({ enabled: { $ne: false } }),
-      Race.countDocuments(),
-      Tournament.countDocuments()
+      Game.countDocuments(enabled),
+      Race.estimatedDocumentCount(),
+      Race.countDocuments({ startedAt: { $gte: weekAgo } }),
+      Tournament.estimatedDocumentCount(),
+      // The players the site lists: racetime accounts that still exist
+      Player.countDocuments({ userId: { $ne: null }, racetimeDeletedAt: null }),
+      Game.countDocuments({ ...enabled, 'resources.officialSite.url': { $in: [null, ''] } }),
+      // Several sites, none chosen as the official one
+      Game.countDocuments({ ...enabled, 'resources.sites.1': { $exists: true }, 'resources.officialSite.url': { $in: [null, ''] } }),
+      Game.countDocuments({ ...enabled, id: { $nin: [...histories] } }),
+      Game.countDocuments({ ...enabled, id: { $nin: [...covers] } }),
+      Game.find({ createdAt: { $gte: weekAgo } })
+        .select('id name randomizer.shortName randomizer.displayName source.origin createdAt')
+        .sort({ createdAt: -1 })
+        .limit(15)
+        .lean(),
+      Tournament.find({ $or: [{ endDate: null }, { endDate: { $gte: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000) } }] })
+        .select('name startDate endDate state status midosHouse.schedule.startAt')
+        .lean(),
+      getJobsHealth({ Game, Tournament, Race })
     ]);
-
-    // Count unique players by entrants.userId from races (preferred source)
-    let totalPlayers = 0;
-    try {
-      const playerIds = await Race.distinct('entrants.userId', { 'entrants.userId': { $exists: true, $ne: null } });
-      totalPlayers = (playerIds && playerIds.length) ? playerIds.length : await Player.countDocuments();
-    } catch (e) {
-      // Fallback to Player collection if something goes wrong
-      totalPlayers = await Player.countDocuments();
-    }
-
-    // Get games with missing resources
-    const gamesNeedingResources = await Game.countDocuments({
-      enabled: { $ne: false },
-      $or: [
-        { 'resources.officialSite': { $exists: false } },
-        { 'resources.officialSite.url': { $exists: false } }
-      ]
-    });
-
-    // Get games with multiple sites (need manual official site selection)
-    const gamesWithMultipleSites = await Game.countDocuments({
-      enabled: { $ne: false },
-      'resources.sites.1': { $exists: true },
-      $or: [
-        { 'resources.officialSite': { $exists: false } },
-        { 'resources.officialSite.url': { $exists: false } }
-      ]
-    });
 
     res.json({
       games: {
         total: totalGames,
         enabled: enabledGames,
         needingResources: gamesNeedingResources,
-        needingOfficialSite: gamesWithMultipleSites
+        needingOfficialSite: gamesWithMultipleSites,
+        withoutHistory: gamesWithoutHistory,
+        withoutCover: gamesWithoutCover,
+        recent: recentGames.map(g => ({
+          id: g.id,
+          name: g.randomizer?.displayName || g.randomizer?.shortName || g.name,
+          origin: g.source?.origin || 'manual',
+          createdAt: g.createdAt
+        }))
       },
       races: totalRaces,
+      racesThisWeek,
       tournaments: totalTournaments,
-      players: totalPlayers
+      tournamentsOngoing: openTournaments.filter(t => calculateTournamentStatus(t) === 'en cours').length,
+      players: totalPlayers,
+      failingJobs: jobs.filter(job => job.state === 'error' || job.state === 'late').map(job => ({ name: job.name, label: job.label, state: job.state }))
     });
   } catch (error) {
     next(error);
@@ -807,28 +894,134 @@ router.get('/stats', requireAdmin, async (req, res, next) => {
 });
 
 /**
- * POST /api/admin/sync/rando-list
- * Trigger rando-list sync
+ * GET /api/admin/content-stats
+ * The catalog and the data the site holds, for the Statistics tab
  */
-router.post('/sync/rando-list', requireAdmin, async (req, res, next) => {
+router.get('/content-stats', requireAdmin, async (req, res, next) => {
   try {
+    const enabled = { enabled: { $ne: false } };
+    const yearAgo = new Date();
+    yearAgo.setUTCMonth(yearAgo.getUTCMonth() - 11, 1);
+    yearAgo.setUTCHours(0, 0, 0, 0);
+    const monthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    const [covers, histories] = await Promise.all([coverIds(), historyIds()]);
+    const count = (filter) => Game.countDocuments({ ...enabled, ...filter });
+
+    const [
+      gamesEnabled, withHistory, withCover, withRacetime, withTwitch, withOfficialSite,
+      onRandoList, onArchipelago, onMultiworld, onApworld, withCategories,
+      racesByMonth, topCategories, tournamentsByYear, playersActive, playersTotal, playersWithTwitch
+    ] = await Promise.all([
+      count({}),
+      count({ id: { $in: [...histories] } }),
+      count({ id: { $in: [...covers] } }),
+      count({ 'integrations.racetime.enabled': true }),
+      count({ 'integrations.twitch.categoryId': { $nin: [null, ''] } }),
+      count({ 'resources.officialSite.url': { $nin: [null, ''] } }),
+      count({ 'integrations.randoList.enabled': true }),
+      count({ 'integrations.archipelago.enabled': true }),
+      count({ 'integrations.multiworld.enabled': true }),
+      count({ 'integrations.apworld.enabled': true }),
+      count({ 'categories.0': { $exists: true } }),
+      Race.aggregate([
+        { $match: { startedAt: { $gte: yearAgo } } },
+        { $group: { _id: { $dateToString: { format: '%Y-%m', date: '$startedAt' } }, races: { $sum: 1 } } },
+        { $sort: { _id: 1 } }
+      ]),
+      Race.aggregate([
+        { $match: { startedAt: { $gte: monthAgo } } },
+        { $group: { _id: '$category', races: { $sum: 1 } } },
+        { $sort: { races: -1 } },
+        { $limit: 10 }
+      ]),
+      Tournament.aggregate([
+        { $match: { startDate: { $ne: null } } },
+        { $group: { _id: { $year: '$startDate' }, tournaments: { $sum: 1 } } },
+        { $sort: { _id: 1 } }
+      ]),
+      Race.distinct('entrants.userId', { startedAt: { $gte: monthAgo } }).then(ids => ids.filter(Boolean).length),
+      Player.countDocuments({ userId: { $ne: null }, racetimeDeletedAt: null }),
+      Player.countDocuments({ userId: { $ne: null }, racetimeDeletedAt: null, twitch: { $nin: [null, ''] } })
+    ]);
+
+    // Racetime categories under the name of their game
+    const slugs = topCategories.map(c => c._id);
+    const games = await Game.find({ $or: [{ 'integrations.racetime.gameSlug': { $in: slugs } }, { 'integrations.racetime.gameSlugs': { $in: slugs } }] })
+      .select('id name randomizer.shortName randomizer.displayName integrations.racetime.gameSlug integrations.racetime.gameSlugs')
+      .lean();
+    const gameOfSlug = new Map();
+    games.forEach(g => [g.integrations?.racetime?.gameSlug, ...(g.integrations?.racetime?.gameSlugs || [])]
+      .filter(Boolean).forEach(slug => gameOfSlug.set(slug, g)));
+
+    res.json({
+      catalog: {
+        games: gamesEnabled, withHistory, withCover, withRacetime, withTwitch, withOfficialSite,
+        onRandoList, onArchipelago, onMultiworld, onApworld, withCategories
+      },
+      racesByMonth: racesByMonth.map(m => ({ month: m._id, races: m.races })),
+      topCategories: topCategories.map(c => {
+        const game = gameOfSlug.get(c._id);
+        return {
+          slug: c._id,
+          gameId: game?.id || null,
+          name: game ? (game.randomizer?.displayName || game.randomizer?.shortName || game.name) : c._id,
+          races: c.races
+        };
+      }),
+      tournamentsByYear: tournamentsByYear.map(y => ({ year: y._id, tournaments: y.tournaments })),
+      players: { total: playersTotal, activeLast30Days: playersActive, withTwitch: playersWithTwitch }
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET /api/admin/jobs
+ * The server's scheduled tasks and the state of their last run
+ */
+router.get('/jobs', requireAdmin, async (req, res, next) => {
+  try {
+    res.json({ jobs: await getJobsHealth({ Game, Tournament, Race }) });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET /api/admin/jobs/:name/log
+ * The log of the task's last run
+ */
+router.get('/jobs/:name/log', requireAdmin, (req, res) => {
+  if (!JOBS.some(job => job.name === req.params.name)) {
+    return res.status(404).json({ error: 'Unknown task' });
+  }
+  res.json({ lines: readJobLog(req.params.name) });
+});
+
+/**
+ * POST /api/admin/jobs/:name/run
+ * Start a scheduled task now, through the same script as the crontab: same logs,
+ * same status file, and its lock skips the run if the task is already running
+ */
+router.post('/jobs/:name/run', requireAdmin, (req, res, next) => {
+  try {
+    if (!JOBS.some(job => job.name === req.params.name)) {
+      return res.status(404).json({ error: 'Unknown task' });
+    }
     const { spawn } = require('child_process');
     const path = require('path');
-    
-    const scriptPath = path.join(__dirname, '..', 'scripts', 'sync-rando-list.js');
-    const args = req.body.linkGames ? ['--link-games'] : [];
-    
-    const child = spawn('node', [scriptPath, ...args], {
+    // The crontab has no TMPDIR: the lock must be the same file as its runs'
+    const env = { ...process.env };
+    delete env.TMPDIR;
+    const child = spawn(path.join(__dirname, '..', 'scripts', 'cron', 'run-job.sh'), [req.params.name], {
       detached: true,
-      stdio: 'ignore'
+      stdio: 'ignore',
+      env
     });
+    child.on('error', error => console.error(`Task ${req.params.name}: ${error.message}`));
     child.unref();
-    
-    res.json({ 
-      success: true, 
-      message: 'Sync started in background',
-      pid: child.pid
-    });
+    res.json({ success: true, pid: child.pid });
   } catch (error) {
     next(error);
   }
@@ -871,107 +1064,60 @@ router.post('/sync/racetime/:gameId', requireAdmin, async (req, res, next) => {
 
 /**
  * GET /api/admin/players
- * List all players with full aggregated data (from tournaments and races)
+ * Players of the site (racetime accounts), with the counts kept by the players sync
  */
 router.get('/players', requireAdmin, async (req, res, next) => {
   try {
-    const { search, limit = 50, page = 1 } = req.query;
-    
-    // Get all tournaments with participants
-    const tournaments = await Tournament.find({}).lean();
-    
-    // Get all Player documents (for racetime/twitch info)
-    const playerDocs = await Player.find({}).lean();
-    const playerDocsByUserId = new Map();
-    playerDocs.forEach(p => {
-      if (p.userId) playerDocsByUserId.set(p.userId, p);
-    });
-    
-    // Get all races to count per player
-    const races = await Race.find({}, { category: 1, entrants: 1 }).lean();
-    
-    // Build player data from races
-    const playersMap = new Map(); // userId -> player data
-    
-    races.forEach(race => {
-      if (race.entrants && Array.isArray(race.entrants)) {
-        race.entrants.forEach(entrant => {
-          const userId = entrant.userId;
-          const userName = entrant.userName || userId;
-          if (!userId) return;
-          
-          if (!playersMap.has(userId)) {
-            const playerDoc = playerDocsByUserId.get(userId);
-            playersMap.set(userId, {
-              userId,
-              name: playerDoc?.name || userName,
-              racetimeUrl: playerDoc?.racetimeUrl || `https://racetime.gg/user/${userId}`,
-              twitch: playerDoc?.twitch || null,
-              aliases: playerDoc?.aliases || [],
-              stats: {
-                totalRaces: 0,
-                totalWins: 0
-              }
-            });
-          }
-          
-          const player = playersMap.get(userId);
-          player.stats.totalRaces++;
-          
-          // Count wins (place 1 or placeOrdinal '1st')
-          if (entrant.place === 1 || entrant.placeOrdinal === '1st') {
-            player.stats.totalWins++;
-          }
-        });
-      }
-    });
-    
-    // Add tournament participants who might not be in races
-    tournaments.forEach(tournament => {
-      if (tournament.participants && Array.isArray(tournament.participants)) {
-        tournament.participants.forEach(participant => {
-          // Use challongeId or name to try to find userId
-          // This is a fallback for tournament-only players
-        });
-      }
-    });
-    
-    // Convert to array and filter by search
-    let players = Array.from(playersMap.values());
-    
+    const { search, filter, sort, limit = 50, page = 1 } = req.query;
+    const base = { userId: { $ne: null } };
+    const query = { ...base };
+
     if (search) {
-      const searchLower = search.toLowerCase();
-      players = players.filter(p => 
-        p.name.toLowerCase().includes(searchLower) ||
-        (p.userId && p.userId.toLowerCase().includes(searchLower)) ||
-        (p.twitch && p.twitch.toLowerCase().includes(searchLower))
-      );
+      const safeSearch = escapeRegex(String(search).trim().slice(0, 100));
+      query.$or = ['name', 'userId', 'twitch', 'aliases'].map(field => ({ [field]: { $regex: safeSearch, $options: 'i' } }));
     }
-    
-    // Sort by name
-    players.sort((a, b) => a.name.localeCompare(b.name));
-    
-    const total = players.length;
-    const skip = (parseInt(page) - 1) * parseInt(limit);
-    const paginatedPlayers = players.slice(skip, skip + parseInt(limit));
-    
-    // Calculate stats
-    const withRacetime = players.filter(p => p.racetimeUrl).length;
-    const withTwitch = players.filter(p => p.twitch).length;
-    
+
+    const filters = {
+      twitch: { twitch: { $nin: [null, ''] } },
+      'no-twitch': { twitch: { $in: [null, ''] } },
+      aliases: { 'aliases.0': { $exists: true } },
+      deleted: { racetimeDeletedAt: { $ne: null } }
+    };
+    // Accounts deleted from racetime leave the site's lists: only shown when asked for
+    Object.assign(query, filters[filter] || { racetimeDeletedAt: null });
+
+    const sorts = {
+      races: { 'stats.totalRaces': -1, name: 1 },
+      wins: { 'stats.totalWins': -1, name: 1 },
+      recent: { createdAt: -1 }
+    };
+    const pageNum = Math.max(1, parseInt(page, 10) || 1);
+    const limitNum = Math.min(200, Math.max(1, parseInt(limit, 10) || 50));
+
+    const [players, total, active, withTwitch, withAliases, deleted] = await Promise.all([
+      Player.find(query)
+        .select('userId name racetimeUrl twitch aliases racetimeDeletedAt stats.totalRaces stats.totalWins createdAt')
+        .sort(sorts[sort] || { name: 1 })
+        .collation({ locale: 'fr', strength: 1 })
+        .skip((pageNum - 1) * limitNum)
+        .limit(limitNum)
+        .lean(),
+      Player.countDocuments(query),
+      Player.countDocuments({ ...base, racetimeDeletedAt: null }),
+      Player.countDocuments({ ...base, racetimeDeletedAt: null, ...filters.twitch }),
+      Player.countDocuments({ ...base, racetimeDeletedAt: null, ...filters.aliases }),
+      Player.countDocuments({ ...base, ...filters.deleted })
+    ]);
+
     res.json({
-      players: paginatedPlayers,
+      players,
       pagination: {
         total,
-        page: parseInt(page),
-        limit: parseInt(limit),
-        pages: Math.ceil(total / parseInt(limit))
+        page: pageNum,
+        limit: limitNum,
+        pages: Math.ceil(total / limitNum)
       },
-      stats: {
-        total,
-        withRacetime,
-        withTwitch
-      }
+      stats: { total: active, withTwitch, withAliases, deleted }
     });
   } catch (error) {
     next(error);
@@ -1003,8 +1149,9 @@ router.get('/players/:id', requireAdmin, async (req, res, next) => {
  */
 router.put('/players/:id', requireAdmin, async (req, res, next) => {
   try {
-    const { name, racetimeUrl, twitch } = req.body;
-    const update = { name, racetimeUrl, twitch };
+    // The name and the racetime profile come from racetime.gg: the syncs keep them up to date
+    const { twitch } = req.body;
+    const update = { twitch: String(twitch || '').trim() || null };
 
     if (req.body.aliases !== undefined) {
       if (!Array.isArray(req.body.aliases)) {
@@ -1016,7 +1163,7 @@ router.put('/players/:id', requireAdmin, async (req, res, next) => {
         return res.status(404).json({ error: 'Player not found' });
       }
 
-      const ownKey = normalizePlayerName(name || current.name);
+      const ownKey = normalizePlayerName(current.name);
       const seen = new Set([ownKey]);
       const aliases = [];
       for (const raw of req.body.aliases) {
@@ -1059,35 +1206,6 @@ router.put('/players/:id', requireAdmin, async (req, res, next) => {
     }
     
     res.json(player);
-  } catch (error) {
-    next(error);
-  }
-});
-
-// ==================== SYNC HISTORY ====================
-
-/**
- * GET /api/admin/sync/history
- * Get sync history (stored in memory or file for now)
- */
-router.get('/sync/history', requireAdmin, async (req, res, next) => {
-  try {
-    // For now, check game lastSync dates as a proxy for sync history
-    const games = await Game.find({ 
-      'integrations.racetime.enabled': true 
-    }).select('id name integrations.racetime.lastSync').lean();
-    
-    const history = games
-      .filter(g => g.integrations?.racetime?.lastSync)
-      .map(g => ({
-        type: `Racetime: ${g.name}`,
-        status: 'success',
-        completedAt: g.integrations.racetime.lastSync
-      }))
-      .sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt))
-      .slice(0, 20);
-    
-    res.json({ history });
   } catch (error) {
     next(error);
   }
@@ -1946,7 +2064,7 @@ function cleanHtml(description) {
  */
 router.get('/tournaments-mgmt', requireAdmin, async (req, res, next) => {
   try {
-    const { search, source, game, limit = 20, page = 1 } = req.query;
+    const { search, source, game, status, sort, limit = 20, page = 1 } = req.query;
     const query = {};
 
     if (search) {
@@ -1964,6 +2082,9 @@ router.get('/tournaments-mgmt', requireAdmin, async (req, res, next) => {
       query.startggId = { $exists: true, $ne: null };
     } else if (source === 'challonge') {
       query.challongeId = { $exists: true, $ne: null };
+    } else if (source === 'other') {
+      query.startggId = null;
+      query.challongeId = null;
     }
 
     if (game) {
@@ -1972,39 +2093,58 @@ router.get('/tournaments-mgmt', requireAdmin, async (req, res, next) => {
 
     const pageNum = Math.max(1, parseInt(page, 10) || 1);
     const limitNum = Math.min(100, Math.max(1, parseInt(limit, 10) || 20));
+    const order = sort === 'imported' ? { createdAt: -1 } : { startDate: -1, createdAt: -1 };
+
+    // The status is computed from the dates: filtered on the ids, then paginated
+    if (['à venir', 'en cours', 'terminé'].includes(status)) {
+      const candidates = await Tournament.find(query)
+        .select('startDate endDate state status midosHouse.schedule.startAt')
+        .sort(order)
+        .lean();
+      query._id = { $in: candidates.filter(t => calculateTournamentStatus(t) === status).map(t => t._id) };
+    }
 
     const [tournaments, total] = await Promise.all([
       Tournament.find(query)
-        .sort({ startDate: -1, createdAt: -1 })
+        .select('-participants -challongeBrackets -alttprAsyncs -midosHouse.pastRestreams -midosHouse.pastStarts')
+        .sort(order)
         .skip((pageNum - 1) * limitNum)
         .limit(limitNum)
-        .populate('game', 'id name randomizer.shortName')
+        .populate('game', 'id name randomizer.shortName randomizer.displayName')
         .lean(),
       Tournament.countDocuments(query)
     ]);
 
-    // Compute match counts
-    const results = tournaments.map(t => {
-      const matchCount = (t.matches || []).length || 0;
-      const source = t.startggId ? 'startgg' : t.challongeId ? 'challonge' : 'unknown';
-      return {
-        _id: t._id,
-        name: t.name,
-        source,
-        gameSlug: t.gameSlug,
-        gameName: t.gameName || t.game?.name,
-        gameShortName: t.game?.randomizer?.shortName,
-        participantsCount: t.participantsCount || (t.participants || []).length,
-        matchCount,
-        state: t.state,
-        startDate: t.startDate,
-        endDate: t.endDate,
-        startggSlug: t.startggSlug,
-        challongeId: t.challongeId,
-        url: t.fullUrl || t.url,
-        createdAt: t.createdAt
-      };
-    });
+    // Where the bracket comes from: start.gg, Challonge, else the site of its page (leagues)
+    const sourceOf = (t) => {
+      if (t.startggId) return { source: 'startgg', sourceLabel: 'start.gg' };
+      if (t.challongeId) return { source: 'challonge', sourceLabel: 'Challonge' };
+      try {
+        return { source: 'other', sourceLabel: new URL(t.fullUrl || t.url || t.midosHouse?.url).hostname.replace(/^www\./, '') };
+      } catch {
+        return { source: 'other', sourceLabel: 'autre' };
+      }
+    };
+
+    const results = tournaments.map(t => ({
+      _id: t._id,
+      name: t.name,
+      ...sourceOf(t),
+      gameSlug: t.gameSlug,
+      gameName: t.gameName || t.game?.name,
+      gameShortName: t.game?.randomizer?.shortName,
+      participantsCount: t.participantsCount || (t.participants || []).length,
+      matchCount: (t.matches || []).length || 0,
+      state: t.state,
+      status: calculateTournamentStatus(t),
+      scheduleSite: t.midosHouse?.url ? (t.midosHouse.site === 'hth' ? 'Hyrule Town Hall' : "Mido's House") : null,
+      startDate: t.startDate,
+      endDate: t.endDate,
+      startggSlug: t.startggSlug,
+      challongeId: t.challongeId,
+      url: t.fullUrl || t.url,
+      createdAt: t.createdAt
+    }));
 
     res.json({ tournaments: results, total, page: pageNum, totalPages: Math.ceil(total / limitNum) });
   } catch (err) {
@@ -2317,18 +2457,5 @@ router.delete('/tournaments-mgmt/:id', requireAdmin, async (req, res, next) => {
 });
 
 // ==================== ANALYTICS (placeholder) ====================
-
-/**
- * GET /api/admin/analytics
- * Get site analytics - placeholder for future integration
- */
-router.get('/analytics', requireAdmin, async (req, res) => {
-  // This is a placeholder - actual implementation would connect to
-  // Google Analytics, Plausible, Umami, or similar service
-  res.status(501).json({ 
-    message: 'Analytics not configured yet',
-    hint: 'Configure Google Analytics, Plausible, or Umami when the site goes live'
-  });
-});
 
 module.exports = router;

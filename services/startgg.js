@@ -1,5 +1,6 @@
 const axios = require('axios');
 const { computeProvisionalRanks, strongestFirst } = require('../helpers/provisional-ranks');
+const { calculateTournamentStatus } = require('../helpers/tournament-status');
 
 // 50 keeps team entrants and nested set slots well under start.gg's 1000-object request limit.
 const EVENT_PAGE_SIZE = 50;
@@ -316,15 +317,17 @@ class StartGGAPI {
   formatTournament(tournament) {
     if (!tournament) return null;
 
+    const endDate = tournament.endAt ? new Date(tournament.endAt * 1000) : null;
     return {
       id: tournament.id,
       name: tournament.name,
       slug: tournament.slug,
       startDate: tournament.startAt ? new Date(tournament.startAt * 1000) : null,
-      endDate: tournament.endAt ? new Date(tournament.endAt * 1000) : null,
+      endDate,
       numAttendees: tournament.numAttendees,
       venueAddress: tournament.venueAddress,
-      events: tournament.events?.map(e => this.formatEvent(e)) || [],
+      // The tournament's end date tells a running event from one its organizer never closed
+      events: tournament.events?.map(e => ({ ...this.formatEvent(e), endDate })) || [],
       source: 'startgg',
       sourceUrl: `https://start.gg/${tournament.slug}`
     };
@@ -451,9 +454,10 @@ class StartGGAPI {
     const participants = [];
     const seen = new Set();
     const sources = event?.standings?.length ? event.standings : event?.entrants || [];
-    // Until the event is over, ranks come from the sets played so far
-    const provisional = event && String(event.state || '').toUpperCase() !== 'COMPLETED'
-      && (event.sets || []).some(set => set.winnerId != null)
+    // While the event runs, ranks come from the sets played so far; an event left open long after
+    // its end keeps start.gg's placements
+    const running = event && calculateTournamentStatus({ startDate: event.startDate, endDate: event.endDate, state: event.state }) === 'en cours';
+    const provisional = running && (event.sets || []).some(set => set.winnerId != null)
       ? computeProvisionalRanks((event.sets || []).map(set => ({
         phase: set.phase?.name || null,
         round: set.round,

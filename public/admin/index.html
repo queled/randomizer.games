@@ -847,6 +847,8 @@
           <button type="button" class="form-tab" data-tab="official">Jeu officiel</button>
           <button type="button" class="form-tab" data-tab="randomizer">Randomizer</button>
           <button type="button" class="form-tab" data-tab="integrations">Intégrations</button>
+          <button type="button" class="form-tab" data-tab="categories">Catégories</button>
+          <button type="button" class="form-tab" data-tab="history">Histoire</button>
         </div>
         
         <div class="form-tab-content active" id="form-tab-basic">
@@ -920,6 +922,12 @@
           </div>
           
           <div class="form-group">
+            <label for="game-randomizer-name">Nom complet du randomizer</label>
+            <input type="text" id="game-randomizer-name" name="randomizer.name" class="form-input">
+            <small>Nom donné par ses auteurs (optionnel)</small>
+          </div>
+
+          <div class="form-group">
             <label for="game-randomizer-website">Site web du randomizer</label>
             <input type="url" id="game-randomizer-website" name="randomizer.website" class="form-input">
           </div>
@@ -948,6 +956,11 @@
                 <small>Ex: ootr, alttpr</small>
               </div>
             </div>
+            <div class="form-group">
+              <label for="game-racetime-slugs">Slugs additionnels</label>
+              <input type="text" id="game-racetime-slugs" class="form-input">
+              <small>Autres catégories racetime du même jeu, séparées par des virgules</small>
+            </div>
           </div>
           
           <div class="integration-section">
@@ -964,6 +977,180 @@
                 <input type="text" id="game-randolist-identifier" name="integrations.randoList.randomizerIdentifier" class="form-input">
               </div>
             </div>
+          </div>
+
+          <div class="integration-section">
+            <h4>Archipelago (archipelago.gg)</h4>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="game-archipelago-enabled">
+                  <span>Activé</span>
+                </label>
+              </div>
+              <div class="form-group">
+                <label for="game-archipelago-name">Nom du monde</label>
+                <input type="text" id="game-archipelago-name" class="form-input">
+                <small>Nom exact dans la liste des jeux d'archipelago.gg</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="integration-section">
+            <h4>Multiworld (multiworld.gg)</h4>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="game-multiworld-enabled">
+                  <span>Activé</span>
+                </label>
+              </div>
+              <div class="form-group">
+                <label for="game-multiworld-name">Nom du monde</label>
+                <input type="text" id="game-multiworld-name" class="form-input">
+                <small>Nom exact dans la liste des jeux de multiworld.gg</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="integration-section">
+            <h4>APWorld communautaire</h4>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="game-apworld-enabled">
+                  <span>Activé</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" id="game-apworld-mature">
+                  <span>18+ / non classé</span>
+                </label>
+              </div>
+              <div class="form-group">
+                <label for="game-apworld-names">Noms dans le tableur</label>
+                <textarea id="game-apworld-names" class="form-input" rows="2"></textarea>
+                <small>Un par ligne, nom exact de la ligne du tableur des APWorlds</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="integration-section">
+            <h4>Twitch</h4>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="game-twitch-enabled">
+                  <span>Activé</span>
+                </label>
+              </div>
+              <div class="form-group form-pair">
+                <div>
+                  <label for="game-twitch-id">ID de catégorie</label>
+                  <input type="text" id="game-twitch-id" class="form-input" inputmode="numeric" pattern="[0-9]*">
+                </div>
+                <div>
+                  <label for="game-twitch-name">Nom de catégorie</label>
+                  <input type="text" id="game-twitch-name" class="form-input">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="integration-section">
+            <h4>start.gg</h4>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="game-startgg-enabled">
+                  <span>Activé</span>
+                </label>
+              </div>
+              <div class="form-group form-pair">
+                <div>
+                  <label for="game-startgg-videogame">ID videogame</label>
+                  <input type="number" id="game-startgg-videogame" class="form-input" min="1">
+                </div>
+                <div>
+                  <label for="game-startgg-keywords">Mots-clés de recherche</label>
+                  <input type="text" id="game-startgg-keywords" class="form-input">
+                  <small>Séparés par des virgules</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="integration-section">
+            <h4>Challonge</h4>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="game-challonge-enabled">
+                  <span>Activé</span>
+                </label>
+              </div>
+              <div class="form-group form-pair">
+                <div>
+                  <label for="game-challonge-game">ID du jeu</label>
+                  <input type="number" id="game-challonge-game" class="form-input" min="1">
+                </div>
+                <div>
+                  <label for="game-challonge-subdomain">Sous-domaine</label>
+                  <input type="text" id="game-challonge-subdomain" class="form-input">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="game-challonge-keywords">Mots-clés de recherche</label>
+              <input type="text" id="game-challonge-keywords" class="form-input">
+              <small>Séparés par des virgules</small>
+            </div>
+          </div>
+          <p class="text-muted form-note">Une intégration modifiée ici passe en « manuel » : les synchronisations ne la remplacent plus.</p>
+        </div>
+
+        <div class="form-tab-content" id="form-tab-categories">
+          <div class="i18n-toolbar">
+            <label for="categories-lang">Langue des traductions</label>
+            <select id="categories-lang" class="form-input form-select lang-select" data-change="onCategoriesLanguageChange" data-args='["$value"]'></select>
+            <small>Le nom et la description de base sont en anglais ; les traductions vides retombent dessus.</small>
+          </div>
+
+          <div class="integration-section">
+            <h4>Catégories principales <button type="button" class="btn btn-primary btn-sm" data-click="addCategory">➕ Ajouter</button></h4>
+            <div id="categories-editor" class="repeat-list"></div>
+          </div>
+
+          <div class="integration-section">
+            <h4>Réglages principaux <button type="button" class="btn btn-primary btn-sm" data-click="addCategorySetting">➕ Ajouter</button></h4>
+            <div id="category-settings-editor" class="repeat-list"></div>
+          </div>
+        </div>
+
+        <div class="form-tab-content" id="form-tab-history">
+          <div class="i18n-toolbar">
+            <label for="history-lang">Langue</label>
+            <select id="history-lang" class="form-input form-select lang-select" data-change="onHistoryLanguageChange" data-args='["$value"]'></select>
+            <small id="history-status"></small>
+          </div>
+
+          <div class="form-group">
+            <label for="history-intro">Introduction</label>
+            <textarea id="history-intro" class="form-input" rows="3"></textarea>
+          </div>
+
+          <div class="integration-section">
+            <h4>Événements <button type="button" class="btn btn-primary btn-sm" data-click="addHistoryEvent">➕ Ajouter</button></h4>
+            <p class="text-muted form-note">Ordre chronologique. Une date commune (ex. « 2005 ») vaut pour toutes les langues ; sinon, saisissez-la dans chaque langue.</p>
+            <div id="history-events" class="repeat-list"></div>
+          </div>
+
+          <div class="integration-section">
+            <h4>Sources <button type="button" class="btn btn-primary btn-sm" data-click="addHistorySource">➕ Ajouter</button></h4>
+            <div id="history-sources" class="repeat-list"></div>
+          </div>
+
+          <div class="history-actions">
+            <button type="button" id="history-delete-btn" class="btn btn-danger btn-sm" data-click="deleteHistory">Supprimer l'histoire</button>
           </div>
         </div>
         
@@ -1079,6 +1266,18 @@
             <option value="rando-list">rando-list</option>
             <option value="import">import</option>
             <option value="community">community</option>
+            <option value="archipelago">archipelago</option>
+            <option value="apworld">apworld</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="resource-modal-apworld-group" style="display: none;">
+          <label for="resource-modal-apworld-status">Statut de l'APWorld</label>
+          <select id="resource-modal-apworld-status" class="form-input form-select">
+            <option value="">—</option>
+            <option value="stable">Stable</option>
+            <option value="unstable">Instable</option>
+            <option value="broken">Cassé</option>
           </select>
         </div>
 

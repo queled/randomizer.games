@@ -22,9 +22,24 @@ const { getJobsHealth } = require('../services/job-health');
 const { computeLinkCoverage, summarizeCoverage } = require('../services/link-coverage');
 const { mergeGames, changeGameId } = require('../services/game-merge');
 const { invalidateGamesWithStats } = require('./games');
+const { readHistory, writeHistory, deleteHistory, renameHistory } = require('../helpers/game-history');
 
 function escapeRegex(value) {
   return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// Nested objects as dotted paths for $set, so an update only touches the fields it sends
+// (arrays and dates are set whole)
+function flattenObject(obj, prefix = '', out = {}) {
+  for (const [key, value] of Object.entries(obj)) {
+    const fullKey = prefix ? `${prefix}.${key}` : key;
+    if (value !== null && typeof value === 'object' && !Array.isArray(value) && !(value instanceof Date)) {
+      flattenObject(value, fullKey, out);
+    } else {
+      out[fullKey] = value;
+    }
+  }
+  return out;
 }
 
 // The games list is cached: any successful game edit refreshes it.
@@ -234,15 +249,16 @@ router.post('/games', requireAdmin, async (req, res, next) => {
 
 /**
  * PUT /api/admin/games/:id
- * Update a game (full replacement of provided fields)
+ * Update the provided fields of a game
  */
 router.put('/games/:id', requireAdmin, async (req, res, next) => {
   try {
-    const { _id, id, ...updateData } = req.body;
+    const { _id, id, createdAt, updatedAt, ...updateData } = req.body;
     
+    // Flattened: saving the form's integrations must not erase the others (Twitch, APWorlds...)
     const game = await Game.findOneAndUpdate(
       { id: req.params.id },
-      { $set: updateData },
+      { $set: flattenObject(updateData) },
       { new: true, runValidators: true }
     );
     
@@ -279,6 +295,7 @@ router.post('/games/:id/change-id', requireAdmin, async (req, res, next) => {
     
     try {
       await changeGameId(oldId, newId);
+      await renameHistory(oldId, newId);
     } catch (error) {
       if (error.status) return res.status(error.status).json({ error: error.message });
       throw error;
@@ -336,22 +353,7 @@ router.post('/games/:id/merge', requireAdmin, async (req, res, next) => {
  */
 router.patch('/games/:id', requireAdmin, async (req, res, next) => {
   try {
-    const updates = {};
-    
-    // Flatten nested objects for $set
-    function flattenObject(obj, prefix = '') {
-      for (const [key, value] of Object.entries(obj)) {
-        const fullKey = prefix ? `${prefix}.${key}` : key;
-        
-        if (value !== null && typeof value === 'object' && !Array.isArray(value) && !(value instanceof Date)) {
-          flattenObject(value, fullKey);
-        } else {
-          updates[fullKey] = value;
-        }
-      }
-    }
-    
-    flattenObject(req.body);
+    const updates = flattenObject(req.body);
     
     // Remove protected fields
     delete updates._id;
@@ -401,6 +403,50 @@ router.delete('/games/:id', requireAdmin, async (req, res, next) => {
     
     res.json({ success: true });
   } catch (error) {
+    next(error);
+  }
+});
+
+// ==================== HISTORY ====================
+
+/**
+ * GET /api/admin/games/:id/history
+ * The game's history file, null when it has none
+ */
+router.get('/games/:id/history', requireAdmin, async (req, res, next) => {
+  try {
+    res.json({ history: await readHistory(req.params.id) });
+  } catch (error) {
+    if (error.status) return res.status(error.status).json({ error: error.message });
+    next(error);
+  }
+});
+
+/**
+ * PUT /api/admin/games/:id/history
+ * Write the game's history file (public/data/history/<id>.json)
+ */
+router.put('/games/:id/history', requireAdmin, async (req, res, next) => {
+  try {
+    if (!await Game.exists({ id: req.params.id })) {
+      return res.status(404).json({ error: 'Game not found' });
+    }
+    res.json({ history: await writeHistory(req.params.id, req.body) });
+  } catch (error) {
+    if (error.status) return res.status(error.status).json({ error: error.message });
+    next(error);
+  }
+});
+
+/**
+ * DELETE /api/admin/games/:id/history
+ * Remove the game's history file (its History tab disappears)
+ */
+router.delete('/games/:id/history', requireAdmin, async (req, res, next) => {
+  try {
+    res.json({ success: await deleteHistory(req.params.id) });
+  } catch (error) {
+    if (error.status) return res.status(error.status).json({ error: error.message });
     next(error);
   }
 });

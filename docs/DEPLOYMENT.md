@@ -367,6 +367,8 @@ pm2 restart randomizer
 
 Les tâches planifiées prennent le nouveau code à leur prochaine exécution.
 
+Les histoires des jeux modifiées depuis l'admin sont écrites directement dans `public/data/history/` sur le serveur. Avant un `git pull`, `git status` les montre : les commiter et les pousser depuis le serveur (ou les rapatrier dans le dépôt), sinon `git pull` refuse d'écraser ces fichiers.
+
 ## Checklist
 
 - [ ] VPS : utilisateur non-root, SSH par clé, UFW et pare-feu Hetzner (22, 80, 443), swap

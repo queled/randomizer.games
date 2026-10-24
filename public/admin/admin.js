@@ -15,6 +15,15 @@ const admin = {
   dragState: null,
   resourceModalState: null,
   resourceModalTranslations: {},
+  // Game form: categories and history, edited in the site's languages
+  gameCategories: [],
+  gameCategorySettings: [],
+  categoriesDirty: false,
+  categoriesLang: 'fr',
+  history: null,
+  historyExists: false,
+  historyDirty: false,
+  historyLang: 'fr',
   dashboardStats: null,
   syncHistory: [],
   players: [],
@@ -37,6 +46,8 @@ const admin = {
     // Restore the admin UI from the server-side cookie session if present.
     this.checkSession();
     
+    this.fillLanguageSelects();
+
     // Setup event listeners
     this.setupEventListeners();
     this.setupDelegatedActions();
@@ -504,6 +515,8 @@ const admin = {
     document.getElementById('game-modal-title').textContent = 'Nouveau jeu';
     document.getElementById('game-form').reset();
     document.getElementById('game-id').disabled = false;
+    this.loadGameExtras({});
+    this.setHistory(null);
     document.getElementById('game-modal').style.display = 'flex';
     this.switchFormTab('basic');
   },
@@ -535,6 +548,7 @@ const admin = {
       document.getElementById('game-randomizer-displayName').value = game.randomizer?.displayName || '';
       document.getElementById('game-randomizer-shortName').value = game.randomizer?.shortName || '';
       document.getElementById('game-randomizer-tinyName').value = game.randomizer?.tinyName || '';
+      document.getElementById('game-randomizer-name').value = game.randomizer?.name || '';
       document.getElementById('game-randomizer-website').value = game.randomizer?.website || '';
       document.getElementById('game-randomizer-opensource').checked = game.randomizer?.opensource || false;
       
@@ -543,6 +557,12 @@ const admin = {
       document.getElementById('game-racetime-slug').value = game.integrations?.racetime?.gameSlug || '';
       document.getElementById('game-randolist-enabled').checked = game.integrations?.randoList?.enabled || false;
       document.getElementById('game-randolist-identifier').value = game.integrations?.randoList?.randomizerIdentifier || '';
+      this.loadGameExtras(game);
+      
+      const historyResponse = await fetch(`/api/admin/games/${encodeURIComponent(game.id)}/history`, {
+        headers: { 'Authorization': `Bearer ${this.token}` }
+      });
+      this.setHistory(historyResponse.ok ? (await historyResponse.json()).history : null);
       
       document.getElementById('game-modal').style.display = 'flex';
       this.switchFormTab('basic');
@@ -583,23 +603,19 @@ const admin = {
       },
       platforms: formData.get('platforms') ? formData.get('platforms').split(',').map(p => p.trim()).filter(Boolean) : undefined,
       randomizer: {
-        displayName: formData.get('randomizer.displayName') || undefined,
+        displayName: formData.get('randomizer.displayName') || null,
         shortName: formData.get('randomizer.shortName'),
-        tinyName: formData.get('randomizer.tinyName') || undefined,
-        website: formData.get('randomizer.website') || undefined,
+        tinyName: formData.get('randomizer.tinyName') || null,
+        name: formData.get('randomizer.name') || null,
+        website: formData.get('randomizer.website') || null,
         opensource: document.getElementById('game-randomizer-opensource').checked
       },
-      integrations: {
-        racetime: {
-          enabled: document.getElementById('game-racetime-enabled').checked,
-          gameSlug: formData.get('integrations.racetime.gameSlug') || undefined
-        },
-        randoList: {
-          enabled: document.getElementById('game-randolist-enabled').checked,
-          randomizerIdentifier: formData.get('integrations.randoList.randomizerIdentifier') || undefined
-        }
-      }
+      integrations: this.collectIntegrations()
     };
+    if (this.categoriesDirty) {
+      data.categories = this.cleanCategoryItems(this.gameCategories, true);
+      data.categorySettings = this.cleanCategoryItems(this.gameCategorySettings, false);
+    }
     
     try {
       const isNew = !this.currentGame;
@@ -641,6 +657,27 @@ const admin = {
         throw new Error(error.error || 'Failed to save game');
       }
       
+      if (this.historyDirty && this.historyExists && !this.historyHasContent()) {
+        this.showToast('Histoire sans événement non enregistrée : utilisez « Supprimer l\'histoire » pour la retirer', 'info');
+      }
+      if (this.historyDirty && this.historyHasContent()) {
+        const historyResponse = await fetch(`/api/admin/games/${encodeURIComponent(data.id)}/history`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.token}`
+          },
+          body: JSON.stringify(this.collectHistory())
+        });
+        if (!historyResponse.ok) {
+          const error = await historyResponse.json().catch(() => ({}));
+          // The game itself is saved: keep the modal open on the history
+          this.currentGame = { ...(this.currentGame || {}), id: data.id };
+          this.switchFormTab('history');
+          throw new Error(`Jeu enregistré, mais pas l'histoire : ${error.error || 'erreur'}`);
+        }
+      }
+      
       this.showToast(isNew ? 'Jeu créé avec succès' : 'Jeu mis à jour', 'success');
       this.closeGameModal();
       // Stay on current page after save
@@ -652,6 +689,411 @@ const admin = {
     }
   },
   
+  // ==================== GAME FORM: INTEGRATIONS, CATEGORIES, HISTORY ====================
+
+  languages: [
+    { code: 'fr', label: 'Français' },
+    { code: 'en', label: 'English' },
+    { code: 'es', label: 'Español' },
+    { code: 'de', label: 'Deutsch' },
+    { code: 'it', label: 'Italiano' },
+    { code: 'pt', label: 'Português' }
+  ],
+
+  fillLanguageSelects() {
+    const options = this.languages.map(l => `<option value="${l.code}">${this.escapeHtml(l.label)}</option>`).join('');
+    document.querySelectorAll('.lang-select').forEach(select => { select.innerHTML = options; });
+  },
+
+  splitList(value, separator = ',') {
+    return String(value || '').split(separator).map(v => v.trim()).filter(Boolean);
+  },
+
+  // The form's values of the integrations it does not keep in named inputs
+  loadGameExtras(game) {
+    const i = game.integrations || {};
+    const set = (id, value) => { document.getElementById(id).value = value ?? ''; };
+    const check = (id, value) => { document.getElementById(id).checked = !!value; };
+    set('game-racetime-slugs', (i.racetime?.gameSlugs || []).join(', '));
+    check('game-archipelago-enabled', i.archipelago?.enabled);
+    set('game-archipelago-name', i.archipelago?.gameName);
+    check('game-multiworld-enabled', i.multiworld?.enabled);
+    set('game-multiworld-name', i.multiworld?.gameName);
+    check('game-apworld-enabled', i.apworld?.enabled);
+    check('game-apworld-mature', i.apworld?.mature);
+    set('game-apworld-names', (i.apworld?.gameNames || []).join('\n'));
+    check('game-twitch-enabled', i.twitch?.enabled);
+    set('game-twitch-id', i.twitch?.categoryId);
+    set('game-twitch-name', i.twitch?.categoryName);
+    check('game-startgg-enabled', i.startgg?.enabled);
+    set('game-startgg-videogame', i.startgg?.videogameId);
+    set('game-startgg-keywords', (i.startgg?.searchKeywords || []).join(', '));
+    check('game-challonge-enabled', i.challonge?.enabled);
+    set('game-challonge-game', i.challonge?.gameId);
+    set('game-challonge-subdomain', i.challonge?.subdomain);
+    set('game-challonge-keywords', (i.challonge?.searchKeywords || []).join(', '));
+
+    this.gameCategories = JSON.parse(JSON.stringify(game.categories || []));
+    this.gameCategorySettings = JSON.parse(JSON.stringify(game.categorySettings || []));
+    this.categoriesDirty = false;
+    this.renderCategoriesEditor();
+  },
+
+  collectIntegrations() {
+    const value = id => document.getElementById(id).value.trim();
+    const checked = id => document.getElementById(id).checked;
+    const number = id => (value(id) ? parseInt(value(id), 10) : null);
+    const next = {
+      racetime: {
+        enabled: checked('game-racetime-enabled'),
+        gameSlug: value('game-racetime-slug') || null,
+        gameSlugs: this.splitList(value('game-racetime-slugs'))
+      },
+      randoList: {
+        enabled: checked('game-randolist-enabled'),
+        randomizerIdentifier: value('game-randolist-identifier') || null
+      },
+      archipelago: { enabled: checked('game-archipelago-enabled'), gameName: value('game-archipelago-name') || null },
+      multiworld: { enabled: checked('game-multiworld-enabled'), gameName: value('game-multiworld-name') || null },
+      apworld: {
+        enabled: checked('game-apworld-enabled'),
+        gameNames: this.splitList(value('game-apworld-names'), '\n'),
+        mature: checked('game-apworld-mature')
+      },
+      twitch: {
+        enabled: checked('game-twitch-enabled'),
+        categoryId: value('game-twitch-id') || null,
+        categoryName: value('game-twitch-name') || null
+      },
+      startgg: {
+        enabled: checked('game-startgg-enabled'),
+        videogameId: number('game-startgg-videogame'),
+        searchKeywords: this.splitList(value('game-startgg-keywords'))
+      },
+      challonge: {
+        enabled: checked('game-challonge-enabled'),
+        gameId: number('game-challonge-game'),
+        subdomain: value('game-challonge-subdomain') || null,
+        searchKeywords: this.splitList(value('game-challonge-keywords'))
+      }
+    };
+    // An integration changed by hand is no longer the syncs' to replace
+    const old = this.currentGame?.integrations || {};
+    for (const [key, fields] of Object.entries(next)) {
+      const before = old[key] || {};
+      const changed = Object.entries(fields).some(([field, v]) => {
+        const was = before[field];
+        if (Array.isArray(v)) return JSON.stringify(v) !== JSON.stringify(was || []);
+        if (typeof v === 'boolean') return v !== !!was;
+        return (v ?? null) !== (was ?? null);
+      });
+      if (changed) {
+        fields.confidence = 'manual';
+        if (key === 'twitch' && fields.categoryId) fields.notFound = false;
+      }
+    }
+    return next;
+  },
+
+  // ----- Categories -----
+
+  addCategory() {
+    this.gameCategories.push({ id: '', name: '', description: '', translations: {}, racetimeGoals: [] });
+    this.categoriesDirty = true;
+    this.renderCategoriesEditor();
+  },
+
+  addCategorySetting() {
+    this.gameCategorySettings.push({ name: '', description: '', values: [], translations: {} });
+    this.categoriesDirty = true;
+    this.renderCategoriesEditor();
+  },
+
+  categoryList(kind) {
+    return kind === 'setting' ? this.gameCategorySettings : this.gameCategories;
+  },
+
+  removeCategoryItem(kind, index) {
+    this.categoryList(kind).splice(index, 1);
+    this.categoriesDirty = true;
+    this.renderCategoriesEditor();
+  },
+
+  moveCategoryItem(kind, index, delta) {
+    const list = this.categoryList(kind);
+    const to = index + delta;
+    if (to < 0 || to >= list.length) return;
+    [list[index], list[to]] = [list[to], list[index]];
+    this.categoriesDirty = true;
+    this.renderCategoriesEditor();
+  },
+
+  updateCategoryField(kind, index, field, value) {
+    const item = this.categoryList(kind)[index];
+    if (!item) return;
+    if (field === 'trName' || field === 'trDescription') {
+      const lang = this.categoriesLang;
+      item.translations = item.translations || {};
+      item.translations[lang] = { ...(item.translations[lang] || {}), [field === 'trName' ? 'name' : 'description']: value };
+    } else if (field === 'values') {
+      item.values = this.splitList(value);
+    } else if (field === 'racetimeGoals') {
+      // One "slug | goal" per line
+      item.racetimeGoals = String(value).split('\n').map(line => {
+        const [slug, ...goal] = line.split('|');
+        return { slug: slug.trim(), goal: goal.join('|').trim() };
+      }).filter(g => g.slug && g.goal);
+    } else {
+      item[field] = value;
+    }
+    this.categoriesDirty = true;
+  },
+
+  onCategoriesLanguageChange(lang) {
+    this.categoriesLang = lang;
+    this.renderCategoriesEditor();
+  },
+
+  renderCategoryItem(kind, item, index, count) {
+    const lang = this.categoriesLang;
+    const tr = item.translations?.[lang] || {};
+    const input = (field, val, placeholder = '', tag = 'input') => {
+      const attrs = `class="form-input" data-input="updateCategoryField" data-args="${this.attrArgs([kind, index, field, '$value'])}" placeholder="${this.escapeHtml(placeholder)}"`;
+      return tag === 'textarea'
+        ? `<textarea ${attrs} rows="2">${this.escapeHtml(val)}</textarea>`
+        : `<input type="text" ${attrs} value="${this.escapeHtml(val)}">`;
+    };
+    const translation = lang === 'en' ? '' : `
+      <div class="form-pair translation-pair">
+        <div><label>Nom (${lang})</label>${input('trName', tr.name || '', item.name)}</div>
+        <div><label>Description (${lang})</label>${input('trDescription', tr.description || '', item.description, 'textarea')}</div>
+      </div>`;
+    const specific = kind === 'setting'
+      ? `<div><label>Valeurs</label>${input('values', (item.values || []).join(', '), 'Séparées par des virgules')}</div>`
+      : `<div class="form-pair">
+          <div><label>Identifiant</label>${input('id', item.id || '')}</div>
+          <div><label>Objectifs racetime</label>${input('racetimeGoals', (item.racetimeGoals || []).map(g => `${g.slug} | ${g.goal}`).join('\n'), 'slug | objectif, un par ligne', 'textarea')}</div>
+        </div>`;
+    return `
+      <div class="repeat-item">
+        <div class="repeat-item-tools">
+          <span class="repeat-item-index">#${index + 1}</span>
+          ${this.renderRepeatTools('moveCategoryItem', 'removeCategoryItem', [kind, index], index, count)}
+        </div>
+        <div class="form-pair">
+          <div><label>Nom (anglais)</label>${input('name', item.name || '')}</div>
+          <div><label>Description (anglais)</label>${input('description', item.description || '', '', 'textarea')}</div>
+        </div>
+        ${translation}
+        ${specific}
+      </div>`;
+  },
+
+  renderRepeatTools(moveMethod, removeMethod, args, index, count) {
+    return `
+      <button type="button" class="btn btn-sm btn-ghost" data-click="${moveMethod}" data-args="${this.attrArgs([...args, -1])}" ${index === 0 ? 'disabled' : ''} title="Monter">↑</button>
+      <button type="button" class="btn btn-sm btn-ghost" data-click="${moveMethod}" data-args="${this.attrArgs([...args, 1])}" ${index === count - 1 ? 'disabled' : ''} title="Descendre">↓</button>
+      <button type="button" class="btn btn-sm btn-ghost btn-danger" data-click="${removeMethod}" data-args="${this.attrArgs(args)}" title="Supprimer">🗑️</button>`;
+  },
+
+  renderCategoriesEditor() {
+    const lang = document.getElementById('categories-lang');
+    if (lang) lang.value = this.categoriesLang;
+    const render = (kind, list) => list.length
+      ? list.map((item, i) => this.renderCategoryItem(kind, item, i, list.length)).join('')
+      : '<p class="text-muted">Aucune pour l\'instant.</p>';
+    document.getElementById('categories-editor').innerHTML = render('category', this.gameCategories);
+    document.getElementById('category-settings-editor').innerHTML = render('setting', this.gameCategorySettings);
+  },
+
+  // Empty translations dropped, items without a name left out
+  cleanCategoryItems(list, isCategory) {
+    return list
+      .filter(item => String(item.name || '').trim())
+      .map(item => {
+        const translations = {};
+        for (const [lang, tr] of Object.entries(item.translations || {})) {
+          const name = String(tr?.name || '').trim();
+          const description = String(tr?.description || '').trim();
+          if (name || description) translations[lang] = { ...(name && { name }), ...(description && { description }) };
+        }
+        const out = { ...item, name: item.name.trim(), description: String(item.description || '').trim(), translations };
+        if (isCategory) out.id = String(item.id || '').trim() || out.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        return out;
+      });
+  },
+
+  // ----- History -----
+
+  // Dates are kept as a text common to all languages, or one per language
+  setHistory(history) {
+    this.historyExists = !!history;
+    this.historyDirty = false;
+    const localized = v => (v && typeof v === 'object' ? { ...v } : (typeof v === 'string' && v ? { fr: v, en: v } : {}));
+    this.history = {
+      intro: localized(history?.intro),
+      events: (history?.events || []).map(ev => ({
+        dateCommon: typeof ev.date === 'string' ? ev.date : '',
+        date: typeof ev.date === 'object' && ev.date ? { ...ev.date } : {},
+        title: localized(ev.title),
+        text: localized(ev.text)
+      })),
+      sources: (history?.sources || []).map(src => ({ label: src.label || '', url: src.url || '' }))
+    };
+    this.renderHistoryEditor();
+  },
+
+  historyHasContent() {
+    return this.history.events.length > 0;
+  },
+
+  collectHistory() {
+    return {
+      intro: this.history.intro,
+      events: this.history.events.map(ev => ({
+        date: ev.dateCommon.trim() || ev.date,
+        title: ev.title,
+        text: ev.text
+      })),
+      sources: this.history.sources
+    };
+  },
+
+  onHistoryLanguageChange(lang) {
+    this.historyLang = lang;
+    this.renderHistoryEditor();
+  },
+
+  // Reference text shown while translating: French, or English when editing French
+  historyReference(value) {
+    const ref = this.historyLang === 'fr' ? 'en' : 'fr';
+    return value?.[ref] || '';
+  },
+
+  updateHistoryField(path, value) {
+    const lang = this.historyLang;
+    const [section, index, field] = path;
+    if (section === 'intro') {
+      this.history.intro[lang] = value;
+    } else if (section === 'event') {
+      const ev = this.history.events[index];
+      if (field === 'dateCommon') ev.dateCommon = value;
+      else ev[field][lang] = value;
+    } else if (section === 'source') {
+      this.history.sources[index][field] = value;
+    }
+    this.historyDirty = true;
+    this.renderHistoryStatus();
+  },
+
+  addHistoryEvent() {
+    this.history.events.push({ dateCommon: '', date: {}, title: {}, text: {} });
+    this.historyDirty = true;
+    this.renderHistoryEditor();
+  },
+
+  addHistorySource() {
+    this.history.sources.push({ label: '', url: '' });
+    this.historyDirty = true;
+    this.renderHistoryEditor();
+  },
+
+  historyList(section) {
+    return section === 'source' ? this.history.sources : this.history.events;
+  },
+
+  moveHistoryItem(section, index, delta) {
+    const list = this.historyList(section);
+    const to = index + delta;
+    if (to < 0 || to >= list.length) return;
+    [list[index], list[to]] = [list[to], list[index]];
+    this.historyDirty = true;
+    this.renderHistoryEditor();
+  },
+
+  removeHistoryItem(section, index) {
+    this.historyList(section).splice(index, 1);
+    this.historyDirty = true;
+    this.renderHistoryEditor();
+  },
+
+  async deleteHistory() {
+    const gameId = this.currentGame?.id;
+    if (!gameId || !this.historyExists) return;
+    if (!confirm('Supprimer l\'histoire de ce jeu ? Son onglet Histoire disparaîtra.')) return;
+    try {
+      const response = await fetch(`/api/admin/games/${encodeURIComponent(gameId)}/history`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${this.token}` }
+      });
+      if (!response.ok) throw new Error();
+      this.setHistory(null);
+      this.showToast('Histoire supprimée', 'success');
+    } catch {
+      this.showToast('Erreur lors de la suppression de l\'histoire', 'error');
+    }
+  },
+
+  renderHistoryStatus() {
+    const el = document.getElementById('history-status');
+    if (!el) return;
+    const lang = this.historyLang;
+    const events = this.history.events;
+    const missing = events.filter(ev => !ev.title[lang] || !ev.text[lang] || (!ev.dateCommon && !ev.date[lang])).length
+      + (this.history.intro[lang] ? 0 : 1);
+    const state = !this.historyExists && !events.length
+      ? 'Pas encore d\'histoire : ajoutez un événement pour en créer une.'
+      : `${events.length} événement(s)${missing ? ` · ${missing} champ(s) à compléter dans cette langue (repli sur l'anglais)` : ' · complet dans cette langue'}`;
+    el.textContent = state + (this.historyDirty ? ' · modifications à enregistrer' : '');
+  },
+
+  renderHistoryEditor() {
+    if (!this.history) return;
+    const lang = this.historyLang;
+    document.getElementById('history-lang').value = lang;
+    const intro = document.getElementById('history-intro');
+    intro.value = this.history.intro[lang] || '';
+    intro.placeholder = this.historyReference(this.history.intro);
+    intro.setAttribute('data-input', 'updateHistoryField');
+    intro.setAttribute('data-args', JSON.stringify([['intro'], '$value']));
+
+    const field = (path, val, placeholder, tag = 'input') => {
+      const attrs = `class="form-input" data-input="updateHistoryField" data-args="${this.attrArgs([path, '$value'])}" placeholder="${this.escapeHtml(placeholder)}"`;
+      return tag === 'textarea'
+        ? `<textarea ${attrs} rows="3">${this.escapeHtml(val)}</textarea>`
+        : `<input type="text" ${attrs} value="${this.escapeHtml(val)}">`;
+    };
+    const events = this.history.events;
+    document.getElementById('history-events').innerHTML = events.length ? events.map((ev, i) => `
+      <div class="repeat-item">
+        <div class="repeat-item-tools">
+          <span class="repeat-item-index">#${i + 1}</span>
+          ${this.renderRepeatTools('moveHistoryItem', 'removeHistoryItem', ['event', i], i, events.length)}
+        </div>
+        <div class="form-pair">
+          <div><label>Date commune</label>${field(['event', i, 'dateCommon'], ev.dateCommon, 'ex. 2005')}</div>
+          <div><label>Date (${lang})</label>${field(['event', i, 'date'], ev.date[lang] || '', ev.dateCommon ? 'Date commune utilisée' : this.historyReference(ev.date))}</div>
+        </div>
+        <div><label>Titre (${lang})</label>${field(['event', i, 'title'], ev.title[lang] || '', this.historyReference(ev.title))}</div>
+        <div><label>Texte (${lang})</label>${field(['event', i, 'text'], ev.text[lang] || '', this.historyReference(ev.text), 'textarea')}</div>
+      </div>`).join('') : '<p class="text-muted">Aucun événement.</p>';
+
+    const sources = this.history.sources;
+    document.getElementById('history-sources').innerHTML = sources.length ? sources.map((src, i) => `
+      <div class="repeat-item repeat-item-inline">
+        <div class="form-pair">
+          <div><label>Libellé</label>${field(['source', i, 'label'], src.label, 'Site — page')}</div>
+          <div><label>URL</label>${field(['source', i, 'url'], src.url, 'https://...')}</div>
+        </div>
+        <div class="repeat-item-tools">
+          ${this.renderRepeatTools('moveHistoryItem', 'removeHistoryItem', ['source', i], i, sources.length)}
+        </div>
+      </div>`).join('') : '<p class="text-muted">Aucune source.</p>';
+
+    document.getElementById('history-delete-btn').style.display = this.historyExists ? '' : 'none';
+    this.renderHistoryStatus();
+  },
+
   viewGameResources(gameId) {
     this.currentResourcesFilter = null;
     this.navigateTo('resources');
@@ -1002,6 +1444,8 @@ const admin = {
     document.getElementById('resource-modal-name').value = item.name || '';
     document.getElementById('resource-modal-description').value = item.description || '';
     document.getElementById('resource-modal-source').value = item.source || 'manual';
+    document.getElementById('resource-modal-apworld-status').value = item.apworldStatus || '';
+    document.getElementById('resource-modal-apworld-group').style.display = kind === 'site' ? 'block' : 'none';
 
     const typeSelect = document.getElementById('resource-modal-type');
     if (kind === 'guide') {
@@ -1163,6 +1607,7 @@ const admin = {
         payload.isArchipelago = isArchipelago;
         payload.isMultiworld = isMultiworld;
         payload.isObsolete = isObsolete;
+        payload.apworldStatus = document.getElementById('resource-modal-apworld-status').value || undefined;
       }
       if (kind === 'guide' || kind === 'other' || kind === 'tracker') {
         payload.type = type;

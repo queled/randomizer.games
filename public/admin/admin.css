@@ -1282,6 +1282,94 @@ a:hover {
   font-size: 1rem;
 }
 
+/* Game form: repeated items (categories, history events and sources) */
+.game-form .form-pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+.game-form .form-pair label,
+.game-form .repeat-item label {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--admin-text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.game-form .form-note {
+  font-size: 0.8125rem;
+  margin-bottom: 0.75rem;
+}
+
+.game-form .integration-section h4 .btn {
+  margin-left: 0.5rem;
+}
+
+.game-form .i18n-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.game-form .i18n-toolbar .form-input {
+  width: auto;
+}
+
+.game-form .i18n-toolbar small {
+  margin-top: 0;
+}
+
+.repeat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.repeat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.875rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  background: var(--admin-bg);
+}
+
+.repeat-item-inline {
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+.repeat-item-inline .form-pair {
+  flex: 1;
+}
+
+.repeat-item-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.repeat-item-index {
+  margin-right: auto;
+  font-size: 0.8125rem;
+  color: var(--admin-text-muted);
+}
+
+.translation-pair {
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--admin-primary);
+}
+
+.history-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
 .resource-modal-i18n {
   margin-top: 1rem;
   padding-top: 1rem;

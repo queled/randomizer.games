@@ -52,6 +52,51 @@ const admin = {
     // Setup event listeners
     this.setupEventListeners();
     this.setupDelegatedActions();
+    this.setupTooltips();
+  },
+
+  /**
+   * One tooltip for every element with data-tooltip, shown at once on hover or
+   * focus (the browser's title waits a second), fixed to the viewport so a
+   * scrolling table does not cut it.
+   */
+  setupTooltips() {
+    const tip = document.createElement('div');
+    tip.className = 'admin-tooltip';
+    tip.setAttribute('role', 'tooltip');
+    document.body.appendChild(tip);
+    let current = null;
+
+    const show = (el) => {
+      const text = el.getAttribute('data-tooltip');
+      if (!text) return;
+      current = el;
+      tip.textContent = text;
+      tip.classList.add('visible');
+      const rect = el.getBoundingClientRect();
+      const { width, height } = tip.getBoundingClientRect();
+      const left = Math.min(Math.max(8, rect.left + rect.width / 2 - width / 2), window.innerWidth - width - 8);
+      const above = rect.top - height - 8;
+      tip.style.left = `${left}px`;
+      tip.style.top = `${above >= 8 ? above : rect.bottom + 8}px`;
+    };
+    const hide = () => {
+      current = null;
+      tip.classList.remove('visible');
+    };
+
+    document.addEventListener('mouseover', (event) => {
+      const el = event.target.closest?.('[data-tooltip]');
+      if (el && el !== current) show(el);
+      else if (!el && current) hide();
+    });
+    document.addEventListener('focusin', (event) => {
+      const el = event.target.closest?.('[data-tooltip]');
+      if (el) show(el);
+    });
+    document.addEventListener('focusout', hide);
+    document.addEventListener('click', hide, true);
+    window.addEventListener('scroll', hide, true);
   },
 
   /**
@@ -427,10 +472,10 @@ const admin = {
               <tr>
                 <td>${this.escapeHtml(g.name)} <code class="text-muted">${this.escapeHtml(g.id)}</code></td>
                 <td><span class="badge badge-muted">${this.escapeHtml(origins[g.origin] || g.origin)}</span></td>
-                <td class="text-muted" title="${this.escapeHtml(this.formatDateTime(g.createdAt))}">${this.formatRelativeTime(g.createdAt)}</td>
+                <td class="text-muted" data-tooltip="${this.escapeHtml(this.formatDateTime(g.createdAt))}">${this.formatRelativeTime(g.createdAt)}</td>
                 <td class="table-actions">
-                  <a class="btn btn-sm btn-ghost" href="/game-detail.html?id=${encodeURIComponent(g.id)}" target="_blank" rel="noopener" title="Page publique">↗</a>
-                  <button class="btn btn-sm btn-ghost" data-click="editGame" data-args="${admin.attrArgs([g.id])}" title="Modifier">✏️</button>
+                  <a class="icon-btn" href="/game-detail.html?id=${encodeURIComponent(g.id)}" target="_blank" rel="noopener" data-tooltip="Page publique" aria-label="Page publique">🌐</a>
+                  <button class="icon-btn" data-click="editGame" data-args="${admin.attrArgs([g.id])}" data-tooltip="Modifier" aria-label="Modifier">✏️</button>
                 </td>
               </tr>
             `).join('')}
@@ -499,7 +544,7 @@ const admin = {
     if (games.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="7" class="text-center text-muted">Aucun jeu trouvé</td>
+          <td colspan="8" class="text-center text-muted">Aucun jeu trouvé</td>
         </tr>
       `;
       return;
@@ -514,28 +559,29 @@ const admin = {
       const label = game.randomizer?.displayName || game.randomizer?.shortName || game.name;
       const integrations = game.integrations || {};
       const badges = [
-        game.hasHistory ? '<span class="badge badge-success" title="Histoire">📜</span>' : '<span class="badge badge-muted" title="Pas d\'histoire">📜</span>',
-        hasOfficialSite ? `<span class="badge badge-success" title="Sites">🌐 ${sitesCount}</span>` : '<span class="badge badge-warning" title="Aucun site">🌐 0</span>',
-        integrations.twitch?.categoryId ? '<span class="badge badge-success" title="Catégorie Twitch">📺</span>' : '',
-        integrations.archipelago?.enabled ? '<span class="badge badge-info" title="Archipelago">AP</span>' : '',
-        integrations.multiworld?.enabled ? '<span class="badge badge-info" title="Multiworld">MW</span>' : '',
-        integrations.apworld?.enabled ? '<span class="badge badge-info" title="APWorld communautaire">APW</span>' : '',
-        (game.categories || []).length ? `<span class="badge badge-muted" title="Catégories">🏷️ ${game.categories.length}</span>` : ''
+        game.hasHistory ? '<span class="badge badge-success" data-tooltip="Histoire">📜</span>' : '<span class="badge badge-muted" data-tooltip="Pas d\'histoire">📜</span>',
+        hasOfficialSite ? `<span class="badge badge-success" data-tooltip="Sites">🌐 ${sitesCount}</span>` : '<span class="badge badge-warning" data-tooltip="Aucun site">🌐 0</span>',
+        integrations.twitch?.categoryId ? '<span class="badge badge-success" data-tooltip="Catégorie Twitch">📺</span>' : '',
+        integrations.archipelago?.enabled ? '<span class="badge badge-info" data-tooltip="Archipelago">AP</span>' : '',
+        integrations.multiworld?.enabled ? '<span class="badge badge-info" data-tooltip="Multiworld">MW</span>' : '',
+        integrations.apworld?.enabled ? '<span class="badge badge-info" data-tooltip="APWorld communautaire">APW</span>' : '',
+        (game.categories || []).length ? `<span class="badge badge-muted" data-tooltip="Catégories">🏷️ ${game.categories.length}</span>` : ''
       ].filter(Boolean).join(' ');
       
       return `
         <tr>
           <td class="game-cover-cell">${game.hasCover
             ? `<img class="game-cover-thumb" src="/assets/${encodeURIComponent(game.id)}.png" alt="" loading="lazy">`
-            : '<span class="game-cover-missing" title="Pas de jaquette">?</span>'}</td>
+            : '<span class="game-cover-missing" data-tooltip="Pas de jaquette">?</span>'}</td>
           <td><code>${this.escapeHtml(game.id)}</code></td>
           <td>
             <strong>${this.escapeHtml(label)}</strong>
             ${label !== game.name ? `<div class="text-muted table-sub">${this.escapeHtml(game.name)}</div>` : ''}
           </td>
+          <td>${this.escapeHtml(game.randomizer?.shortName || '-')}</td>
           <td>
             ${hasRacetime 
-              ? `<span class="badge badge-success" title="${this.escapeHtml(racetimeSlug)}">✓ ${this.escapeHtml(racetimeSlug)}</span>` 
+              ? `<span class="badge badge-success" data-tooltip="${this.escapeHtml(racetimeSlug)}">✓ ${this.escapeHtml(racetimeSlug)}</span>` 
               : '<span class="badge badge-muted">-</span>'}
           </td>
           <td><div class="game-badges">${badges}</div></td>
@@ -544,25 +590,15 @@ const admin = {
               ? '<span class="badge badge-success">Activé</span>' 
               : '<span class="badge badge-danger">Désactivé</span>'}
           </td>
-          <td>
-            <a class="btn btn-sm btn-ghost" href="/game-detail.html?id=${encodeURIComponent(game.id)}" target="_blank" rel="noopener" title="Page publique">↗</a>
-            <button class="btn btn-sm btn-ghost" data-click="editGame" data-args="${admin.attrArgs([String(game.id)])}" title="Modifier">
-              ✏️
-            </button>
-            <button class="btn btn-sm btn-ghost" data-click="viewGameResources" data-args="${admin.attrArgs([String(game.id)])}" title="Ressources">
-              📚
-            </button>
+          <td class="table-actions">
+            <a class="icon-btn" href="/game-detail.html?id=${encodeURIComponent(game.id)}" target="_blank" rel="noopener" data-tooltip="Page publique" aria-label="Page publique">🌐</a>
+            <button class="icon-btn" data-click="editGame" data-args="${admin.attrArgs([String(game.id)])}" data-tooltip="Modifier" aria-label="Modifier">✏️</button>
+            <button class="icon-btn" data-click="viewGameResources" data-args="${admin.attrArgs([String(game.id)])}" data-tooltip="Ressources" aria-label="Ressources">📚</button>
             ${hasRacetime 
-              ? `<button class="btn btn-sm btn-ghost" data-click="triggerFullResync" data-args="${admin.attrArgs([String(game.id), String(racetimeSlug)])}" title="Resync complète des races (racetime)">
-              🔄
-            </button>` 
+              ? `<button class="icon-btn" data-click="triggerFullResync" data-args="${admin.attrArgs([String(game.id), String(racetimeSlug)])}" data-tooltip="Resynchroniser toutes les courses racetime" aria-label="Resynchroniser toutes les courses racetime">🔄</button>` 
               : ''}
-            <button class="btn btn-sm btn-ghost" data-click="showMergeGameModal" data-args="${admin.attrArgs([String(game.id)])}" title="Fusionner avec un autre jeu">
-              🔀
-            </button>
-            <button class="btn btn-sm btn-ghost btn-danger" data-click="deleteGame" data-args="${admin.attrArgs([String(game.id)])}" title="Supprimer">
-              🗑️
-            </button>
+            <button class="icon-btn" data-click="showMergeGameModal" data-args="${admin.attrArgs([String(game.id)])}" data-tooltip="Fusionner un autre jeu dans celui-ci" aria-label="Fusionner un autre jeu dans celui-ci">🔀</button>
+            <button class="icon-btn icon-btn-danger" data-click="deleteGame" data-args="${admin.attrArgs([String(game.id)])}" data-tooltip="Supprimer" aria-label="Supprimer">🗑️</button>
           </td>
         </tr>
       `;
@@ -1059,9 +1095,9 @@ const admin = {
 
   renderRepeatTools(moveMethod, removeMethod, args, index, count) {
     return `
-      <button type="button" class="btn btn-sm btn-ghost" data-click="${moveMethod}" data-args="${this.attrArgs([...args, -1])}" ${index === 0 ? 'disabled' : ''} title="Monter">↑</button>
-      <button type="button" class="btn btn-sm btn-ghost" data-click="${moveMethod}" data-args="${this.attrArgs([...args, 1])}" ${index === count - 1 ? 'disabled' : ''} title="Descendre">↓</button>
-      <button type="button" class="btn btn-sm btn-ghost btn-danger" data-click="${removeMethod}" data-args="${this.attrArgs(args)}" title="Supprimer">🗑️</button>`;
+      <button class="icon-btn" type="button" data-click="${moveMethod}" data-args="${this.attrArgs([...args, -1])}" ${index === 0 ? 'disabled' : ''} data-tooltip="Monter" aria-label="Monter">⬆️</button>
+      <button class="icon-btn" type="button" data-click="${moveMethod}" data-args="${this.attrArgs([...args, 1])}" ${index === count - 1 ? 'disabled' : ''} data-tooltip="Descendre" aria-label="Descendre">⬇️</button>
+      <button class="icon-btn icon-btn-danger" type="button" data-click="${removeMethod}" data-args="${this.attrArgs(args)}" data-tooltip="Supprimer" aria-label="Supprimer">🗑️</button>`;
   },
 
   renderCategoriesEditor() {
@@ -1494,8 +1530,8 @@ const admin = {
         <div class="resource-item resource-item-primary">
           <span class="resource-icon">${this.getAdminSiteIcon(resources.officialSite)}</span>
           ${this.renderExternalLink(resources.officialSite.url, resources.officialSite.name || 'Site officiel')}
-          <button class="btn btn-sm btn-ghost" data-click="editOfficialSiteTitle" title="Modifier le titre officiel">✏️</button>
-          <button class="btn btn-sm btn-ghost btn-danger" data-click="removeOfficialSite">×</button>
+          <button class="icon-btn" data-click="editOfficialSiteTitle" data-tooltip="Modifier le titre du site officiel" aria-label="Modifier le titre du site officiel">✏️</button>
+          <button class="icon-btn icon-btn-danger" data-click="removeOfficialSite" data-tooltip="Retirer le site officiel" aria-label="Retirer le site officiel">✖️</button>
         </div>
       `;
     } else {
@@ -1514,9 +1550,9 @@ const admin = {
           </div>
           ${resources.officialSite?.url === site.url ? '<span class="resource-type">officiel</span>' : ''}
           <span class="resource-source">${this.escapeHtml(site.source || 'manual')}</span>
-          ${site.apworldStatus ? `<span class="badge badge-${{ stable: 'success', unstable: 'warning', broken: 'danger' }[site.apworldStatus] || 'muted'}" title="Statut de l'APWorld">${{ stable: 'stable', unstable: 'instable', broken: 'cassé' }[site.apworldStatus] || this.escapeHtml(site.apworldStatus)}</span>` : ''}
-          <button class="btn btn-sm btn-ghost" data-click="openResourceModal" data-args="${admin.attrArgs(["site", i])}" title="Modifier">✏️</button>
-          <button class="btn btn-sm btn-ghost btn-danger" data-click="removeSite" data-args="${admin.attrArgs([i])}" title="Supprimer">×</button>
+          ${site.apworldStatus ? `<span class="badge badge-${{ stable: 'success', unstable: 'warning', broken: 'danger' }[site.apworldStatus] || 'muted'}" data-tooltip="Statut de l'APWorld">${{ stable: 'stable', unstable: 'instable', broken: 'cassé' }[site.apworldStatus] || this.escapeHtml(site.apworldStatus)}</span>` : ''}
+          <button class="icon-btn" data-click="openResourceModal" data-args="${admin.attrArgs(["site", i])}" data-tooltip="Modifier" aria-label="Modifier">✏️</button>
+          <button class="icon-btn icon-btn-danger" data-click="removeSite" data-args="${admin.attrArgs([i])}" data-tooltip="Supprimer" aria-label="Supprimer">🗑️</button>
         </div>
       `).join('');
       this.attachResourceDnD('sites-list', 'sites');
@@ -1535,8 +1571,8 @@ const admin = {
             ${tracker.description ? `<span class="resource-desc">${this.escapeHtml(tracker.description)}</span>` : ''}
           </div>
           <span class="resource-source">${this.escapeHtml(tracker.source || 'manual')}</span>
-          <button class="btn btn-sm btn-ghost" data-click="openResourceModal" data-args="${admin.attrArgs(["tracker", i])}" title="Modifier">✏️</button>
-          <button class="btn btn-sm btn-ghost btn-danger" data-click="removeTracker" data-args="${admin.attrArgs([i])}">×</button>
+          <button class="icon-btn" data-click="openResourceModal" data-args="${admin.attrArgs(["tracker", i])}" data-tooltip="Modifier" aria-label="Modifier">✏️</button>
+          <button class="icon-btn icon-btn-danger" data-click="removeTracker" data-args="${admin.attrArgs([i])}" data-tooltip="Supprimer" aria-label="Supprimer">🗑️</button>
         </div>
       `).join('');
       this.attachResourceDnD('trackers-list', 'trackers');
@@ -1557,8 +1593,8 @@ const admin = {
           </div>
           <span class="resource-source">${this.escapeHtml(guide.source || 'manual')}</span>
           <span class="resource-type">${guide.type}</span>
-          <button class="btn btn-sm btn-ghost" data-click="openResourceModal" data-args="${admin.attrArgs(["guide", i])}" title="Modifier">✏️</button>
-          <button class="btn btn-sm btn-ghost btn-danger" data-click="removeGuide" data-args="${admin.attrArgs([i])}">×</button>
+          <button class="icon-btn" data-click="openResourceModal" data-args="${admin.attrArgs(["guide", i])}" data-tooltip="Modifier" aria-label="Modifier">✏️</button>
+          <button class="icon-btn icon-btn-danger" data-click="removeGuide" data-args="${admin.attrArgs([i])}" data-tooltip="Supprimer" aria-label="Supprimer">🗑️</button>
         </div>
       `).join('');
       this.attachResourceDnD('guides-list', 'guides');
@@ -1579,8 +1615,8 @@ const admin = {
             </div>
             <span class="resource-source">${this.escapeHtml(link.source || 'manual')}</span>
             <span class="resource-type">${this.escapeHtml(link.type || 'resource')}</span>
-            <button class="btn btn-sm btn-ghost" data-click="openResourceModal" data-args="${admin.attrArgs(["other", i])}" title="Modifier">✏️</button>
-            <button class="btn btn-sm btn-ghost btn-danger" data-click="removeOtherLink" data-args="${admin.attrArgs([i])}">×</button>
+            <button class="icon-btn" data-click="openResourceModal" data-args="${admin.attrArgs(["other", i])}" data-tooltip="Modifier" aria-label="Modifier">✏️</button>
+            <button class="icon-btn icon-btn-danger" data-click="removeOtherLink" data-args="${admin.attrArgs([i])}" data-tooltip="Supprimer" aria-label="Supprimer">🗑️</button>
           </div>
         `).join('');
         this.attachResourceDnD('other-links-list', 'other');
@@ -2423,7 +2459,7 @@ const admin = {
       const [badge, text] = states[job.state] || states.unknown;
       const frequency = job.everyMinutes >= 1440 ? 'tous les jours' : `toutes les ${job.everyMinutes} min`;
       const last = job.startedAt
-        ? `<span title="${this.escapeHtml(this.formatDateTime(job.startedAt))}">${this.formatRelativeTime(job.startedAt)}</span>${job.durationMs ? ` <span class="text-muted">· ${this.formatDuration(job.durationMs)}</span>` : ''}`
+        ? `<span data-tooltip="${this.escapeHtml(this.formatDateTime(job.startedAt))}">${this.formatRelativeTime(job.startedAt)}</span>${job.durationMs ? ` <span class="text-muted">· ${this.formatDuration(job.durationMs)}</span>` : ''}`
         : '<span class="text-muted">-</span>';
       const detail = job.exitCode && job.state !== 'running'
         ? `<div class="text-muted table-sub">code ${job.exitCode}${job.consecutiveFailures > 1 ? `, ${job.consecutiveFailures} échecs de suite` : ''}</div>`
@@ -2436,8 +2472,8 @@ const admin = {
           <td>${last}</td>
           <td>${job.nextRunAt ? `${this.formatClock(job.nextRunAt)} <span class="text-muted">(${this.formatUntil(job.nextRunAt)})</span>` : '-'}</td>
           <td class="table-actions">
-            <button class="btn btn-sm btn-primary" data-click="runJob" data-args="${admin.attrArgs([job.name, job.label])}" ${job.state === 'running' ? 'disabled' : ''}>▶ Lancer</button>
-            <button class="btn btn-sm btn-outline" data-click="showSyncLog" data-args="${admin.attrArgs([job.name, job.label])}">📜 Journal</button>
+            <button class="icon-btn" data-click="runJob" data-args="${admin.attrArgs([job.name, job.label])}" ${job.state === 'running' ? 'disabled' : ''} data-tooltip="${job.state === 'running' ? 'Déjà en cours' : 'Lancer maintenant'}" aria-label="Lancer maintenant">▶️</button>
+            <button class="icon-btn" data-click="showSyncLog" data-args="${admin.attrArgs([job.name, job.label])}" data-tooltip="Voir le journal" aria-label="Voir le journal">📜</button>
           </td>
         </tr>
       `;
@@ -2748,7 +2784,7 @@ const admin = {
         <td>
           <span class="player-cell">
             <a href="/player-detail.html?id=${encodeURIComponent(player.userId)}" target="_blank" rel="noopener">${this.escapeHtml(player.name)}</a>
-            ${player.racetimeDeletedAt ? '<span class="badge badge-danger" title="Compte supprimé de racetime.gg">supprimé</span>' : ''}
+            ${player.racetimeDeletedAt ? '<span class="badge badge-danger" data-tooltip="Compte supprimé de racetime.gg">supprimé</span>' : ''}
           </span>
         </td>
         <td>
@@ -2764,10 +2800,9 @@ const admin = {
           : '<span class="text-muted">-</span>'}</td>
         <td>${this.formatNumber(player.stats?.totalRaces || 0)}</td>
         <td>${this.formatNumber(player.stats?.totalWins || 0)}</td>
-        <td>
-          <button class="btn btn-sm btn-ghost" data-click="editPlayer" data-args="${admin.attrArgs([String(player.userId)])}" title="Modifier">
-            ✏️
-          </button>
+        <td class="table-actions">
+          <a class="icon-btn" href="/player-detail.html?id=${encodeURIComponent(player.userId)}" target="_blank" rel="noopener" data-tooltip="Page publique" aria-label="Page publique">🌐</a>
+          <button class="icon-btn" data-click="editPlayer" data-args="${admin.attrArgs([String(player.userId)])}" data-tooltip="Modifier" aria-label="Modifier">✏️</button>
         </td>
       </tr>
     `).join('');
@@ -2883,7 +2918,7 @@ const admin = {
 
   rlRenderCoverageCell(coverage) {
     if (!coverage || coverage.status === 'empty') return '<span class="text-muted">-</span>';
-    if (coverage.status === 'none') return '<span class="badge badge-muted" title="Aucune course racetime.gg rattachée">sans course</span>';
+    if (coverage.status === 'none') return '<span class="badge badge-muted" data-tooltip="Aucune course racetime.gg rattachée">sans course</span>';
     const badge = coverage.status === 'complete' ? 'success' : coverage.percent >= 80 ? 'warning' : 'danger';
     const details = [
       `${coverage.linkedMatches} / ${coverage.playedMatches} matchs joués avec course`,
@@ -2892,9 +2927,9 @@ const admin = {
       coverage.orphanRaces ? `${coverage.orphanRaces} course(s) rattachée(s) au tournoi sans match` : ''
     ].filter(Boolean).join('\n');
     return `
-      <span class="badge badge-${badge}" title="${this.escapeHtml(details)}">${coverage.percent} %</span>
+      <span class="badge badge-${badge}" data-tooltip="${this.escapeHtml(details)}">${coverage.percent} %</span>
       <span class="text-muted" style="font-size: 0.75rem;">${coverage.linkedMatches}/${coverage.playedMatches}</span>
-      ${coverage.orphanRaces ? `<span class="badge badge-danger" title="Courses rattachées au tournoi sans match">${coverage.orphanRaces} sans match</span>` : ''}
+      ${coverage.orphanRaces ? `<span class="badge badge-danger" data-tooltip="Courses rattachées au tournoi sans match">${coverage.orphanRaces} sans match</span>` : ''}
     `;
   },
 
@@ -3106,9 +3141,9 @@ const admin = {
               <div class="rl-match-races" id="rl-match-races-${this.escapeHtml(matchId)}" ${raceCount > 1 ? 'data-sortable="true"' : ''}>
                 ${raceUrls.map((url, idx) => `
                   <div class="rl-linked-race" draggable="${raceCount > 1 ? 'true' : 'false'}" data-race-url="${this.escapeHtml(url)}" data-match-id="${this.escapeHtml(matchId)}" data-index="${idx}">
-                    ${raceCount > 1 ? `<span class="rl-race-order" title="Manche">⠿ ${idx + 1}</span>` : ''}
+                    ${raceCount > 1 ? `<span class="rl-race-order" data-tooltip="Manche">⠿ ${idx + 1}</span>` : ''}
                     ${this.renderExternalLink(this.sanitizeRacetimeUrl(url), url, 'rl-race-link')}
-                    <button class="btn btn-sm btn-ghost btn-danger" data-click="rlUnlinkRace" data-args="${admin.attrArgs([String(url)])}" data-stop title="Délier">✕</button>
+                    <button class="icon-btn icon-btn-danger" data-click="rlUnlinkRace" data-args="${admin.attrArgs([String(url)])}" data-stop data-tooltip="Délier la course" aria-label="Délier la course">✖️</button>
                   </div>
                 `).join('')}
               </div>
@@ -3255,7 +3290,7 @@ const admin = {
           </div>
         </div>
         <div class="rl-race-actions">
-          <button class="btn btn-sm btn-ghost btn-danger" data-click="rlUnlinkRace" data-args="${admin.attrArgs([String(r.url)])}" title="Retirer des qualifications">✕</button>
+          <button class="icon-btn icon-btn-danger" data-click="rlUnlinkRace" data-args="${admin.attrArgs([String(r.url)])}" data-tooltip="Retirer des qualifications" aria-label="Retirer des qualifications">✖️</button>
         </div>
       </div>
     `).join('');
@@ -3303,7 +3338,7 @@ const admin = {
           </div>
         </div>
         <div class="rl-race-actions">
-          <button class="btn btn-sm btn-ghost" data-click="rlMarkAsQualifier" data-args="${admin.attrArgs([String(r.url)])}" title="Marquer comme qualification">🏅</button>
+          <button class="icon-btn" data-click="rlMarkAsQualifier" data-args="${admin.attrArgs([String(r.url)])}" data-tooltip="Marquer comme qualification" aria-label="Marquer comme qualification">🏅</button>
         </div>
       </div>
     `}).join('');
@@ -3426,7 +3461,7 @@ const admin = {
           ${linkedSuggestions.map((s, idx) => `
             <div class="rl-linked-race" draggable="${isBo ? 'true' : 'false'}"
                  data-race-url="${this.escapeHtml(s.raceUrl)}" data-match-id="${this.escapeHtml(String(matchId))}" data-index="${idx}">
-              <span class="rl-race-order" title="Manche">⠿ ${idx + 1}</span>
+              <span class="rl-race-order" data-tooltip="Manche">⠿ ${idx + 1}</span>
               <div class="rl-suggestion-info" style="flex:1;">
                 <div class="rl-suggestion-label">${this.escapeHtml(s.label)}</div>
                 <div class="rl-suggestion-details">
@@ -3435,7 +3470,7 @@ const admin = {
                   ${this.renderExternalLink(this.sanitizeRacetimeUrl(s.raceUrl), s.raceUrl, 'rl-race-link', 'style="font-size:0.8rem;"')}
                 </div>
               </div>
-              <button class="btn btn-sm btn-ghost btn-danger" data-click="rlUnlinkRace" data-args="${admin.attrArgs([String(s.raceUrl)])}" data-stop title="Délier">✕</button>
+              <button class="icon-btn icon-btn-danger" data-click="rlUnlinkRace" data-args="${admin.attrArgs([String(s.raceUrl)])}" data-stop data-tooltip="Délier la course" aria-label="Délier la course">✖️</button>
             </div>
           `).join('')}
         </div>
@@ -3656,7 +3691,7 @@ const admin = {
             <div class="rl-autolink-match">
               ${p.startedAt ? `<span class="text-muted">${new Date(p.startedAt).toLocaleDateString('fr-FR')}</span>` : ''}
               ${p.goal ? `<span class="text-muted">${this.escapeHtml(p.goal)}</span>` : ''}
-              <span class="badge ${p.matchType === 'named' ? 'badge-success' : 'badge-muted'}" title="${p.matchType === 'named' ? 'Le titre nomme ce tournoi' : 'Titre générique, joué avant le tournoi'}">${p.matchType === 'named' ? 'Nommée' : 'Générique'}</span>
+              <span class="badge ${p.matchType === 'named' ? 'badge-success' : 'badge-muted'}" data-tooltip="${p.matchType === 'named' ? 'Le titre nomme ce tournoi' : 'Titre générique, joué avant le tournoi'}">${p.matchType === 'named' ? 'Nommée' : 'Générique'}</span>
               ${!p.inDatabase ? '<span class="badge badge-warning">À importer</span>' : ''}
               ${p.attached ? '<span class="badge badge-muted">Déjà rattachée</span>' : ''}
             </div>
@@ -4055,7 +4090,7 @@ const admin = {
     const row = (label, value, title = '') => `
       <div class="monitoring-item">
         <span class="monitoring-label">${label}</span>
-        <span class="monitoring-value"${title ? ` title="${this.escapeHtml(title)}"` : ''}>${value}</span>
+        <span class="monitoring-value"${title ? ` data-tooltip="${this.escapeHtml(title)}"` : ''}>${value}</span>
       </div>
     `;
     
@@ -4148,7 +4183,7 @@ const admin = {
         ? `depuis ${this.formatDuration(Date.now() - new Date(job.startedAt))}`
         : `${this.formatClock(job.startedAt)}${job.durationMs !== null ? ` · ${this.formatDuration(job.durationMs || 1000)}` : ''}`;
       return `
-        <span title="${this.escapeHtml(this.formatDateTime(job.startedAt))}">${this.formatRelativeTime(job.startedAt)}</span>
+        <span data-tooltip="${this.escapeHtml(this.formatDateTime(job.startedAt))}">${this.formatRelativeTime(job.startedAt)}</span>
         <div class="text-muted monitoring-sub">${sub}</div>
       `;
     };
@@ -4161,7 +4196,7 @@ const admin = {
             <strong>${this.escapeHtml(job.label)}</strong>
             <div class="text-muted monitoring-sub"><code>${this.escapeHtml(job.name)}</code></div>
           </td>
-          <td title="cron ${this.escapeHtml(job.cron || '')} (UTC)">${schedule(job)}</td>
+          <td data-tooltip="cron ${this.escapeHtml(job.cron || '')} (UTC)">${schedule(job)}</td>
           <td>
             <span class="badge badge-${state.badge}">${state.text}</span>
             ${detail ? `<div class="text-muted monitoring-sub">${this.escapeHtml(detail)}</div>` : ''}
@@ -4169,13 +4204,13 @@ const admin = {
           <td>${lastRun(job)}</td>
           <td>
             ${job.nextRunAt ? `
-              <span title="${this.escapeHtml(this.formatDateTime(job.nextRunAt))}">${this.formatUntil(job.nextRunAt)}</span>
+              <span data-tooltip="${this.escapeHtml(this.formatDateTime(job.nextRunAt))}">${this.formatUntil(job.nextRunAt)}</span>
               <div class="text-muted monitoring-sub">${this.formatClock(job.nextRunAt)}</div>
             ` : '<span class="text-muted">-</span>'}
           </td>
           <td>
             ${job.lastData ? `
-              <span title="${this.escapeHtml(this.formatDateTime(job.lastData.at))}">${this.formatRelativeTime(job.lastData.at)}</span>
+              <span data-tooltip="${this.escapeHtml(this.formatDateTime(job.lastData.at))}">${this.formatRelativeTime(job.lastData.at)}</span>
               <div class="text-muted monitoring-sub">${this.escapeHtml(job.lastData.label)}</div>
             ` : '<span class="text-muted">-</span>'}
           </td>
@@ -4320,15 +4355,15 @@ const admin = {
         <td>${t.matchCount || '-'}</td>
         <td>
           <span class="badge badge-${statusClass}">${this.escapeHtml(t.status || '-')}</span>
-          ${t.state ? `<div class="text-muted table-sub" title="État donné par la plateforme">${this.escapeHtml(t.state)}</div>` : ''}
+          ${t.state ? `<div class="text-muted table-sub" data-tooltip="État donné par la plateforme">${this.escapeHtml(t.state)}</div>` : ''}
         </td>
         <td>${date}</td>
         <td class="table-actions">
-          <a class="btn btn-sm btn-outline" href="/tournament-detail.html?id=${encodeURIComponent(t._id)}" target="_blank" rel="noopener" title="Page publique">↗</a>
-          <button class="btn btn-sm btn-outline" data-click="tmOpenLinking" data-args="${admin.attrArgs([String(t._id)])}" title="Rattacher les courses">🔗</button>
-          <button class="btn btn-sm btn-outline" data-click="tmShowDetail" data-args="${admin.attrArgs([String(t._id)])}" title="Détails">👁</button>
-          <button class="btn btn-sm btn-outline" data-click="tmShowEditGame" data-args="${admin.attrArgs([String(t._id), String(t.gameSlug || '')])}" title="Modifier le jeu">🎮</button>
-          <button class="btn btn-sm btn-danger" data-click="tmDeleteTournament" data-args="${admin.attrArgs([String(t._id), String(t.name)])}" title="Supprimer">🗑️</button>
+          <a class="icon-btn" href="/tournament-detail.html?id=${encodeURIComponent(t._id)}" target="_blank" rel="noopener" data-tooltip="Page publique" aria-label="Page publique">🌐</a>
+          <button class="icon-btn" data-click="tmOpenLinking" data-args="${admin.attrArgs([String(t._id)])}" data-tooltip="Rattacher les courses" aria-label="Rattacher les courses">🔗</button>
+          <button class="icon-btn" data-click="tmShowDetail" data-args="${admin.attrArgs([String(t._id)])}" data-tooltip="Détails du tournoi" aria-label="Détails du tournoi">ℹ️</button>
+          <button class="icon-btn" data-click="tmShowEditGame" data-args="${admin.attrArgs([String(t._id), String(t.gameSlug || '')])}" data-tooltip="Changer le jeu associé" aria-label="Changer le jeu associé">🎮</button>
+          <button class="icon-btn icon-btn-danger" data-click="tmDeleteTournament" data-args="${admin.attrArgs([String(t._id), String(t.name)])}" data-tooltip="Supprimer" aria-label="Supprimer">🗑️</button>
         </td>
       </tr>`;
     }).join('');

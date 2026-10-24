@@ -202,6 +202,7 @@
                 <th></th>
                 <th>ID</th>
                 <th>Nom</th>
+                <th>Nom court</th>
                 <th>Racetime</th>
                 <th>Contenu</th>
                 <th>Statut</th>
@@ -234,7 +235,7 @@
             </select>
           </div>
           <div class="form-group" style="margin-bottom: 0;">
-            <a id="resources-public-link" class="btn btn-ghost btn-sm" target="_blank" rel="noopener" style="display: none;">↗ Page publique</a>
+            <a id="resources-public-link" class="icon-btn" target="_blank" rel="noopener" style="display: none;" data-tooltip="Page publique du jeu" aria-label="Page publique du jeu">🌐</a>
           </div>
           <div class="form-group" style="margin-bottom: 0;">
             <select id="resources-filter" class="form-input form-select" data-change="applyResourcesFilter" data-args='["$value"]'>
@@ -399,7 +400,7 @@
           <div class="card-title-row">
             <h3 class="card-title" id="sync-log-title">📜 Journal</h3>
             <button class="btn btn-outline btn-sm" data-click="refreshSyncLog">🔄 Rafraîchir</button>
-            <button class="btn btn-ghost btn-sm" data-click="closeSyncLog">✕</button>
+            <button class="icon-btn" data-click="closeSyncLog" data-tooltip="Fermer le journal" aria-label="Fermer le journal">✖️</button>
           </div>
           <pre id="sync-log-content" class="sync-log-pre"></pre>
         </div>

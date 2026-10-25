@@ -99,3 +99,12 @@ test('Swiss: equal records told apart by the wins of the opponents met', () => {
   // At 1-1, c met e and f (one win each), b and e met opponents with one win in all
   assert.deepEqual(ranksOf(ranks), { a: 1, f: 1, c: 3, b: 4, e: 4, d: 6 });
 });
+
+test('knocked out at the same stage: tied, even after a bye', () => {
+  const ranks = computeProvisionalRanks([
+    set('Top 4', 1, 'c', 'd', 'c'),
+    set('Top 4', 2, 'a', 'c', 'c'), set('Top 4', 2, 'b', 'e', 'e'),
+    set('Top 4', 3, 'c', 'e', 'e')
+  ], PHASES);
+  assert.deepEqual(ranksOf(ranks), { e: 1, c: 2, a: 3, b: 3, d: 5 });
+});

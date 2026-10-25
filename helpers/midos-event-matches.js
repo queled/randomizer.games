@@ -22,20 +22,24 @@ function tiebreakGroup(label) {
  * - round robin: the label is the group, every match in round 1;
  * - Swiss: "Round 3" → 3;
  * - elimination: `rounds`, labels from the first round to the final (array), or
- *   label → number (object; losers rounds negative, -1 first).
- * @returns { round, group } or null when the label is not one of the phase's
+ *   label → number (object; losers rounds negative, -1 first); `thirdPlace`, the label of
+ *   the third place match, played in the final's round as on start.gg.
+ * @returns { round, group, thirdPlace } or null when the label is not one of the phase's
  */
 function roundOf(phase, label) {
   const kind = kindOf(phase.bracketType);
   const text = String(label || '').trim();
-  if (kind === 'roundrobin') return text ? { round: 1, group: text } : null;
+  if (kind === 'roundrobin') return text ? { round: 1, group: text, thirdPlace: false } : null;
   if (kind === 'swiss') {
     const n = Number(text.match(/(\d+)\s*$/)?.[1]);
-    return Number.isInteger(n) && n > 0 ? { round: n, group: null } : null;
+    return Number.isInteger(n) && n > 0 ? { round: n, group: null, thirdPlace: false } : null;
   }
   const rounds = phase.rounds || [];
+  if (phase.thirdPlace && text === phase.thirdPlace && Array.isArray(rounds)) {
+    return { round: rounds.length, group: null, thirdPlace: true };
+  }
   const round = Array.isArray(rounds) ? rounds.indexOf(text) + 1 : rounds[text];
-  return round ? { round, group: null } : null;
+  return round ? { round, group: null, thirdPlace: false } : null;
 }
 
 /**
@@ -74,10 +78,12 @@ function inferWalkovers(matches, phases) {
 /**
  * Matches of an elimination phase in bracket order: the two matches feeding a match sit
  * next to each other, in the order of its sides, from the final back to the first round.
- * The tournament page keeps that order within a round to draw the bracket.
+ * The third place match comes after the final. The tournament page keeps that order
+ * within a round to draw the bracket.
  */
 function orderBracket(matches) {
-  const byStart = (a, b) => (a.startAt || Infinity) - (b.startAt || Infinity);
+  const byStart = (a, b) => (a.thirdPlace ? 1 : 0) - (b.thirdPlace ? 1 : 0)
+    || (a.startAt || Infinity) - (b.startAt || Infinity);
   const ordered = [];
   for (const sign of [1, -1]) {
     const rounds = [...new Set(matches.map(m => m.round).filter(r => Math.sign(r) === sign))]
@@ -87,7 +93,7 @@ function orderBracket(matches) {
     for (const round of rounds) {
       const left = matches.filter(m => m.round === round).sort(byStart);
       const list = [];
-      for (const m of next) {
+      for (const m of next.filter(x => !x.thirdPlace)) {
         for (const side of m.sides) {
           const i = left.findIndex(o => o.sides.includes(side));
           if (i >= 0) list.push(...left.splice(i, 1));

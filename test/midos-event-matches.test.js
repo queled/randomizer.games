@@ -7,13 +7,13 @@ const match = (round, a, b, winner = null, startAt = 0) => ({ phase: 'Top 8', ro
 const PHASES = [{ name: 'Top 8', bracketType: 'SINGLE_ELIMINATION' }];
 
 test('round labels: group, Swiss round, elimination rounds by list or by number', () => {
-  assert.deepEqual(roundOf({ bracketType: 'ROUND_ROBIN' }, 'B'), { round: 1, group: 'B' });
-  assert.deepEqual(roundOf({ bracketType: 'SWISS' }, 'Round 4'), { round: 4, group: null });
+  assert.deepEqual(roundOf({ bracketType: 'ROUND_ROBIN' }, 'B'), { round: 1, group: 'B', thirdPlace: false });
+  assert.deepEqual(roundOf({ bracketType: 'SWISS' }, 'Round 4'), { round: 4, group: null, thirdPlace: false });
   const se = { bracketType: 'SINGLE_ELIMINATION', rounds: ['Quarterfinal', 'Semifinal', 'Final'] };
-  assert.deepEqual(roundOf(se, 'Final'), { round: 3, group: null });
+  assert.deepEqual(roundOf(se, 'Final'), { round: 3, group: null, thirdPlace: false });
   assert.equal(roundOf(se, 'Round of 16'), null);
   const de = { bracketType: 'DOUBLE_ELIMINATION', rounds: { 'Winners Final': 2, 'Losers Final': -2 } };
-  assert.deepEqual(roundOf(de, 'Losers Final'), { round: -2, group: null });
+  assert.deepEqual(roundOf(de, 'Losers Final'), { round: -2, group: null, thirdPlace: false });
 });
 
 test('tie-break labels name their group', () => {
@@ -57,4 +57,14 @@ test('rounds not paired yet: placeholders fed by the winners of the round before
   assert.equal(added[0].round, 3);
   assert.deepEqual([added[0].player1.name, added[0].player2.name], ['P2', 'TBD']);
   assert.deepEqual(pendingRounds([sf('1', '2', 1)], 2), []);
+});
+
+test('the third place match is played in the final round, after the final', () => {
+  const se = { bracketType: 'SINGLE_ELIMINATION', rounds: ['Semifinals', 'Finals'], thirdPlace: 'Bronze Match' };
+  assert.deepEqual(roundOf(se, 'Bronze Match'), { round: 2, group: null, thirdPlace: true });
+  const ordered = orderBracket([
+    { ...match(2, 'b', 'd', 'b', 1), thirdPlace: true }, match(2, 'a', 'c', 'a', 2),
+    match(1, 'c', 'd', 'c', 0), match(1, 'a', 'b', 'a', 0)
+  ]);
+  assert.deepEqual(ordered.map(m => m.sides.join('')), ['ab', 'cd', 'ac', 'bd']);
 });

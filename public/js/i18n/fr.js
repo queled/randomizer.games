@@ -326,6 +326,7 @@ const fr = {
         losersFinal: "Finale des perdants",
         roundN: "Tour {n}",
         bracketReset: "Bracket reset",
+        thirdPlaceMatch: "Match pour la 3e place",
         phaseNames: {
             groups: "Groupes",
             group: "Groupe",

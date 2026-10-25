@@ -4164,7 +4164,6 @@ function displayDoubleEliminationBracket(matches, container, isPoolBracket = fal
 }
 
 function displayBracketSection(matches, container, bracketType = 'winner', isDoubleElimination = false, isPoolBracket = false, bracketMatches = matches) {
-  const roundLabels = getBracketRoundLabels(bracketMatches, isDoubleElimination);
   // Group matches by round
   const byRound = {};
   matches.forEach(match => {
@@ -4191,9 +4190,13 @@ function displayBracketSection(matches, container, bracketType = 'winner', isDou
     });
   });
   
+  const thirdPlace = isDoubleElimination || isPoolBracket ? null : takeThirdPlaceMatch(byRound, sortedRounds);
+  // The third place match would make the final round look twice as wide
+  const roundLabels = getBracketRoundLabels(bracketMatches.filter(m => m !== thirdPlace), isDoubleElimination);
+
   const numRounds = sortedRounds.length;
   const columnWidth = `${100 / numRounds}%`;
-  
+
   // Create bracket wrapper with position relative for SVG overlay.
   // Each round keeps a readable width; on a narrow screen the bracket scrolls sideways instead of the page.
   const bracketWrapper = document.createElement('div');
@@ -4224,11 +4227,33 @@ function displayBracketSection(matches, container, bracketType = 'winner', isDou
   bracketWrapper.appendChild(svg);
   
   container.appendChild(bracketScroll);
-  
+  if (thirdPlace) {
+    const section = document.createElement('div');
+    section.style.cssText = 'max-width: 280px; margin: 1.5rem auto 0;';
+    const title = document.createElement('div');
+    title.style.cssText = 'font-size: 0.8rem; font-weight: bold; color: #cd7f32; text-align: center; margin-bottom: 0.5rem;';
+    title.textContent = `🥉 ${tdText('thirdPlaceMatch', 'Third place match')}`;
+    section.appendChild(title);
+    section.appendChild(createBracketMatchCard(thirdPlace));
+    container.appendChild(section);
+  }
+
   // Draw connector lines after a brief delay to ensure elements are rendered
   bracketHTML.dataset.bracketType = bracketType;
   if (isPoolBracket) bracketHTML.dataset.poolBracket = '1';
   setTimeout(() => drawBracketConnectors(bracketHTML, svg, bracketType, isPoolBracket), 50);
+}
+
+// Single elimination: the third place match shares the final's round (start.gg, Mido's House).
+// It is the one played by two semi-final losers; taken out of the round to be shown apart.
+function takeThirdPlaceMatch(byRound, sortedRounds) {
+  if (sortedRounds.length < 2) return null;
+  const last = byRound[sortedRounds[sortedRounds.length - 1]];
+  const semis = byRound[sortedRounds[sortedRounds.length - 2]];
+  if (last.length !== 2) return null;
+  const losers = new Set(semis.filter(m => m.winnerId != null).map(m => String(m.winnerId === m.player1Id ? m.player2Id : m.player1Id)));
+  const i = last.findIndex(m => losers.has(String(m.player1Id)) && losers.has(String(m.player2Id)));
+  return i >= 0 ? last.splice(i, 1)[0] : null;
 }
 
 // Connectors are measured on screen: a bracket drawn in a hidden tab or pool, or before a resize,

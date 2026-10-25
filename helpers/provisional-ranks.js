@@ -8,8 +8,8 @@
  * - in a round robin / Swiss phase: more wins first, then fewer losses (Swiss: then the wins of
  *   the opponents met, the Buchholz score);
  * - in an elimination phase: entrants still in first (more wins first), then the eliminated
- *   ones by how far they went (double elimination: out on the second loss); entrants still in
- *   are then told apart by their record in the earlier phases.
+ *   ones by how far they went (double elimination: out on the second loss), tied when out at
+ *   the same stage; entrants still in are then told apart by their record in the earlier phases.
  * Tied entrants share their rank (1, 2, 2, 4).
  */
 
@@ -173,8 +173,10 @@ function computeProvisionalRanks(matches = [], phases = []) {
     const kind = kinds.get(s.phase);
     const elimination = kind === 'singleelimination' || kind === 'doubleelimination';
     const stillIn = elimination && !s.out;
+    // Knocked out at the same stage of a bracket: tied, as on start.gg (a bye is not a win)
+    const record = elimination && s.out ? [0, 0, 0] : [s.wins, -s.losses, s.buchholz];
     // Higher first: phase, still in, how far, wins, fewer losses, Buchholz, then the whole record of those still in
-    return [s.tier, stillIn ? 1 : 0, s.out, s.wins, -s.losses, s.buchholz, stillIn ? s.allWins : 0, stillIn ? -s.allLosses : 0];
+    return [s.tier, stillIn ? 1 : 0, s.out, ...record, stillIn ? s.allWins : 0, stillIn ? -s.allLosses : 0];
   };
   const compare = (a, b) => {
     const ka = keyOf(a);

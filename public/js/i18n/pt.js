@@ -362,6 +362,7 @@ const pt = {
         losersFinal: "Final dos perdedores",
         roundN: "Rodada {n}",
         bracketReset: "Reset do bracket",
+        thirdPlaceMatch: "Disputa de terceiro lugar",
         phaseNames: {
             groups: "Grupos",
             group: "Grupo",

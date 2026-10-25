@@ -16,7 +16,8 @@
  *
  * Phases come from EVENTS, by their Mido's House name:
  *   - bracketType as on start.gg (ROUND_ROBIN, SWISS, SINGLE_ELIMINATION, DOUBLE_ELIMINATION);
- *   - rounds of an elimination phase (see helpers/midos-event-matches.js `roundOf`);
+ *   - rounds of an elimination phase, and its third place match (see
+ *     helpers/midos-event-matches.js `roundOf`);
  *   - perRace: one match per race (team events scoring a point per race won).
  * `teams`: the sides are Mido's House teams, each race played by one player of each.
  *
@@ -81,6 +82,23 @@ const EVENTS = {
     phases: {
       Swiss: { name: 'Swiss', bracketType: 'SWISS' },
       Bracket: { name: 'Bracket', bracketType: 'SINGLE_ELIMINATION', rounds: ['Round 1', 'Quarterfinal', 'Semifinal', 'Final'] }
+    }
+  },
+  'br/1': {
+    name: 'Copa do Brasil',
+    phases: {
+      Swiss: { name: 'Swiss', bracketType: 'SWISS' },
+      Bracket: {
+        name: 'Bracket', bracketType: 'SINGLE_ELIMINATION',
+        rounds: ['Quarterfinals', 'Semifinals', 'Finals'], thirdPlace: 'Bronze Match'
+      }
+    }
+  },
+  'latam/2025': {
+    name: 'Copa Latinoamerica 2025',
+    phases: {
+      'Group Stage': { name: 'Group Stage', bracketType: 'ROUND_ROBIN' },
+      Playoffs: { name: 'Playoffs', bracketType: 'SINGLE_ELIMINATION', rounds: ['Quarter-finals', 'Semifinals', 'Finals'] }
     }
   }
 };
@@ -243,7 +261,7 @@ function buildMatches(games) {
   games.forEach((g, i) => {
     const pair = g.sides.map(s => s.key).sort().join('|');
     const key = g.phase.perRace ? `race:${i}` : `${g.phase.name}|${g.round}|${g.group || ''}|${pair}`;
-    if (!byKey.has(key)) byKey.set(key, { phase: g.phase.name, round: g.round, group: g.group, sideInfo: g.sides, sides: g.sides.map(s => s.key), games: [] });
+    if (!byKey.has(key)) byKey.set(key, { phase: g.phase.name, round: g.round, group: g.group, thirdPlace: g.thirdPlace, sideInfo: g.sides, sides: g.sides.map(s => s.key), games: [] });
     byKey.get(key).games.push(g);
   });
   const matches = [...byKey.values()];
@@ -316,6 +334,7 @@ async function syncEvent(key, config, { game, dryRun, verbose }) {
   const sideName = side => (config.teams ? side.name : nameOf(side.userId, side.name));
 
   const embedded = [];
+  const thirdPlaceMatches = new Set();
   for (const phase of phaseList) {
     let list = matches.filter(m => m.phase === phase.name);
     list = isElimination(kindOf(phase.bracketType))
@@ -331,6 +350,7 @@ async function syncEvent(key, config, { game, dryRun, verbose }) {
         return { startggEntrantId: entrants.get(s.key).id, name: sideName(s), ...(members?.length ? { members } : {}) };
       };
       const urls = m.games.map(g => g.race?.url).filter(Boolean);
+      if (m.thirdPlace) thirdPlaceMatches.add(embedded.length);
       embedded.push({
         round: m.round,
         completedAt: m.doneAt ? new Date(m.doneAt) : null,
@@ -353,13 +373,21 @@ async function syncEvent(key, config, { game, dryRun, verbose }) {
   // played, such as forfeits, do not hold it open)
   const lastPhase = phaseList[phaseList.length - 1];
   const finalRound = Math.max(...embedded.filter(m => m.phase === lastPhase.name).map(m => m.round));
-  const finals = embedded.filter(m => m.phase === lastPhase.name && m.round === finalRound);
+  const finals = embedded.filter((m, i) => m.phase === lastPhase.name && m.round === finalRound && !thirdPlaceMatches.has(i));
   const scheduled = games.some(g => !g.doneAt && g.startAt > Date.now());
   const over = finals.length === 1 && finals[0].winnerId != null && !scheduled;
   const ended = embedded.map(m => m.completedAt).filter(Boolean).sort((a, b) => b - a)[0] || null;
   const starts = games.map(g => g.startAt).filter(Boolean).sort((a, b) => a - b);
 
-  const ranks = computeProvisionalRanks(embedded, phases);
+  // The third place match, in the final's round, splits the semi-final losers
+  const ranks = computeProvisionalRanks(embedded.filter((m, i) => !thirdPlaceMatches.has(i)), phases);
+  for (const i of thirdPlaceMatches) {
+    const m = embedded[i];
+    if (m.winnerId == null) continue;
+    const loser = [m.player1, m.player2].find(p => p.startggEntrantId !== String(m.winnerId));
+    ranks.set(String(m.winnerId), 3);
+    if (loser) ranks.set(loser.startggEntrantId, 4);
+  }
   const participants = [];
   for (const [, { id, side }] of entrants) {
     const finalRank = ranks.get(id) || null;

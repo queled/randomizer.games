@@ -23,7 +23,7 @@
  *
  * Usage:
  *   node scripts/sync-midos-events.js                  # every event of EVENTS
- *   node scripts/sync-midos-events.js --event fr/6     # one event (repeatable)
+ *   node scripts/sync-midos-events.js --event br/1     # one event (repeatable)
  *   node scripts/sync-midos-events.js --active         # events not over yet
  *   node scripts/sync-midos-events.js --dry-run --verbose   # brackets and top 8 as rebuilt
  */
@@ -75,13 +75,6 @@ const EVENTS = {
     phases: {
       Swiss: { name: 'Swiss', bracketType: 'SWISS', perRace: true },
       'Top 8': { name: 'Top 8', bracketType: 'SINGLE_ELIMINATION', rounds: ['Quarterfinal', 'Semifinal', 'Final'] }
-    }
-  },
-  'fr/6': {
-    name: 'Tournoi Francophone Saison 6',
-    phases: {
-      Swiss: { name: 'Swiss', bracketType: 'SWISS' },
-      Bracket: { name: 'Bracket', bracketType: 'SINGLE_ELIMINATION', rounds: ['Round 1', 'Quarterfinal', 'Semifinal', 'Final'] }
     }
   },
   'br/1': {

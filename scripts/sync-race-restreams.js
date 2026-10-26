@@ -18,7 +18,8 @@
  * Then on YouTube (with YOUTUBE_API_KEY), where restreamers archive their broadcasts
  * once Twitch deletes them: the uploads of the channels kept by
  * scripts/discover-youtube-restreamers.js, matched the same way (the broadcast running
- * at the race start, or an upload whose title fits one race only). The tournament page
+ * at the race start, or an upload whose title fits one race only, or one of a restreamer's
+ * schedule, uploaded months later, by its players' names on it). The tournament page
  * shows Twitch first.
  * Stored in `race.restreams`. VODs Twitch or YouTube has deleted since are dropped,
  * keeping who restreamed.
@@ -42,7 +43,7 @@ const { Race, Tournament, YoutubeChannel } = require('../models');
 const twitchVods = require('../services/twitch-vods');
 const youtube = require('../services/youtube');
 const { titleFitsEvent, titleNamesRace, LANGUAGE_NAMES } = require('../helpers/restream-titles');
-const { raceIndex, matchVideo } = require('../helpers/youtube-restreams');
+const { raceIndex, matchVideo, matchScheduleUploads } = require('../helpers/youtube-restreams');
 
 const RACETIME_DELAY_MS = 500;
 const RETRY_AFTER_END_MS = 12 * 3600 * 1000;
@@ -309,8 +310,9 @@ async function findYoutubeRestreams({ dryRun, days }, stats) {
     startedAt: { $gte: since }
   }).select('_id url startedAt tournamentId tiebreak restreams entrants.userName').lean();
   const tournaments = await Tournament.find({ _id: { $in: [...new Set(races.map(r => String(r.tournamentId)))] } })
-    .select('_id name midosHouse.site midosHouse.series midosHouse.event midosHouse.pastRestreams').lean();
+    .select('_id name matches.raceUrl matches.raceUrls midosHouse.site midosHouse.series midosHouse.event midosHouse.pastRestreams').lean();
   if (!tournaments.length) return;
+  const byRoom = new Map(races.map(r => [roomPath(r.url), r]));
   const byId = new Map(tournaments.map(t => [String(t._id), t]));
   races.forEach(r => { r.tournament = byId.get(String(r.tournamentId)); });
   const index = raceIndex(races);
@@ -325,26 +327,43 @@ async function findYoutubeRestreams({ dryRun, days }, stats) {
     if (!channel) continue;
     const uploads = await youtube.getUploads(channel, oldest);
     videos += uploads.length;
+    const link = (race, video, vodUrl) => {
+      const audio = String(video.snippet.defaultAudioLanguage || video.snippet.defaultLanguage || '').split('-')[0];
+      race.restreams = race.restreams || [];
+      let entry = race.restreams.find(st => st.url === youtube.channelUrl(channel.id));
+      if (entry && entry.vodUrl) return;
+      if (!entry) {
+        entry = { url: youtube.channelUrl(channel.id) };
+        race.restreams.push(entry);
+      }
+      Object.assign(entry, { language: doc.language || LANGUAGE_NAMES[audio] || undefined, title: video.snippet.title, vodUrl, channel: channel.title });
+      delete entry.vodGoneAt;
+      touched.add(race);
+      stats.youtube++;
+      console.log(`   ▶️  ${race.url} : ${channel.title} « ${video.snippet.title} »`);
+    };
     for (const video of uploads) {
       if (used.has(video.id)) continue;
       const found = matchVideo(video, index, channel);
       if (!found.length) continue;
       used.add(video.id);
-      const audio = String(video.snippet.defaultAudioLanguage || video.snippet.defaultLanguage || '').split('-')[0];
-      for (const { race, vodUrl } of found) {
-        race.restreams = race.restreams || [];
-        let entry = race.restreams.find(st => st.url === youtube.channelUrl(channel.id));
-        if (entry && entry.vodUrl) continue;
-        if (!entry) {
-          entry = { url: youtube.channelUrl(channel.id) };
-          race.restreams.push(entry);
-        }
-        Object.assign(entry, { language: doc.language || LANGUAGE_NAMES[audio] || undefined, title: video.snippet.title, vodUrl, channel: channel.title });
-        delete entry.vodGoneAt;
-        touched.add(race);
-        stats.youtube++;
-        console.log(`   ▶️  ${race.url} : ${channel.title} « ${video.snippet.title} »`);
+      for (const { race, vodUrl } of found) link(race, video, vodUrl);
+    }
+    // Restreams of a schedule (SpeedGaming...) uploaded months later, too late for matchVideo:
+    // to the tournament the title names best, none on a tie
+    const best = new Map();
+    for (const tournament of tournaments) {
+      for (const found of matchScheduleUploads(tournament, uploads.filter(v => !used.has(v.id)), doc.language)) {
+        const current = best.get(found.video.id);
+        if (!current || found.score > current.score) best.set(found.video.id, found);
+        else if (found.score === current.score) current.tie = true;
       }
+    }
+    for (const { roomUrl, video, tie } of best.values()) {
+      const race = byRoom.get(roomPath(roomUrl));
+      if (tie || !race) continue;
+      used.add(video.id);
+      link(race, video, `https://www.youtube.com/watch?v=${video.id}`);
     }
   }
   console.log(`\n▶️  YouTube : ${videos} vidéo(s) sur ${channels.size} chaîne(s)`);

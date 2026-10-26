@@ -241,7 +241,7 @@ Le résultat va dans `race.restreams` (`language`, `url` de la chaîne, `vodUrl`
 
 ### Restreams archivés sur YouTube
 
-Twitch efface les rediffusions en 60 jours au plus ; beaucoup de restreamers les remettent sur YouTube. Avec `YOUTUBE_API_KEY` (Google Cloud, « YouTube Data API v3 »), `sync-race-restreams.js` lit ensuite les vidéos mises en ligne (`services/youtube.js`) des chaînes gardées dans `youtubechannels`, pour les races de tournoi des 30 derniers jours (ou de `--days` ; `--youtube-only` ne fait que cette étape).
+Twitch efface les rediffusions en 60 jours au plus ; beaucoup de restreamers les remettent sur YouTube. Avec `YOUTUBE_API_KEY` (Google Cloud, « YouTube Data API v3 »), `sync-race-restreams.js` lit ensuite les vidéos mises en ligne (`services/youtube.js`) des chaînes gardées dans `youtubechannels`, pour les races de tournoi des 30 derniers jours (ou de `--days` ; `--youtube-only` ne fait que cette étape). Les races sont écrites chaîne par chaîne : un quota épuisé en route garde ce qui est trouvé.
 
 Une vidéo compte (`helpers/youtube-restreams.js`) quand son titre nomme les joueurs et ne désigne pas un autre événement, comme sur Twitch, hors chaîne d'un joueur et hors vidéo déjà liée : un direct archivé qui couvre le départ de la race (lien à ce moment, `&t=`), sinon une vidéo mise en ligne dans les 30 jours qui ne correspond qu’à une seule race. Elle va dans `race.restreams` avec `url` de la chaîne (`youtube.com/channel/<id>`), `channel` (son nom), `vodUrl` et la langue de la chaîne (sinon la langue audio de la vidéo).
 
@@ -249,10 +249,10 @@ Certains restreamers (SpeedGaming) remettent leurs restreams en ligne des mois p
 
 Les chaînes des restreamers ne sont listées nulle part, et la chaîne YouTube qui porte le nom d'un restreamer Twitch est souvent celle de quelqu'un d'autre. `discover-youtube-restreamers.js` réunit des candidates :
 - les chaînes vérifiées à la main (`MANUAL_CHANNELS`) et celles des vidéos que Mido's House lie ;
-- la chaîne YouTube du même nom que chaque restreamer Twitch de Mido's House et Hyrule Town Hall ;
-- les chaînes des vidéos trouvées par une recherche YouTube par tournoi OoTR (« Ocarina of Time Randomizer <tournoi> », YouTube lisant « OoTR » comme « root »), puis par langue (français, deutsch, español, português), quand l'une de ces vidéos est le restream d'une race en base. Une recherche coûte 100 unités : 40 par jour au plus, chacune faite une seule fois (`youtubesearches`, gardé même en `--dry-run`).
+- la chaîne YouTube du même nom que chaque restreamer Twitch de Mido's House, Hyrule Town Hall et SpeedGaming, ou trouvé sur une race (titres Twitch, iCal) ;
+- les chaînes des vidéos trouvées par une recherche YouTube par tournoi, tous jeux confondus, ceux qui ont le plus de races sans VOD de restream d'abord : son nom (« Ocarina of Time Randomizer <tournoi> » pour OoTR, YouTube lisant « OoTR » comme « root »), puis par langue (français, deutsch, español, português), quand l'une de ces vidéos est le restream d'une race en base. Une recherche coûte 100 unités, et YouTube en limite le nombre à part (100 par jour, réponse 429) : 40 par jour au plus, chacune faite une seule fois (`youtubesearches`, gardé même en `--dry-run`).
 
-Une candidate est gardée (`status: accepted`) quand au moins 2 de ses vidéos sont les restreams de races différentes, sinon écartée ; chaque chaîne est revue au bout de 90 jours (`--revalidate` : toutes). Sa langue est celle de son restreamer Twitch sur Mido's House, sinon la langue audio de ses restreams.
+Une candidate est gardée (`status: accepted`) quand au moins 2 de ses vidéos sont les restreams de races différentes (mises en ligne peu après la race, ou plus tard d'après un planning), sinon écartée ; chaque chaîne est revue au bout de 90 jours (`--revalidate` : toutes, `--rejected` : les écartées). Sa langue est celle de son restreamer Twitch sur Mido's House, sinon la langue audio de ses restreams.
 
 Hors découverte, tout passe par `playlistItems` et `videos` (1 unité par lot de 50, sur 10 000 par jour). Les vidéos YouTube liées (restreams trouvés ici, liens de Mido's House) sont vérifiées à chaque exécution, comme les VOD Twitch ; celles de Mido's House reçoivent au passage leur chaîne (`url`, `channel`).
 

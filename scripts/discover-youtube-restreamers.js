@@ -5,20 +5,24 @@
  * The restreamers' YouTube channels are not listed anywhere, and a channel named
  * like a Twitch restreamer is often someone else. Candidates come from:
  *   - the channels set by hand (MANUAL_CHANNELS) and those of the videos Mido's House links;
- *   - the YouTube channel named like each Twitch restreamer of Mido's House (1 unit each);
- *   - YouTube searches for each OoTR tournament, then in each restream language
+ *   - the YouTube channel named like each Twitch restreamer of Mido's House, or found on
+ *     a race (1 unit each);
+ *   - YouTube searches for each tournament, those with the most races without a restream
+ *     VOD first, then in each restream language
  *     (100 units each, --max-searches a run; a search is made once, kept in `youtubesearches`).
  * A channel found by a search is a candidate only when one of the videos found is a
  * restream of a race in the base. A candidate is kept (`youtubechannels`, status
  * accepted) once at least MIN_MATCHES of its uploads are restreams of different races
- * in the base (helpers/youtube-restreams.js), players' own channels aside; else
- * rejected, and looked at again after REVALIDATE_DAYS.
+ * in the base (helpers/youtube-restreams.js: an upload soon after the race, or of a
+ * restreamer's schedule months later), players' own channels aside; else rejected, and
+ * looked at again after REVALIDATE_DAYS (--rejected: now).
  * scripts/sync-race-restreams.js then looks for restreams on the accepted channels.
  *
  * Usage:
  *   node scripts/discover-youtube-restreamers.js --dry-run     # candidates and their matches, nothing saved but the searches
  *   node scripts/discover-youtube-restreamers.js --max-searches 45
  *   node scripts/discover-youtube-restreamers.js --revalidate  # every channel again
+ *   node scripts/discover-youtube-restreamers.js --rejected    # the rejected channels again
  */
 
 const path = require('path');
@@ -29,7 +33,7 @@ const connectDB = require('../config/database');
 const { Race, Tournament, YoutubeChannel, YoutubeSearch } = require('../models');
 const twitchVods = require('../services/twitch-vods');
 const youtube = require('../services/youtube');
-const { raceIndex, matchVideo } = require('../helpers/youtube-restreams');
+const { raceIndex, matchVideo, matchScheduleUploads, ownChannel } = require('../helpers/youtube-restreams');
 const { normalizeName, LANGUAGE_NAMES } = require('../helpers/restream-titles');
 
 const MIN_MATCHES = 2;
@@ -47,40 +51,40 @@ const MANUAL_CHANNELS = {
 };
 // Searches of a tournament: its name, then with each restream language
 const QUERY_LANGUAGES = ['', 'français', 'deutsch', 'español', 'português'];
-// Games whose tournaments are searched (racetime.gg categories)
-const SEARCHED_CATEGORIES = ['ootr'];
 
 function parseArgs() {
   const args = process.argv.slice(2);
-  const opts = { dryRun: false, maxSearches: 45, revalidate: false };
+  const opts = { dryRun: false, maxSearches: 45, revalidate: false, rejected: false };
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
       case '--dry-run': opts.dryRun = true; break;
       case '--revalidate': opts.revalidate = true; break;
+      case '--rejected': opts.rejected = true; break;
       case '--max-searches': opts.maxSearches = Math.max(0, parseInt(args[++i], 10) || 0); break;
     }
   }
   return opts;
 }
 
-// "OoTR <Event> - Main Tournament" → "Ocarina of Time Randomizer <Event>": YouTube reads "OoTR" as "root"
-function tournamentQuery(name) {
-  const base = String(name).split(' - ')[0].replace(/^(?:ootr|oot randomizer|ocarina of time randomizer)\b:?\s*/i, '').trim();
-  return `Ocarina of Time Randomizer ${base}`;
+// "OoTR <Event> - Main Tournament" → "Ocarina of Time Randomizer <Event>": YouTube reads "OoTR" as "root";
+// other games: the name, without what follows " - "
+function tournamentQuery(name, category) {
+  const base = String(name).split(' - ')[0].trim();
+  if (category !== 'ootr') return base;
+  return `Ocarina of Time Randomizer ${base.replace(/^(?:ootr|oot randomizer|ocarina of time randomizer)\b:?\s*/i, '').trim()}`;
 }
 
-// Twitch restreamers of Mido's House and Hyrule Town Hall, with the language they restream in most
-function twitchRestreamers(tournaments) {
+// Twitch restreamers of Mido's House and Hyrule Town Hall, and those found on the races, with the language they restream in most
+function twitchRestreamers(tournaments, races) {
   const counts = new Map();
-  for (const t of tournaments) {
-    const entries = [...((t.midosHouse && t.midosHouse.pastRestreams) || []), ...((t.midosHouse && t.midosHouse.schedule) || [])];
-    for (const stream of entries.flatMap(e => e.restreams || [])) {
-      const login = twitchVods.twitchLogin(stream.url) || twitchVods.twitchLogin(stream.sourceUrl);
-      if (!login) continue;
-      const byLanguage = counts.get(login) || new Map();
-      byLanguage.set(stream.language, (byLanguage.get(stream.language) || 0) + 1);
-      counts.set(login, byLanguage);
-    }
+  const streams = [...tournaments.flatMap(t => [...((t.midosHouse && t.midosHouse.pastRestreams) || []), ...((t.midosHouse && t.midosHouse.schedule) || [])]),
+    ...races].flatMap(e => e.restreams || []);
+  for (const stream of streams) {
+    const login = twitchVods.twitchLogin(stream.url) || twitchVods.twitchLogin(stream.sourceUrl);
+    if (!login) continue;
+    const byLanguage = counts.get(login) || new Map();
+    byLanguage.set(stream.language, (byLanguage.get(stream.language) || 0) + 1);
+    counts.set(login, byLanguage);
   }
   return new Map([...counts].map(([login, byLanguage]) => [login, [...byLanguage].sort((a, b) => b[1] - a[1])[0][0]]));
 }
@@ -95,12 +99,13 @@ async function main() {
   await connectDB();
 
   const races = await Race.find({ tournamentId: { $ne: null }, status: 'finished', url: /^\/[^/]+\/[^/]+$/ })
-    .select('_id url category startedAt tournamentId tiebreak entrants.userName').lean();
+    .select('_id url category startedAt tournamentId tiebreak entrants.userName restreams.url restreams.language restreams.vodUrl').lean();
   const tournaments = await Tournament.find({ _id: { $in: [...new Set(races.map(r => String(r.tournamentId)))] } })
-    .select('_id name startDate endDate midosHouse.site midosHouse.series midosHouse.event midosHouse.pastRestreams midosHouse.schedule').lean();
+    .select('_id name startDate endDate matches.raceUrl matches.raceUrls midosHouse.site midosHouse.series midosHouse.event midosHouse.pastRestreams midosHouse.schedule').lean();
   const byId = new Map(tournaments.map(t => [String(t._id), t]));
   races.forEach(r => { r.tournament = byId.get(String(r.tournamentId)); });
   const index = raceIndex(races);
+  const byRoom = new Map(races.map(r => [String(r.url).toLowerCase(), r]));
   console.log(`🏁 ${races.length} races de ${tournaments.length} tournois`);
 
   // Candidates: channel id → { source, twitchLogin }
@@ -113,7 +118,7 @@ async function main() {
   for (const video of (await youtube.getVideos(linkedIds)).values()) add(video.snippet.channelId, { source: 'midos' });
 
   const known = new Map((await YoutubeChannel.find().lean()).map(c => [c.channelId, c]));
-  const restreamers = twitchRestreamers(tournaments);
+  const restreamers = twitchRestreamers(tournaments, races);
   const linkedLogins = new Set([...known.values()].map(c => c.twitchLogin).filter(Boolean));
   for (const login of restreamers.keys()) {
     if (linkedLogins.has(login) || Object.values(MANUAL_CHANNELS).includes(login)) continue;
@@ -121,14 +126,20 @@ async function main() {
     if (channel) add(channel.id, { source: 'handle', twitchLogin: login });
   }
 
-  // Searches not made yet, every tournament's name first, newest tournaments first
+  // Searches not made yet, every tournament's name first, those with the most races without a restream VOD first
   const searched = await YoutubeSearch.find().lean();
   const found = searched.flatMap(s => s.videos || []);
   const done = new Set(searched.map(s => s.query));
-  const searchedTournaments = tournaments
-    .filter(t => races.some(r => String(r.tournamentId) === String(t._id) && SEARCHED_CATEGORIES.includes(r.category)))
-    .sort((a, b) => new Date(b.startDate || 0) - new Date(a.startDate || 0));
-  const queries = QUERY_LANGUAGES.flatMap(language => searchedTournaments.map(t => ({ tournament: t, query: `${tournamentQuery(t.name)} ${language}`.trim() })))
+  const missing = new Map();
+  const categoryOf = new Map();
+  for (const race of races) {
+    const id = String(race.tournamentId);
+    categoryOf.set(id, race.category);
+    if (!(race.restreams || []).some(s => s.vodUrl)) missing.set(id, (missing.get(id) || 0) + 1);
+  }
+  const searchedTournaments = tournaments.filter(t => missing.get(String(t._id)))
+    .sort((a, b) => missing.get(String(b._id)) - missing.get(String(a._id)));
+  const queries = QUERY_LANGUAGES.flatMap(language => searchedTournaments.map(t => ({ tournament: t, query: `${tournamentQuery(t.name, categoryOf.get(String(t._id)))} ${language}`.trim() })))
     .filter(q => !done.has(q.query));
   let searches = 0;
   for (const { tournament, query } of queries.slice(0, opts.maxSearches)) {
@@ -162,7 +173,7 @@ async function main() {
   const stale = Date.now() - REVALIDATE_DAYS * 24 * 3600 * 1000;
   const toCheck = [...candidates].filter(([id, c]) => {
     const k = known.get(id);
-    return opts.revalidate || !k || !k.validatedAt || new Date(k.validatedAt).getTime() < stale || (c.source === 'manual' && k.status !== 'accepted');
+    return opts.revalidate || (opts.rejected && k && k.status === 'rejected') || !k || !k.validatedAt || new Date(k.validatedAt).getTime() < stale || (c.source === 'manual' && k.status !== 'accepted');
   });
   const channels = await youtube.getChannels(toCheck.map(([id]) => id));
   const oldest = new Date(Math.min(...races.map(r => new Date(r.startedAt).getTime())));
@@ -181,11 +192,21 @@ async function main() {
     }
     const matched = new Map();
     const audio = new Map();
-    for (const video of uploads) {
-      const found = matchVideo(video, index, channel);
-      found.forEach(f => matched.set(String(f.race._id), { race: f.race, title: video.snippet.title }));
+    const counted = new Set();
+    const count = (video, race) => {
+      matched.set(String(race._id), { race, title: video.snippet.title });
       const code = String(video.snippet.defaultAudioLanguage || video.snippet.defaultLanguage || '').split('-')[0];
-      if (found.length && LANGUAGE_NAMES[code]) audio.set(code, (audio.get(code) || 0) + 1);
+      if (!counted.has(video.id) && LANGUAGE_NAMES[code]) audio.set(code, (audio.get(code) || 0) + 1);
+      counted.add(video.id);
+    };
+    for (const video of uploads) matchVideo(video, index, channel).forEach(f => count(video, f.race));
+    // Uploads of a restreamer's schedule, months later
+    const late = uploads.filter(v => !counted.has(v.id));
+    for (const tournament of tournaments) {
+      for (const { roomUrl, video } of matchScheduleUploads(tournament, late)) {
+        const race = byRoom.get(String(roomUrl).replace(/^https?:\/\/(?:www\.)?racetime\.gg/i, '').toLowerCase());
+        if (race && !ownChannel([channel.title, channel.handle].map(normalizeName).filter(Boolean), race)) count(video, race);
+      }
     }
     // The Twitch restreamer the channel is named after ("123<login>", "<login> VODs"), whose language Mido's House gives;
     // not "<login> <country>", another channel of the same team

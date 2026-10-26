@@ -365,11 +365,13 @@ async function findYoutubeRestreams({ dryRun, days }, stats) {
       used.add(video.id);
       link(race, video, `https://www.youtube.com/watch?v=${video.id}`);
     }
+    // Saved channel by channel: the quota may run out on the next one
+    if (!dryRun) {
+      for (const race of touched) await Race.updateOne({ _id: race._id }, { $set: { restreams: race.restreams } });
+    }
+    touched.clear();
   }
   console.log(`\n▶️  YouTube : ${videos} vidéo(s) sur ${channels.size} chaîne(s)`);
-  if (!dryRun) {
-    for (const race of touched) await Race.updateOne({ _id: race._id }, { $set: { restreams: race.restreams } });
-  }
 }
 
 // VODs Twitch or YouTube has deleted since they were found: the link goes, the channel stays

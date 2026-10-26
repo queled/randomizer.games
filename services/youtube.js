@@ -85,10 +85,14 @@ async function searchVideos(query, { after, before } = {}) {
   return (data.items || []).map(i => ({ videoId: i.id.videoId, channelId: i.snippet.channelId, title: i.snippet.title }));
 }
 
-/** The API refused for lack of quota: nothing more until it resets (midnight, Pacific time) */
+/**
+ * The API refused for lack of quota: nothing more until it resets (midnight, Pacific time).
+ * Searches have a daily limit of their own, answered with a 429.
+ */
 function isQuotaError(error) {
   const reasons = ((error.response && error.response.data && error.response.data.error && error.response.data.error.errors) || []).map(e => e.reason);
-  return reasons.includes('quotaExceeded') || reasons.includes('dailyLimitExceeded');
+  return reasons.includes('quotaExceeded') || reasons.includes('dailyLimitExceeded')
+    || (error.response && error.response.status === 429 && reasons.includes('rateLimitExceeded'));
 }
 
 /**

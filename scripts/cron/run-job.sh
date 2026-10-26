@@ -8,7 +8,7 @@
 #   tournaments-update    tournois actifs + rattachement des courses (toutes les 15 min)
 #   schedule-sites        horaires, restreams et VOD des races (Mido's House, Hyrule Town Hall), saisons de ligue, VOD Speedrace, plannings localhorst et iCal (toutes les 15 min)
 #   race-vods             VOD Twitch des joueurs, restreams trouvés sur Twitch (toutes les 30 min)
-#   tournaments-discover  nouveaux tournois des 2 derniers jours, séries async, saisons de ligue, runs GDQ (tous les jours)
+#   tournaments-discover  nouveaux tournois des 2 derniers jours, séries async, saisons de ligue, runs GDQ, chaînes YouTube de restream (tous les jours)
 #   rando-list            cache rando-list, si le dépôt a changé    (tous les jours)
 #   archipelago           jeux d'archipelago.gg et multiworld.gg, puis APWorlds communautaires (tous les jours)
 #   players               joueurs et profils racetime.gg, comptes des participants (tous les jours)
@@ -64,6 +64,7 @@ run_tournaments_discover() {
   timeout 5m node scripts/sync-alttpr-asyncs.js || status=$?
   timeout 10m node scripts/sync-alttpr-league.js --current || status=$?
   timeout 5m node scripts/sync-gdq-runs.js || status=$?
+  timeout 15m node scripts/discover-youtube-restreamers.js --max-searches 40 || status=$?
   return "$status"
 }
 

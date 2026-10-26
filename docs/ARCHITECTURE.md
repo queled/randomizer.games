@@ -53,7 +53,7 @@ En production, la base MongoDB tourne sur le même serveur que le site et n'éco
 | `schedule-sites` | toutes les 15 min | `sync-schedule-sites.js` : horaires et restreams des races des tournois de Mido's House et Hyrule Town Hall, rattachement des courses par leur room, VOD Twitch des restreams, puis `sync-midos-league.js --current` : saison en cours de l'OoTR League, puis `sync-midos-events.js --active` : tournois Mido's House sans bracket en cours, puis `sync-speedrace.js` : VOD saisies sur Speedrace, puis `sync-localhorst.js` : restreams planifiés sur localhorst, puis `sync-ical-restreams.js` : restreams des calendriers iCal (voir plus bas) |
 | `rando-list` | tous les jours à 6h | met à jour la copie locale de rando-list ; si `check-rando-list-changes.js` signale un nouveau commit, `sync-rando-list.js --detect-new` met à jour le cache et les ressources, puis signale les nouveaux jeux, à créer depuis le panneau admin |
 | `archipelago` | tous les jours à 6h20 | `sync-archipelago-games.js` : jeux listés sur [archipelago.gg](https://archipelago.gg/games) et [multiworld.gg](https://multiworld.gg/games) ; ajoute à chaque jeu sa page sur ces sites, le guide d'installation et le wiki (page vérifiée sur le wiki, titre corrigé ou lien retiré quand elle n'existe pas), crée les jeux absents (puis catégorie Twitch et année de sortie) et retire les liens des jeux qui en sont partis, puis `sync-community-apworlds.js` : APWorlds du tableur communautaire (voir plus bas) |
-| `tournaments-discover` | tous les jours à 7h | `discover-tournaments.js --since <il y a 2 jours> --max-pages 3` : nouveaux tournois sur start.gg et Challonge, et ceux liés depuis Mido's House, Hyrule Town Hall et SpeedGaming, puis `sync-alttpr-asyncs.js` : séries async ALTTPR, puis `sync-alttpr-league.js --current` : saison en cours de l'ALTTPR League, puis `sync-gdq-runs.js` : runs randomizer des marathons GDQ (voir plus bas) |
+| `tournaments-discover` | tous les jours à 7h | `discover-tournaments.js --since <il y a 2 jours> --max-pages 3` : nouveaux tournois sur start.gg et Challonge, et ceux liés depuis Mido's House, Hyrule Town Hall et SpeedGaming, puis `sync-alttpr-asyncs.js` : séries async ALTTPR, puis `sync-alttpr-league.js --current` : saison en cours de l'ALTTPR League, puis `sync-gdq-runs.js` : runs randomizer des marathons GDQ (voir plus bas), puis `discover-youtube-restreamers.js --max-searches 40` : chaînes YouTube qui archivent des restreams (voir plus bas) |
 | `players` | tous les jours à 7h30 | `sync-players-from-races.js` : un joueur par compte racetime.gg (source de vérité), au nom de sa dernière course ; `sync-racetime-profiles.js --stale-days 7 --limit 1200` relit le profil racetime des joueurs (chacun une fois par semaine) : nom actuel, compte supprimé ; puis `link-participant-accounts.js --all --apply` relie chaque participant de tournoi au compte racetime qui a couru ses matchs (voir plus bas) |
 | `challonge-check` | tous les jours à 7h45 | `check-challonge-quota.js` : une seule requête Challonge, en erreur sur la page de santé tant que le quota (500 requêtes sur 30 jours glissants) est épuisé ; à son retour, les imports Challonge en attente se lancent à la main |
 | `backup` | tous les jours à 3h30 | `backup-db.js` : archive `mongodump` de la base, 7 gardées |
@@ -216,14 +216,18 @@ Le résultat va dans `race.restreams` (`language`, `url` de la chaîne, `vodUrl`
 
 ### Restreams archivés sur YouTube
 
-Twitch efface les rediffusions en 60 jours au plus ; beaucoup de restreamers les remettent sur YouTube. Avec `YOUTUBE_API_KEY` (Google Cloud, « YouTube Data API v3 »), `sync-race-restreams.js` cherche ensuite, pour les races de tournoi des 30 derniers jours (ou de `--days`, `--youtube-only` pour ne faire que cette étape), les vidéos mises en ligne (`services/youtube.js`) :
-- des chaînes YouTube des restreamers Twitch du tournoi (table `YOUTUBE_CHANNELS`, login Twitch → chaîne, la langue venant de Mido's House) ;
-- des chaînes des vidéos YouTube que Mido's House lie pour le tournoi ;
-- des chaînes communautaires et d'organisateurs de `COMMUNITY_YOUTUBE` (langue audio de la vidéo).
+Twitch efface les rediffusions en 60 jours au plus ; beaucoup de restreamers les remettent sur YouTube. Avec `YOUTUBE_API_KEY` (Google Cloud, « YouTube Data API v3 »), `sync-race-restreams.js` lit ensuite les vidéos mises en ligne (`services/youtube.js`) des chaînes gardées dans `youtubechannels`, pour les races de tournoi des 30 derniers jours (ou de `--days` ; `--youtube-only` ne fait que cette étape).
 
-Une vidéo compte aux mêmes conditions de titre que sur Twitch, hors chaîne d'un joueur et hors vidéo déjà liée : un direct archivé qui couvre le départ de la race (lien à ce moment, `&t=`), sinon une vidéo mise en ligne dans les 14 jours qui ne correspond qu'à une seule race. Elle va dans `race.restreams` avec `url` de la chaîne (`youtube.com/channel/<id>`), `channel` (son nom) et `vodUrl`.
+Une vidéo compte (`helpers/youtube-restreams.js`) quand son titre nomme les joueurs et ne désigne pas un autre événement, comme sur Twitch, hors chaîne d'un joueur et hors vidéo déjà liée : un direct archivé qui couvre le départ de la race (lien à ce moment, `&t=`), sinon une vidéo mise en ligne dans les 14 jours qui ne correspond qu'à une seule race. Elle va dans `race.restreams` avec `url` de la chaîne (`youtube.com/channel/<id>`), `channel` (son nom), `vodUrl` et la langue de la chaîne (sinon la langue audio de la vidéo).
 
-La recherche ne se sert que de `playlistItems` et `videos` (1 unité par lot de 50, sur 10 000 par jour) : jamais de `search` (100 unités). Les vidéos YouTube liées (restreams trouvés ici, liens de Mido's House) sont vérifiées à chaque exécution, comme les VOD Twitch ; celles de Mido's House reçoivent au passage leur chaîne (`url`, `channel`).
+Les chaînes des restreamers ne sont listées nulle part, et la chaîne YouTube qui porte le nom d'un restreamer Twitch est souvent celle de quelqu'un d'autre. `discover-youtube-restreamers.js` réunit des candidates :
+- les chaînes vérifiées à la main (`MANUAL_CHANNELS`) et celles des vidéos que Mido's House lie ;
+- la chaîne YouTube du même nom que chaque restreamer Twitch de Mido's House et Hyrule Town Hall ;
+- les chaînes des vidéos trouvées par une recherche YouTube par tournoi OoTR (« Ocarina of Time Randomizer <tournoi> », YouTube lisant « OoTR » comme « root »), puis par langue (français, deutsch, español, português), quand l'une de ces vidéos est le restream d'une race en base. Une recherche coûte 100 unités : 40 par jour au plus, chacune faite une seule fois (`youtubesearches`, gardé même en `--dry-run`).
+
+Une candidate est gardée (`status: accepted`) quand au moins 2 de ses vidéos sont les restreams de races différentes, sinon écartée ; chaque chaîne est revue au bout de 90 jours (`--revalidate` : toutes). Sa langue est celle de son restreamer Twitch sur Mido's House, sinon la langue audio de ses restreams.
+
+Hors découverte, tout passe par `playlistItems` et `videos` (1 unité par lot de 50, sur 10 000 par jour). Les vidéos YouTube liées (restreams trouvés ici, liens de Mido's House) sont vérifiées à chaque exécution, comme les VOD Twitch ; celles de Mido's House reçoivent au passage leur chaîne (`url`, `channel`).
 
 L'affichage donne la priorité à Twitch : les liens Twitch d'abord ; une vidéo YouTube n'apparaît que si aucune VOD Twitch de sa langue ne reste, et remplace alors le simple lien vers la chaîne Twitch. Les liens YouTube sont rouges, avec le logo YouTube, comme les liens Twitch le sont en violet.
 
@@ -239,6 +243,8 @@ Les schémas sont dans [`models/index.js`](../models/index.js).
 | `matches` | Un match de tournoi et les courses qui y sont liées |
 | `players` | Un joueur = un compte racetime.gg (`userId`), avec ses alias (pseudos utilisés ailleurs) |
 | `marathonruns` | Un run randomizer d'un marathon (GDQ) : marathon, jeu, catégorie, joueurs, vidéos |
+| `youtubechannels` | Une chaîne YouTube candidate pour les restreams : gardée ou écartée, avec sa langue |
+| `youtubesearches` | Les recherches YouTube déjà faites par la découverte des chaînes, et leurs vidéos |
 | `discoveryskips` | Liens Challonge écartés par la découverte speedgaming.org (pas un randomizer, bracket privé…), revus après 30 jours |
 | `rando_list_cache` | Copie brute de rando-list et métadonnées de la dernière synchronisation |
 
@@ -316,6 +322,7 @@ Les scripts qui écrivent en base proposent un mode `--dry-run` (ou n'écrivent 
 | `sync-alttpr-asyncs.js` | `sync:alttpr-asyncs` (+ `:dry`) | Séries async ALTTPR et résultats des qualifs (tâche `tournaments-discover`) |
 | `sync-alttpr-league.js` | `sync:alttpr-league` (+ `:dry`) | Saisons de l'ALTTPR League (Invitational et Open) en tournois (tâche `tournaments-discover`, avec `--current`) |
 | `sync-gdq-runs.js` | `sync:gdq-runs` (+ `:dry`) | Runs randomizer des marathons GDQ (tâche `tournaments-discover`) |
+| `discover-youtube-restreamers.js` | `discover:youtube-restreamers` (+ `:dry`) | Chaînes YouTube qui archivent des restreams (tâche `tournaments-discover`) |
 
 `npm run sync` enchaîne racetime, joueurs et rando-list.
 

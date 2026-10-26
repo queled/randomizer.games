@@ -2,8 +2,8 @@
  * YouTube Data API (v3): channels' uploads, to find the restreams archived there
  * once Twitch has deleted the past broadcast, and which videos are still online.
  *
- * Quota: 10,000 units a day; every call used here costs 1 unit for up to 50 items
- * (search, at 100 units a call, is never used).
+ * Quota: 10,000 units a day; every call here costs 1 unit for up to 50 items, search
+ * aside (100 units a call, for the discovery of channels only).
  */
 
 const axios = require('axios');
@@ -68,11 +68,34 @@ async function getChannels(ids) {
   return channels;
 }
 
+/** The channel of a handle ("@name"), null when none */
+async function getChannelByHandle(handle) {
+  const data = await api('/channels', { part: 'snippet,contentDetails', forHandle: `@${String(handle).replace(/^@/, '')}` });
+  const c = (data.items || [])[0];
+  return c ? { id: c.id, title: c.snippet.title, handle: String(c.snippet.customUrl || '').replace(/^@/, ''), uploads: c.contentDetails.relatedPlaylists.uploads } : null;
+}
+
+/** Videos matching `query` (100 units): [{ videoId, channelId, title }] */
+async function searchVideos(query, { after, before } = {}) {
+  const data = await api('/search', {
+    part: 'snippet', type: 'video', q: query, maxResults: 50,
+    publishedAfter: after ? new Date(after).toISOString() : undefined,
+    publishedBefore: before ? new Date(before).toISOString() : undefined
+  });
+  return (data.items || []).map(i => ({ videoId: i.id.videoId, channelId: i.snippet.channelId, title: i.snippet.title }));
+}
+
+/** The API refused for lack of quota: nothing more until it resets (midnight, Pacific time) */
+function isQuotaError(error) {
+  const reasons = ((error.response && error.response.data && error.response.data.error && error.response.data.error.errors) || []).map(e => e.reason);
+  return reasons.includes('quotaExceeded') || reasons.includes('dailyLimitExceeded');
+}
+
 /**
- * Uploads of a channel published since `since`, newest first, with when they were
- * live (`liveStreamingDetails`) for past broadcasts.
+ * Uploads of a channel published since `since`, newest first (at most `max`), with when
+ * they were live (`liveStreamingDetails`) for past broadcasts.
  */
-async function getUploads(channel, since) {
+async function getUploads(channel, since, max = Infinity) {
   const ids = [];
   let pageToken;
   do {
@@ -82,7 +105,7 @@ async function getUploads(channel, since) {
     // Newest first: stop at the first page reaching past `since`
     if (items.some(i => new Date(i.contentDetails.videoPublishedAt) < since)) break;
     pageToken = data.nextPageToken;
-  } while (pageToken);
+  } while (pageToken && ids.length < max);
   return [...(await getVideos(ids)).values()];
 }
 
@@ -103,4 +126,4 @@ function broadcastAt(video, startAt) {
   return `https://www.youtube.com/watch?v=${video.id}&t=${formatOffset(start - from)}`;
 }
 
-module.exports = { hasKey, videoId, channelId, channelUrl, getVideos, getChannels, getUploads, broadcastAt };
+module.exports = { hasKey, videoId, channelId, channelUrl, getVideos, getChannels, getChannelByHandle, searchVideos, isQuotaError, getUploads, broadcastAt };

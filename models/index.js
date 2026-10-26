@@ -579,6 +579,30 @@ const discoverySkipSchema = new mongoose.Schema({
   checkedAt: Date
 });
 
+// YouTube channels that archive restreams (scripts/discover-youtube-restreamers.js):
+// a channel is kept once its uploads are restreams of races in the base
+const youtubeChannelSchema = new mongoose.Schema({
+  channelId: { type: String, required: true, unique: true },
+  title: String,
+  handle: String,
+  // The Twitch channel it archives, and the language it restreams in
+  twitchLogin: String,
+  language: String,
+  // manual (set by hand), midos (videos Mido's House links), handle (same name as a Twitch restreamer), search (YouTube search)
+  source: String,
+  status: { type: String, enum: ['accepted', 'rejected'] },
+  matchedRaces: Number,
+  validatedAt: Date
+});
+
+// YouTube searches already made by the discovery, not repeated
+const youtubeSearchSchema = new mongoose.Schema({
+  query: { type: String, required: true, unique: true },
+  tournamentId: mongoose.Schema.Types.ObjectId,
+  videos: [{ _id: false, videoId: String, channelId: String }],
+  searchedAt: Date
+});
+
 // Indexes for better query performance
 tournamentSchema.index({ gameId: 1, startDate: -1 });
 // consider also indexing new relation
@@ -634,5 +658,7 @@ module.exports = {
   Player: mongoose.model('Player', playerSchema),
   DiscoverySkip: mongoose.model('DiscoverySkip', discoverySkipSchema),
   MarathonRun: mongoose.model('MarathonRun', marathonRunSchema),
-  AdminSession: mongoose.model('AdminSession', adminSessionSchema)
+  AdminSession: mongoose.model('AdminSession', adminSessionSchema),
+  YoutubeChannel: mongoose.model('YoutubeChannel', youtubeChannelSchema),
+  YoutubeSearch: mongoose.model('YoutubeSearch', youtubeSearchSchema)
 };

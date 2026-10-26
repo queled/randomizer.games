@@ -18,3 +18,30 @@ test('a broadcast covering the race start links to that moment', () => {
   assert.equal(broadcastAt(video, '2025-01-01T23:30:00Z'), null);
   assert.equal(broadcastAt({ id: 'abcdefghijk' }, '2025-01-01T20:10:00Z'), null);
 });
+
+const { raceIndex, matchVideo } = require('../helpers/youtube-restreams');
+
+const race = (id, start, a, b) => ({ _id: id, startedAt: start, entrants: [{ userName: a }, { userName: b }], tournament: {} });
+const RACES = raceIndex([
+  race('r1', '2025-03-01T20:00:00Z', 'Alpha', 'Bravo'),
+  race('r2', '2025-03-01T21:00:00Z', 'Alpha', 'Bravo'),
+  race('r3', '2025-03-08T20:00:00Z', 'Charlie', 'Delta')
+]);
+const CHANNEL = { title: 'Restream Channel', handle: 'restreamchannel' };
+
+test('an archived broadcast is the restream of every race it covers, at its start', () => {
+  const video = { id: 'abcdefghijk', snippet: { title: 'Event: Final - Alpha vs Bravo' },
+    liveStreamingDetails: { actualStartTime: '2025-03-01T19:50:00Z', actualEndTime: '2025-03-01T22:30:00Z' } };
+  assert.deepEqual(matchVideo(video, RACES, CHANNEL).map(f => [f.race._id, f.vodUrl]), [
+    ['r1', 'https://www.youtube.com/watch?v=abcdefghijk&t=600s'],
+    ['r2', 'https://www.youtube.com/watch?v=abcdefghijk&t=4200s']
+  ]);
+});
+
+test('an upload counts when it fits one race only, and never on a player\'s channel', () => {
+  const upload = title => ({ id: 'abcdefghijk', snippet: { title, publishedAt: '2025-03-10T12:00:00Z' } });
+  assert.deepEqual(matchVideo(upload('Charlie vs Delta'), RACES, CHANNEL).map(f => f.race._id), ['r3']);
+  // Two games of the same players: no way to tell which
+  assert.deepEqual(matchVideo({ ...upload('Alpha vs Bravo'), snippet: { title: 'Alpha vs Bravo', publishedAt: '2025-03-02T12:00:00Z' } }, RACES, CHANNEL), []);
+  assert.deepEqual(matchVideo(upload('Charlie vs Delta'), RACES, { title: 'Charlie', handle: 'charlie' }), []);
+});

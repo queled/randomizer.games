@@ -16,6 +16,8 @@
  * The sheet's results win over the rooms (async races, played outside racetime.gg, have none);
  * the bracket's come from the rooms only. Byes and drops are left out of the matches.
  * Swiss players outside the bracket keep the sheet's rank.
+ * `asyncs` ties the event's seeds on an async site (services/alttpr-asyncs.js): its practice
+ * series, and its qualifier seeds with their results, in `alttprAsyncs` as for ALTTPR.
  *
  * Usage:
  *   node scripts/sync-sheet-swiss.js                     # every event of EVENTS
@@ -33,6 +35,7 @@ const connectDB = require('../config/database');
 const { Game, Tournament, Race, Player } = require('../models');
 const { computeProvisionalRanks } = require('../helpers/provisional-ranks');
 const { sideNamesPlayer } = require('../helpers/restream-titles');
+const asyncs = require('../services/alttpr-asyncs');
 
 const DAY_MS = 24 * 3600 * 1000;
 // A Swiss race may be played just before its week (the evening before, in the Americas) or
@@ -51,7 +54,10 @@ const EVENTS = {
     swiss: { name: 'Swiss', rounds: 6, start: '2025-02-19T05:00:00Z', weekDays: 7 },
     bracket: { name: 'Playoffs', size: 16, bestOf: 3, start: '2025-04-02T05:00:00Z' },
     // Sheet name → racetime.gg name, when neither contains the other
-    aliases: { AkumaGath17: 'Akuma17', Seb: 'Sebk', Tso: 'tso15' }
+    aliases: { AkumaGath17: 'Akuma17', Seb: 'Sebk', Tso: 'tso15' },
+    // Its restreams' schedule on SpeedGaming (sync-speedgaming.js)
+    speedgaming: 'smz3_2025',
+    asyncs: { site: asyncs.SMZ3_URL, practice: [10], qualifiers: [836] }
   }
 };
 
@@ -140,6 +146,33 @@ function racesOf(races, config, names) {
 function raceWinner(race, config, names) {
   const first = race.entrants.filter(e => e.status === 'done').sort((a, b) => (a.place || Infinity) - (b.place || Infinity))[0];
   return first ? names.find(n => isPlayer(config, n, first)) || null : null;
+}
+
+/**
+ * The event's async seeds, as `tournament.alttprAsyncs`: each practice series (a button on the
+ * page), then its qualifier seeds, outside any series, with their results
+ */
+async function readAsyncs({ site, practice = [], qualifiers = [] }) {
+  const entries = [];
+  const series = practice.length ? await asyncs.listSeries(site) : [];
+  for (const seriesId of practice) {
+    const found = series.find(s => s.id === seriesId);
+    if (!found) throw new Error(`série ${seriesId} absente de ${site}`);
+    const seeds = await asyncs.getSeriesSeeds(seriesId, site);
+    entries.push({ seriesId, title: found.title, url: found.url, qualifier: false, seedCount: seeds.length, syncedAt: new Date(), seeds: [] });
+  }
+  for (const asyncId of qualifiers) {
+    const [info, results] = [await asyncs.getAsync(asyncId, site), await asyncs.getResults(asyncId, site)];
+    entries.push({
+      title: 'Qualifier',
+      url: asyncs.resultsUrl(asyncId, site),
+      qualifier: true,
+      seedCount: 1,
+      syncedAt: new Date(),
+      seeds: [{ asyncId, mode: info.mode, description: info.description, participants: results.participants, finishers: results.finishers, results: results.results }]
+    });
+  }
+  return entries;
 }
 
 async function syncEvent(key, config, { dryRun, verbose }) {
@@ -293,6 +326,8 @@ async function syncEvent(key, config, { dryRun, verbose }) {
     phases: phases.map(p => ({ ...p, groupCount: 1, state: over || p.bracketType === 'SWISS' ? 'COMPLETED' : 'ACTIVE' })),
     matches: embedded,
     setsTotal: embedded.length,
+    speedgamingEvent: config.speedgaming || undefined,
+    ...(config.asyncs ? { alttprAsyncs: await readAsyncs(config.asyncs) } : {}),
     'source.type': 'sheet',
     'source.externalId': key,
     'source.url': `https://docs.google.com/spreadsheets/d/${config.sheet.id}/edit#gid=${config.sheet.gid}`,
@@ -302,6 +337,9 @@ async function syncEvent(key, config, { dryRun, verbose }) {
   const missing = swiss.filter(m => !m.race);
   const conflicts = swiss.filter(m => m.conflict);
   console.log(`  ${label} : ${players.length} joueurs, ${swiss.length} matchs suisses (${swiss.length - missing.length} rooms), ${bracket.length} matchs de bracket, ${doc.state}`);
+  for (const s of doc.alttprAsyncs || []) {
+    console.log(`     Asyncs : ${s.title} (${s.qualifier ? `${s.seeds[0].finishers}/${s.seeds[0].participants} à l'arrivée` : `${s.seedCount} seed(s)`})`);
+  }
   if (missing.length) console.log(`     ${missing.length} match(s) suisse(s) sans room (async ou room absente)`);
   if (conflicts.length) console.log(`     ⚠️  ${conflicts.length} room(s) dont le vainqueur diffère du tableau (le tableau l'emporte) : ${conflicts.map(m => m.race.url).join(', ')}`);
   if (unknown.size) console.log(`     ⚠️  adversaire(s) absent(s) du classement : ${[...unknown].join(', ')}`);

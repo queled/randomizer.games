@@ -322,6 +322,9 @@ const tournamentSchema = new mongoose.Schema({
       game: Number
     }]
   },
+  // Slug of the tournament's SpeedGaming schedule, for an event the speedgaming.org events
+  // page does not pair with its bracket (sync-speedgaming.js)
+  speedgamingEvent: String,
   // Async series of the tournament on alttprasyncs.com (sync-alttpr-asyncs.js):
   // practice seeds, or qualifiers with their results (live and async together)
   alttprAsyncs: [{

@@ -1614,7 +1614,10 @@ function displayAsyncSeries(tournament) {
   const modeLabel = mode => String(mode || '').split('/').pop().replace(/_/g, ' ');
   const card = (seed, index) => {
     const room = sanitizeExternalUrl(seed.roomUrl);
-    const resultsUrl = sanitizeExternalUrl(`https://alttprasyncs.com/results/${encodeURIComponent(seed.asyncId)}`);
+    // On the series' site (alttprasyncs.com, smz3asyncs.com)
+    let site = 'https://alttprasyncs.com';
+    try { site = new URL(seed.seriesUrl).origin; } catch (e) { /* default site */ }
+    const resultsUrl = sanitizeExternalUrl(`${site}/results/${encodeURIComponent(seed.asyncId)}`);
     const rows = (seed.results || []).map(r => `<tr>
         <td style="padding: 0.25rem 0.5rem; color: #9ca3af; text-align: right;">${r.forfeit ? 'FF' : escHtml(r.place || '')}</td>
         <td style="padding: 0.25rem 0.5rem; color: #e5e7eb;">${escHtml(sanitizeDisplayName(r.name || ''))}</td>

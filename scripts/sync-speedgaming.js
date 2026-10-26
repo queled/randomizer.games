@@ -11,6 +11,8 @@
  * stored matches). sync-schedule-sites.js then finds the Twitch past broadcast of
  * each, as for Mido's House, and sync-race-restreams.js the YouTube upload. A match
  * Mido's House already lists with the same channel is left as it is.
+ * A tournament without a start.gg or Challonge bracket (sync-sheet-swiss.js) names its
+ * schedule in `speedgamingEvent`, read even when the events page does not list it.
  *
  * Usage:
  *   node scripts/sync-speedgaming.js              # events of tournaments running or over for less than 60 days
@@ -83,15 +85,25 @@ function findSet(entry, matches) {
   return candidates.length === 1 && !candidates[0].completedAt ? candidates[0] : null;
 }
 
-/** The racetime.gg race of a scheduled match: its two players, started around the scheduled time */
-function findRace(entry, races) {
-  if (entry.players.length !== 2) return null;
+/**
+ * The racetime.gg race of a scheduled match, started around the scheduled time: of its two
+ * players, or (`loose`, among the tournament's own races) of at least one of them, for a match
+ * SpeedGaming lists with one player or under another name
+ */
+function findRace(entry, races, loose = false) {
+  if (entry.players.length !== 2 && !(loose && entry.players.length)) return null;
   const when = new Date(entry.when).getTime();
   const found = races.filter(r => {
     const start = new Date(r.startedAt).getTime();
+    const named = entry.players.filter(p => (r.entrants || []).some(e => sameName(p, e.userName))).length;
     return start >= when - EARLY_MS && start <= when + 3 * 3600 * 1000
-      && entry.players.every(p => (r.entrants || []).some(e => sameName(p, e.userName)));
+      && (named === entry.players.length || (loose && named >= 1));
   });
+  // Games of one series, restreamed back to back: the first
+  const pair = r => (r.entrants || []).map(e => e.userName).sort().join('|');
+  if (found.length > 1 && found.every(r => pair(r) === pair(found[0]))) {
+    return found.sort((x, y) => new Date(x.startedAt) - new Date(y.startedAt))[0];
+  }
   return found.length === 1 ? found[0] : null;
 }
 
@@ -106,6 +118,8 @@ async function syncEvent(event, tournament, { dryRun }, stats) {
     'entrants.1': { $exists: true },
     'entrants.2': { $exists: false }
   }).select('url startedAt entrants.userName').lean();
+  // Races of the tournament: its matches without a start.gg set (sync-sheet-swiss.js), each game of a series
+  const own = await Race.find({ tournamentId: tournament._id }).select('url startedAt entrants.userName').lean();
   const past = (tournament.midosHouse && tournament.midosHouse.pastRestreams) || [];
   const loginsOf = entry => new Set((entry.restreams || []).map(s => twitchVods.twitchLogin(s.url)).filter(Boolean));
 
@@ -113,7 +127,10 @@ async function syncEvent(event, tournament, { dryRun }, stats) {
   let unmatched = 0;
   for (const entry of schedule) {
     const set = findSet(entry, matches);
-    const race = set ? null : findRace(entry, races);
+    const setRaces = set ? (set.raceUrls && set.raceUrls.length ? set.raceUrls : [set.raceUrl]).filter(Boolean) : [];
+    // A set of several races: the one restreamed
+    const race = setRaces.length === 1 ? null
+      : (!set && findRace(entry, races)) || findRace(entry, own) || findRace(entry, own, true);
     if (!set && !race) unmatched++;
     const when = new Date(entry.when);
     const restreams = entry.channels.map(c => ({
@@ -122,7 +139,8 @@ async function syncEvent(event, tournament, { dryRun }, stats) {
       sourceUrl: `https://twitch.tv/${c.slug}`
     }));
     // Listed already (by Mido's House, or a previous run): the same set or players, around the same time
-    const existing = past.find(r => (set && r.startggSetId === String(set.startggSetId)
+    const setId = set && set.startggSetId != null ? String(set.startggSetId) : undefined;
+    const existing = past.find(r => (setId && r.startggSetId === setId
       || entry.players.every(p => (r.entrants || []).some(n => sameName(p, n))))
       && Math.abs(new Date(r.startAt).getTime() - when.getTime()) < PLAYED_WITHIN_MS);
     if (existing) {
@@ -131,19 +149,20 @@ async function syncEvent(event, tournament, { dryRun }, stats) {
       if (!fresh.length) continue;
       existing.restreams.push(...fresh);
     } else {
-      const raceUrls = set ? (set.raceUrls && set.raceUrls.length ? set.raceUrls : [set.raceUrl]).filter(Boolean) : race ? [race.url] : [];
+      const raceUrls = race ? [race.url] : setRaces;
       past.push({
-        startggSetId: set ? String(set.startggSetId) : undefined,
+        startggSetId: setId,
         startAt: when,
         round: entry.title || undefined,
-        entrants: entry.players,
+        // Found from one of its players: the race's
+        entrants: race && entry.players.length < 2 ? race.entrants.map(e => e.userName) : entry.players,
         // One race: its start dates the VOD better than the schedule
         roomUrl: raceUrls.length === 1 ? `https://racetime.gg${raceUrls[0]}` : undefined,
         restreams
       });
     }
     added++;
-    console.log(`   📺 ${when.toISOString().slice(0, 16)} ${entry.players.join(' vs ')} : ${restreams.map(s => twitchVods.twitchLogin(s.url)).join(', ')}${set ? '' : race ? ` (${race.url})` : ' (ni set ni race)'}`);
+    console.log(`   📺 ${when.toISOString().slice(0, 16)} ${entry.players.join(' vs ')} : ${restreams.map(s => twitchVods.twitchLogin(s.url)).join(', ')}${race ? ` (${race.url})` : set ? '' : ' (ni set ni race)'}`);
   }
 
   console.log(`   ✅ ${event.slug} → ${tournament.name} : ${schedule.length} match(s) restreamé(s), ${added} ajouté(s), ${unmatched} sans set ni race`);
@@ -162,9 +181,14 @@ async function main() {
   const stats = { events: 0, matches: 0, added: 0, errors: 0 };
 
   const events = (await speedgaming.getEvents()).filter(e => !opts.events.length || opts.events.includes(e.slug));
-  const tournaments = await Tournament.find({ $or: [{ 'source.type': 'startgg' }, { 'source.type': 'challonge' }] })
-    .select('_id name fullUrl url source.url startDate endDate matches.startggSetId matches.player1.name matches.player2.name matches.completedAt matches.raceUrl matches.raceUrls midosHouse.pastRestreams').lean();
+  const tournaments = await Tournament.find({ $or: [{ 'source.type': 'startgg' }, { 'source.type': 'challonge' }, { speedgamingEvent: { $nin: [null, ''] } }] })
+    .select('_id name fullUrl url source.url speedgamingEvent startDate endDate matches.startggSetId matches.player1.name matches.player2.name matches.completedAt matches.raceUrl matches.raceUrls midosHouse.pastRestreams').lean();
   const byBracket = new Map();
+  const bySlug = new Map(tournaments.filter(t => t.speedgamingEvent).map(t => [t.speedgamingEvent.toLowerCase(), t]));
+  // Schedules named by a tournament, missing from the events page
+  for (const slug of bySlug.keys()) {
+    if (!events.some(e => e.slug === slug) && (!opts.events.length || opts.events.includes(slug))) events.push({ title: slug, slug, brackets: [] });
+  }
   for (const t of tournaments) {
     for (const url of [t.fullUrl, t.url, t.source && t.source.url]) {
       const key = bracketKey(url);
@@ -173,7 +197,7 @@ async function main() {
   }
 
   for (const event of events) {
-    const tournament = event.brackets.map(bracketKey).filter(Boolean).map(key => byBracket.get(key)).find(Boolean);
+    const tournament = bySlug.get(event.slug) || event.brackets.map(bracketKey).filter(Boolean).map(key => byBracket.get(key)).find(Boolean);
     if (!tournament) continue;
     const recent = !tournament.endDate || new Date(tournament.endDate).getTime() > Date.now() - RECENT_MS;
     if (!opts.all && !opts.events.length && !recent) continue;

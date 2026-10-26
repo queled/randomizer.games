@@ -55,19 +55,36 @@ async function getEvents() {
   return events;
 }
 
+// The API gives at most that many matches per request
+const PAGE_SIZE = 100;
+// Channels that are no stream: "No Stream" (initials NONE), "undecided-not-sg"
+const NOT_A_CHANNEL_RE = /^(norestream|undecided)/;
+
 /**
  * Matches of an event's schedule between two dates:
  * [{ id, when, players: [name], title, channels: [{ slug, language }] }]
+ * Matches without a restream have no channel.
  */
 async function getSchedule(slug, from, to) {
-  const data = await get('/api/schedule/', { event: slug, from: new Date(from).toISOString(), to: new Date(to).toISOString() });
-  if (!Array.isArray(data)) return [];
-  return data.filter(e => e.approved !== false).map(e => ({
+  const entries = new Map();
+  let since = new Date(from).getTime();
+  const until = new Date(to).getTime();
+  while (since < until) {
+    const data = await get('/api/schedule/', { event: slug, from: new Date(since).toISOString(), to: new Date(until).toISOString() });
+    if (!Array.isArray(data) || !data.length) break;
+    for (const e of data) entries.set(e.id, e);
+    const last = Math.max(...data.map(e => new Date(e.when).getTime()));
+    if (data.length < PAGE_SIZE || !(last > since)) break;
+    since = last;
+  }
+  return [...entries.values()].filter(e => e.approved !== false).map(e => ({
     id: e.id,
     when: e.when,
     players: [e.match1, e.match2].filter(Boolean).flatMap(m => (m.players || []).map(p => p.displayName)).filter(Boolean),
     title: (e.match1 && e.match1.title) || e.title || '',
-    channels: (e.channels || []).filter(c => c.slug).map(c => ({ slug: String(c.slug).toLowerCase(), language: c.language }))
+    channels: (e.channels || [])
+      .filter(c => c.slug && c.initials !== 'NONE' && !NOT_A_CHANNEL_RE.test(String(c.slug).toLowerCase()))
+      .map(c => ({ slug: String(c.slug).toLowerCase(), language: c.language }))
   }));
 }
 

@@ -149,7 +149,7 @@ Certains tournois communautaires n'ont ni bracket ni page Mido's House : les org
 - le résultat du tableau l'emporte sur la room (les async n'en ont pas) ; celui du bracket vient des rooms. Les byes et les abandons ne font pas de match ;
 - les joueurs éliminés au suisse gardent le rang du tableau. `aliases` relie un nom du tableau au nom racetime.gg quand aucun ne contient l'autre.
 
-La page du tournoi affiche un bouton « Page du tournoi » vers `fullUrl` (inertia.run pour SMZ3). `--dry-run --verbose` affiche les matchs suisses sans room, le bracket reconstruit et le top 8.
+La page du tournoi affiche un bouton « Page du tournoi » vers `fullUrl` (inertia.run pour SMZ3). `speedgaming` donne le planning de restreams SpeedGaming (voir plus bas), `asyncs` les seeds de smz3asyncs.com (série d'entraînement, qualif et ses résultats). `--dry-run --verbose` affiche les matchs suisses sans room, le bracket reconstruit et le top 8.
 
 ### VOD Speedrace
 
@@ -164,6 +164,8 @@ SpeedGaming restreame des tournois de beaucoup de jeux sur ses propres chaînes 
 `sync-speedgaming.js` retrouve le tournoi de chaque événement par son lien de bracket, et range chaque match joué dans `midosHouse.pastRestreams` du tournoi, avec ses chaînes et sa langue :
 - le set start.gg des deux mêmes joueurs (un nom contient l'autre, sur au moins 4 caractères), terminé dans les heures qui suivent l'heure prévue ; c'est ce qui le relie au match, même joué sur place sans room racetime.gg ;
 - sinon (bracket Challonge, dont les matchs ne sont pas dans le tournoi) la race racetime.gg 1v1 de ces deux joueurs qui démarre autour de l'heure prévue (sa room).
+
+Un tournoi sans bracket start.gg ni Challonge nomme son planning dans `speedgamingEvent` (`sync-sheet-swiss.js` : `smz3_2025`), lu même quand la page events ne le liste pas. Ses matchs n'ont pas de set : chaque entrée va à la room du tournoi qui démarre à l'heure prévue, avec ses deux joueurs ou, quand SpeedGaming n'en inscrit qu'un ou sous un autre nom, avec au moins l'un d'eux (la première manche quand une série enchaîne plusieurs rooms des deux mêmes joueurs). L'API rend au plus 100 matchs par requête : `services/speedgaming.js` les lit page par page. Les pseudo-chaînes (« No Stream », « undecided-not-sg ») ne sont pas des restreams.
 
 Un match déjà listé par Mido's House sur la même chaîne est laissé tel quel. `sync-schedule-sites.js` cherche ensuite la rediffusion Twitch de chacun, comme pour Mido's House. Par défaut, seuls les tournois en cours ou terminés depuis moins de 60 jours sont lus (`--all` : tous ceux de la page, `--event <slug>` : un seul).
 
@@ -196,6 +198,8 @@ Par défaut : matchs des 3 derniers jours (`--days N` pour remonter) ; `--archiv
 `sync-alttpr-asyncs.js` (tâche `tournaments-discover`) rattache chaque série au tournoi ALTTPR dont elle parle, par le nom : même genre de tournoi (main, crosskeys, co-op, spoiler, enemizer…) et même année, ou même numéro de saison ou d'édition. Une série ambiguë est signalée, pas rattachée ; `--link <série> <tournoi>` en rattache une à la main (gardée ensuite), `--unlink` la retire. Le résultat va dans `tournament.alttprAsyncs` :
 - série d'entraînement : titre, lien et nombre de seeds, en bouton sur la page du tournoi ;
 - série de qualifs (titre contenant « qualif ») : chaque seed avec sa room et ses résultats (arrivées live et asyncs ensemble, abandons, VOD), relus pendant 30 jours, affichés dans l'onglet Qualifications (masqués en mode anti-spoiler).
+
+[SMZ3 Asyncs](https://www.smz3asyncs.com) tourne sur le même logiciel (dates en UTC, hash en tableau) : le service prend l'adresse du site en dernier argument. Ses séries ne suivent pas les noms de tournois ALTTPR ; `sync-sheet-swiss.js` les rattache depuis sa config (`asyncs` : série d'entraînement, et seed de qualif hors série, lue sur sa page `/async/<id>`).
 
 ### ALTTPR League
 

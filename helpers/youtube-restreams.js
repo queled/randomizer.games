@@ -8,10 +8,17 @@ const youtube = require('../services/youtube');
 const { normalizeName, titleFitsEvent, titleNamesRace } = require('./restream-titles');
 
 const SAME_RACE_MS = 3600 * 1000;
-// An upload comes within days of the race
-const UPLOAD_MAX_DELAY_MS = 14 * 24 * 3600 * 1000;
+// An upload comes within weeks of the race
+const UPLOAD_MAX_DELAY_MS = 30 * 24 * 3600 * 1000;
 // A broadcast lasts a few hours at most
 const BROADCAST_MAX_MS = 12 * 3600 * 1000;
+const TIEBREAK_RE = /\btie[\s-]?break/i;
+
+// A channel named after one of its players ("<name>_tv", "123<name>"), names of 4 characters at least
+function ownChannel(channelNames, race) {
+  return (race.entrants || []).map(e => normalizeName(e.userName)).filter(n => n.length >= 4)
+    .some(n => channelNames.some(c => c.includes(n) || (c.length >= 4 && n.includes(c))));
+}
 
 function fitsTournament(title, tournament) {
   const mh = (tournament && tournament.midosHouse) || {};
@@ -49,7 +56,8 @@ const playersOf = race => (race.entrants || []).map(e => [e.userName].filter(Boo
  * Races a video is the restream of, with the link to give:
  * - a broadcast archived on YouTube covering the race start, linked at that moment
  *   (every game of a series it covers);
- * - else an upload within days of the race, when it fits one race only.
+ * - else an upload within weeks of the race, when it fits one race only (a title
+ *   saying tie-break picks among the races of the same players the tie-break one).
  * The title names the race's players and no other event; a player's own channel is
  * not a restream.
  * @param channel { title, handle }
@@ -60,7 +68,7 @@ function matchVideo(video, index, channel) {
   const channelNames = [channel.title, channel.handle].map(normalizeName).filter(Boolean);
   const live = video.liveStreamingDetails && video.liveStreamingDetails.actualStartTime ? video.liveStreamingDetails : null;
   const named = race => titleNamesRace(title, playersOf(race)) && fitsTournament(title, race.tournament)
-    && !(race.entrants || []).some(e => channelNames.includes(normalizeName(e.userName)));
+    && !ownChannel(channelNames, race);
 
   if (live) {
     const from = new Date(live.actualStartTime).getTime();
@@ -70,8 +78,9 @@ function matchVideo(video, index, channel) {
       .filter(found => found.vodUrl);
   }
   const published = new Date(video.snippet.publishedAt).getTime();
-  const matching = index.between(published - UPLOAD_MAX_DELAY_MS, published + SAME_RACE_MS).filter(named);
+  let matching = index.between(published - UPLOAD_MAX_DELAY_MS, published + SAME_RACE_MS).filter(named);
+  if (matching.length > 1) matching = matching.filter(race => !!race.tiebreak === TIEBREAK_RE.test(title));
   return matching.length === 1 ? [{ race: matching[0], vodUrl: `https://www.youtube.com/watch?v=${video.id}` }] : [];
 }
 
-module.exports = { fitsTournament, raceIndex, matchVideo };
+module.exports = { fitsTournament, raceIndex, matchVideo, ownChannel };

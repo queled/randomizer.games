@@ -7,7 +7,12 @@
  * with one round robin phase, one group per division, from its racetime.gg races:
  *   - the rooms Mido's House lists for the season (series "league"), with their division;
  *   - races of the season's goal ("League Season 10") whose info starts with
- *     "Div 7D: A vs B", as the League opens rooms Mido's House does not list.
+ *     "Div 7D: A vs B", as the League opens rooms Mido's House does not list;
+ *   - rooms opened by hand with another goal, played during the season, whose info
+ *     starts with "League" and names a division ("League S10 Div 7D - A vs B",
+ *     "League Race A vs B division 7C tiebreak"); a season named in it has to be this one.
+ * Tie-breaks are not matches: their races are linked to the season as tie-breaks of
+ * their division.
  * Practice races with that goal (several entrants, no division) are left out.
  * The winner is the entrant who finished first; a race nobody finished has none.
  * The standings shown are wins and losses, not the League's official points.
@@ -35,6 +40,13 @@ const MAX_SEASON = 50;
 // A season is over once its last race is that old and nothing is scheduled
 const SEASON_OVER_AFTER_MS = 30 * 24 * 3600 * 1000;
 const DIVISION_INFO_RE = /^Div(?:ision)?\s*([0-9]+[A-Z]?)\s*:/i;
+// Info of a room opened by hand: "League ...", with a season, a division, a tie-break
+const HAND_INFO_RE = /^League\b/i;
+const HAND_SEASON_RE = /\b(?:S|Season)\s*(\d+)\b/i;
+const HAND_DIVISION_RE = /\bDiv(?:ision)?\s*([0-9]+[A-Z]?)\b/i;
+const TIEBREAK_RE = /\btie[\s-]?break/i;
+// Rooms opened by hand count from the season's first race to this long after its last
+const HAND_ROOMS_AFTER_MS = 14 * 24 * 3600 * 1000;
 
 function parseArgs() {
   const args = process.argv.slice(2);
@@ -73,8 +85,9 @@ function raceWinner(race) {
 }
 
 /**
- * Matches of a season: { race, division } for each 1v1 race played in it. Races
- * already linked to another tournament (a goal picked by mistake) stay there.
+ * Matches of a season: { race, division } for each 1v1 race played in it, and its
+ * tie-breaks apart. Races already linked to another tournament (a goal picked by
+ * mistake) stay there.
  */
 async function collectSeasonMatches(season, mhRaces, tournamentId) {
   const divisionByRoom = new Map();
@@ -90,23 +103,41 @@ async function collectSeasonMatches(season, mhRaces, tournamentId) {
     ]
   }).select('url goal info status startedAt endedAt tournamentId entrants.userId entrants.userName entrants.status entrants.place').lean();
 
+  // Rooms opened by hand during the season
+  const starts = races.filter(r => r.startedAt).map(r => new Date(r.startedAt).getTime());
+  if (starts.length) {
+    const byHand = await Race.find({
+      url: { $nin: races.map(r => r.url) },
+      category: 'ootr',
+      info: { $regex: '^League\\b.*\\bDiv', $options: 'i' },
+      startedAt: { $gte: new Date(Math.min(...starts)), $lte: new Date(Math.max(...starts) + HAND_ROOMS_AFTER_MS) }
+    }).select('url goal info status startedAt endedAt tournamentId entrants.userId entrants.userName entrants.status entrants.place').lean();
+    races.push(...byHand.filter(r => {
+      const named = String(r.info || '').split('\n')[0].match(HAND_SEASON_RE)?.[1];
+      return !named || Number(named) === Number(season);
+    }));
+  }
+
   const matches = [];
+  const tiebreaks = [];
   for (const race of races) {
     if (race.status === 'cancelled') continue;
     if (race.tournamentId && String(race.tournamentId) !== String(tournamentId)) continue;
-    const fromInfo = String(race.info || '').split('\n')[0].match(DIVISION_INFO_RE)?.[1];
-    const division = divisionByRoom.get(race.url) || fromInfo;
+    const line = String(race.info || '').split('\n')[0];
+    const byHand = HAND_INFO_RE.test(line);
+    const division = divisionByRoom.get(race.url) || line.match(DIVISION_INFO_RE)?.[1] || (byHand && line.match(HAND_DIVISION_RE)?.[1]);
     const players = (race.entrants || []).filter(e => e.userId);
     if (!division || players.length !== 2) continue;
-    matches.push({ race, division, players });
+    (byHand && TIEBREAK_RE.test(line) ? tiebreaks : matches).push({ race, division: division.toUpperCase(), players });
   }
-  return matches.sort((a, b) => new Date(a.race.startedAt || 0) - new Date(b.race.startedAt || 0));
+  const byStart = (a, b) => new Date(a.race.startedAt || 0) - new Date(b.race.startedAt || 0);
+  return { matches: matches.sort(byStart), tiebreaks };
 }
 
 async function syncSeason(season, mhRaces, { game, dryRun }) {
   const filter = { 'source.type': 'midos-house', 'source.externalId': `${SERIES}/${season}` };
   const existing = await Tournament.findOne(filter).select('_id').lean();
-  const matches = await collectSeasonMatches(season, mhRaces, existing?._id);
+  const { matches, tiebreaks } = await collectSeasonMatches(season, mhRaces, existing?._id);
   if (!matches.length) {
     console.log(`  Season ${season}: aucun match trouvé, ignorée`);
     return null;
@@ -187,12 +218,15 @@ async function syncSeason(season, mhRaces, { game, dryRun }) {
     'source.importedAt': new Date()
   };
 
-  console.log(`  Season ${season}: ${embedded.length} matchs (${mhRaces.filter(r => r.room).length} salons Mido's House), ${divisions.size} divisions, ${participants.size} joueurs, ${doc.state}`);
+  console.log(`  Season ${season}: ${embedded.length} matchs (${mhRaces.filter(r => r.room).length} salons Mido's House), ${tiebreaks.length} tie-break(s), ${divisions.size} divisions, ${participants.size} joueurs, ${doc.state}`);
   if (dryRun) return null;
 
   await Tournament.updateOne(filter, { $set: doc }, { upsert: true });
   const tournament = await Tournament.findOne(filter).select('_id').lean();
   await Race.updateMany({ url: { $in: matches.map(m => m.race.url) } }, { $set: { tournamentId: tournament._id } });
+  for (const { race, division } of tiebreaks) {
+    await Race.updateOne({ _id: race._id }, { $set: { tournamentId: tournament._id, tiebreak: true, tournamentPhase: phase, tournamentPool: divisionName(division) } });
+  }
   return tournament;
 }
 

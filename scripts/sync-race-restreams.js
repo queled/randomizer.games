@@ -307,7 +307,7 @@ async function findYoutubeRestreams({ dryRun, days }, stats) {
     status: 'finished',
     url: /^\/[^/]+\/[^/]+$/,
     startedAt: { $gte: since }
-  }).select('_id url startedAt tournamentId restreams entrants.userName').lean();
+  }).select('_id url startedAt tournamentId tiebreak restreams entrants.userName').lean();
   const tournaments = await Tournament.find({ _id: { $in: [...new Set(races.map(r => String(r.tournamentId)))] } })
     .select('_id name midosHouse.site midosHouse.series midosHouse.event midosHouse.pastRestreams').lean();
   if (!tournaments.length) return;

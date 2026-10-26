@@ -30,7 +30,7 @@ const { Race, Tournament, YoutubeChannel, YoutubeSearch } = require('../models')
 const twitchVods = require('../services/twitch-vods');
 const youtube = require('../services/youtube');
 const { raceIndex, matchVideo } = require('../helpers/youtube-restreams');
-const { LANGUAGE_NAMES } = require('../helpers/restream-titles');
+const { normalizeName, LANGUAGE_NAMES } = require('../helpers/restream-titles');
 
 const MIN_MATCHES = 2;
 const REVALIDATE_DAYS = 90;
@@ -39,6 +39,7 @@ const MAX_UPLOADS = 5000;
 // Channels checked by hand (channel id → Twitch channel it archives)
 const MANUAL_CHANNELS = {
   UCd3Qyn3yRGaOzEIZojyq2CA: 'zeldaspeedruns',
+  UCVVKtZgs5O5M4ZeAvw_EUmg: 'zeldaspeedrunsde',
   UCe_uLJvuvlohlZ6RPNClkLw: 'aosuna',
   UCho0rakwbqB87CDoE6x5CuA: 'randomizerbrasil',
   UCRg3lnaAXr2wH2py2Jy34HA: null,
@@ -94,7 +95,7 @@ async function main() {
   await connectDB();
 
   const races = await Race.find({ tournamentId: { $ne: null }, status: 'finished', url: /^\/[^/]+\/[^/]+$/ })
-    .select('_id url category startedAt tournamentId entrants.userName').lean();
+    .select('_id url category startedAt tournamentId tiebreak entrants.userName').lean();
   const tournaments = await Tournament.find({ _id: { $in: [...new Set(races.map(r => String(r.tournamentId)))] } })
     .select('_id name startDate endDate midosHouse.site midosHouse.series midosHouse.event midosHouse.pastRestreams midosHouse.schedule').lean();
   const byId = new Map(tournaments.map(t => [String(t._id), t]));
@@ -154,7 +155,7 @@ async function main() {
     if (matchVideo(video, index, channel).length) foundChannels.set(video.snippet.channelId, video.snippet.channelTitle);
   }
   [...foundChannels.keys()].forEach(id => add(id, { source: 'search' }));
-  known.forEach((k, id) => { if (k.source === 'search') add(id, { source: 'search' }); });
+  known.forEach((k, id) => add(id, { source: k.source, twitchLogin: k.twitchLogin }));
   console.log(`🔍 ${searches} recherche(s) YouTube, ${Math.max(0, queries.length - searches)} restante(s) ; ${new Set(found.map(v => v.channelId)).size} chaîne(s) dans les résultats, dont ${foundChannels.size} avec un restream ; ${candidates.size} chaîne(s) candidate(s)`);
 
   // Channels to (re)validate
@@ -186,7 +187,14 @@ async function main() {
       const code = String(video.snippet.defaultAudioLanguage || video.snippet.defaultLanguage || '').split('-')[0];
       if (found.length && LANGUAGE_NAMES[code]) audio.set(code, (audio.get(code) || 0) + 1);
     }
-    const twitchLogin = candidate.twitchLogin || (known.get(id) && known.get(id).twitchLogin) || null;
+    // The Twitch restreamer the channel is named after ("123<login>", "<login> VODs"), whose language Mido's House gives;
+    // not "<login> <country>", another channel of the same team
+    const namedAfterLogin = name => [...restreamers.keys()].find(login => {
+      const n = normalizeName(login);
+      return n.length >= 4 && name.includes(n) && /^(?:\d|tv|vods?|yt|replays?)*$/.test(name.replace(n, ''));
+    });
+    const namedAfter = namedAfterLogin(normalizeName(channel.title)) || namedAfterLogin(normalizeName(channel.handle));
+    const twitchLogin = candidate.twitchLogin || (known.get(id) && known.get(id).twitchLogin) || namedAfter || null;
     const topAudio = [...audio].sort((a, b) => b[1] - a[1])[0];
     const accepted = candidate.source === 'manual' || candidate.source === 'midos' || matched.size >= MIN_MATCHES;
     results.push({

@@ -20,6 +20,8 @@
  *     helpers/midos-event-matches.js `roundOf`);
  *   - perRace: one match per race (team events scoring a point per race won).
  * `teams`: the sides are Mido's House teams, each race played by one player of each.
+ * `resultsSheet`: the Google Sheet where the organizers kept the results of a phase, which
+ * fills in the matches the rooms leave without a winner (async races) and wins over them.
  * `startggUrl`: the start.gg bracket of the last phase alone, which Mido's House does not
  * link: linked from the tournament page, the event staying rebuilt here with all its phases.
  *
@@ -32,6 +34,7 @@
 
 const path = require('path');
 const axios = require('axios');
+const { parse } = require('csv-parse/sync');
 const mongoose = require('mongoose');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env'), quiet: true });
 
@@ -82,6 +85,10 @@ const EVENTS = {
   'fr/6': {
     name: 'Tournoi Francophone Saison 6',
     startggUrl: 'https://www.start.gg/tournament/tournoi-franco-s6-brackets-top-16/event/top-16-bracket',
+    resultsSheet: {
+      id: '1rgVUygbbKge23UYtrPHhjczRx1xgTnsDropOnPkHgvw', gid: 1964569891, playersGid: 0, phase: 'Swiss',
+      names: { PoireofLavement: 'PoireDuLavement' }
+    },
     phases: {
       Swiss: { name: 'Swiss', bracketType: 'SWISS' },
       Bracket: { name: 'Bracket', bracketType: 'SINGLE_ELIMINATION', rounds: ['Round 1', 'Quarterfinal', 'Semifinal', 'Final'] }
@@ -138,6 +145,58 @@ async function getEventRaces(series, event) {
 async function linksBracket(url) {
   const { data } = await axios.get(url, { timeout: 20000, headers: { 'User-Agent': 'RandomizerHub-sync/1.0 (+tournament index)' } });
   return BRACKET_LINK_RE.test(String(data));
+}
+
+const sheetCsv = async (id, gid) => {
+  const url = `https://docs.google.com/spreadsheets/d/${id}/export?format=csv&gid=${gid}`;
+  const { data } = await axios.get(url, { timeout: 20000, responseType: 'text' });
+  return parse(String(data), { relax_column_count: true }).map(row => row.map(cell => String(cell).trim()));
+};
+const squash = name => String(name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+/**
+ * Results of a phase kept in a Google Sheet: a row per player with a column per round
+ * ('Round 1'…, 'WIN' or 'LOSE'), and a tab of the players with their Twitch channel.
+ * A side is found by its name (on Mido's House or racetime.gg), then its Twitch channel, then a name starting the other
+ * one; `names` gives the sheet name of the others, by racetime name.
+ * Sets the winner of each match whose players the sheet tells apart.
+ */
+async function applyResultsSheet(matches, sheet) {
+  const [header, ...rows] = await sheetCsv(sheet.id, sheet.gid);
+  const [playersHeader, ...players] = await sheetCsv(sheet.id, sheet.playersGid);
+  const channelCol = playersHeader.findIndex(h => /twitch/i.test(h));
+  const channels = new Map(players.map(p => [squash(p[0]), squash((p[channelCol] || '').match(/twitch\.tv\/([^/?#]+)/i)?.[1])]));
+  const entries = rows.filter(r => r[0]).map(r => ({
+    name: squash(r[0]),
+    channel: channels.get(squash(r[0])) || null,
+    result: round => (r[header.indexOf(`Round ${round}`)] || '').toUpperCase()
+  }));
+
+  const list = matches.filter(m => m.phase === sheet.phase);
+  const sides = new Map(list.flatMap(m => m.sideInfo).map(side => [side.key, side]));
+  const accounts = new Map((await Player.find({ userId: { $in: [...sides.values()].map(side => side.userId).filter(Boolean) } })
+    .select('userId name twitch').lean()).map(p => [p.userId, p]));
+  const unique = found => (found.length === 1 ? found[0] : null);
+  const entryOf = new Map([...sides.values()].map(side => {
+    const account = accounts.get(side.userId);
+    const names = [side.name, account?.name].filter(Boolean).map(n => squash(sheet.names?.[n] || n));
+    const channel = squash(account?.twitch);
+    const entry = unique(entries.filter(e => names.includes(e.name)))
+      || unique(entries.filter(e => e.channel && (names.includes(e.channel) || e.channel === channel)))
+      || unique(entries.filter(e => e.name.length >= 4 && names.some(n => n.length >= 4 && (e.name.startsWith(n) || n.startsWith(e.name)))));
+    return [side.key, entry];
+  }));
+
+  const stats = { filled: 0, overruled: 0, unmatched: [...sides.values()].filter(side => !entryOf.get(side.key)).map(side => side.name) };
+  for (const m of list) {
+    const [a, b] = m.sides.map(key => entryOf.get(key)?.result(m.round));
+    const winner = a === 'WIN' && b === 'LOSE' ? m.sides[0] : a === 'LOSE' && b === 'WIN' ? m.sides[1] : null;
+    if (!winner || winner === m.winner) continue;
+    stats[m.winner ? 'overruled' : 'filled']++;
+    m.winner = winner;
+    m.doneAt = m.doneAt || Math.max(0, ...m.games.map(g => g.doneAt || g.startAt).filter(Boolean)) || null;
+  }
+  return stats;
 }
 
 // Entrant who won the race: the first one to finish
@@ -317,7 +376,9 @@ async function syncEvent(key, config, { game, dryRun, verbose }) {
   const { games, tiebreaks, unknownPhases } = buildGames(mhRaces, racesByUrl, config, replaced);
   const phaseList = Object.values(config.phases);
   const phases = phaseList.map((p, i) => ({ name: p.name, bracketType: p.bracketType, phaseOrder: i + 1 }));
-  const matches = inferWalkovers(buildMatches(games), phases);
+  const built = buildMatches(games);
+  const sheetStats = config.resultsSheet ? await applyResultsSheet(built, config.resultsSheet) : null;
+  const matches = inferWalkovers(built, phases);
   // A walkover is over by the winner's next match
   for (const m of matches.filter(x => x.walkover && !x.doneAt)) {
     const next = matches.filter(o => o !== m && o.phase === m.phase && o.sides.includes(m.winner) && o.startAt).map(o => o.startAt);
@@ -437,6 +498,10 @@ async function syncEvent(key, config, { game, dryRun, verbose }) {
   const walkovers = matches.filter(m => m.walkover).length;
   console.log(`  ${label} : ${embedded.length} matchs (${games.length} races), ${tiebreaks.length} tie-break(s), ${entrants.size} ${config.teams ? 'équipes' : 'joueurs'}, ${doc.state}`);
   if (walkovers) console.log(`     ${walkovers} vainqueur(s) déduit(s) du tour suivant (match sans résultat)`);
+  if (sheetStats) {
+    console.log(`     Tableau des résultats : ${sheetStats.filled} vainqueur(s) ajouté(s), ${sheetStats.overruled} corrigé(s)`);
+    if (sheetStats.unmatched.length) console.log(`     ⚠️  absent(s) du tableau : ${sheetStats.unmatched.join(', ')}`);
+  }
   if (unknown) console.log(`     ${unknown} match(s) joué(s) sans résultat connu (async, personne à l'arrivée)`);
   if (replaced.size) console.log(`     ${replaced.size} room(s) annulée(s) remplacée(s) par la course rejouée : ${[...replaced.values()].map(r => r.url).join(', ')}`);
   const elsewhere = races.filter(r => !racesByUrl.has(r.url)).length;

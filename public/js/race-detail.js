@@ -441,12 +441,17 @@
     }
   }
 
-  function restreamChannelName(url) {
+  const isYoutubeUrl = url => /^https?:\/\/(?:www\.|m\.)?(?:youtube\.com|youtu\.be)\//.test(String(url || ''));
+  const isYoutubeStream = stream => isYoutubeUrl(stream.vodUrl || stream.url);
+
+  // `channel`: the YouTube channel's name, its link only giving its id
+  function restreamChannelName(url, channel) {
     try {
       const u = new URL(url);
-      const channel = u.pathname.split('/').filter(Boolean)[0];
-      if (!channel || channel === 'videos' || channel === 'watch' || /youtu\.?be/.test(u.hostname)) return u.hostname.replace(/^www\./, '');
-      return channel;
+      if (isYoutubeUrl(url)) return channel || u.hostname.replace(/^www\./, '');
+      const channelName = u.pathname.split('/').filter(Boolean)[0];
+      if (!channelName || channelName === 'videos') return u.hostname.replace(/^www\./, '');
+      return channelName;
     } catch (e) {
       return url;
     }
@@ -456,15 +461,22 @@
     return String(url || '').replace(/^https?:\/\/(?:www\.)?racetime\.gg/i, '').replace(/\/+$/, '').toLowerCase();
   }
 
-  // Restreams of this race: Mido's House's, then those found from Twitch titles (sync-race-restreams.js), one per channel
+  // Restreams of this race: Mido's House's, then those found on Twitch and YouTube (sync-race-restreams.js), one per channel, Twitch first
   function findRestreams(race, tournament) {
     const seen = new Set();
-    return findMidosHouseRestreams(race, tournament).concat(race.restreams || []).filter(stream => {
-      const key = restreamChannelName(stream.url || stream.vodUrl || '').toLowerCase();
+    const merged = findMidosHouseRestreams(race, tournament).concat(race.restreams || []).filter(stream => {
+      // A YouTube video linked without its channel: the video itself
+      const key = (isYoutubeStream(stream) && !stream.channel ? stream.vodUrl || stream.url : restreamChannelName(stream.url || stream.vodUrl || '', stream.channel)).toLowerCase();
       if (seen.has(key)) return false;
       seen.add(key);
       return true;
     });
+    // A YouTube video only when no Twitch VOD in its language is left, then in place of the Twitch channel
+    const language = st => st.language || '';
+    const twitchVodLanguages = new Set(merged.filter(st => !isYoutubeStream(st) && st.vodUrl).map(language));
+    const youtube = merged.filter(st => isYoutubeStream(st) && !twitchVodLanguages.has(language(st)));
+    const youtubeVodLanguages = new Set(youtube.filter(st => st.vodUrl).map(language));
+    return merged.filter(st => !isYoutubeStream(st) && (st.vodUrl || !youtubeVodLanguages.has(language(st)))).concat(youtube);
   }
 
   // Restreams of this race on Mido's House: by its racetime.gg room, else the race of its start.gg set starting at the same time
@@ -488,18 +500,23 @@
     return bySet ? bySet.r.restreams : [];
   }
 
-  // Restream button, one per language: the VOD at the race start, or the channel while the race is not over yet
+  // Restream button, one per language: the VOD at the race start (Twitch, else YouTube), or the channel while the race is not over yet
   function renderRestreamLink(stream, live) {
-    const vod = /^https:\/\/www\.twitch\.tv\/videos\/\d+/.test(stream.vodUrl || '') ? sanitizeExternalUrl(stream.vodUrl) : '';
-    const href = vod || (live ? sanitizeExternalUrl(stream.url) : '');
+    const youtube = isYoutubeStream(stream);
+    const isVod = youtube ? isYoutubeUrl(stream.vodUrl) : /^https:\/\/www\.twitch\.tv\/videos\/\d+/.test(stream.vodUrl || '');
+    const vod = isVod ? sanitizeExternalUrl(stream.vodUrl) : '';
+    const href = vod || (live && !youtube ? sanitizeExternalUrl(stream.url) : '');
     if (!href) return '';
     const t = (key, fallback) => (typeof i18n !== 'undefined' && i18n.t(key)) || fallback;
-    const channel = restreamChannelName(stream.url || href);
+    const channel = restreamChannelName(stream.url || href, stream.channel);
     const language = restreamLanguageLabel(stream.language);
     const label = vod ? '▶ ' + t('raceDetail.watchRestream', 'Watch the restream') : t('raceDetail.restream', 'Restream');
     // Race running: the restream is live, same blinking dot as the players' LIVE buttons
     const liveBadge = '<span style="display:inline-flex;align-items:center;gap:0.35rem;color:#fca5a5;font-size:0.8rem;font-weight:700;letter-spacing:0.03em;"><span style="width:8px;height:8px;background:#dc2626;border-radius:50%;animation:pulse 2s cubic-bezier(0.4,0,0.6,1) infinite;"></span>LIVE</span>';
-    return `<a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(channel)}" style="display:inline-flex;align-items:center;gap:0.6rem;background-color:#1F2937;color:#E9D5FF;font-weight:600;padding:0.75rem 1.5rem;border-radius:0.5rem;border:2px solid #9146FF;text-decoration:none;transition:all 0.2s;font-size:1rem;" data-hover-style="background:#3b0764" data-rest-style="background:#1F2937"><img src="/assets/twitch.svg" alt="Twitch" style="width:22px;height:22px;"><span>${escapeHtml(label)}</span>${vod ? '' : liveBadge}<span style="color:#c4b5fd;font-weight:400;font-size:0.875rem;">${escapeHtml([language, channel].filter(Boolean).join(' · '))}</span></a>`;
+    const colors = youtube
+      ? { text: '#FEE2E2', border: '#FF0033', hover: '#450a0a', meta: '#fca5a5', icon: 'youtube', alt: 'YouTube' }
+      : { text: '#E9D5FF', border: '#9146FF', hover: '#3b0764', meta: '#c4b5fd', icon: 'twitch', alt: 'Twitch' };
+    return `<a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(channel)}" style="display:inline-flex;align-items:center;gap:0.6rem;background-color:#1F2937;color:${colors.text};font-weight:600;padding:0.75rem 1.5rem;border-radius:0.5rem;border:2px solid ${colors.border};text-decoration:none;transition:all 0.2s;font-size:1rem;" data-hover-style="background:${colors.hover}" data-rest-style="background:#1F2937"><img src="/assets/${colors.icon}.svg" alt="${colors.alt}" style="width:22px;height:22px;"><span>${escapeHtml(label)}</span>${vod ? '' : liveBadge}<span style="color:${colors.meta};font-weight:400;font-size:0.875rem;">${escapeHtml([language, channel].filter(Boolean).join(' · '))}</span></a>`;
   }
 
   async function loadLiveStreams(race) {

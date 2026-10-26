@@ -15,7 +15,12 @@
  *     that moment, looked up until 12 h after the race end;
  *   - --highlights: highlights / uploads (kept by Twitch) for older races, when
  *     the title fits one race of the tournament only.
- * Stored in `race.restreams`. VODs Twitch has deleted since are dropped,
+ * Then on YouTube (with YOUTUBE_API_KEY), where restreamers archive their broadcasts
+ * once Twitch deletes them: the uploads of the restreamers' YouTube channels, of the
+ * channels Mido's House links videos of for the tournament and of community channels,
+ * matched the same way (the broadcast running at the race start, or an upload whose
+ * title fits one race only). The tournament page shows Twitch first.
+ * Stored in `race.restreams`. VODs Twitch or YouTube has deleted since are dropped,
  * keeping who restreamed.
  *
  * Usage:
@@ -23,6 +28,7 @@
  *   node scripts/sync-race-restreams.js --days 60       # backfill, as far as Twitch keeps past broadcasts
  *   node scripts/sync-race-restreams.js --days 60 --recheck   # again for races already searched (a channel added)
  *   node scripts/sync-race-restreams.js --days 3650 --highlights   # older races: highlights
+ *   node scripts/sync-race-restreams.js --days 3650 --youtube-only # older races: YouTube alone
  *   node scripts/sync-race-restreams.js --dry-run
  */
 
@@ -34,7 +40,8 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env'), quiet: true
 const connectDB = require('../config/database');
 const { Race, Tournament } = require('../models');
 const twitchVods = require('../services/twitch-vods');
-const { titleFitsEvent, titleNamesRace, LANGUAGE_NAMES } = require('../helpers/restream-titles');
+const youtube = require('../services/youtube');
+const { normalizeName, titleFitsEvent, titleNamesRace, LANGUAGE_NAMES } = require('../helpers/restream-titles');
 
 const RACETIME_DELAY_MS = 500;
 const RETRY_AFTER_END_MS = 12 * 3600 * 1000;
@@ -45,6 +52,20 @@ const SAME_RACE_MS = 3600 * 1000;
 // Community channels restreaming in their language, looked up for every
 // tournament; the language comes from the broadcast
 const COMMUNITY_RESTREAMERS = ['randomizerbrasil'];
+// YouTube channels where Twitch restreamers archive their broadcasts (Twitch login → channel id)
+const YOUTUBE_CHANNELS = {
+  zeldaspeedruns: 'UCd3Qyn3yRGaOzEIZojyq2CA',
+  zeldaspeedruns2: 'UCd3Qyn3yRGaOzEIZojyq2CA',
+  zeldaspeedruns_3: 'UCd3Qyn3yRGaOzEIZojyq2CA',
+  papy_grant: 'UCn1HT_dXAidJrbP5XDJ6KKA',
+  aosuna: 'UCe_uLJvuvlohlZ6RPNClkLw',
+  randomizerbrasil: 'UCho0rakwbqB87CDoE6x5CuA',
+  slugcentral: 'UCwS4v4KatyOubmrF6IXRrqA'
+};
+// Community and organisers' YouTube channels, looked up for every tournament
+const COMMUNITY_YOUTUBE = ['UCRg3lnaAXr2wH2py2Jy34HA', 'UChfm7rmNqD6k3Ri_Ze32t5A'];
+// YouTube keeps broadcasts: races this old at least are looked up there
+const YOUTUBE_MIN_DAYS = 30;
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -52,12 +73,13 @@ function sleep(ms) {
 
 function parseArgs() {
   const args = process.argv.slice(2);
-  const opts = { dryRun: false, days: 2, highlights: false, recheck: false };
+  const opts = { dryRun: false, days: 2, highlights: false, recheck: false, youtubeOnly: false };
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
       case '--dry-run': opts.dryRun = true; break;
       case '--highlights': opts.highlights = true; break;
       case '--recheck': opts.recheck = true; break;
+      case '--youtube-only': opts.youtubeOnly = true; break;
       case '--days': opts.days = Math.max(1, parseInt(args[++i], 10) || 2); break;
     }
   }
@@ -279,19 +301,115 @@ async function findHighlights({ dryRun, days }, stats) {
   }
 }
 
-// VODs Twitch has deleted since they were found: the link goes, the channel stays
+// YouTube videos linked to a restream, Mido's House's and those found here
+function youtubeVideoIds(tournament, races) {
+  const streams = [...((tournament.midosHouse && tournament.midosHouse.pastRestreams) || []).flatMap(r => r.restreams || []),
+    ...races.flatMap(r => r.restreams || [])];
+  return new Set(streams.flatMap(s => [youtube.videoId(s.vodUrl), youtube.videoId(s.url)]).filter(Boolean));
+}
+
+// Restreams archived on YouTube, for races without one there yet
+async function findYoutubeRestreams({ dryRun, days }, stats) {
+  const since = new Date(Date.now() - Math.max(days, YOUTUBE_MIN_DAYS) * 24 * 3600 * 1000);
+  const races = await Race.find({
+    tournamentId: { $ne: null },
+    status: 'finished',
+    url: /^\/[^/]+\/[^/]+$/,
+    startedAt: { $gte: since }
+  }).select('_id url startedAt tournamentId restreams entrants.userName').lean();
+  const tournaments = await Tournament.find({ _id: { $in: [...new Set(races.map(r => String(r.tournamentId)))] } })
+    .select('_id name midosHouse.site midosHouse.series midosHouse.event midosHouse.pastRestreams midosHouse.schedule').lean();
+  if (!tournaments.length) return;
+
+  // Each tournament's channels: its Twitch restreamers' YouTube channels, the channels of the videos Mido's House links, the community's
+  const contexts = tournaments.map(t => ({ tournament: t, ...midosHouseRestreams(t), races: races.filter(r => String(r.tournamentId) === String(t._id)) }));
+  const linked = await youtube.getVideos(contexts.flatMap(c => [...youtubeVideoIds(c.tournament, [])]));
+  for (const context of contexts) {
+    const languageByChannel = new Map();
+    for (const [login, language] of context.languageByLogin) {
+      if (YOUTUBE_CHANNELS[login] && !languageByChannel.has(YOUTUBE_CHANNELS[login])) languageByChannel.set(YOUTUBE_CHANNELS[login], language);
+    }
+    for (const id of youtubeVideoIds(context.tournament, [])) {
+      const video = linked.get(id);
+      if (video && !languageByChannel.has(video.snippet.channelId)) languageByChannel.set(video.snippet.channelId, undefined);
+    }
+    COMMUNITY_YOUTUBE.filter(id => !languageByChannel.has(id)).forEach(id => languageByChannel.set(id, undefined));
+    context.languageByChannel = languageByChannel;
+  }
+
+  const channels = await youtube.getChannels(contexts.flatMap(c => [...c.languageByChannel.keys()]));
+  const oldest = new Date(Math.min(...races.map(r => new Date(r.startedAt).getTime())) - SAME_RACE_MS);
+  const uploads = new Map();
+  for (const channel of channels.values()) uploads.set(channel.id, await youtube.getUploads(channel, oldest));
+  console.log(`\n▶️  YouTube : ${[...uploads.values()].reduce((n, v) => n + v.length, 0)} vidéo(s) sur ${uploads.size} chaîne(s)`);
+
+  // racetime.gg names only: the Twitch channels would take one call per race
+  const playersOf = race => (race.entrants || []).map(e => [e.userName].filter(Boolean));
+  for (const context of contexts) {
+    const used = youtubeVideoIds(context.tournament, context.races);
+    const touched = new Set();
+    for (const [id, channelLanguage] of context.languageByChannel) {
+      const channel = channels.get(id);
+      if (!channel) continue;
+      const channelNames = [channel.title, channel.handle].map(normalizeName).filter(Boolean);
+      for (const video of uploads.get(id) || []) {
+        const title = video.snippet.title;
+        if (used.has(video.id) || !fitsTournament(title, context.tournament)) continue;
+        const named = context.races.filter(race => titleNamesRace(title, playersOf(race))
+          // A player's own channel is not a restream
+          && !(race.entrants || []).some(e => channelNames.includes(normalizeName(e.userName))));
+        // The broadcast running at the race start, linked at that moment; else an upload of one race only
+        let found = named.map(race => ({ race, vodUrl: youtube.broadcastAt(video, race.startedAt) })).filter(f => f.vodUrl);
+        if (!found.length && !(video.liveStreamingDetails && video.liveStreamingDetails.actualStartTime)) {
+          const published = new Date(video.snippet.publishedAt).getTime();
+          const matching = named.filter(race => {
+            const start = new Date(race.startedAt).getTime();
+            return published > start - SAME_RACE_MS && published < start + HIGHLIGHT_MAX_DELAY_MS;
+          });
+          if (matching.length === 1) found = [{ race: matching[0], vodUrl: `https://www.youtube.com/watch?v=${video.id}` }];
+        }
+        if (!found.length) continue;
+        used.add(video.id);
+        const audio = String(video.snippet.defaultAudioLanguage || video.snippet.defaultLanguage || '').split('-')[0];
+        for (const { race, vodUrl } of found) {
+          race.restreams = race.restreams || [];
+          let entry = race.restreams.find(s => s.url === youtube.channelUrl(id));
+          if (entry && entry.vodUrl) continue;
+          if (!entry) {
+            entry = { url: youtube.channelUrl(id) };
+            race.restreams.push(entry);
+          }
+          Object.assign(entry, { language: channelLanguage || LANGUAGE_NAMES[audio] || undefined, title, vodUrl, channel: channel.title });
+          delete entry.vodGoneAt;
+          touched.add(race);
+          stats.youtube++;
+          console.log(`   ▶️  ${race.url} : ${channel.title} « ${title} »`);
+        }
+      }
+    }
+    if (!dryRun) {
+      for (const race of touched) await Race.updateOne({ _id: race._id }, { $set: { restreams: race.restreams } });
+    }
+  }
+}
+
+// VODs Twitch or YouTube has deleted since they were found: the link goes, the channel stays
 async function checkVods({ dryRun }, stats) {
   const races = await Race.find({ 'restreams.vodUrl': { $type: 'string' } }).select('_id restreams').lean();
-  const ids = races.flatMap(r => r.restreams.map(s => twitchVods.videoId(s.vodUrl)).filter(Boolean));
-  if (!ids.length) return;
+  const streams = races.flatMap(r => r.restreams);
+  const twitchIds = streams.map(s => twitchVods.videoId(s.vodUrl)).filter(Boolean);
+  const youtubeIds = youtube.hasKey() ? streams.map(s => youtube.videoId(s.vodUrl)).filter(Boolean) : [];
+  if (!twitchIds.length && !youtubeIds.length) return;
 
-  const existing = await twitchVods.getExistingVideoIds(ids);
-  console.log(`\n🔎 VOD de restreams vérifiées : ${new Set(ids).size}, encore en ligne : ${existing.size}`);
+  const existing = twitchIds.length ? await twitchVods.getExistingVideoIds(twitchIds) : new Set();
+  const onYoutube = youtubeIds.length ? new Set((await youtube.getVideos(youtubeIds)).keys()) : new Set();
+  console.log(`\n🔎 VOD de restreams vérifiées : ${new Set(twitchIds).size} sur Twitch (${existing.size} encore en ligne), ${new Set(youtubeIds).size} sur YouTube (${onYoutube.size} encore en ligne)`);
   for (const race of races) {
     let gone = 0;
     for (const stream of race.restreams) {
-      const id = twitchVods.videoId(stream.vodUrl);
-      if (!id || existing.has(id)) continue;
+      const twitchId = twitchVods.videoId(stream.vodUrl);
+      const youtubeId = youtubeIds.length && youtube.videoId(stream.vodUrl);
+      if (twitchId ? existing.has(twitchId) : !youtubeId || onYoutube.has(youtubeId)) continue;
       delete stream.vodUrl;
       stream.vodGoneAt = new Date();
       gone++;
@@ -307,22 +425,33 @@ async function main() {
   if (opts.dryRun) console.log('📋 Mode DRY-RUN : rien n’est écrit en base');
 
   await connectDB();
-  const stats = { races: 0, restreams: 0, highlights: 0, vodsGone: 0, errors: 0 };
+  const stats = { races: 0, restreams: 0, highlights: 0, youtube: 0, vodsGone: 0, errors: 0 };
 
   try {
     await checkVods(opts, stats);
-    await findRestreams(opts, stats);
-    if (opts.highlights) await findHighlights(opts, stats);
+    if (!opts.youtubeOnly) {
+      await findRestreams(opts, stats);
+      if (opts.highlights) await findHighlights(opts, stats);
+    }
   } catch (error) {
     console.log(`   ❌ ${error.message}`);
     stats.errors++;
   }
+  if (youtube.hasKey()) {
+    try {
+      await findYoutubeRestreams(opts, stats);
+    } catch (error) {
+      console.log(`   ❌ YouTube : ${(error.response && error.response.data && error.response.data.error && error.response.data.error.message) || error.message}`);
+      stats.errors++;
+    }
+  }
 
-  console.log('\n📊 Résumé restreams Twitch');
+  console.log('\n📊 Résumé restreams Twitch et YouTube');
   console.log(`Races cherchées : ${stats.races}`);
   console.log(`Restreams trouvés : ${stats.restreams}`);
   console.log(`Temps forts trouvés : ${stats.highlights}`);
-  console.log(`VOD supprimées par Twitch : ${stats.vodsGone}`);
+  console.log(`Restreams trouvés sur YouTube : ${stats.youtube}`);
+  console.log(`VOD supprimées par Twitch ou YouTube : ${stats.vodsGone}`);
   console.log(`Erreurs : ${stats.errors}`);
 
   await mongoose.disconnect();

@@ -214,13 +214,17 @@ function restreamLanguageLabel(language) {
   }
 }
 
-function restreamChannelName(url) {
+const isYoutubeUrl = url => /^https?:\/\/(?:www\.|m\.)?(?:youtube\.com|youtu\.be)\//.test(String(url || ''));
+
+// `channel`: the YouTube channel's name, its link only giving its id
+function restreamChannelName(url, channel) {
   try {
     const u = new URL(url);
-    const channel = u.pathname.split('/').filter(Boolean)[0];
-    // A video link (channel unknown) or a YouTube video: just the site
-    if (!channel || channel === 'videos' || channel === 'watch' || /youtu\.?be/.test(u.hostname)) return u.hostname.replace(/^www\./, '');
-    return `${u.hostname.replace(/^www\./, '')}/${channel}`;
+    if (isYoutubeUrl(url)) return channel ? `youtube.com/${channel}` : 'youtube.com';
+    const channelName = u.pathname.split('/').filter(Boolean)[0];
+    // A video link (channel unknown): just the site
+    if (!channelName || channelName === 'videos') return u.hostname.replace(/^www\./, '');
+    return `${u.hostname.replace(/^www\./, '')}/${channelName}`;
   } catch (e) {
     return url;
   }
@@ -234,28 +238,46 @@ function playerVodsHtml(race) {
     .join('');
 }
 
-// Restreams of a match on Mido's House, then those found from Twitch titles on its races, one per channel
+const isYoutubeStream = stream => isYoutubeUrl(stream.vodUrl || stream.url);
+
+// Restreams of a match on Mido's House, then those found from Twitch and YouTube on its races, one per channel
 function mergeRestreams(restreams, races) {
   const seen = new Set();
-  return (restreams || []).concat(...(races || []).map(r => r.restreams || [])).filter(stream => {
-    const key = restreamChannelName(stream.url || stream.vodUrl || '').toLowerCase();
+  const merged = (restreams || []).concat(...(races || []).map(r => r.restreams || [])).filter(stream => {
+    // A YouTube video linked without its channel: the video itself
+    const key = (isYoutubeStream(stream) && !stream.channel ? stream.vodUrl || stream.url : restreamChannelName(stream.url || stream.vodUrl || '', stream.channel)).toLowerCase();
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
   });
+  return preferTwitch(merged);
 }
 
-// Link to a restream: its VOD when Twitch still has it, else the channel
+// Twitch first; a YouTube video only when no Twitch VOD in its language is left, then in place of the Twitch channel
+function preferTwitch(streams) {
+  const language = s => s.language || '';
+  const twitchVodLanguages = new Set(streams.filter(s => !isYoutubeStream(s) && s.vodUrl).map(language));
+  const youtube = streams.filter(s => isYoutubeStream(s) && !twitchVodLanguages.has(language(s)));
+  const youtubeVodLanguages = new Set(youtube.filter(s => s.vodUrl).map(language));
+  const twitch = streams.filter(s => !isYoutubeStream(s) && (s.vodUrl || !youtubeVodLanguages.has(language(s))));
+  return twitch.concat(youtube);
+}
+
+// Link to a restream: its VOD when Twitch or YouTube still has it, else the channel
 function restreamLinkHtml(stream) {
   const vod = sanitizeExternalUrl(stream.vodUrl);
   const href = vod || sanitizeExternalUrl(stream.url);
   if (!href) return '';
-  const label = vod ? `▶ ${i18n.t('tournamentDetail.watchVod') || 'VOD'}` : restreamChannelName(href);
+  const channel = restreamChannelName(stream.url || href, stream.channel);
+  const label = vod ? `▶ ${i18n.t('tournamentDetail.watchVod') || 'VOD'}` : channel;
   const title = stream.vodGoneAt && !vod
-    ? `${restreamChannelName(stream.url)} — ${i18n.t('tournamentDetail.vodGone') || 'VOD no longer available'}`
-    : restreamChannelName(stream.url);
-  return `<a href="${escHtml(href)}" target="_blank" rel="noopener noreferrer" data-stop-propagation title="${escHtml(title)}" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.6rem; border-radius: 0.25rem; font-size: 0.8rem; color: #e9d5ff; background: #3b0764; border: 1px solid #9146ff; text-decoration: none;">
-    <span style="color: #c4b5fd;">${escHtml(restreamLanguageLabel(stream.language))}</span>
+    ? `${channel} — ${i18n.t('tournamentDetail.vodGone') || 'VOD no longer available'}`
+    : channel;
+  const colors = isYoutubeStream(stream)
+    ? { text: '#fee2e2', background: '#450a0a', border: '#ff0033', language: '#fca5a5' }
+    : { text: '#e9d5ff', background: '#3b0764', border: '#9146ff', language: '#c4b5fd' };
+  return `<a href="${escHtml(href)}" target="_blank" rel="noopener noreferrer" data-stop-propagation title="${escHtml(title)}" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.6rem; border-radius: 0.25rem; font-size: 0.8rem; color: ${colors.text}; background: ${colors.background}; border: 1px solid ${colors.border}; text-decoration: none;">
+    <span style="color: ${colors.language};">${escHtml(restreamLanguageLabel(stream.language))}</span>
     <span>${escHtml(label)}</span>
   </a>`;
 }
@@ -291,16 +313,24 @@ function displayRestreams(tournament) {
 
   // Played: Mido's House, plus the restreams found from Twitch titles on the races, as in the matches tab
   const pastBySet = new Map();
+  const roomKey = url => String(url || '').replace(/^https?:\/\/(?:www\.)?racetime\.gg/i, '').replace(/^\/+|\/+$/g, '').toLowerCase();
   (mh.pastRestreams || []).concat(scheduled.filter(played)).filter(withStreams).forEach(r => {
-    const key = String(r.startggSetId || r.roomUrl || r.startAt);
+    const key = r.startggSetId ? String(r.startggSetId) : r.roomUrl ? roomKey(r.roomUrl) : String(r.startAt);
     const prev = pastBySet.get(key);
     pastBySet.set(key, prev ? { ...prev, restreams: mergeRestreams(prev.restreams, [r]) } : withTarget(r));
   });
   (currentMatches || []).forEach(m => {
     const key = m && matchKey(m);
     if (!key) return;
-    const races = findRacesForMatch(m, currentRaces).filter(race => race.restreams && race.restreams.length);
+    const matchRaces = findRacesForMatch(m, currentRaces);
+    const races = matchRaces.filter(race => race.restreams && race.restreams.length);
     if (!races.length && !(m.completedAt && m.restreams && m.restreams.length)) return;
+    // Mido's House lists the match by its room when there is no start.gg set
+    const roomEntry = !pastBySet.has(key) && matchRaces.map(race => roomKey(race.url)).find(k => pastBySet.has(k));
+    if (roomEntry) {
+      pastBySet.set(key, { ...pastBySet.get(roomEntry), target: key });
+      pastBySet.delete(roomEntry);
+    }
     const prev = pastBySet.get(key);
     const startAt = (races[0] && races[0].startedAt) || m.completedAt || m.startedAt;
     const round = m.phaseGroup ? `${i18n.t('tournamentDetail.group') || 'Group'} ${m.phaseGroup}` : null;
@@ -314,9 +344,11 @@ function displayRestreams(tournament) {
     startAt: race.startedAt,
     round: [i18n.t('tournamentDetail.tiebreak') || 'Tie-break', race.tournamentPool ? `${i18n.t('tournamentDetail.group') || 'Group'} ${race.tournamentPool}` : ''].filter(Boolean).join(' • '),
     entrants: (race.entrants || []).map(e => e.userName).filter(Boolean),
-    restreams: mergeRestreams([], [race]),
+    restreams: mergeRestreams(pastBySet.has(roomKey(race.url)) ? pastBySet.get(roomKey(race.url)).restreams : [], [race]),
     target: 'tiebreak-' + race._id
   }));
+  // Listed by Mido's House too: the tie-break card replaces it
+  tiebreakRaces(currentRaces).filter(race => race.restreams && race.restreams.length).forEach(race => pastBySet.delete(roomKey(race.url)));
   const past = [...pastBySet.values()].concat(tiebreaks)
     .filter(withStreams)
     .sort((a, b) => new Date(b.startAt) - new Date(a.startAt));
@@ -591,14 +623,15 @@ function displayCalendar(tournament) {
   const tbd = t('tbd', 'TBD');
   const time = at => new Date(at).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
 
-  // A restream in a day cell: the Twitch logo and the language, to its VOD or its channel
+  // A restream in a day cell: the Twitch or YouTube logo and the language, to its VOD or its channel
   const restreamChip = stream => {
     const vod = sanitizeExternalUrl(stream.vodUrl);
     const href = vod || sanitizeExternalUrl(stream.url);
     if (!href) return '';
     const code = (RESTREAM_LANGUAGE_CODES[stream.language] || String(stream.language || '').slice(0, 2)).toUpperCase();
-    const title = [restreamLanguageLabel(stream.language), restreamChannelName(stream.url || href), vod ? (i18n.t('tournamentDetail.watchVod') || 'VOD') : ''].filter(Boolean).join(' · ');
-    return `<a href="${escHtml(href)}" target="_blank" rel="noopener noreferrer" class="calendar-stream${vod ? ' calendar-stream-vod' : ''}" title="${escHtml(title)}"><img src="assets/twitch.svg" alt="">${code ? `<span>${escHtml(code)}</span>` : ''}</a>`;
+    const title = [restreamLanguageLabel(stream.language), restreamChannelName(stream.url || href, stream.channel), vod ? (i18n.t('tournamentDetail.watchVod') || 'VOD') : ''].filter(Boolean).join(' · ');
+    const youtube = isYoutubeStream(stream);
+    return `<a href="${escHtml(href)}" target="_blank" rel="noopener noreferrer" class="calendar-stream${youtube ? ' calendar-stream-youtube' : ''}${vod ? ' calendar-stream-vod' : ''}" title="${escHtml(title)}"><img src="assets/${youtube ? 'youtube' : 'twitch'}.svg" alt="">${code ? `<span>${escHtml(code)}</span>` : ''}</a>`;
   };
 
   const eventHtml = e => {

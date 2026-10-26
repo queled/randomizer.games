@@ -39,6 +39,7 @@ Comment les données arrivent dans le site, où elles sont stockées, et quels s
 | [ALttPR Asyncs](https://alttprasyncs.com) | Séries de seeds async ALTTPR : entraînements des tournois, qualifs live et leurs résultats async |
 | speedrun.com | Plateformes, date de sortie, images des jeux |
 | Twitch | Streams en direct, identifiants des jeux, VOD des restreams |
+| YouTube | Restreams archivés sur YouTube une fois la rediffusion Twitch effacée, et contrôle des vidéos YouTube liées (`YOUTUBE_API_KEY`) |
 
 ## Tâches planifiées
 
@@ -48,7 +49,7 @@ En production, la base MongoDB tourne sur le même serveur que le site et n'éco
 |-------|-----------------|-----------------|
 | `racetime` | toutes les 5 min | `sync-racetime-global.js` : nouvelles courses, finalisation des courses bloquées « en cours » depuis plus de 24 h, rattrapage des courses terminées entre deux exécutions |
 | `tournaments-update` | toutes les 15 min | `sync-tournaments.js --update-only` met à jour les tournois actifs, puis `auto-link-tournaments.js` rattache les courses aux matchs, et les tie-breaks de poule (room « tie-break » entre joueurs d'une même poule) à leur poule |
-| `race-vods` | toutes les 30 min | `sync-race-vods.js` : VOD Twitch des joueurs de chaque race, puis `sync-race-restreams.js` : restreams absents de Mido's House, trouvés par le titre Twitch (voir plus bas) |
+| `race-vods` | toutes les 30 min | `sync-race-vods.js` : VOD Twitch des joueurs de chaque race, puis `sync-race-restreams.js` : restreams absents de Mido's House, trouvés par le titre Twitch ou YouTube (voir plus bas) |
 | `schedule-sites` | toutes les 15 min | `sync-schedule-sites.js` : horaires et restreams des races des tournois de Mido's House et Hyrule Town Hall, rattachement des courses par leur room, VOD Twitch des restreams, puis `sync-midos-league.js --current` : saison en cours de l'OoTR League, puis `sync-midos-events.js --active` : tournois Mido's House sans bracket en cours, puis `sync-speedrace.js` : VOD saisies sur Speedrace, puis `sync-localhorst.js` : restreams planifiés sur localhorst, puis `sync-ical-restreams.js` : restreams des calendriers iCal (voir plus bas) |
 | `rando-list` | tous les jours à 6h | met à jour la copie locale de rando-list ; si `check-rando-list-changes.js` signale un nouveau commit, `sync-rando-list.js --detect-new` met à jour le cache et les ressources, puis signale les nouveaux jeux, à créer depuis le panneau admin |
 | `archipelago` | tous les jours à 6h20 | `sync-archipelago-games.js` : jeux listés sur [archipelago.gg](https://archipelago.gg/games) et [multiworld.gg](https://multiworld.gg/games) ; ajoute à chaque jeu sa page sur ces sites, le guide d'installation et le wiki (page vérifiée sur le wiki, titre corrigé ou lien retiré quand elle n'existe pas), crée les jeux absents (puis catégorie Twitch et année de sortie) et retire les liens des jeux qui en sont partis, puis `sync-community-apworlds.js` : APWorlds du tableur communautaire (voir plus bas) |
@@ -163,7 +164,7 @@ Aucun des deux ne donne la room racetime.gg. Un match est rattaché aux races :
 - parties entre 30 min avant et 3 h après l'heure prévue (pendant la rediffusion, pour une rediffusion Twitch) : toutes sont prises, un stream pouvant enchaîner plusieurs manches ;
 - dont deux participants différents correspondent aux deux côtés de « A vs B » (`parseMatchup`, `sideNamesPlayer` de `helpers/restream-titles.js`) : un nom contient l'autre, sur au moins 4 caractères (« Tyrant » pour « Tyrant242 », « Mr. Navigator » pour « mr__navigator »).
 
-Les matchs d'équipes (noms d'équipe), les courses hebdomadaires (sans « vs ») et les titres sans nom d'événement sont laissés de côté. La chaîne va dans `race.restreams`, avec la langue du flux et la rediffusion Twitch qui couvre le départ tant que Twitch la garde (ZeldaSpeedRuns met surtout ses VOD sur YouTube, que le site ne lit pas). Comme pour localhorst, la race n'a pas besoin d'être rattachée à un tournoi.
+Les matchs d'équipes (noms d'équipe), les courses hebdomadaires (sans « vs ») et les titres sans nom d'événement sont laissés de côté. La chaîne va dans `race.restreams`, avec la langue du flux et la rediffusion Twitch qui couvre le départ tant que Twitch la garde (ZeldaSpeedRuns met surtout ses VOD sur YouTube : `sync-race-restreams.js` les y retrouve pour les races rattachées à un tournoi). Comme pour localhorst, la race n'a pas besoin d'être rattachée à un tournoi.
 
 Par défaut : matchs des 3 derniers jours (`--days N` pour remonter) ; `--archive` reprend tous les événements des calendriers une fois ; `--feed <nom>` limite à un flux. Pour ajouter un calendrier, ajouter son adresse `.ics` à `FEEDS` et vérifier les rattachements avec `--dry-run --archive`, qui affiche chaque titre et la race trouvée.
 
@@ -212,6 +213,19 @@ Mido's House ne connaît que les restreams qu'il planifie : une race montée à 
 - `--highlights` (rattrapage) : les temps forts et uploads, quand le titre ne correspond qu'à une seule race du tournoi dans les 14 jours précédents.
 
 Le résultat va dans `race.restreams` (`language`, `url` de la chaîne, `vodUrl`, `title`), fusionné à l'affichage avec les restreams de Mido's House (un par chaîne). Les VOD supprimées par Twitch perdent leur lien, comme pour les joueurs.
+
+### Restreams archivés sur YouTube
+
+Twitch efface les rediffusions en 60 jours au plus ; beaucoup de restreamers les remettent sur YouTube. Avec `YOUTUBE_API_KEY` (Google Cloud, « YouTube Data API v3 »), `sync-race-restreams.js` cherche ensuite, pour les races de tournoi des 30 derniers jours (ou de `--days`, `--youtube-only` pour ne faire que cette étape), les vidéos mises en ligne (`services/youtube.js`) :
+- des chaînes YouTube des restreamers Twitch du tournoi (table `YOUTUBE_CHANNELS`, login Twitch → chaîne, la langue venant de Mido's House) ;
+- des chaînes des vidéos YouTube que Mido's House lie pour le tournoi ;
+- des chaînes communautaires et d'organisateurs de `COMMUNITY_YOUTUBE` (langue audio de la vidéo).
+
+Une vidéo compte aux mêmes conditions de titre que sur Twitch, hors chaîne d'un joueur et hors vidéo déjà liée : un direct archivé qui couvre le départ de la race (lien à ce moment, `&t=`), sinon une vidéo mise en ligne dans les 14 jours qui ne correspond qu'à une seule race. Elle va dans `race.restreams` avec `url` de la chaîne (`youtube.com/channel/<id>`), `channel` (son nom) et `vodUrl`.
+
+La recherche ne se sert que de `playlistItems` et `videos` (1 unité par lot de 50, sur 10 000 par jour) : jamais de `search` (100 unités). Les vidéos YouTube liées (restreams trouvés ici, liens de Mido's House) sont vérifiées à chaque exécution, comme les VOD Twitch ; celles de Mido's House reçoivent au passage leur chaîne (`url`, `channel`).
+
+L'affichage donne la priorité à Twitch : les liens Twitch d'abord ; une vidéo YouTube n'apparaît que si aucune VOD Twitch de sa langue ne reste, et remplace alors le simple lien vers la chaîne Twitch. Les liens YouTube sont rouges, avec le logo YouTube, comme les liens Twitch le sont en violet.
 
 ## Modèle de données
 

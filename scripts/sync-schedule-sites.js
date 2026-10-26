@@ -34,6 +34,7 @@ const connectDB = require('../config/database');
 const { Tournament, Race, Match } = require('../models');
 const scheduleSites = require('../services/schedule-sites');
 const twitchVods = require('../services/twitch-vods');
+const youtube = require('../services/youtube');
 const { applyAutoLinkProposals } = require('../services/tournament-autolink');
 const { normalizeName, titleFitsEvent } = require('../helpers/restream-titles');
 
@@ -301,28 +302,41 @@ async function clearStaleSchedules({ dryRun, sites }, stats, syncedIds, failedEv
   }
 }
 
-// VODs Twitch has deleted since they were found: the link goes, the restreamer stays
+// VODs Twitch or YouTube has deleted since they were found: the link goes, the restreamer stays
 async function checkVods({ dryRun }, stats) {
   const tournaments = await Tournament.find({ 'midosHouse.pastRestreams.restreams.vodUrl': { $type: 'string' } })
     .select('_id name midosHouse.pastRestreams').lean();
-  const ids = tournaments.flatMap(t => t.midosHouse.pastRestreams.flatMap(r => r.restreams.map(s => twitchVods.videoId(s.vodUrl)).filter(Boolean)));
-  if (!ids.length) return;
+  const streams = tournaments.flatMap(t => t.midosHouse.pastRestreams.flatMap(r => r.restreams));
+  const ids = streams.map(s => twitchVods.videoId(s.vodUrl)).filter(Boolean);
+  const youtubeIds = youtube.hasKey() ? streams.map(s => youtube.videoId(s.vodUrl)).filter(Boolean) : [];
+  if (!ids.length && !youtubeIds.length) return;
 
-  const existing = await twitchVods.getExistingVideoIds(ids);
-  console.log(`\n🔎 VOD vérifiées : ${new Set(ids).size}, encore en ligne : ${existing.size}`);
+  const existing = ids.length ? await twitchVods.getExistingVideoIds(ids) : new Set();
+  const onYoutube = youtubeIds.length ? await youtube.getVideos(youtubeIds) : new Map();
+  console.log(`\n🔎 VOD vérifiées : ${new Set(ids).size} sur Twitch (${existing.size} encore en ligne), ${new Set(youtubeIds).size} sur YouTube (${onYoutube.size} encore en ligne)`);
   for (const tournament of tournaments) {
     let gone = 0;
+    let named = 0;
     for (const race of tournament.midosHouse.pastRestreams) {
       for (const stream of race.restreams) {
         const id = twitchVods.videoId(stream.vodUrl);
-        if (!id || existing.has(id)) continue;
+        const youtubeId = youtubeIds.length && youtube.videoId(stream.vodUrl);
+        // A YouTube video still online: its channel as who restreamed
+        const video = youtubeId && onYoutube.get(youtubeId);
+        if (video && !stream.channel) {
+          stream.url = youtube.channelUrl(video.snippet.channelId);
+          stream.channel = video.snippet.channelTitle;
+          named++;
+        }
+        if (id ? existing.has(id) : !youtubeId || video) continue;
         delete stream.vodUrl;
         stream.vodGoneAt = new Date();
         gone++;
       }
     }
-    if (!gone) continue;
-    console.log(`   🗑️  ${tournament.name} : ${gone} VOD supprimée(s) par Twitch`);
+    if (!gone && !named) continue;
+    if (gone) console.log(`   🗑️  ${tournament.name} : ${gone} VOD supprimée(s) par Twitch ou YouTube`);
+    if (named) console.log(`   ▶️  ${tournament.name} : chaîne YouTube de ${named} restream(s)`);
     stats.vodsGone += gone;
     if (!dryRun) {
       await Tournament.updateOne({ _id: tournament._id }, { $set: { 'midosHouse.pastRestreams': tournament.midosHouse.pastRestreams } });

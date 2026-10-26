@@ -4479,6 +4479,17 @@ a.match-player-name.match-winner:hover {
     color: #fff;
 }
 
+.calendar-stream-youtube {
+    border-color: #ff0033;
+    background: #450a0a;
+    color: #fee2e2;
+}
+
+.calendar-stream-youtube.calendar-stream-vod {
+    background: #cc0000;
+    color: #fff;
+}
+
 .calendar-event-players {
     display: flex;
     flex-direction: column;

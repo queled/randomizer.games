@@ -297,6 +297,8 @@ const tournamentSchema = new mongoose.Schema({
   startggId: Number,
   startggTournamentId: Number,
   startggSlug: String,
+  // start.gg bracket of one phase of a tournament rebuilt from elsewhere (Mido's House): a link only
+  startggUrl: String,
   // Last refresh from the Challonge API (the update job spaces them out: 500 requests per 30 days)
   challongeSyncedAt: Date,
   // Races scheduled on Mido's House or Hyrule Town Hall (its fork for other

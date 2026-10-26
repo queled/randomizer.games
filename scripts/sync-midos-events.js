@@ -20,10 +20,12 @@
  *     helpers/midos-event-matches.js `roundOf`);
  *   - perRace: one match per race (team events scoring a point per race won).
  * `teams`: the sides are Mido's House teams, each race played by one player of each.
+ * `startggUrl`: the start.gg bracket of the last phase alone, which Mido's House does not
+ * link: linked from the tournament page, the event staying rebuilt here with all its phases.
  *
  * Usage:
  *   node scripts/sync-midos-events.js                  # every event of EVENTS
- *   node scripts/sync-midos-events.js --event br/1     # one event (repeatable)
+ *   node scripts/sync-midos-events.js --event fr/6     # one event (repeatable)
  *   node scripts/sync-midos-events.js --active         # events not over yet
  *   node scripts/sync-midos-events.js --dry-run --verbose   # brackets and top 8 as rebuilt
  */
@@ -75,6 +77,14 @@ const EVENTS = {
     phases: {
       Swiss: { name: 'Swiss', bracketType: 'SWISS', perRace: true },
       'Top 8': { name: 'Top 8', bracketType: 'SINGLE_ELIMINATION', rounds: ['Quarterfinal', 'Semifinal', 'Final'] }
+    }
+  },
+  'fr/6': {
+    name: 'Tournoi Francophone Saison 6',
+    startggUrl: 'https://www.start.gg/tournament/tournoi-franco-s6-brackets-top-16/event/top-16-bracket',
+    phases: {
+      Swiss: { name: 'Swiss', bracketType: 'SWISS' },
+      Bracket: { name: 'Bracket', bracketType: 'SINGLE_ELIMINATION', rounds: ['Round 1', 'Quarterfinal', 'Semifinal', 'Final'] }
     }
   },
   'br/1': {
@@ -412,6 +422,7 @@ async function syncEvent(key, config, { game, dryRun, verbose }) {
     phases: phases.map(p => ({ ...p, groupCount: new Set(embedded.filter(m => m.phase === p.name && m.phaseGroup).map(m => m.phaseGroup)).size || 1, state: over ? 'COMPLETED' : 'ACTIVE' })),
     matches: embedded,
     setsTotal: embedded.length,
+    startggUrl: config.startggUrl || null,
     'midosHouse.series': series,
     'midosHouse.event': event,
     'midosHouse.url': url,

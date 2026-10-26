@@ -913,6 +913,10 @@ function displayTournamentInfo(tournament) {
     } else if (sourceType === 'midos-house') {
       document.getElementById('midoshouse-link-container').style.display = 'block';
       document.getElementById('midoshouse-link').href = tournament.fullUrl;
+      if (tournament.startggUrl) {
+        document.getElementById('startgg-link-container').style.display = 'block';
+        document.getElementById('startgg-link').href = tournament.startggUrl;
+      }
     } else if (sourceType === 'sheet') {
       document.getElementById('tournament-page-link-container').style.display = 'block';
       document.getElementById('tournament-page-link').href = tournament.fullUrl;

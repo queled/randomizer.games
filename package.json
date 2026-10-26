@@ -43,6 +43,8 @@
     "sync:race-vods:dry": "node scripts/sync-race-vods.js --dry-run",
     "sync:race-restreams": "node scripts/sync-race-restreams.js",
     "sync:race-restreams:dry": "node scripts/sync-race-restreams.js --dry-run",
+    "sync:speedgaming": "node scripts/sync-speedgaming.js",
+    "sync:speedgaming:dry": "node scripts/sync-speedgaming.js --dry-run",
     "discover:youtube-restreamers": "node scripts/discover-youtube-restreamers.js",
     "discover:youtube-restreamers:dry": "node scripts/discover-youtube-restreamers.js --dry-run",
     "discover:tournaments": "node scripts/discover-tournaments.js",

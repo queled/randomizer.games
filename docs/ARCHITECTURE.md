@@ -140,6 +140,17 @@ Les rangs viennent de `helpers/provisional-ranks.js`. La tâche `schedule-sites`
 
 En routine, `--current` reprend la dernière saison en base et la suivante, dès que Mido's House la connaît. Sans option, le script reprend toutes les saisons.
 
+### Tournois suisses tenus dans un tableau Google
+
+Certains tournois communautaires n'ont ni bracket ni page Mido's House : les organisateurs apparient eux-mêmes les rondes suisses et publient le classement dans un tableau Google public (une ligne par joueur : rang, puis résultat et adversaire de chaque ronde), puis tirent un bracket à élimination directe de ce classement. `sync-sheet-swiss.js` en fait des tournois (`source.type: 'sheet'`, `source.externalId: <clé de EVENTS>`) pour les événements de sa constante `EVENTS` (SMZ3 Winter 2025) :
+
+- le tableau, lu en CSV, donne les appariements et les résultats officiels du suisse, et les têtes de série du bracket (placées comme dans un bracket standard : 1 contre 16, 8 contre 9…) ;
+- un match suisse reçoit la room racetime.gg 1v1 de ses deux joueurs pendant sa semaine (à un jour avant et deux jours après près) ; un match de bracket, les rooms de ses deux joueurs après le suisse, jusqu'à ce que l'un gagne la série. Les rooms dont l'info parle d'une autre course (weekly, pilot spoiler, casual…) sont écartées, celles d'un autre tournoi y restent ;
+- le résultat du tableau l'emporte sur la room (les async n'en ont pas) ; celui du bracket vient des rooms. Les byes et les abandons ne font pas de match ;
+- les joueurs éliminés au suisse gardent le rang du tableau. `aliases` relie un nom du tableau au nom racetime.gg quand aucun ne contient l'autre.
+
+La page du tournoi affiche un bouton « Page du tournoi » vers `fullUrl` (inertia.run pour SMZ3). `--dry-run --verbose` affiche les matchs suisses sans room, le bracket reconstruit et le top 8.
+
 ### VOD Speedrace
 
 [Speedrace](https://speedrace.deeplydevs.com) gère les restreams de quelques tournois OoTR, surtout francophones (Tournoi Francophone, Rupees of Time, Mixed Pools) : les organisateurs y créent les matchs, les restreamers s'y voient attribuer un match et y saisissent le lien de leur VOD. Les races restent planifiées sur Mido's House, où Speedrace renvoie le restreamer. Son API publique (`https://speedrace-api.deeplydevs.com/api/Planning/<jeu>/<tournoi>/<saison>?scope=All`, lue par `services/speedrace.js`) donne les matchs de chaque saison avec leurs restreams.

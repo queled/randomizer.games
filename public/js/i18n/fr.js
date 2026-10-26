@@ -295,6 +295,7 @@ const fr = {
         viewOnChallonge: "Voir sur Challonge",
         viewOnStartgg: "Voir sur Start.gg",
         viewOnMidosHouse: "Voir sur Mido's House",
+        viewTournamentPage: "Page du tournoi",
         asyncsLink: "Asyncs",
         asyncQualifiers: "Qualifications async",
         qualifier: "Qualif",

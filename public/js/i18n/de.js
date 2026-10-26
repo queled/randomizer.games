@@ -290,6 +290,7 @@ const de = {
         viewOnChallonge: "Auf Challonge ansehen",
         viewOnStartgg: "Auf Start.gg ansehen",
         viewOnMidosHouse: "Auf Mido's House ansehen",
+        viewTournamentPage: "Turnierseite",
         asyncsLink: "Asyncs",
         asyncQualifiers: "Async-Qualifikationen",
         qualifier: "Qualifikation",

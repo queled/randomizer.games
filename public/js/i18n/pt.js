@@ -331,6 +331,7 @@ const pt = {
         viewOnChallonge: "Ver no Challonge",
         viewOnStartgg: "Ver no Start.gg",
         viewOnMidosHouse: "Ver no Mido's House",
+        viewTournamentPage: "Página do torneio",
         asyncsLink: "Asyncs",
         asyncQualifiers: "Qualificatórias async",
         qualifier: "Qualificatória",

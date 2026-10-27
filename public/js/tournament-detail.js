@@ -2745,14 +2745,15 @@ function createMatchCard(match, races = []) {
   card.className = 'match-card';
   card.style.cssText = 'background-color: #1f2937; padding: 1rem; border-radius: 0.5rem; margin-bottom: 0.75rem;';
   
-  const stateColor = match.state === 'complete' ? '#10b981' 
-                   : match.state === 'open' ? '#3b82f6'
-                   : '#6b7280';
-  
-  const stateBadge = `<span style="background-color: ${stateColor}; color: white; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem;">${formatMatchState(match.state)}</span>`;
-
   // Find all races linked to this match
   const matchRaces = findRacesForMatch(match, races);
+
+  const state = matchState(match, matchRaces);
+  const stateColor = state === 'complete' ? '#10b981'
+                   : state === 'open' ? '#3b82f6'
+                   : '#6b7280';
+
+  const stateBadge = `<span style="background-color: ${stateColor}; color: white; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem;">${formatMatchState(state)}</span>`;
   const isMultiRaceSeries = matchRaces.length > 1;
 
   // For group stage matches, scoresCsv often contains race times (e.g., "0-32717") instead of match scores.
@@ -3266,6 +3267,13 @@ function formatTournamentTypeForDisplay(tournament) {
   }
   
   return formatTournamentType(tournament.tournamentType);
+}
+
+// The bracket's state, ongoing while one of its races runs: organizers rarely start the set on start.gg
+function matchState(match, races) {
+  if (match.state === 'complete') return match.state;
+  const live = (races || []).some(race => ['open', 'invitational', 'in_progress'].includes(race && race.status));
+  return live ? 'open' : match.state;
 }
 
 function formatMatchState(state) {
@@ -4874,10 +4882,11 @@ function createBracketMatchCard(match, isFinal = false) {
   }
 
   // Add match state indicator only for 'open' matches (ongoing), unless the schedule is already shown
-  if (match.state === 'open' && !match.scheduledAt) {
+  const state = matchState(match, findRacesForMatch(match, currentRaces));
+  if (state === 'open' && !match.scheduledAt) {
     const stateIndicator = document.createElement('div');
     stateIndicator.style.cssText = 'padding: 0.25rem; text-align: center; background-color: #374151; font-size: 0.75rem; color: #9ca3af;';
-    stateIndicator.textContent = formatMatchState(match.state);
+    stateIndicator.textContent = formatMatchState(state);
     card.appendChild(stateIndicator);
   }
 

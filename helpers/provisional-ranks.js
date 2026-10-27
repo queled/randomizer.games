@@ -7,9 +7,10 @@
  *   players of a parallel bracket identified as the stronger one above those of the other;
  * - in a round robin / Swiss phase: more wins first, then fewer losses (Swiss: then the wins of
  *   the opponents met, the Buchholz score);
- * - in an elimination phase: entrants still in first (more wins first), then the eliminated
- *   ones by how far they went (double elimination: out on the second loss), tied when out at
- *   the same stage; entrants still in are then told apart by their record in the earlier phases.
+ * - in an elimination phase: entrants still in first, then the eliminated ones by how far they
+ *   went (double elimination: out on the second loss), tied when out at the same stage; in single
+ *   elimination, those still in by the round they reached, tied there too (whatever their wins:
+ *   byes and forfeits skew them); in double elimination by their wins, then fewer losses.
  * Tied entrants share their rank (1, 2, 2, 4).
  */
 
@@ -138,7 +139,7 @@ function computeProvisionalRanks(matches = [], phases = []) {
     for (const id of sideIds(m)) {
       if (!id) continue;
       const s = stats.get(id);
-      if (!s || tier > s.tier) stats.set(id, { tier, phase: m.phase || '', wins: 0, losses: 0, out: 0, allWins: 0, allLosses: 0, buchholz: 0 });
+      if (!s || tier > s.tier) stats.set(id, { tier, phase: m.phase || '', wins: 0, losses: 0, out: 0, reached: 0, buchholz: 0 });
     }
   }
   for (const m of matches) {
@@ -146,16 +147,23 @@ function computeProvisionalRanks(matches = [], phases = []) {
     const kind = kinds.get(m.phase || '');
     for (const id of sideIds(m)) {
       const s = id && stats.get(id);
-      if (!s) continue;
-      if (id === String(winnerOf(m))) s.allWins += 1;
-      else s.allLosses += 1;
-      if (s.phase !== (m.phase || '')) continue;
+      if (!s || s.phase !== (m.phase || '')) continue;
       if (id === String(winnerOf(m))) { s.wins += 1; continue; }
       s.losses += 1;
       const round = m.round || 0;
       // How far the entrant went when knocked out (losers rounds count back from -1, grand finals last)
       if (kind === 'singleelimination') s.out = Math.max(s.out, Math.abs(round) || 1);
       else if (kind === 'doubleelimination' && s.losses >= 2) s.out = round > 0 ? 1000 + round : Math.abs(round);
+    }
+  }
+
+  // Single elimination: the round each entrant reached, the set waiting for them or the one after their last win
+  for (const m of matches) {
+    if (kinds.get(m.phase || '') !== 'singleelimination') continue;
+    const round = Math.abs(m.round || 0) || 1;
+    for (const id of sideIds(m)) {
+      const s = id && stats.get(id);
+      if (s && s.phase === (m.phase || '')) s.reached = Math.max(s.reached, id === String(winnerOf(m)) ? round + 1 : round);
     }
   }
 
@@ -180,10 +188,10 @@ function computeProvisionalRanks(matches = [], phases = []) {
     const kind = kinds.get(s.phase);
     const elimination = kind === 'singleelimination' || kind === 'doubleelimination';
     const stillIn = elimination && !s.out;
-    // Knocked out at the same stage of a bracket: tied, as on start.gg (a bye is not a win)
-    const record = elimination && s.out ? [0, 0, 0] : [s.wins, -s.losses, s.buchholz];
-    // Higher first: phase, still in, how far, wins, fewer losses, Buchholz, then the whole record of those still in
-    return [s.tier, stillIn ? 1 : 0, s.out, ...record, stillIn ? s.allWins : 0, stillIn ? -s.allLosses : 0];
+    // At the same stage of a single elimination bracket, still in or knocked out: tied (a bye is not a win)
+    const record = (elimination && s.out) || kind === 'singleelimination' ? [0, 0, 0] : [s.wins, -s.losses, s.buchholz];
+    // Higher first: phase, still in, how far (knocked out / reached), wins, fewer losses, Buchholz
+    return [s.tier, stillIn ? 1 : 0, s.out, stillIn ? s.reached : 0, ...record];
   };
   const compare = (a, b) => {
     const ka = keyOf(a);

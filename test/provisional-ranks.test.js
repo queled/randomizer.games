@@ -22,13 +22,13 @@ test('pools under way: more wins first, then fewer losses, ties shared', () => {
   assert.deepEqual(ranksOf(ranks), { a: 1, b: 2, c: 2, d: 4 });
 });
 
-test('the next phase ranks above the pools, those still in by their pool record', () => {
+test('the next phase ranks above the pools, those still in tied at the round they reached', () => {
   const ranks = computeProvisionalRanks([
     set('Pools', 1, 'a', 'b', 'a'), set('Pools', 1, 'c', 'd', 'c'), set('Pools', 1, 'e', 'f', 'e'),
     set('Pools', 2, 'a', 'c', 'a'), set('Pools', 2, 'b', 'd', 'd'),
     set('Top 4', 1, 'a', 'c'), set('Top 4', 1, 'e', null)
   ], PHASES);
-  assert.deepEqual(ranksOf(ranks), { a: 1, e: 2, c: 3, d: 4, f: 5, b: 6 });
+  assert.deepEqual(ranksOf(ranks), { a: 1, c: 1, e: 1, d: 4, f: 5, b: 6 });
 });
 
 test('single elimination: the knocked-out entrants by the round they fell in', () => {
@@ -87,8 +87,8 @@ test('parallel brackets: their names tell the stronger one', () => {
 
 test('parallel brackets of unknown order share a tier', () => {
   const ranks = computeProvisionalRanks(evenBrackets('Bracket A', 'Bracket B'), parallelPhases('Bracket A', 'Bracket B'));
-  // Ranked together: those still in by their earlier record, the knocked-out ones tied
-  assert.deepEqual(ranksOf(ranks), { a: 1, e: 2, b: 3, f: 3 });
+  // Ranked together: tied at the same stage, still in or knocked out
+  assert.deepEqual(ranksOf(ranks), { a: 1, e: 1, b: 3, f: 3 });
 });
 
 test('Swiss: equal records told apart by the wins of the opponents met', () => {
@@ -98,6 +98,16 @@ test('Swiss: equal records told apart by the wins of the opponents met', () => {
   ], [{ name: 'Swiss', bracketType: 'SWISS', phaseOrder: 1 }]);
   // At 1-1, c met e and f (one win each), b and e met opponents with one win in all
   assert.deepEqual(ranksOf(ranks), { a: 1, f: 1, c: 3, b: 4, e: 4, d: 6 });
+});
+
+test('still in at the same round: tied, whatever their wins (a bye)', () => {
+  const ranks = computeProvisionalRanks([
+    set('Top 4', 1, 'a', 'b', 'a'), set('Top 4', 1, 'c', 'd', 'c'),
+    set('Top 4', 2, 'a', 'c', 'a'), set('Top 4', 2, 'e', 'f'),
+    set('Top 4', 3, 'a', 'g')
+  ], PHASES);
+  // g came in at round 3 without a win, as far as a
+  assert.deepEqual(ranksOf(ranks), { a: 1, g: 1, e: 3, f: 3, c: 5, b: 6, d: 6 });
 });
 
 test('knocked out at the same stage: tied, even after a bye', () => {

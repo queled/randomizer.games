@@ -115,10 +115,19 @@ async function getKeptVideos(userId, max = 1000) {
   return videos;
 }
 
-/** Past broadcasts still kept by Twitch, newest first */
-async function getArchives(userId) {
-  const { data } = await helix('/videos', { user_id: userId, type: 'archive', first: 100 });
-  return data || [];
+/**
+ * Past broadcasts still kept by Twitch, newest first: all of them, a busy
+ * restream channel keeping more than a page of 100 over its 60 days
+ */
+async function getArchives(userId, max = 1000) {
+  const archives = [];
+  let cursor;
+  do {
+    const { data, pagination } = await helix('/videos', { user_id: userId, type: 'archive', first: 100, after: cursor });
+    archives.push(...(data || []));
+    cursor = pagination && pagination.cursor;
+  } while (cursor && archives.length < max);
+  return archives;
 }
 
 /** "3h2m10s" → milliseconds */

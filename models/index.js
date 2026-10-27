@@ -280,7 +280,11 @@ const tournamentSchema = new mongoose.Schema({
       name: String,
       members: { type: [String], default: undefined }
     },
-    winnerId: Number
+    winnerId: Number,
+    // Both players forfeited: start.gg shows a win for one of them (helpers/double-forfeits.js)
+    doubleForfeit: Boolean,
+    // The next set of that player, lost without playing: the opponent goes through alone
+    withdrawnEntrantId: String
   }],
   // Phases for start.gg tournaments
   phases: [{

@@ -3,7 +3,8 @@ const { QUALIFIER_PHASE } = require('./tournament-autolink');
 /**
  * How many played matches of each tournament have their races linked, for the admin
  * list of tournaments. A played match is a completed match between two named players,
- * forfeits (start.gg "DQ") left out: they never have a race.
+ * forfeits (start.gg "DQ", or a set gone through alone after a double forfeit) left out:
+ * they never have a race.
  *
  * status: complete (every played match linked), partial, none (no race at all: a game
  * not raced on racetime.gg), empty (no played match yet).
@@ -64,7 +65,7 @@ async function computeLinkCoverage({ tournaments, Match, Race }) {
     let linkedMatches = 0;
     if (tournament.startggId) {
       for (const match of tournament.matches || []) {
-        if (Number(match.state) !== STARTGG_COMPLETED || DQ_SCORE.test(match.displayScore || '')) continue;
+        if (Number(match.state) !== STARTGG_COMPLETED || DQ_SCORE.test(match.displayScore || '') || match.withdrawnEntrantId) continue;
         if (!isNamed(match.player1?.name) || !isNamed(match.player2?.name)) continue;
         playedMatches++;
         if (match.raceUrl || match.raceUrls?.length || linkedSets.has(match.startggSetId)) linkedMatches++;

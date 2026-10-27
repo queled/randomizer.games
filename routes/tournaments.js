@@ -236,11 +236,13 @@ router.get('/:id/matches', validateObjectId('id'), async (req, res, next) => {
 
       // Start.gg tournament - return embedded matches formatted like Challonge matches
       const formattedMatches = tournament.matches.map(m => {
-        const player1Name = m.player1?.name || 'TBD';
-        const player2Name = m.player2?.name || 'TBD';
+        // Out on a double forfeit before this set: the opponent goes through alone
+        const withdrawn = slot => !!m.withdrawnEntrantId && String(slot?.startggEntrantId) === String(m.withdrawnEntrantId);
+        const player1Name = withdrawn(m.player1) ? null : m.player1?.name || 'TBD';
+        const player2Name = withdrawn(m.player2) ? null : m.player2?.name || 'TBD';
         // Ensure consistent types for ID comparison on frontend (all numbers)
-        const player1Id = m.player1?.startggEntrantId ? Number(m.player1.startggEntrantId) : null;
-        const player2Id = m.player2?.startggEntrantId ? Number(m.player2.startggEntrantId) : null;
+        const player1Id = m.player1?.startggEntrantId && player1Name ? Number(m.player1.startggEntrantId) : null;
+        const player2Id = m.player2?.startggEntrantId && player2Name ? Number(m.player2.startggEntrantId) : null;
 
         // Parse Start.gg displayScore to extract numeric scores
         // Format: "PlayerA 2 - PlayerB 1" or "PlayerA W - PlayerB L" or "DQ" etc.
@@ -322,6 +324,9 @@ router.get('/:id/matches', validateObjectId('id'), async (req, res, next) => {
             scoresCsv = 'DQ';
           }
         }
+        // start.gg's score is made up there: both players forfeited, or the set was not played
+        if (m.doubleForfeit || m.withdrawnEntrantId) scoresCsv = null;
+        if (m.doubleForfeit) winnerId = null;
 
         return {
           _id: m.startggSetId || m._id,
@@ -336,7 +341,9 @@ router.get('/:id/matches', validateObjectId('id'), async (req, res, next) => {
           player1Id,
           player2Id,
           scoresCsv,
-          displayScore: m.displayScore || null,
+          displayScore: m.doubleForfeit || m.withdrawnEntrantId ? null : m.displayScore || null,
+          doubleForfeit: !!m.doubleForfeit,
+          walkover: !!m.withdrawnEntrantId,
           completedAt: m.completedAt,
           winnerId,
           groupId: null, // Start.gg uses phases instead

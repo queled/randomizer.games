@@ -1404,7 +1404,7 @@ router.get('/tournaments', requireAdmin, async (req, res, next) => {
     const tournaments = await Tournament.find(query)
       .populate('game', 'id name')
       .sort({ startDate: -1 })
-      .select('name gameName gameId startDate endDate startggId challongeId participantsCount game matches.state matches.displayScore matches.raceUrl matches.raceUrls matches.startggSetId matches.player1.name matches.player2.name')
+      .select('name gameName gameId startDate endDate startggId challongeId participantsCount game matches.state matches.displayScore matches.withdrawnEntrantId matches.raceUrl matches.raceUrls matches.startggSetId matches.player1.name matches.player2.name')
       .lean();
 
     const [coverage, challongeCounts] = await Promise.all([

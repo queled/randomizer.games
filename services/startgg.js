@@ -448,8 +448,10 @@ class StartGGAPI {
   /**
    * One participant per player, from the standings (or the entrants before standings exist).
    * Players of a team entrant carry the team name.
+   * @param matches the event's sets in the stored shape, when they carry more than start.gg
+   *   gives (double forfeits): the provisional ranks are read from them
    */
-  static buildParticipants(event) {
+  static buildParticipants(event, { matches = null } = {}) {
     const teams = StartGGAPI.teamMembersByEntrant(event);
     const participants = [];
     const seen = new Set();
@@ -458,7 +460,7 @@ class StartGGAPI {
     // its end keeps start.gg's placements
     const running = event && calculateTournamentStatus({ startDate: event.startDate, endDate: event.endDate, state: event.state }) === 'en cours';
     const provisional = running && (event.sets || []).some(set => set.winnerId != null)
-      ? computeProvisionalRanks((event.sets || []).map(set => ({
+      ? computeProvisionalRanks(matches || (event.sets || []).map(set => ({
         phase: set.phase?.name || null,
         round: set.round,
         winnerId: set.winnerId,

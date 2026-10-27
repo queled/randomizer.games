@@ -15,8 +15,13 @@
 
 const kindOf = bracketType => String(bracketType || '').toLowerCase().replace(/[\s_]+/g, '');
 
+// A player withdrawn from a set (out on a double forfeit before it) was never in it
 const sideIds = m => [m.player1?.startggEntrantId, m.player2?.startggEntrantId]
-  .map(id => (id == null || id === '' ? null : String(id)));
+  .map(id => (id == null || id === '' || String(id) === String(m.withdrawnEntrantId) ? null : String(id)));
+
+// No winner on a double forfeit (both players lose) nor in a set gone through alone (a bye is not a win)
+const winnerOf = m => (m.doubleForfeit || m.withdrawnEntrantId ? null : m.winnerId);
+const isDecided = m => winnerOf(m) != null || !!m.doubleForfeit;
 
 // Parallel brackets named by level, strongest first (as on the tournament page)
 const BRACKET_LEVELS = [
@@ -59,7 +64,7 @@ function phaseTiers(order, matches) {
     for (const id of sideIds(m)) {
       if (!id) continue;
       playersOf.get(name).add(id);
-      if (id === String(m.winnerId)) wins.set(`${name}|${id}`, (wins.get(`${name}|${id}`) || 0) + 1);
+      if (id === String(winnerOf(m))) wins.set(`${name}|${id}`, (wins.get(`${name}|${id}`) || 0) + 1);
     }
   }
 
@@ -97,7 +102,8 @@ function phaseTiers(order, matches) {
 }
 
 /**
- * @param matches sets in the stored shape ({ phase, round, winnerId, player1/2.startggEntrantId })
+ * @param matches sets in the stored shape ({ phase, round, winnerId, player1/2.startggEntrantId,
+ *   doubleForfeit, withdrawnEntrantId })
  * @param phases [{ name, bracketType, phaseOrder }]
  * @returns Map entrantId → rank
  */
@@ -116,8 +122,8 @@ function computeProvisionalRanks(matches = [], phases = []) {
     if (!kind) {
       const list = matches.filter(m => (m.phase || '') === name);
       const losses = new Map();
-      list.forEach(m => m.winnerId != null && sideIds(m).forEach(id => {
-        if (id && id !== String(m.winnerId)) losses.set(id, (losses.get(id) || 0) + 1);
+      list.forEach(m => isDecided(m) && sideIds(m).forEach(id => {
+        if (id && id !== String(winnerOf(m))) losses.set(id, (losses.get(id) || 0) + 1);
       }));
       kind = list.some(m => (m.round || 0) < 0) ? 'doubleelimination'
         : [...losses.values()].some(n => n > 1) ? 'roundrobin' : 'singleelimination';
@@ -136,15 +142,15 @@ function computeProvisionalRanks(matches = [], phases = []) {
     }
   }
   for (const m of matches) {
-    if (m.winnerId == null) continue;
+    if (!isDecided(m)) continue;
     const kind = kinds.get(m.phase || '');
     for (const id of sideIds(m)) {
       const s = id && stats.get(id);
       if (!s) continue;
-      if (id === String(m.winnerId)) s.allWins += 1;
+      if (id === String(winnerOf(m))) s.allWins += 1;
       else s.allLosses += 1;
       if (s.phase !== (m.phase || '')) continue;
-      if (id === String(m.winnerId)) { s.wins += 1; continue; }
+      if (id === String(winnerOf(m))) { s.wins += 1; continue; }
       s.losses += 1;
       const round = m.round || 0;
       // How far the entrant went when knocked out (losers rounds count back from -1, grand finals last)
@@ -156,11 +162,12 @@ function computeProvisionalRanks(matches = [], phases = []) {
   // Swiss: the wins in the phase of each opponent met there
   const phaseWins = new Map(); // `${phase}|${entrantId}` → wins
   for (const m of matches) {
-    if (m.winnerId != null) phaseWins.set(`${m.phase || ''}|${m.winnerId}`, (phaseWins.get(`${m.phase || ''}|${m.winnerId}`) || 0) + 1);
+    const winner = winnerOf(m);
+    if (winner != null) phaseWins.set(`${m.phase || ''}|${winner}`, (phaseWins.get(`${m.phase || ''}|${winner}`) || 0) + 1);
   }
   for (const m of matches) {
     const phase = m.phase || '';
-    if (m.winnerId == null || kinds.get(phase) !== 'swiss') continue;
+    if (winnerOf(m) == null || kinds.get(phase) !== 'swiss') continue;
     const [p1, p2] = sideIds(m);
     if (!p1 || !p2) continue;
     [[p1, p2], [p2, p1]].forEach(([id, opponent]) => {

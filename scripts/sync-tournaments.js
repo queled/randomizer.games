@@ -33,6 +33,7 @@ const findGameForTournament = require('../helpers/find-game-for-tournament');
 const sanitizeHtml = require('sanitize-html');
 const { saveGroupedChallongeBracket } = require('../services/challonge-bracket-groups');
 const { fillMissingFinalRanks } = require('../helpers/bracket-ranks');
+const { markDoubleForfeits, findUnfinishedRooms } = require('../helpers/double-forfeits');
 
 const RATE_LIMIT_MS = 1500;
 const HOUR_MS = 60 * 60 * 1000;
@@ -176,8 +177,6 @@ async function updateActiveTournaments({ dryRun, challongeHours }) {
           return m;
         });
 
-        const participants = StartGGAPI.buildParticipants(event);
-
         // Phases are often set up after the event is created: refresh them with the sets
         const phases = (event.phases || []).map(phase => ({
           startggPhaseId: phase.id,
@@ -188,6 +187,11 @@ async function updateActiveTournaments({ dryRun, challongeHours }) {
           groupCount: phase.groupCount,
           state: phase.state
         }));
+
+        // Both players out, a win for one of them on start.gg: told apart by the linked rooms
+        const doubleForfeits = markDoubleForfeits(matches, phases, await findUnfinishedRooms(matches, Race));
+        if (doubleForfeits) console.log(`   🚫 ${tournament.name} : ${doubleForfeits} double(s) forfait(s)`);
+        const participants = StartGGAPI.buildParticipants(event, doubleForfeits ? { matches } : {});
         const phaseFields = phases.length
           ? { phases, tournamentType: String(phases[0].bracketType || '').toLowerCase() || tournament.tournamentType }
           : {};

@@ -4830,9 +4830,10 @@ function createBracketMatchCard(match, isFinal = false) {
     'white-space: nowrap; overflow: hidden; text-overflow: ellipsis; gap: 0.5rem;'
   ].filter(Boolean).join(' ');
   
-  // Only apply winner background if both players are defined (not TBD)
-  const player1Style = playerStyle(player1Winner && match.player1Name && match.player2Name, true);
-  const player2Style = playerStyle(player2Winner && match.player1Name && match.player2Name, false);
+  // Only apply winner background if both players are defined (not TBD), or the winner went through alone
+  const decided = (match.player1Name && match.player2Name) || match.walkover;
+  const player1Style = playerStyle(player1Winner && decided, true);
+  const player2Style = playerStyle(player2Winner && decided, false);
   
   // Race times: show a 1-0 from the winner instead of the raw seconds.
   const parsedScores = isRaceTimeScore(match.scoresCsv)

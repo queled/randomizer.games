@@ -13,6 +13,33 @@ const UPLOAD_MAX_DELAY_MS = 30 * 24 * 3600 * 1000;
 // A broadcast lasts a few hours at most
 const BROADCAST_MAX_MS = 12 * 3600 * 1000;
 const TIEBREAK_RE = /\btie[\s-]?break/i;
+const GAME_RE = /\b(?:game|match|g)\s*(\d)\b/i;
+// "(03/27/2025)": the day of the race
+const TITLE_DATE_RE = /\b(\d{1,2})\/(\d{1,2})\/(20\d\d)\b/;
+const DAY_MS = 24 * 3600 * 1000;
+
+// Race url → its game number in a series of its tournament (null for a single race)
+const gamesByTournament = new WeakMap();
+function gameOf(race) {
+  const tournament = race.tournament;
+  if (!tournament || !tournament.matches) return null;
+  if (!gamesByTournament.has(tournament)) {
+    const games = new Map();
+    for (const m of tournament.matches) {
+      const urls = (m.raceUrls && m.raceUrls.length ? m.raceUrls : [m.raceUrl]).filter(Boolean);
+      if (urls.length > 1) urls.forEach((url, i) => games.set(url.replace(/^https?:\/\/racetime\.gg/i, '').toLowerCase(), i + 1));
+    }
+    gamesByTournament.set(tournament, games);
+  }
+  return gamesByTournament.get(tournament).get(String(race.url).toLowerCase()) || null;
+}
+
+// The day a title gives (month first), as a UTC midnight time; null without one
+function titleDay(title) {
+  const m = String(title).match(TITLE_DATE_RE);
+  if (!m || +m[1] > 12 || +m[2] > 31) return null;
+  return Date.UTC(+m[3], +m[1] - 1, +m[2]);
+}
 
 // A channel named after one of its players ("<name>_tv", "123<name>"), names of 4 characters at least
 function ownChannel(channelNames, race) {
@@ -56,8 +83,9 @@ const playersOf = race => (race.entrants || []).map(e => [e.userName].filter(Boo
  * Races a video is the restream of, with the link to give:
  * - a broadcast archived on YouTube covering the race start, linked at that moment
  *   (every game of a series it covers);
- * - else an upload within weeks of the race, when it fits one race only (a title
- *   saying tie-break picks among the races of the same players the tie-break one).
+ * - else an upload within weeks of the race, when it fits one race only; among races of
+ *   the same players, the day in the title, a tie-break, or the game number of the
+ *   series ("G2") picks one.
  * The title names the race's players and no other event; a player's own channel is
  * not a restream.
  * @param channel { title, handle }
@@ -79,7 +107,12 @@ function matchVideo(video, index, channel) {
   }
   const published = new Date(video.snippet.publishedAt).getTime();
   let matching = index.between(published - UPLOAD_MAX_DELAY_MS, published + SAME_RACE_MS).filter(named);
+  const day = matching.length > 1 && titleDay(title);
+  // The day in the title, in any time zone
+  if (day) matching = matching.filter(race => Math.abs(new Date(race.startedAt).getTime() - day - DAY_MS / 2) <= DAY_MS);
   if (matching.length > 1) matching = matching.filter(race => !!race.tiebreak === TIEBREAK_RE.test(title));
+  const game = matching.length > 1 && +((title.match(GAME_RE) || [])[1]);
+  if (game) matching = matching.filter(race => gameOf(race) === game);
   return matching.length === 1 ? [{ race: matching[0], vodUrl: `https://www.youtube.com/watch?v=${video.id}` }] : [];
 }
 
@@ -87,7 +120,6 @@ function matchVideo(video, index, channel) {
 const SCHEDULE_UPLOAD_MAX_DELAY_MS = 180 * 24 * 3600 * 1000;
 // The same video uploaded again: its length within seconds
 const REUPLOAD_MAX_GAP_S = 10;
-const GAME_RE = /\b(?:game|match|g)\s*(\d)\b/i;
 const PART_RE = /\bpart\s*(\d+)\b/i;
 // Words of a tournament name that tell no tournament apart
 const GENERIC_WORDS = new Set(['the', 'tournament', 'tournoi', 'community', 'season', 'saison', 'league', 'open', 'cup', 'winter', 'spring', 'summer', 'fall', 'autumn', 'main', 'edition']);

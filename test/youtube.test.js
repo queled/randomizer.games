@@ -69,3 +69,16 @@ test('uploads of a schedule go to its races in order, "Game N" to that game of t
   ], 'English');
   assert.deepEqual(found.map(f => [f.video.id, f.roomUrl.split('/').pop()]).sort(), [['v1', 'swiss'], ['v3', 'g3'], ['v4', 'g2']]);
 });
+
+test('among games of the same players, the day or the game number of the title picks the race', () => {
+  const tournament = { matches: [{ raceUrls: ['/game/one', '/game/two'] }] };
+  const games = raceIndex([
+    { _id: 'g1', url: '/game/one', startedAt: '2025-03-01T20:00:00Z', entrants: [{ userName: 'Alpha' }, { userName: 'Bravo' }], tournament },
+    { _id: 'g2', url: '/game/two', startedAt: '2025-03-04T02:00:00Z', entrants: [{ userName: 'Alpha' }, { userName: 'Bravo' }], tournament }
+  ]);
+  const upload = title => ({ id: 'abcdefghijk', snippet: { title, publishedAt: '2025-03-10T12:00:00Z' } });
+  assert.deepEqual(matchVideo(upload('Event: Final - Alpha vs Bravo (G2)'), games, CHANNEL).map(f => f.race._id), ['g2']);
+  // Evening of the 3rd in America, the 4th in UTC
+  assert.deepEqual(matchVideo(upload('Event: Final - Alpha vs Bravo (03/03/2025)'), games, CHANNEL).map(f => f.race._id), ['g2']);
+  assert.deepEqual(matchVideo(upload('Event: Final - Alpha vs Bravo'), games, CHANNEL), []);
+});

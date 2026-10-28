@@ -1460,6 +1460,33 @@ function teamRaceWinner(race, members1, members2) {
   return null;
 }
 
+// Racetime dates over the bracket's: Challonge stamps a match when it opens and when its score is reported, often days apart from the races.
+// A series the organizer never validated ends once its races are all over, one player ahead and nothing played for a week.
+const SETTLED_SERIES_DELAY_MS = 7 * 24 * 3600 * 1000;
+function settleMatchesFromRaces(matches, races) {
+  matches.forEach(m => {
+    const played = findRacesForMatch(m, races).filter(r => r && r.startedAt);
+    if (!played.length) return;
+    const last = played[played.length - 1];
+    m.playedAt = last.startedAt;
+    m.startedAt = played[0].startedAt;
+    const over = played.every(r => r.status === 'finished' && r.endedAt);
+    if (!over) return;
+    const endedAt = played.map(r => r.endedAt).sort().pop();
+    if (m.state === 'complete') {
+      m.completedAt = endedAt;
+      return;
+    }
+    const [s1, s2] = String(m.scoresCsv || '').split('-').map(Number);
+    if (!Number.isInteger(s1) || !Number.isInteger(s2) || s1 === s2 || Math.max(s1, s2) > played.length) return;
+    if (Date.now() - new Date(endedAt).getTime() < SETTLED_SERIES_DELAY_MS) return;
+    m.state = 'complete';
+    m.completedAt = endedAt;
+    m.winnerId = s1 > s2 ? m.player1Id : m.player2Id;
+    m.loserId = s1 > s2 ? m.player2Id : m.player1Id;
+  });
+}
+
 async function loadMatches(tournamentId) {
   try {
     const response = await fetch(`/api/tournaments/${tournamentId}/matches`);
@@ -1486,7 +1513,8 @@ async function loadMatches(tournamentId) {
     const tournamentComplete = ['complete', 'completed', 'ended', 'awaiting_review'].includes(String(currentTournament?.state || '').toLowerCase())
       || String(currentTournament?.status || '').toLowerCase() === 'terminé';
     const allMatches = removeUnplayedBracketResets(data.matches || [], tournamentComplete);
-    
+    settleMatchesFromRaces(allMatches, races);
+
     // Store for re-rendering on spoiler mode change
     currentMatches = allMatches;
     currentRaces = races;
@@ -2890,7 +2918,7 @@ function createMatchCard(match, races = []) {
   card.innerHTML = `
     <div class="match-card-head" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
       <div style="font-size: 0.875rem; color: #9ca3af;">
-        ${match.completedAt ? formatDateTime(match.completedAt) : match.startedAt ? formatDateTime(match.startedAt) : match.scheduledAt ? escHtml(formatScheduledAt(match.scheduledAt)) : escHtml(tdText('notScheduled', 'Not scheduled'))}${match.groupId !== null && match.groupId !== undefined && match.round ? ` • ${escHtml(tdText('roundN', 'Round {n}', { n: match.round }))}` : ''}
+        ${match.playedAt ? formatDateTime(match.playedAt) : match.completedAt ? formatDateTime(match.completedAt) : match.startedAt ? formatDateTime(match.startedAt) : match.scheduledAt ? escHtml(formatScheduledAt(match.scheduledAt)) : escHtml(tdText('notScheduled', 'Not scheduled'))}${match.groupId !== null && match.groupId !== undefined && match.round ? ` • ${escHtml(tdText('roundN', 'Round {n}', { n: match.round }))}` : ''}
       </div>
       <div class="match-card-links" style="display: flex; align-items: center; gap: 0.5rem;">
         <div class="match-card-media">${mergeRestreams(match.restreams, matchRaces).filter(s => s.vodUrl).map(restreamLinkHtml).join('')}${!isMultiRaceSeries ? singleRaceVodsHtml : ''}</div>

@@ -399,6 +399,8 @@ const matchSchema = new mongoose.Schema({
   startedAt: Date,
   completedAt: Date,
   raceUrl: String, // Link to racetime.gg race
+  // Completed from its races: the organizer reported the score but never validated the match on Challonge
+  settledFromRaces: Boolean,
   // optional source metadata for import tracing
   source: {
     type: { type: String },

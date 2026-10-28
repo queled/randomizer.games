@@ -1461,7 +1461,8 @@ function teamRaceWinner(race, members1, members2) {
 }
 
 // Racetime dates over the bracket's: Challonge stamps a match when it opens and when its score is reported, often days apart from the races.
-// A series the organizer never validated ends once its races are all over, one player ahead and nothing played for a week.
+// A series the organizer never validated ends once its races are all over, one player ahead and nothing played for a week
+// (mirrors settledSeries() in helpers/settled-series.js: keep both in sync).
 const SETTLED_SERIES_DELAY_MS = 7 * 24 * 3600 * 1000;
 function settleMatchesFromRaces(matches, races) {
   matches.forEach(m => {

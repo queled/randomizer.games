@@ -32,7 +32,8 @@ const challongeAPI = require('../services/challonge');
 const findGameForTournament = require('../helpers/find-game-for-tournament');
 const sanitizeHtml = require('sanitize-html');
 const { saveGroupedChallongeBracket } = require('../services/challonge-bracket-groups');
-const { fillMissingFinalRanks } = require('../helpers/bracket-ranks');
+const { fillMissingFinalRanks, computeEliminationRanks } = require('../helpers/bracket-ranks');
+const { settledSeries } = require('../helpers/settled-series');
 const { markDoubleForfeits, findUnfinishedRooms } = require('../helpers/double-forfeits');
 
 const RATE_LIMIT_MS = 1500;
@@ -323,23 +324,55 @@ async function updateActiveTournaments({ dryRun, challongeHours }) {
 }
 
 // Challonge brackets the organizer never closes have no end: their last race or reported score
-// stands in for it, so they end like a start.gg event left open (no API request needed)
+// stands in for it, so they end like a start.gg event left open (no API request needed).
+// Series whose races are over get their winner, and a bracket all played its ranks.
 async function updateLastActivity({ dryRun }) {
   const open = await Tournament.find({
     startggId: null,
     endDate: null,
     state: { $in: ['pending', 'underway', 'in_progress'] },
     $or: [{ challongeId: { $ne: null } }, { 'challongeBrackets.0': { $exists: true } }]
-  }).select('_id name lastActivityAt').lean();
+  }).select('_id name tournamentType challongeId challongeBrackets participants lastActivityAt').lean();
 
   let updated = 0;
   for (const t of open) {
-    const [match] = await Match.find({ tournamentId: t._id, completedAt: { $ne: null } }).sort({ completedAt: -1 }).limit(1).select('completedAt').lean();
-    const [race] = await Race.find({ tournamentId: t._id, endedAt: { $ne: null } }).sort({ endedAt: -1 }).limit(1).select('endedAt').lean();
-    const last = [match?.completedAt, race?.endedAt].filter(Boolean).map(d => new Date(d)).sort((a, b) => b - a)[0];
-    if (!last || (t.lastActivityAt && new Date(t.lastActivityAt).getTime() === last.getTime())) continue;
-    if (!dryRun) await Tournament.updateOne({ _id: t._id }, { $set: { lastActivityAt: last } });
-    console.log(`   🕒 ${t.name}: last played ${last.toISOString().slice(0, 10)}`);
+    const matches = await Match.find({ tournamentId: t._id }).lean();
+    const races = await Race.find({ tournamentId: t._id }).select('matchId status startedAt endedAt').lean();
+    const racesByMatch = new Map();
+    races.forEach(r => {
+      if (!r.matchId) return;
+      const key = String(r.matchId);
+      if (!racesByMatch.has(key)) racesByMatch.set(key, []);
+      racesByMatch.get(key).push(r);
+    });
+
+    for (const m of matches) {
+      const settled = settledSeries(m, racesByMatch.get(String(m._id)));
+      if (!settled) continue;
+      Object.assign(m, settled, { state: 'complete', settledFromRaces: true });
+      if (!dryRun) await Match.updateOne({ _id: m._id }, { $set: { ...settled, state: 'complete', settledFromRaces: true } });
+      console.log(`   🏁 ${t.name}: ${m.player1Name} ${m.scoresCsv} ${m.player2Name}, never validated, over since ${settled.completedAt.toISOString().slice(0, 10)}`);
+    }
+
+    // One Challonge bracket all played (a grouped tournament ranks each of its brackets apart).
+    // Only a match with no players may be left: the bracket reset a double elimination did not need
+    const participants = t.participants || [];
+    const allPlayed = matches.every(m => m.state === 'complete' || (m.player1Id == null && m.player2Id == null));
+    if (t.challongeId && !t.challongeBrackets?.length && allPlayed && participants.length && participants.every(p => p.finalRank == null)) {
+      const ranks = computeEliminationRanks({ tournamentType: t.tournamentType, matches });
+      if (ranks) {
+        participants.forEach(p => { const rank = ranks.get(String(p.challongeId)); if (rank) p.finalRank = rank; });
+        if (!dryRun) await Tournament.updateOne({ _id: t._id }, { $set: { participants } });
+        console.log(`   🏆 ${t.name}: ranks of the played bracket`);
+      }
+    }
+
+    const lastMatch = Math.max(0, ...matches.map(m => (m.completedAt ? new Date(m.completedAt).getTime() : 0)));
+    const lastRace = Math.max(0, ...races.map(r => (r.endedAt ? new Date(r.endedAt).getTime() : 0)));
+    const last = Math.max(lastMatch, lastRace);
+    if (!last || (t.lastActivityAt && new Date(t.lastActivityAt).getTime() === last)) continue;
+    if (!dryRun) await Tournament.updateOne({ _id: t._id }, { $set: { lastActivityAt: new Date(last) } });
+    console.log(`   🕒 ${t.name}: last played ${new Date(last).toISOString().slice(0, 10)}`);
     updated++;
   }
   return updated;
@@ -397,7 +430,7 @@ async function main() {
     totalSkipped += updateStats.skipped;
     totalErrors += updateStats.errors;
     console.log(`\n   📊 Update: ${updateStats.updated} updated, ${updateStats.skipped} skipped, ${updateStats.errors} errors`);
-    console.log(`   🕒 Last activity: ${await updateLastActivity({ dryRun: opts.dryRun })} Challonge bracket(s) still open`);
+    console.log(`   🕒 Last activity: ${await updateLastActivity({ dryRun: opts.dryRun })} Challonge bracket(s) updated`);
   }
 
   // Phase 2: Discover new tournaments

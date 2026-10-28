@@ -218,9 +218,15 @@ async function syncEvent(ev, { dryRun }, stats, syncedIds) {
   const { upcoming, past } = await scheduleSites.getEventRaces(ev.series, ev.event, ev.site);
   numberGames(upcoming.concat(past));
 
+  // An event rebuilt from Mido's House (sync-midos-events.js) holds all its races, start.gg sets or not
+  const rebuilt = ev.site === 'midos' ? await Tournament.findOne({
+    'source.type': 'midos-house', 'source.externalId': `${ev.series}/${ev.event}`
+  }).select('_id name midosHouse.pastRestreams').lean() : null;
+
   // One Mido's House event can map to several start.gg events (e.g. one per bracket)
   const bySlug = new Map();
-  for (const [list, race] of [...upcoming.map(r => ['upcoming', r]), ...past.map(r => ['past', r])]) {
+  if (rebuilt) bySlug.set(null, { upcoming, past, tournament: rebuilt });
+  for (const [list, race] of rebuilt ? [] : [...upcoming.map(r => ['upcoming', r]), ...past.map(r => ['past', r])]) {
     if (!race.startggSlug) continue;
     if (!bySlug.has(race.startggSlug)) bySlug.set(race.startggSlug, { upcoming: [], past: [] });
     bySlug.get(race.startggSlug)[list].push(race);

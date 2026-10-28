@@ -432,9 +432,11 @@ async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun,
   const existingStartgg = await Tournament.find({
     $or: [
       { startggId: { $exists: true, $ne: null } },
-      { startggTournamentId: { $exists: true, $ne: null } }
+      { startggTournamentId: { $exists: true, $ne: null } },
+      // The start.gg bracket of a tournament rebuilt from Mido's House (sync-midos-events.js)
+      { startggUrl: { $exists: true, $ne: null } }
     ]
-  }).select('startggId startggTournamentId startggSlug').lean();
+  }).select('startggId startggTournamentId startggSlug startggUrl').lean();
   const existingStartggIds = new Set(existingStartgg
     .filter(tournament => tournament.startggId != null)
     .map(tournament => String(tournament.startggId)));
@@ -442,7 +444,8 @@ async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun,
     .filter(tournament => tournament.startggTournamentId != null)
     .map(tournament => String(tournament.startggTournamentId)));
   const existingStartggSlugs = new Set(existingStartgg
-    .map(tournament => String(tournament.startggSlug || '').split('/event/')[0])
+    .map(tournament => String(tournament.startggSlug || '').split('/event/')[0]
+      || StartGGAPI.extractSlugFromUrl(String(tournament.startggUrl || '')))
     .filter(Boolean));
 
   console.log(`\n🔍 Start.gg: Searching ${games.length} game(s)...`);

@@ -10,7 +10,8 @@
  *     won more of them.
  * Races labelled as tie-breaks, or with more than two sides, are attached as tie-breaks
  * of their group instead of matches. Async races, played outside racetime.gg, have no
- * known result.
+ * known result. A bracket forfeit Mido's House never listed is added when the bracket
+ * shows who met (helpers/midos-event-matches.js `missingForfeits`).
  * An event whose page links a start.gg or Challonge bracket is left out: that bracket is
  * imported instead.
  *
@@ -22,8 +23,8 @@
  * `teams`: the sides are Mido's House teams, each race played by one player of each.
  * `resultsSheet`: the Google Sheet where the organizers kept the results of a phase, which
  * fills in the matches the rooms leave without a winner (async races) and wins over them.
- * `startggUrl`: the start.gg bracket of the last phase alone, which Mido's House does not
- * link: linked from the tournament page, the event staying rebuilt here with all its phases.
+ * `startggUrl`: the start.gg bracket of the last phase alone, linked or not by Mido's House:
+ * linked from the tournament page, the event staying rebuilt here with all its phases.
  *
  * Usage:
  *   node scripts/sync-midos-events.js                  # every event of EVENTS
@@ -44,7 +45,7 @@ const scheduleSites = require('../services/schedule-sites');
 const racetime = require('../services/racetime');
 const { computeProvisionalRanks } = require('../helpers/provisional-ranks');
 const {
-  TIEBREAK_RE, kindOf, isElimination, tiebreakGroup, roundOf, seriesWinner, inferWalkovers, orderBracket, pendingRounds
+  TIEBREAK_RE, kindOf, isElimination, tiebreakGroup, roundOf, seriesWinner, inferWalkovers, missingForfeits, orderBracket, pendingRounds
 } = require('../helpers/midos-event-matches');
 
 const GAME_ID = 'oot';
@@ -92,6 +93,24 @@ const EVENTS = {
     phases: {
       Swiss: { name: 'Swiss', bracketType: 'SWISS' },
       Bracket: { name: 'Bracket', bracketType: 'SINGLE_ELIMINATION', rounds: ['Round 1', 'Quarterfinal', 'Semifinal', 'Final'] }
+    }
+  },
+  'mp/4': {
+    name: 'Mixed Pools Tournament Season 4',
+    startggUrl: 'https://www.start.gg/tournament/ootr-mixed-pools-s4-top-16-bracket/event/top-16-bracket',
+    resultsSheet: { id: '1xjU_tv8pbMpfDBeCbm6SQ7HtbOPS4ZCsOLySkDX296o', gid: 1885752948, phase: 'Swiss', names: { Inc: 'Incacola' } },
+    phases: {
+      Swiss: { name: 'Swiss', bracketType: 'SWISS' },
+      Bracket: { name: 'Bracket', bracketType: 'SINGLE_ELIMINATION', rounds: ['Round 1', 'Quarter-Final', 'Semi-Final', 'Final'] }
+    }
+  },
+  'mp/5': {
+    name: 'Mixed Pools Tournament Season 5',
+    startggUrl: 'https://www.start.gg/tournament/ootr-mixed-pools-s5-top-16-bracket/event/top-16-bracket',
+    resultsSheet: { id: '1Czm7o5vI3uafdjAsEuHa8VyX2ts52oFf1L4LFJqbNmc', gid: 1885752948, phase: 'Swiss' },
+    phases: {
+      Swiss: { name: 'Swiss', bracketType: 'SWISS' },
+      Bracket: { name: 'Bracket', bracketType: 'SINGLE_ELIMINATION', rounds: ['Round 1', 'Quarter-Final', 'Semi-Final', 'Final'] }
     }
   },
   'br/1': {
@@ -156,20 +175,22 @@ const squash = name => String(name || '').toLowerCase().replace(/[^a-z0-9]/g, ''
 
 /**
  * Results of a phase kept in a Google Sheet: a row per player with a column per round
- * ('Round 1'…, 'WIN' or 'LOSE'), and a tab of the players with their Twitch channel.
+ * ('Round 1' or 'R1'…, 'WIN' or 1, 'LOSE' or 0), and maybe a tab of the players with their Twitch channel.
  * A side is found by its name (on Mido's House or racetime.gg), then its Twitch channel, then a name starting the other
  * one; `names` gives the sheet name of the others, by racetime name.
  * Sets the winner of each match whose players the sheet tells apart.
  */
 async function applyResultsSheet(matches, sheet) {
   const [header, ...rows] = await sheetCsv(sheet.id, sheet.gid);
-  const [playersHeader, ...players] = await sheetCsv(sheet.id, sheet.playersGid);
+  const [playersHeader, ...players] = sheet.playersGid != null ? await sheetCsv(sheet.id, sheet.playersGid) : [[]];
   const channelCol = playersHeader.findIndex(h => /twitch/i.test(h));
   const channels = new Map(players.map(p => [squash(p[0]), squash((p[channelCol] || '').match(/twitch\.tv\/([^/?#]+)/i)?.[1])]));
+  const roundCol = round => [`Round ${round}`, `R${round}`].map(h => header.indexOf(h)).find(i => i >= 0);
+  const OUTCOMES = { WIN: 'WIN', 1: 'WIN', LOSE: 'LOSE', 0: 'LOSE' };
   const entries = rows.filter(r => r[0]).map(r => ({
     name: squash(r[0]),
     channel: channels.get(squash(r[0])) || null,
-    result: round => (r[header.indexOf(`Round ${round}`)] || '').toUpperCase()
+    result: round => OUTCOMES[(r[roundCol(round)] || '').toUpperCase()] || ''
   }));
 
   const list = matches.filter(m => m.phase === sheet.phase);
@@ -342,7 +363,7 @@ async function syncEvent(key, config, { game, dryRun, verbose }) {
   const url = scheduleSites.eventUrl('midos', series, event);
   const label = `${config.name} (${key})`;
 
-  if (await linksBracket(url)) {
+  if (!config.startggUrl && await linksBracket(url)) {
     console.log(`  ⏭️  ${label} : la page lie un bracket start.gg ou Challonge, à importer depuis celui-ci`);
     return null;
   }
@@ -377,6 +398,7 @@ async function syncEvent(key, config, { game, dryRun, verbose }) {
   const phaseList = Object.values(config.phases);
   const phases = phaseList.map((p, i) => ({ name: p.name, bracketType: p.bracketType, phaseOrder: i + 1 }));
   const built = buildMatches(games);
+  built.push(...missingForfeits(built, phases));
   const sheetStats = config.resultsSheet ? await applyResultsSheet(built, config.resultsSheet) : null;
   const matches = inferWalkovers(built, phases);
   // A walkover is over by the winner's next match

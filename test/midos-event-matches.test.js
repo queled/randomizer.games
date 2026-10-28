@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { tiebreakGroup, roundOf, seriesWinner, inferWalkovers, orderBracket, pendingRounds } = require('../helpers/midos-event-matches');
+const { tiebreakGroup, roundOf, seriesWinner, inferWalkovers, missingForfeits, orderBracket, pendingRounds } = require('../helpers/midos-event-matches');
 
 const game = (winner, doneAt = 1) => ({ winner, doneAt });
 const match = (round, a, b, winner = null, startAt = 0) => ({ phase: 'Top 8', round, sides: [a, b], winner, startAt });
@@ -38,6 +38,23 @@ test('a match without result is won by the only side playing a later round', () 
   assert.equal(matches[0].winner, 'a');
   assert.equal(matches[0].walkover, true);
   assert.equal(matches[3].winner, null);
+});
+
+test('a forfeit never listed pairs the side going through with the only winner going no further', () => {
+  const info = side => ({ key: side, name: side });
+  const full = (round, a, b, winner) => ({ ...match(round, a, b, winner), sideInfo: [info(a), info(b)] });
+  const matches = [
+    full(1, 'a', 'b', 'a'), full(1, 'c', 'd', 'c'), full(1, 'e', 'f', 'e'), full(1, 'g', 'h', 'g'),
+    full(2, 'a', 'c', 'a'), full(3, 'a', 'e', 'a')
+  ];
+  const [added, ...rest] = missingForfeits(matches, PHASES);
+  assert.equal(rest.length, 0);
+  assert.deepEqual(added.sides, ['e', 'g']);
+  assert.equal(added.round, 2);
+  assert.equal(added.winner, 'e');
+  assert.equal(added.walkover, true);
+  // Two winners gone: who met is unknown
+  assert.equal(missingForfeits(matches.filter(m => m.round !== 2), PHASES).length, 0);
 });
 
 test('bracket order: the matches feeding a match sit together, in the order of its sides', () => {

@@ -76,6 +76,36 @@ function inferWalkovers(matches, phases) {
 }
 
 /**
+ * Single elimination matches Mido's House never listed (forfeits without a room): a side
+ * playing round r + 1 without a match in round r, against the only winner of round r - 1
+ * that went no further. Matches it cannot pair that way are left out.
+ * @returns the missing matches, won by the side that went through, as walkovers
+ */
+function missingForfeits(matches, phases) {
+  const added = [];
+  for (const phase of phases.filter(p => kindOf(p.bracketType) === 'singleelimination')) {
+    const list = matches.filter(m => m.phase === phase.name && m.round > 0 && !m.thirdPlace);
+    const inRound = round => list.filter(m => m.round === round);
+    const plays = (round, side) => inRound(round).some(m => m.sides.includes(side));
+    const infoOf = side => list.flatMap(m => m.sideInfo).find(info => info.key === side);
+    const last = Math.max(0, ...list.map(m => m.round));
+    for (let round = 2; round < last; round++) {
+      const through = [...new Set(inRound(round + 1).flatMap(m => m.sides))].filter(side => !plays(round, side));
+      const out = inRound(round - 1).map(m => m.winner).filter(side => side && !plays(round, side) && !plays(round + 1, side));
+      if (through.length !== 1 || out.length !== 1) continue;
+      const m = {
+        phase: phase.name, round, group: null, thirdPlace: false,
+        sideInfo: [infoOf(through[0]), infoOf(out[0])], sides: [through[0], out[0]],
+        games: [], winner: through[0], walkover: true, startAt: null, doneAt: null
+      };
+      list.push(m);
+      added.push(m);
+    }
+  }
+  return added;
+}
+
+/**
  * Matches of an elimination phase in bracket order: the two matches feeding a match sit
  * next to each other, in the order of its sides, from the final back to the first round.
  * The third place match comes after the final. The tournament page keeps that order
@@ -138,4 +168,4 @@ function pendingRounds(stored, roundCount) {
   return added;
 }
 
-module.exports = { TIEBREAK_RE, kindOf, isElimination, tiebreakGroup, roundOf, seriesWinner, inferWalkovers, orderBracket, pendingRounds };
+module.exports = { TIEBREAK_RE, kindOf, isElimination, tiebreakGroup, roundOf, seriesWinner, inferWalkovers, missingForfeits, orderBracket, pendingRounds };

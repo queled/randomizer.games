@@ -322,6 +322,29 @@ async function updateActiveTournaments({ dryRun, challongeHours }) {
   return stats;
 }
 
+// Challonge brackets the organizer never closes have no end: their last race or reported score
+// stands in for it, so they end like a start.gg event left open (no API request needed)
+async function updateLastActivity({ dryRun }) {
+  const open = await Tournament.find({
+    startggId: null,
+    endDate: null,
+    state: { $in: ['pending', 'underway', 'in_progress'] },
+    $or: [{ challongeId: { $ne: null } }, { 'challongeBrackets.0': { $exists: true } }]
+  }).select('_id name lastActivityAt').lean();
+
+  let updated = 0;
+  for (const t of open) {
+    const [match] = await Match.find({ tournamentId: t._id, completedAt: { $ne: null } }).sort({ completedAt: -1 }).limit(1).select('completedAt').lean();
+    const [race] = await Race.find({ tournamentId: t._id, endedAt: { $ne: null } }).sort({ endedAt: -1 }).limit(1).select('endedAt').lean();
+    const last = [match?.completedAt, race?.endedAt].filter(Boolean).map(d => new Date(d)).sort((a, b) => b - a)[0];
+    if (!last || (t.lastActivityAt && new Date(t.lastActivityAt).getTime() === last.getTime())) continue;
+    if (!dryRun) await Tournament.updateOne({ _id: t._id }, { $set: { lastActivityAt: last } });
+    console.log(`   🕒 ${t.name}: last played ${last.toISOString().slice(0, 10)}`);
+    updated++;
+  }
+  return updated;
+}
+
 // ─── Discover new tournaments (delegate to discover-tournaments.js) ──────────
 
 async function discoverNewTournaments({ days, dryRun }) {
@@ -374,6 +397,7 @@ async function main() {
     totalSkipped += updateStats.skipped;
     totalErrors += updateStats.errors;
     console.log(`\n   📊 Update: ${updateStats.updated} updated, ${updateStats.skipped} skipped, ${updateStats.errors} errors`);
+    console.log(`   🕒 Last activity: ${await updateLastActivity({ dryRun: opts.dryRun })} Challonge bracket(s) still open`);
   }
 
   // Phase 2: Discover new tournaments

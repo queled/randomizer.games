@@ -80,7 +80,7 @@ async function buildCommonTournaments({ Tournament, Match, players, raceIdByRoom
 
   const [tournaments, labelFor] = await Promise.all([
     Tournament.find({ $and: [participantQuery(p1), participantQuery(p2)] })
-      .select('name gameName gameId gameSlug game startDate endDate state participants participantsCount matches.startggSetId matches.round matches.phase matches.phaseGroup matches.displayScore matches.completedAt matches.winnerId matches.player1 matches.player2 matches.raceUrl matches.raceUrls midosHouse.schedule.startAt')
+      .select('name gameName gameId gameSlug game startDate endDate lastActivityAt state participants participantsCount matches.startggSetId matches.round matches.phase matches.phaseGroup matches.displayScore matches.completedAt matches.winnerId matches.player1 matches.player2 matches.raceUrl matches.raceUrls midosHouse.schedule.startAt')
       .populate('game', 'id name official.name randomizer')
       .lean(),
     loadGameLabels()

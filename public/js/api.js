@@ -124,7 +124,8 @@ function getTournamentStatus(tournament) {
 
   const now = Date.now();
   const start = parseDate(tournament && tournament.startDate);
-  const end = parseDate(tournament && tournament.endDate);
+  // Challonge sets no end before the organizer closes the bracket: its last race or reported score stands in
+  const end = parseDate(tournament && tournament.endDate) || parseDate(tournament && tournament.lastActivityAt);
   const state = String((tournament && tournament.state) || '').toLowerCase();
 
   if (FINISHED_STATES.includes(state) || FINISHED_STATES.includes(tournament && tournament.status)) return 'terminé';

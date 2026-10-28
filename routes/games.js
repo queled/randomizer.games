@@ -267,7 +267,7 @@ router.get('/:id/stats', async (req, res, next) => {
     })
       .sort({ startDate: -1 })
       .limit(30)
-      .select('name startDate endDate state status midosHouse.schedule');
+      .select('name startDate endDate lastActivityAt state status midosHouse.schedule');
 
     res.json({
       gameId,

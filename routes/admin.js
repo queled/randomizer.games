@@ -861,7 +861,7 @@ router.get('/stats', requireAdmin, async (req, res, next) => {
         .limit(15)
         .lean(),
       Tournament.find({ $or: [{ endDate: null }, { endDate: { $gte: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000) } }] })
-        .select('name startDate endDate state status midosHouse.schedule.startAt')
+        .select('name startDate endDate lastActivityAt state status midosHouse.schedule.startAt')
         .lean(),
       getJobsHealth({ Game, Tournament, Race })
     ]);
@@ -2098,7 +2098,7 @@ router.get('/tournaments-mgmt', requireAdmin, async (req, res, next) => {
     // The status is computed from the dates: filtered on the ids, then paginated
     if (['à venir', 'en cours', 'terminé'].includes(status)) {
       const candidates = await Tournament.find(query)
-        .select('startDate endDate state status midosHouse.schedule.startAt')
+        .select('startDate endDate lastActivityAt state status midosHouse.schedule.startAt')
         .sort(order)
         .lean();
       query._id = { $in: candidates.filter(t => calculateTournamentStatus(t) === status).map(t => t._id) };

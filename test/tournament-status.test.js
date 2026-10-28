@@ -20,6 +20,8 @@ const CASES = [
   ['started over a year ago', { startDate: daysFromNow(-366), state: 'underway' }, 'terminé'],
   ['active, a little past its end', { startDate: daysFromNow(-30), endDate: daysFromNow(-10), state: 'active' }, 'en cours'],
   ['active, long past its end', { startDate: daysFromNow(-120), endDate: daysFromNow(-90), state: 'active' }, 'terminé'],
+  ['underway, last played a little ago', { startDate: daysFromNow(-60), lastActivityAt: daysFromNow(-10), state: 'underway' }, 'en cours'],
+  ['underway, nothing played for long', { startDate: daysFromNow(-150), lastActivityAt: daysFromNow(-90), state: 'underway' }, 'terminé'],
   ['past its end, a match still scheduled', {
     startDate: daysFromNow(-120),
     endDate: daysFromNow(-90),

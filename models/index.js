@@ -305,6 +305,8 @@ const tournamentSchema = new mongoose.Schema({
   startggUrl: String,
   // Last refresh from the Challonge API (the update job spaces them out: 500 requests per 30 days)
   challongeSyncedAt: Date,
+  // Last race or reported score of a bracket still open: its end for the status while the organizer has not closed it
+  lastActivityAt: Date,
   // Races scheduled on Mido's House or Hyrule Town Hall (its fork for other
   // games), linked to matches by start.gg set.
   // Kept apart from `matches`, which the start.gg sync rebuilds.

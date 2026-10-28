@@ -25,7 +25,8 @@ function hasUpcomingMatch(tournament, now) {
 
 function calculateTournamentStatus(tournament, now = Date.now()) {
   const start = parseDate(tournament?.startDate);
-  const end = parseDate(tournament?.endDate);
+  // Challonge sets no end before the organizer closes the bracket: its last race or reported score stands in
+  const end = parseDate(tournament?.endDate) || parseDate(tournament?.lastActivityAt);
   const state = String(tournament?.state || '').toLowerCase();
 
   if (FINISHED_STATES.includes(state) || FINISHED_STATES.includes(tournament?.status)) return 'terminé';

@@ -134,7 +134,7 @@ async function buildPlayerTournaments({ Tournament, Match, userId, names }) {
 
   const [tournaments, labelFor] = await Promise.all([
     Tournament.find(participantQuery({ userId, names: cleanNames }))
-      .select('name gameName gameSlug gameId startDate endDate state status participantsCount participants matches.player1.startggEntrantId matches.player2.startggEntrantId matches.winnerId matches.phaseGroup midosHouse.schedule.startAt game')
+      .select('name gameName gameSlug gameId startDate endDate lastActivityAt state status participantsCount participants matches.player1.startggEntrantId matches.player2.startggEntrantId matches.winnerId matches.phaseGroup midosHouse.schedule.startAt game')
       .populate('game', 'id name official.name randomizer')
       .lean(),
     loadGameLabels()

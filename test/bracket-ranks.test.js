@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { computeEliminationRanks, fillMissingFinalRanks } = require('../helpers/bracket-ranks');
+const { computeEliminationRanks, computeChallongeProvisionalRanks, fillMissingFinalRanks } = require('../helpers/bracket-ranks');
 
 const match = (round, winnerId, loserId, extra = {}) => ({ round, winnerId, loserId, state: 'complete', ...extra });
 
@@ -86,4 +86,69 @@ test('fillMissingFinalRanks only fills a finished bracket without ranks', () => 
   known[0].finalRank = 2;
   fillMissingFinalRanks({ tournamentData: { state: 'complete', tournamentType: 'single elimination' }, participants: known, matches });
   assert.deepEqual(known.map((p) => p.finalRank), [2, null, null, null]);
+});
+
+// Provisional ranks of a Challonge tournament still running
+const people = ids => ids.map(id => ({ challongeId: id, name: `P${id}` }));
+const open = (round, player1Id, player2Id, extra = {}) => ({ round, player1Id, player2Id, state: 'open', ...extra });
+const played = (round, player1Id, player2Id, winnerId, extra = {}) => ({ round, player1Id, player2Id, winnerId, state: 'complete', ...extra });
+
+test('provisional: single elimination, players still in tied at the round reached', () => {
+  const ranks = computeChallongeProvisionalRanks({
+    tournamentType: 'single elimination',
+    participants: people([1, 2, 3, 4]),
+    matches: [played(1, 1, 2, 1), played(1, 3, 4, 3), open(2, 1, 3)]
+  });
+  assert.deepEqual(ranksOf(ranks), { 1: 1, 3: 1, 2: 3, 4: 3 });
+});
+
+test('provisional: nothing played yet, no ranks', () => {
+  const ranks = computeChallongeProvisionalRanks({
+    tournamentType: 'single elimination',
+    participants: people([1, 2]),
+    matches: [open(1, 1, 2)]
+  });
+  assert.equal(ranks, null);
+});
+
+test('provisional: group stage players found by name, the final bracket above', () => {
+  const ranks = computeChallongeProvisionalRanks({
+    tournamentType: 'single elimination',
+    participants: people([1, 2, 3]),
+    matches: [
+      played(1, 101, 102, 101, { groupId: 9, player1Name: 'P1', player2Name: 'P2' }),
+      played(2, 101, 103, 103, { groupId: 9, player1Name: 'P1', player2Name: 'P3' }),
+      played(3, 102, 103, 102, { groupId: 9, player1Name: 'P2', player2Name: 'P3' }),
+      open(1, 1, 3)
+    ]
+  });
+  assert.deepEqual(ranksOf(ranks), { 1: 1, 3: 1, 2: 3 });
+});
+
+test('provisional: parallel brackets ranked by their names, not their order', () => {
+  const ranks = computeChallongeProvisionalRanks({
+    tournamentType: 'single elimination',
+    challongeBrackets: [{ challongeId: 10 }, { challongeId: 20 }],
+    phases: [
+      { name: 'Upper', bracketType: 'single elimination', phaseOrder: 1 },
+      { name: 'Lower', bracketType: 'single elimination', phaseOrder: 2 }
+    ],
+    participants: people([1, 2, 3, 4]),
+    matches: [played(1, 1, 2, 1, { phase: 'Upper' }), played(1, 3, 4, 3, { phase: 'Lower' })]
+  });
+  assert.deepEqual(ranksOf(ranks), { 1: 1, 2: 2, 3: 3, 4: 4 });
+});
+
+test('provisional: parallel brackets of unclear order tied at the round reached', () => {
+  const ranks = computeChallongeProvisionalRanks({
+    tournamentType: 'single elimination',
+    challongeBrackets: [{ challongeId: 10 }, { challongeId: 20 }],
+    phases: [
+      { name: 'Pool A', bracketType: 'single elimination', phaseOrder: 1 },
+      { name: 'Pool B', bracketType: 'single elimination', phaseOrder: 2 }
+    ],
+    participants: people([1, 2, 3, 4]),
+    matches: [played(1, 1, 2, 1, { phase: 'Pool A' }), played(1, 3, 4, 3, { phase: 'Pool B' })]
+  });
+  assert.deepEqual(ranksOf(ranks), { 1: 1, 3: 1, 2: 3, 4: 3 });
 });

@@ -32,7 +32,7 @@ const challongeAPI = require('../services/challonge');
 const findGameForTournament = require('../helpers/find-game-for-tournament');
 const sanitizeHtml = require('sanitize-html');
 const { saveGroupedChallongeBracket } = require('../services/challonge-bracket-groups');
-const { fillMissingFinalRanks, computeEliminationRanks } = require('../helpers/bracket-ranks');
+const { fillMissingFinalRanks, computeEliminationRanks, computeChallongeProvisionalRanks } = require('../helpers/bracket-ranks');
 const { settledSeries } = require('../helpers/settled-series');
 const { markDoubleForfeits, findUnfinishedRooms } = require('../helpers/double-forfeits');
 
@@ -325,14 +325,14 @@ async function updateActiveTournaments({ dryRun, challongeHours }) {
 
 // Challonge brackets the organizer never closes have no end: their last race or reported score
 // stands in for it, so they end like a start.gg event left open (no API request needed).
-// Series whose races are over get their winner, and a bracket all played its ranks.
+// Series whose races are over get their winner, and the bracket its ranks.
 async function updateLastActivity({ dryRun }) {
   const open = await Tournament.find({
     startggId: null,
     endDate: null,
     state: { $in: ['pending', 'underway', 'in_progress'] },
     $or: [{ challongeId: { $ne: null } }, { 'challongeBrackets.0': { $exists: true } }]
-  }).select('_id name tournamentType challongeId challongeBrackets participants lastActivityAt').lean();
+  }).select('_id name tournamentType challongeId challongeBrackets phases participants ranksFromMatches lastActivityAt').lean();
 
   let updated = 0;
   for (const t of open) {
@@ -354,16 +354,23 @@ async function updateLastActivity({ dryRun }) {
       console.log(`   🏁 ${t.name}: ${m.player1Name} ${m.scoresCsv} ${m.player2Name}, never validated, over since ${settled.completedAt.toISOString().slice(0, 10)}`);
     }
 
-    // One Challonge bracket all played (a grouped tournament ranks each of its brackets apart).
-    // Only a match with no players may be left: the bracket reset a double elimination did not need
+    // Ranks Challonge gives once the organizer closes the bracket, from the matches until then:
+    // those of a single bracket all played (only a match with no players may be left, the bracket
+    // reset a double elimination did not need), else provisional as for a running start.gg event
     const participants = t.participants || [];
-    const allPlayed = matches.every(m => m.state === 'complete' || (m.player1Id == null && m.player2Id == null));
-    if (t.challongeId && !t.challongeBrackets?.length && allPlayed && participants.length && participants.every(p => p.finalRank == null)) {
-      const ranks = computeEliminationRanks({ tournamentType: t.tournamentType, matches });
+    if (participants.length && (t.ranksFromMatches || participants.every(p => p.finalRank == null))) {
+      const allPlayed = matches.every(m => m.state === 'complete' || (m.player1Id == null && m.player2Id == null));
+      const final = t.challongeId && !t.challongeBrackets?.length && allPlayed
+        ? computeEliminationRanks({ tournamentType: t.tournamentType, matches })
+        : null;
+      const ranks = final || computeChallongeProvisionalRanks({ ...t, matches });
       if (ranks) {
-        participants.forEach(p => { const rank = ranks.get(String(p.challongeId)); if (rank) p.finalRank = rank; });
-        if (!dryRun) await Tournament.updateOne({ _id: t._id }, { $set: { participants } });
-        console.log(`   🏆 ${t.name}: ranks of the played bracket`);
+        const before = participants.map(p => p.finalRank ?? null).join();
+        participants.forEach(p => { p.finalRank = ranks.get(String(p.challongeId)) || null; });
+        if (participants.map(p => p.finalRank).join() !== before || !t.ranksFromMatches) {
+          if (!dryRun) await Tournament.updateOne({ _id: t._id }, { $set: { participants, ranksFromMatches: true } });
+          console.log(`   🏆 ${t.name}: ${final ? 'ranks of the played bracket' : 'provisional ranks'}`);
+        }
       }
     }
 

@@ -307,6 +307,8 @@ const tournamentSchema = new mongoose.Schema({
   challongeSyncedAt: Date,
   // Last race or reported score of a bracket still open: its end for the status while the organizer has not closed it
   lastActivityAt: Date,
+  // Participants' finalRank computed from the matches (Challonge gives none before the bracket is closed)
+  ranksFromMatches: Boolean,
   // Races scheduled on Mido's House or Hyrule Town Hall (its fork for other
   // games), linked to matches by start.gg set.
   // Kept apart from `matches`, which the start.gg sync rebuilds.

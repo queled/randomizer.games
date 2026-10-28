@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2011",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Traveller's Tales sort LEGO Star Wars III: The Clone Wars en 2011.",
+        "en": "Traveller's Tales releases LEGO Star Wars III: The Clone Wars in 2011."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"

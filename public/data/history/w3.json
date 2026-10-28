@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Blizzard Entertainment sort Warcraft III: Reign of Chaos en 2002.",
+        "en": "Blizzard Entertainment releases Warcraft III: Reign of Chaos in 2002."
+      }
+    },
+    {
       "date": {
         "fr": "Octobre 2023",
         "en": "October 2023"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2026",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "ArtRising sort Librarian: Tidy Up the Arcane Library! en 2026.",
+        "en": "ArtRising releases Librarian: Tidy Up the Arcane Library! in 2026."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2026",
         "en": "May 2026"

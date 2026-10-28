@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2006",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Inti Creates sort Mega Man ZX en 2006.",
+        "en": "Inti Creates releases Mega Man ZX in 2006."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2026",
         "en": "September 2026"

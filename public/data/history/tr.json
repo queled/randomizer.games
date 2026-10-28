@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2014",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Proton Studio sort Time Rifters en 2014.",
+        "en": "Proton Studio releases Time Rifters in 2014."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2026",
         "en": "September 2026"

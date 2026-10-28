@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Full Frontal Frog sort Oh So Hero! en 2025.",
+        "en": "Full Frontal Frog releases Oh So Hero! in 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"

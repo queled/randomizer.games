@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "PuffballsUnited sort The Henry Stickmin Collection en 2020.",
+        "en": "PuffballsUnited releases The Henry Stickmin Collection in 2020."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"

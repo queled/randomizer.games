@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2005",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "High Voltage Software sort Codename: Kids Next Door - Operation: V.I.D.E.O.G.A.M.E. en 2005.",
+        "en": "High Voltage Software releases Codename: Kids Next Door - Operation: V.I.D.E.O.G.A.M.E. in 2005."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2026",
         "en": "March 2026"

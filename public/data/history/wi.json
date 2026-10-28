@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Leaping Turtle sort Widget Inc. en 2024.",
+        "en": "Leaping Turtle releases Widget Inc. in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Janvier 2026",
         "en": "January 2026"

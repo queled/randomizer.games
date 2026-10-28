@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "MONKEYCRAFT sort We Love Katamari Reroll + Royal Reverie en 2023, version remaniée de We Love Katamari (2005).",
+        "en": "MONKEYCRAFT releases We Love Katamari Reroll + Royal Reverie in 2023, a remastered version of We Love Katamari (2005)."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2026",
         "en": "March 2026"

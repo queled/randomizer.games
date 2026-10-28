@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "HAL Laboratory sort Kirby: Planet Robobot en 2016.",
+        "en": "HAL Laboratory releases Kirby: Planet Robobot in 2016."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"

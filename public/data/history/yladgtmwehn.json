@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Ryu Ga Gotoku Studio sort Like a Dragon Gaiden: The Man Who Erased His Name en 2023.",
+        "en": "Ryu Ga Gotoku Studio releases Like a Dragon Gaiden: The Man Who Erased His Name in 2023."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"

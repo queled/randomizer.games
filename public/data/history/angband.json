@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1993",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Angband sort en 1993.",
+        "en": "Angband is released in 1993."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"

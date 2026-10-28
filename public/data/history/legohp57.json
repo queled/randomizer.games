@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2011",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Traveller's Tales sort LEGO Harry Potter: Years 5-7 en 2011.",
+        "en": "Traveller's Tales releases LEGO Harry Potter: Years 5-7 in 2011."
+      }
+    },
+    {
       "date": {
         "fr": "Novembre 2025",
         "en": "November 2025"

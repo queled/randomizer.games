@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Krome Studios sort Ty the Tasmanian Tiger 2: Bush Rescue en 2004 ; la version HD suit en 2017.",
+        "en": "Krome Studios releases Ty the Tasmanian Tiger 2: Bush Rescue in 2004; the HD version follows in 2017."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2025",
         "en": "May 2025"

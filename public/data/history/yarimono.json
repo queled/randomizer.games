@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Yarimono sort en 2024.",
+        "en": "Yarimono is released in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"

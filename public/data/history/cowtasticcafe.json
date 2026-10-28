@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Cowtastic Cafe sort en 2023.",
+        "en": "Cowtastic Cafe is released in 2023."
+      }
+    },
+    {
       "date": {
         "fr": "Décembre 2025",
         "en": "December 2025"

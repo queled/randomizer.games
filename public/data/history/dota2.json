@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2013",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Valve sort Dota 2 en 2013.",
+        "en": "Valve releases Dota 2 in 2013."
+      }
+    },
+    {
       "date": {
         "fr": "Octobre 2026",
         "en": "October 2026"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sternly Worded Adventures sort en 2023.",
+        "en": "Sternly Worded Adventures is released in 2023."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2020",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Vicarious Visions sort Tony Hawk's Pro Skater 1 + 2 en 2020, remake des deux premiers jeux de la série.",
+        "en": "Vicarious Visions releases Tony Hawk's Pro Skater 1 + 2 in 2020, a remake of the first two games in the series."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2026",
         "en": "March 2026"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2017",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Firaxis Games sort XCOM 2: War of the Chosen en 2017, extension de XCOM 2.",
+        "en": "Firaxis Games releases XCOM 2: War of the Chosen in 2017, an expansion for XCOM 2."
+      }
+    },
+    {
       "date": {
         "fr": "Octobre 2026",
         "en": "October 2026"

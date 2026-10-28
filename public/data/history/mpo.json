@@ -7,6 +7,17 @@
     {
       "date": "2026",
       "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Lv.4 Games sort Metroid Prime Origins en 2026.",
+        "en": "Lv.4 Games releases Metroid Prime Origins in 2026."
+      }
+    },
+    {
+      "date": "2026",
+      "title": {
         "fr": "Courses",
         "en": "Races"
       },

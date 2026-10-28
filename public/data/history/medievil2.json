@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2000",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "SCE Cambridge Studio sort MediEvil II en 2000.",
+        "en": "SCE Cambridge Studio releases MediEvil II in 2000."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2025",
         "en": "August 2025"

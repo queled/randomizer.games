@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2012",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Zeno Rogue sort HyperRogue en 2012.",
+        "en": "Zeno Rogue releases HyperRogue in 2012."
+      }
+    },
+    {
       "date": {
         "fr": "Mai 2026",
         "en": "May 2026"

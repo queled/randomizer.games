@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "MogDogBlog Productions sort Nubby's Number Factory en 2025.",
+        "en": "MogDogBlog Productions releases Nubby's Number Factory in 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"

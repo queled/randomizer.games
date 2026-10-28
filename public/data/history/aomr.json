@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "World's Edge sort Age of Mythology: Retold en 2024, version remaniée du jeu d'Ensemble Studios de 2002.",
+        "en": "World's Edge releases Age of Mythology: Retold in 2024, a remastered version of Ensemble Studios' 2002 game."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2026",
         "en": "March 2026"

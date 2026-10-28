@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Paquerette Down the Bunburrows sort en 2023.",
+        "en": "Paquerette Down the Bunburrows is released in 2023."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2026",
         "en": "March 2026"

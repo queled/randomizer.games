@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "CABO Studio sort ZERO Sievert en accès anticipé en novembre 2022, puis en version 1.0 en octobre 2024.",
+        "en": "CABO Studio releases ZERO Sievert in early access in November 2022, then as version 1.0 in October 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2023",
         "en": "September 2023"

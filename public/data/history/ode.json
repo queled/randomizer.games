@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nine Dots Studio sort Outward: Definitive Edition en 2022, version enrichie du jeu de 2019.",
+        "en": "Nine Dots Studio releases Outward: Definitive Edition in 2022, an expanded version of the 2019 game."
+      }
+    },
+    {
       "date": {
         "fr": "Novembre 2025",
         "en": "November 2025"

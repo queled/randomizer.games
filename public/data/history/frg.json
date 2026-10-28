@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2026",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Funi Raccoon Game sort en 2026.",
+        "en": "Funi Raccoon Game is released in 2026."
+      }
+    },
+    {
       "date": {
         "fr": "Aujourd'hui",
         "en": "Today"

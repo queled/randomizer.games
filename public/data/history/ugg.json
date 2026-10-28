@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2019",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "House House sort Untitled Goose Game en 2019.",
+        "en": "House House releases Untitled Goose Game in 2019."
+      }
+    },
+    {
       "date": {
         "fr": "Décembre 2025",
         "en": "December 2025"

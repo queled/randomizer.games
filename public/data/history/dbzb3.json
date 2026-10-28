@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2004",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Dimps sort Dragon Ball Z: Budokai 3 en 2004.",
+        "en": "Dimps releases Dragon Ball Z: Budokai 3 in 2004."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"

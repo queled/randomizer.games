@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2016",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "HuniePot sort HunieCam Studio en 2016.",
+        "en": "HuniePot releases HunieCam Studio in 2016."
+      }
+    },
+    {
       "date": {
         "fr": "Décembre 2025",
         "en": "December 2025"

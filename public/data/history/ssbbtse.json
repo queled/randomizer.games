@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2008",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sora sort Super Smash Bros. Brawl en 2008, dont l'Emissaire subspatial est le mode aventure.",
+        "en": "Sora releases Super Smash Bros. Brawl in 2008, whose adventure mode is The Subspace Emissary."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2026",
         "en": "March 2026"

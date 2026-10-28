@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Chime sort Made in Abyss: Binary Star Falling into Darkness en 2022.",
+        "en": "Chime releases Made in Abyss: Binary Star Falling into Darkness in 2022."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"

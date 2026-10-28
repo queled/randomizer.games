@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Gallant Leaf sort Zexion en 2025.",
+        "en": "Gallant Leaf releases Zexion in 2025."
+      }
+    },
+    {
       "date": "2025-2026",
       "title": {
         "fr": "Courses",

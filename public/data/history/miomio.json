@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2026",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Douze Dixièmes sort MIO: Memories in Orbit en 2026.",
+        "en": "Douze Dixièmes releases MIO: Memories in Orbit in 2026."
+      }
+    },
+    {
       "date": {
         "fr": "Septembre 2026",
         "en": "September 2026"

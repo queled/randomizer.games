@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2015",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Treyarch sort Call of Duty: Black Ops III en 2015, avec son mode Zombies.",
+        "en": "Treyarch releases Call of Duty: Black Ops III in 2015, with its Zombies mode."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2026",
         "en": "March 2026"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sokpop Collective sort Grunn en 2024.",
+        "en": "Sokpop Collective releases Grunn in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"

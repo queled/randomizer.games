@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Landfall sort HASTE: Broken Worlds en 2025.",
+        "en": "Landfall releases HASTE: Broken Worlds in 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2025",
         "en": "April 2025"

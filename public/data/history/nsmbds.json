@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2006",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo EAD sort New Super Mario Bros. sur Nintendo DS en 2006.",
+        "en": "Nintendo EAD releases New Super Mario Bros. on Nintendo DS in 2006."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2026",
         "en": "August 2026"

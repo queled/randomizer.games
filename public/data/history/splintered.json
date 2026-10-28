@@ -7,6 +7,17 @@
     {
       "date": "2025",
       "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Splintered sort en 2025.",
+        "en": "Splintered is released in 2025."
+      }
+    },
+    {
+      "date": "2025",
+      "title": {
         "fr": "Courses",
         "en": "Races"
       },

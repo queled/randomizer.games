@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "1999",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Traveller's Tales sort Toy Story 2: Buzz Lightyear to the Rescue! en 1999.",
+        "en": "Traveller's Tales releases Toy Story 2: Buzz Lightyear to the Rescue! in 1999."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"

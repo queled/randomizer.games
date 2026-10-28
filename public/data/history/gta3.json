@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2001",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "DMA Design sort Grand Theft Auto III en 2001.",
+        "en": "DMA Design releases Grand Theft Auto III in 2001."
+      }
+    },
+    {
       "date": {
         "fr": "Juin 2026",
         "en": "June 2026"

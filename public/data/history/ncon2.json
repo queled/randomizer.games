@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2003",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Naruto: Clash of Ninja 2 sort en 2003.",
+        "en": "Naruto: Clash of Ninja 2 is released in 2003."
+      }
+    },
+    {
       "date": {
         "fr": "Mars 2026",
         "en": "March 2026"

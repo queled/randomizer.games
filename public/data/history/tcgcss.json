@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "OPNeon Games sort TCG Card Shop Simulator en accès anticipé en septembre 2024, puis en version 1.0 en septembre 2026.",
+        "en": "OPNeon Games releases TCG Card Shop Simulator in early access in September 2024, then as version 1.0 in September 2026."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2025",
         "en": "April 2025"

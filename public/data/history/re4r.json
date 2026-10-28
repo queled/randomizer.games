@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2023",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Capcom sort Resident Evil 4 en 2023, remake du jeu de 2005.",
+        "en": "Capcom releases Resident Evil 4 in 2023, a remake of the 2005 game."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "tobspr Games sort shapez 2 en accès anticipé en 2024.",
+        "en": "tobspr Games releases shapez 2 in early access in 2024."
+      }
+    },
+    {
       "date": {
         "fr": "Décembre 2025",
         "en": "December 2025"

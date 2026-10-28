@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2002",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Nintendo EAD sort Animal Crossing en 2002.",
+        "en": "Nintendo EAD releases Animal Crossing in 2002."
+      }
+    },
+    {
       "date": {
         "fr": "Octobre 2026",
         "en": "October 2026"

@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2025",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Francis Coulombe sort Look Outside en 2025.",
+        "en": "Francis Coulombe releases Look Outside in 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Avril 2026",
         "en": "April 2026"

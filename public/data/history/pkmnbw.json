@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2010",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Game Freak sort Pokémon Black and White en 2010.",
+        "en": "Game Freak releases Pokémon Black and White in 2010."
+      }
+    },
+    {
       "date": {
         "fr": "Août 2025",
         "en": "August 2025"

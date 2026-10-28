@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2022",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Fancy Games sort Escape the Backrooms en accès anticipé en août 2022, puis en version 1.0 en octobre 2025.",
+        "en": "Fancy Games releases Escape the Backrooms in early access in August 2022, then as version 1.0 in October 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Janvier 2024",
         "en": "January 2024"

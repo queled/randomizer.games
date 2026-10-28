@@ -5,6 +5,17 @@
   },
   "events": [
     {
+      "date": "2024",
+      "title": {
+        "fr": "Le jeu d'origine",
+        "en": "The original game"
+      },
+      "text": {
+        "fr": "Sonic Team sort Sonic X Shadow Generations en 2024, dont Shadow Generations est la nouvelle campagne.",
+        "en": "Sonic Team releases Sonic X Shadow Generations in 2024, whose new campaign is Shadow Generations."
+      }
+    },
+    {
       "date": {
         "fr": "Juillet 2026",
         "en": "July 2026"

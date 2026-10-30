@@ -4289,6 +4289,11 @@ function displayBracketSection(matches, container, bracketType = 'winner', isDou
   bracketWrapper.style.cssText = `position: relative; width: 100%; min-width: ${numRounds * 140}px;`;
   const bracketScroll = document.createElement('div');
   bracketScroll.className = 'bracket-scroll';
+  // A bracket too wide for the page spreads into the side margins of a large screen before scrolling
+  if (!isPoolBracket) {
+    bracketScroll.classList.add('bracket-scroll-bleed');
+    bracketScroll.style.setProperty('--bracket-width', `${numRounds * 140 + (numRounds - 1) * 8}px`);
+  }
   bracketScroll.appendChild(bracketWrapper);
   
   // Create bracket HTML

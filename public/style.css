@@ -2246,6 +2246,17 @@ body.spoiler-mode .spoiler-text::before {
     overflow-x: auto;
 }
 
+/* Grows past the page width up to the screen width, centred; no change when the bracket already fits */
+.bracket-scroll-bleed {
+    --bleed-width: max(100%, min(var(--bracket-width), 100vw - 3rem));
+    width: var(--bleed-width);
+    margin-left: calc((100% - var(--bleed-width)) / 2);
+}
+
+.bracket-wrapper:has(.bracket-scroll-bleed) {
+    overflow-x: visible;
+}
+
 .tournament-description p:last-child {
     color: #d1d5db;
     line-height: 1.6;

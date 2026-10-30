@@ -725,7 +725,7 @@ roundOf16: "Achtelfinale",
     tooltips: {
         spoilerEnabled: "Spoilerfrei an: Ergebnisse sind ausgeblendet. Klicken, um sie anzuzeigen",
         spoilerDisabled: "Spoilerfrei aus: Ergebnisse sind sichtbar. Klicken, um sie auszublenden, praktisch vor einem VOD",
-        patreon: "Unterstützen Sie uns auf Patreon"
+        kofi: "Unterstützen Sie uns auf Ko-fi"
     }
 };
 

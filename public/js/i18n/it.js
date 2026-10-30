@@ -723,7 +723,7 @@ match1: "Partita 1",
     tooltips: {
         spoilerEnabled: "No spoiler attivo: i risultati sono nascosti. Clicca per mostrarli",
         spoilerDisabled: "No spoiler disattivato: i risultati sono visibili. Clicca per nasconderli, utile prima di guardare un VOD",
-        patreon: "Sostienici su Patreon"
+        kofi: "Sostienici su Ko-fi"
     }
 };
 

@@ -754,44 +754,39 @@ body.spoiler-mode .spoiler-text::before {
     gap: 1.5rem;
 }
 
-/* Patreon Button */
-.footer-patreon-btn {
+/* Ko-fi Button */
+.footer-kofi-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 6px 10px;
-    min-width: 72px;
+    padding: 6px 12px;
     height: 36px;
     border-radius: 0.5rem;
     background-color: transparent;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    color: #e5e7eb;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, color 0.25s ease;
     text-decoration: none;
     cursor: pointer;
     border: 1px solid #30363d;
 }
 
-.patreon-icon {
-    height: 22px;
-    width: auto;
-    display: block;
-    object-fit: contain;
-    opacity: 0.9;
-    transition: filter 0.25s ease, opacity 0.25s ease;
+.kofi-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
 }
 
-.footer-patreon-btn:hover {
+.footer-kofi-btn:hover {
     transform: translateY(-2px) scale(1.07);
-    border-color: #fbbf24;
-    box-shadow: 0 6px 18px rgba(251, 191, 36, 0.12);
-    background-color: rgba(251, 191, 36, 0.03);
+    border-color: #ff5e5b;
+    color: #ff5e5b;
+    box-shadow: 0 6px 18px rgba(255, 94, 91, 0.12);
+    background-color: rgba(255, 94, 91, 0.03);
 }
 
-.footer-patreon-btn:hover .patreon-icon {
-    opacity: 1;
-    filter: hue-rotate(10deg) saturate(1.2) brightness(1.05) sepia(0.15);
-}
-
-.footer-patreon-btn:active {
+.footer-kofi-btn:active {
     transform: scale(0.98);
 }
 
@@ -826,7 +821,7 @@ body.spoiler-mode .spoiler-text::before {
     align-items: center;
 }
 
-.footer-actions > a.footer-patreon-btn {
+.footer-actions > a.footer-kofi-btn {
     display: inline-flex;
     align-items: center;
     justify-content: flex-start;
@@ -843,7 +838,7 @@ body.spoiler-mode .spoiler-text::before {
 }
 
 .footer-social svg,
-.patreon-icon {
+.kofi-icon {
     vertical-align: middle;
     display: block;
 }
@@ -854,8 +849,8 @@ body.spoiler-mode .spoiler-text::before {
         gap: 1rem;
     }
     
-    /* Taller touch target; the width follows the wide Patreon logo */
-    .footer-patreon-btn {
+    /* Taller touch target */
+    .footer-kofi-btn {
         width: auto;
         height: 44px;
         padding: 6px 12px;

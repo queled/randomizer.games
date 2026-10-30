@@ -742,7 +742,7 @@ const en = {
     tooltips: {
         spoilerEnabled: "No spoilers on: results are hidden. Click to show them",
         spoilerDisabled: "No spoilers off: results are visible. Click to hide them, handy before watching a VOD",
-        patreon: "Support us on Patreon"
+        kofi: "Support us on Ko-fi"
     }
 };
 

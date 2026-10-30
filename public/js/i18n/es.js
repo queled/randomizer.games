@@ -723,7 +723,7 @@ roundOf16: "Octavos de final",
     tooltips: {
         spoilerEnabled: "Sin spoilers activado: los resultados están ocultos. Haz clic para mostrarlos",
         spoilerDisabled: "Sin spoilers desactivado: los resultados son visibles. Haz clic para ocultarlos, útil antes de ver un VOD",
-        patreon: "Apóyanos en Patreon"
+        kofi: "Apóyanos en Ko-fi"
     }
 };
 

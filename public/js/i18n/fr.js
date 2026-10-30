@@ -730,7 +730,7 @@ const fr = {
     tooltips: {
         spoilerEnabled: "Anti-spoil activé : les résultats sont masqués. Cliquez pour les afficher",
         spoilerDisabled: "Anti-spoil désactivé : les résultats sont visibles. Cliquez pour les masquer, pratique avant de regarder une VOD",
-        patreon: "Soutenez-nous sur Patreon"
+        kofi: "Soutenez-nous sur Ko-fi"
     }
 };
 

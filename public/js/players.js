@@ -113,7 +113,7 @@ function renderPlayers(players) {
              data-fallback-src="${escHtml(placeholder)}"
              style="width:120px;height:120px;border-radius:50%;margin-bottom:1rem;object-fit:cover;background:#374151;display:block;transition:opacity 0.2s;">
         
-        <div style="display: flex; flex-direction: column; gap: 0.25rem; width: 100%; overflow: hidden;">
+        <div style="display: flex; flex-direction: column; gap: 0.25rem; width: 100%; overflow: hidden; flex-shrink: 0;">
           ${racesByGame.length > 0 ? racesByGame.map(game => {
             const rawSlug = (game.gameId || game.slug || game.id || game.gameSlug || '').toLowerCase();
             const slugAliases = {

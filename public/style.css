@@ -314,6 +314,9 @@ h1 {
 #players-list .player-card {
     content-visibility: auto;
     contain-intrinsic-size: auto 300px;
+    /* Square by default, taller when the games list needs it (narrow columns on ultrawide screens) */
+    width: 100%;
+    height: auto;
 }
 
 .player-card h3 {

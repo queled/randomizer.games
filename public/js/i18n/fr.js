@@ -588,7 +588,7 @@ const fr = {
         visitArchipelago: "Visiter archipelago.gg →",
         apworldsName: "APWorlds communautaires",
         apworldsDesc: "Le tableau tenu par la communauté Archipelago des mondes jouables en dehors de l'installation de base, avec leur stabilité, leurs liens et leur guide. Les APWorlds des fiches de jeux en viennent.",
-        visitApworlds: "Visiter docs.google.com →",
+        visitApworlds: "Ouvrir le tableau →",
         multiworldDesc: "Une plateforme en ligne pour créer et rejoindre des parties multiworld de randomizers, en coopération ou en compétition.",
         visitMultiworld: "Visiter multiworld.gg →",
         discordDesc: "La plupart des communautés randomizer sont organisées sur Discord. Chaque jeu a généralement son serveur, avec guides, annonces de tournois et entraide.",

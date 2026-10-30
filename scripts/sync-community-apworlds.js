@@ -66,6 +66,7 @@ const OVERRIDES = {
   'Mega Man Battle Network 6': 'mmbn6',
   'Noita - Enemysanity': 'noita',
   'Call of Duty: Black Ops 3 - Zombies': 'codbo3',
+  'Yakuza | Like a Dragon Gaiden: The Man Who Erased His Name': 'ladgtmwehn',
   'Plants vs. Zombies: GOTY': 'pvz',
   'Plants vs. Zombies: Replanted': 'pvz',
   'Ratchet & Clank 2: Going Commando': 'rc2',

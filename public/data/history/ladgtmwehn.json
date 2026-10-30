@@ -1,7 +1,7 @@
 {
   "intro": {
-    "fr": "Yakuza | Like a Dragon Gaiden: The Man Who Erased His Name se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
-    "en": "Yakuza | Like a Dragon Gaiden: The Man Who Erased His Name can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+    "fr": "Like a Dragon Gaiden: The Man Who Erased His Name se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Like a Dragon Gaiden: The Man Who Erased His Name can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
   },
   "events": [
     {
@@ -25,8 +25,8 @@
         "en": "The repository"
       },
       "text": {
-        "fr": "Création du dépôt GitHub zorasknight/YakLaDGaiRando, qui héberge l'APWorld de Yakuza | Like a Dragon Gaiden: The Man Who Erased His Name.",
-        "en": "The GitHub repository zorasknight/YakLaDGaiRando, home of the Yakuza | Like a Dragon Gaiden: The Man Who Erased His Name APWorld, is created."
+        "fr": "Création du dépôt GitHub zorasknight/YakLaDGaiRando, qui héberge l'APWorld de Like a Dragon Gaiden: The Man Who Erased His Name.",
+        "en": "The GitHub repository zorasknight/YakLaDGaiRando, home of the Like a Dragon Gaiden: The Man Who Erased His Name APWorld, is created."
       }
     },
     {
@@ -67,8 +67,8 @@
         "en": "One APWorld among many"
       },
       "text": {
-        "fr": "Comme beaucoup de jeux, Yakuza | Like a Dragon Gaiden: The Man Who Erased His Name rejoint Archipelago par un APWorld non officiel : un fichier .apworld distribué à part, que chaque joueur ajoute lui-même à son installation pour l'intégrer à un multiworld.",
-        "en": "Like many games, Yakuza | Like a Dragon Gaiden: The Man Who Erased His Name joins Archipelago through an unofficial APWorld: a .apworld file distributed separately, which each player adds to their own install to bring it into a multiworld."
+        "fr": "Comme beaucoup de jeux, Like a Dragon Gaiden: The Man Who Erased His Name rejoint Archipelago par un APWorld non officiel : un fichier .apworld distribué à part, que chaque joueur ajoute lui-même à son installation pour l'intégrer à un multiworld.",
+        "en": "Like many games, Like a Dragon Gaiden: The Man Who Erased His Name joins Archipelago through an unofficial APWorld: a .apworld file distributed separately, which each player adds to their own install to bring it into a multiworld."
       }
     }
   ],

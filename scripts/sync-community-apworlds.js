@@ -65,6 +65,7 @@ const OVERRIDES = {
   'The Legend of Zelda: A Link to the Past OWR': 'alttp',
   'Mega Man Battle Network 6': 'mmbn6',
   'Noita - Enemysanity': 'noita',
+  'Call of Duty: Black Ops 3 - Zombies': 'codbo3',
   'Plants vs. Zombies: GOTY': 'pvz',
   'Plants vs. Zombies: Replanted': 'pvz',
   'Ratchet & Clank 2: Going Commando': 'rc2',

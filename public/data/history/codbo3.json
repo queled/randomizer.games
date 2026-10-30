@@ -1,7 +1,7 @@
 {
   "intro": {
-    "fr": "Call of Duty: Black Ops 3 - Zombies se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
-    "en": "Call of Duty: Black Ops 3 - Zombies can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+    "fr": "Le mode Zombies de Call of Duty: Black Ops 3 se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "The Zombies mode of Call of Duty: Black Ops 3 can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
   },
   "events": [
     {
@@ -53,8 +53,8 @@
         "en": "One APWorld among many"
       },
       "text": {
-        "fr": "Comme beaucoup de jeux, Call of Duty: Black Ops 3 - Zombies rejoint Archipelago par un APWorld non officiel : un fichier .apworld distribué à part, que chaque joueur ajoute lui-même à son installation pour l'intégrer à un multiworld.",
-        "en": "Like many games, Call of Duty: Black Ops 3 - Zombies joins Archipelago through an unofficial APWorld: a .apworld file distributed separately, which each player adds to their own install to bring it into a multiworld."
+        "fr": "Comme beaucoup de jeux, Call of Duty: Black Ops 3 rejoint Archipelago par un APWorld non officiel : un fichier .apworld distribué à part, que chaque joueur ajoute lui-même à son installation pour l'intégrer à un multiworld.",
+        "en": "Like many games, Call of Duty: Black Ops 3 joins Archipelago through an unofficial APWorld: a .apworld file distributed separately, which each player adds to their own install to bring it into a multiworld."
       }
     }
   ],

@@ -562,7 +562,7 @@ const fr = {
         visitChallonge: "Visiter challonge.com →",
         startggDesc: "La plateforme de gestion de tournois anciennement appelée Smash.gg : inscriptions, seeding, brackets et check-ins. Plusieurs grands tournois randomizer y ont leur bracket, importé sur ce site.",
         visitStartgg: "Visiter start.gg →",
-        midosHouseDesc: "Le hub des tournois et événements de l'Ocarina of Time Randomizer. Mido's House gère les inscriptions, les brackets, la planification et la génération des seeds, avec une intégration directe à racetime.gg. Ce site y lit les plannings et les restreams.",
+        midosHouseDesc: "Le hub des tournois et événements d'Ocarina of Time Randomizer. Mido's House gère les inscriptions, les brackets, la planification et la génération des seeds, avec une intégration directe à racetime.gg. Ce site y lit les plannings et les restreams.",
         visitMidosHouse: "Visiter midos.house →",
         hyruleTownHallDesc: "Le hub des tournois des autres randomizers Zelda (A Link to the Past, The Wind Waker, Majora's Mask…), bâti sur Mido's House. Inscriptions, brackets, planification des races et restreams, avec intégration racetime.gg.",
         visitHyruleTownHall: "Visiter hyruletownhall.com →",

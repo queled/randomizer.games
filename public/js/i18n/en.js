@@ -563,7 +563,7 @@ const en = {
         pageTitle: "Related Sites - Randomizer",
         intro: "The sites and tools of the randomizer community, including those this site gets its data from: game list, races, tournaments, schedules and restreams. Thanks to their teams!",
         randoListDesc: "The community list of video game randomizers, kept up to date on GitHub. It lists hundreds of games with their randomizers, sites and trackers, and is the basis of this site's game catalogue.",
-        visitRandoList: "Visit github.com →",
+        visitRandoList: "View on GitHub →",
         speedrunDesc: "The reference for speedrun leaderboards. Speedrun.com hosts the rankings, rules and records of thousands of games, many randomizers included.",
         visitSpeedrun: "Visit speedrun.com →",
         racetimeDesc: "The real-time racing platform for randomizers and speedruns: synchronized timer, chat and automatic results. It is the main source of the races, results, leaderboards and hash icons shown here.",

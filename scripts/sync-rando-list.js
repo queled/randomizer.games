@@ -230,7 +230,7 @@ function hackTitle(game) {
 /**
  * Met à jour les ressources des Games existants
  * NOTE: N'écrase pas les jeux dont source.origin='manual' ou les noms curés manuellement
- * (origin 'randomizer-site', fiche prise sur le site du randomizer, reste synchronisée)
+ * (origin 'randorandy', hacks Super Metroid pris sur randorandy.github.io, restent synchronisés)
  */
 async function updateGameResources(seriesData, dryRun = false) {
   console.log('\n🔗 Mise à jour des ressources des jeux...');

@@ -175,7 +175,7 @@ const gameSchema = new mongoose.Schema({
   
   // === METADATA ===
   source: {
-    origin: { type: String, enum: ['seed', 'csv-import', 'rando-list', 'manual', 'archipelago', 'apworld', 'randomizer-site'], default: 'manual' },
+    origin: { type: String, enum: ['seed', 'csv-import', 'rando-list', 'manual', 'archipelago', 'apworld', 'randorandy'], default: 'manual' },
     importedAt: Date
   },
   enabled: { type: Boolean, default: true }

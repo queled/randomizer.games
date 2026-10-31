@@ -39,7 +39,7 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env'), quiet: true
 const connectDB = require('../config/database');
 const { Game } = require('../models');
 const { SITES, fetchGames, resolveWikiLinks } = require('../services/archipelago');
-const { norm, withoutBrackets, subtitle, mainTitle, gameNames, pickCandidate, newGameId, runEnrichment } = require('../services/game-names');
+const { norm, withoutBrackets, subtitle, mainTitle, gameNames, pickCandidate, newGameId, randomizerShortNames, runEnrichment } = require('../services/game-names');
 
 const SOURCE = 'archipelago';
 const SITE_HOST_RE = /^https?:\/\/(?:www\.)?(archipelago|multiworld)\.gg(?:\/|$)/i;
@@ -354,8 +354,7 @@ function newGameDoc(id, worldsBySite, now) {
     official: { name },
     randomizer: {
       displayName: `${name} Randomizer`,
-      shortName: `${id.toUpperCase()} Randomizer`,
-      tinyName: id.toUpperCase(),
+      ...randomizerShortNames(name, id),
       name: `${name} Randomizer`,
       website: world.gamePage,
       opensource: null

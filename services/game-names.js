@@ -91,6 +91,31 @@ function newGameId(name, takenIds) {
   }
 }
 
+const SMALL_WORDS = new Set(['a', 'an', 'and', 'at', 'by', 'for', 'in', 'n', 'of', 'on', 'the', 'to']);
+
+// Short and tiny randomizer names: "Cavern of Dreams" → "CoD Randomizer" / "CoDR";
+// a single word, numbered or not ("Portal 2"), keeps the id: "PORTAL2 Randomizer" / "PORTAL2"
+function randomizerShortNames(name, id) {
+  const words = withoutBrackets(name)
+    .normalize('NFD').replace(/\p{Diacritic}/gu, '')
+    .replace(/'/g, '')
+    .split(/[^A-Za-z0-9]+/)
+    .filter(Boolean);
+  if (words.filter(word => !/^\d+$/.test(word)).length < 2) {
+    return { shortName: `${id.toUpperCase()} Randomizer`, tinyName: id.toUpperCase() };
+  }
+  const initials = words.map((word, i) => {
+    const lower = word.toLowerCase();
+    if (lower === 'pokemon') return 'PKMN';
+    if (/^\d+$/.test(word)) return word;
+    if (ROMAN[lower] && word === word.toUpperCase()) return ROMAN[lower];
+    if (word.length <= 3 && word.length >= 2 && word === word.toUpperCase()) return word;
+    if (i > 0 && SMALL_WORDS.has(lower)) return lower[0];
+    return word[0].toUpperCase();
+  }).join('');
+  return { shortName: `${initials} Randomizer`, tinyName: `${initials}R` };
+}
+
 function runEnrichment(ids) {
   for (const script of ['enrich-twitch.js', 'enrich-release-years.js']) {
     console.log(`\n▶ ${script} --ids ${ids.join(',')}`);
@@ -102,4 +127,4 @@ function runEnrichment(ids) {
   }
 }
 
-module.exports = { ROMAN, norm, withoutBrackets, subtitle, mainTitle, gameNames, pickCandidate, idCandidates, newGameId, runEnrichment };
+module.exports = { ROMAN, norm, withoutBrackets, subtitle, mainTitle, gameNames, pickCandidate, idCandidates, newGameId, randomizerShortNames, runEnrichment };

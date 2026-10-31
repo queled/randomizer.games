@@ -40,7 +40,7 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env'), quiet: true
 const connectDB = require('../config/database');
 const { Game } = require('../models');
 const { fetchCommunityWorlds } = require('../services/community-apworlds');
-const { norm, withoutBrackets, subtitle, mainTitle, gameNames, pickCandidate, newGameId, runEnrichment } = require('../services/game-names');
+const { norm, withoutBrackets, subtitle, mainTitle, gameNames, pickCandidate, newGameId, randomizerShortNames, runEnrichment } = require('../services/game-names');
 
 const SOURCE = 'apworld';
 const SITE_HOST_RE = /^https?:\/\/(?:www\.)?(archipelago|multiworld)\.gg(?:\/|$)/i;
@@ -371,8 +371,7 @@ function newGameDoc(id, name, rows, now) {
     official: { name },
     randomizer: {
       displayName: `${name} Randomizer`,
-      shortName: `${id.toUpperCase()} Randomizer`,
-      tinyName: id.toUpperCase(),
+      ...randomizerShortNames(name, id),
       name: `${name} Randomizer`,
       website: site?.url || null,
       opensource: null

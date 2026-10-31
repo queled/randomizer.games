@@ -1247,7 +1247,9 @@
       titleEl.textContent = gameName || '';
       
       if (siteEl) {
-        const website = game.randomizer?.website || game.officialWebsite;
+        // Same rule as the resources block: chosen official site, else the only known site, else the legacy field
+        const resources = game.resources || {};
+        const website = resources.officialSite?.url || (resources.sites?.length === 1 ? resources.sites[0].url : '') || game.randomizer?.website;
         const websiteLinkAttrs = buildExternalLinkAttrs(website);
         const renderSite = () => {
           siteEl.innerHTML = websiteLinkAttrs ? `<div><a ${websiteLinkAttrs} style="color:#60a5fa;">${escHtml(overviewT('common.officialSite', 'Official site'))}</a></div>` : '';

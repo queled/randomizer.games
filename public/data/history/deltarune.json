@@ -36,8 +36,8 @@
         "en": "Randomizers and multiworld"
       },
       "text": {
-        "fr": "Un mod « Chapter 2 Encounter Randomizer » est disponible sur GameBanana. DELTARUNE est aussi jouable en multiworld, avec un dossier de sauvegarde séparé pour chaque partie.",
-        "en": "A \"Chapter 2 Encounter Randomizer\" mod is available on GameBanana. DELTARUNE can also be played in multiworld, with a separate save folder for each slot."
+        "fr": "Un mod « Chapter 2 Encounter Randomizer » est disponible sur GameBanana, et Deltarando, partagé sur Discord, randomise le chapitre 1 (SURVEY_PROGRAM). DELTARUNE est aussi jouable en multiworld, avec un dossier de sauvegarde séparé pour chaque partie.",
+        "en": "A \"Chapter 2 Encounter Randomizer\" mod is available on GameBanana, and Deltarando, shared on Discord, randomizes Chapter 1 (SURVEY_PROGRAM). DELTARUNE can also be played in multiworld, with a separate save folder for each slot."
       }
     }
   ],
@@ -53,6 +53,10 @@
     {
       "label": "GameBanana — DELTARUNE Chaos Randomizer",
       "url": "https://gamebanana.com/mods/650496"
+    },
+    {
+      "label": "Discord — Deltarando",
+      "url": "https://discord.com/invite/WwVB9sxd47"
     }
   ]
 }

@@ -116,8 +116,8 @@ async function gameMeta(query, siteUrl, lang) {
     readHistory(game.id).catch(() => null),
     cachedGameStats(game.id)
   ]);
-  // Histories are written in English and French: no sentence in another language
-  const intro = String(history?.intro?.[lang] || '').trim();
+  // Histories are written in English and French: the other languages take the English one
+  const intro = String(history?.intro?.[lang] || history?.intro?.en || '').trim();
   const firstSentence = intro.match(/^.+?[.!?](?=\s|$)/)?.[0] || intro;
   const counts = stats && [
     stats.totalRaces && count(lang, 'races', stats.totalRaces),

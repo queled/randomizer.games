@@ -224,7 +224,7 @@ async function main() {
     }
 
     console.log('\n✅ Import completed successfully!');
-    console.log(`\n💡 View tournament at: http://localhost:3000/tournaments.html`);
+    console.log(`\n💡 View tournament at: http://localhost:3000/tournaments`);
 
   } catch (error) {
     console.error('\n❌ Import failed:', error.message);

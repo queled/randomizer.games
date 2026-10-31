@@ -17,7 +17,7 @@ let currentLanguage = DEFAULT_LANGUAGE;
  */
 async function initI18n() {
     // Get saved language or detect from browser
-    currentLanguage = getSavedLanguage() || detectBrowserLanguage() || DEFAULT_LANGUAGE;
+    currentLanguage = (window.SiteUrls && window.SiteUrls.lang) || getSavedLanguage() || detectBrowserLanguage() || DEFAULT_LANGUAGE;
     
     // Load the translations. The language files are async scripts (English in
     // the page, the visitor's language added by i18n-boot.js), so this file can
@@ -264,9 +264,9 @@ function applyTranslations() {
         el.title = t(key);
     });
     
-    // Translate document title if needed
+    // Translate document title if needed: the server wrote it in the address's language
     const titleEl = document.querySelector('[data-i18n-page-title]');
-    if (titleEl) {
+    if (titleEl && document.documentElement.getAttribute('data-seo-lang') !== currentLanguage) {
         document.title = t(titleEl.getAttribute('data-i18n-page-title'));
     }
 }

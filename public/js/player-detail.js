@@ -1,8 +1,5 @@
 (function(){
-  function qs(name){
-    const m = location.search.match(new RegExp('[?&]'+name+'=([^&]+)'));
-    return m ? decodeURIComponent(m[1]) : null;
-  }
+  function qs(name){ return window.SiteUrls.param(name); }
 
   function normalizeRacetimeProfileUrl(input, racetimeId) {
     const raw = String(input || '').trim();
@@ -68,11 +65,11 @@
     ].map((value) => sanitizeExternalUrl(value)).filter(Boolean);
 
     const breadcrumbUrl = id
-      ? `/player-detail.html?id=${encodeURIComponent(id)}`
-      : `/player-detail.html?name=${encodeURIComponent(nameParam || playerName)}`;
+      ? `/players/${encodeURIComponent(id)}`
+      : `/players/name/${encodeURIComponent(nameParam || playerName)}`;
     const breadcrumb = window.RandomizerSEO.buildBreadcrumbList([
       { name: 'Home', url: '/' },
-      { name: 'Players', url: '/players.html' },
+      { name: 'Players', url: '/players' },
       { name: playerName, url: breadcrumbUrl }
     ]);
     const schema = {
@@ -266,7 +263,7 @@
     const playerName = p.name || p.userId || '';
     if (playerCompareAction && playerName) {
       const compareLabel = typeof i18n !== 'undefined' ? (i18n.t('comparePlayers.compareWith') || 'Compare with another player') : 'Compare with another player';
-      playerCompareAction.innerHTML = `<a class="btn-compare btn-compare--stats" href="/compare-players.html?player1=${encodeURIComponent(playerName)}">⚔️ ${compareLabel}</a>`;
+      playerCompareAction.innerHTML = `<a class="btn-compare btn-compare--stats" href="/compare-players?player1=${encodeURIComponent(playerName)}">⚔️ ${compareLabel}</a>`;
     }
 
     updateGamesSummaryVisibility();
@@ -517,7 +514,7 @@
     playerGamesSummary.innerHTML = `
       ${gamesSummary.map(g => `
         <div class="player-games-summary-row">
-          <a href="/game-detail.html?id=${encodeURIComponent(g.gameId)}">${escHtml(g.name)}</a>
+          <a href="/games/${encodeURIComponent(g.gameId)}">${escHtml(g.name)}</a>
           <span class="count">(${g.count})</span>
         </div>
       `).join('')}
@@ -602,14 +599,14 @@
       let extra = '';
       if (t.team) {
         const members = (t.team.members || []).map(m => m.userId
-          ? `<a class="result-card-inner-link" href="/player-detail.html?id=${encodeURIComponent(m.userId)}">${escHtml(m.name)}</a>`
+          ? `<a class="result-card-inner-link" href="/players/${encodeURIComponent(m.userId)}">${escHtml(m.name)}</a>`
           : escHtml(m.name)).join(', ');
         extra = `<div class="result-card-team">${escHtml(tr('playerDetail.team', 'Team'))} <em>${escHtml(t.team.name)}</em>${members ? ` ${escHtml(tr('playerDetail.teamWith', 'with'))} ${members}` : ''}</div>`;
       }
 
       const statusKey = TOURNAMENT_STATUS_KEYS[t.status] || 'ongoing';
       return renderResultCard({
-        href: `/tournament-detail.html?id=${encodeURIComponent(t.tournamentId)}`,
+        href: `/tournaments/${encodeURIComponent(t.tournamentId)}`,
         title: t.name || 'Tournament',
         result,
         resultClass,
@@ -683,7 +680,7 @@
       const raceId = r._id || r.id || '';
 
       return renderResultCard({
-        href: raceId ? `/race-detail.html?id=${encodeURIComponent(raceId)}` : '#',
+        href: raceId ? `/races/${encodeURIComponent(raceId)}` : '#',
         title: gameName,
         result,
         resultClass,
@@ -838,7 +835,7 @@
       }
       // The name is an alias (former name, Challonge name...): show the canonical profile
       if (player && player.name && player.name.toLowerCase() !== name.toLowerCase()) {
-        window.location.replace('/player-detail.html?name=' + encodeURIComponent(player.name));
+        window.location.replace('/players/name/' + encodeURIComponent(player.name));
         return;
       }
       const displayTournaments = await tournamentsRequest;

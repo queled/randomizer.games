@@ -7,12 +7,17 @@
         return ['en', 'fr', 'es', 'de', 'it', 'pt'].indexOf(lang) !== -1;
     }
     try {
-        // Get saved language or detect from browser
-        let lang = localStorage.getItem('preferred-language');
+        // The language of the address (/fr/...), else the saved one, else the browser's
+        const urls = window.SiteUrls;
+        let lang = urls && urls.lang;
+        if (!lang) lang = localStorage.getItem('preferred-language');
         if (!supportedLanguage(lang)) {
             const browserLang = (navigator.language || navigator.userLanguage || 'en').split('-')[0].toLowerCase();
             lang = supportedLanguage(browserLang) ? browserLang : 'en';
         }
+        // A page shown in French has the French address, to share or bookmark
+        // (crawlers have no saved language: they stay on the English address)
+        if (urls && !urls.lang && lang !== 'en') urls.setLanguage(lang);
         // Apply language immediately to prevent flicker
         document.documentElement.lang = lang;
 

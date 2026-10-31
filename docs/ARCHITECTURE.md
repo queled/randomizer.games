@@ -41,6 +41,14 @@ Comment les données arrivent dans le site, où elles sont stockées, et quels s
 | Twitch | Streams en direct, identifiants des jeux, VOD des restreams |
 | YouTube | Restreams archivés sur YouTube une fois la rediffusion Twitch effacée, et contrôle des vidéos YouTube liées (`YOUTUBE_API_KEY`) |
 
+### Adresses des pages et référencement
+
+Les pages publiques ont des adresses propres, déclarées dans `helpers/site-routes.js` (et lues dans le navigateur par `public/js/site-urls.js`) : `/games/<id>`, `/tournaments/<id>`, `/races/<id>`, `/players/<userId>` (ou `/players/name/<nom>` sans compte racetime), et `/games`, `/races`… pour les listes. Les anciennes adresses (`/game-detail.html?id=…`) redirigent en 301.
+
+Chaque page existe en six langues : l'anglais sans préfixe, les autres avec (`/fr/games/hk`). `services/seo-pages.js` écrit dans le HTML, dans la langue de l'adresse, le titre, la description, le canonical, les liens `hreflang` et le JSON-LD (textes dans `services/seo-texts.js`). Un visiteur qui a choisi une autre langue que l'anglais voit l'adresse passer à son préfixe, sans rechargement ; les liens internes gardent le préfixe. Les robots n'ont pas de langue enregistrée : ils restent sur l'adresse anglaise et suivent les `hreflang` vers les autres.
+
+Les pages chargent leur contenu depuis `/api/`, que `robots.txt` laisse donc ouvert (les réponses portent `X-Robots-Tag: noindex`) ; les robots de Google, Bing et Apple, vérifiés par DNS, ne sont pas soumis à la limite d'appels (`helpers/search-crawlers.js`).
+
 ## Tâches planifiées
 
 En production, la base MongoDB tourne sur le même serveur que le site et n'écoute que sur `127.0.0.1`. Les synchronisations sont lancées par la crontab du serveur via [`scripts/cron/run-job.sh`](../scripts/cron/run-job.sh), qui pose un verrou par tâche (une exécution encore en cours n'est pas doublée), limite leur durée et écrit dans `~/logs/<tâche>.log`. La crontab elle-même est dans [DEPLOYMENT.md](DEPLOYMENT.md#6-tâches-planifiées). L'ordre des étapes et leur relance à la main sur une période sont dans [SYNC-WORKFLOW.md](SYNC-WORKFLOW.md).

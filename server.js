@@ -8,6 +8,7 @@ const path = require('path');
 const connectDB = require('./config/database');
 const { Game, Tournament, Player, Race } = require('./models');
 const seoPages = require('./services/seo-pages');
+const { parseSitePath, legacyTarget } = require('./helpers/site-routes');
 const { COVERS_DIR, coverIds } = require('./helpers/game-covers');
 const { 
   apiLimiter, 
@@ -64,14 +65,14 @@ function buildUrlset(entries) {
 async function generateSitemaps() {
   const staticEntries = [
     ['/', null],
-    ['/games.html', null],
-    ['/races.html', null],
-    ['/tournaments.html', null],
-    ['/players.html', null],
-    ['/streams.html', null],
-    ['/resources.html', null],
-    ['/about.html', null],
-    ['/terms.html', null]
+    ['/games', null],
+    ['/races', null],
+    ['/tournaments', null],
+    ['/players', null],
+    ['/streams', null],
+    ['/resources', null],
+    ['/about', null],
+    ['/terms', null]
   ];
 
   const [games, tournaments, players, races, covers] = await Promise.all([
@@ -96,18 +97,18 @@ async function generateSitemaps() {
       .map((game) => {
         const id = game.id.toLowerCase();
         const cover = covers.has(id) ? `/assets/covers/${encodeURIComponent(id)}.png` : null;
-        return [`/game-detail.html?id=${encodeURIComponent(game.id)}`, formatLastMod(game.updatedAt), cover];
+        return [`/games/${encodeURIComponent(game.id)}`, formatLastMod(game.updatedAt), cover];
       }),
     tournaments: tournaments.filter((tournament) => tournament?._id)
-      .map((tournament) => [`/tournament-detail.html?id=${encodeURIComponent(String(tournament._id))}`, formatLastMod(tournament.updatedAt)]),
+      .map((tournament) => [`/tournaments/${encodeURIComponent(String(tournament._id))}`, formatLastMod(tournament.updatedAt)]),
     players: players.map((player) => {
       const identifier = player?.userId
-        ? `id=${encodeURIComponent(player.userId)}`
-        : (player?.name ? `name=${encodeURIComponent(player.name)}` : '');
-      return identifier ? [`/player-detail.html?${identifier}`, formatLastMod(player.updatedAt)] : null;
+        ? encodeURIComponent(player.userId)
+        : (player?.name ? `name/${encodeURIComponent(player.name)}` : '');
+      return identifier ? [`/players/${identifier}`, formatLastMod(player.updatedAt)] : null;
     }).filter(Boolean),
     races: races.filter((race) => race?._id)
-      .map((race) => [`/race-detail.html?id=${encodeURIComponent(String(race._id))}`, formatLastMod(race.updatedAt || race.startedAt)])
+      .map((race) => [`/races/${encodeURIComponent(String(race._id))}`, formatLastMod(race.updatedAt || race.startedAt)])
   };
 
   const files = new Map();
@@ -220,17 +221,36 @@ app.get('/favicon.ico', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'assets', 'favicon-48.png'), { maxAge: '7d' });
 });
 
-// One URL per page: /index.html duplicates the home page.
-app.get('/index.html', (req, res) => {
-  const query = req.originalUrl.includes('?') ? req.originalUrl.slice(req.originalUrl.indexOf('?')) : '';
-  res.redirect(301, `/${query}`);
+// Old addresses (/game-detail.html?id=hk, /games.html, /index.html) lead to
+// the current ones, so shared and indexed links keep working
+app.get(/^\/[a-z-]+\.html$/, async (req, res, next) => {
+  try {
+    const target = legacyTarget(req.path, req.query);
+    if (!target) return next();
+    if (target.raceUrl) {
+      const racePath = target.raceUrl.replace(/^https?:\/\/racetime\.gg/i, '').replace(/^\/+/, '');
+      const race = await Race.findOne({ url: { $in: [racePath, `/${racePath}`] } }).select('_id').lean();
+      if (!race) return next();
+      return res.redirect(301, target.rest(`/races/${race._id}`));
+    }
+    res.redirect(301, target.path);
+  } catch (error) {
+    next(error);
+  }
 });
 
 // Public pages get their title, description, canonical, social and JSON-LD
 // tags rendered on the server so crawlers that skip JavaScript see them.
-app.get(['/', '/:page.html'], async (req, res, next) => {
+app.use(async (req, res, next) => {
+  if (req.method !== 'GET' && req.method !== 'HEAD') return next();
   try {
-    const page = await seoPages.renderPage(req.path, req.query, SITE_URL);
+    const route = parseSitePath(req.path);
+    if (!route) return next();
+    if (route.redirect) {
+      const query = req.originalUrl.includes('?') ? req.originalUrl.slice(req.originalUrl.indexOf('?')) : '';
+      return res.redirect(301, `${route.redirect}${query}`);
+    }
+    const page = await seoPages.renderPage({ ...route, params: { ...req.query, ...route.params } }, SITE_URL);
     if (!page) return next();
     res.status(page.status);
     res.set('Cache-Control', 'no-cache');

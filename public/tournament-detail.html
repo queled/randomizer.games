@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title" data-i18n-page-title="tournamentDetail.pageTitle">Tournament - Randomizer</title>
     <script defer src="/js/seo.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/style.css">
     <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48.png">
     <link rel="icon" type="image/png" sizes="512x512" href="/assets/icon-512.png">
     <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
@@ -15,6 +15,7 @@
         body { opacity: 0; transition: opacity 0.1s ease-in; }
         body.i18n-ready { opacity: 1; }
     </style>
+    <script src="/js/site-urls.js"></script>
     <script src="/js/i18n-boot.js"></script>
     <script src="/js/ui-events.js"></script>
     
@@ -26,17 +27,17 @@
 
     <!-- Menu en haut -->
     <header>
-        <a href="index.html" class="logo"><img src="/assets/favicon.png" alt="Randomizer" class="site-logo">Randomizer</a>
+        <a href="/" class="logo"><img src="/assets/favicon.png" alt="Randomizer" class="site-logo">Randomizer</a>
         <button class="mobile-menu-toggle" aria-label="Menu" data-menu-toggle>
             <span></span><span></span><span></span>
         </button>
         <nav>
             <ul>
-                <li><a href="games.html" data-i18n="nav.games">🎮 Games</a></li>
-                <li><a href="/races.html" data-i18n="nav.races">🏁 Races</a></li>
-                <li><a href="tournaments.html" style="color: #fbbf24" data-i18n="nav.tournaments">🏆 Tournaments</a></li>
-                <li><a href="players.html" data-i18n="nav.players">👤 Players</a></li>
-                <li><a href="/streams.html" data-i18n="nav.live">📺 Live</a></li>
+                <li><a href="/games" data-i18n="nav.games">🎮 Games</a></li>
+                <li><a href="/races" data-i18n="nav.races">🏁 Races</a></li>
+                <li><a href="/tournaments" style="color: #fbbf24" data-i18n="nav.tournaments">🏆 Tournaments</a></li>
+                <li><a href="/players" data-i18n="nav.players">👤 Players</a></li>
+                <li><a href="/streams" data-i18n="nav.live">📺 Live</a></li>
             </ul>
         </nav>
         <div class="flex-grow"></div>
@@ -85,7 +86,7 @@
                 <!-- Lien Challonge -->
                 <div id="challonge-link-container" class="challonge-container" style="display:none;">
                     <a id="challonge-link" href="#" target="_blank" class="challonge-btn">
-                        <img src="assets/challonge.svg" alt="Challonge">
+                        <img src="/assets/challonge.svg" alt="Challonge">
                         <span data-i18n="tournamentDetail.viewOnChallonge">Voir sur Challonge</span>
                     </a>
                 </div>
@@ -93,7 +94,7 @@
                 <!-- Lien Start.gg -->
                 <div id="startgg-link-container" class="challonge-container" style="display:none;">
                     <a id="startgg-link" href="#" target="_blank" class="challonge-btn startgg-btn">
-                        <img src="assets/startgg.svg" alt="Start.gg">
+                        <img src="/assets/startgg.svg" alt="Start.gg">
                         <span data-i18n="tournamentDetail.viewOnStartgg">Voir sur Start.gg</span>
                     </a>
                 </div>
@@ -101,7 +102,7 @@
                 <!-- Lien Mido's House -->
                 <div id="midoshouse-link-container" class="challonge-container" style="display:none;">
                     <a id="midoshouse-link" href="#" target="_blank" rel="noopener noreferrer" class="challonge-btn">
-                        <img src="assets/midoshouse.png" alt="Mido's House">
+                        <img src="/assets/midoshouse.png" alt="Mido's House">
                         <span data-i18n="tournamentDetail.viewOnMidosHouse">Voir sur Mido's House</span>
                     </a>
                 </div>
@@ -190,13 +191,13 @@
         </div>
     </main>
 
-    <script src="js/api.js"></script>
+    <script src="/js/api.js"></script>
     <script src="/js/spoiler-mode.js"></script>
     <script src="/js/global-search.js"></script>
     <script src="/js/tab-history.js"></script>
     <script src="/js/hash-icons.js"></script>
     <script src="/js/game-label.js"></script>
-    <script src="js/tournament-detail.js"></script>
+    <script src="/js/tournament-detail.js"></script>
     <script src="/js/footer.js"></script>
 </body>
 </html>

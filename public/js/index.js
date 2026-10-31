@@ -350,7 +350,7 @@ function renderHomeLive(streams) {
       if (!link) return;
       e.preventDefault();
       e.stopPropagation();
-      window.location.href = '/game-detail.html?id=' + encodeURIComponent(link.dataset.gameId);
+      window.location.href = '/games/' + encodeURIComponent(link.dataset.gameId);
     });
   }
 }
@@ -414,7 +414,7 @@ async function loadRecentTournaments(request) {
 function createRaceCard(race) {
   // A race of ours is a real link (crawlers follow it); others open racetime or SRL
   const card = document.createElement(race._id ? 'a' : 'div');
-  if (race._id) card.href = `/race-detail.html?id=${encodeURIComponent(race._id)}`;
+  if (race._id) card.href = `/races/${encodeURIComponent(race._id)}`;
   card.style.cssText = 'background:#1f2937;padding:1rem;border-radius:0.5rem;cursor:pointer;transition:background 0.2s;min-height:140px;display:flex;flex-direction:column;text-decoration:none;color:inherit;';
   card.onmouseenter = () => card.style.background = '#374151';
   card.onmouseleave = () => card.style.background = '#1f2937';
@@ -497,7 +497,7 @@ function createRaceCard(race) {
 
 function createTournamentCard(tournament) {
   const card = document.createElement('a');
-  card.href = `/tournament-detail.html?id=${encodeURIComponent(tournament._id)}`;
+  card.href = `/tournaments/${encodeURIComponent(tournament._id)}`;
   card.style.cssText = 'background:#1f2937;padding:1rem;border-radius:0.5rem;cursor:pointer;transition:background 0.2s;min-height:140px;display:flex;flex-direction:column;text-decoration:none;color:inherit;';
   card.onmouseenter = () => card.style.background = '#374151';
   card.onmouseleave = () => card.style.background = '#1f2937';

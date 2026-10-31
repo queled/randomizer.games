@@ -5,13 +5,13 @@
     if (!searchInput) return;
 
     // Don't override if we're on the search page (it has its own handler)
-    if (window.location.pathname === '/search.html') return;
+    if (window.SiteUrls && window.SiteUrls.path === '/search') return;
 
     searchInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') {
         const query = searchInput.value.trim();
         if (query && query.length >= 2) {
-          window.location.href = `/search.html?q=${encodeURIComponent(query)}`;
+          window.location.href = `/search?q=${encodeURIComponent(query)}`;
         }
       }
     });

@@ -66,10 +66,10 @@ async function loadStats() {
             el.setAttribute('role', 'link');
             el.addEventListener('click', () => { window.location.href = href; });
         };
-        makeLink(statGames, '/games.html');
-        makeLink(statRaces, '/races.html');
-        makeLink(statTournaments, '/tournaments.html');
-        makeLink(statPlayers, '/players.html');
+        makeLink(statGames, '/games');
+        makeLink(statRaces, '/races');
+        makeLink(statTournaments, '/tournaments');
+        makeLink(statPlayers, '/players');
         
     } catch (error) {
         console.error('Error loading stats:', error);

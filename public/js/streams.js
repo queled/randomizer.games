@@ -53,7 +53,7 @@ async function loadStreams() {
             noStreams.innerHTML = `
                 <p class="no-streams-emoji">😴</p>
                 <p class="no-streams-title">${escapeHtml(tr('streams.noStreams', 'No live streams at the moment'))}</p>
-                <p class="no-streams-subtitle">${escapeHtml(tr('streams.checkRaces', 'Come back later or check the'))} <a href="/races.html">${escapeHtml(tr('streams.currentRaces', 'ongoing races'))}</a></p>
+                <p class="no-streams-subtitle">${escapeHtml(tr('streams.checkRaces', 'Come back later or check the'))} <a href="/races">${escapeHtml(tr('streams.currentRaces', 'ongoing races'))}</a></p>
             `;
             countEl.textContent = formatStreamsCount(0);
             streamsShown = false;
@@ -107,7 +107,7 @@ async function loadStreams() {
                 e.stopPropagation();
                 const gameId = gameLink.getAttribute('data-game-id');
                 if (gameId) {
-                    window.location.href = '/game-detail.html?id=' + gameId;
+                    window.location.href = '/games/' + gameId;
                 }
             });
             gameLink.addEventListener('mouseenter', () => {
@@ -126,7 +126,7 @@ async function loadStreams() {
         noStreams.innerHTML = `
             <p style="font-size: 1.5rem; margin-bottom: 0.5rem;">⚠️</p>
             <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">${typeof i18n !== 'undefined' ? i18n.t('streams.loadError') : 'Unable to load streams'}</p>
-            <p style="font-size: 0.875rem;">${typeof i18n !== 'undefined' ? i18n.t('streams.comeBackLater') : 'Come back later or check the'} <a href="/races.html" style="color: #fbbf24;">${typeof i18n !== 'undefined' ? i18n.t('streams.currentRaces') : 'ongoing races'}</a></p>
+            <p style="font-size: 0.875rem;">${typeof i18n !== 'undefined' ? i18n.t('streams.comeBackLater') : 'Come back later or check the'} <a href="/races" style="color: #fbbf24;">${typeof i18n !== 'undefined' ? i18n.t('streams.currentRaces') : 'ongoing races'}</a></p>
         `;
         noStreams.style.display = 'block';
         grid.style.display = 'none';

@@ -126,7 +126,7 @@
       `;
     }
 
-    const url = r._id ? `/race-detail.html?id=${encodeURIComponent(r._id)}` : '#';
+    const url = r._id ? `/races/${encodeURIComponent(r._id)}` : '#';
 
     return `
       <a href="${url}" style="text-decoration:none;color:inherit;display:block;">

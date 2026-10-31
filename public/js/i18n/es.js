@@ -71,7 +71,7 @@ const es = {
     games: {
         heading: "Juegos Randomizer",
         title: "Juegos",
-        pageTitle: "Juegos - Randomizer",
+        pageTitle: "Juegos randomizer - Randomizer",
         tournaments: "torneos",
         races: "carreras",
         players: "jugadores",
@@ -189,7 +189,7 @@ const es = {
     races: {
         heading: "Carreras Randomizer",
         title: "Carreras",
-        pageTitle: "Carreras - Randomizer",
+        pageTitle: "Carreras de randomizer - Randomizer",
         filterAll: "Todas",
         filterUpcoming: "Próximas",
         filterInProgress: "En curso",
@@ -230,7 +230,7 @@ const es = {
     tournaments: {
         heading: "Torneos Randomizer",
         title: "Torneos",
-        pageTitle: "Torneos - Randomizer",
+        pageTitle: "Torneos de randomizer - Randomizer",
         filterAll: "Todos",
         filterUpcoming: "Próximos",
         filterOngoing: "En curso",
@@ -378,7 +378,7 @@ roundOf16: "Octavos de final",
     players: {
         heading: "Jugadores Randomizer",
         title: "Jugadores",
-        pageTitle: "Jugadores - Randomizer",
+        pageTitle: "Jugadores de randomizer - Randomizer",
         searchPlaceholder: "Buscar jugadores...",
         races: "carreras",
         tournaments: "torneos",
@@ -455,7 +455,7 @@ roundOf16: "Octavos de final",
     // Streams page
     streams: {
         title: "📺 Transmisiones en vivo",
-        pageTitle: "Transmisiones en vivo - Randomizer",
+        pageTitle: "Directos de randomizer - Randomizer",
         subtitle: "Streams de la comunidad randomizer. ¡Mira a tus jugadores favoritos en vivo!",
         allGames: "Todos los juegos",
         loadingStreams: "Cargando streams...",

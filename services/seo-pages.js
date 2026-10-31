@@ -18,75 +18,20 @@ const { gameLabel, tournamentGameLabel } = require('../helpers/game-label');
 const { coverUrl } = require('../helpers/game-covers');
 const { readHistory } = require('../helpers/game-history');
 const { cachedGameStats } = require('../routes/games');
+const { LANGUAGES, localizedPath } = require('../helpers/site-routes');
+const { texts, fill, count } = require('./seo-texts');
 
 const PUBLIC_DIR = path.join(__dirname, '..', 'public');
 // Square logo for social previews and the Organization logo
 const DEFAULT_IMAGE_PATH = '/assets/icon-512.png';
 
-const PAGE_META = {
-  '/index.html': {
-    title: 'Randomizer - Races, Tournaments and Players for Randomizer Games',
-    description: 'Randomizer games, races, tournaments and players in one place. Follow racetime.gg races, Challonge and start.gg brackets and live streams.'
-  },
-  '/games.html': {
-    title: 'Randomizer Games - Randomizer',
-    description: 'Browse hundreds of randomizer games and explore their races, tournaments and community resources.'
-  },
-  '/races.html': {
-    title: 'Randomizer Races - Randomizer',
-    description: 'Explore recent and historical randomizer races from racetime.gg with entrants, results and finish times.'
-  },
-  '/tournaments.html': {
-    title: 'Randomizer Tournaments - Randomizer',
-    description: 'Browse randomizer tournaments from Challonge and start.gg with brackets, participants and linked races.'
-  },
-  '/players.html': {
-    title: 'Randomizer Players - Randomizer',
-    description: 'Discover randomizer players, their aliases, race results and tournament history.'
-  },
-  '/streams.html': {
-    title: 'Live Randomizer Streams - Randomizer',
-    description: 'Live and recent randomizer streams on Twitch, by game and category.'
-  },
-  '/resources.html': {
-    title: 'Related Sites - Randomizer',
-    description: 'Useful links and community resources for randomizer players.'
-  },
-  '/about.html': {
-    title: 'About - Randomizer',
-    description: 'About Randomizer and how the data is collected and displayed.'
-  },
-  '/terms.html': {
-    title: 'Terms of Use - Randomizer',
-    description: 'Terms of use and legal information for the Randomizer website.'
-  },
-  '/search.html': {
-    title: 'Search - Randomizer',
-    description: 'Search games, races, tournaments and players.',
-    robots: 'noindex,follow'
-  },
-  '/compare-players.html': {
-    title: 'Compare Players - Randomizer',
-    description: 'Compare head-to-head randomizer player results and shared race history.',
-    robots: 'noindex,follow'
-  },
-  '/game-detail.html': {
-    title: 'Game - Randomizer',
-    description: 'Game details, linked races and tournament context.'
-  },
-  '/tournament-detail.html': {
-    title: 'Tournament - Randomizer',
-    description: 'Tournament details, brackets and linked races.'
-  },
-  '/player-detail.html': {
-    title: 'Player Profile - Randomizer',
-    description: 'Player profile with results, aliases and game activity.'
-  },
-  '/race-detail.html': {
-    title: 'Race - Randomizer',
-    description: 'Race details, standings and related tournament information.'
-  }
+// Public page templates; their titles and descriptions are in seo-texts.js.
+// The search and comparison pages answer any query: not worth indexing.
+const PAGE_ROBOTS = {
+  '/search.html': 'noindex,follow',
+  '/compare-players.html': 'noindex,follow'
 };
+const PAGE_FILES = Object.keys(texts('en').pages);
 
 const templateCache = new Map();
 
@@ -126,7 +71,7 @@ function absoluteUrl(siteUrl, input) {
   }
 }
 
-function breadcrumb(siteUrl, items) {
+function breadcrumb(siteUrl, items, lang = 'en') {
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -134,7 +79,7 @@ function breadcrumb(siteUrl, items) {
       '@type': 'ListItem',
       position: index + 1,
       name: item.name,
-      item: absoluteUrl(siteUrl, item.url)
+      item: absoluteUrl(siteUrl, localizedPath(lang, item.url))
     }))
   };
 }
@@ -155,7 +100,8 @@ async function findGameForRaceCategory(category) {
   }).select('id name official randomizer').lean();
 }
 
-async function gameMeta(query, siteUrl) {
+async function gameMeta(query, siteUrl, lang) {
+  const t = texts(lang);
   const id = String(query.id || '').trim();
   if (!id) return null;
   const game = await Game.findOne({ id, enabled: { $ne: false } }).lean();
@@ -169,18 +115,19 @@ async function gameMeta(query, siteUrl) {
     readHistory(game.id).catch(() => null),
     cachedGameStats(game.id)
   ]);
-  const intro = String(history?.intro?.en || '').trim();
+  // Histories are written in English and French: no sentence in another language
+  const intro = String(history?.intro?.[lang] || '').trim();
   const firstSentence = intro.match(/^.+?[.!?](?=\s|$)/)?.[0] || intro;
   const counts = stats && [
-    stats.totalRaces && `${stats.totalRaces.toLocaleString('en-US')} race${stats.totalRaces > 1 ? 's' : ''}`,
-    stats.totalTournaments && `${stats.totalTournaments.toLocaleString('en-US')} tournament${stats.totalTournaments > 1 ? 's' : ''}`
+    stats.totalRaces && count(lang, 'races', stats.totalRaces),
+    stats.totalTournaments && count(lang, 'tournaments', stats.totalTournaments)
   ].filter(Boolean);
-  const lead = displayTitle !== gameName ? `${displayTitle} for ${gameName}` : displayTitle;
+  const lead = displayTitle !== gameName ? fill(t.gameLead, { title: displayTitle, game: gameName }) : displayTitle;
   // The counts first: past 160 characters, search results cut the end
   const description = counts?.length
-    ? `${displayTitle}: ${counts.join(' and ')} on Randomizer. ${firstSentence}`.trim()
-    : (firstSentence ? `${firstSentence} Races, tournaments and community resources on Randomizer.` : `${lead}: races, tournaments and community resources on Randomizer.`);
-  const canonicalPath = `/game-detail.html?id=${encodeURIComponent(game.id)}`;
+    ? `${fill(t.gameCounts, { title: displayTitle, counts: counts.join(t.and) })} ${firstSentence}`.trim()
+    : (firstSentence ? `${firstSentence} ${t.gameFallback}` : fill(t.gameFallbackLead, { lead }));
+  const canonicalPath = `/games/${encodeURIComponent(game.id)}`;
   const image = coverUrl(game.id);
   // The site shown on the page (chosen official site, else the only known site, else the legacy
   // field); a Discord thread says nothing about the randomizer's identity
@@ -197,17 +144,18 @@ async function gameMeta(query, siteUrl) {
     image,
     jsonLd: [
       breadcrumb(siteUrl, [
-        { name: 'Home', url: '/' },
-        { name: 'Games', url: '/games.html' },
+        { name: t.crumbs.home, url: '/' },
+        { name: t.crumbs.games, url: '/games' },
         { name: displayTitle, url: canonicalPath }
-      ]),
+      ], lang),
       // The page is about the randomizer, a modified version of the base game:
       // its site is the randomizer's, never the base game's
       compact({
         '@context': 'https://schema.org',
         '@type': 'VideoGame',
         name: displayTitle,
-        url: absoluteUrl(siteUrl, canonicalPath),
+        url: absoluteUrl(siteUrl, localizedPath(lang, canonicalPath)),
+        inLanguage: lang,
         image: absoluteUrl(siteUrl, image) || undefined,
         description: normalizeDescription(intro || description, 500),
         isBasedOn: displayTitle !== gameName ? compact({
@@ -221,44 +169,51 @@ async function gameMeta(query, siteUrl) {
   };
 }
 
-const TOURNAMENT_STATUS_LABELS = { 'à venir': 'Upcoming', 'en cours': 'Ongoing', 'terminé': 'Completed' };
+const TOURNAMENT_STATUS_KEYS = { 'à venir': 'upcoming', 'en cours': 'ongoing', 'terminé': 'completed' };
 
-function tournamentStatus(tournament) {
+function tournamentStatus(tournament, lang) {
   if (!tournament.startDate && !tournament.endDate) return '';
-  return TOURNAMENT_STATUS_LABELS[calculateTournamentStatus(tournament)];
+  return texts(lang).status[TOURNAMENT_STATUS_KEYS[calculateTournamentStatus(tournament)]] || '';
 }
 
-async function tournamentMeta(query, siteUrl) {
+async function tournamentMeta(query, siteUrl, lang) {
+  const t = texts(lang);
   const id = String(query.id || '').trim();
   if (!mongoose.Types.ObjectId.isValid(id)) return null;
   const tournament = await Tournament.findById(id).populate('game', 'id name official randomizer').lean();
   if (!tournament) return null;
 
   const tournamentGame = tournamentGameLabel(tournament) || 'randomizer';
-  const status = tournamentStatus(tournament);
+  const status = tournamentStatus(tournament, lang);
   const participants = Number(tournament.participantsCount) || (Array.isArray(tournament.participants) ? tournament.participants.length : 0);
-  const description = `${tournament.name} on Randomizer. ${status ? `${status} ` : ''}${tournamentGame} tournament${participants ? ` with ${participants} participants` : ''}. Explore bracket, participants and linked races.`;
-  const canonicalPath = `/tournament-detail.html?id=${encodeURIComponent(String(tournament._id))}`;
+  // "Upcoming <game> tournament" in English, "Tournoi <game> à venir" in French
+  const description = fill(t.tournamentDescription, {
+    name: tournament.name,
+    game: tournamentGame,
+    status: status ? (t.statusAfter ? ` ${status}` : `${status} `) : '',
+    participants: participants ? fill(t.tournamentParticipants, { participants: count(lang, 'participants', participants) }) : ''
+  });
+  const canonicalPath = `/tournaments/${encodeURIComponent(String(tournament._id))}`;
   const image = coverUrl(tournament.game?.id);
 
   return {
-    title: `${tournament.name} - Tournament - Randomizer`,
+    title: fill(t.tournamentTitle, { name: tournament.name }),
     heading: tournament.name,
     description,
     canonicalPath,
     image,
     jsonLd: [
       breadcrumb(siteUrl, [
-        { name: 'Home', url: '/' },
-        { name: 'Tournaments', url: '/tournaments.html' },
+        { name: t.crumbs.home, url: '/' },
+        { name: t.crumbs.tournaments, url: '/tournaments' },
         { name: tournament.name, url: canonicalPath }
-      ]),
+      ], lang),
       // Google requires a start date on an Event: undated tournaments get none
       tournament.startDate && compact({
         '@context': 'https://schema.org',
         '@type': 'Event',
         name: tournament.name,
-        url: absoluteUrl(siteUrl, canonicalPath),
+        url: absoluteUrl(siteUrl, localizedPath(lang, canonicalPath)),
         startDate: tournament.startDate ? new Date(tournament.startDate).toISOString() : undefined,
         endDate: tournament.endDate ? new Date(tournament.endDate).toISOString() : undefined,
         eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
@@ -298,7 +253,8 @@ async function playerRaceSummary(player) {
   };
 }
 
-async function playerMeta(query, siteUrl) {
+async function playerMeta(query, siteUrl, lang) {
+  const t = texts(lang);
   const id = String(query.id || '').trim();
   const name = String(query.name || '').trim();
   let player = null;
@@ -320,15 +276,15 @@ async function playerMeta(query, siteUrl) {
     return [{ total: 0, games: [] }, 0];
   });
   const facts = [
-    racesCount && `${racesCount} race${racesCount > 1 ? 's' : ''}${games.length ? ` (${games.join(', ')})` : ''}`,
-    tournamentsCount && `${tournamentsCount} tournament${tournamentsCount > 1 ? 's' : ''}`
+    racesCount && `${count(lang, 'races', racesCount)}${games.length ? ` (${games.join(', ')})` : ''}`,
+    tournamentsCount && count(lang, 'tournaments', tournamentsCount)
   ].filter(Boolean);
   const description = facts.length
-    ? `${playerName} on Randomizer: ${facts.join(', ')}. Race results, tournament history and head-to-heads.`
-    : `${playerName} on Randomizer: randomizer race results, tournaments and game activity.`;
+    ? fill(t.playerFacts, { name: playerName, facts: facts.join(', ') })
+    : fill(t.playerFallback, { name: playerName });
   const canonicalPath = player.userId
-    ? `/player-detail.html?id=${encodeURIComponent(player.userId)}`
-    : `/player-detail.html?name=${encodeURIComponent(playerName)}`;
+    ? `/players/${encodeURIComponent(player.userId)}`
+    : `/players/name/${encodeURIComponent(playerName)}`;
   const sameAs = [
     player.racetimeUrl,
     player.challongeUrl,
@@ -336,21 +292,22 @@ async function playerMeta(query, siteUrl) {
   ].filter((url) => /^https?:\/\//i.test(String(url || '')));
 
   return {
-    title: `${playerName} - Randomizer Player Profile`,
+    title: fill(t.playerTitle, { name: playerName }),
     heading: playerName,
     description,
     canonicalPath,
     ogType: 'profile',
     jsonLd: [
       breadcrumb(siteUrl, [
-        { name: 'Home', url: '/' },
-        { name: 'Players', url: '/players.html' },
+        { name: t.crumbs.home, url: '/' },
+        { name: t.crumbs.players, url: '/players' },
         { name: playerName, url: canonicalPath }
-      ]),
+      ], lang),
       {
         '@context': 'https://schema.org',
         '@type': 'ProfilePage',
-        url: absoluteUrl(siteUrl, canonicalPath),
+        url: absoluteUrl(siteUrl, localizedPath(lang, canonicalPath)),
+        inLanguage: lang,
         mainEntity: compact({
           '@type': 'Person',
           name: playerName,
@@ -362,7 +319,8 @@ async function playerMeta(query, siteUrl) {
   };
 }
 
-async function raceMeta(query, siteUrl) {
+async function raceMeta(query, siteUrl, lang) {
+  const t = texts(lang);
   const id = String(query.id || '').trim();
   const url = String(query.url || '').trim();
   let race = null;
@@ -384,26 +342,26 @@ async function raceMeta(query, siteUrl) {
   const label = matchup ? `${matchup} (${goal})` : goal;
   const entrants = Array.isArray(race.entrants) ? race.entrants.length : 0;
   const day = race.startedAt ? new Date(race.startedAt).toISOString().slice(0, 10) : '';
-  const parts = [`${gameName} race on Randomizer.`, `${label}, ${entrants} entrants.`];
-  if (day) parts.push(`Started ${day}.`);
-  if (tournament?.name) parts.push(`Tournament: ${tournament.name}.`);
+  const parts = [fill(t.raceLead, { game: gameName }), `${label}, ${count(lang, 'entrants', entrants)}.`];
+  if (day) parts.push(fill(t.raceStarted, { day }));
+  if (tournament?.name) parts.push(fill(t.raceTournament, { name: tournament.name }));
   const description = parts.join(' ');
-  const canonicalPath = `/race-detail.html?id=${encodeURIComponent(String(race._id))}`;
+  const canonicalPath = `/races/${encodeURIComponent(String(race._id))}`;
   const image = coverUrl(game?.id);
 
   return {
     // Thousands of races share a goal: the day tells their pages apart
-    title: `${label} - ${gameName} Race${day ? ` (${day})` : ''} - Randomizer`,
+    title: fill(t.raceTitle, { label, game: gameName, day: day ? ` (${day})` : '' }),
     heading: gameName,
     description,
     canonicalPath,
     image,
     jsonLd: [
       breadcrumb(siteUrl, [
-        { name: 'Home', url: '/' },
-        { name: 'Races', url: '/races.html' },
+        { name: t.crumbs.home, url: '/' },
+        { name: t.crumbs.races, url: '/races' },
         { name: `${gameName} - ${label}`, url: canonicalPath }
-      ])
+      ], lang)
       // No Event: a race is not an event people attend, and Event markup on
       // thousands of races would be reported as invalid by search engines
     ]
@@ -426,16 +384,17 @@ const DETAIL_RESOLVERS = {
   '/race-detail.html': raceMeta
 };
 
-function websiteSchema(siteUrl) {
+function websiteSchema(siteUrl, lang) {
   return [
     {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
       name: 'Randomizer',
       url: `${siteUrl}/`,
+      inLanguage: LANGUAGES,
       potentialAction: {
         '@type': 'SearchAction',
-        target: `${siteUrl}/search.html?q={search_term_string}`,
+        target: `${siteUrl}${localizedPath(lang, '/search')}?q={search_term_string}`,
         'query-input': 'required name=search_term_string'
       }
     },
@@ -458,8 +417,9 @@ function readTemplate(file) {
   return html;
 }
 
-function renderHead(meta, siteUrl, titleAttrs = '') {
-  const canonical = `${siteUrl}${meta.canonicalPath}`;
+function renderHead(meta, siteUrl, lang, titleAttrs = '') {
+  const canonical = `${siteUrl}${localizedPath(lang, meta.canonicalPath)}`;
+  const indexable = !String(meta.robots || '').includes('noindex');
   const image = absoluteUrl(siteUrl, meta.image) || `${siteUrl}${DEFAULT_IMAGE_PATH}`;
   const title = htmlEscape(meta.title);
   const description = htmlEscape(normalizeDescription(meta.description));
@@ -475,31 +435,42 @@ function renderHead(meta, siteUrl, titleAttrs = '') {
     `<meta property="og:url" content="${htmlEscape(canonical)}">`,
     `<meta property="og:image" content="${htmlEscape(image)}">`,
     `<meta property="og:image:alt" content="${title}">`,
-    '<meta property="og:locale" content="en_US">',
+    `<meta property="og:locale" content="${texts(lang).locale}">`,
+    ...LANGUAGES.filter((other) => other !== lang).map((other) => `<meta property="og:locale:alternate" content="${texts(other).locale}">`),
     // Covers are small and vertical, the logo square: a large card would crop them.
     '<meta name="twitter:card" content="summary">',
     `<meta name="twitter:title" content="${title}">`,
     `<meta name="twitter:description" content="${description}">`,
     `<meta name="twitter:image" content="${htmlEscape(image)}">`
   ];
+  // The same page in every language; English, without prefix, for the others
+  if (indexable) {
+    for (const other of LANGUAGES) {
+      lines.push(`<link rel="alternate" hreflang="${other}" href="${htmlEscape(`${siteUrl}${localizedPath(other, meta.canonicalPath)}`)}">`);
+    }
+    lines.push(`<link rel="alternate" hreflang="x-default" href="${htmlEscape(`${siteUrl}${meta.canonicalPath}`)}">`);
+  }
   if (meta.jsonLd) {
     lines.push(`<script type="application/ld+json" id="seo-structured-data">${jsonLdEscape(meta.jsonLd)}</script>`);
   }
   return lines.join('\n  ');
 }
 
-// Returns { status, html } for a public page, or null when the path is not one.
-async function renderPage(pathname, query, siteUrl) {
-  const file = pathname === '/' ? '/index.html' : pathname;
-  const base = PAGE_META[file];
-  if (!base) return null;
+// Returns { status, html } for a public page (a route from helpers/site-routes.js),
+// or null when it is not one.
+async function renderPage(route, siteUrl) {
+  const { file } = route;
+  const lang = route.lang || 'en';
+  const query = route.params || {};
+  if (!PAGE_FILES.includes(file)) return null;
 
-  let meta = { ...base, canonicalPath: pathname === '/index.html' ? '/' : pathname };
+  const [title, description] = texts(lang).pages[file];
+  let meta = { title, description, robots: PAGE_ROBOTS[file], canonicalPath: route.path };
   let status = 200;
   let specific = false;
 
   if (file === '/index.html') {
-    meta.jsonLd = websiteSchema(siteUrl);
+    meta.jsonLd = websiteSchema(siteUrl, lang);
   }
 
   const resolver = DETAIL_RESOLVERS[file];
@@ -507,7 +478,7 @@ async function renderPage(pathname, query, siteUrl) {
     const hasParams = ['id', 'name', 'url'].some((key) => query[key]);
     let detail = null;
     try {
-      detail = hasParams ? await resolver(query, siteUrl) : null;
+      detail = hasParams ? await resolver(query, siteUrl, lang) : null;
     } catch (error) {
       console.error(`SEO lookup failed for ${file}:`, error.message);
       detail = undefined; // lookup error: serve the generic page, do not claim a 404
@@ -527,7 +498,12 @@ async function renderPage(pathname, query, siteUrl) {
   html = html.replace(/<title([^>]*)>[\s\S]*?<\/title>/i, (match, attrs) => (
     // An entity title must not be reset to the generic translated one by i18n.js,
     // but other attributes (the id the page scripts look up) are kept.
-    renderHead(meta, siteUrl, specific ? attrs.replace(/\s+data-i18n-page-title="[^"]*"/i, '') : attrs)
+    renderHead(meta, siteUrl, lang, specific ? attrs.replace(/\s+data-i18n-page-title="[^"]*"/i, '') : attrs)
+  ));
+  // The language of the address; i18n.js and seo.js leave the server's title
+  // alone while the page shows that language
+  html = html.replace(/<html([^>]*)>/i, (match, attrs) => (
+    `<html${attrs.replace(/\s+lang="[^"]*"/i, '')} lang="${lang}" data-seo-lang="${lang}">`
   ));
   if (specific && meta.heading && DETAIL_HEADING_IDS[file]) {
     const headingRe = new RegExp(`<h1([^>]*\\sid="${DETAIL_HEADING_IDS[file]}"[^>]*)>[\\s\\S]*?<\\/h1>`, 'i');
@@ -544,4 +520,4 @@ async function renderPage(pathname, query, siteUrl) {
   return { status, html };
 }
 
-module.exports = { renderPage, PAGE_META };
+module.exports = { renderPage };

@@ -109,7 +109,7 @@ const pt = {
     games: {
         heading: "Jogos Randomizer",
         title: "Jogos",
-        pageTitle: "Jogos - Randomizer",
+        pageTitle: "Jogos randomizer - Randomizer",
         tournaments: "torneios",
         races: "corridas",
         players: "jogadores",
@@ -231,7 +231,7 @@ const pt = {
     races: {
         heading: "Corridas Randomizer",
         title: "Corridas",
-        pageTitle: "Corridas - Randomizer",
+        pageTitle: "Corridas de randomizer - Randomizer",
         filterAll: "Todas",
         filterUpcoming: "Próximas",
         filterInProgress: "Em Curso",
@@ -272,7 +272,7 @@ const pt = {
     tournaments: {
         heading: "Torneios Randomizer",
         title: "Torneios",
-        pageTitle: "Torneios - Randomizer",
+        pageTitle: "Torneios de randomizer - Randomizer",
         filterAll: "Todos",
         filterUpcoming: "Próximos",
         filterOngoing: "Em Curso",
@@ -421,7 +421,7 @@ const pt = {
     players: {
         heading: "Jogadores Randomizer",
         title: "Jogadores",
-        pageTitle: "Jogadores - Randomizer",
+        pageTitle: "Jogadores de randomizer - Randomizer",
         searchPlaceholder: "Pesquisar jogadores...",
         races: "corridas",
         tournaments: "torneios",
@@ -498,7 +498,7 @@ const pt = {
     // Streams page
     streams: {
         title: "📺 Transmissões ao Vivo",
-        pageTitle: "Transmissões ao Vivo - Randomizer",
+        pageTitle: "Transmissões de randomizer ao vivo - Randomizer",
         subtitle: "Transmissões ao vivo da comunidade randomizer. Assista seus jogadores favoritos ao vivo!",
         allGames: "Todos os jogos",
         loadingStreams: "Carregando transmissões...",
@@ -584,7 +584,7 @@ const pt = {
     // Resources page
     resources: {
         title: "🔗 Sites Relacionados a Randomizer",
-        pageTitle: "Sites Relacionados - Randomizer",
+        pageTitle: "Sites relacionados - Randomizer",
         intro: "Os sites e ferramentas da comunidade randomizer, incluindo aqueles de onde este site obtém seus dados: lista de jogos, corridas, torneios, agendas e restreams. Obrigado às suas equipes!",
         randoListDesc: "A lista comunitária de randomizers de videogames, mantida no GitHub. Ela reúne centenas de jogos com seus randomizers, sites e trackers, e é a base do catálogo de jogos deste site.",
         visitRandoList: "Ver no GitHub →",
@@ -637,7 +637,7 @@ const pt = {
     // Terms page
     terms: {
         title: "📜 Termos de Uso",
-        pageTitle: "Termos de Uso - Randomizer",
+        pageTitle: "Termos de uso - Randomizer",
         lastUpdated: "Última atualização: 30 de outubro de 2026",
         section1Title: "1. Aceitação dos Termos",
         section1Content: "Ao acessar e usar este site, você concorda em estar vinculado a estes termos de uso. Se você não aceitar estes termos, por favor não use este site.",

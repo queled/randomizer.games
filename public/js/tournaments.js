@@ -51,7 +51,7 @@
       ? `<div class="spoiler-block" style="color:#9ca3af;font-size:0.8rem;margin-top:0.5rem;">🏆 ${escHtml(winnerName)}</div>`
       : '';
 
-    const url = `/tournament-detail.html?id=${encodeURIComponent(t._id || t.id)}`;
+    const url = `/tournaments/${encodeURIComponent(t._id || t.id)}`;
 
     return `
       <a href="${url}" style="text-decoration:none;color:inherit;display:block;">

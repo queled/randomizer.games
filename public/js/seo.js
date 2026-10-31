@@ -79,22 +79,17 @@
     }
   }
 
-  function buildCanonicalUrl({ path, id, name, url } = {}) {
-    const pathname = path || window.location.pathname || '/';
-    const params = new URLSearchParams();
-
-    if (/\/game-detail\.html$/.test(pathname) || /\/tournament-detail\.html$/.test(pathname)) {
-      if (id) params.set('id', id);
-    } else if (/\/player-detail\.html$/.test(pathname)) {
-      if (id) params.set('id', id);
-      else if (name) params.set('name', name);
-    } else if (/\/race-detail\.html$/.test(pathname)) {
-      if (id) params.set('id', id);
-      else if (url) params.set('url', url);
+  // /games/<id>, /tournaments/<id>, /races/<id>, /players/<id> or /players/name/<name>,
+  // in the page's language (helpers/site-routes.js)
+  function buildCanonicalUrl({ path, id, name } = {}) {
+    const segment = (path || window.location.pathname || '/').replace(/^\/(fr|es|de|it|pt)(?=\/|$)/, '').split('/')[1] || '';
+    let target = window.SiteUrls ? window.SiteUrls.path : window.location.pathname;
+    if (['games', 'tournaments', 'races', 'players'].includes(segment)) {
+      if (id) target = `/${segment}/${encodeURIComponent(id)}`;
+      else if (name && segment === 'players') target = `/players/name/${encodeURIComponent(name)}`;
     }
-
-    const query = params.toString();
-    return `${SITE_URL}${pathname}${query ? `?${query}` : ''}`;
+    const localized = window.SiteUrls ? window.SiteUrls.localize(target, window.SiteUrls.lang) : target;
+    return `${SITE_URL}${localized}`;
   }
 
   function buildBreadcrumbList(items) {
@@ -121,12 +116,12 @@
 
     // The server rendered this entity's description, canonical, social and
     // JSON-LD tags (services/seo-pages.js): crawlers must see that single
-    // version. Only the visible title follows the page language; in English
-    // (the language crawlers render in) the server's title stays.
+    // version. Only the visible title follows the page language; in the
+    // address's language (the one crawlers render in) the server's title stays.
     if (document.documentElement.getAttribute('data-seo-ssr') === '1') {
       const lang = (window.i18n && typeof window.i18n.getLanguage === 'function' && window.i18n.getLanguage())
         || document.documentElement.lang || 'en';
-      if (lang !== 'en') document.title = title;
+      if (lang !== (document.documentElement.getAttribute('data-seo-lang') || 'en')) document.title = title;
       if (options.title) {
         const titleEl = document.querySelector('title[data-i18n-page-title]');
         if (titleEl) titleEl.removeAttribute('data-i18n-page-title');
@@ -138,8 +133,7 @@
     const canonicalUrl = options.canonicalUrl || buildCanonicalUrl({
       path,
       id: options.canonicalParams?.id,
-      name: options.canonicalParams?.name,
-      url: options.canonicalParams?.url
+      name: options.canonicalParams?.name
     });
     const image = buildAbsoluteUrl(options.image) || DEFAULT_SOCIAL_IMAGE;
     const robots = options.robots || currentMetaContent('robots') || 'index,follow';

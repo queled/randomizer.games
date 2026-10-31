@@ -73,7 +73,7 @@ const de = {
     games: {
         heading: "Randomizer-Spiele",
         title: "Spiele",
-        pageTitle: "Spiele - Randomizer",
+        pageTitle: "Randomizer-Spiele - Randomizer",
         tournaments: "Turniere",
         races: "Rennen",
         players: "Spieler",
@@ -191,7 +191,7 @@ const de = {
     races: {
         heading: "Randomizer-Rennen",
         title: "Rennen",
-        pageTitle: "Rennen - Randomizer",
+        pageTitle: "Randomizer-Rennen - Randomizer",
         filterAll: "Alle",
         filterUpcoming: "Bevorstehend",
         filterInProgress: "Laufend",
@@ -232,7 +232,7 @@ const de = {
     tournaments: {
         heading: "Randomizer-Turniere",
         title: "Turniere",
-        pageTitle: "Turniere - Randomizer",
+        pageTitle: "Randomizer-Turniere - Randomizer",
         filterAll: "Alle",
         filterUpcoming: "Bevorstehend",
         filterOngoing: "Laufend",
@@ -380,7 +380,7 @@ roundOf16: "Achtelfinale",
     players: {
         heading: "Randomizer-Spieler",
         title: "Spieler",
-        pageTitle: "Spieler - Randomizer",
+        pageTitle: "Randomizer-Spieler - Randomizer",
         searchPlaceholder: "Spieler suchen...",
         races: "Rennen",
         tournaments: "Turniere",
@@ -457,7 +457,7 @@ roundOf16: "Achtelfinale",
     // Streams page
     streams: {
         title: "📺 Live-Streams",
-        pageTitle: "Live-Streams - Randomizer",
+        pageTitle: "Randomizer-Livestreams - Randomizer",
         subtitle: "Live-Streams aus der Randomizer-Community. Schau deinen Lieblingsspielern zu!",
         allGames: "Alle Spiele",
         loadingStreams: "Streams werden geladen...",

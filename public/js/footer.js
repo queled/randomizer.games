@@ -23,15 +23,15 @@ function createFooter() {
             <div class="footer-sections">
                 <div class="footer-section">
                     <span class="footer-section-title" data-i18n="footer.explore">${getText('footer.explore', {}, 'Explore')}</span>
-                    <a href="/streams.html" data-i18n="footer.liveStreams">${getText('footer.liveStreams', {}, '📺 Live Streams')}</a>
-                    <a href="/games.html" data-i18n="footer.games">${getText('footer.games', {}, '🎮 Games')}</a>
+                    <a href="/streams" data-i18n="footer.liveStreams">${getText('footer.liveStreams', {}, '📺 Live Streams')}</a>
+                    <a href="/games" data-i18n="footer.games">${getText('footer.games', {}, '🎮 Games')}</a>
                 </div>
                 
                 <div class="footer-section">
                     <span class="footer-section-title" data-i18n="footer.information">${getText('footer.information', {}, 'Information')}</span>
-                    <a href="/about.html" data-i18n="footer.about">${getText('footer.about', {}, 'ℹ️ About')}</a>
-                    <a href="/resources.html" data-i18n="footer.relatedSites">${getText('footer.relatedSites', {}, '🔗 Related Sites')}</a>
-                    <a href="/terms.html" data-i18n="footer.termsOfUse">${getText('footer.termsOfUse', {}, '📜 Terms of Use')}</a>
+                    <a href="/about" data-i18n="footer.about">${getText('footer.about', {}, 'ℹ️ About')}</a>
+                    <a href="/resources" data-i18n="footer.relatedSites">${getText('footer.relatedSites', {}, '🔗 Related Sites')}</a>
+                    <a href="/terms" data-i18n="footer.termsOfUse">${getText('footer.termsOfUse', {}, '📜 Terms of Use')}</a>
                 </div>
                 
                 <div class="footer-section">
@@ -84,13 +84,11 @@ function initLanguageSelector() {
     selector.addEventListener('change', (e) => {
         const lang = e.target.value;
         
-        // Use i18n system if available
-        if (window.i18n) {
-            window.i18n.setLanguage(lang);
-            // Reload page to apply all translations
-            window.location.reload();
+        // Saved, then the page reloads at its address in that language (/fr/...)
+        try { localStorage.setItem('preferred-language', lang); } catch (err) { /* private mode */ }
+        if (window.SiteUrls) {
+            window.location.href = window.SiteUrls.localize(window.SiteUrls.path, lang) + window.location.search + window.location.hash;
         } else {
-            localStorage.setItem('preferred-language', lang);
             window.location.reload();
         }
     });

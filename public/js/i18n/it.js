@@ -71,7 +71,7 @@ const it = {
     games: {
         heading: "Giochi Randomizer",
         title: "Giochi",
-        pageTitle: "Giochi - Randomizer",
+        pageTitle: "Giochi randomizer - Randomizer",
         tournaments: "tornei",
         races: "gare",
         players: "giocatori",
@@ -189,7 +189,7 @@ const it = {
     races: {
         heading: "Gare Randomizer",
         title: "Gare",
-        pageTitle: "Gare - Randomizer",
+        pageTitle: "Gare di randomizer - Randomizer",
         filterAll: "Tutte",
         filterUpcoming: "In arrivo",
         filterInProgress: "In corso",
@@ -230,7 +230,7 @@ const it = {
     tournaments: {
         heading: "Tornei Randomizer",
         title: "Tornei",
-        pageTitle: "Tornei - Randomizer",
+        pageTitle: "Tornei di randomizer - Randomizer",
         filterAll: "Tutti",
         filterUpcoming: "In arrivo",
         filterOngoing: "In corso",
@@ -378,7 +378,7 @@ match1: "Partita 1",
     players: {
         heading: "Giocatori Randomizer",
         title: "Giocatori",
-        pageTitle: "Giocatori - Randomizer",
+        pageTitle: "Giocatori di randomizer - Randomizer",
         searchPlaceholder: "Cerca giocatori...",
         races: "gare",
         tournaments: "tornei",
@@ -455,7 +455,7 @@ match1: "Partita 1",
     // Streams page
     streams: {
         title: "📺 Dirette",
-        pageTitle: "Dirette - Randomizer",
+        pageTitle: "Dirette di randomizer - Randomizer",
         subtitle: "Streams della comunità randomizer. Guarda i tuoi giocatori preferiti dal vivo!",
         allGames: "Tutti i giochi",
         loadingStreams: "Caricamento streams...",

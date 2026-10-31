@@ -103,7 +103,7 @@ function renderPlayers(players) {
 
     return `
       <div class="player-card" style="background-color: #1f2937; padding: 1.5rem; border-radius: 0.5rem; transition: background-color 0.2s; cursor: pointer; aspect-ratio: 1/1; display: flex; flex-direction: column; align-items: center;">
-        <h3 style="font-size: 1.1rem; font-weight: bold; color: white; margin-bottom: 0.75rem; text-align: center;"><a class="player-card-name" href="${escHtml(player.userId ? `/player-detail.html?id=${safeEncodeURIComponent(player.userId)}` : `/player-detail.html?name=${safeEncodeURIComponent(player.name)}`)}" style="color:inherit;text-decoration:none;">${escHtml(player.name)}</a></h3>
+        <h3 style="font-size: 1.1rem; font-weight: bold; color: white; margin-bottom: 0.75rem; text-align: center;"><a class="player-card-name" href="${escHtml(player.userId ? `/players/${safeEncodeURIComponent(player.userId)}` : `/players/name/${safeEncodeURIComponent(player.name)}`)}" style="color:inherit;text-decoration:none;">${escHtml(player.name)}</a></h3>
         
         <img class="rt-avatar" 
              src="${escHtml(avatarSrc)}" 
@@ -139,7 +139,7 @@ function renderPlayers(players) {
             const gameSlug = slugAliases[rawSlug] || rawSlug;
             return `
               <div style="font-size: 0.75rem; color: #d1d5db; font-weight: 500; display: flex; align-items: center; white-space: nowrap; overflow: hidden;">
-                <a class="game-link" href="/game-detail.html?id=${safeEncodeURIComponent(gameSlug)}" style="text-decoration: none; "overflow: hidden; text-overflow: ellipsis; flex: 1 1 auto; min-width: 0; cursor: pointer; color: #60a5fa; transition: color 0.2s;">${escHtml(game.gameName)}</a>
+                <a class="game-link" href="/games/${safeEncodeURIComponent(gameSlug)}" style="text-decoration: none; "overflow: hidden; text-overflow: ellipsis; flex: 1 1 auto; min-width: 0; cursor: pointer; color: #60a5fa; transition: color 0.2s;">${escHtml(game.gameName)}</a>
                 <span style="color: #10b981; font-weight: bold; margin-left: 0.5ch; flex-shrink: 0; flex-grow: 0;">(${game.count})</span>
               </div>
             `;

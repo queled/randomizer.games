@@ -474,7 +474,7 @@ const admin = {
                 <td><span class="badge badge-muted">${this.escapeHtml(origins[g.origin] || g.origin)}</span></td>
                 <td class="text-muted" data-tooltip="${this.escapeHtml(this.formatDateTime(g.createdAt))}">${this.formatRelativeTime(g.createdAt)}</td>
                 <td class="table-actions">
-                  <a class="icon-btn" href="/game-detail.html?id=${encodeURIComponent(g.id)}" target="_blank" rel="noopener" data-tooltip="Page publique" aria-label="Page publique">🌐</a>
+                  <a class="icon-btn" href="/games/${encodeURIComponent(g.id)}" target="_blank" rel="noopener" data-tooltip="Page publique" aria-label="Page publique">🌐</a>
                   <button class="icon-btn" data-click="editGame" data-args="${admin.attrArgs([g.id])}" data-tooltip="Modifier" aria-label="Modifier">✏️</button>
                 </td>
               </tr>
@@ -591,7 +591,7 @@ const admin = {
               : '<span class="badge badge-danger">Désactivé</span>'}
           </td>
           <td class="table-actions">
-            <a class="icon-btn" href="/game-detail.html?id=${encodeURIComponent(game.id)}" target="_blank" rel="noopener" data-tooltip="Page publique" aria-label="Page publique">🌐</a>
+            <a class="icon-btn" href="/games/${encodeURIComponent(game.id)}" target="_blank" rel="noopener" data-tooltip="Page publique" aria-label="Page publique">🌐</a>
             <button class="icon-btn" data-click="editGame" data-args="${admin.attrArgs([String(game.id)])}" data-tooltip="Modifier" aria-label="Modifier">✏️</button>
             <button class="icon-btn" data-click="viewGameResources" data-args="${admin.attrArgs([String(game.id)])}" data-tooltip="Ressources" aria-label="Ressources">📚</button>
             ${hasRacetime 
@@ -1389,7 +1389,7 @@ const admin = {
       const data = await response.json();
       this.currentGame = { id: gameId, resources: data.resources };
       const publicLink = document.getElementById('resources-public-link');
-      publicLink.href = `/game-detail.html?id=${encodeURIComponent(gameId)}`;
+      publicLink.href = `/games/${encodeURIComponent(gameId)}`;
       publicLink.style.display = '';
       
       document.getElementById('resources-placeholder').style.display = 'none';
@@ -2783,7 +2783,7 @@ const admin = {
       <tr>
         <td>
           <span class="player-cell">
-            <a href="/player-detail.html?id=${encodeURIComponent(player.userId)}" target="_blank" rel="noopener">${this.escapeHtml(player.name)}</a>
+            <a href="/players/${encodeURIComponent(player.userId)}" target="_blank" rel="noopener">${this.escapeHtml(player.name)}</a>
             ${player.racetimeDeletedAt ? '<span class="badge badge-danger" data-tooltip="Compte supprimé de racetime.gg">supprimé</span>' : ''}
           </span>
         </td>
@@ -2801,7 +2801,7 @@ const admin = {
         <td>${this.formatNumber(player.stats?.totalRaces || 0)}</td>
         <td>${this.formatNumber(player.stats?.totalWins || 0)}</td>
         <td class="table-actions">
-          <a class="icon-btn" href="/player-detail.html?id=${encodeURIComponent(player.userId)}" target="_blank" rel="noopener" data-tooltip="Page publique" aria-label="Page publique">🌐</a>
+          <a class="icon-btn" href="/players/${encodeURIComponent(player.userId)}" target="_blank" rel="noopener" data-tooltip="Page publique" aria-label="Page publique">🌐</a>
           <button class="icon-btn" data-click="editPlayer" data-args="${admin.attrArgs([String(player.userId)])}" data-tooltip="Modifier" aria-label="Modifier">✏️</button>
         </td>
       </tr>
@@ -3978,7 +3978,7 @@ const admin = {
           <h3 class="card-title">🔥 Jeux les plus joués (30 jours)</h3>
           ${data.topCategories.length ? this.renderBars(data.topCategories.map(g => ({
             label: g.gameId
-              ? `<a href="/game-detail.html?id=${encodeURIComponent(g.gameId)}" target="_blank" rel="noopener">${this.escapeHtml(g.name)}</a>`
+              ? `<a href="/games/${encodeURIComponent(g.gameId)}" target="_blank" rel="noopener">${this.escapeHtml(g.name)}</a>`
               : this.escapeHtml(g.name),
             value: g.races
           }))) : '<p class="text-muted">Aucune course sur 30 jours.</p>'}
@@ -4359,7 +4359,7 @@ const admin = {
         </td>
         <td>${date}</td>
         <td class="table-actions">
-          <a class="icon-btn" href="/tournament-detail.html?id=${encodeURIComponent(t._id)}" target="_blank" rel="noopener" data-tooltip="Page publique" aria-label="Page publique">🌐</a>
+          <a class="icon-btn" href="/tournaments/${encodeURIComponent(t._id)}" target="_blank" rel="noopener" data-tooltip="Page publique" aria-label="Page publique">🌐</a>
           <button class="icon-btn" data-click="tmOpenLinking" data-args="${admin.attrArgs([String(t._id)])}" data-tooltip="Rattacher les courses" aria-label="Rattacher les courses">🔗</button>
           <button class="icon-btn" data-click="tmShowDetail" data-args="${admin.attrArgs([String(t._id)])}" data-tooltip="Détails du tournoi" aria-label="Détails du tournoi">ℹ️</button>
           <button class="icon-btn" data-click="tmShowEditGame" data-args="${admin.attrArgs([String(t._id), String(t.gameSlug || '')])}" data-tooltip="Changer le jeu associé" aria-label="Changer le jeu associé">🎮</button>

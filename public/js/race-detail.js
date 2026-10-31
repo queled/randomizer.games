@@ -42,10 +42,7 @@
     return (typeof i18n !== 'undefined' && i18n.t(key, {}, fallback)) || fallback;
   }
 
-  function qs(name){
-    const m = location.search.match(new RegExp('[?&]'+name+'=([^&]+)'));
-    return m ? decodeURIComponent(m[1]) : null;
-  }
+  function qs(name){ return window.SiteUrls.param(name); }
 
   const raceId = qs('id');
   const raceUrl = qs('url');
@@ -171,7 +168,7 @@
     const status = ENGLISH_STATUS[race?.status || 'finished'] || race?.status;
     const goal = race?.goal || race?.name || 'Race';
     const detailUrl = raceId
-      ? `/race-detail.html?id=${encodeURIComponent(raceId)}`
+      ? `/races/${encodeURIComponent(raceId)}`
       : `/race-detail.html?url=${encodeURIComponent(raceUrl)}`;
     const descriptionParts = [
       `${gameDisplayName} race on Randomizer.`,
@@ -186,7 +183,7 @@
     const image = gameDoc?.cover || '/assets/icon-512.png';
     const breadcrumb = window.RandomizerSEO.buildBreadcrumbList([
       { name: 'Home', url: '/' },
-      { name: 'Races', url: '/races.html' },
+      { name: 'Races', url: '/races' },
       { name: gameDisplayName, url: detailUrl }
     ]);
     const schema = {
@@ -578,7 +575,7 @@
 
     const html = sorted.map((e, idx) => {
       const name = escapeHtml(e.userName || unknown);
-      const playerLink = e.userName ? `/player-detail.html?name=${encodeURIComponent(e.userName)}` : '#';
+      const playerLink = e.userName ? `/players/name/${encodeURIComponent(e.userName)}` : '#';
       
       if (spoilerMode) {
         // Spoiler mode: simple list, no rank, no time, alphabetical
@@ -673,7 +670,7 @@
 
       // Game name
       if (gameDoc?.id) {
-        gameEl.innerHTML = `<a href="/game-detail.html?id=${encodeURIComponent(gameDoc.id)}" style="color:inherit;text-decoration:none;">${escapeHtml(gameDisplayName)}</a>`;
+        gameEl.innerHTML = `<a href="/games/${encodeURIComponent(gameDoc.id)}" style="color:inherit;text-decoration:none;">${escapeHtml(gameDisplayName)}</a>`;
       } else {
         gameEl.textContent = gameDisplayName;
       }
@@ -710,7 +707,7 @@
           currentTournament = await fetchJson('/api/tournaments/' + encodeURIComponent(race.tournamentId));
           if (currentTournament && currentTournament.name) {
             tournamentNameEl.textContent = currentTournament.name;
-            tournamentNameEl.href = '/tournament-detail.html?id=' + encodeURIComponent(race.tournamentId);
+            tournamentNameEl.href = '/tournaments/' + encodeURIComponent(race.tournamentId);
             tournamentLinkDiv.style.display = 'block';
           }
           renderLinks();

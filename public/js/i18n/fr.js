@@ -73,7 +73,7 @@ const fr = {
     games: {
         heading: "Jeux Randomizer",
         title: "Jeux",
-        pageTitle: "Jeux - Randomizer",
+        pageTitle: "Jeux randomizer - Randomizer",
         tournaments: "tournois",
         races: "courses",
         players: "joueurs",
@@ -195,7 +195,7 @@ const fr = {
     races: {
         heading: "Courses Randomizer",
         title: "Courses",
-        pageTitle: "Courses - Randomizer",
+        pageTitle: "Courses de randomizer - Randomizer",
         filterAll: "Toutes",
         filterUpcoming: "À venir",
         filterInProgress: "En cours",
@@ -236,7 +236,7 @@ const fr = {
     tournaments: {
         heading: "Tournois Randomizer",
         title: "Tournois",
-        pageTitle: "Tournois - Randomizer",
+        pageTitle: "Tournois de randomizer - Randomizer",
         filterAll: "Tous",
         filterUpcoming: "À venir",
         filterOngoing: "En cours",
@@ -385,7 +385,7 @@ const fr = {
     players: {
         heading: "Joueurs Randomizer",
         title: "Joueurs",
-        pageTitle: "Joueurs - Randomizer",
+        pageTitle: "Joueurs de randomizer - Randomizer",
         searchPlaceholder: "Rechercher un joueur...",
         races: "courses",
         tournaments: "tournois",
@@ -462,7 +462,7 @@ const fr = {
     // Streams page
     streams: {
         title: "📺 Diffusions en direct",
-        pageTitle: "Diffusions en direct - Randomizer",
+        pageTitle: "Streams de randomizer en direct - Randomizer",
         subtitle: "Streams en cours de la communauté randomizer. Retrouvez vos joueurs préférés en live !",
         allGames: "Tous les jeux",
         loadingStreams: "Chargement des streams...",
@@ -601,7 +601,7 @@ const fr = {
     // Terms page
     terms: {
         title: "📜 Conditions d'utilisation",
-        pageTitle: "Conditions d'utilisation - Randomizer",
+        pageTitle: "Conditions d’utilisation - Randomizer",
         lastUpdated: "Dernière mise à jour : 30 octobre 2026",
         section1Title: "1. Acceptation des conditions",
         section1Content: "En accédant et en utilisant ce site, vous acceptez d'être lié par ces conditions d'utilisation. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser ce site.",

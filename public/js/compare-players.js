@@ -161,9 +161,9 @@
 
     // Player names
     document.getElementById('cp-name1').textContent = p1;
-    document.getElementById('cp-name1').href = `/player-detail.html?name=${encodeURIComponent(p1)}`;
+    document.getElementById('cp-name1').href = `/players/name/${encodeURIComponent(p1)}`;
     document.getElementById('cp-name2').textContent = p2;
-    document.getElementById('cp-name2').href = `/player-detail.html?name=${encodeURIComponent(p2)}`;
+    document.getElementById('cp-name2').href = `/players/name/${encodeURIComponent(p2)}`;
     document.getElementById('cp-avatar-link1').href = document.getElementById('cp-name1').href;
     document.getElementById('cp-avatar-link2').href = document.getElementById('cp-name2').href;
 
@@ -317,14 +317,14 @@
             <span class="compare-tour-round">${label}</span>
             <span class="compare-tour-score right ${m.winner === 'player2' ? 'winner' : ''}">${score2}</span>`;
         return m.raceId
-          ? `<a class="compare-tour-match ${cls}" href="/race-detail.html?id=${encodeURIComponent(m.raceId)}">${inner}</a>`
+          ? `<a class="compare-tour-match ${cls}" href="/races/${encodeURIComponent(m.raceId)}">${inner}</a>`
           : `<div class="compare-tour-match ${cls}">${inner}</div>`;
       }).join('');
 
       return `
-        <div class="compare-tour-card ${rankClass}" data-href="/tournament-detail.html?id=${encodeURIComponent(tour.tournamentId)}">
+        <div class="compare-tour-card ${rankClass}" data-href="/tournaments/${encodeURIComponent(tour.tournamentId)}">
           <div class="compare-race-header">
-            <a class="compare-tour-name" href="/tournament-detail.html?id=${encodeURIComponent(tour.tournamentId)}">${escHtml(tour.name)}</a>
+            <a class="compare-tour-name" href="/tournaments/${encodeURIComponent(tour.tournamentId)}">${escHtml(tour.name)}</a>
             ${badge}
           </div>
           <div class="compare-tour-meta">${meta}</div>
@@ -361,7 +361,7 @@
       const pct1 = gTotal ? Math.round((g.p1Wins / gTotal) * 100) : 0;
       const pct2 = gTotal ? Math.round((g.p2Wins / gTotal) * 100) : 0;
       const tag = g.gameId ? 'a' : 'div';
-      const href = g.gameId ? ` href="/game-detail.html?id=${encodeURIComponent(g.gameId)}"` : '';
+      const href = g.gameId ? ` href="/games/${encodeURIComponent(g.gameId)}"` : '';
       return `
         <${tag} class="compare-game-card"${href}>
           <div class="compare-game-name">${escHtml(g.gameName)}</div>
@@ -389,7 +389,7 @@
       const winnerClass = r.h2hWinner === 1 ? 'p1-won' : r.h2hWinner === 2 ? 'p2-won' : 'draw';
       const raceId = r.raceId || r._id || '';
       const raceLink = raceId
-        ? `/race-detail.html?id=${encodeURIComponent(raceId)}`
+        ? `/races/${encodeURIComponent(raceId)}`
         : '#';
 
       return `

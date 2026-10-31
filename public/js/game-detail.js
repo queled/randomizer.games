@@ -1,5 +1,5 @@
 (function(){
-  function qs(name){ const m = location.search.match(new RegExp('[?&]'+name+'=([^&]+)')); return m ? decodeURIComponent(m[1]) : null; }
+  function qs(name){ return window.SiteUrls.param(name); }
   const id = qs('id');
   const idLower = id ? id.toLowerCase() : '';
   // Canonical short names to display on the second line when needed
@@ -175,7 +175,7 @@
       : '';
     
     return `
-      <a href="/tournament-detail.html?id=${encodeURIComponent(tid)}" style="text-decoration:none;color:inherit;display:block;">
+      <a href="/tournaments/${encodeURIComponent(tid)}" style="text-decoration:none;color:inherit;display:block;">
         <div style="background:#374151;padding:1rem;border-radius:0.5rem;margin-bottom:0.75rem;transition:background 0.2s;cursor:pointer;" data-hover-style="background:#4b5563" data-rest-style="background:#374151">
           <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:0.25rem;">
             <h4 style="color:#fbbf24;font-size:0.95rem;flex:1;">${t.name || 'Tournoi'}</h4>
@@ -237,7 +237,7 @@
       winnerHtml = `<div class="spoiler-block" style="color:#fbbf24;font-size:0.8rem;margin-top:0.5rem;"><span>🏆</span> <span style="color:#d1d5db;">${winnerName}</span> <span style="color:#10b981;font-weight:600;">${timeStr}</span></div>`;
     }
     
-    const raceUrl = r._id ? `/race-detail.html?id=${encodeURIComponent(r._id)}` : '#';
+    const raceUrl = r._id ? `/races/${encodeURIComponent(r._id)}` : '#';
     
     return `
       <a href="${raceUrl}" style="text-decoration:none;color:inherit;display:block;">
@@ -369,7 +369,7 @@
 
   function leaderboardPlayerCell(r) {
     const name = escapeHtml(r.name || '—');
-    if (r.hasProfile) return `<a class="player-link" href="/player-detail.html?id=${encodeURIComponent(r.userId)}">${name}</a>`;
+    if (r.hasProfile) return `<a class="player-link" href="/players/${encodeURIComponent(r.userId)}">${name}</a>`;
     if (r.userId) return `<a class="player-link" ${buildExternalLinkAttrs(`https://racetime.gg/user/${encodeURIComponent(r.userId)}`)}>${name}</a>`;
     return name;
   }
@@ -708,11 +708,11 @@
       .map((value) => sanitizeExternalUrl(value))
       .filter((url) => url && !/^https?:\/\/(www\.)?discord\.(com|gg)\//i.test(url));
 
-    const canonicalUrl = `/game-detail.html?id=${encodeURIComponent(id)}`;
+    const canonicalUrl = `/games/${encodeURIComponent(id)}`;
     const image = game.cover || '/assets/icon-512.png';
     const breadcrumb = window.RandomizerSEO.buildBreadcrumbList([
       { name: 'Home', url: '/' },
-      { name: 'Games', url: '/games.html' },
+      { name: 'Games', url: '/games' },
       { name: displayTitle, url: canonicalUrl }
     ]);
     const schema = {
@@ -1086,7 +1086,7 @@
 
   function marathonRunnerCell(runner) {
     const name = escapeHtml(runner.name || '');
-    if (runner.userId) return `<a class="player-link" href="/player-detail.html?id=${encodeURIComponent(runner.userId)}">${name}</a>`;
+    if (runner.userId) return `<a class="player-link" href="/players/${encodeURIComponent(runner.userId)}">${name}</a>`;
     return name;
   }
 
@@ -1161,10 +1161,10 @@
     const hasTournaments = stats.totalTournaments > 0;
     const figures = [];
     if (hasRaces) {
-      figures.push(`<a href="/races.html?game=${encodeURIComponent(game.id)}"><strong>${fmt(stats.totalRaces)}</strong> ${escHtml(overviewT('gameDetail.overviewRaces', 'races'))}</a>`);
+      figures.push(`<a href="/races?game=${encodeURIComponent(game.id)}"><strong>${fmt(stats.totalRaces)}</strong> ${escHtml(overviewT('gameDetail.overviewRaces', 'races'))}</a>`);
     }
     if (hasTournaments) {
-      figures.push(`<a href="/tournaments.html?game=${encodeURIComponent(game.id)}"><strong>${fmt(stats.totalTournaments)}</strong> ${escHtml(overviewT('gameDetail.overviewTournaments', 'tournaments'))}</a>`);
+      figures.push(`<a href="/tournaments?game=${encodeURIComponent(game.id)}"><strong>${fmt(stats.totalTournaments)}</strong> ${escHtml(overviewT('gameDetail.overviewTournaments', 'tournaments'))}</a>`);
     }
     if (liveCount > 0) {
       figures.push(`<a href="#" data-overview-tab="streams"><strong>${fmt(liveCount)}</strong> ${escHtml(overviewT('gameDetail.overviewLive', 'live now'))}</a>`);
@@ -1179,14 +1179,14 @@
     const upcoming = tournaments
       .filter(t => getTournamentStatus(t) === 'à venir')
       .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))[0];
-    const tournamentLink = (t) => `<a href="/tournament-detail.html?id=${encodeURIComponent(t._id || t.id)}">${escHtml(t.name)}</a>`;
+    const tournamentLink = (t) => `<a href="/tournaments/${encodeURIComponent(t._id || t.id)}">${escHtml(t.name)}</a>`;
     let tournamentHtml = '';
     if (ongoing.length) {
       const label = ongoing.length > 1
         ? overviewT('gameDetail.ongoingTournaments', 'Tournaments in progress:')
         : overviewT('gameDetail.ongoingTournament', 'Tournament in progress:');
       const more = ongoing.length > MAX_ONGOING
-        ? ` <a href="/tournaments.html?game=${encodeURIComponent(game.id)}">+${ongoing.length - MAX_ONGOING}</a>`
+        ? ` <a href="/tournaments?game=${encodeURIComponent(game.id)}">+${ongoing.length - MAX_ONGOING}</a>`
         : '';
       tournamentHtml += `<p class="game-overview-tournament">🏆 ${escHtml(label)} ${ongoing.slice(0, MAX_ONGOING).map(tournamentLink).join(' · ')}${more}</p>`;
     }
@@ -1203,8 +1203,8 @@
       ${tournamentHtml}
       <div class="game-overview-actions">
         <button type="button" class="home-hero-btn home-hero-btn-primary" data-overview-tab="resources">${escHtml(overviewT('gameDetail.ctaStart', '🚀 Get started'))}</button>
-        ${hasRaces ? `<a class="home-hero-btn" href="/races.html?game=${encodeURIComponent(game.id)}">${escHtml(overviewT('gameDetail.ctaRaces', 'See the races'))}</a>` : ''}
-        ${hasTournaments ? `<a class="home-hero-btn" href="/tournaments.html?game=${encodeURIComponent(game.id)}">${escHtml(overviewT('gameDetail.ctaTournaments', 'See the tournaments'))}</a>` : ''}
+        ${hasRaces ? `<a class="home-hero-btn" href="/races?game=${encodeURIComponent(game.id)}">${escHtml(overviewT('gameDetail.ctaRaces', 'See the races'))}</a>` : ''}
+        ${hasTournaments ? `<a class="home-hero-btn" href="/tournaments?game=${encodeURIComponent(game.id)}">${escHtml(overviewT('gameDetail.ctaTournaments', 'See the tournaments'))}</a>` : ''}
       </div>
     `;
 
@@ -1277,8 +1277,8 @@
         })
         .catch(() => {});
       
-      const racesUrl = `/races.html?game=${encodeURIComponent(id)}`;
-      const tournamentsUrl = `/tournaments.html?game=${encodeURIComponent(id)}`;
+      const racesUrl = `/races?game=${encodeURIComponent(id)}`;
+      const tournamentsUrl = `/tournaments?game=${encodeURIComponent(id)}`;
       const racesLabel = typeof i18n !== 'undefined' ? i18n.t('gameDetail.races') : 'Races';
       const tournamentsLabel = typeof i18n !== 'undefined' ? i18n.t('gameDetail.tournaments') : 'Tournois';
       statsEl.innerHTML = `

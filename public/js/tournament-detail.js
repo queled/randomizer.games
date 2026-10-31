@@ -31,12 +31,11 @@ window.addEventListener('spoilerModeChanged', () => {
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const tournamentId = urlParams.get('id');
+  const tournamentId = window.SiteUrls.param('id');
 
   if (!tournamentId) {
     alert(tdText('missingId', 'Missing tournament ID'));
-    window.location.href = '/tournaments.html';
+    window.location.href = '/tournaments';
     return;
   }
 
@@ -148,10 +147,10 @@ function applyTournamentSeo(tournament) {
     `${statusLabel} ${tournamentGame} tournament with ${participantsCount} participants.`,
     'Explore bracket, participants and linked races.'
   ].join(' ');
-  const detailUrl = `/tournament-detail.html?id=${encodeURIComponent(tournament._id || tournament.id)}`;
+  const detailUrl = `/tournaments/${encodeURIComponent(tournament._id || tournament.id)}`;
   const breadcrumb = window.RandomizerSEO.buildBreadcrumbList([
     { name: 'Home', url: '/' },
-    { name: 'Tournaments', url: '/tournaments.html' },
+    { name: 'Tournaments', url: '/tournaments' },
     { name: tournament.name, url: detailUrl }
   ]);
   const image = tournament.game?.cover || '/assets/icon-512.png';
@@ -194,7 +193,7 @@ async function loadTournamentDetails(tournamentId) {
   } catch (error) {
     console.error('Error loading tournament:', error);
     alert(tdText('loadError', 'Error loading tournament'));
-    window.location.href = '/tournaments.html';
+    window.location.href = '/tournaments';
   }
 }
 
@@ -234,7 +233,7 @@ function restreamChannelName(url, channel) {
 function playerVodsHtml(race) {
   return ((race && race.vods) || [])
     .filter(v => v.vodUrl && /^https:\/\/www\.twitch\.tv\/videos\/\d+/.test(v.vodUrl))
-    .map(v => `<a href="${escHtml(v.vodUrl)}" target="_blank" rel="noopener noreferrer" data-stop-propagation title="${escHtml((i18n.t('tournamentDetail.watchVod') || 'VOD') + ' · twitch.tv/' + (v.twitchName || ''))}" style="display:inline-flex; align-items:center; gap:0.3rem; padding:0.2rem 0.4rem; border-radius:0.25rem; font-size:0.7rem; color:#c4b5fd; background:#222222; border:1px solid #9344ff; text-decoration:none; white-space:nowrap;"><img src="assets/twitch.svg" alt="Twitch" style="width:12px;height:12px;">${escHtml(sanitizeDisplayName(v.userName || v.twitchName || ''))}</a>`)
+    .map(v => `<a href="${escHtml(v.vodUrl)}" target="_blank" rel="noopener noreferrer" data-stop-propagation title="${escHtml((i18n.t('tournamentDetail.watchVod') || 'VOD') + ' · twitch.tv/' + (v.twitchName || ''))}" style="display:inline-flex; align-items:center; gap:0.3rem; padding:0.2rem 0.4rem; border-radius:0.25rem; font-size:0.7rem; color:#c4b5fd; background:#222222; border:1px solid #9344ff; text-decoration:none; white-space:nowrap;"><img src="/assets/twitch.svg" alt="Twitch" style="width:12px;height:12px;">${escHtml(sanitizeDisplayName(v.userName || v.twitchName || ''))}</a>`)
     .join('');
 }
 
@@ -631,7 +630,7 @@ function displayCalendar(tournament) {
     const code = (RESTREAM_LANGUAGE_CODES[stream.language] || String(stream.language || '').slice(0, 2)).toUpperCase();
     const title = [restreamLanguageLabel(stream.language), restreamChannelName(stream.url || href, stream.channel), vod ? (i18n.t('tournamentDetail.watchVod') || 'VOD') : ''].filter(Boolean).join(' · ');
     const youtube = isYoutubeStream(stream);
-    return `<a href="${escHtml(href)}" target="_blank" rel="noopener noreferrer" class="calendar-stream${youtube ? ' calendar-stream-youtube' : ''}${vod ? ' calendar-stream-vod' : ''}" title="${escHtml(title)}"><img src="assets/${youtube ? 'youtube' : 'twitch'}.svg" alt="">${code ? `<span>${escHtml(code)}</span>` : ''}</a>`;
+    return `<a href="${escHtml(href)}" target="_blank" rel="noopener noreferrer" class="calendar-stream${youtube ? ' calendar-stream-youtube' : ''}${vod ? ' calendar-stream-vod' : ''}" title="${escHtml(title)}"><img src="/assets/${youtube ? 'youtube' : 'twitch'}.svg" alt="">${code ? `<span>${escHtml(code)}</span>` : ''}</a>`;
   };
 
   const eventHtml = e => {
@@ -732,7 +731,7 @@ function displayCalendar(tournament) {
       const race = card.getAttribute('data-calendar-race');
       const url = card.getAttribute('data-calendar-url');
       if (match) goToMatchById(match);
-      else if (race) window.location.href = '/race-detail.html?id=' + encodeURIComponent(race);
+      else if (race) window.location.href = '/races/' + encodeURIComponent(race);
       else if (url) window.open(url, '_blank', 'noopener');
     };
     card.addEventListener('click', e => { if (!e.target.closest('a')) open(); });
@@ -824,7 +823,7 @@ function displayTournamentInfo(tournament) {
   const tournamentGameEl = document.getElementById('tournament-game');
   const tournamentGameLabel = window.gameLabel(tournament.game) || tournament.gameName || 'Unknown game';
   if (tournament.game?.id) {
-    tournamentGameEl.innerHTML = `<a href="/game-detail.html?id=${encodeURIComponent(tournament.game.id)}" style="color:inherit;text-decoration:none;">${escHtml(tournamentGameLabel)}</a>`;
+    tournamentGameEl.innerHTML = `<a href="/games/${encodeURIComponent(tournament.game.id)}" style="color:inherit;text-decoration:none;">${escHtml(tournamentGameLabel)}</a>`;
   } else {
     tournamentGameEl.textContent = tournamentGameLabel;
   }
@@ -1363,7 +1362,7 @@ function playerPageHref(name) {
   const keys = [name, String(name || '').split(' | ').pop()].map(n => normalizeName(sanitizeDisplayName(n))).filter(Boolean);
   const participant = keys.length && (currentTournament?.participants || []).find(p => p.racetimeName
     && [p.displayName, p.name].some(n => n && keys.includes(normalizeName(sanitizeDisplayName(n)))));
-  return '/player-detail.html?name=' + encodeURIComponent(participant ? participant.racetimeName : name);
+  return '/players/name/' + encodeURIComponent(participant ? participant.racetimeName : name);
 }
 
 // Challonge co-op brackets name each entrant after its players ("Alice & Bob"), with no team name:
@@ -1386,10 +1385,18 @@ function teamNameMembers(name) {
   return members.length >= 2 ? members : null;
 }
 
+// A slot not filled yet ("TBD"): no player page behind it, so no link (crawlers would follow it to a 404)
+function isPlaceholderName(name) {
+  const text = String(name || '').trim();
+  return !text || /^(tbd|tba|bye|\?+)$/i.test(text) || text === tdText('tbd', 'TBD');
+}
+
 // Link(s) to the player page of a bracket name: one per player when the name joins a team's players
 function playerNameLinks(name, attrs = '') {
   const members = teamNameMembers(name) || [name];
-  return members.map(m => `<a href="${playerPageHref(m)}" ${attrs}>${escHtml(m)}</a>`).join(' & ');
+  return members.map(m => (isPlaceholderName(m)
+    ? `<span ${attrs}>${escHtml(m)}</span>`
+    : `<a href="${playerPageHref(m)}" ${attrs}>${escHtml(m)}</a>`)).join(' & ');
 }
 
 function groupTeamParticipants(participants) {
@@ -1415,7 +1422,9 @@ function groupTeamParticipants(participants) {
 // Players of a team, each linking to their page
 function renderTeamMembers(members, style = '') {
   if (!members || !members.length) return '';
-  const links = members.map(m => `<a href="${playerPageHref(m)}" class="player-link" data-stop-propagation style="color: inherit; text-decoration: none;">${escHtml(m)}</a>`).join(' / ');
+  const links = members.map(m => (isPlaceholderName(m)
+    ? escHtml(m)
+    : `<a href="${playerPageHref(m)}" class="player-link" data-stop-propagation style="color: inherit; text-decoration: none;">${escHtml(m)}</a>`)).join(' / ');
   return `<div class="team-members" style="color: #9ca3af; font-size: 0.75rem; font-weight: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; ${style}">${links}</div>`;
 }
 
@@ -1701,7 +1710,7 @@ function createQualificationRaceCard(race) {
   raceLinkElem.style.cssText = 'color: inherit; text-decoration: none; cursor: pointer;';
   try {
     const rid = race._id || race.id || null;
-    if (rid) raceLinkElem.href = '/race-detail.html?id=' + encodeURIComponent(rid);
+    if (rid) raceLinkElem.href = '/races/' + encodeURIComponent(rid);
     else raceLinkElem.href = '#';
   } catch (e) {
     raceLinkElem.href = '#';
@@ -1759,7 +1768,7 @@ function createQualificationRaceCard(race) {
     link.style.cssText = `display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.65rem; border-radius: 0.25rem; font-size: 0.8rem; color: ${brandColor}; background: #222222; border: 1px solid ${brandColor}; text-decoration: none;`;
     link.innerHTML = srlUrl
       ? '<span class="srl-logo" role="img" aria-label="SpeedRunsLive"></span>'
-      : '<img src="assets/racetime.svg" alt="Racetime" style="width: 16px; height: 16px;">Racetime';
+      : '<img src="/assets/racetime.svg" alt="Racetime" style="width: 16px; height: 16px;">Racetime';
     linkDiv.appendChild(link);
     header.appendChild(linkDiv);
   }
@@ -1841,9 +1850,9 @@ function createQualificationRaceCard(race) {
       playerLink.style.cssText = 'color: #60a5fa; font-weight: 500; font-size: 0.875rem; text-decoration: none;';
       playerLink.textContent = playerDisplayName;
       try {
-        playerLink.href = '/player-detail.html?name=' + encodeURIComponent(playerDisplayName);
+        playerLink.href = '/players/name/' + encodeURIComponent(playerDisplayName);
       } catch (e) {
-        playerLink.href = '/player-detail.html?name=' + encodeURIComponent(String(playerDisplayName));
+        playerLink.href = '/players/name/' + encodeURIComponent(String(playerDisplayName));
       }
       leftDiv.appendChild(playerLink);
 
@@ -1878,7 +1887,7 @@ function createQualificationRaceCard(race) {
         vodLink.rel = 'noopener noreferrer';
         vodLink.title = 'twitch.tv/' + (vod.twitchName || '');
         vodLink.style.cssText = 'display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.2rem 0.4rem; border-radius: 0.25rem; font-size: 0.7rem; color: #c4b5fd; background: #222222; border: 1px solid #9344ff; text-decoration: none; white-space: nowrap;';
-        vodLink.innerHTML = '<img src="assets/twitch.svg" alt="Twitch" style="width: 12px; height: 12px;">';
+        vodLink.innerHTML = '<img src="/assets/twitch.svg" alt="Twitch" style="width: 12px; height: 12px;">';
         vodLink.appendChild(document.createTextNode('▶ ' + ((typeof i18n !== 'undefined' && i18n.t('tournamentDetail.watchVod')) || 'VOD')));
         rightDiv.prepend(vodLink);
       }
@@ -2370,7 +2379,7 @@ document.addEventListener('click', function(e) {
         } catch (err) {}
         const id = el.dataset.raceId;
         if (id) {
-          window.location.href = '/race-detail.html?id=' + encodeURIComponent(id);
+          window.location.href = '/races/' + encodeURIComponent(id);
         }
         return;
       }
@@ -2678,7 +2687,7 @@ function raceLinkHtml(race) {
   const href = srlUrl || 'https://racetime.gg/' + parts.join('/');
   const logo = srlUrl
     ? '<span class="srl-logo" role="img" aria-label="SpeedRunsLive" style="--srl-logo-height:14px;"></span>'
-    : '<img src="assets/racetime.svg" alt="Racetime" style="width:14px;height:14px;">Racetime';
+    : '<img src="/assets/racetime.svg" alt="Racetime" style="width:14px;height:14px;">Racetime';
   const brandColor = srlUrl ? '#F0C850' : '#C2CECF';
   return `<a href="${href}" target="_blank" rel="noopener noreferrer" data-stop-propagation style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.2rem 0.4rem; border-radius:0.25rem; font-size:0.7rem; color:${brandColor}; background:#222222; border:1px solid ${brandColor}; text-decoration:none;">${logo}</a>`;
 }
@@ -2959,7 +2968,7 @@ function createMatchCard(match, races = []) {
     card.style.cursor = 'pointer';
     card.addEventListener('click', (e) => {
       if (e.target.closest('a')) return;
-      window.location.href = '/race-detail.html?id=' + encodeURIComponent(singleRace._id);
+      window.location.href = '/races/' + encodeURIComponent(singleRace._id);
     });
   }
   
@@ -3961,7 +3970,7 @@ function createTiebreakCard(race, { inMatchList = false } = {}) {
     // The whole card opens the race, its VOD links aside
     card.addEventListener('click', (e) => {
       if (e.target.closest('a')) return;
-      window.location.href = '/race-detail.html?id=' + encodeURIComponent(race._id);
+      window.location.href = '/races/' + encodeURIComponent(race._id);
     });
   } else {
     card.addEventListener('click', () => goToMatchById('tiebreak-' + race._id));

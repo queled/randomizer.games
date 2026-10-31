@@ -121,9 +121,12 @@
 
     // The server rendered this entity's description, canonical, social and
     // JSON-LD tags (services/seo-pages.js): crawlers must see that single
-    // version. Only the visible title follows the page language.
+    // version. Only the visible title follows the page language; in English
+    // (the language crawlers render in) the server's title stays.
     if (document.documentElement.getAttribute('data-seo-ssr') === '1') {
-      document.title = title;
+      const lang = (window.i18n && typeof window.i18n.getLanguage === 'function' && window.i18n.getLanguage())
+        || document.documentElement.lang || 'en';
+      if (lang !== 'en') document.title = title;
       if (options.title) {
         const titleEl = document.querySelector('title[data-i18n-page-title]');
         if (titleEl) titleEl.removeAttribute('data-i18n-page-title');

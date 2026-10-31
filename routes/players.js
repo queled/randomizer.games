@@ -206,6 +206,7 @@ async function buildPlayersResponse(includeTournaments) {
         tournaments: [],
         racetimeUrl: playerDoc?.racetimeUrl || null,
         racetimeId: playerDoc?.racetimeId || playerDoc?.userId || null,
+        userId: playerDoc?.userId || null,
         twitch: playerDoc?.twitch || null
       });
     }
@@ -249,6 +250,7 @@ async function buildPlayersResponse(includeTournaments) {
         tournaments: [],
         racetimeUrl: p?.racetimeUrl || null,
         racetimeId: p?.racetimeId || p?.userId || null,
+        userId: p?.userId || null,
         twitch: p?.twitch || null
       });
     }

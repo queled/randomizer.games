@@ -283,7 +283,7 @@ server {
 }
 ```
 
-Les en-têtes de sécurité (via `helmet`) et la mise en cache des fichiers statiques sont déjà gérés par l'application : inutile de les redéfinir ici. L'application fait confiance au premier proxy (`trust proxy`), ce qui lui permet de voir la vraie IP des visiteurs pour le rate limiting.
+Les en-têtes de sécurité (via `helmet`) et la mise en cache des fichiers statiques sont déjà gérés par l'application : inutile de les redéfinir ici. L'application fait confiance au premier proxy (`trust proxy`), ce qui lui permet de voir la vraie IP des visiteurs pour le rate limiting. En production, elle redirige aussi (301) `www.randomizer.games` et le HTTP vers `https://randomizer.games`, pour qu'une page n'ait qu'une adresse dans les moteurs de recherche : l'en-tête `X-Forwarded-Proto` ci-dessus est donc indispensable.
 
 ```bash
 sudo ln -s /etc/nginx/sites-available/randomizer.games /etc/nginx/sites-enabled/

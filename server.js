@@ -149,6 +149,15 @@ async function getSitemapCached(name) {
 // Trust proxy (important for rate limiting behind reverse proxy)
 app.set('trust proxy', 1);
 
+// One host per page: www.randomizer.games (or any other name pointing here)
+// would duplicate every URL in search results
+const SITE_HOST = new URL(SITE_URL).host;
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV !== 'production' || req.path === '/api/health') return next();
+  if (req.get('host') === SITE_HOST && req.protocol === 'https') return next();
+  res.redirect(301, `${SITE_URL}${req.originalUrl}`);
+});
+
 // Security middleware
 app.use(helmet());
 
@@ -255,6 +264,12 @@ app.get('/assets/:file.png', (req, res, next) => {
   res.redirect(301, `/assets/covers/${encodeURIComponent(file)}`);
 });
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Crawlers fetch the API to render the pages, but its JSON is not a page to list
+app.use('/api/', (req, res, next) => {
+  res.set('X-Robots-Tag', 'noindex');
+  next();
+});
 
 // Apply rate limiting to all API routes (images have their own budget)
 app.use('/api/', apiLimiter);

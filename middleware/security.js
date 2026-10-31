@@ -1,5 +1,6 @@
 const rateLimit = require('express-rate-limit');
 const validator = require('validator');
+const { isVerifiedCrawler } = require('../helpers/search-crawlers');
 
 // Check if in development mode
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -22,8 +23,8 @@ const createRateLimiter = (windowMs, max, message, skip = () => false) => {
     message: { error: message || 'Too many requests, please try again later' },
     standardHeaders: true,
     legacyHeaders: false,
-    // Skip rate limiting for health checks and in development
-    skip: (req) => isDevelopment || req.originalUrl.split('?')[0] === '/api/health' || skip(req)
+    // Skip rate limiting for health checks, search engine crawlers and in development
+    skip: (req) => isDevelopment || req.originalUrl.split('?')[0] === '/api/health' || skip(req) || isVerifiedCrawler(req)
   });
 };
 

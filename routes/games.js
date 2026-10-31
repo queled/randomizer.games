@@ -574,3 +574,9 @@ router.patch('/:id/resources', requireAdmin, async (req, res, next) => {
 
 module.exports = router;
 module.exports.invalidateGamesWithStats = invalidateGamesWithStats;
+// The counts of one game when they are computed already (page metadata must not wait for them)
+module.exports.cachedGameStats = (id) => {
+  if (!gamesWithStatsCache) return null;
+  if (gamesWithStatsCacheExpiresAt <= Date.now()) getGamesWithStatsCached().catch(() => {});
+  return gamesWithStatsCache.games.find((game) => game.id === id) || null;
+};

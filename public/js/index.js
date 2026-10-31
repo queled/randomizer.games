@@ -412,8 +412,10 @@ async function loadRecentTournaments(request) {
 }
 
 function createRaceCard(race) {
-  const card = document.createElement('div');
-  card.style.cssText = 'background:#1f2937;padding:1rem;border-radius:0.5rem;cursor:pointer;transition:background 0.2s;min-height:140px;display:flex;flex-direction:column;';
+  // A race of ours is a real link (crawlers follow it); others open racetime or SRL
+  const card = document.createElement(race._id ? 'a' : 'div');
+  if (race._id) card.href = `/race-detail.html?id=${encodeURIComponent(race._id)}`;
+  card.style.cssText = 'background:#1f2937;padding:1rem;border-radius:0.5rem;cursor:pointer;transition:background 0.2s;min-height:140px;display:flex;flex-direction:column;text-decoration:none;color:inherit;';
   card.onmouseenter = () => card.style.background = '#374151';
   card.onmouseleave = () => card.style.background = '#1f2937';
 
@@ -469,7 +471,7 @@ function createRaceCard(race) {
 
   card.addEventListener('click', () => {
     if (race._id) {
-      window.location.href = `/race-detail.html?id=${encodeURIComponent(race._id)}`;
+      return;
     } else if (/^\/?srl\/\d+$/i.test(String(race.url || '').trim())) {
       // Races imported from SpeedRunsLive are stored as /srl/<raceId>
       const raceId = String(race.url).trim().split('/').pop();
@@ -494,8 +496,9 @@ function createRaceCard(race) {
 }
 
 function createTournamentCard(tournament) {
-  const card = document.createElement('div');
-  card.style.cssText = 'background:#1f2937;padding:1rem;border-radius:0.5rem;cursor:pointer;transition:background 0.2s;min-height:140px;display:flex;flex-direction:column;';
+  const card = document.createElement('a');
+  card.href = `/tournament-detail.html?id=${encodeURIComponent(tournament._id)}`;
+  card.style.cssText = 'background:#1f2937;padding:1rem;border-radius:0.5rem;cursor:pointer;transition:background 0.2s;min-height:140px;display:flex;flex-direction:column;text-decoration:none;color:inherit;';
   card.onmouseenter = () => card.style.background = '#374151';
   card.onmouseleave = () => card.style.background = '#1f2937';
   
@@ -558,10 +561,6 @@ function createTournamentCard(tournament) {
       <span style="align-self:flex-end;">👥 ${tournament.participantsCount || 0} ${typeof i18n !== 'undefined' ? i18n.t('home.participants') : 'participants'}</span>
     </div>
   `;
-
-  card.addEventListener('click', () => {
-    window.location.href = `/tournament-detail.html?id=${tournament._id}`;
-  });
 
   return card;
 }

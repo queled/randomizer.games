@@ -102,8 +102,8 @@ function renderPlayers(players) {
       : placeholder;
 
     return `
-      <div class="player-card" data-player-name="${safeEncodeURIComponent(player.name)}" style="background-color: #1f2937; padding: 1.5rem; border-radius: 0.5rem; transition: background-color 0.2s; cursor: pointer; aspect-ratio: 1/1; display: flex; flex-direction: column; align-items: center;">
-        <h3 style="font-size: 1.1rem; font-weight: bold; color: white; margin-bottom: 0.75rem; text-align: center;">${escHtml(player.name)}</h3>
+      <div class="player-card" style="background-color: #1f2937; padding: 1.5rem; border-radius: 0.5rem; transition: background-color 0.2s; cursor: pointer; aspect-ratio: 1/1; display: flex; flex-direction: column; align-items: center;">
+        <h3 style="font-size: 1.1rem; font-weight: bold; color: white; margin-bottom: 0.75rem; text-align: center;"><a class="player-card-name" href="${escHtml(player.userId ? `/player-detail.html?id=${safeEncodeURIComponent(player.userId)}` : `/player-detail.html?name=${safeEncodeURIComponent(player.name)}`)}" style="color:inherit;text-decoration:none;">${escHtml(player.name)}</a></h3>
         
         <img class="rt-avatar" 
              src="${escHtml(avatarSrc)}" 
@@ -139,7 +139,7 @@ function renderPlayers(players) {
             const gameSlug = slugAliases[rawSlug] || rawSlug;
             return `
               <div style="font-size: 0.75rem; color: #d1d5db; font-weight: 500; display: flex; align-items: center; white-space: nowrap; overflow: hidden;">
-                <span class="game-link" data-game-id="${safeEncodeURIComponent(gameSlug)}" style="overflow: hidden; text-overflow: ellipsis; flex: 1 1 auto; min-width: 0; cursor: pointer; color: #60a5fa; transition: color 0.2s;">${escHtml(game.gameName)}</span>
+                <a class="game-link" href="/game-detail.html?id=${safeEncodeURIComponent(gameSlug)}" style="text-decoration: none; "overflow: hidden; text-overflow: ellipsis; flex: 1 1 auto; min-width: 0; cursor: pointer; color: #60a5fa; transition: color 0.2s;">${escHtml(game.gameName)}</a>
                 <span style="color: #10b981; font-weight: bold; margin-left: 0.5ch; flex-shrink: 0; flex-grow: 0;">(${game.count})</span>
               </div>
             `;
@@ -159,21 +159,13 @@ function renderPlayers(players) {
 
 function attachPlayerCardListeners(list) {
   list.querySelectorAll('.player-card').forEach(card => {
-    const playerName = card.getAttribute('data-player-name');
-    
+    // The name and the games are real links; the rest of the card clicks through to the profile
+    const nameLink = card.querySelector('.player-card-name');
     card.addEventListener('click', (e) => {
-      if (!e.target.classList.contains('game-link')) {
-        window.location.href = '/player-detail.html?name=' + playerName;
-      }
+      if (nameLink && !e.target.closest('a')) nameLink.click();
     });
     
     card.querySelectorAll('.game-link').forEach(gameLink => {
-      gameLink.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const gameId = gameLink.getAttribute('data-game-id');
-        window.location.href = '/game-detail.html?id=' + gameId;
-      });
-
       gameLink.addEventListener('mouseenter', () => {
         gameLink.style.color = '#fbbf24';
       });

@@ -16,6 +16,8 @@ const { buildPlayerRacesFilter } = require('../helpers/player-races-filter');
 const { countPlayerTournaments } = require('../helpers/player-tournaments');
 const { gameLabel, tournamentGameLabel } = require('../helpers/game-label');
 const { coverUrl } = require('../helpers/game-covers');
+const { readHistory } = require('../helpers/game-history');
+const { cachedGameStats } = require('../routes/games');
 
 const PUBLIC_DIR = path.join(__dirname, '..', 'public');
 // Square logo for social previews and the Organization logo
@@ -159,17 +161,29 @@ async function gameMeta(query, siteUrl) {
   const game = await Game.findOne({ id, enabled: { $ne: false } }).lean();
   if (!game) return null;
 
-  // Race counts depend on the racetime category resolution in routes/games.js
-  // (a scan over every game); the description sticks to what the document holds.
   const displayTitle = gameLabel(game) || 'Game';
   const gameName = game.official?.name || game.name || displayTitle;
-  const description = displayTitle !== gameName
-    ? `${displayTitle} for ${gameName}: races, tournaments, players and community resources on Randomizer.`
-    : `${displayTitle}: races, tournaments, players and community resources on Randomizer.`;
+  // Each page gets its own description: what the randomizer does (the first
+  // sentence of its history) and how much of it the site follows
+  const [history, stats] = await Promise.all([
+    readHistory(game.id).catch(() => null),
+    cachedGameStats(game.id)
+  ]);
+  const intro = String(history?.intro?.en || '').trim();
+  const firstSentence = intro.match(/^.+?[.!?](?=\s|$)/)?.[0] || intro;
+  const counts = stats && [
+    stats.totalRaces && `${stats.totalRaces.toLocaleString('en-US')} race${stats.totalRaces > 1 ? 's' : ''}`,
+    stats.totalTournaments && `${stats.totalTournaments.toLocaleString('en-US')} tournament${stats.totalTournaments > 1 ? 's' : ''}`
+  ].filter(Boolean);
+  const lead = displayTitle !== gameName ? `${displayTitle} for ${gameName}` : displayTitle;
+  // The counts first: past 160 characters, search results cut the end
+  const description = counts?.length
+    ? `${displayTitle}: ${counts.join(' and ')} on Randomizer. ${firstSentence}`.trim()
+    : (firstSentence ? `${firstSentence} Races, tournaments and community resources on Randomizer.` : `${lead}: races, tournaments and community resources on Randomizer.`);
   const canonicalPath = `/game-detail.html?id=${encodeURIComponent(game.id)}`;
   const image = coverUrl(game.id);
   // The site shown on the page (chosen official site, else the only known site, else the legacy
-  // field); a Discord thread says nothing about the game's identity
+  // field); a Discord thread says nothing about the randomizer's identity
   const resources = game.resources || {};
   const website = resources.officialSite?.url || (resources.sites?.length === 1 ? resources.sites[0].url : '') || game.randomizer?.website;
   const sameAs = [website]
@@ -187,14 +201,20 @@ async function gameMeta(query, siteUrl) {
         { name: 'Games', url: '/games.html' },
         { name: displayTitle, url: canonicalPath }
       ]),
+      // The page is about the randomizer, a modified version of the base game:
+      // its site is the randomizer's, never the base game's
       compact({
         '@context': 'https://schema.org',
         '@type': 'VideoGame',
-        name: gameName,
-        alternateName: displayTitle !== gameName ? displayTitle : undefined,
+        name: displayTitle,
         url: absoluteUrl(siteUrl, canonicalPath),
         image: absoluteUrl(siteUrl, image) || undefined,
-        description,
+        description: normalizeDescription(intro || description, 500),
+        isBasedOn: displayTitle !== gameName ? compact({
+          '@type': 'VideoGame',
+          name: gameName,
+          gamePlatform: game.platforms?.length ? game.platforms : undefined
+        }) : undefined,
         sameAs: sameAs.length ? sameAs : undefined
       })
     ]
@@ -363,15 +383,17 @@ async function raceMeta(query, siteUrl) {
   const matchup = String(race.matchPlayers || '').trim();
   const label = matchup ? `${matchup} (${goal})` : goal;
   const entrants = Array.isArray(race.entrants) ? race.entrants.length : 0;
+  const day = race.startedAt ? new Date(race.startedAt).toISOString().slice(0, 10) : '';
   const parts = [`${gameName} race on Randomizer.`, `${label}, ${entrants} entrants.`];
-  if (race.startedAt) parts.push(`Started ${new Date(race.startedAt).toISOString().slice(0, 10)}.`);
+  if (day) parts.push(`Started ${day}.`);
   if (tournament?.name) parts.push(`Tournament: ${tournament.name}.`);
   const description = parts.join(' ');
   const canonicalPath = `/race-detail.html?id=${encodeURIComponent(String(race._id))}`;
   const image = coverUrl(game?.id);
 
   return {
-    title: `${label} - ${gameName} Race - Randomizer`,
+    // Thousands of races share a goal: the day tells their pages apart
+    title: `${label} - ${gameName} Race${day ? ` (${day})` : ''} - Randomizer`,
     heading: gameName,
     description,
     canonicalPath,

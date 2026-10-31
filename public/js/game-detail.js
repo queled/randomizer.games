@@ -718,8 +718,9 @@
     const schema = {
       '@context': 'https://schema.org',
       '@type': 'VideoGame',
-      name: gameName,
-      alternateName: displayTitle !== gameName ? displayTitle : undefined,
+      // The randomizer, based on the game (same entity as the server-rendered one)
+      name: displayTitle,
+      isBasedOn: displayTitle !== gameName ? { '@type': 'VideoGame', name: gameName } : undefined,
       url: window.RandomizerSEO.buildAbsoluteUrl(canonicalUrl),
       image: window.RandomizerSEO.buildAbsoluteUrl(image) || window.RandomizerSEO.defaultImage,
       description,

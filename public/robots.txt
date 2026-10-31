@@ -1,6 +1,10 @@
 User-agent: *
 Allow: /
-Disallow: /api/
 Disallow: /admin/
+# The pages load their content from /api/: crawlers must reach it to render them.
+# The API answers carry X-Robots-Tag: noindex, so they stay out of the results.
+Disallow: /api/admin/
+Disallow: /api/sync/
+Disallow: /api/search
 
 Sitemap: https://randomizer.games/sitemap.xml

@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Afficher le nom complet du jeu en sous-titre
       const gameName = game.official?.name || game.name;
       const stats = streamStats[game.id] || { streamers: 0, viewers: 0 };
-      const website = sanitizeExternalUrl(game.randomizer?.website || game.officialWebsite);
+      const website = sanitizeExternalUrl(game.resources?.officialSite?.url || game.randomizer?.website || game.officialWebsite);
       
       return `
         <div class="game-card" data-game-id="${escHtml(id)}" role="link" tabindex="0" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;overflow:hidden;">

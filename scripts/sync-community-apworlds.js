@@ -340,6 +340,18 @@ function planGame(game, rows, now) {
   if (strip(guides) !== strip(resources.guides)) set['resources.guides'] = guides;
   if (strip(other) !== strip(resources.other)) set['resources.other'] = other;
 
+  // Official site: the APWorld when it is the game's only link, a Discord thread
+  // aside. One already chosen stays, unless it is an APWorld link the list dropped
+  const oldOfficial = resources.officialSite?.url ? resources.officialSite : null;
+  const droppedOfficial = oldOfficial && !sites.some(site => site.url === oldOfficial.url) &&
+    (resources.sites || []).some(site => site.source === SOURCE && site.url === oldOfficial.url);
+  if (!oldOfficial || droppedOfficial) {
+    const active = sites.filter(site => !site.isObsolete);
+    const only = active.length === 1 && active[0].source === SOURCE && !isDiscord(active[0].url) ? active[0] : null;
+    if (only) set['resources.officialSite'] = { url: only.url, name: only.name, isArchipelago: true, isMultiworld: false };
+    else if (droppedOfficial) set['resources.officialSite'] = null;
+  }
+
   const old = game.integrations?.apworld || {};
   const next = {
     enabled: rows.length > 0,
@@ -480,7 +492,8 @@ async function main() {
         sites: set['resources.sites'] || [],
         trackers: set['resources.trackers'] || [],
         guides: set['resources.guides'] || [],
-        other: set['resources.other'] || []
+        other: set['resources.other'] || [],
+        officialSite: set['resources.officialSite'] || undefined
       },
       integrations: { ...doc.integrations, apworld: set['integrations.apworld'] }
     });

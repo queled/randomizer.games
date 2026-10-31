@@ -56,6 +56,15 @@ const attr = (tag, name) => decodeXml((tag.match(new RegExp(`\\s${name}="([^"]*)
 // Text of an <si> / <is> element: its runs put together
 const runText = xml => [...xml.matchAll(/<t(?:\s[^>]*)?>([\s\S]*?)<\/t>/g)].map(m => decodeXml(m[1])).join('');
 
+// A link pasted from a Google doc goes through google.com/url?q=<link>: the link itself
+function withoutRedirect(url) {
+  try {
+    const { hostname, pathname, searchParams } = new URL(url);
+    if (/^(www\.)?google\.[a-z.]+$/.test(hostname) && pathname === '/url' && searchParams.get('q')) return searchParams.get('q');
+  } catch { /* not a URL: kept as is */ }
+  return url;
+}
+
 /**
  * Rows of a sheet: { [column letter]: { text, url } } by row number. A cell's
  * url is its link, with the link's anchor ("location") when it has one.
@@ -93,7 +102,7 @@ function readSheet(files, tabName) {
     const target = sheetRels.get(attr(tag, 'r:id'));
     if (!target) continue;
     const location = attr(tag, 'location');
-    cell(attr(tag, 'ref')).url = location ? `${target}#${location}` : target;
+    cell(attr(tag, 'ref')).url = withoutRedirect(location ? `${target}#${location}` : target);
   }
   return rows;
 }

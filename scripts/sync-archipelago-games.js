@@ -301,9 +301,8 @@ function planGame(game, worldsBySite, fetchedSites, now) {
     officialSite = ownPage || (GAME_PAGE_RE.test(officialSite.url) ? null : officialSite);
   } else if (!officialSite && ownPage) {
     // No other site to show first
-    const website = game.randomizer?.website;
     const others = sites.filter(site => !site.isObsolete && !hostOf(site.url));
-    if (!others.length && (!website || hostOf(website))) officialSite = ownPage;
+    if (!others.length) officialSite = ownPage;
   }
 
   const set = {};
@@ -356,7 +355,6 @@ function newGameDoc(id, worldsBySite, now) {
       displayName: `${name} Randomizer`,
       ...randomizerShortNames(name, id),
       name: `${name} Randomizer`,
-      website: world.gamePage,
       opensource: null
     },
     resources: { sites: [], trackers: [], guides: [], other: [] },

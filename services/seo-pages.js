@@ -21,6 +21,7 @@ const { cachedGameStats } = require('../routes/games');
 const { LANGUAGES, localizedPath } = require('../helpers/site-routes');
 const { texts, fill, count } = require('./seo-texts');
 const { isThinGame, isThinPlayer } = require('../helpers/thin-pages');
+const { pickOfficialSite } = require('../helpers/official-site');
 
 const PUBLIC_DIR = path.join(__dirname, '..', 'public');
 // Square logo for social previews and the Organization logo
@@ -130,12 +131,9 @@ async function gameMeta(query, siteUrl, lang) {
     : (firstSentence ? `${firstSentence} ${t.gameFallback}` : fill(t.gameFallbackLead, { lead }));
   const canonicalPath = `/games/${encodeURIComponent(game.id)}`;
   const image = coverUrl(game.id);
-  // The site shown on the page (chosen official site, else the only known site, else the legacy
-  // field); a Discord thread says nothing about the randomizer's identity
-  const resources = game.resources || {};
-  const website = resources.officialSite?.url || (resources.sites?.length === 1 ? resources.sites[0].url : '') || game.randomizer?.website;
-  const sameAs = [website]
-    .filter((url) => /^https?:\/\//i.test(String(url || '')) && !/^https?:\/\/(www\.)?discord\.(com|gg)\//i.test(url));
+  // The site shown on the page as its official one
+  const website = pickOfficialSite(game.resources || {})?.url;
+  const sameAs = [website].filter((url) => /^https?:\/\//i.test(String(url || '')));
 
   // Counts not computed yet (server just started): indexable until known
   const thin = stats && isThinGame({ ...stats, hasHistory: Boolean(history) });

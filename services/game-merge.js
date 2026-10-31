@@ -141,7 +141,7 @@ async function mergeGames(targetId, sourceId) {
       target.set(`official.${field}`, source.official[field]);
     }
   }
-  for (const field of ['website', 'opensource', 'addedDate', 'updatedDate']) {
+  for (const field of ['opensource', 'addedDate', 'updatedDate']) {
     if (isEmpty(target.randomizer?.[field]) && !isEmpty(source.randomizer?.[field])) {
       target.set(`randomizer.${field}`, source.randomizer[field]);
     }

@@ -669,7 +669,6 @@ const admin = {
       document.getElementById('game-randomizer-shortName').value = game.randomizer?.shortName || '';
       document.getElementById('game-randomizer-tinyName').value = game.randomizer?.tinyName || '';
       document.getElementById('game-randomizer-name').value = game.randomizer?.name || '';
-      document.getElementById('game-randomizer-website').value = game.randomizer?.website || '';
       document.getElementById('game-randomizer-opensource').checked = game.randomizer?.opensource || false;
       
       // Integrations
@@ -730,7 +729,6 @@ const admin = {
         shortName: formData.get('randomizer.shortName'),
         tinyName: formData.get('randomizer.tinyName') || null,
         name: formData.get('randomizer.name') || null,
-        website: formData.get('randomizer.website') || null,
         opensource: document.getElementById('game-randomizer-opensource').checked
       },
       integrations: this.collectIntegrations()

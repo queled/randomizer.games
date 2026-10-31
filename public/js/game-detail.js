@@ -658,6 +658,16 @@
     }[m]));
   }
 
+  // Same rule as helpers/official-site.js: the chosen site, else the only known
+  // one; a Discord thread is never the official site
+  function officialSiteUrl(resources = {}) {
+    const isDiscord = (url) => /^https?:\/\/([a-z0-9-]+\.)?(discord\.(com|gg)|discordapp\.com)\//i.test(String(url || ''));
+    const chosen = resources.officialSite?.url;
+    if (chosen) return isDiscord(chosen) ? '' : chosen;
+    const sites = resources.sites || [];
+    return sites.length === 1 && !isDiscord(sites[0].url) ? sites[0].url : '';
+  }
+
   function sanitizeExternalUrl(url, { allowRelative = false } = {}) {
     const raw = String(url || '').trim();
     if (!raw) return '';
@@ -701,12 +711,10 @@
       'Explore recent activity, tournaments and community resources.'
     ].join(' ');
 
-    // Same site as the page header; a Discord thread says nothing about the game's identity
-    const resources = game.resources || {};
-    const website = resources.officialSite?.url || (resources.sites?.length === 1 ? resources.sites[0].url : '') || game.randomizer?.website;
-    const sameAs = [website]
+    // Same site as the page header
+    const sameAs = [officialSiteUrl(game.resources)]
       .map((value) => sanitizeExternalUrl(value))
-      .filter((url) => url && !/^https?:\/\/(www\.)?discord\.(com|gg)\//i.test(url));
+      .filter(Boolean);
 
     const canonicalUrl = `/games/${encodeURIComponent(id)}`;
     const image = game.cover || '/assets/icon-512.png';
@@ -1248,9 +1256,7 @@
       titleEl.textContent = gameName || '';
       
       if (siteEl) {
-        // Same rule as the resources block: chosen official site, else the only known site, else the legacy field
-        const resources = game.resources || {};
-        const website = resources.officialSite?.url || (resources.sites?.length === 1 ? resources.sites[0].url : '') || game.randomizer?.website;
+        const website = officialSiteUrl(game.resources);
         const websiteLinkAttrs = buildExternalLinkAttrs(website);
         const renderSite = () => {
           siteEl.innerHTML = websiteLinkAttrs ? `<div><a ${websiteLinkAttrs} style="color:#60a5fa;">${escHtml(overviewT('common.officialSite', 'Official site'))}</a></div>` : '';

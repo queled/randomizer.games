@@ -20,7 +20,6 @@ const gameSchema = new mongoose.Schema({
     shortName: String,      // Acronyme
     tinyName: String,       // Très court
     name: String,           // Nom complet
-    website: String,        // Site du randomizer
     opensource: Boolean,
     addedDate: Date,        // Date d'ajout du randomizer
     updatedDate: Date       // Dernière mise à jour

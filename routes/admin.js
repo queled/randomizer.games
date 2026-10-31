@@ -536,7 +536,7 @@ router.delete('/games/:id/history', requireAdmin, async (req, res, next) => {
 router.get('/games/:id/resources', requireAdmin, async (req, res, next) => {
   try {
     const game = await Game.findOne({ id: req.params.id })
-      .select('resources randomizer.website integrations.randoList')
+      .select('resources integrations.randoList')
       .lean();
     
     if (!game) {
@@ -545,7 +545,6 @@ router.get('/games/:id/resources', requireAdmin, async (req, res, next) => {
     
     res.json({
       resources: game.resources || {},
-      legacyWebsite: game.randomizer?.website,
       randoListInfo: game.integrations?.randoList
     });
   } catch (error) {

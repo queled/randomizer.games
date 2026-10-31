@@ -33,6 +33,7 @@ const SERIES_DIR = path.join(TMP_DIR, 'src', 'series');
 
 const connectDB = require('../config/database');
 const { Game } = require('../models');
+const { isDiscordUrl } = require('../helpers/official-site');
 
 /**
  * Clone ou met à jour le repo
@@ -315,9 +316,10 @@ async function updateGameResources(seriesData, dryRun = false) {
     
     if (sites.length === 0) continue;
     
-    // Déterminer le site officiel
+    // Déterminer le site officiel (jamais un lien Discord : fil d'entraide ou fichier
+    // joint, dont les adresses expirent)
     let officialSite = null;
-    const activeSites = sites.filter(s => !s.isObsolete);
+    const activeSites = sites.filter(s => !s.isObsolete && !isDiscordUrl(s.url));
     
     if (activeSites.length === 1) {
       // Un seul site = c'est le site officiel

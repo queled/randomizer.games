@@ -376,7 +376,6 @@ function newGameName(row, indexes) {
 }
 
 function newGameDoc(id, name, rows, now) {
-  const site = rows.map(row => rowLinks(row).site).find(Boolean);
   return {
     id,
     name,
@@ -385,7 +384,6 @@ function newGameDoc(id, name, rows, now) {
       displayName: `${name} Randomizer`,
       ...randomizerShortNames(name, id),
       name: `${name} Randomizer`,
-      website: site?.url || null,
       opensource: null
     },
     resources: { sites: [], trackers: [], guides: [], other: [] },

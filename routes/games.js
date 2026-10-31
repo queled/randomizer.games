@@ -4,6 +4,7 @@ const router = express.Router();
 const { Game } = require('../models');
 const { requireAdmin } = require('../middleware/admin-auth');
 const { coverIds, coverUrl } = require('../helpers/game-covers');
+const { pickOfficialSite } = require('../helpers/official-site');
 
 const GAMES_WITH_STATS_CACHE_TTL = 10 * 60 * 1000;
 let gamesWithStatsCache = null;
@@ -322,27 +323,13 @@ router.get('/:id/resources', async (req, res, next) => {
     
     const resources = game.resources || {};
     
-    // Déterminer le site officiel à afficher
-    let officialSite = null;
-    
-    if (resources.officialSite?.url) {
-      // Site officiel défini manuellement
-      officialSite = resources.officialSite;
-    } else if (resources.sites?.length === 1) {
-      // Un seul site = c'est le site officiel
-      officialSite = {
-        url: resources.sites[0].url,
-        name: resources.sites[0].name || 'Site officiel',
-        isArchipelago: resources.sites[0].isArchipelago || false
-      };
-    } else if (game.randomizer?.website) {
-      // Fallback sur le champ legacy
-      officialSite = {
-        url: game.randomizer.website,
-        name: 'Site officiel',
-        isArchipelago: game.randomizer.website?.includes('archipelago') || false
-      };
-    }
+    // Site officiel à afficher : celui choisi, sinon le seul site connu (jamais un fil Discord)
+    const picked = pickOfficialSite(resources);
+    const officialSite = picked && (picked === resources.officialSite ? picked : {
+      url: picked.url,
+      name: picked.name || 'Site officiel',
+      isArchipelago: picked.isArchipelago || false
+    });
     
     // Filtrer les sites obsolètes pour l'affichage, ainsi que les liens génériques
     // vers archipelago.gg / multiworld.gg (rando-list) quand le jeu a sa page sur ce site.

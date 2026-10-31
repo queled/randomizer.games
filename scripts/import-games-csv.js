@@ -234,7 +234,6 @@ function buildNewGameData(record, gameId, integrations) {
       tinyName: record.tinyName || null,
       // name = nom complet
       name: fullRandoName,
-      website: null,
       opensource: null
     },
     integrations: {

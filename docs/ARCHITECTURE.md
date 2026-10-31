@@ -305,7 +305,7 @@ La page d'un ancien pseudo ou d'un nom de bracket qui mène à un seul compte re
 id                 identifiant interne, unique et immuable (ex. "alttp")
 name               nom court du jeu
 official           { name, releaseDate, releaseYear, website }   — le jeu d'origine
-randomizer         { displayName, shortName, tinyName, name, website, opensource, addedDate, updatedDate }
+randomizer         { displayName, shortName, tinyName, name, opensource, addedDate, updatedDate }
 resources          { officialSite, sites[], trackers[], guides[], other[] }
 platforms[], series, logo, image, categories[]
 integrations       { randoList, racetime, speedrun, twitch, startgg, challonge, archipelago, multiworld, apworld }
@@ -328,7 +328,7 @@ Deux règles protègent les données saisies à la main :
 
 **Fusion de jeux.** Un même jeu peut figurer plusieurs fois dans rando-list (une entrée par plateforme ou par édition) ; sur le site, il n'en fait qu'un. La fusion (panneau admin, ou `node scripts/merge-games.js <cible> <source>... [--rename <id>] [--short-name "<libellé>"]`, code dans `services/game-merge.js`) garde le jeu cible et supprime les sources : leurs ressources s'ajoutent sans doublon d'URL, ce qui manque à la cible (logo, plateformes, intégrations, catégories) est repris, leurs catégories racetime.gg deviennent des catégories supplémentaires de la cible (les courses ne sont pas modifiées) et leurs noms rando-list passent dans `gameNames`. La synchronisation suivante retrouve donc les sites de toutes les versions et ne les signale plus comme nouveaux jeux.
 
-À l'affichage, la page d'un jeu prend `randomizer.displayName` comme titre et `official.name` comme sous-titre. Le bouton « Site officiel » (ou « Archipelago ») vient de `resources.officialSite`, ou du seul site connu s'il n'y en a qu'un.
+À l'affichage, la page d'un jeu prend `randomizer.displayName` comme titre et `official.name` comme sous-titre. Le bouton « Site officiel » (ou « Archipelago ») vient de `resources.officialSite`, ou du seul site connu s'il n'y en a qu'un, mais jamais d'un lien Discord, fil d'entraide ou fichier joint (`helpers/official-site.js`). L'ancien champ `randomizer.website` a été supprimé le 2026-10-31 : le site officiel ne vit plus que dans `resources`.
 
 ## Scripts
 

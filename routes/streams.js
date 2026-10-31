@@ -144,38 +144,50 @@ const COMBO_TWITCH_CATEGORY_IDS = {
   ]
 };
 
+// A hack whose title is an everyday word ("nature", "recovery") counts only when
+// the title ties it to the randomizer ("<title> rando…") or to the base game
+// ("super metroid <title>", "sm: <title>")
+const hackMentions = (bases, ...titles) => titles.flatMap(title => [
+  `${title} rando`,
+  ...bases.flatMap(base => [`${base} ${title}`, `${base}: ${title}`, `${base} - ${title}`])
+]);
+const SM_HACK = ['super metroid', 'sm'];
+const MZM_HACK = ['metroid zero mission', 'metroid: zero mission', 'zero mission', 'mzm', 'zm'];
+
 // Per-game extra filters:
 // - PER_GAME_TITLE_KEYWORDS: require one of these keywords to start a word of the title/tags
 // - PER_GAME_ALLOWED_TWITCH_CATEGORIES: only accept streams whose Twitch category name matches one of these
 const PER_GAME_TITLE_KEYWORDS = {
   'ootmq': ['master quest', 'mq', 'ootmq'],
   // ROM hacks have no Twitch category of their own: they are streamed under
-  // the game they modify (stored as their category), named in the title
-  'smascent': ['ascent'],
-  'smcryogenesis': ['cryogenesis'],
+  // the game they modify (stored as their category), named in the title.
+  // Super Metroid hacks: a distinctive name is enough, an everyday word is not
+  'smascent': hackMentions(SM_HACK, 'ascent'),
+  'smcryogenesis': hackMentions(SM_HACK, 'cryogenesis'),
   'smdc': ['digital cube'],
   'smtbp': ['blue plague'],
-  'smnature': ['nature'],
-  'smoxide': ['oxide'],
-  'smrecovery': ['recovery'],
-  'smcr': ['cliffhanger'],
-  'smescape2': ['escape ii', 'escape 2'],
-  'smeris': ['eris'],
+  'smnature': hackMentions(SM_HACK, 'nature'),
+  'smoxide': hackMentions(SM_HACK, 'oxide'),
+  'smrecovery': hackMentions(SM_HACK, 'recovery'),
+  'smcr': ['cliffhanger redux', ...hackMentions(SM_HACK, 'cliffhanger')],
+  'smescape2': hackMentions(SM_HACK, 'escape ii', 'escape 2'),
+  'smeris': hackMentions(SM_HACK, 'eris'),
   'smgd': ['golden dawn'],
   'smhm': ['hyper metroid'],
   'smpb': ['project base'],
-  'smstardust': ['stardust'],
-  'smsubversion': ['subversion'],
+  'smstardust': hackMentions(SM_HACK, 'stardust'),
+  'smsubversion': hackMentions(SM_HACK, 'subversion'),
   'smszm': ['super zero mission'],
-  'smvitality': ['vitality'],
+  'smvitality': hackMentions(SM_HACK, 'vitality', 'v i t a l i t y'),
   'smzf': ['z-factor', 'z factor', 'zfactor'],
-  'mzmsm': ['spooky mission'],
+  'smredesign': hackMentions(SM_HACK, 'redesign'),
+  'smsj': ['junkoid'],
+  // Zero Mission hacks; "spooky mission" alone must not take Spooky Mission 2
+  'mzmsm': ['spooky mission rando', 'spooky mission 1'],
   'mzmsm2': ['spooky mission 2', 'spooky mission ii'],
   'mzmss': ['scrolls six', 'scrolls 6'],
   'mzmwm': ['winter mission'],
-  'mzmdf': ['deep freeze'],
-  'smredesign': ['redesign'],
-  'smsj': ['junkoid'],
+  'mzmdf': hackMentions(MZM_HACK, 'deep freeze'),
   'cm64': ['cursed mario'],
   'sm64sm64': ['spicy mycena'],
   'smsa2': ['sunshine arcade'],

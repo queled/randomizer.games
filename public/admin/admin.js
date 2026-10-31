@@ -1792,6 +1792,11 @@ const admin = {
       this.showToast('URL et titre requis', 'error');
       return;
     }
+    // Same rule as helpers/official-site.js: the site would ignore it
+    if ((kind === 'official' || (kind === 'site' && isOfficial)) && /^https?:\/\/([a-z0-9-]+\.)?(discord\.(com|gg)|discordapp\.com)\//i.test(url)) {
+      this.showToast('Un lien Discord ne peut pas être le site officiel (le site ne l’afficherait pas)', 'error');
+      return;
+    }
 
     try {
       const resources = this.currentGame.resources || {};

@@ -559,6 +559,9 @@ router.get('/games/:id/resources', requireAdmin, async (req, res, next) => {
 router.put('/games/:id/resources', requireAdmin, async (req, res, next) => {
   try {
     const { officialSite, sites, trackers, guides, other } = req.body;
+    if (officialSite?.url && isDiscordUrl(officialSite.url)) {
+      return res.status(400).json({ error: 'A Discord link cannot be the official site' });
+    }
     
     const resources = {};
     
@@ -1989,6 +1992,7 @@ router.post('/tournaments/:id/reorder-races', requireAdmin, async (req, res, nex
 const StartGGAPI = require('../services/startgg');
 const challongeService = require('../services/challonge');
 const sanitizeHtml = require('sanitize-html');
+const { isDiscordUrl } = require('../helpers/official-site');
 
 /**
  * Parse a start.gg URL to extract the tournament slug.

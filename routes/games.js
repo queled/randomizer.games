@@ -4,7 +4,7 @@ const router = express.Router();
 const { Game } = require('../models');
 const { requireAdmin } = require('../middleware/admin-auth');
 const { coverIds, coverUrl } = require('../helpers/game-covers');
-const { pickOfficialSite } = require('../helpers/official-site');
+const { pickOfficialSite, isDiscordUrl } = require('../helpers/official-site');
 
 const GAMES_WITH_STATS_CACHE_TTL = 10 * 60 * 1000;
 let gamesWithStatsCache = null;
@@ -535,6 +535,9 @@ router.patch('/:id/resources', requireAdmin, async (req, res, next) => {
   try {
     const { officialSite, trackers, guides, other } = req.body;
     
+    if (officialSite?.url && isDiscordUrl(officialSite.url)) {
+      return res.status(400).json({ error: 'A Discord link cannot be the official site' });
+    }
     const updateData = {};
     
     if (officialSite !== undefined) {

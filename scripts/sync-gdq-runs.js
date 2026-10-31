@@ -36,7 +36,8 @@ const RECENT_DAYS = 400;
 const RANDOMIZER_RE = /\brando\b|randomi[sz]er|archipelago|multiworld/i;
 // Run name → game id, for names the Twitch category and game names do not find
 const GAME_HINTS = [
-  [/link to the past.*super metroid|super metroid.*link to the past/i, 'smz3']
+  [/link to the past.*super metroid|super metroid.*link to the past/i, 'smz3'],
+  [/kingdom hearts (2|ii) final mix/i, 'kh2fm']
 ];
 
 function parseArgs() {

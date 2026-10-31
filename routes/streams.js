@@ -1585,7 +1585,8 @@ whenConnected(() => setTimeout(warmAllStreams, 4000));
 setInterval(warmAllStreams, CACHE_TTL - 30 * 1000).unref();
 
 // Every live randomizer stream: the cache, else the stale list while it refreshes, else a fresh build
-async function getAllStreams() {
+// ({ wait: false }: no list yet gives none, rather than waiting for the build)
+async function getAllStreams({ wait = true } = {}) {
   const cached = getCached(ALL_STREAMS_KEY);
   if (cached) return cached;
 
@@ -1595,6 +1596,10 @@ async function getAllStreams() {
     return stale;
   }
 
+  if (!wait) {
+    warmAllStreams();
+    return { streams: [] };
+  }
   return refreshAllStreams();
 }
 

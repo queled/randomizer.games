@@ -333,7 +333,7 @@
     }
 
     try {
-      const response = await fetch(`/api/search?q=${encodeURIComponent(query)}&limit=20`);
+      const response = await fetch(`/api/search?q=${encodeURIComponent(query)}&limit=12`);
       if (!response.ok) throw new Error('Search failed');
       
       searchResults = await response.json();

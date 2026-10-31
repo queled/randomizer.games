@@ -138,7 +138,7 @@ router.get('/', async (req, res, next) => {
     // Also search in tournament participants and race entrants
     const tournamentsWithPlayers = wants('players')
       ? await Tournament.find({ 'participants.displayName': searchRegex })
-        .select('participants gameName').limit(20).lean()
+        .select('participants gameName').sort({ startDate: -1 }).limit(20).lean()
       : [];
 
     const racesWithPlayers = wants('players')
@@ -147,7 +147,7 @@ router.get('/', async (req, res, next) => {
           { 'entrants.userName': searchRegex },
           { 'entrants.user.name': searchRegex }
         ]
-      }).select('entrants category').limit(50).lean()
+      }).select('entrants category').sort({ startedAt: -1 }).limit(50).lean()
       : [];
 
     // Build unique players map
@@ -241,7 +241,7 @@ router.get('/', async (req, res, next) => {
         const matchedGameIds = new Set((await Game.find(gameQuery).select('id').lean())
           .map(g => String(g.id || '').toLowerCase()));
         const matchedTwitch = new Set(playerDocs.map(p => String(p.twitch || '').toLowerCase()).filter(Boolean));
-        const { streams = [] } = await getAllStreams();
+        const { streams = [] } = await getAllStreams({ wait: false });
         liveStreams = streams.filter(st =>
           [st.title, st.userName, st.userLogin, st.gameName].some(v => v && searchRegex.test(v)) ||
           matchedGameIds.has(String(st.gameId || '').toLowerCase()) ||

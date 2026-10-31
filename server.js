@@ -6,9 +6,12 @@ const cookieParser = require('cookie-parser');
 const fs = require('fs');
 const path = require('path');
 const connectDB = require('./config/database');
-const { Game, Tournament, Player, Race } = require('./models');
+const { Tournament, Race } = require('./models');
 const seoPages = require('./services/seo-pages');
 const { parseSitePath, legacyTarget } = require('./helpers/site-routes');
+const { isThinGame, isThinPlayer } = require('./helpers/thin-pages');
+const { getGamesWithStatsCached } = require('./routes/games');
+const { getPlayersList } = require('./routes/players');
 const { COVERS_DIR, coverIds } = require('./helpers/game-covers');
 const { 
   apiLimiter, 
@@ -44,6 +47,14 @@ function formatLastMod(value) {
   return date.toISOString();
 }
 
+// Last edit of each game history (public/data/history/<id>.json), by game id
+async function historyDates() {
+  const dir = path.join(__dirname, 'public', 'data', 'history');
+  const files = (await fs.promises.readdir(dir).catch(() => [])).filter((file) => file.endsWith('.json'));
+  const dates = await Promise.all(files.map((file) => fs.promises.stat(path.join(dir, file)).then((stat) => stat.mtime, () => null)));
+  return new Map(files.map((file, i) => [file.slice(0, -5).toLowerCase(), dates[i]]).filter(([, date]) => date));
+}
+
 // The game pages list their cover too, for image search
 function buildSitemapEntry(loc, lastmod, image) {
   const safeLoc = `${SITE_URL}${loc}`;
@@ -75,38 +86,38 @@ async function generateSitemaps() {
     ['/terms', null]
   ];
 
-  const [games, tournaments, players, races, covers] = await Promise.all([
-    Game.find({ enabled: { $ne: false } }).select('id updatedAt').sort({ updatedAt: -1 }).lean(),
+  const [gamesWithStats, tournaments, players, races, covers, histories] = await Promise.all([
+    getGamesWithStatsCached().then((result) => result.games.filter((game) => game.enabled !== false)),
     Tournament.find({}).select('_id updatedAt').sort({ updatedAt: -1 }).lean(),
-    // Accounts deleted from racetime leave the player lists, and the sitemap
-    Player.find({
-      $or: [{ userId: { $exists: true, $ne: '' } }, { name: { $exists: true, $ne: '' } }],
-      racetimeDeletedAt: null
-    })
-      .select('userId name updatedAt')
-      .sort({ updatedAt: -1 })
-      .lean(),
+    // The players list (racetime accounts deleted are out of it), with their counts
+    getPlayersList(false).then((result) => result.players),
     // Most recent races only: older ones are reached through players and tournaments
     Race.find({}).select('_id updatedAt startedAt').sort({ startedAt: -1, updatedAt: -1 }).limit(1000).lean(),
-    coverIds()
+    coverIds(),
+    historyDates()
   ]);
 
+  // Pages too thin for a search result (helpers/thin-pages.js) are left out.
+  // A date is given only when it says the page changed: the syncs touch every
+  // game's updatedAt, so a game page dates from its latest race or history edit.
   const groups = {
     pages: staticEntries,
-    games: games.filter((game) => game?.id)
+    games: gamesWithStats
+      .filter((game) => game?.id && !isThinGame({ ...game, hasHistory: histories.has(game.id.toLowerCase()) }))
       .map((game) => {
         const id = game.id.toLowerCase();
         const cover = covers.has(id) ? `/assets/covers/${encodeURIComponent(id)}.png` : null;
-        return [`/games/${encodeURIComponent(game.id)}`, formatLastMod(game.updatedAt), cover];
+        const changed = [game.lastRaceAt, histories.get(id)].filter(Boolean).map((date) => new Date(date)).sort((a, b) => b - a)[0];
+        return [`/games/${encodeURIComponent(game.id)}`, formatLastMod(changed), cover];
       }),
     tournaments: tournaments.filter((tournament) => tournament?._id)
       .map((tournament) => [`/tournaments/${encodeURIComponent(String(tournament._id))}`, formatLastMod(tournament.updatedAt)]),
-    players: players.map((player) => {
-      const identifier = player?.userId
-        ? encodeURIComponent(player.userId)
-        : (player?.name ? `name/${encodeURIComponent(player.name)}` : '');
-      return identifier ? [`/players/${identifier}`, formatLastMod(player.updatedAt)] : null;
-    }).filter(Boolean),
+    players: players
+      .filter((player) => player?.name && !isThinPlayer({ races: player.totalRaces, tournaments: player.tournamentsCount }))
+      .map((player) => [
+        player.userId ? `/players/${encodeURIComponent(player.userId)}` : `/players/name/${encodeURIComponent(player.name)}`,
+        formatLastMod(player.lastRaceAt)
+      ]),
     races: races.filter((race) => race?._id)
       .map((race) => [`/races/${encodeURIComponent(String(race._id))}`, formatLastMod(race.updatedAt || race.startedAt)])
   };

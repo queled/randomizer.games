@@ -292,6 +292,7 @@ async function buildPlayersResponse(includeTournaments) {
       lastRaceAt: lastRaceByPlayer.get(normalized) || null,
       racetimeUrl: player.racetimeUrl,
       racetimeId: player.racetimeId,
+      userId: player.userId,
       twitch: player.twitch
     };
   }).sort((a, b) => a.name.localeCompare(b.name));
@@ -756,3 +757,4 @@ router.get('/:id', async (req, res, next) => {
 });
 
 module.exports = router;
+module.exports.getPlayersList = getPlayersList;

@@ -49,6 +49,8 @@ Chaque page existe en six langues : l'anglais sans préfixe, les autres avec (`/
 
 Les pages chargent leur contenu depuis `/api/`, que `robots.txt` laisse donc ouvert (les réponses portent `X-Robots-Tag: noindex`) ; les robots de Google, Bing et Apple, vérifiés par DNS, ne sont pas soumis à la limite d'appels (`helpers/search-crawlers.js`).
 
+Les pages trop pauvres pour un résultat de recherche (`helpers/thin-pages.js`) : un jeu sans course, sans tournoi et sans histoire, un joueur de moins de 3 courses sans tournoi, sont en `noindex,follow` et absents du sitemap. Dans le sitemap, la date d'une fiche jeu est celle de sa dernière course ou de la dernière modification de son histoire (les synchros touchent le `updatedAt` de tous les jeux), celle d'un joueur sa dernière course.
+
 ## Tâches planifiées
 
 En production, la base MongoDB tourne sur le même serveur que le site et n'écoute que sur `127.0.0.1`. Les synchronisations sont lancées par la crontab du serveur via [`scripts/cron/run-job.sh`](../scripts/cron/run-job.sh), qui pose un verrou par tâche (une exécution encore en cours n'est pas doublée), limite leur durée et écrit dans `~/logs/<tâche>.log`. La crontab elle-même est dans [DEPLOYMENT.md](DEPLOYMENT.md#6-tâches-planifiées). L'ordre des étapes et leur relance à la main sur une période sont dans [SYNC-WORKFLOW.md](SYNC-WORKFLOW.md).

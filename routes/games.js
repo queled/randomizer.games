@@ -54,8 +54,10 @@ async function computeGamesWithStats() {
 
   // One grouped count over all races instead of one count query per game
   // (hundreds of simultaneous queries used to saturate the connection pool)
-  const raceCountRows = await Race.aggregate([{ $group: { _id: '$category', count: { $sum: 1 } } }]);
+  const raceCountRows = await Race.aggregate([{ $group: { _id: '$category', count: { $sum: 1 }, last: { $max: '$startedAt' } } }]);
   const raceCountByCategory = new Map(raceCountRows.map(row => [row._id, row.count]));
+  // Latest race of each category: when a game page last changed, for the sitemap
+  const lastRaceByCategory = new Map(raceCountRows.map(row => [row._id, row.last]));
 
   // Tournament counts, many games per query: one $facet branch per game runs
   // that game's usual filter, so the counts are those of countDocuments
@@ -91,10 +93,15 @@ async function computeGamesWithStats() {
       tournamentCounts ? tournamentCounts[index] : Tournament.countDocuments(tournamentQueries[index])
     ]);
 
+    const lastRaceAt = categories
+      ? categories.map(category => lastRaceByCategory.get(category)).filter(Boolean).sort((a, b) => b - a)[0] || null
+      : null;
+
     return {
       ...game.toObject(),
       totalRaces,
-      totalTournaments
+      totalTournaments,
+      lastRaceAt
     };
   });
 
@@ -574,6 +581,7 @@ router.patch('/:id/resources', requireAdmin, async (req, res, next) => {
 
 module.exports = router;
 module.exports.invalidateGamesWithStats = invalidateGamesWithStats;
+module.exports.getGamesWithStatsCached = getGamesWithStatsCached;
 // The counts of one game when they are computed already (page metadata must not wait for them)
 module.exports.cachedGameStats = (id) => {
   if (!gamesWithStatsCache) return null;

@@ -68,11 +68,7 @@
 
     // Add click handlers
     tabsContainer.querySelectorAll('.search-tab').forEach(btn => {
-      btn.addEventListener('click', () => {
-        currentFilter = btn.dataset.filter;
-        renderTabs(counts);
-        renderResults();
-      });
+      btn.addEventListener('click', () => selectFilter(btn.dataset.filter));
     });
   }
 
@@ -86,7 +82,7 @@
     const cover = `/assets/covers/${encodeURIComponent(String(game.id || '').toLowerCase())}.png`;
     return `
       <a href="/games/${encodeURIComponent(game.id)}" class="result-card with-media">
-        <img class="result-media cover" src="${escHtml(cover)}" alt="" loading="lazy" width="60" height="80"
+        <img class="result-media cover" src="${escHtml(cover)}" alt="" loading="lazy" width="64" height="90"
              data-fallback-src="${escHtml(placeholderImage('🎮', 48))}">
         <div class="result-body">
           <div class="title">${highlightText(game.label || game.officialName || game.name, searchQuery)}</div>
@@ -159,7 +155,6 @@
              data-fallback-src="${escHtml(placeholder)}">
         <div class="result-body">
           <div class="title">${highlightText(player.name, searchQuery)}</div>
-          ${player.racetimeId ? `<div class="subtitle">Racetime: ${escHtml(player.racetimeId)}</div>` : ''}
           ${gamesHtml}
         </div>
       </a>
@@ -192,19 +187,61 @@
     `;
   }
 
-  // Render a section of results
-  function renderSection(title, icon, items, renderFn, count) {
+  // A tab shows its whole section, a page at a time
+  const PAGE_SIZE = 48;
+  let loadingMore = false;
+
+  function selectFilter(filter) {
+    currentFilter = filter;
+    renderTabs(searchResults.counts);
+    renderResults();
+    window.scrollTo({ top: 0 });
+    // The first view holds a few results: the tab fills its first page
+    const loaded = (searchResults.results[filter] || []).length;
+    if (filter !== 'all' && loaded < PAGE_SIZE && loaded < (searchResults.counts[filter] || 0)) loadMore(filter);
+  }
+
+  async function loadMore(section) {
+    if (loadingMore) return;
+    loadingMore = true;
+    renderResults();
+    const items = searchResults.results[section] || [];
+    try {
+      const response = await fetch(`/api/search?q=${encodeURIComponent(searchQuery)}&type=${section}&offset=${items.length}&limit=${PAGE_SIZE}`);
+      if (!response.ok) throw new Error('Search failed');
+      const data = await response.json();
+      const next = data.results[section] || [];
+      searchResults.results[section] = items.concat(next);
+      // Nothing more came back: the count was larger than what the section can list
+      if (!next.length) searchResults.counts[section] = searchResults.results[section].length;
+    } catch (error) {
+      console.error('Search error:', error);
+    } finally {
+      loadingMore = false;
+      renderResults();
+    }
+  }
+
+  // Render a section of results: in the "all" view a link to its tab, in its tab a button for the next page
+  function renderSection(section, title, icon, items, renderFn, count) {
     if (!items || items.length === 0) return '';
-    
+    const more = items.length < count;
+    const footer = !more ? ''
+      : currentFilter === 'all'
+        ? ''
+        : `<div class="load-more"><button type="button" class="load-more-btn" data-load-more="${section}" ${loadingMore ? 'disabled' : ''}>${escHtml(loadingMore ? tr('common.loading', 'Loading...') : tr('common.viewMore', 'View more'))}</button></div>`;
+
     return `
       <div class="results-section">
         <div class="section-header">
-          <span class="section-count">${count}</span>
+          <span class="section-count">${count.toLocaleString((window.i18n && window.i18n.getLanguage) ? window.i18n.getLanguage() : undefined)}</span>
           <span class="section-title">${icon} ${escHtml(title)}</span>
+          ${more && currentFilter === 'all' ? `<button type="button" class="section-see-all" data-see-all="${section}">${escHtml(tr('common.viewAll', 'View all'))} →</button>` : ''}
         </div>
         <div class="results-grid">
           ${items.map(renderFn).join('')}
         </div>
+        ${footer}
       </div>
     `;
   }
@@ -235,23 +272,23 @@
 
     // Show sections based on filter
     if (currentFilter === 'all' || currentFilter === 'games') {
-      html += renderSection(tr('search.tabGames', 'Games'), '🎮', results.games, renderGameCard, counts.games);
+      html += renderSection('games', tr('search.tabGames', 'Games'), '🎮', results.games, renderGameCard, counts.games || 0);
     }
     
     if (currentFilter === 'all' || currentFilter === 'races') {
-      html += renderSection(tr('search.tabRaces', 'Races'), '🥇', results.races, renderRaceCard, counts.races);
+      html += renderSection('races', tr('search.tabRaces', 'Races'), '🥇', results.races, renderRaceCard, counts.races || 0);
     }
     
     if (currentFilter === 'all' || currentFilter === 'tournaments') {
-      html += renderSection(tr('search.tabTournaments', 'Tournaments'), '🏆', results.tournaments, renderTournamentCard, counts.tournaments);
+      html += renderSection('tournaments', tr('search.tabTournaments', 'Tournaments'), '🏆', results.tournaments, renderTournamentCard, counts.tournaments || 0);
     }
     
     if (currentFilter === 'all' || currentFilter === 'players') {
-      html += renderSection(tr('search.tabPlayers', 'Players'), '👤', results.players, renderPlayerCard, counts.players);
+      html += renderSection('players', tr('search.tabPlayers', 'Players'), '👤', results.players, renderPlayerCard, counts.players || 0);
     }
 
     if (currentFilter === 'all' || currentFilter === 'streams') {
-      html += renderSection(tr('search.tabLive', 'Live'), '📺', results.streams, renderStreamCard, counts.streams);
+      html += renderSection('streams', tr('search.tabLive', 'Live'), '📺', results.streams, renderStreamCard, counts.streams || 0);
     }
 
     if (!html) {
@@ -344,9 +381,14 @@
     renderResults();
   });
 
-  // The game name of a live card leads to its page instead of the stream
+  // The game name of a live card leads to its page instead of the stream;
+  // "View all" opens the section's tab, "View more" loads its next page
   function setupGameLinks() {
     document.getElementById('results-container').addEventListener('click', e => {
+      const seeAll = e.target.closest('[data-see-all]');
+      if (seeAll) return selectFilter(seeAll.dataset.seeAll);
+      const loadMoreBtn = e.target.closest('[data-load-more]');
+      if (loadMoreBtn) return loadMore(loadMoreBtn.dataset.loadMore);
       const link = e.target.closest('.game-link');
       if (!link) return;
       e.preventDefault();

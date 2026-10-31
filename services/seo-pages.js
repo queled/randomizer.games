@@ -20,6 +20,7 @@ const { readHistory } = require('../helpers/game-history');
 const { cachedGameStats } = require('../routes/games');
 const { LANGUAGES, localizedPath } = require('../helpers/site-routes');
 const { texts, fill, count } = require('./seo-texts');
+const { isThinGame, isThinPlayer } = require('../helpers/thin-pages');
 
 const PUBLIC_DIR = path.join(__dirname, '..', 'public');
 // Square logo for social previews and the Organization logo
@@ -136,8 +137,12 @@ async function gameMeta(query, siteUrl, lang) {
   const sameAs = [website]
     .filter((url) => /^https?:\/\//i.test(String(url || '')) && !/^https?:\/\/(www\.)?discord\.(com|gg)\//i.test(url));
 
+  // Counts not computed yet (server just started): indexable until known
+  const thin = stats && isThinGame({ ...stats, hasHistory: Boolean(history) });
+
   return {
     title: `${displayTitle} - Randomizer`,
+    robots: thin ? 'noindex,follow' : undefined,
     heading: displayTitle,
     description,
     canonicalPath,
@@ -268,12 +273,12 @@ async function playerMeta(query, siteUrl, lang) {
   const playerName = player.name || player.userId;
   // Counted as the page counts them (/api/players/:id/races and /tournaments).
   // A slow count must not cost the whole preview: fall back to the generic text.
-  const [{ total: racesCount, games }, tournamentsCount] = await Promise.all([
+  const [{ total: racesCount, games, failed: countsFailed }, tournamentsCount] = await Promise.all([
     playerRaceSummary(player),
     countPlayerTournaments({ Tournament, userId: player.userId || null, names: [player.name, ...(player.aliases || [])] })
   ]).catch((error) => {
     console.error('SEO counts failed for player:', error.message);
-    return [{ total: 0, games: [] }, 0];
+    return [{ total: 0, games: [], failed: true }, 0];
   });
   const facts = [
     racesCount && `${count(lang, 'races', racesCount)}${games.length ? ` (${games.join(', ')})` : ''}`,
@@ -293,6 +298,7 @@ async function playerMeta(query, siteUrl, lang) {
 
   return {
     title: fill(t.playerTitle, { name: playerName }),
+    robots: !countsFailed && isThinPlayer({ races: racesCount, tournaments: tournamentsCount }) ? 'noindex,follow' : undefined,
     heading: playerName,
     description,
     canonicalPath,

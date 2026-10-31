@@ -22,6 +22,11 @@ function normalizeName(name) {
 router.get('/', async (req, res, next) => {
   try {
     const { q, limit = 10 } = req.query;
+    // ?type=races&offset=40: the next page of one section (its tab on the search page)
+    const SECTIONS = ['games', 'races', 'tournaments', 'players', 'streams'];
+    const type = SECTIONS.includes(req.query.type) ? req.query.type : null;
+    const wants = (section) => !type || type === section;
+    const offset = Math.max(parseInt(req.query.offset, 10) || 0, 0);
     
     if (!q || q.trim().length < 2) {
       return res.json({
@@ -82,17 +87,23 @@ router.get('/', async (req, res, next) => {
         { id: searchRegex }
       ]
     };
-    const games = await Game.find(gameQuery).limit(limitNum);
+    const games = wants('games')
+      ? await Game.find(gameQuery).sort({ name: 1 }).skip(offset).limit(limitNum)
+      : [];
 
     // 2. Search Tournaments (by name or game name)
-    const tournaments = await Tournament.find({
+    const tournamentQuery = {
       $or: [
         { name: searchRegex },
         { gameName: searchRegex }
       ]
-    })
-    .sort({ startDate: -1 })
-    .limit(limitNum);
+    };
+    const tournaments = wants('tournaments')
+      ? await Tournament.find(tournamentQuery)
+        .sort({ startDate: -1 })
+        .skip(offset)
+        .limit(limitNum)
+      : [];
 
     // 3. Search Races (by name, goal, info, or category)
     const raceQuery = {
@@ -105,31 +116,39 @@ router.get('/', async (req, res, next) => {
       ]
     };
 
-    const races = await Race.find(raceQuery)
-    .sort({ startedAt: -1 })
-    .limit(limitNum);
+    const races = wants('races')
+      ? await Race.find(raceQuery)
+        .sort({ startedAt: -1 })
+        .skip(offset)
+        .limit(limitNum)
+      : [];
 
-    // 4. Search Players
-    // First, get Player documents
-    const playerDocs = await Player.find({
-      racetimeDeletedAt: null,
-      $or: [
-        { name: searchRegex },
-        { racetimeId: searchRegex }
-      ]
-    }).limit(limitNum);
+    // 4. Search Players (also wanted by the streams: a found player's Twitch)
+    // First, get Player documents: the same caps on every page, so the pages follow each other
+    const playerDocs = wants('players') || wants('streams')
+      ? await Player.find({
+        racetimeDeletedAt: null,
+        $or: [
+          { name: searchRegex },
+          { racetimeId: searchRegex }
+        ]
+      }).sort({ name: 1 }).limit(500).lean()
+      : [];
 
     // Also search in tournament participants and race entrants
-    const tournamentsWithPlayers = await Tournament.find({
-      'participants.displayName': searchRegex
-    }).limit(20);
+    const tournamentsWithPlayers = wants('players')
+      ? await Tournament.find({ 'participants.displayName': searchRegex })
+        .select('participants gameName').limit(20).lean()
+      : [];
 
-    const racesWithPlayers = await Race.find({
-      $or: [
-        { 'entrants.userName': searchRegex },
-        { 'entrants.user.name': searchRegex }
-      ]
-    }).limit(50);
+    const racesWithPlayers = wants('players')
+      ? await Race.find({
+        $or: [
+          { 'entrants.userName': searchRegex },
+          { 'entrants.user.name': searchRegex }
+        ]
+      }).select('entrants category').limit(50).lean()
+      : [];
 
     // Build unique players map
     const playersMap = new Map();
@@ -193,41 +212,43 @@ router.get('/', async (req, res, next) => {
       }
     });
 
-    // Convert players map to array
+    // Convert players map to array: the exact name first, then the names starting with the query
+    const rank = (name) => {
+      const n = normalizeName(name);
+      return n === normalizedSearch ? 0 : n.startsWith(normalizedSearch) ? 1 : 2;
+    };
     const players = Array.from(playersMap.values())
+      .sort((a, b) => rank(a.name) - rank(b.name))
       .map(p => ({
         ...p,
         games: p.games
       }))
-      .slice(0, limitNum);
+      .slice(offset, offset + limitNum);
 
     // Get counts (without limit for totals)
     const [gamesCount, tournamentsCount, racesCount] = await Promise.all([
-      Game.countDocuments(gameQuery),
-      Tournament.countDocuments({
-        $or: [
-          { name: searchRegex },
-          { gameName: searchRegex }
-        ]
-      }),
-      Race.countDocuments(raceQuery)
+      wants('games') ? Game.countDocuments(gameQuery) : 0,
+      wants('tournaments') ? Tournament.countDocuments(tournamentQuery) : 0,
+      wants('races') ? Race.countDocuments(raceQuery) : 0
     ]);
 
     const playersCount = playersMap.size;
 
     // 5. Live streams: the query in the title, the channel or the game, a game found above, or a player's Twitch
-    const matchedGameIds = new Set((await Game.find(gameQuery).select('id').lean())
-      .map(g => String(g.id || '').toLowerCase()));
-    const matchedTwitch = new Set(playerDocs.map(p => String(p.twitch || '').toLowerCase()).filter(Boolean));
     let liveStreams = [];
-    try {
-      const { streams = [] } = await getAllStreams();
-      liveStreams = streams.filter(st =>
-        [st.title, st.userName, st.userLogin, st.gameName].some(v => v && searchRegex.test(v)) ||
-        matchedGameIds.has(String(st.gameId || '').toLowerCase()) ||
-        matchedTwitch.has(String(st.userLogin || '').toLowerCase()));
-    } catch (err) {
-      console.warn('Search: live streams unavailable:', err?.message || err);
+    if (wants('streams')) {
+      try {
+        const matchedGameIds = new Set((await Game.find(gameQuery).select('id').lean())
+          .map(g => String(g.id || '').toLowerCase()));
+        const matchedTwitch = new Set(playerDocs.map(p => String(p.twitch || '').toLowerCase()).filter(Boolean));
+        const { streams = [] } = await getAllStreams();
+        liveStreams = streams.filter(st =>
+          [st.title, st.userName, st.userLogin, st.gameName].some(v => v && searchRegex.test(v)) ||
+          matchedGameIds.has(String(st.gameId || '').toLowerCase()) ||
+          matchedTwitch.has(String(st.userLogin || '').toLowerCase()));
+      } catch (err) {
+        console.warn('Search: live streams unavailable:', err?.message || err);
+      }
     }
     const gameLabel = await loadGameLabels();
 
@@ -263,7 +284,7 @@ router.get('/', async (req, res, next) => {
           ...p,
           games: [...new Set(Array.from(p.games).map(g => gameLabel(g) || g))]
         })),
-        streams: liveStreams.slice(0, limitNum).map(st => ({
+        streams: liveStreams.slice(offset, offset + limitNum).map(st => ({
           title: st.title,
           userName: st.userName,
           userLogin: st.userLogin,

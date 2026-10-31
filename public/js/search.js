@@ -31,6 +31,12 @@
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
+  // Numbers in the site's language
+  function formatNumber(n) {
+    const locale = (window.i18n && window.i18n.getLanguage) ? window.i18n.getLanguage() : undefined;
+    return Number(n || 0).toLocaleString(locale);
+  }
+
   // Format date
   function formatDate(dateStr) {
     if (!dateStr) return '';
@@ -62,7 +68,7 @@
 
     tabsContainer.innerHTML = tabs.map(tab => `
       <button class="search-tab ${currentFilter === tab.id ? 'active' : ''}" data-filter="${tab.id}">
-        ${escHtml(tab.label)}<span class="count">${tab.count}</span>
+        ${escHtml(tab.label)}<span class="count">${formatNumber(tab.count)}</span>
       </button>
     `).join('');
 
@@ -135,7 +141,7 @@
     // Most raced games with their race count, as on the players page; else the games seen in the results
     const gamesHtml = player.racesByGame && player.racesByGame.length > 0
       ? `<div class="player-games">${player.racesByGame.map(g =>
-          `<span class="game-tag">${escHtml(g.gameName)} <span class="race-count">(${Number(g.count).toLocaleString()})</span></span>`
+          `<span class="game-tag">${escHtml(g.gameName)} <span class="race-count">(${formatNumber(g.count)})</span></span>`
         ).join('')}</div>`
       : player.games && player.games.length > 0 
       ? `<div class="player-games">${player.games.slice(0, 4).map(g => 
@@ -239,7 +245,7 @@
     return `
       <div class="results-section">
         <div class="section-header">
-          <span class="section-count">${count.toLocaleString((window.i18n && window.i18n.getLanguage) ? window.i18n.getLanguage() : undefined)}</span>
+          <span class="section-count">${formatNumber(count)}</span>
           <span class="section-title">${icon} ${escHtml(title)}</span>
           ${more && currentFilter === 'all' ? `<button type="button" class="section-see-all" data-see-all="${section}">${escHtml(tr('common.viewAll', 'View all'))} →</button>` : ''}
         </div>

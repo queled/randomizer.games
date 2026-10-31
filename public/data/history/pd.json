@@ -1,18 +1,46 @@
 {
   "intro": {
-    "fr": "Peggle Deluxe se joue en multiworld : niveaux, maîtres Peggle et bonus se débloquent comme objets.",
-    "en": "Peggle Deluxe can be played in multiworld: levels, Peggle masters and bonuses unlock as items."
+    "fr": "Perfect Dark se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
+    "en": "Perfect Dark can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
   },
   "events": [
     {
-      "date": "2007",
+      "date": "2000",
       "title": {
         "fr": "Le jeu d'origine",
         "en": "The original game"
       },
       "text": {
-        "fr": "PopCap Games sort Peggle Deluxe en 2007.",
-        "en": "PopCap Games releases Peggle Deluxe in 2007."
+        "fr": "Rare sort Perfect Dark en 2000.",
+        "en": "Rare releases Perfect Dark in 2000."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mai 2026",
+        "en": "May 2026"
+      },
+      "title": {
+        "fr": "Première version",
+        "en": "First release"
+      },
+      "text": {
+        "fr": "Publication de la première version, pd-v0.1.0.",
+        "en": "The first version, pd-v0.1.0, is released."
+      }
+    },
+    {
+      "date": {
+        "fr": "Octobre 2026",
+        "en": "October 2026"
+      },
+      "title": {
+        "fr": "Dernière version",
+        "en": "Latest release"
+      },
+      "text": {
+        "fr": "Publication de la version pd-v0.7.0, la plus récente des 11 versions au nom du jeu sur ce dépôt au 21 octobre 2026.",
+        "en": "Version pd-v0.7.0 is released, the latest of the 11 versions named after the game on this repository as of October 21, 2026."
       }
     },
     {
@@ -21,19 +49,31 @@
         "en": "Today"
       },
       "title": {
-        "fr": "Multiworld",
-        "en": "Multiworld"
+        "fr": "Un APWorld parmi d'autres",
+        "en": "One APWorld among many"
       },
       "text": {
-        "fr": "Peggle Deluxe est jouable en multiworld avec MultiworldGG. Il faut débloquer les niveaux, leurs pegs, les maîtres Peggle, les balles de départ et divers bonus, puis réunir assez de Gold Pegs. Les 55 niveaux Quick Play et les 10 maîtres sont pris en charge.",
-        "en": "Peggle Deluxe can be played in multiworld with MultiworldGG. You unlock levels, their pegs, Peggle masters, starting balls and various bonuses, then collect enough Gold Pegs. All 55 Quick Play levels and 10 masters are supported."
+        "fr": "Comme beaucoup de jeux, Perfect Dark rejoint Archipelago par un APWorld non officiel : un fichier .apworld distribué à part, que chaque joueur ajoute lui-même à son installation pour l'intégrer à un multiworld.",
+        "en": "Like many games, Perfect Dark joins Archipelago through an unofficial APWorld: a .apworld file distributed separately, which each player adds to their own install to bring it into a multiworld."
       }
     }
   ],
   "sources": [
     {
-      "label": "Multiworld — Peggle Deluxe",
-      "url": "https://multiworld.gg/games/Peggle%20Deluxe/info/en"
+      "label": "IGDB — Perfect Dark",
+      "url": "https://www.igdb.com/games/perfect-dark"
+    },
+    {
+      "label": "GitHub — ajeloom/Perfect-Dark-PC-AP",
+      "url": "https://github.com/ajeloom/Perfect-Dark-PC-AP"
+    },
+    {
+      "label": "GitHub — ajeloom/Perfect-Dark-PC-AP (releases)",
+      "url": "https://github.com/ajeloom/Perfect-Dark-PC-AP/releases"
+    },
+    {
+      "label": "Archipelago — spécification des APWorlds",
+      "url": "https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/apworld%20specification.md"
     }
   ]
 }

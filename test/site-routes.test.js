@@ -13,6 +13,9 @@ test('a clean address leads to its page, in its language', () => {
 test('an address has a single spelling', () => {
   assert.deepEqual(parseSitePath('/games/sample/'), { redirect: '/games/sample' });
   assert.deepEqual(parseSitePath('/fr'), { redirect: '/fr/' });
+  // A real folder keeps its slash, or the static server would redirect forever
+  assert.equal(parseSitePath('/admin/'), null);
+  assert.deepEqual(parseSitePath('/fr/games/'), { redirect: '/fr/games' });
 });
 
 test('other paths are not pages', () => {

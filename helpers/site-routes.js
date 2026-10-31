@@ -51,7 +51,13 @@ function parseSitePath(pathname) {
     if (lang !== 'en' && !String(pathname).endsWith('/')) return { redirect: localizedPath(lang, '/') };
     return { lang, file: '/index.html', params: {}, path: '/' };
   }
-  if (path.endsWith('/')) return { redirect: localizedPath(lang, path.replace(/\/+$/, '')) };
+  // Only a site page loses its trailing slash: a real folder such as /admin/
+  // is left to the static server, which redirects "/admin" to "/admin/"
+  if (path.endsWith('/')) {
+    const target = localizedPath(lang, path.replace(/\/+$/, ''));
+    const route = parseSitePath(target);
+    return route && !route.redirect ? { redirect: target } : null;
+  }
 
   const segments = path.slice(1).split('/').map(decodeSegment);
   if (segments.some((segment) => !segment)) return null;

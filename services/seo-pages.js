@@ -168,8 +168,12 @@ async function gameMeta(query, siteUrl) {
     : `${displayTitle}: races, tournaments, players and community resources on Randomizer.`;
   const canonicalPath = `/game-detail.html?id=${encodeURIComponent(game.id)}`;
   const image = coverUrl(game.id);
-  const sameAs = [game.randomizer?.website, game.officialWebsite, game.official?.website, game.resources?.officialSite?.url]
-    .filter((url) => /^https?:\/\//i.test(String(url || '')));
+  // The site shown on the page (chosen official site, else the only known site, else the legacy
+  // field); a Discord thread says nothing about the game's identity
+  const resources = game.resources || {};
+  const website = resources.officialSite?.url || (resources.sites?.length === 1 ? resources.sites[0].url : '') || game.randomizer?.website;
+  const sameAs = [website]
+    .filter((url) => /^https?:\/\//i.test(String(url || '')) && !/^https?:\/\/(www\.)?discord\.(com|gg)\//i.test(url));
 
   return {
     title: `${displayTitle} - Randomizer`,

@@ -701,12 +701,12 @@
       'Explore recent activity, tournaments and community resources.'
     ].join(' ');
 
-    const sameAs = [
-      game.randomizer?.website,
-      game.officialWebsite,
-      game.official?.website,
-      game.resources?.officialSite?.url
-    ].map((value) => sanitizeExternalUrl(value)).filter(Boolean);
+    // Same site as the page header; a Discord thread says nothing about the game's identity
+    const resources = game.resources || {};
+    const website = resources.officialSite?.url || (resources.sites?.length === 1 ? resources.sites[0].url : '') || game.randomizer?.website;
+    const sameAs = [website]
+      .map((value) => sanitizeExternalUrl(value))
+      .filter((url) => url && !/^https?:\/\/(www\.)?discord\.(com|gg)\//i.test(url));
 
     const canonicalUrl = `/game-detail.html?id=${encodeURIComponent(id)}`;
     const image = game.cover || '/assets/icon-512.png';

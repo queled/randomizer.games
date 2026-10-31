@@ -1,0 +1,29 @@
+{
+  "intro": {
+    "fr": "Open Doors, romhack de Super Metroid, a son randomizer, réalisé par ironrusty.",
+    "en": "Open Doors, a Super Metroid romhack, has its randomizer, made by ironrusty."
+  },
+  "events": [
+    {
+      "date": "2025",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "En janvier 2025, ironrusty publie un randomizer d'Open Doors. Ces randomizers de hacks cherchent à préserver au maximum le comportement d'origine de chaque hack, avec l'algorithme de remplissage de Subversion, de beauxq.",
+        "en": "In January 2025, ironrusty releases an Open Doors randomizer. These hack randomizers aim to preserve each hack's original behavior as much as possible, using beauxq's Subversion fill algorithm."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "randorandy — Open Doors Rando",
+      "url": "https://randorandy.github.io/OpenDoorsRando/"
+    },
+    {
+      "label": "randorandy — Super Metroid hack randomizers",
+      "url": "https://randorandy.github.io/"
+    }
+  ]
+}

@@ -182,6 +182,12 @@ const PER_GAME_TITLE_KEYWORDS = {
   'smzf': ['z-factor', 'z factor', 'zfactor'],
   'smredesign': hackMentions(SM_HACK, 'redesign'),
   'smsj': ['junkoid'],
+  'smcursed': hackMentions(SM_HACK, 'cursed'),
+  'smroj': ['return of justin'],
+  'smmmr': ['mission rescue'],
+  'smod': hackMentions(SM_HACK, 'open doors'),
+  'smverticality': hackMentions(SM_HACK, 'verticality'),
+  'smlw': hackMentions(SM_HACK, 'lost world'),
   // Zero Mission hacks; "spooky mission" alone must not take Spooky Mission 2
   'mzmsm': ['spooky mission rando', 'spooky mission 1'],
   'mzmsm2': ['spooky mission 2', 'spooky mission ii'],

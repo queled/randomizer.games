@@ -1,0 +1,29 @@
+{
+  "intro": {
+    "fr": "Super Metroid Cursed, romhack de Super Metroid, a son randomizer, réalisé par ironrusty.",
+    "en": "Super Metroid Cursed, a Super Metroid romhack, has its randomizer, made by ironrusty."
+  },
+  "events": [
+    {
+      "date": "2026",
+      "title": {
+        "fr": "Le randomizer",
+        "en": "The randomizer"
+      },
+      "text": {
+        "fr": "En avril 2026, ironrusty publie un randomizer de Super Metroid Cursed. Ces randomizers de hacks cherchent à préserver au maximum le comportement d'origine de chaque hack, avec l'algorithme de remplissage de Subversion, de beauxq.",
+        "en": "In April 2026, ironrusty releases a Super Metroid Cursed randomizer. These hack randomizers aim to preserve each hack's original behavior as much as possible, using beauxq's Subversion fill algorithm."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "randorandy — Cursed Rando",
+      "url": "https://randorandy.github.io/CursedRando/"
+    },
+    {
+      "label": "randorandy — Super Metroid hack randomizers",
+      "url": "https://randorandy.github.io/"
+    }
+  ]
+}

@@ -463,7 +463,7 @@ const admin = {
         </div>
       `;
       
-      const origins = { 'rando-list': 'rando-list', archipelago: 'Archipelago', apworld: 'APWorld', manual: 'à la main', 'csv-import': 'CSV', seed: 'seed' };
+      const origins = { 'rando-list': 'rando-list', archipelago: 'Archipelago', apworld: 'APWorld', manual: 'à la main', 'csv-import': 'CSV', seed: 'seed', 'randomizer-site': 'site du randomizer' };
       const recent = stats.games.recent || [];
       document.getElementById('dashboard-recent-games').innerHTML = recent.length ? `
         <table class="table table-compact">

@@ -217,9 +217,20 @@ function normalizeGameName(name) {
     .replace(/randomizer/g, '');
 }
 
+// A hack is named after the game it modifies, whose Twitch category it shares
+// ("<Base game>: <Hack>"), but rando-list may list it under the hack's title alone
+function hackTitle(game) {
+  const base = game.integrations?.twitch?.categoryName;
+  const name = game.name || '';
+  if (!base || !name.toLowerCase().startsWith(base.toLowerCase())) return null;
+  const match = name.slice(base.length).match(/^\s*[:–-]\s+(.+)$/);
+  return match ? match[1].trim() : null;
+}
+
 /**
  * Met à jour les ressources des Games existants
  * NOTE: N'écrase pas les jeux dont source.origin='manual' ou les noms curés manuellement
+ * (origin 'randomizer-site', fiche prise sur le site du randomizer, reste synchronisée)
  */
 async function updateGameResources(seriesData, dryRun = false) {
   console.log('\n🔗 Mise à jour des ressources des jeux...');
@@ -261,7 +272,8 @@ async function updateGameResources(seriesData, dryRun = false) {
       game.randomizer?.name,
       shortName && normalizeGameName(shortName).length > 3 ? shortName : null,
       game.integrations?.randoList?.gameName,
-      ...(game.integrations?.randoList?.gameNames || [])
+      ...(game.integrations?.randoList?.gameNames || []),
+      hackTitle(game)
     ].filter(Boolean);
     
     // Exact rando-list names found, kept on the game so that the link survives a rename
@@ -409,7 +421,7 @@ async function detectNewGames(seriesData) {
   console.log('\n🆕 Détection des nouveaux jeux...');
   
   // Récupérer tous les jeux existants et leurs noms connus
-  const existingGames = await Game.find({}).select('id name displayName officialName integrations.randoList').lean();
+  const existingGames = await Game.find({}).select('id name displayName officialName integrations.randoList integrations.twitch.categoryName').lean();
   
   // Index des noms de jeux existants (normalisés)
   const existingNames = new Set();
@@ -424,6 +436,8 @@ async function detectNewGames(seriesData) {
     for (const name of game.integrations?.randoList?.gameNames || []) {
       existingNames.add(normalizeGameName(name));
     }
+    const title = hackTitle(game);
+    if (title) existingNames.add(normalizeGameName(title));
   }
   
   // Collecter tous les jeux uniques de rando-list
@@ -748,4 +762,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { syncRepo, parseSeriesFiles, buildRandomizerIndex, normalizeGameName, randoListNamesUpdate };
+module.exports = { syncRepo, parseSeriesFiles, buildRandomizerIndex, normalizeGameName, randoListNamesUpdate, hackTitle };

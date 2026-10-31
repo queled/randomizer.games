@@ -3,6 +3,36 @@ const router = express.Router();
 const { Game, Tournament, Race, Player } = require('../models');
 const { gameLabel: labelOfGame, loadGameLabels, tournamentGameLabel } = require('../helpers/game-label');
 const { getAllStreams } = require('./streams');
+const { buildGameDisplayMaps } = require('./players');
+
+// The three games a player raced most, as on the players page: { gameId, gameName, count } by userId
+async function mostRacedGames(userIds) {
+  if (!userIds.length) return new Map();
+  const [{ displayBySlug, canonicalIdBySlug }, rows] = await Promise.all([
+    buildGameDisplayMaps(),
+    Race.aggregate([
+      { $match: { 'entrants.userId': { $in: userIds } } },
+      { $unwind: '$entrants' },
+      { $match: { 'entrants.userId': { $in: userIds }, category: { $nin: [null, ''] } } },
+      { $group: { _id: { userId: '$entrants.userId', category: '$category' }, count: { $sum: 1 } } }
+    ])
+  ]);
+
+  // Racetime categories of the same game add up
+  const byUser = new Map();
+  for (const { _id, count } of rows) {
+    const slug = String(_id.category).toLowerCase();
+    const gameId = canonicalIdBySlug.get(slug) || slug;
+    const games = byUser.get(_id.userId) || new Map();
+    const game = games.get(gameId) || { gameId, gameName: displayBySlug.get(slug) || _id.category, count: 0 };
+    game.count += count;
+    games.set(gameId, game);
+    byUser.set(_id.userId, games);
+  }
+  return new Map([...byUser].map(([userId, games]) => [userId, [...games.values()]
+    .sort((a, b) => b.count - a.count || a.gameName.localeCompare(b.gameName))
+    .slice(0, 3)]));
+}
 
 function escapeRegex(value) {
   return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -251,6 +281,7 @@ router.get('/', async (req, res, next) => {
       }
     }
     const gameLabel = await loadGameLabels();
+    const racesByUser = await mostRacedGames(players.map(p => p.userId).filter(Boolean));
 
     res.json({
       query: searchTerm,
@@ -282,6 +313,7 @@ router.get('/', async (req, res, next) => {
         })),
         players: players.map(p => ({
           ...p,
+          racesByGame: (p.userId && racesByUser.get(p.userId)) || [],
           games: [...new Set(Array.from(p.games).map(g => gameLabel(g) || g))]
         })),
         streams: liveStreams.slice(offset, offset + limitNum).map(st => ({

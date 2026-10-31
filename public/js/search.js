@@ -132,7 +132,12 @@
 
   // Render player card
   function renderPlayerCard(player) {
-    const gamesHtml = player.games && player.games.length > 0 
+    // Most raced games with their race count, as on the players page; else the games seen in the results
+    const gamesHtml = player.racesByGame && player.racesByGame.length > 0
+      ? `<div class="player-games">${player.racesByGame.map(g =>
+          `<span class="game-tag">${escHtml(g.gameName)} <span class="race-count">(${Number(g.count).toLocaleString()})</span></span>`
+        ).join('')}</div>`
+      : player.games && player.games.length > 0 
       ? `<div class="player-games">${player.games.slice(0, 4).map(g => 
           `<span class="game-tag">${escHtml(g)}</span>`
         ).join('')}${player.games.length > 4 ? `<span class="game-tag">+${player.games.length - 4}</span>` : ''}</div>`

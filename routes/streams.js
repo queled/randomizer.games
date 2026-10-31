@@ -1584,31 +1584,32 @@ whenConnected(() => setTimeout(warmAllStreams, 4000));
 // Refreshed a little before the cache expires
 setInterval(warmAllStreams, CACHE_TTL - 30 * 1000).unref();
 
+// Every live randomizer stream: the cache, else the stale list while it refreshes, else a fresh build
+async function getAllStreams() {
+  const cached = getCached(ALL_STREAMS_KEY);
+  if (cached) return cached;
+
+  const stale = cache.data[ALL_STREAMS_KEY];
+  if (stale && cache.expires[ALL_STREAMS_KEY] + ALL_STREAMS_MAX_STALE > Date.now()) {
+    warmAllStreams();
+    return stale;
+  }
+
+  return refreshAllStreams();
+}
+
 router.get('/', async (req, res, next) => {
   try {
     // ?limit=4: only the most watched streams (the home page shows four)
     const limit = parseInt(req.query.limit, 10);
-    const send = (data) => res.json(limit > 0 && Array.isArray(data.streams)
+    const data = await getAllStreams();
+    res.json(limit > 0 && Array.isArray(data.streams)
       ? { ...data, streams: data.streams.slice(0, limit) }
       : data);
-
-    const cached = getCached(ALL_STREAMS_KEY);
-    if (cached) {
-      return send(cached);
-    }
-
-    const stale = cache.data[ALL_STREAMS_KEY];
-    if (stale && cache.expires[ALL_STREAMS_KEY] + ALL_STREAMS_MAX_STALE > Date.now()) {
-      refreshAllStreams().catch(err => {
-        console.warn('Refresh /api/streams failed:', err?.message || err);
-      });
-      return send(stale);
-    }
-
-    send(await refreshAllStreams());
   } catch (error) {
     next(error);
   }
 });
 
 module.exports = router;
+module.exports.getAllStreams = getAllStreams;

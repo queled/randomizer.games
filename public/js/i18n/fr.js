@@ -646,6 +646,7 @@ const fr = {
         tabTournaments: "Tournois",
         tabRaces: "Courses",
         tabPlayers: "Joueurs",
+        tabLive: "Direct",
         resultsCount: "{count} RÉSULTATS DE RECHERCHE",
         noResultsFor: "Aucun résultat pour",
         tryOtherTerms: "Essayez avec d'autres termes de recherche",

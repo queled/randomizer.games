@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { Game, Tournament, Race, Player } = require('../models');
 const { gameLabel: labelOfGame, loadGameLabels, tournamentGameLabel } = require('../helpers/game-label');
+const { getAllStreams } = require('./streams');
 
 function escapeRegex(value) {
   return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -29,13 +30,15 @@ router.get('/', async (req, res, next) => {
           games: [],
           races: [],
           tournaments: [],
-          players: []
+          players: [],
+          streams: []
         },
         counts: {
           games: 0,
           races: 0,
           tournaments: 0,
           players: 0,
+          streams: 0,
           total: 0
         }
       });
@@ -137,6 +140,7 @@ router.get('/', async (req, res, next) => {
       if (!playersMap.has(normalized)) {
         playersMap.set(normalized, {
           name: p.name,
+          userId: p.userId,
           racetimeId: p.racetimeId || p.userId,
           racetimeUrl: p.racetimeUrl,
           twitch: p.twitch,
@@ -177,6 +181,7 @@ router.get('/', async (req, res, next) => {
           if (!playersMap.has(normalized)) {
             playersMap.set(normalized, {
               name: playerName,
+              userId: entrant.userId || (entrant.user && entrant.user.id),
               racetimeId: entrant.userId || (entrant.user && entrant.user.id),
               games: new Set()
             });
@@ -209,6 +214,21 @@ router.get('/', async (req, res, next) => {
     ]);
 
     const playersCount = playersMap.size;
+
+    // 5. Live streams: the query in the title, the channel or the game, a game found above, or a player's Twitch
+    const matchedGameIds = new Set((await Game.find(gameQuery).select('id').lean())
+      .map(g => String(g.id || '').toLowerCase()));
+    const matchedTwitch = new Set(playerDocs.map(p => String(p.twitch || '').toLowerCase()).filter(Boolean));
+    let liveStreams = [];
+    try {
+      const { streams = [] } = await getAllStreams();
+      liveStreams = streams.filter(st =>
+        [st.title, st.userName, st.userLogin, st.gameName].some(v => v && searchRegex.test(v)) ||
+        matchedGameIds.has(String(st.gameId || '').toLowerCase()) ||
+        matchedTwitch.has(String(st.userLogin || '').toLowerCase()));
+    } catch (err) {
+      console.warn('Search: live streams unavailable:', err?.message || err);
+    }
     const gameLabel = await loadGameLabels();
 
     res.json({
@@ -242,6 +262,16 @@ router.get('/', async (req, res, next) => {
         players: players.map(p => ({
           ...p,
           games: [...new Set(Array.from(p.games).map(g => gameLabel(g) || g))]
+        })),
+        streams: liveStreams.slice(0, limitNum).map(st => ({
+          title: st.title,
+          userName: st.userName,
+          userLogin: st.userLogin,
+          url: st.url,
+          thumbnailUrl: st.thumbnailUrl,
+          viewerCount: st.viewerCount,
+          gameId: st.gameId,
+          gameName: st.gameName
         }))
       },
       counts: {
@@ -249,7 +279,8 @@ router.get('/', async (req, res, next) => {
         tournaments: tournamentsCount,
         races: racesCount,
         players: playersCount,
-        total: gamesCount + tournamentsCount + racesCount + playersCount
+        streams: liveStreams.length,
+        total: gamesCount + tournamentsCount + racesCount + playersCount + liveStreams.length
       }
     });
   } catch (error) {

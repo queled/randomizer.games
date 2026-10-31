@@ -658,6 +658,7 @@ const en = {
         tabTournaments: "Tournaments",
         tabRaces: "Races",
         tabPlayers: "Players",
+        tabLive: "Live",
         resultsCount: "{count} SEARCH RESULTS",
         noResultsFor: "No results found for",
         tryOtherTerms: "Try other search terms",

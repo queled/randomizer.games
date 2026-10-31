@@ -56,7 +56,8 @@
       { id: 'games', label: tr('search.tabGames', 'Games'), count: counts.games },
       { id: 'races', label: tr('search.tabRaces', 'Races'), count: counts.races },
       { id: 'tournaments', label: tr('search.tabTournaments', 'Tournaments'), count: counts.tournaments },
-      { id: 'players', label: tr('search.tabPlayers', 'Players'), count: counts.players }
+      { id: 'players', label: tr('search.tabPlayers', 'Players'), count: counts.players },
+      { id: 'streams', label: tr('search.tabLive', 'Live'), count: counts.streams || 0 }
     ];
 
     tabsContainer.innerHTML = tabs.map(tab => `
@@ -75,12 +76,22 @@
     });
   }
 
-  // Render game card
+  // Square placeholder with a letter or an emoji, for a missing cover or avatar
+  function placeholderImage(text, fontSize) {
+    return 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><rect width="120" height="120" fill="#374151"/><text x="50%" y="50%" dy=".35em" font-size="' + fontSize + '" fill="#fbbf24" text-anchor="middle">' + escHtml(text) + '</text></svg>');
+  }
+
+  // Render game card: its cover, the placeholder when the game has none
   function renderGameCard(game) {
+    const cover = `/assets/covers/${encodeURIComponent(String(game.id || '').toLowerCase())}.png`;
     return `
-      <a href="/game-detail.html?id=${encodeURIComponent(game.id)}" class="result-card">
-        <div class="title">${highlightText(game.label || game.officialName || game.name, searchQuery)}</div>
-        <div class="subtitle">${highlightText(game.officialName || game.id, searchQuery)}</div>
+      <a href="/games/${encodeURIComponent(game.id)}" class="result-card with-media">
+        <img class="result-media cover" src="${escHtml(cover)}" alt="" loading="lazy" width="60" height="80"
+             data-fallback-src="${escHtml(placeholderImage('🎮', 48))}">
+        <div class="result-body">
+          <div class="title">${highlightText(game.label || game.officialName || game.name, searchQuery)}</div>
+          <div class="subtitle">${highlightText(game.officialName || game.id, searchQuery)}</div>
+        </div>
       </a>
     `;
   }
@@ -88,7 +99,7 @@
   // Render tournament card
   function renderTournamentCard(tournament) {
     return `
-      <a href="/tournament-detail.html?id=${encodeURIComponent(tournament._id)}" class="result-card">
+      <a href="/tournaments/${encodeURIComponent(tournament._id)}" class="result-card">
         <div class="title">${highlightText(tournament.name, searchQuery)}</div>
         <div class="subtitle">${highlightText(tournament.gameName || '', searchQuery)}</div>
         <div class="meta">
@@ -109,7 +120,7 @@
                        race.status === 'cancelled' ? tr('status.race.cancelled', 'Cancelled') : race.status;
     
     return `
-      <a href="/race-detail.html?id=${encodeURIComponent(race._id)}" class="result-card">
+      <a href="/races/${encodeURIComponent(race._id)}" class="result-card">
         <div class="title">${highlightText(race.goal || race.name, searchQuery)}</div>
         <div class="subtitle">
           <span class="badge game">${escHtml(race.gameName || race.category || '')}</span>
@@ -131,11 +142,52 @@
         ).join('')}${player.games.length > 4 ? `<span class="game-tag">+${player.games.length - 4}</span>` : ''}</div>`
       : '';
     
+    // racetime avatar, else Twitch avatar (as on the players page); the initial on failure
+    const initialMatch = String(player.name || '').match(/[\p{L}\p{N}]/u);
+    const placeholder = placeholderImage(initialMatch ? initialMatch[0].toUpperCase() : '?', 56);
+    const racetimeAccount = player.racetimeId || player.racetimeUrl || '';
+    const avatar = (racetimeAccount || player.twitch)
+      ? '/api/avatar?racetime=' + encodeURIComponent(racetimeAccount) + '&twitch=' + encodeURIComponent(player.twitch || '')
+      : placeholder;
+    const href = player.userId
+      ? `/players/${encodeURIComponent(player.userId)}`
+      : `/players/name/${encodeURIComponent(player.name)}`;
+
     return `
-      <a href="/player-detail.html?name=${encodeURIComponent(player.name)}" class="result-card">
-        <div class="title">${highlightText(player.name, searchQuery)}</div>
-        ${player.racetimeId ? `<div class="subtitle">Racetime: ${escHtml(player.racetimeId)}</div>` : ''}
-        ${gamesHtml}
+      <a href="${escHtml(href)}" class="result-card with-media">
+        <img class="result-media avatar" src="${escHtml(avatar)}" alt="" loading="lazy" width="56" height="56"
+             data-fallback-src="${escHtml(placeholder)}">
+        <div class="result-body">
+          <div class="title">${highlightText(player.name, searchQuery)}</div>
+          ${player.racetimeId ? `<div class="subtitle">Racetime: ${escHtml(player.racetimeId)}</div>` : ''}
+          ${gamesHtml}
+        </div>
+      </a>
+    `;
+  }
+
+  // Render live stream card (same card as the live page)
+  function renderStreamCard(stream) {
+    const login = String(stream.userLogin || '').replace(/[^a-zA-Z0-9_]/g, '');
+    if (!login) return '';
+    const fallback = placeholderImage('📺', 40);
+    const thumb = stream.thumbnailUrl ? `/api/proxy-image?url=${encodeURIComponent(stream.thumbnailUrl)}` : fallback;
+    const gameId = stream.gameId && stream.gameId !== 'unknown' ? stream.gameId : '';
+    const locale = (window.i18n && window.i18n.getLanguage) ? window.i18n.getLanguage() : undefined;
+    return `
+      <a class="stream-card" href="https://twitch.tv/${login}" target="_blank" rel="noopener noreferrer">
+        <div class="stream-thumbnail">
+          <img src="${escHtml(thumb)}" alt="" loading="lazy" data-fallback-src="${escHtml(fallback)}">
+          <span class="stream-live-badge">${escHtml(tr('streams.live', 'LIVE'))}</span>
+          ${stream.viewerCount ? `<span class="stream-viewers">👁 ${escHtml(new Intl.NumberFormat(locale, { notation: 'compact' }).format(stream.viewerCount))}</span>` : ''}
+        </div>
+        <div class="stream-info">
+          <div class="stream-title">${highlightText(stream.title || '', searchQuery)}</div>
+          <div class="stream-channel">${highlightText(stream.userName || login, searchQuery)}</div>
+          ${stream.gameName ? `<div class="stream-game">🎮 ${gameId
+            ? `<span class="game-link" data-game-id="${escHtml(gameId)}">${highlightText(stream.gameName, searchQuery)}</span>`
+            : highlightText(stream.gameName, searchQuery)}</div>` : ''}
+        </div>
       </a>
     `;
   }
@@ -196,6 +248,10 @@
     
     if (currentFilter === 'all' || currentFilter === 'players') {
       html += renderSection(tr('search.tabPlayers', 'Players'), '👤', results.players, renderPlayerCard, counts.players);
+    }
+
+    if (currentFilter === 'all' || currentFilter === 'streams') {
+      html += renderSection(tr('search.tabLive', 'Live'), '📺', results.streams, renderStreamCard, counts.streams);
     }
 
     if (!html) {
@@ -270,7 +326,7 @@
       if (e.key === 'Enter') {
         const query = searchInput.value.trim();
         if (query) {
-          window.location.href = `/search.html?q=${encodeURIComponent(query)}`;
+          window.location.href = `/search?q=${encodeURIComponent(query)}`;
         }
       }
     });
@@ -288,9 +344,21 @@
     renderResults();
   });
 
+  // The game name of a live card leads to its page instead of the stream
+  function setupGameLinks() {
+    document.getElementById('results-container').addEventListener('click', e => {
+      const link = e.target.closest('.game-link');
+      if (!link) return;
+      e.preventDefault();
+      e.stopPropagation();
+      window.location.href = '/games/' + encodeURIComponent(link.dataset.gameId);
+    });
+  }
+
   // Initialize
   document.addEventListener('DOMContentLoaded', () => {
     setupSearchInput();
+    setupGameLinks();
     const query = getSearchQuery();
     performSearch(query);
   });

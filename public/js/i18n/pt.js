@@ -682,6 +682,7 @@ const pt = {
         tabTournaments: "Torneios",
         tabRaces: "Corridas",
         tabPlayers: "Jogadores",
+        tabLive: "Ao vivo",
         resultsCount: "{count} RESULTADOS DA PESQUISA",
         noResultsFor: "Nenhum resultado para",
         tryOtherTerms: "Tente outros termos de pesquisa",

@@ -90,7 +90,7 @@ const OVERRIDES = {
   'Momodora 4 - Reverie Under the Moonlight': 'mrutm',
   'Paper Mario 64': 'pm',
   'Final Fantasy 6 Worlds Collide': 'ff6',
-  'Final Fantasy 1: Pixel Remaster': 'ff1pr',
+  'Final Fantasy 1: Pixel Remaster': 'ff',
   'Final Fantasy 1 (PSP)': 'ff1psp',
   'Dark Cloud 1': 'dc1',
   'Wario Land 1': 'wl1',

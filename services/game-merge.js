@@ -89,6 +89,20 @@ function mergeRandoList(target, source) {
   to.enabled = to.enabled || from.enabled;
 }
 
+// The source's community APWorld names, so that the APWorld sync keeps their rows on the target
+function mergeApworld(target, source) {
+  const from = source.integrations?.apworld;
+  if (!from?.gameNames?.length) return;
+  const to = target.integrations.apworld;
+  if (!to?.gameNames?.length) {
+    target.integrations.apworld = from;
+    return;
+  }
+  to.gameNames = [...new Set([...to.gameNames, ...from.gameNames])].sort();
+  to.enabled = to.enabled || from.enabled;
+  to.mature = to.mature || from.mature;
+}
+
 function mergeCategories(target, source) {
   const ids = new Set((target.categories || []).map(c => c.id));
   for (const category of source.categories || []) {
@@ -136,6 +150,7 @@ async function mergeGames(targetId, sourceId) {
   if (!target.integrations) target.integrations = {};
   mergeRacetime(target, source);
   mergeRandoList(target, source);
+  mergeApworld(target, source);
   for (const name of INTEGRATIONS) {
     const from = source.integrations?.[name];
     if (from?.enabled && !target.integrations[name]?.enabled) target.integrations[name] = from;

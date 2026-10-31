@@ -27,6 +27,28 @@
       }
     },
     {
+      "date": "2021",
+      "title": {
+        "fr": "La version Pixel Remaster",
+        "en": "The Pixel Remaster"
+      },
+      "text": {
+        "fr": "Square Enix sort la version Pixel Remaster de Final Fantasy IV en 2021.",
+        "en": "Square Enix releases the Pixel Remaster of Final Fantasy IV in 2021."
+      }
+    },
+    {
+      "date": "2021-2025",
+      "title": {
+        "fr": "Fabul Gauntlet et Falcon Dive",
+        "en": "Fabul Gauntlet and Falcon Dive"
+      },
+      "text": {
+        "fr": "Sur la version Pixel Remaster, gameboy9 publie Fabul Gauntlet en octobre 2021 : la carte est découpée en 11 zones, chacune conclue par une série de dix combats. Suit, le 3 juillet 2023, Falcon Dive, un randomizer en monde ouvert basé sur Free Enterprise, mis à jour jusqu'à la version 6.0.4 en mars 2025.",
+        "en": "On the Pixel Remaster, gameboy9 releases Fabul Gauntlet in October 2021: the map is split into 11 areas, each ending with a ten-battle gauntlet. Falcon Dive follows on July 3, 2023, an open-world randomizer based on Free Enterprise, updated up to version 6.0.4 in March 2025."
+      }
+    },
+    {
       "date": {
         "fr": "Aujourd'hui",
         "en": "Today"
@@ -57,6 +79,14 @@
     {
       "label": "Romhacking.net — Roguelikeifyer",
       "url": "https://www.romhacking.net/forum/index.php?topic=23126.0"
+    },
+    {
+      "label": "gameboy9/FF4FabulGauntlet (GitHub)",
+      "url": "https://github.com/gameboy9/FF4FabulGauntlet"
+    },
+    {
+      "label": "gameboy9/FF4FalconDive (GitHub)",
+      "url": "https://github.com/gameboy9/FF4FalconDive"
     }
   ]
 }

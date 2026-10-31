@@ -45,6 +45,22 @@
       }
     },
     {
+      "date": "2021",
+      "title": { "fr": "La version Pixel Remaster", "en": "The Pixel Remaster" },
+      "text": {
+        "fr": "Square Enix sort la version Pixel Remaster de Final Fantasy en 2021.",
+        "en": "Square Enix releases the Pixel Remaster of Final Fantasy in 2021."
+      }
+    },
+    {
+      "date": "2021-2024",
+      "title": { "fr": "Un randomizer pour le Pixel Remaster", "en": "A randomizer for the Pixel Remaster" },
+      "text": {
+        "fr": "Autour de gameboy9, un randomizer d'objets clés voit le jour pour la version Pixel Remaster : version 0.1 le 14 décembre 2021, 0.4 en mai 2024. Il s'appuie sur Memoria, l'outil de modding d'Albeoris. Un APWorld communautaire, FF1PRAP, permet aussi de la jouer en multiworld Archipelago.",
+        "en": "Around gameboy9, a key item randomizer comes to life for the Pixel Remaster: version 0.1 on December 14, 2021, 0.4 in May 2024. It relies on Memoria, Albeoris's modding tool. A community APWorld, FF1PRAP, also lets it be played in an Archipelago multiworld."
+      }
+    },
+    {
       "date": "2023",
       "title": { "fr": "Flame Fatales et Archipelago", "en": "Flame Fatales and Archipelago" },
       "text": {
@@ -58,6 +74,9 @@
     { "label": "FF1Randomizer — Releases", "url": "https://github.com/FiendsOfTheElements/FF1Randomizer/releases" },
     { "label": "Final Fantasy Randomizer", "url": "https://finalfantasyrandomizer.com/" },
     { "label": "Archipelago — Final Fantasy", "url": "https://archipelago.gg/games/Final%20Fantasy/info/en" },
-    { "label": "racetime.gg — FF1R", "url": "https://racetime.gg/ff1r" }
+    { "label": "racetime.gg — FF1R", "url": "https://racetime.gg/ff1r" },
+    { "label": "gameboy9/FF1-PR-Rando (GitHub)", "url": "https://github.com/gameboy9/FF1-PR-Rando" },
+    { "label": "Albeoris/Memoria.FFPR (GitHub)", "url": "https://github.com/Albeoris/Memoria.FFPR" },
+    { "label": "wildham0/FF1PRAP (GitHub)", "url": "https://github.com/wildham0/FF1PRAP" }
   ]
 }

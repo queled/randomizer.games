@@ -60,6 +60,28 @@
       }
     },
     {
+      "date": "2022",
+      "title": {
+        "fr": "La version Pixel Remaster",
+        "en": "The Pixel Remaster"
+      },
+      "text": {
+        "fr": "Square Enix sort la version Pixel Remaster de Final Fantasy VI en 2022.",
+        "en": "Square Enix releases the Pixel Remaster of Final Fantasy VI in 2022."
+      }
+    },
+    {
+      "date": "2022",
+      "title": {
+        "fr": "Kefka Rush",
+        "en": "Kefka Rush"
+      },
+      "text": {
+        "fr": "Sur la version Pixel Remaster, gameboy9 publie Kefka Rush en septembre 2022 : une série de scénarios à réussir avec seulement quatre personnages.",
+        "en": "On the Pixel Remaster, gameboy9 releases Kefka Rush in September 2022: a series of scenarios to complete with only four characters."
+      }
+    },
+    {
       "date": "2024",
       "title": {
         "fr": "Toujours actifs",
@@ -99,6 +121,10 @@
     {
       "label": "racetime.gg — FF6 Worlds Collide",
       "url": "https://racetime.gg/ff6wc"
+    },
+    {
+      "label": "gameboy9/FF6KefkaRush (GitHub)",
+      "url": "https://github.com/gameboy9/FF6KefkaRush"
     }
   ]
 }

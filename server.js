@@ -3,10 +3,12 @@ const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
+const fs = require('fs');
 const path = require('path');
 const connectDB = require('./config/database');
 const { Game, Tournament, Player, Race } = require('./models');
 const seoPages = require('./services/seo-pages');
+const { COVERS_DIR, coverIds } = require('./helpers/game-covers');
 const { 
   apiLimiter, 
   mediaLimiter,
@@ -41,15 +43,18 @@ function formatLastMod(value) {
   return date.toISOString();
 }
 
-function buildSitemapEntry(loc, lastmod) {
+// The game pages list their cover too, for image search
+function buildSitemapEntry(loc, lastmod, image) {
   const safeLoc = `${SITE_URL}${loc}`;
   const lastmodTag = lastmod ? `<lastmod>${xmlEscape(lastmod)}</lastmod>` : '';
-  return `<url><loc>${xmlEscape(safeLoc)}</loc>${lastmodTag}</url>`;
+  const imageTag = image ? `<image:image><image:loc>${xmlEscape(`${SITE_URL}${image}`)}</image:loc></image:image>` : '';
+  return `<url><loc>${xmlEscape(safeLoc)}</loc>${lastmodTag}${imageTag}</url>`;
 }
 
 function buildUrlset(entries) {
-  const urls = entries.map(([loc, lastmod]) => buildSitemapEntry(loc, lastmod)).join('');
-  return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</urlset>`;
+  const urls = entries.map(([loc, lastmod, image]) => buildSitemapEntry(loc, lastmod, image)).join('');
+  const imageNs = entries.some(([, , image]) => image) ? ' xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"' : '';
+  return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"${imageNs}>${urls}</urlset>`;
 }
 
 /**
@@ -69,7 +74,7 @@ async function generateSitemaps() {
     ['/terms.html', null]
   ];
 
-  const [games, tournaments, players, races] = await Promise.all([
+  const [games, tournaments, players, races, covers] = await Promise.all([
     Game.find({ enabled: { $ne: false } }).select('id updatedAt').sort({ updatedAt: -1 }).lean(),
     Tournament.find({}).select('_id updatedAt').sort({ updatedAt: -1 }).lean(),
     // Accounts deleted from racetime leave the player lists, and the sitemap
@@ -81,13 +86,18 @@ async function generateSitemaps() {
       .sort({ updatedAt: -1 })
       .lean(),
     // Most recent races only: older ones are reached through players and tournaments
-    Race.find({}).select('_id updatedAt startedAt').sort({ startedAt: -1, updatedAt: -1 }).limit(1000).lean()
+    Race.find({}).select('_id updatedAt startedAt').sort({ startedAt: -1, updatedAt: -1 }).limit(1000).lean(),
+    coverIds()
   ]);
 
   const groups = {
     pages: staticEntries,
     games: games.filter((game) => game?.id)
-      .map((game) => [`/game-detail.html?id=${encodeURIComponent(game.id)}`, formatLastMod(game.updatedAt)]),
+      .map((game) => {
+        const id = game.id.toLowerCase();
+        const cover = covers.has(id) ? `/assets/covers/${encodeURIComponent(id)}.png` : null;
+        return [`/game-detail.html?id=${encodeURIComponent(game.id)}`, formatLastMod(game.updatedAt), cover];
+      }),
     tournaments: tournaments.filter((tournament) => tournament?._id)
       .map((tournament) => [`/tournament-detail.html?id=${encodeURIComponent(String(tournament._id))}`, formatLastMod(tournament.updatedAt)]),
     players: players.map((player) => {
@@ -236,6 +246,14 @@ app.get(['/sitemap.xml', '/sitemaps/:file.xml'], async (req, res, next) => {
 // day instead of revalidating each one on every page view. JS/CSS keep the
 // default (always revalidated) because their URLs are not versioned.
 app.use('/assets', express.static(path.join(__dirname, 'public', 'assets'), { maxAge: '1d' }));
+// The covers were in /assets until October 2026: their old URLs, shared or
+// indexed by image search, lead to the new ones
+app.get('/assets/:file.png', (req, res, next) => {
+  const file = `${req.params.file}.png`;
+  if (file !== path.basename(file) || !fs.existsSync(path.join(COVERS_DIR, file))) return next();
+  res.set('Cache-Control', 'public, max-age=604800');
+  res.redirect(301, `/assets/covers/${encodeURIComponent(file)}`);
+});
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Apply rate limiting to all API routes (images have their own budget)

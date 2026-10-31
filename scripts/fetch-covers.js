@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Fetch the covers of the games (public/assets/<id>.png)
+ * Fetch the covers of the games (public/assets/covers/<id>.png)
  *
  * The cover is the game's IGDB box art (264 × 352, vertical like the site's
  * posters). The IGDB entry is the one of the game's Twitch category, else
@@ -36,8 +36,8 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env'), quiet: true
 const connectDB = require('../config/database');
 const { Game } = require('../models');
 const { norm } = require('../services/game-names');
+const { COVERS_DIR } = require('../helpers/game-covers');
 
-const ASSETS = path.join(__dirname, '..', 'public', 'assets');
 const IGDB_DELAY_MS = 300; // IGDB: 4 requests per second at most
 const SRC_API = 'https://www.speedrun.com/api/v1';
 // speedrun.com serves its images to browsers only (Cloudflare), and only under ".png"
@@ -99,8 +99,7 @@ const isVertical = buffer => {
 };
 
 function coverFile(game) {
-  const image = String(game.image || game.logo || '');
-  return path.join(__dirname, '..', 'public', image.startsWith('assets/') ? image : `assets/${game.id}.png`);
+  return path.join(COVERS_DIR, `${game.id}.png`);
 }
 
 class Igdb {
@@ -199,7 +198,7 @@ async function main() {
   const options = parseArgs();
   await connectDB();
   const query = options.ids ? { id: { $in: options.ids } } : {};
-  const all = await Game.find(query, { id: 1, name: 1, official: 1, image: 1, logo: 1, integrations: 1 }).lean();
+  const all = await Game.find(query, { id: 1, name: 1, official: 1, integrations: 1 }).lean();
   const games = all.filter(game => {
     if (HAND_MADE.has(game.id)) return false;
     const file = coverFile(game);

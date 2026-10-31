@@ -132,7 +132,7 @@ async function mergeGames(targetId, sourceId) {
 
   const mergedResources = mergeResources(target, source);
 
-  for (const field of ['platforms', 'logo', 'image', 'series']) {
+  for (const field of ['platforms', 'series']) {
     if (isEmpty(target[field]) && !isEmpty(source[field])) target[field] = source[field];
   }
   // Not official.name: the source's is the name of another version (another version of the game)

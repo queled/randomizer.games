@@ -3,6 +3,7 @@ const { whenConnected } = require('../config/database');
 const router = express.Router();
 const { Game } = require('../models');
 const { requireAdmin } = require('../middleware/admin-auth');
+const { coverIds, coverUrl } = require('../helpers/game-covers');
 
 const GAMES_WITH_STATS_CACHE_TTL = 10 * 60 * 1000;
 let gamesWithStatsCache = null;
@@ -152,8 +153,13 @@ whenConnected(() => setTimeout(() => {
 // Get all games
 router.get('/', async (req, res, next) => {
   try {
-    const games = await Game.find().sort({ name: 1 });
-    res.json({ games });
+    const [games, covers] = await Promise.all([Game.find().sort({ name: 1 }), coverIds()]);
+    res.json({
+      games: games.map(game => {
+        const id = game.id.toLowerCase();
+        return { ...game.toJSON(), cover: covers.has(id) ? `/assets/covers/${encodeURIComponent(id)}.png` : null };
+      })
+    });
   } catch (error) {
     next(error);
   }
@@ -178,7 +184,7 @@ router.get('/:id', async (req, res, next) => {
       return res.status(404).json({ error: 'Game not found' });
     }
 
-    res.json(game);
+    res.json({ ...game.toJSON(), cover: coverUrl(game.id) });
   } catch (error) {
     next(error);
   }

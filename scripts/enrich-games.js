@@ -3,7 +3,7 @@
  * Enrich Games Data
  * 
  * Ce script enrichit les jeux existants avec les données de:
- * - speedrun.com (plateformes, date de sortie, images)
+ * - speedrun.com (plateformes, date de sortie)
  * - racetime.gg (vérification de disponibilité)
  * 
  * IMPORTANT: 
@@ -81,14 +81,6 @@ async function enrichFromSpeedrun(game, dryRun = true) {
     // Nom officiel (seulement si vide)
     if (!game.official?.name && srcGame.name) {
       updates['official.name'] = srcGame.name;
-    }
-    
-    // Images (seulement si vide)
-    if (!game.image && srcGame.assets?.coverMedium) {
-      updates.image = srcGame.assets.coverMedium;
-    }
-    if (!game.logo && srcGame.assets?.logo) {
-      updates.logo = srcGame.assets.logo;
     }
     
     // Mettre à jour l'intégration

@@ -1,8 +1,9 @@
-// Game covers: public/assets/<id>.png, vertical like the IGDB box art (264 × 352)
+// Game covers: public/assets/covers/<id>.png, vertical like the IGDB box art (264 × 352)
 const fs = require('fs/promises');
+const { existsSync } = require('fs');
 const path = require('path');
 
-const ASSETS_DIR = path.join(__dirname, '..', 'public', 'assets');
+const COVERS_DIR = path.join(__dirname, '..', 'public', 'assets', 'covers');
 const HISTORY_DIR = path.join(__dirname, '..', 'public', 'data', 'history');
 const MAX_BYTES = 700 * 1024;
 
@@ -11,7 +12,14 @@ function coverPath(gameId) {
   if (!/^[a-z0-9-]+$/.test(id)) {
     throw Object.assign(new Error('Invalid game id'), { status: 400 });
   }
-  return path.join(ASSETS_DIR, `${id}.png`);
+  return path.join(COVERS_DIR, `${id}.png`);
+}
+
+// URL of the game's cover, null when it has none (some ids hold "!", "&" or "+")
+function coverUrl(gameId) {
+  const id = String(gameId || '').toLowerCase();
+  if (!id || id !== path.basename(id) || id.startsWith('.')) return null;
+  return existsSync(path.join(COVERS_DIR, `${id}.png`)) ? `/assets/covers/${encodeURIComponent(id)}.png` : null;
 }
 
 // Ids of the files of a folder with this extension (covers, histories)
@@ -23,14 +31,7 @@ async function idsWithFile(dir, ext) {
   }
 }
 
-// The Archipelago and Multiworld logos sit with the covers but are not any game's
-const SITE_LOGOS = ['archipelago', 'multiworld'];
-
-async function coverIds() {
-  const ids = await idsWithFile(ASSETS_DIR, '.png');
-  SITE_LOGOS.forEach(id => ids.delete(id));
-  return ids;
-}
+const coverIds = () => idsWithFile(COVERS_DIR, '.png');
 
 const historyIds = () => idsWithFile(HISTORY_DIR, '.json');
 
@@ -53,6 +54,7 @@ async function writeCover(gameId, dataUrl) {
   if (size.width > 1200 || size.height > 1600) throw Object.assign(new Error('Cover too large (1200 × 1600 max)'), { status: 400 });
   const file = coverPath(gameId);
   const tmp = `${file}.${process.pid}.tmp`;
+  await fs.mkdir(COVERS_DIR, { recursive: true });
   await fs.writeFile(tmp, buffer);
   await fs.rename(tmp, file);
   return size;
@@ -78,4 +80,4 @@ async function renameCover(oldId, newId) {
   }
 }
 
-module.exports = { coverIds, historyIds, pngSize, writeCover, deleteCover, renameCover };
+module.exports = { COVERS_DIR, coverIds, coverUrl, historyIds, pngSize, writeCover, deleteCover, renameCover };

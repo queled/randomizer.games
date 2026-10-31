@@ -709,7 +709,7 @@
     ].map((value) => sanitizeExternalUrl(value)).filter(Boolean);
 
     const canonicalUrl = `/game-detail.html?id=${encodeURIComponent(id)}`;
-    const image = game.image || game.logo || '/assets/icon-512.png';
+    const image = game.cover || '/assets/icon-512.png';
     const breadcrumb = window.RandomizerSEO.buildBreadcrumbList([
       { name: 'Home', url: '/' },
       { name: 'Games', url: '/games.html' },
@@ -1222,16 +1222,6 @@
       const game = await fetchJson('/api/games/'+encodeURIComponent(id));
       titleEl.textContent = game.name || id;
       
-      // Set poster image (utiliser game.image/logo ou construire depuis l'ID)
-      let image = game.image || game.logo;
-      if (!image || !image.startsWith('assets/')) {
-        // Fallback: construire depuis l'ID du jeu
-        const gameId = (game.id || '').toLowerCase();
-        image = `/assets/${gameId}.png`;
-      } else if (!image.startsWith('/')) {
-        // Ajouter le / si nécessaire
-        image = `/${image}`;
-      }
       // Without a cover the poster shows the id, like on the games list
       const missingPosterEl = document.getElementById('game-poster-missing');
       const missingNameEl = document.createElement('span');
@@ -1239,12 +1229,11 @@
       missingNameEl.textContent = (game.id || id).toLowerCase();
       missingPosterEl.replaceChildren(missingNameEl);
       posterEl.alt = game.name;
-      // archipelago.png and multiworld.png are the sites' logos, not covers of these games
-      if (image === '/assets/archipelago.png' || image === '/assets/multiworld.png') {
+      if (game.cover) {
+        posterEl.src = game.cover;
+      } else {
         posterEl.style.display = 'none';
         missingPosterEl.style.display = 'flex';
-      } else {
-        posterEl.src = image;
       }
 
       // Afficher randomizer.displayName en titre principal (h1)

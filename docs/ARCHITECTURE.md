@@ -366,7 +366,7 @@ Les scripts qui écrivent en base proposent un mode `--dry-run` (ou n'écrivent 
 | `enrich-games.js` | `enrich-games` | Complète les jeux via speedrun.com et racetime.gg |
 | `enrich-twitch.js` | — | Associe les jeux à leurs catégories Twitch |
 | `enrich-release-years.js` | — | Renseigne l'année de sortie des jeux depuis IGDB (via leur catégorie Twitch) |
-| `fetch-covers.js` | — | Jaquettes (`public/assets/<id>.png`) : box art IGDB, verticale, de la fiche de la catégorie Twitch ou trouvée par nom, retenue seulement si elle porte un nom du jeu et sa même année (année exigée hors catégorie Twitch). Par défaut les jaquettes manquantes ; `--replace-non-vertical` remplace aussi les carrées et horizontales, jamais les montages faits à la main (`HAND_MADE`) ; `--speedrun` en secours (lent) |
+| `fetch-covers.js` | — | Jaquettes (`public/assets/covers/<id>.png`) : box art IGDB, verticale, de la fiche de la catégorie Twitch ou trouvée par nom, retenue seulement si elle porte un nom du jeu et sa même année (année exigée hors catégorie Twitch). Par défaut les jaquettes manquantes ; `--replace-non-vertical` remplace aussi les carrées et horizontales, jamais les montages faits à la main (`HAND_MADE`) ; `--speedrun` en secours (lent) |
 | `import-games-csv.js` | `import-games <fichier.csv>` | Import de jeux depuis un CSV (modèle : [`data/games-template.csv`](../data/games-template.csv)) |
 
 ### Maintenance

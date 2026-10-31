@@ -77,8 +77,6 @@ const gameSchema = new mongoose.Schema({
   
   // === MEDIA ===
   platforms: [String],
-  logo: String,
-  image: String,
   series: String,           // name of the game series
   
   // === CATEGORIES ===

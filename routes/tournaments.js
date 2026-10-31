@@ -6,6 +6,7 @@ const racetimeAPI = require('../services/racetime');
 const { buildTournamentQuery } = require('../helpers/game-matching');
 const { calculateTournamentStatus } = require('../helpers/tournament-status');
 const { tournamentGameLabel } = require('../helpers/game-label');
+const { coverUrl } = require('../helpers/game-covers');
 
 function extractRaceSlug(race) {
   const externalId = race?.source?.externalId;
@@ -182,6 +183,7 @@ router.get('/:id', validateObjectId('id'), async (req, res, next) => {
     if (tournamentObj.game) {
       tournamentObj.sourceGameName = tournamentObj.gameName || null;
       tournamentObj.gameName = tournamentGameLabel(tournamentObj);
+      tournamentObj.game.cover = coverUrl(tournamentObj.game.id);
     }
     tournamentObj.status = calculateTournamentStatus(tournamentObj);
 

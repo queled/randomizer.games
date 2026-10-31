@@ -571,7 +571,7 @@ const admin = {
       return `
         <tr>
           <td class="game-cover-cell">${game.hasCover
-            ? `<img class="game-cover-thumb" src="/assets/${encodeURIComponent(game.id)}.png" alt="" loading="lazy">`
+            ? `<img class="game-cover-thumb" src="/assets/covers/${encodeURIComponent(game.id)}.png" alt="" loading="lazy">`
             : '<span class="game-cover-missing" data-tooltip="Pas de jaquette">?</span>'}</td>
           <td><code>${this.escapeHtml(game.id)}</code></td>
           <td>
@@ -924,7 +924,7 @@ const admin = {
     const game = this.currentGame;
     const preview = document.getElementById('game-cover-preview');
     preview.innerHTML = game?.hasCover
-      ? `<img src="/assets/${encodeURIComponent(game.id)}.png?v=${Date.now()}" alt="">`
+      ? `<img src="/assets/covers/${encodeURIComponent(game.id)}.png?v=${Date.now()}" alt="">`
       : '<span>Pas de jaquette</span>';
     document.getElementById('game-cover-pick').classList.toggle('disabled', !game);
     document.getElementById('game-cover-file').disabled = !game;

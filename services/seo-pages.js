@@ -15,6 +15,7 @@ const { calculateTournamentStatus } = require('../helpers/tournament-status');
 const { buildPlayerRacesFilter } = require('../helpers/player-races-filter');
 const { countPlayerTournaments } = require('../helpers/player-tournaments');
 const { gameLabel, tournamentGameLabel } = require('../helpers/game-label');
+const { coverUrl } = require('../helpers/game-covers');
 
 const PUBLIC_DIR = path.join(__dirname, '..', 'public');
 // Square logo for social previews and the Organization logo
@@ -149,7 +150,7 @@ async function findGameForRaceCategory(category) {
       { 'integrations.racetime.gameSlugs': slug },
       { id: slug }
     ]
-  }).select('id name official randomizer image logo').lean();
+  }).select('id name official randomizer').lean();
 }
 
 async function gameMeta(query, siteUrl) {
@@ -166,7 +167,7 @@ async function gameMeta(query, siteUrl) {
     ? `${displayTitle} for ${gameName}: races, tournaments, players and community resources on Randomizer.`
     : `${displayTitle}: races, tournaments, players and community resources on Randomizer.`;
   const canonicalPath = `/game-detail.html?id=${encodeURIComponent(game.id)}`;
-  const image = game.image || game.logo;
+  const image = coverUrl(game.id);
   const sameAs = [game.randomizer?.website, game.officialWebsite, game.official?.website, game.resources?.officialSite?.url]
     .filter((url) => /^https?:\/\//i.test(String(url || '')));
 
@@ -206,7 +207,7 @@ function tournamentStatus(tournament) {
 async function tournamentMeta(query, siteUrl) {
   const id = String(query.id || '').trim();
   if (!mongoose.Types.ObjectId.isValid(id)) return null;
-  const tournament = await Tournament.findById(id).populate('game', 'id name official randomizer image logo').lean();
+  const tournament = await Tournament.findById(id).populate('game', 'id name official randomizer').lean();
   if (!tournament) return null;
 
   const tournamentGame = tournamentGameLabel(tournament) || 'randomizer';
@@ -214,7 +215,7 @@ async function tournamentMeta(query, siteUrl) {
   const participants = Number(tournament.participantsCount) || (Array.isArray(tournament.participants) ? tournament.participants.length : 0);
   const description = `${tournament.name} on Randomizer. ${status ? `${status} ` : ''}${tournamentGame} tournament${participants ? ` with ${participants} participants` : ''}. Explore bracket, participants and linked races.`;
   const canonicalPath = `/tournament-detail.html?id=${encodeURIComponent(String(tournament._id))}`;
-  const image = tournament.game?.image || tournament.game?.logo;
+  const image = coverUrl(tournament.game?.id);
 
   return {
     title: `${tournament.name} - Tournament - Randomizer`,
@@ -363,7 +364,7 @@ async function raceMeta(query, siteUrl) {
   if (tournament?.name) parts.push(`Tournament: ${tournament.name}.`);
   const description = parts.join(' ');
   const canonicalPath = `/race-detail.html?id=${encodeURIComponent(String(race._id))}`;
-  const image = game?.image || game?.logo;
+  const image = coverUrl(game?.id);
 
   return {
     title: `${label} - ${gameName} Race - Randomizer`,
@@ -449,7 +450,7 @@ function renderHead(meta, siteUrl, titleAttrs = '') {
     `<meta property="og:image" content="${htmlEscape(image)}">`,
     `<meta property="og:image:alt" content="${title}">`,
     '<meta property="og:locale" content="en_US">',
-    // Game artwork and the logo are small square images: a large card would crop them.
+    // Covers are small and vertical, the logo square: a large card would crop them.
     '<meta name="twitter:card" content="summary">',
     `<meta name="twitter:title" content="${title}">`,
     `<meta name="twitter:description" content="${description}">`,

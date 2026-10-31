@@ -222,8 +222,6 @@ function buildNewGameData(record, gameId, integrations) {
     name: record.gameName || record.fullGameName || gameId,
     series: record.series || null,
     platforms: parsePlatforms(record.platforms),
-    logo: `assets/${gameId}.png`,
-    image: `assets/${gameId}.png`,
     official: {
       name: record.fullGameName || null,
       releaseDate: parseReleaseDate(record.releaseYear),

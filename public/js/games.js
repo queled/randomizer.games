@@ -34,21 +34,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     'kh2fmr': 'Kingdom Hearts II Final Mix'
   };
   
-  // Logos of the Archipelago and Multiworld sites, not covers of the games with these ids
-  const SITE_LOGOS = new Set(['/assets/archipelago.png', '/assets/multiworld.png']);
-
+  // A missing cover hides the image and shows the id instead (data-fallback)
   function getGameImage(game) {
-    // Utiliser game.image ou game.logo, ou construire depuis l'ID
-    let image = game.image || game.logo;
-    if (!image || !image.startsWith('assets/')) {
-      // Fallback: construire depuis l'ID du jeu
-      const id = (game.id || '').toLowerCase();
-      image = `/assets/${id}.png`;
-    } else if (!image.startsWith('/')) {
-      // Ajouter le / si nécessaire
-      image = `/${image}`;
-    }
-    return SITE_LOGOS.has(image) ? '' : image;
+    return `/assets/covers/${encodeURIComponent((game.id || '').toLowerCase())}.png`;
   }
 
   function sanitizeExternalUrl(url) {

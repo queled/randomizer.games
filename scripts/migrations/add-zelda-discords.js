@@ -86,6 +86,20 @@ const SERVERS = [
     }
   },
   {
+    games: ['oot'],
+    url: 'https://discord.gg/w46yWPFXj',
+    oldUrls: ['https://discord.com/invite/w46yWPFXj'],
+    name: 'MaisonDeManu',
+    descriptions: {
+      en: 'French help server to learn OoTR tricks.',
+      fr: 'Entraide FR pour apprendre les tricks OoTR.',
+      es: 'Ayuda en francés para aprender los tricks de OoTR.',
+      de: 'Französische Hilfe zum Lernen von OoTR-Tricks.',
+      it: 'Aiuto in francese per imparare i trick di OoTR.',
+      pt: 'Ajuda em francês para aprender os tricks de OoTR.'
+    }
+  },
+  {
     games: ZELDA_GAMES,
     url: 'https://discord.gg/fkDSFcDhEE',
     oldUrls: ['https://discord.com/invite/fkDSFcDhEE'],

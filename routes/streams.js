@@ -498,12 +498,25 @@ function recordTwitchQuota(response) {
   twitchBucket.updatedAt = now;
 }
 
-async function twitchFetch(url, token) {
+async function twitchFetch(url, token, options = {}) {
   let response;
+  let renewed = false;
   for (let attempt = 0; attempt <= TWITCH_MAX_RETRIES; attempt++) {
     await takeTwitchRequestSlot();
-    response = await fetch(url, { headers: twitchHeaders(token) });
+    response = await fetch(url, { ...options, headers: twitchHeaders(token) });
     recordTwitchQuota(response);
+    // Twitch can revoke a token before it expires: without a new one, every
+    // request would be refused until the server restarts
+    if (response.status === 401 && !renewed) {
+      renewed = true;
+      if (twitchAccessToken === token) {
+        twitchAccessToken = null;
+        twitchTokenExpires = 0;
+      }
+      token = await getTwitchToken();
+      if (!token) return response;
+      continue;
+    }
     if (response.status !== 429 || attempt === TWITCH_MAX_RETRIES) return response;
     twitchBucket.tokens = 0;
     twitchBucket.updatedAt = Date.now();
@@ -1369,11 +1382,7 @@ router.get('/twitch-avatar/:username', async (req, res) => {
         return res.status(503).json({ error: 'Twitch API not configured' });
       }
 
-      const response = await fetch(`https://api.twitch.tv/helix/users?login=${encodeURIComponent(login)}`, {
-        headers: {
-          'Client-ID': TWITCH_CLIENT_ID,
-          'Authorization': `Bearer ${token}`
-        },
+      const response = await twitchFetch(`https://api.twitch.tv/helix/users?login=${encodeURIComponent(login)}`, token, {
         signal: AbortSignal.timeout(8000)
       });
       if (!response.ok) return res.status(204).end();

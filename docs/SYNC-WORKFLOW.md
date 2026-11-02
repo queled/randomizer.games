@@ -55,7 +55,7 @@ La crontab lance ces étapes via [`scripts/cron/run-job.sh`](../scripts/cron/run
 | Tâche | Étapes | Fréquence |
 |-------|--------|-----------|
 | `racetime` | 1 | toutes les 5 min |
-| `tournaments-discover` | 2 (2 derniers jours) | tous les jours à 7h |
+| `tournaments-discover` | 2 (2 derniers jours) | tous les jours à 8h30 UTC, après la remise à zéro du quota YouTube (minuit, heure du Pacifique) |
 | `tournaments-update` | 3 puis 4 | toutes les 15 min (minute 2) |
 | `schedule-sites` | 5 puis 5b | toutes les 15 min (minute 7) |
 | `race-vods` | 6 puis 7 | toutes les 30 min (minute 12) |

@@ -13,9 +13,9 @@
 name: Sync Tournaments (Discover New)
 
 on:
-  # Exécution 1 fois par jour à 7h du matin (UTC)
+  # Exécution 1 fois par jour à 8h30 UTC, après la remise à zéro du quota YouTube
   schedule:
-    - cron: '0 7 * * *'
+    - cron: '30 8 * * *'
 
   # Déclenchement manuel avec options
   workflow_dispatch:

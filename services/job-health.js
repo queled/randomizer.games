@@ -20,9 +20,9 @@ const JOBS = [
   { name: 'race-vods', label: 'VOD et restreams Twitch', cron: '12-59/30 * * * *', maxRun: 20 * MINUTE },
   { name: 'rando-list', label: 'rando-list', cron: '0 6 * * *', maxRun: 20 * MINUTE },
   { name: 'archipelago', label: 'Jeux Archipelago et Multiworld', cron: '20 6 * * *', maxRun: 15 * MINUTE },
-  { name: 'tournaments-discover', label: 'Découverte de tournois et asyncs ALTTPR', cron: '0 7 * * *', maxRun: 20 * MINUTE },
-  { name: 'players', label: 'Joueurs et comptes racetime', cron: '30 7 * * *', maxRun: 70 * MINUTE },
-  { name: 'challonge-check', label: 'Quota API Challonge', cron: '45 7 * * *', maxRun: 2 * MINUTE },
+  { name: 'tournaments-discover', label: 'Découverte de tournois et asyncs ALTTPR', cron: '30 8 * * *', maxRun: 90 * MINUTE },
+  { name: 'players', label: 'Joueurs et comptes racetime', cron: '0 10 * * *', maxRun: 70 * MINUTE },
+  { name: 'challonge-check', label: 'Quota API Challonge', cron: '15 10 * * *', maxRun: 2 * MINUTE },
   { name: 'backup', label: 'Sauvegarde de la base', cron: '30 3 * * *', maxRun: 30 * MINUTE }
 ];
 

@@ -222,9 +222,9 @@ PATH=/usr/local/bin:/usr/bin:/bin
 12-59/30 * * * * /home/randomizer/randomizer-app/scripts/cron/run-job.sh race-vods
 0     6 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh rando-list
 20    6 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh archipelago
-0     7 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh tournaments-discover
-30    7 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh players
-45    7 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh challonge-check
+30    8 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh tournaments-discover
+0     10 * * * /home/randomizer/randomizer-app/scripts/cron/run-job.sh players
+15    10 * * * /home/randomizer/randomizer-app/scripts/cron/run-job.sh challonge-check
 30    3 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh backup
 ```
 

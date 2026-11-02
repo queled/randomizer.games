@@ -155,6 +155,9 @@ STARTGG_API_TOKEN=
 # Page streams
 TWITCH_CLIENT_ID=
 TWITCH_CLIENT_SECRET=
+
+# Restreams archivés sur YouTube
+YOUTUBE_API_KEY=
 ```
 
 ```bash

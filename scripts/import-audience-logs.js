@@ -4,8 +4,8 @@
  * reported their own views (routes/audience.js).
  *
  * Only the browsers that ran the page count, as with the live measure: a page
- * is kept when the same address and browser also called the API from a page
- * of the site that day. Views already taken from the logs are replaced, so the
+ * is kept when the same address and browser also called the API that day (the
+ * site sends no Referer, so the logs cannot tell which page made the call). Views already taken from the logs are replaced, so the
  * import can be run again.
  *
  * The logs are only readable by root, the app by its own user:
@@ -44,14 +44,6 @@ function parseLine(line) {
   return { ip: m[1], at, method: m[3], url: m[4], status: Number(m[5]), referrer: m[6] === '-' ? '' : m[6], userAgent: m[7] };
 }
 
-function fromSite(referrer) {
-  try {
-    return new URL(referrer).host.replace(/^www\./, '') === SITE_HOST.replace(/^www\./, '');
-  } catch {
-    return false;
-  }
-}
-
 async function main() {
   await connectDB();
 
@@ -68,7 +60,7 @@ async function main() {
     if (!entry || entry.method !== 'GET' || entry.at >= until) continue;
     const key = `${dayOf(entry.at)}|${entry.ip}|${entry.userAgent}`;
     if (entry.url.startsWith('/api/')) {
-      if (fromSite(entry.referrer)) ranScripts.add(key);
+      ranScripts.add(key);
     } else if (entry.status === 200 || entry.status === 304) {
       pages.push({ ...entry, key });
     }

@@ -458,7 +458,7 @@ router.delete('/games/:id', requireAdmin, async (req, res, next) => {
 
 /**
  * PUT /api/admin/games/:id/cover
- * Replace the game's cover (public/assets/<id>.png) with a PNG data URL
+ * Replace the game's cover (public/assets/covers/<id>.webp) with a PNG data URL
  */
 router.put('/games/:id/cover', requireAdmin, async (req, res, next) => {
   try {

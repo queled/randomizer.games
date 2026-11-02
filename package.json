@@ -92,6 +92,7 @@
     "js-yaml": "^5.4.3",
     "mongoose": "^9.11.2",
     "sanitize-html": "^2.18.1",
+    "sharp": "^0.35.5",
     "validator": "^13.11.0"
   },
   "devDependencies": {

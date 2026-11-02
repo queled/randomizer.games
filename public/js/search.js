@@ -85,7 +85,7 @@
 
   // Render game card: its cover, the placeholder when the game has none
   function renderGameCard(game) {
-    const cover = `/assets/covers/${encodeURIComponent(String(game.id || '').toLowerCase())}.png`;
+    const cover = `/assets/covers/${encodeURIComponent(String(game.id || '').toLowerCase())}.webp`;
     return `
       <a href="/games/${encodeURIComponent(game.id)}" class="result-card with-media">
         <img class="result-media cover" src="${escHtml(cover)}" alt="" loading="lazy" width="64" height="90"

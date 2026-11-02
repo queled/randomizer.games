@@ -3,7 +3,7 @@ const { whenConnected } = require('../config/database');
 const router = express.Router();
 const { Game } = require('../models');
 const { requireAdmin } = require('../middleware/admin-auth');
-const { coverIds, coverUrl } = require('../helpers/game-covers');
+const { coverIds, coverUrl, coverPublicUrl } = require('../helpers/game-covers');
 const { pickOfficialSite, isDiscordUrl } = require('../helpers/official-site');
 
 const GAMES_WITH_STATS_CACHE_TTL = 10 * 60 * 1000;
@@ -165,7 +165,7 @@ router.get('/', async (req, res, next) => {
     res.json({
       games: games.map(game => {
         const id = game.id.toLowerCase();
-        return { ...game.toJSON(), cover: covers.has(id) ? `/assets/covers/${encodeURIComponent(id)}.png` : null };
+        return { ...game.toJSON(), cover: covers.has(id) ? coverPublicUrl(id) : null };
       })
     });
   } catch (error) {

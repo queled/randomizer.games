@@ -516,6 +516,13 @@ async function renderPage(route, siteUrl) {
       `<h1${attrs.replace(/\s+data-i18n="[^"]*"/i, '')}>${htmlEscape(meta.heading)}</h1>`
     ));
   }
+  // The cover is the largest image of a game page: it loads with the HTML,
+  // first, instead of after the API call of game-detail.js
+  if (specific && file === '/game-detail.html' && meta.image) {
+    html = html.replace(/<img id="game-poster" alt=""/i, () => (
+      `<img id="game-poster" src="${htmlEscape(meta.image)}" alt="${htmlEscape(meta.heading)}" width="256" height="360" fetchpriority="high"`
+    ));
+  }
   if (specific) {
     // Tells seo.js the head already describes this entity.
     html = html.replace(/<html([^>]*)>/i, '<html$1 data-seo-ssr="1">');

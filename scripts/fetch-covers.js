@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Fetch the covers of the games (public/assets/covers/<id>.png)
+ * Fetch the covers of the games (public/assets/covers/<id>.webp)
  *
  * The cover is the game's IGDB box art (264 × 352, vertical like the site's
  * posters). The IGDB entry is the one of the game's Twitch category, else
@@ -36,7 +36,8 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env'), quiet: true
 const connectDB = require('../config/database');
 const { Game } = require('../models');
 const { norm } = require('../services/game-names');
-const { COVERS_DIR } = require('../helpers/game-covers');
+const sharp = require('sharp');
+const { COVERS_DIR, toCoverWebp } = require('../helpers/game-covers');
 
 const IGDB_DELAY_MS = 300; // IGDB: 4 requests per second at most
 const SRC_API = 'https://www.speedrun.com/api/v1';
@@ -93,13 +94,14 @@ function pngSize(buffer) {
 }
 // A cover: a PNG at least 100 px wide (Twitch and others serve tiny placeholders)
 const isCover = buffer => (pngSize(buffer)?.width || 0) >= 100;
-const isVertical = buffer => {
-  const size = pngSize(buffer);
-  return !!size && size.height / size.width > 1.15;
-};
+// A cover already saved (WebP) that is vertical
+async function isVertical(file) {
+  const { width, height } = await sharp(file).metadata();
+  return height / width > 1.15;
+}
 
 function coverFile(game) {
-  return path.join(COVERS_DIR, `${game.id}.png`);
+  return path.join(COVERS_DIR, `${game.id}.webp`);
 }
 
 class Igdb {
@@ -199,12 +201,12 @@ async function main() {
   await connectDB();
   const query = options.ids ? { id: { $in: options.ids } } : {};
   const all = await Game.find(query, { id: 1, name: 1, official: 1, integrations: 1 }).lean();
-  const games = all.filter(game => {
-    if (HAND_MADE.has(game.id)) return false;
+  const games = [];
+  for (const game of all) {
+    if (HAND_MADE.has(game.id)) continue;
     const file = coverFile(game);
-    if (!fs.existsSync(file)) return true;
-    return options.replace && !isVertical(fs.readFileSync(file));
-  });
+    if (!fs.existsSync(file) || (options.replace && !await isVertical(file))) games.push(game);
+  }
   const missing = games.filter(g => !fs.existsSync(coverFile(g))).length;
   console.log(`🖼️ ${missing} jeux sans jaquette, ${games.length - missing} jaquettes non verticales${options.dryRun ? ' (simulation)' : ''}`);
 
@@ -239,7 +241,7 @@ async function main() {
       stats[srcGame && label.startsWith('speedrun') ? 'speedrun' : 'igdb'].push(game.id);
       console.log(`  ✓ ${game.id} — ${game.name} (${label})${replacing ? ' — remplace la jaquette' : ''}`);
       if (options.dryRun) continue;
-      fs.writeFileSync(coverFile(game), buffer);
+      fs.writeFileSync(coverFile(game), await toCoverWebp(buffer));
       if (srcGame && game.integrations?.speedrun?.confidence !== 'manual') {
         await Game.updateOne({ id: game.id }, {
           $set: { 'integrations.speedrun': { enabled: true, gameId: srcGame.id, weblink: srcGame.weblink, confidence: 'auto', lastSync: new Date() } }

@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   // A missing cover hides the image and shows the id instead (data-fallback)
   function getGameImage(game) {
-    return `/assets/covers/${encodeURIComponent((game.id || '').toLowerCase())}.png`;
+    return `/assets/covers/${encodeURIComponent((game.id || '').toLowerCase())}.webp`;
   }
 
   // Same rule as helpers/official-site.js: the chosen site, else the only known

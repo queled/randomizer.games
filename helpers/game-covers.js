@@ -1,25 +1,31 @@
-// Game covers: public/assets/covers/<id>.png, vertical like the IGDB box art (264 × 352)
+// Game covers: public/assets/covers/<id>.webp, vertical like the IGDB box art (264 × 352)
 const fs = require('fs/promises');
 const { existsSync } = require('fs');
 const path = require('path');
+const sharp = require('sharp');
 
 const COVERS_DIR = path.join(__dirname, '..', 'public', 'assets', 'covers');
 const HISTORY_DIR = path.join(__dirname, '..', 'public', 'data', 'history');
 const MAX_BYTES = 700 * 1024;
+// Twice the largest size a cover is shown at (256 × 360 on the game page)
+const MAX_WIDTH = 528;
+const MAX_HEIGHT = 720;
 
 function coverPath(gameId) {
   const id = String(gameId || '').toLowerCase();
   if (!/^[a-z0-9-]+$/.test(id)) {
     throw Object.assign(new Error('Invalid game id'), { status: 400 });
   }
-  return path.join(COVERS_DIR, `${id}.png`);
+  return path.join(COVERS_DIR, `${id}.webp`);
 }
+
+const coverPublicUrl = (id) => `/assets/covers/${encodeURIComponent(id)}.webp`;
 
 // URL of the game's cover, null when it has none (some ids hold "!", "&" or "+")
 function coverUrl(gameId) {
   const id = String(gameId || '').toLowerCase();
   if (!id || id !== path.basename(id) || id.startsWith('.')) return null;
-  return existsSync(path.join(COVERS_DIR, `${id}.png`)) ? `/assets/covers/${encodeURIComponent(id)}.png` : null;
+  return existsSync(path.join(COVERS_DIR, `${id}.webp`)) ? coverPublicUrl(id) : null;
 }
 
 // Ids of the files of a folder with this extension (covers, histories)
@@ -31,7 +37,7 @@ async function idsWithFile(dir, ext) {
   }
 }
 
-const coverIds = () => idsWithFile(COVERS_DIR, '.png');
+const coverIds = () => idsWithFile(COVERS_DIR, '.webp');
 
 const historyIds = () => idsWithFile(HISTORY_DIR, '.json');
 
@@ -42,6 +48,16 @@ function pngSize(buffer) {
     return null;
   }
   return { width: buffer.readUInt32BE(16), height: buffer.readUInt32BE(20) };
+}
+
+// Any image as a cover: lossless WebP (lossy WebP halves the colour resolution,
+// which blurs pixel art and text), no larger than twice its biggest display size
+async function toCoverWebp(input) {
+  return sharp(input)
+    .rotate()
+    .resize({ width: MAX_WIDTH, height: MAX_HEIGHT, fit: 'inside', withoutEnlargement: true })
+    .webp({ lossless: true, effort: 6 })
+    .toBuffer();
 }
 
 async function writeCover(gameId, dataUrl) {
@@ -55,7 +71,7 @@ async function writeCover(gameId, dataUrl) {
   const file = coverPath(gameId);
   const tmp = `${file}.${process.pid}.tmp`;
   await fs.mkdir(COVERS_DIR, { recursive: true });
-  await fs.writeFile(tmp, buffer);
+  await fs.writeFile(tmp, await toCoverWebp(buffer));
   await fs.rename(tmp, file);
   return size;
 }
@@ -80,4 +96,4 @@ async function renameCover(oldId, newId) {
   }
 }
 
-module.exports = { COVERS_DIR, coverIds, coverUrl, historyIds, pngSize, writeCover, deleteCover, renameCover };
+module.exports = { COVERS_DIR, coverIds, coverUrl, coverPublicUrl, historyIds, pngSize, toCoverWebp, writeCover, deleteCover, renameCover };

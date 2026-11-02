@@ -12,7 +12,7 @@ const { parseSitePath, legacyTarget } = require('./helpers/site-routes');
 const { isThinGame, isThinPlayer } = require('./helpers/thin-pages');
 const { getGamesWithStatsCached } = require('./routes/games');
 const { getPlayersList } = require('./routes/players');
-const { COVERS_DIR, coverIds } = require('./helpers/game-covers');
+const { COVERS_DIR, coverIds, coverPublicUrl } = require('./helpers/game-covers');
 const { 
   apiLimiter, 
   mediaLimiter,
@@ -106,7 +106,7 @@ async function generateSitemaps() {
       .filter((game) => game?.id && !isThinGame({ ...game, hasHistory: histories.has(game.id.toLowerCase()) }))
       .map((game) => {
         const id = game.id.toLowerCase();
-        const cover = covers.has(id) ? `/assets/covers/${encodeURIComponent(id)}.png` : null;
+        const cover = covers.has(id) ? coverPublicUrl(id) : null;
         const changed = [game.lastRaceAt, histories.get(id)].filter(Boolean).map((date) => new Date(date)).sort((a, b) => b - a)[0];
         return [`/games/${encodeURIComponent(game.id)}`, formatLastMod(changed), cover];
       }),
@@ -286,13 +286,14 @@ app.get(['/sitemap.xml', '/sitemaps/:file.xml'], async (req, res, next) => {
 // day instead of revalidating each one on every page view. JS/CSS keep the
 // default (always revalidated) because their URLs are not versioned.
 app.use('/assets', express.static(path.join(__dirname, 'public', 'assets'), { maxAge: '1d' }));
-// The covers were in /assets until October 2026: their old URLs, shared or
-// indexed by image search, lead to the new ones
-app.get('/assets/:file.png', (req, res, next) => {
-  const file = `${req.params.file}.png`;
-  if (file !== path.basename(file) || !fs.existsSync(path.join(COVERS_DIR, file))) return next();
+// The covers were PNG in /assets until October 2026, then PNG in /assets/covers
+// until November 2026: their old URLs, shared or indexed by image search, lead
+// to the WebP
+app.get(['/assets/:file.png', '/assets/covers/:file.png'], (req, res, next) => {
+  const id = req.params.file;
+  if (id !== path.basename(id) || !fs.existsSync(path.join(COVERS_DIR, `${id}.webp`))) return next();
   res.set('Cache-Control', 'public, max-age=604800');
-  res.redirect(301, `/assets/covers/${encodeURIComponent(file)}`);
+  res.redirect(301, coverPublicUrl(id));
 });
 app.use(express.static(path.join(__dirname, 'public')));
 

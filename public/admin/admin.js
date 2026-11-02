@@ -4191,8 +4191,6 @@ const admin = {
           ${this.renderBars(data.tournamentsByYear.map(y => ({ label: String(y.year), value: y.tournaments })))}
         </div>
       </div>
-      
-      <p class="text-muted form-note mt-4">Les visites du site sont dans l’onglet <button class="btn btn-sm btn-ghost" data-click="navigateTo" data-args="${admin.attrArgs(['audience'])}">👀 Audience →</button></p>
     `;
   },
   

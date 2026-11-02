@@ -4192,7 +4192,7 @@ const admin = {
         </div>
       </div>
       
-      <p class="text-muted form-note mt-4">Pas de statistiques de visite : aucun outil d'audience n'est branché sur le site.</p>
+      <p class="text-muted form-note mt-4">Les visites du site sont dans l’onglet <button class="btn btn-sm btn-ghost" data-click="navigateTo" data-args="${admin.attrArgs(['audience'])}">👀 Audience →</button></p>
     `;
   },
   

@@ -318,13 +318,44 @@ const admin = {
   // ==================== NAVIGATION ====================
   
   // A reload keeps the section open
+  isPhone() {
+    return window.matchMedia('(max-width: 768px)').matches;
+  },
+
+  // Phones have no sidebar: they open on a menu of tiles, one per sidebar entry
+  setupPhoneHome() {
+    const grid = document.getElementById('home-grid');
+    grid.innerHTML = '';
+    document.querySelectorAll('.sidebar-nav .nav-item').forEach(item => {
+      const tile = item.cloneNode(true);
+      tile.className = 'home-tile';
+      tile.type = 'button';
+      tile.addEventListener('click', () => {
+        this.sections.open(item.dataset.section);
+        history.replaceState({ ...history.state, fromHome: true }, '');
+        window.scrollTo(0, 0);
+      });
+      grid.appendChild(tile);
+    });
+    document.getElementById('mobile-home-btn').addEventListener('click', () => {
+      // Back to the menu the tab was opened from, otherwise open it
+      if (history.state && history.state.fromHome) history.back();
+      else this.sections.open('home');
+    });
+    window.matchMedia('(max-width: 768px)').addEventListener('change', () => {
+      if (this.currentSection === 'home' && !this.isPhone()) this.showSection('dashboard');
+    });
+  },
+
   initSections() {
     if (!this.sections) {
+      if (this.isPhone() && !(history.state && history.state.tab)) this.currentSection = 'home';
       this.sections = tabHistory({
         current: () => this.currentSection,
         show: (section) => this.showSection(section),
         isTab: (section) => !!document.getElementById(`section-${section}`)
       });
+      this.setupPhoneHome();
     }
     this.showSection(history.state.tab);
   },
@@ -335,7 +366,11 @@ const admin = {
   },
 
   showSection(section) {
+    if (section === 'home' && !this.isPhone()) section = 'dashboard';
     this.currentSection = section;
+    document.body.classList.toggle('on-home', section === 'home');
+    const navLabel = document.querySelector(`.nav-item[data-section="${section}"] span:last-child`);
+    document.getElementById('mobile-bar-title').textContent = navLabel ? navLabel.textContent : '';
     
     // Update nav
     document.querySelectorAll('.nav-item').forEach(item => {

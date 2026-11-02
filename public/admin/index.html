@@ -94,6 +94,24 @@
 
     <!-- Main Content -->
     <main class="main-content">
+
+      <!-- Phone: the sidebar is hidden, this bar leads back to the home menu -->
+      <div class="mobile-bar">
+        <button type="button" class="btn btn-outline btn-sm" id="mobile-home-btn">☰ Menu</button>
+        <span class="mobile-bar-title" id="mobile-bar-title"></span>
+      </div>
+
+      <!-- Phone home: one tile per sidebar entry, filled by admin.js -->
+      <section id="section-home" class="admin-section">
+        <div class="section-header">
+          <h1 class="section-title">🎮 Randomizer Admin</h1>
+        </div>
+        <div class="home-grid" id="home-grid"></div>
+        <div class="home-footer">
+          <button type="button" class="btn btn-outline" data-click="logout">🚪 Déconnexion</button>
+          <a href="/" class="btn btn-ghost">← Retour au site</a>
+        </div>
+      </section>
       
       <!-- Dashboard Section -->
       <section id="section-dashboard" class="admin-section active">

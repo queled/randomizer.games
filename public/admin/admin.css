@@ -1991,15 +1991,6 @@ a:hover {
 }
 
 @media (max-width: 768px) {
-  .sidebar {
-    transform: translateX(-100%);
-    transition: transform 0.2s ease;
-  }
-  
-  .sidebar.open {
-    transform: translateX(0);
-  }
-  
   .main-content {
     margin-left: 0;
     padding: 1rem;
@@ -2031,6 +2022,95 @@ a:hover {
   
   .monitoring-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ==================== PHONE HOME ==================== */
+
+.mobile-bar,
+#section-home {
+  display: none;
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.home-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 6.5rem;
+  padding: 1rem 0.5rem;
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 10px;
+  color: var(--admin-text);
+  font-size: 0.9375rem;
+  text-align: center;
+  cursor: pointer;
+}
+
+.home-tile:active {
+  background: var(--admin-surface-hover);
+}
+
+.home-tile .nav-icon {
+  font-size: 1.75rem;
+}
+
+.home-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.home-footer .btn {
+  width: 100%;
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
+  #section-home.active {
+    display: block;
+  }
+
+  .mobile-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    margin: -1rem -1rem 1rem;
+    padding: 0.625rem 1rem;
+    background: var(--admin-surface);
+    border-bottom: 1px solid var(--admin-border);
+  }
+
+  .on-home .mobile-bar {
+    display: none;
+  }
+
+  .mobile-bar-title {
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .section-header {
+    flex-wrap: wrap;
+    gap: 0.75rem;
   }
 }
 

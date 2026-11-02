@@ -162,3 +162,16 @@ if (document.readyState === 'loading') {
 } else {
     createFooter();
 }
+
+// Audience: the page tells the server it was seen (no cookie, see
+// services/audience.js). A page opened in the background counts once shown.
+function reportPageView() {
+    if (document.visibilityState !== 'visible') {
+        document.addEventListener('visibilitychange', reportPageView, { once: true });
+        return;
+    }
+    const body = JSON.stringify({ path: location.pathname, referrer: document.referrer });
+    if (navigator.sendBeacon && navigator.sendBeacon('/api/seen', new Blob([body], { type: 'application/json' }))) return;
+    fetch('/api/seen', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body, keepalive: true }).catch(() => {});
+}
+reportPageView();

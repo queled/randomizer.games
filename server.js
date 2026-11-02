@@ -325,6 +325,7 @@ app.use('/api/avatar', require('./routes/avatar'));
 app.use('/api/streams', require('./routes/streams'));
 app.use('/api/search', require('./routes/search'));
 app.use('/api/proxy-image', require('./routes/proxy-image'));
+app.use('/api/seen', require('./routes/audience'));
 
 // Admin routes (authenticated: no general rate limit, the login has its own)
 app.use('/api/admin', require('./routes/admin'));

@@ -614,7 +614,7 @@ const en = {
     terms: {
         title: "📜 Terms of Use",
         pageTitle: "Terms of Use - Randomizer",
-        lastUpdated: "Last updated: October 30, 2026",
+        lastUpdated: "Last updated: November 2, 2026",
         section1Title: "1. Acceptance of Terms",
         section1Content: "By accessing and using this website, you agree to be bound by these terms of use. If you do not accept these terms, please do not use this site.",
         section2Title: "2. Description of Service",
@@ -627,7 +627,7 @@ const en = {
         section3Content1: "Video games, their names, logos, and associated trademarks are the property of their respective publishers and developers. This site is not affiliated with any video game publisher.",
         section3Content2: "Data displayed on this site is collected from public sources and third-party APIs (racetime.gg, SpeedRunsLive, Challonge, start.gg, Mido's House, Hyrule Town Hall, SpeedGaming, Twitch, YouTube…), fully listed on the Related Sites page. Rights to this data belong to their respective owners.",
         section4Title: "4. Data Usage",
-        section4Content: "Player data displayed on this site (usernames, race times, tournament results) is public data accessible on source platforms. If you wish to have your data removed, please contact us.",
+        section4Content: "Player data displayed on this site (usernames, race times, tournament results) is public data accessible on source platforms. If you wish to have your data removed, please contact us. To measure the site's audience, we count page views without cookies: the address and browser are only kept as an anonymous identifier that changes every day, and page views are deleted after 13 months.",
         section5Title: "5. Limitation of Liability",
         section5Content1: "This site is provided \"as is\" without any warranty. We do not guarantee the accuracy, completeness, or timeliness of the information presented.",
         section5Content2: "We are not responsible for any direct or indirect damages resulting from the use or inability to use this site.",

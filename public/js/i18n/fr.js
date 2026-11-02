@@ -602,7 +602,7 @@ const fr = {
     terms: {
         title: "📜 Conditions d'utilisation",
         pageTitle: "Conditions d’utilisation - Randomizer",
-        lastUpdated: "Dernière mise à jour : 30 octobre 2026",
+        lastUpdated: "Dernière mise à jour : 2 novembre 2026",
         section1Title: "1. Acceptation des conditions",
         section1Content: "En accédant et en utilisant ce site, vous acceptez d'être lié par ces conditions d'utilisation. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser ce site.",
         section2Title: "2. Description du service",
@@ -615,7 +615,7 @@ const fr = {
         section3Content1: "Les jeux vidéo, leurs noms, logos et marques associées sont la propriété de leurs éditeurs et développeurs respectifs. Ce site n'est affilié à aucun éditeur de jeux vidéo.",
         section3Content2: "Les données affichées sur ce site sont collectées à partir de sources publiques et d'API tierces (racetime.gg, SpeedRunsLive, Challonge, start.gg, Mido's House, Hyrule Town Hall, SpeedGaming, Twitch, YouTube…), dont la liste complète figure sur la page Sites liés. Les droits sur ces données appartiennent à leurs propriétaires respectifs.",
         section4Title: "4. Utilisation des données",
-        section4Content: "Les données des joueurs affichées sur ce site (pseudonymes, temps de course, résultats de tournois) sont des données publiques accessibles sur les plateformes sources. Si vous souhaitez faire supprimer vos données, veuillez nous contacter.",
+        section4Content: "Les données des joueurs affichées sur ce site (pseudonymes, temps de course, résultats de tournois) sont des données publiques accessibles sur les plateformes sources. Si vous souhaitez faire supprimer vos données, veuillez nous contacter. Pour mesurer l'audience du site, nous comptons les pages vues sans cookie : l'adresse IP et le navigateur ne sont conservés que sous la forme d'un identifiant anonyme qui change chaque jour, et les pages vues sont effacées au bout de 13 mois.",
         section5Title: "5. Limitation de responsabilité",
         section5Content1: "Ce site est fourni \"tel quel\" sans aucune garantie. Nous ne garantissons pas l'exactitude, l'exhaustivité ou l'actualité des informations présentées.",
         section5Content2: "Nous ne sommes pas responsables des dommages directs ou indirects résultant de l'utilisation ou de l'impossibilité d'utiliser ce site.",

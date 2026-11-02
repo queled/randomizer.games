@@ -662,6 +662,33 @@ const adminSessionSchema = new mongoose.Schema({
 }, { timestamps: { createdAt: true, updatedAt: false } });
 adminSessionSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
+// Audience (services/audience.js): one document per page view, kept 13 months
+// as the CNIL allows for audience measurement without consent
+const pageViewSchema = new mongoose.Schema({
+  at: { type: Date, required: true },
+  // Address without the language prefix ("/games/hk") and its template
+  path: String,
+  page: String,
+  lang: String,
+  // Hash of the address and browser, salted per day: the same within a day only
+  visitor: String,
+  // Host of the site the visitor came from, null when direct or internal
+  referrer: String,
+  device: String,
+  browser: String,
+  // 'browser' (sent by the page) or 'logs' (taken back from the Nginx logs)
+  source: String
+}, { versionKey: false });
+pageViewSchema.index({ at: 1 }, { expireAfterSeconds: 395 * 24 * 3600 });
+pageViewSchema.index({ source: 1, at: 1 });
+
+// The random salt of each day's visitor ids, dropped once the day is over
+const audienceSaltSchema = new mongoose.Schema({
+  day: { type: String, required: true, unique: true },
+  salt: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now, expires: 2 * 24 * 3600 }
+}, { versionKey: false });
+
 module.exports = {
   Game: mongoose.model('Game', gameSchema),
   Tournament: mongoose.model('Tournament', tournamentSchema),
@@ -671,6 +698,8 @@ module.exports = {
   DiscoverySkip: mongoose.model('DiscoverySkip', discoverySkipSchema),
   MarathonRun: mongoose.model('MarathonRun', marathonRunSchema),
   AdminSession: mongoose.model('AdminSession', adminSessionSchema),
+  PageView: mongoose.model('PageView', pageViewSchema),
+  AudienceSalt: mongoose.model('AudienceSalt', audienceSaltSchema),
   YoutubeChannel: mongoose.model('YoutubeChannel', youtubeChannelSchema),
   YoutubeSearch: mongoose.model('YoutubeSearch', youtubeSearchSchema)
 };

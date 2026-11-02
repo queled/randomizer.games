@@ -638,7 +638,7 @@ const pt = {
     terms: {
         title: "📜 Termos de Uso",
         pageTitle: "Termos de uso - Randomizer",
-        lastUpdated: "Última atualização: 30 de outubro de 2026",
+        lastUpdated: "Última atualização: 2 de novembro de 2026",
         section1Title: "1. Aceitação dos Termos",
         section1Content: "Ao acessar e usar este site, você concorda em estar vinculado a estes termos de uso. Se você não aceitar estes termos, por favor não use este site.",
         section2Title: "2. Descrição do Serviço",
@@ -651,7 +651,7 @@ const pt = {
         section3Content1: "Videogames, seus nomes, logos e marcas registradas associadas são propriedade de seus respectivos editores e desenvolvedores. Este site não é afiliado a nenhum editor de videogames.",
         section3Content2: "Os dados exibidos neste site são coletados de fontes públicas e APIs de terceiros (racetime.gg, SpeedRunsLive, Challonge, start.gg, Mido's House, Hyrule Town Hall, SpeedGaming, Twitch, YouTube…), listadas por completo na página Sites Relacionados. Os direitos sobre esses dados pertencem aos seus respectivos proprietários.",
         section4Title: "4. Uso de Dados",
-        section4Content: "Os dados de jogadores exibidos neste site (nomes de usuário, tempos de corrida, resultados de torneios) são dados públicos acessíveis nas plataformas de origem. Se você deseja ter seus dados removidos, entre em contato conosco.",
+        section4Content: "Os dados de jogadores exibidos neste site (nomes de usuário, tempos de corrida, resultados de torneios) são dados públicos acessíveis nas plataformas de origem. Se você deseja ter seus dados removidos, entre em contato conosco. Para medir a audiência do site, contamos as páginas vistas sem cookies: o endereço IP e o navegador só são guardados como um identificador anônimo que muda todos os dias, e as páginas vistas são apagadas após 13 meses.",
         section5Title: "5. Limitação de Responsabilidade",
         section5Content1: "Este site é fornecido \"como está\" sem qualquer garantia. Não garantimos a precisão, completude ou atualidade das informações apresentadas.",
         section5Content2: "Não somos responsáveis por quaisquer danos diretos ou indiretos resultantes do uso ou incapacidade de usar este site.",

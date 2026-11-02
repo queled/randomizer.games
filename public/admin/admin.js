@@ -437,6 +437,9 @@ const admin = {
       case 'tournaments-mgmt':
         this.tmLoadTournaments();
         break;
+      case 'audience':
+        this.loadAudience();
+        break;
       case 'statistics':
         this.loadStatistics();
         break;
@@ -3958,6 +3961,136 @@ const admin = {
 
   // ==================== STATISTICS ====================
   
+  // ==================== AUDIENCE ====================
+
+  async loadAudience() {
+    const container = document.getElementById('audience-content');
+    const days = document.getElementById('audience-days').value;
+    try {
+      const response = await fetch(`/api/admin/audience?days=${encodeURIComponent(days)}`, {
+        headers: { 'Authorization': `Bearer ${this.token}` }
+      });
+      if (!response.ok) throw new Error();
+      this.renderAudience(await response.json());
+    } catch (error) {
+      console.error('Error loading audience:', error);
+      container.innerHTML = '<div class="alert alert-danger"><span class="alert-icon">⚠️</span><span class="alert-text">Impossible de charger l’audience</span></div>';
+    }
+  },
+
+  renderAudience(data) {
+    const container = document.getElementById('audience-content');
+    const { current, previous } = data;
+    if (!data.firstViewAt) {
+      container.innerHTML = '<p class="text-muted">Aucune visite enregistrée pour l’instant.</p>';
+      return;
+    }
+    const PAGE_LABELS = {
+      index: 'Accueil', games: 'Liste des jeux', 'game-detail': 'Fiche d’un jeu',
+      races: 'Liste des courses', 'race-detail': 'Fiche d’une course',
+      tournaments: 'Liste des tournois', 'tournament-detail': 'Fiche d’un tournoi',
+      players: 'Liste des joueurs', 'player-detail': 'Fiche d’un joueur',
+      streams: 'Streams', resources: 'Ressources', about: 'À propos', terms: 'Mentions',
+      search: 'Recherche', 'compare-players': 'Comparaison de joueurs'
+    };
+    const LANG_LABELS = { en: '🇬🇧 Anglais', fr: '🇫🇷 Français', es: '🇪🇸 Espagnol', de: '🇩🇪 Allemand', it: '🇮🇹 Italien', pt: '🇧🇷 Portugais' };
+    const DEVICE_LABELS = { desktop: '🖥️ Ordinateur', mobile: '📱 Mobile', tablet: '📲 Tablette' };
+    const percent = (part, whole) => whole ? Math.round(100 * part / whole) : 0;
+    const change = (now, before) => {
+      if (!before) return '';
+      const delta = Math.round(100 * (now - before) / before);
+      return `${delta > 0 ? '+' : ''}${delta} % par rapport à la période précédente`;
+    };
+    const rows = (list, label) => list.map(r => ({ label: label(r.key), value: r.visits }));
+    const dateLabel = day => new Date(`${day}T12:00:00Z`).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+
+    container.innerHTML = `
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon">🟢</div><div>
+          <div class="stat-value">${this.formatNumber(data.liveVisitors)}</div><div class="stat-label">En ce moment</div>
+          <div class="stat-sub">visiteurs ces 5 dernières minutes</div>
+        </div></div>
+        <div class="stat-card"><div class="stat-icon">👀</div><div>
+          <div class="stat-value">${this.formatNumber(current.visits)}</div><div class="stat-label">Visites</div>
+          <div class="stat-sub">${change(current.visits, previous.visits)}</div>
+        </div></div>
+        <div class="stat-card"><div class="stat-icon">📄</div><div>
+          <div class="stat-value">${this.formatNumber(current.views)}</div><div class="stat-label">Pages vues</div>
+          <div class="stat-sub">${current.visits ? (current.views / current.visits).toLocaleString('fr-FR', { maximumFractionDigits: 1 }) : 0} par visite</div>
+        </div></div>
+        <div class="stat-card"><div class="stat-icon">↩️</div><div>
+          <div class="stat-value">${percent(current.bounces, current.visits)} %</div><div class="stat-label">Visites d’une seule page</div>
+        </div></div>
+      </div>
+
+      <div class="card mt-4">
+        <h3 class="card-title">📅 Visites par jour</h3>
+        ${this.renderAudienceDays(data)}
+        <p class="text-muted audience-note">Mesure sans cookie depuis le ${new Date(data.firstViewAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}. Une visite = un visiteur sur une journée ; robots et navigation de l’admin exclus.</p>
+      </div>
+
+      <div class="stats-columns mt-4">
+        <div class="card">
+          <h3 class="card-title">🔝 Pages les plus visitées</h3>
+          ${data.pages.length ? this.renderBars(data.pages.map(r => ({
+            label: `<a href="${this.escapeHtml(r.key)}" target="_blank" rel="noopener">${this.escapeHtml(r.key)}</a>`,
+            value: r.visits
+          }))) : '<p class="text-muted">Rien sur la période</p>'}
+        </div>
+        <div class="card">
+          <h3 class="card-title">🧭 Types de pages</h3>
+          ${this.renderBars(rows(data.pageTypes, k => this.escapeHtml(PAGE_LABELS[k] || k)))}
+          <h3 class="card-title mt-4">🔗 Sites d’où viennent les visiteurs</h3>
+          ${data.referrers.length ? this.renderBars(rows(data.referrers, k => this.escapeHtml(k))) : '<p class="text-muted">Aucun site référent sur la période</p>'}
+        </div>
+        <div class="card">
+          <h3 class="card-title">🌐 Langue du site</h3>
+          ${this.renderBars(rows(data.langs, k => this.escapeHtml(LANG_LABELS[k] || k)))}
+          <h3 class="card-title mt-4">💻 Appareils</h3>
+          ${this.renderBars(rows(data.devices, k => this.escapeHtml(DEVICE_LABELS[k] || k)))}
+          <h3 class="card-title mt-4">🧩 Navigateurs</h3>
+          ${this.renderBars(rows(data.browsers, k => this.escapeHtml(k)))}
+        </div>
+      </div>`;
+
+    // One tooltip for every bar of the daily chart
+    const chart = container.querySelector('.audience-days');
+    const tooltip = container.querySelector('.audience-tooltip');
+    if (!chart) return;
+    chart.addEventListener('mouseover', (event) => {
+      const bar = event.target.closest('.audience-day');
+      if (!bar) return;
+      tooltip.innerHTML = `<strong>${dateLabel(bar.dataset.day)}</strong><br>${this.formatNumber(bar.dataset.visits)} visites · ${this.formatNumber(bar.dataset.views)} pages vues`;
+      tooltip.hidden = false;
+      const left = bar.offsetLeft + bar.offsetWidth / 2;
+      tooltip.style.left = `${Math.min(Math.max(left, 80), chart.offsetWidth - 80)}px`;
+    });
+    chart.addEventListener('mouseleave', () => { tooltip.hidden = true; });
+  },
+
+  // Columns of visits per day, days without visits included
+  renderAudienceDays(data) {
+    const byDay = new Map(data.daily.map(d => [d.day, d]));
+    const days = [];
+    const paris = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Paris' });
+    const start = new Date(Math.max(new Date(data.from).getTime(), new Date(data.firstViewAt).getTime()));
+    for (let t = start.getTime(); paris.format(t) <= paris.format(new Date(data.to)); t += 86400000) {
+      const day = paris.format(t);
+      if (days.at(-1)?.day !== day) days.push(byDay.get(day) || { day, visits: 0, views: 0 });
+    }
+    const max = Math.max(1, ...days.map(d => d.visits));
+    const label = day => new Date(`${day}T12:00:00Z`).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+    return `
+      <div class="audience-chart">
+        <div class="audience-axis"><span>${this.formatNumber(max)}</span><span>0</span></div>
+        <div class="audience-days${days.length > 60 ? ' audience-days-dense' : ''}">
+          ${days.map(d => `<div class="audience-day" data-day="${d.day}" data-visits="${d.visits}" data-views="${d.views}"><span class="audience-day-fill" style="height: ${(100 * d.visits / max).toFixed(1)}%"></span></div>`).join('')}
+          <div class="audience-tooltip" hidden></div>
+        </div>
+      </div>
+      <div class="audience-dates"><span>${label(days[0].day)}</span><span>${label(days.at(-1).day)}</span></div>`;
+  },
+
   async loadStatistics() {
     const container = document.getElementById('statistics-content');
     try {

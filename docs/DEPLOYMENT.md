@@ -257,6 +257,20 @@ node scripts/sync-racetime-game.js --game ootr --max-pages 100  # limité à 100
 }
 ```
 
+### Audience
+
+Les pages publiques signalent chaque vue à `/api/seen` (sans cookie, voir
+`services/audience.js`) ; l'onglet Audience de l'admin les affiche. Pour
+reprendre les jours qui précèdent la mesure, depuis les logs Nginx (lisibles
+par root seulement ; Nginx les garde 14 jours) :
+
+```bash
+zcat -f /var/log/nginx/access.log.* /var/log/nginx/access.log \
+  | sudo -u randomizer node /home/randomizer/randomizer-app/scripts/import-audience-logs.js --dry-run
+```
+
+Sans `--dry-run`, les vues reprises des logs remplacent celles d'un import précédent.
+
 ## 7. Nginx
 
 `/etc/nginx/sites-available/randomizer.games` :

@@ -2282,6 +2282,89 @@ a:hover {
   word-break: break-word;
 }
 
+/* ==================== AUDIENCE ==================== */
+
+.audience-chart {
+  display: flex;
+  gap: 0.5rem;
+  height: 180px;
+}
+
+.audience-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--admin-text-muted);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  min-width: 2rem;
+}
+
+.audience-days {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.audience-days-dense {
+  gap: 1px;
+}
+
+/* The whole column is the hover target, not only the bar */
+.audience-day {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  cursor: default;
+}
+
+.audience-day-fill {
+  display: block;
+  width: 100%;
+  min-height: 1px;
+  border-radius: 4px 4px 0 0;
+  background: var(--admin-primary);
+}
+
+.audience-days-dense .audience-day-fill {
+  border-radius: 1px 1px 0 0;
+}
+
+.audience-day:hover .audience-day-fill {
+  background: var(--admin-info);
+}
+
+.audience-tooltip {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  padding: 0.375rem 0.625rem;
+  border-radius: 6px;
+  background: var(--admin-bg);
+  border: 1px solid var(--admin-border);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.audience-dates {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.25rem 0 0 2.5rem;
+  font-size: 0.75rem;
+  color: var(--admin-text-muted);
+}
+
+.audience-note {
+  margin-top: 0.75rem;
+  font-size: 0.8125rem;
+}
+
 .stats-columns {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));

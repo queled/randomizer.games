@@ -25,6 +25,7 @@ const { invalidateGamesWithStats } = require('./games');
 const { readHistory, writeHistory, deleteHistory, renameHistory } = require('../helpers/game-history');
 const { coverIds, historyIds, writeCover, deleteCover, renameCover } = require('../helpers/game-covers');
 const { calculateTournamentStatus } = require('../helpers/tournament-status');
+const audience = require('../services/audience');
 
 function escapeRegex(value) {
   return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -890,6 +891,19 @@ router.get('/stats', requireAdmin, async (req, res, next) => {
       players: totalPlayers,
       failingJobs: jobs.filter(job => job.state === 'error' || job.state === 'late').map(job => ({ name: job.name, label: job.label, state: job.state }))
     });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET /api/admin/audience?days=30
+ * Visits and page views of the site, for the Audience tab
+ */
+router.get('/audience', requireAdmin, async (req, res, next) => {
+  try {
+    const days = [1, 7, 30, 90, 365].includes(Number(req.query.days)) ? Number(req.query.days) : 30;
+    res.json(await audience.summarize(days));
   } catch (error) {
     next(error);
   }

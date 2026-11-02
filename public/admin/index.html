@@ -72,6 +72,10 @@
           <span class="nav-icon">🔄</span>
           <span>Synchronisation</span>
         </button>
+        <button class="nav-item" data-section="audience">
+          <span class="nav-icon">👀</span>
+          <span>Audience</span>
+        </button>
         <button class="nav-item" data-section="statistics">
           <span class="nav-icon">📈</span>
           <span>Statistiques</span>
@@ -502,6 +506,24 @@
       </section>
 
       <!-- Statistics Section -->
+      <!-- Audience Section -->
+      <section id="section-audience" class="admin-section">
+        <div class="section-header">
+          <h1 class="section-title">Audience du site</h1>
+          <select id="audience-days" class="form-input form-select" style="max-width: 200px;" data-change="loadAudience">
+            <option value="1">24 dernières heures</option>
+            <option value="7">7 derniers jours</option>
+            <option value="30" selected>30 derniers jours</option>
+            <option value="90">90 derniers jours</option>
+            <option value="365">12 derniers mois</option>
+          </select>
+        </div>
+
+        <div id="audience-content">
+          <p class="text-muted">Chargement...</p>
+        </div>
+      </section>
+
       <section id="section-statistics" class="admin-section">
         <div class="section-header">
           <h1 class="section-title">Statistiques du contenu</h1>

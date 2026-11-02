@@ -347,6 +347,36 @@ const admin = {
     });
   },
 
+  // On phones, table rows turn into cards: each cell carries its column title
+  labelTableCells() {
+    document.querySelectorAll('table.table').forEach(table => {
+      const headers = [...table.querySelectorAll('thead th')].map(th => th.textContent.trim());
+      if (!headers.length) return;
+      table.classList.add('table-cards');
+      table.querySelectorAll('tbody tr').forEach(row => {
+        let col = 0;
+        for (const cell of row.cells) {
+          const label = headers[col];
+          if (label && cell.colSpan === 1) cell.dataset.label = label;
+          col += cell.colSpan;
+        }
+      });
+    });
+  },
+
+  watchTables() {
+    let pending = false;
+    new MutationObserver(() => {
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(() => {
+        pending = false;
+        this.labelTableCells();
+      });
+    }).observe(document.getElementById('admin-app'), { childList: true, subtree: true });
+    this.labelTableCells();
+  },
+
   initSections() {
     if (!this.sections) {
       if (this.isPhone() && !(history.state && history.state.tab)) this.currentSection = 'home';
@@ -356,6 +386,7 @@ const admin = {
         isTab: (section) => !!document.getElementById(`section-${section}`)
       });
       this.setupPhoneHome();
+      this.watchTables();
     }
     this.showSection(history.state.tab);
   },

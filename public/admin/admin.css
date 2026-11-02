@@ -2423,3 +2423,243 @@ td.table-actions .icon-btn + .btn,
 .admin-tooltip.visible {
   opacity: 1;
 }
+
+/* ==================== PHONE LAYOUT ==================== */
+/* Everything stacks vertically: table rows become cards, filters and forms take the full width */
+
+@media (max-width: 768px) {
+  .table-container {
+    overflow: visible;
+    background: none;
+    border: none;
+    border-radius: 0;
+  }
+
+  .table-cards,
+  .table-cards tbody,
+  .table-cards tr,
+  .table-cards td {
+    display: block;
+    width: 100%;
+  }
+
+  .table-cards thead {
+    display: none;
+  }
+
+  .table-cards tbody tr {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    padding: 0.5rem 0.875rem;
+    margin-bottom: 0.625rem;
+  }
+
+  .table-cards tbody tr:hover {
+    background: var(--admin-surface);
+  }
+
+  .table-cards td,
+  .table-cards tbody tr:last-child td {
+    position: relative;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+    text-align: left;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .table-cards td:last-child {
+    border-bottom: none;
+  }
+
+  .table-cards td:empty {
+    display: none;
+  }
+
+  /* Column title on the left, value on the right */
+  .table-cards td[data-label] {
+    padding-left: 34%;
+    min-height: 2rem;
+  }
+
+  .table-cards td[data-label]::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    width: 31%;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--admin-text-muted);
+    overflow-wrap: normal;
+  }
+
+  /* Untitled cells (cover, actions, messages) use the whole width */
+  .table-cards td:not([data-label]) {
+    padding-left: 0;
+  }
+
+  /* Action buttons get their own full-width line */
+  .table-cards td[data-label="Actions"] {
+    padding-left: 0;
+    min-height: 0;
+  }
+
+  .table-cards td[data-label="Actions"]::before {
+    content: none;
+  }
+
+  .table-cards td .btn {
+    margin: 0.125rem 0;
+  }
+
+  .table-actions {
+    white-space: normal;
+  }
+
+  .stats-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .table-compact .stat-coverage {
+    display: none;
+  }
+
+  .table-compact td {
+    padding-left: 0.375rem;
+    padding-right: 0.375rem;
+  }
+
+  /* Filters and forms */
+  .toolbar,
+  .toolbar-filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .toolbar-search {
+    min-width: 0;
+    max-width: none;
+    width: 100%;
+  }
+
+  .toolbar > *,
+  .toolbar-filters > *,
+  .toolbar .form-input {
+    width: 100%;
+    max-width: none;
+  }
+
+  .card-header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .cover-editor-body {
+    min-width: 0;
+  }
+
+  .cover-editor-actions {
+    flex-wrap: wrap;
+  }
+
+  .cover-editor-body code {
+    overflow-wrap: anywhere;
+  }
+
+  .game-form .form-pair {
+    grid-template-columns: 1fr;
+  }
+
+  .repeat-item-inline {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .repeat-item-inline .repeat-item-tools {
+    justify-content: flex-end;
+  }
+
+  /* Race <-> Match: headers stack, match status goes under the players */
+  .rl-detail-header,
+  .rl-panel-header,
+  .rl-match-main {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .rl-panel-header {
+    gap: 0.5rem;
+  }
+
+  .rl-match-players {
+    flex-wrap: wrap;
+  }
+
+  #rl-filters .form-input {
+    max-width: none !important;
+  }
+
+  /* Form sub-tabs wrap into a grid instead of one long row */
+  .form-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.25rem;
+    border-bottom: none;
+  }
+
+  .form-tab {
+    padding: 0.625rem 0.5rem;
+    border: 1px solid var(--admin-border);
+    border-radius: 6px;
+    margin-bottom: 0;
+  }
+
+  .form-tab.active {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: var(--admin-primary);
+  }
+
+  /* Modals take the whole screen */
+  .modal {
+    padding: 0;
+    align-items: stretch;
+  }
+
+  .modal-content,
+  .modal-content.modal-large {
+    max-width: none;
+    max-height: none;
+    min-height: 100%;
+    border-radius: 0;
+    border: none;
+  }
+
+  .modal-header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--admin-surface);
+    padding: 1rem;
+  }
+
+  .modal-body {
+    padding: 1rem;
+  }
+
+  .modal-footer {
+    position: sticky;
+    bottom: 0;
+    background: var(--admin-surface);
+    flex-wrap: wrap;
+    padding: 0.75rem 1rem;
+  }
+
+  .modal-footer .btn {
+    flex: 1 1 auto;
+  }
+}

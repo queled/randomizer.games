@@ -456,8 +456,9 @@ class StartGGAPI {
     const participants = [];
     const seen = new Set();
     const sources = event?.standings?.length ? event.standings : event?.entrants || [];
-    // While the event runs, ranks come from the sets played so far; an event left open long after
-    // its end keeps start.gg's placements
+    // While the event runs, ranks come from the sets played so far (none before the first one: start.gg
+    // ties every pool player at the place they would get if knocked out now); an event left open
+    // long after its end keeps start.gg's placements
     const running = event && calculateTournamentStatus({ startDate: event.startDate, endDate: event.endDate, state: event.state }) === 'en cours';
     const provisional = running && (event.sets || []).some(set => set.winnerId != null)
       ? computeProvisionalRanks(matches || (event.sets || []).map(set => ({
@@ -478,7 +479,7 @@ class StartGGAPI {
         participants.push({
           name,
           seed: entry.seed || null,
-          finalRank: (provisional ? provisional.get(entrantId) : entry.placement) || null,
+          finalRank: (running ? provisional?.get(entrantId) : entry.placement) || null,
           startggUserId: p.userId,
           startggUserSlug: p.userSlug,
           prefix: p.prefix,

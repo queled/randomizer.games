@@ -38,6 +38,20 @@
       }
     },
     {
+      "date": {
+        "fr": "Février 2023",
+        "en": "February 2023"
+      },
+      "title": {
+        "fr": "Critical Mix",
+        "en": "Critical Mix"
+      },
+      "text": {
+        "fr": "Le 17 février 2023, Xendra publie sur Nexus Mods un randomizer pour Critical Mix, mod de Kingdom Hearts Final Mix : récompenses, Keyblades, montées de niveau, emplacements des emblèmes et plus encore.",
+        "en": "On February 17, 2023, Xendra posts on Nexus Mods a randomizer for Critical Mix, a Kingdom Hearts Final Mix mod: rewards, Keyblades, level-ups, emblem locations and more."
+      }
+    },
+    {
       "date": "2023-2024",
       "title": {
         "fr": "Archipelago",
@@ -69,6 +83,10 @@
     {
       "label": "racetime.gg — KH1FM Randomizer",
       "url": "https://racetime.gg/khfmr"
+    },
+    {
+      "label": "Nexus Mods — Critical Mix Randomizer",
+      "url": "https://www.nexusmods.com/kingdomheartsfinalmix/mods/96"
     }
   ]
 }

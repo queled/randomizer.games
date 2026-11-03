@@ -17,6 +17,20 @@
     },
     {
       "date": {
+        "fr": "Juin 2022",
+        "en": "June 2022"
+      },
+      "title": {
+        "fr": "Mega Man X3 Item Randomizer",
+        "en": "Mega Man X3 Item Randomizer"
+      },
+      "text": {
+        "fr": "vinheim3 ajoute le 25 juin 2022 une bêta du randomizer de Mega Man X3 à son dépôt de randomizers. Il accepte une ROM normale ou celle du hack Zero Project, où l'on joue Zero, et propose aussi PV et faiblesses des boss, ennemis et couleurs aléatoires.",
+        "en": "vinheim3 adds a beta of the Mega Man X3 randomizer to their randomizers repository on June 25, 2022. It accepts a regular ROM or one of the Zero Project hack, where you play as Zero, and also offers random boss HP and weaknesses, enemies and colours."
+      }
+    },
+    {
+      "date": {
         "fr": "Aujourd'hui",
         "en": "Today"
       },
@@ -38,6 +52,14 @@
     {
       "label": "Multiworld — Mega Man X3",
       "url": "https://multiworld.gg/games/Mega%20Man%20X3/info/en"
+    },
+    {
+      "label": "GitHub — vinheim3/randomizers",
+      "url": "https://github.com/vinheim3/randomizers"
+    },
+    {
+      "label": "rando-list — Mega Man",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Mega_Man.yml"
     }
   ]
 }

@@ -11,8 +11,8 @@
         "en": "The original game"
       },
       "text": {
-        "fr": "Overhaul Games sort Baldur's Gate II: Enhanced Edition en 2013.",
-        "en": "Overhaul Games releases Baldur's Gate II: Enhanced Edition in 2013."
+        "fr": "Overhaul Games sort Baldur's Gate II: Enhanced Edition en 2013, version remaniée de Baldur's Gate II: Shadows of Amn, sorti chez BioWare en 2000.",
+        "en": "Overhaul Games releases Baldur's Gate II: Enhanced Edition in 2013, a reworked version of Baldur's Gate II: Shadows of Amn, released by BioWare in 2000."
       }
     },
     {
@@ -78,6 +78,10 @@
     {
       "label": "rando-list — Baldurs Gate",
       "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Baldurs_Gate.yml"
+    },
+    {
+      "label": "Wikipedia — Baldur's Gate II: Shadows of Amn",
+      "url": "https://en.wikipedia.org/wiki/Baldur%27s_Gate_II:_Shadows_of_Amn"
     }
   ]
 }

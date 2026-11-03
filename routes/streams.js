@@ -121,6 +121,10 @@ const COMBO_TWITCH_CATEGORY_IDS = {
   'pkmnrb': ['3623', '1528763908'],
   'pkmnbw': ['27602', '1432908059'],
   'pkmnbw2': ['33734', '1690221315'],
+  // A game and its remaster or enhanced edition, one category each
+  'ff8': ['11282', '1736914392'],
+  'rer': ['418892281', '492035'],
+  'bg2': ['9769', '1116745944'],
   // A game and its fan remake, one category each
   'legorrmm': ['9147', '375440842'],
   // A game randomized on its NES version, also streamed under its remakes'
@@ -203,11 +207,9 @@ const PER_GAME_TITLE_KEYWORDS = {
   'pkmng': ['gaia'],
   // Mods, modpacks and maps, streamed under their base game
   'bg3tot': ['trials of tav'],
-  'easytutu': ['easytutu', 'tutu'],
   'secmod': ['secmod'],
   'ccmo': ['mental omega'],
   'ccr': ['reloaded'],
-  'fwbm': ["bob's mods", 'bobs mods', "bob's"],
   'fp': ['platformer'],
   'payday2cd': ['criminal dawn'],
   'maem': ['aem'],
@@ -215,7 +217,6 @@ const PER_GAME_TITLE_KEYWORDS = {
   'wynncraft': ['wynncraft'],
   'dapotheosis': ['drehmal'],
   'cl': ['citadel'],
-  'oc': ['cargolock'],
   'mgsmgs': ['masala'],
   // Versions without a Twitch category of their own, streamed under another one
   'sth2006': ['sonic 06', 'sonic 2006', 'sonic the hedgehog 2006', 'sonic the hedgehog (2006)', 'sth06'],

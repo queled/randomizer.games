@@ -11,8 +11,8 @@
         "en": "The original game"
       },
       "text": {
-        "fr": "FromSoftware sort Dark Souls en 2011.",
-        "en": "FromSoftware releases Dark Souls in 2011."
+        "fr": "FromSoftware sort Dark Souls en 2011 ; la Prepare to Die Edition l'amène sur PC en 2012.",
+        "en": "FromSoftware releases Dark Souls in 2011; the Prepare to Die Edition brings it to PC in 2012."
       }
     },
     {
@@ -41,6 +41,17 @@
       "text": {
         "fr": "Le 29 avril 2018, rycheNhavalys publie un randomizer qui remplace au hasard ennemis et boss ; il dépasse les 200 000 téléchargements.",
         "en": "On April 29, 2018, rycheNhavalys releases a randomizer that randomly replaces enemies and bosses; it passes 200,000 downloads."
+      }
+    },
+    {
+      "date": "2018-2020",
+      "title": {
+        "fr": "Paramdomizer",
+        "en": "Paramdomizer"
+      },
+      "text": {
+        "fr": "Mechapope crée en 2018 Paramdomizer, qui randomise les paramètres du jeu, repris en 2020 par Poppyanimal.",
+        "en": "In 2018 Mechapope creates Paramdomizer, which randomizes the game's parameters, taken over in 2020 by Poppyanimal."
       }
     },
     {
@@ -119,6 +130,14 @@
     {
       "label": "racetime.gg — DS1",
       "url": "https://racetime.gg/darksouls"
+    },
+    {
+      "label": "Poppyanimal/Paramdomizer (GitHub)",
+      "url": "https://github.com/Poppyanimal/Paramdomizer"
+    },
+    {
+      "label": "HotPocketRemix/DarkSoulsItemRandomizer (GitHub)",
+      "url": "https://github.com/HotPocketRemix/DarkSoulsItemRandomizer"
     }
   ]
 }

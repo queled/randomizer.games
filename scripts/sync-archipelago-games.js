@@ -72,7 +72,8 @@ const OVERRIDES = {
     // Variant worlds, beside the base game's
     'The Legend of Zelda: A Link to the Past': false,
     'Super Metroid Map Rando': false,
-    'SM64 Romhack': false
+    'SM64 Romhack': false,
+    'Factorio - Space Age Without Space': false
   }
 };
 

@@ -6,6 +6,20 @@
   "events": [
     {
       "date": {
+        "fr": "Février 2026",
+        "en": "February 2026"
+      },
+      "title": {
+        "fr": "Yacht Dice Bliss",
+        "en": "Yacht Dice Bliss"
+      },
+      "text": {
+        "fr": "La variante Yacht Dice Bliss paraît en février 2026 (version v2.3.4) sur le dépôt ArchipelagoYachtDice de spinerak, sous forme d'APWorld communautaire.",
+        "en": "The Yacht Dice Bliss variant comes out in February 2026 (version v2.3.4) on spinerak's ArchipelagoYachtDice repository, as a community APWorld."
+      }
+    },
+    {
+      "date": {
         "fr": "Aujourd'hui",
         "en": "Today"
       },
@@ -23,6 +37,10 @@
     {
       "label": "Archipelago — Yacht Dice",
       "url": "https://archipelago.gg/games/Yacht%20Dice/info/en"
+    },
+    {
+      "label": "GitHub — spinerak/ArchipelagoYachtDice (releases)",
+      "url": "https://github.com/spinerak/ArchipelagoYachtDice/releases"
     }
   ]
 }

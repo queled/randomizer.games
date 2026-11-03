@@ -17,6 +17,20 @@
     },
     {
       "date": {
+        "fr": "Octobre 2025",
+        "en": "October 2025"
+      },
+      "title": {
+        "fr": "Bob's Mods",
+        "en": "Bob's Mods"
+      },
+      "text": {
+        "fr": "Osiris32-and-a-half publie le 11 octobre 2025 BobFactorioAP, variante du monde Factorio d'Archipelago adaptée aux Bob's Mods, une série de mods qui étoffent l'arbre technologique.",
+        "en": "On October 11, 2025, Osiris32-and-a-half releases BobFactorioAP, a variant of Archipelago's Factorio world adapted to Bob's Mods, a set of mods that expand the tech tree."
+      }
+    },
+    {
+      "date": {
         "fr": "Aujourd'hui",
         "en": "Today"
       },
@@ -25,8 +39,8 @@
         "en": "Multiworld"
       },
       "text": {
-        "fr": "Factorio est jouable en multiworld avec Archipelago. L'arbre de recherche est mélangé, si bien que certaines technologies s'obtiennent dans un ordre inhabituel ; les coûts des recettes et les besoins en technologies et en packs de science peuvent aussi être mélangés. Factorio figure parmi les premiers jeux pris en charge par Archipelago.",
-        "en": "Factorio can be played in multiworld with Archipelago. The research tree is shuffled, so some technologies are obtained in a non-standard order; recipe costs and technology and science pack requirements can also be shuffled. Factorio is among the first games supported by Archipelago."
+        "fr": "Factorio est jouable en multiworld avec Archipelago. L'arbre de recherche est mélangé, si bien que certaines technologies s'obtiennent dans un ordre inhabituel ; les coûts des recettes et les besoins en technologies et en packs de science peuvent aussi être mélangés. Factorio figure parmi les premiers jeux pris en charge par Archipelago. Sur MultiworldGG, la variante Space Age Without Space se joue de la même façon.",
+        "en": "Factorio can be played in multiworld with Archipelago. The research tree is shuffled, so some technologies are obtained in a non-standard order; recipe costs and technology and science pack requirements can also be shuffled. Factorio is among the first games supported by Archipelago. On MultiworldGG, the Space Age Without Space variant is played the same way."
       }
     }
   ],
@@ -34,6 +48,14 @@
     {
       "label": "Archipelago — Factorio",
       "url": "https://archipelago.gg/games/Factorio/info/en"
+    },
+    {
+      "label": "GitHub — Osiris32-and-a-half/BobFactorioAP",
+      "url": "https://github.com/Osiris32-and-a-half/BobFactorioAP"
+    },
+    {
+      "label": "Multiworld — Factorio - Space Age Without Space",
+      "url": "https://multiworld.gg/games/Factorio%20-%20Space%20Age%20Without%20Space/info/en"
     }
   ]
 }

@@ -11,8 +11,22 @@
         "en": "The original game"
       },
       "text": {
-        "fr": "Capcom sort le remake de Resident Evil sur GameCube en 2002.",
-        "en": "Capcom releases the Resident Evil remake on GameCube in 2002."
+        "fr": "Capcom sort le remake de Resident Evil sur GameCube en 2002, puis sa version HD Remaster fin 2014.",
+        "en": "Capcom releases the Resident Evil remake on GameCube in 2002, then its HD Remaster version in late 2014."
+      }
+    },
+    {
+      "date": {
+        "fr": "Août 2024",
+        "en": "August 2024"
+      },
+      "title": {
+        "fr": "Flame Fatales 2024",
+        "en": "Flame Fatales 2024"
+      },
+      "text": {
+        "fr": "Le 19 août 2024, marphoria court Resident Evil HD Remaster en « Randomizer (Items + Enemies) » au marathon Flame Fatales 2024.",
+        "en": "On August 19, 2024, marphoria runs Resident Evil HD Remaster in \"Randomizer (Items + Enemies)\" at the Flame Fatales 2024 marathon."
       }
     },
     {
@@ -38,6 +52,18 @@
     {
       "label": "racetime.gg — Resident Evil (Remake) Randomizer",
       "url": "https://racetime.gg/residentevilhd-rando"
+    },
+    {
+      "label": "IGDB — Resident Evil (HD Remaster)",
+      "url": "https://www.igdb.com/games/resident-evil--3"
+    },
+    {
+      "label": "Games Done Quick — Flame Fatales 2024, Resident Evil HD Remaster",
+      "url": "https://tracker.gamesdonequick.com/tracker/run/6393"
+    },
+    {
+      "label": "rando-list — Resident Evil",
+      "url": "https://github.com/video-game-randomizers/rando-list/blob/main/src/series/Resident_Evil.yml"
     }
   ]
 }

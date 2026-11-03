@@ -1,7 +1,7 @@
 {
   "intro": {
-    "fr": "OpenTTD se joue en multiworld Archipelago grâce à un APWorld communautaire, distribué hors de l'installation officielle.",
-    "en": "OpenTTD can be played in an Archipelago multiworld through a community APWorld, distributed outside the official install."
+    "fr": "OpenTTD se joue en multiworld Archipelago grâce à deux APWorlds communautaires, distribués hors de l'installation officielle : celui d'OpenTTD et Cargolock.",
+    "en": "OpenTTD can be played in an Archipelago multiworld through two community APWorlds, distributed outside the official install: OpenTTD's and Cargolock."
   },
   "events": [
     {
@@ -13,6 +13,20 @@
       "text": {
         "fr": "OpenTTD Team sort OpenTTD en 2004.",
         "en": "OpenTTD Team releases OpenTTD in 2004."
+      }
+    },
+    {
+      "date": {
+        "fr": "Mars 2026",
+        "en": "March 2026"
+      },
+      "title": {
+        "fr": "Cargolock",
+        "en": "Cargolock"
+      },
+      "text": {
+        "fr": "kbab13reel crée en mars 2026 le dépôt openttd-archipelago et publie l'APWorld OpenTTD Cargolock, en version 0.1.0 ; la 0.3.1 sort en juin 2026.",
+        "en": "kbab13reel creates the openttd-archipelago repository in March 2026 and releases the OpenTTD Cargolock APWorld, version 0.1.0; 0.3.1 comes out in June 2026."
       }
     },
     {
@@ -67,8 +81,8 @@
         "en": "One APWorld among many"
       },
       "text": {
-        "fr": "Comme beaucoup de jeux, OpenTTD rejoint Archipelago par un APWorld non officiel : un fichier .apworld distribué à part, que chaque joueur ajoute lui-même à son installation pour l'intégrer à un multiworld.",
-        "en": "Like many games, OpenTTD joins Archipelago through an unofficial APWorld: a .apworld file distributed separately, which each player adds to their own install to bring it into a multiworld."
+        "fr": "Comme beaucoup de jeux, OpenTTD rejoint Archipelago par des APWorlds non officiels : des fichiers .apworld distribués à part, que chaque joueur ajoute lui-même à son installation pour l'intégrer à un multiworld.",
+        "en": "Like many games, OpenTTD joins Archipelago through unofficial APWorlds: .apworld files distributed separately, which each player adds to their own install to bring it into a multiworld."
       }
     }
   ],
@@ -88,6 +102,14 @@
     {
       "label": "Archipelago — spécification des APWorlds",
       "url": "https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/apworld%20specification.md"
+    },
+    {
+      "label": "GitHub — kbab13reel/openttd-archipelago",
+      "url": "https://github.com/kbab13reel/openttd-archipelago"
+    },
+    {
+      "label": "GitHub — kbab13reel/openttd-archipelago (releases)",
+      "url": "https://github.com/kbab13reel/openttd-archipelago/releases"
     }
   ]
 }

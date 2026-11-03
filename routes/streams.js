@@ -81,7 +81,11 @@ async function requestTwitchToken() {
 
 // Keywords that must appear in title/tags for combo games (case-insensitive)
 const COMBO_KEYWORDS = {
-  'ootmm': ['ootmm', 'oot mm', 'ootxmm', 'oot x mm', 'ocarina majora', 'oot+mm', 'oot/mm'],
+  'ootmm': [
+    'ootmm', 'oot mm', 'ootxmm', 'oot x mm', 'ocarina majora', 'oot+mm', 'oot + mm', 'oot/mm', 'oot & mm', 'oot and mm',
+    // The two titles spelled out, "x", "+", "&" or "and" between them
+    ...['ocarina of time', 'oot'].flatMap(oot => ['x', '+', '&', 'and', '/'].map(sep => `${oot} ${sep} majora`))
+  ],
   'smz3': ['smz3', 'sm z3', 'smxz3', 'sm x z3', 'super metroid link', 'metroid alttp', 'sm+z3', 'z3sm'],
   'hodbt': ['hodbt', 'hod bt', 'hodxbt', 'harmony bomberman'],
   'mpcg': ['mpcg', 'crossgame', 'cross game', 'mp1 mp2', 'prime crossover'],

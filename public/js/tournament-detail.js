@@ -2319,8 +2319,12 @@ function displayMatches(matches, tournament, races = []) {
   // Display winner bracket (from Grand Finals to Round 1)
   const winnerRounds = Object.keys(winnerByRound).map(r => parseInt(r)).sort((a, b) => b - a);
   
+  // A single-stage Swiss / round robin has numbered rounds, not "Finale", "Demi-finales"...
+  const standingsRounds = !phases.length && !hasGroupsThenFinal && isStandingsPhase(tournament, null);
   winnerRounds.forEach(round => {
-    const roundName = roundLabels.label(round);
+    const roundName = standingsRounds
+      ? `${i18n.t('tournamentDetail.roundNumber') || 'Tour'} ${round}`
+      : roundLabels.label(round);
     
     const roundHeader = document.createElement('h3');
     roundHeader.style.cssText = 'font-size: 1.25rem; font-weight: bold; margin-top: 1.5rem; margin-bottom: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;';
@@ -3761,6 +3765,9 @@ function displayBracket(matches, tournament) {
     displayMultiPhaseBracket(matches, container, isDoubleElimination, phases, tournament);
   } else if (phases.length === 1 && isStandingsPhase(tournament, phases[0])) {
     displayStandingsPhase(matches, container, getPhaseKind(tournament, phases[0]) === 'swiss', phases[0]);
+  } else if (phases.length === 0 && isStandingsPhase(tournament, null)) {
+    // Single-stage Challonge Swiss / round robin: standings, not an elimination tree
+    displayStandingsPhase(matches, container, getPhaseKind(tournament, null) === 'swiss');
   } else if (hasPhaseGroups) {
     // Start.gg pools - display each pool as a separate bracket
     displayPoolsBracket(matches, container, isDoubleElimination, phaseGroups);
@@ -3840,9 +3847,12 @@ function displayMultiPhaseBracket(matches, container, isDoubleElimination, phase
 }
 
 // Normalized start.gg bracketType of a phase ('swiss', 'roundrobin', 'doubleelimination'...)
+// Without a phase name (Challonge bracket of a single stage), the tournament's own type applies.
 function getPhaseKind(tournament, phaseName) {
+  const normalize = type => String(type || '').toLowerCase().replace(/[\s_]+/g, '');
+  if (!phaseName) return normalize(tournament && tournament.tournamentType);
   const phase = (tournament && Array.isArray(tournament.phases) ? tournament.phases : []).find(p => p.name === phaseName);
-  return phase ? String(phase.bracketType || '').toLowerCase().replace(/[\s_]+/g, '') : '';
+  return phase ? normalize(phase.bracketType) : '';
 }
 
 function isStandingsPhase(tournament, phaseName) {

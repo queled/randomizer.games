@@ -47,6 +47,20 @@ function freezeAbandoned(t, matches) {
   t.completedAt = t.completedAt || new Date(last).toISOString();
 }
 
+/**
+ * A Swiss bracket closed long after its last games may carry one more round, paired by Challonge
+ * but never played: without a single result, that round is left out.
+ */
+function dropUnplayedSwissRounds(t, details) {
+  if (!/swiss/i.test(t.tournamentType || '')) return;
+  const played = new Set(details.matches.filter(m => m.winnerId || m.scoresCsv).map(m => m.round));
+  const kept = details.matches.filter(m => played.has(m.round));
+  const dropped = details.matches.length - kept.length;
+  if (!dropped) return;
+  console.log(`   ✂️  ${t.name}: ${dropped} match(es) of unplayed Swiss round(s) left out`);
+  details.matches = kept;
+}
+
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 async function main() {
@@ -104,6 +118,7 @@ async function main() {
     if (entry.skip) { console.log(`↪ Skipped: ${ref.apiId}`); continue; }
     if (entry.name) t.name = entry.name;
     freezeAbandoned(t, details.matches);
+    if (FINISHED.includes(String(t.state).toLowerCase())) dropUnplayedSwissRounds(t, details);
 
     await importChallongeTournament({ name: t.name, url: ref.apiId }, entry.game || null, {
       group: entry.group || null,

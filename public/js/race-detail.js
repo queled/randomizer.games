@@ -575,7 +575,9 @@
 
     const html = sorted.map((e, idx) => {
       const name = escapeHtml(e.userName || unknown);
-      const playerLink = e.userName ? `/players/name/${encodeURIComponent(e.userName)}` : '#';
+      // An account has the page of its id: several accounts can share a name
+      const playerLink = e.userId ? `/players/${encodeURIComponent(e.userId)}`
+        : e.userName ? `/players/name/${encodeURIComponent(e.userName)}` : '#';
       
       if (spoilerMode) {
         // Spoiler mode: simple list, no rank, no time, alphabetical

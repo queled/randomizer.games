@@ -1356,12 +1356,15 @@ function isParticipantName(name, participant) {
 
 // Co-op tournaments list each player with the team they raced in: show one row per team
 // Player page of a bracket name: the racetime account that raced it, when known
-// (organizers type any name in the bracket, racetime says who raced)
-function playerPageHref(name) {
+// (organizers type any name in the bracket, racetime says who raced). An account has
+// the page of its id: several accounts can share a name.
+function playerPageHref(name, userId) {
+  if (userId) return '/players/' + encodeURIComponent(userId);
   // start.gg sets show a player as "Prefix | GamerTag", the participant is its gamer tag
   const keys = [name, String(name || '').split(' | ').pop()].map(n => normalizeName(sanitizeDisplayName(n))).filter(Boolean);
   const participant = keys.length && (currentTournament?.participants || []).find(p => p.racetimeName
     && [p.displayName, p.name].some(n => n && keys.includes(normalizeName(sanitizeDisplayName(n)))));
+  if (participant && participant.racetimeUserId) return '/players/' + encodeURIComponent(participant.racetimeUserId);
   return '/players/name/' + encodeURIComponent(participant ? participant.racetimeName : name);
 }
 
@@ -1849,11 +1852,9 @@ function createQualificationRaceCard(race) {
       const playerLink = document.createElement('a');
       playerLink.style.cssText = 'color: #60a5fa; font-weight: 500; font-size: 0.875rem; text-decoration: none;';
       playerLink.textContent = playerDisplayName;
-      try {
-        playerLink.href = '/players/name/' + encodeURIComponent(playerDisplayName);
-      } catch (e) {
-        playerLink.href = '/players/name/' + encodeURIComponent(String(playerDisplayName));
-      }
+      playerLink.href = entrant.userId
+        ? '/players/' + encodeURIComponent(entrant.userId)
+        : '/players/name/' + encodeURIComponent(String(playerDisplayName));
       leftDiv.appendChild(playerLink);
 
       // Do not show external Racetime icon for entrants; internal player pages are used instead
@@ -4002,7 +4003,7 @@ function createTiebreakCard(race, { inMatchList = false } = {}) {
     const result = live ? '' : e.status === 'dnf' ? 'DNF' : e.status === 'dq' ? 'DQ' : (ms ? formatMs(ms) : '');
     return `<div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;">
       ${inMatchList
-        ? `<a href="${playerPageHref(sanitizeDisplayName(e.userName || ''))}" class="player-link" style="font-weight: ${winner ? 'bold' : 'normal'}; color: ${winner ? '#fbbf24' : 'white'}; text-decoration: none;">${escHtml(sanitizeDisplayName(e.userName || ''))}</a>`
+        ? `<a href="${playerPageHref(sanitizeDisplayName(e.userName || ''), e.userId)}" class="player-link" style="font-weight: ${winner ? 'bold' : 'normal'}; color: ${winner ? '#fbbf24' : 'white'}; text-decoration: none;">${escHtml(sanitizeDisplayName(e.userName || ''))}</a>`
         : `<span style="font-weight: ${winner ? 'bold' : 'normal'}; color: ${winner ? '#fbbf24' : 'white'};">${escHtml(sanitizeDisplayName(e.userName || ''))}</span>`}
       ${result ? `<span style="color: ${e.status === 'done' ? '#9ca3af' : '#ef4444'}; font-family: monospace;">${escHtml(result)}</span>` : ''}
     </div>`;

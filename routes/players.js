@@ -3,9 +3,10 @@ const router = express.Router();
 const { Player, Tournament, Race, Game, Match } = require('../models');
 const { buildCommonTournaments, racetimeRoomPath } = require('../helpers/compare-tournaments');
 const { buildPlayerTournaments } = require('../helpers/player-tournaments');
-const { gameLabel, loadGameLabels, tournamentGameLabel } = require('../helpers/game-label');
-const { buildAliasIndex, loadAliasIndex, getCanonicalName, getAliases } = require('../helpers/player-aliases');
+const { gameLabel, loadGameLabels } = require('../helpers/game-label');
 const { exactNameRegex, buildPlayerRacesFilter } = require('../helpers/player-races-filter');
+const { loadOwnNames, findPlayerByName, namesRacedWithoutAccount } = require('../helpers/player-identity');
+const { aggregatePlayers } = require('../helpers/players-list');
 
 const PLAYERS_CACHE_TTL = 5 * 60 * 1000;
 const playersCache = {
@@ -103,7 +104,7 @@ async function buildPlayersResponse(includeTournaments) {
   const { displayBySlug: gameDisplayBySlug, canonicalIdBySlug: canonicalGameIdBySlug } = await buildGameDisplayMaps();
 
   const [playerDocs, tournamentParticipants, raceCounts, labelFor] = await Promise.all([
-    Player.find({}).select('name aliases racetimeUrl racetimeId userId twitch racetimeDeletedAt').lean(),
+    Player.find({}).select('name aliases discriminator racetimeUrl racetimeId userId twitch racetimeDeletedAt').lean(),
     Tournament.aggregate([
       { $match: { participants: { $exists: true, $ne: [] } } },
       { $unwind: '$participants' },
@@ -151,156 +152,32 @@ async function buildPlayersResponse(includeTournaments) {
     loadGameLabels()
   ]);
 
-  // Accounts deleted from racetime leave the list (their races stay)
-  const deletedUserIds = new Set(playerDocs.filter(p => p.racetimeDeletedAt).map(p => p.userId));
-  const aliasIndex = buildAliasIndex(playerDocs);
-  const playerDocsByName = new Map();
-  const playerDocsByUserId = new Map();
-  playerDocs.forEach(p => {
-    playerDocsByName.set(normalizeName(p.name), p);
-    if (p.userId) playerDocsByUserId.set(p.userId, p);
+  return aggregatePlayers({
+    playerDocs,
+    raceCounts,
+    tournamentParticipants,
+    gameMaps: { displayBySlug: gameDisplayBySlug, canonicalIdBySlug: canonicalGameIdBySlug },
+    labelFor,
+    includeTournaments
   });
+}
 
-  const raceCountsByPlayer = new Map();
-  // Most recent race of each player, for the "recently active" sort
-  const lastRaceByPlayer = new Map();
-  for (const row of raceCounts) {
-    if (deletedUserIds.has(row?._id?.userId)) continue;
-    // A racetime account is one player whatever name it raced under: its current name
-    const rawName = playerDocsByUserId.get(row?._id?.userId)?.name || row?._id?.entrantName;
-    const category = String(row?._id?.category || '').toLowerCase();
-    if (!rawName || !category) continue;
-
-    const canonicalName = getCanonicalName(aliasIndex, rawName);
-    const normalized = normalizeName(canonicalName);
-    if (!raceCountsByPlayer.has(normalized)) {
-      raceCountsByPlayer.set(normalized, new Map());
-    }
-
-    const perGame = raceCountsByPlayer.get(normalized);
-    perGame.set(category, (perGame.get(category) || 0) + (row.count || 0));
-
-    const last = row.lastRaceAt ? new Date(row.lastRaceAt) : null;
-    if (last && !(lastRaceByPlayer.get(normalized) >= last)) lastRaceByPlayer.set(normalized, last);
+/**
+ * A side of the compare page: the racetime account of `id`, else the player a name page
+ * of `name` shows (helpers/player-identity.js), else the name itself (a player without
+ * account; an alias leads to its player). Null when nothing is known of it.
+ */
+async function resolveComparedPlayer({ id, name }) {
+  const select = 'userId name aliases tournaments.tournamentId tournaments.finalRank';
+  const doc = id
+    ? await Player.findOne({ userId: id }).select(select).lean()
+    : await findPlayerByName({ Player, Race, name, select });
+  if (doc?.userId) {
+    const names = await loadOwnNames(Player, doc);
+    return { key: `u:${doc.userId}`, name: doc.name, userId: doc.userId, doc, names };
   }
-
-  const playersMap = new Map();
-  const playersWithRaces = new Set(raceCountsByPlayer.keys());
-
-  for (const row of tournamentParticipants) {
-    if (deletedUserIds.has(row.racetimeUserId)) continue;
-    // The racetime account that raced the participant's matches, rather than the bracket name
-    const rawName = playerDocsByUserId.get(row.racetimeUserId)?.name || row.racetimeName || row.participantName;
-    if (!rawName) continue;
-
-    const canonicalName = getCanonicalName(aliasIndex, rawName);
-    const normalized = normalizeName(canonicalName);
-    if (!playersWithRaces.has(normalized)) continue;
-
-    if (!playersMap.has(normalized)) {
-      const playerDoc = playerDocsByName.get(normalized);
-      playersMap.set(normalized, {
-        name: canonicalName,
-        games: new Set(),
-        tournamentsCount: 0,
-        tournaments: [],
-        racetimeUrl: playerDoc?.racetimeUrl || null,
-        racetimeId: playerDoc?.racetimeId || playerDoc?.userId || null,
-        userId: playerDoc?.userId || null,
-        twitch: playerDoc?.twitch || null
-      });
-    }
-
-    const player = playersMap.get(normalized);
-
-    const rowGameName = tournamentGameLabel({
-      game: row.tournamentGame,
-      gameId: row.tournamentGameId,
-      gameSlug: row.tournamentGameSlug,
-      gameName: row.tournamentGameName
-    }, labelFor);
-    if (rowGameName) {
-      player.games.add(rowGameName);
-    }
-
-    player.tournamentsCount += 1;
-
-    if (includeTournaments) {
-      player.tournaments.push({
-        tournamentId: row.tournamentId,
-        tournamentName: row.tournamentName,
-        gameName: rowGameName || null,
-        finalRank: row.finalRank,
-        seed: row.seed
-      });
-    }
-  }
-
-  // Include player documents that may have no tournament rows
-  for (const p of playerDocs) {
-    if (p.racetimeDeletedAt) continue;
-    const canonicalName = getCanonicalName(aliasIndex, p.name);
-    const normalized = normalizeName(canonicalName);
-    if (!playersWithRaces.has(normalized)) continue;
-    if (!playersMap.has(normalized)) {
-      playersMap.set(normalized, {
-        name: canonicalName,
-        games: new Set(),
-        tournamentsCount: 0,
-        tournaments: [],
-        racetimeUrl: p?.racetimeUrl || null,
-        racetimeId: p?.racetimeId || p?.userId || null,
-        userId: p?.userId || null,
-        twitch: p?.twitch || null
-      });
-    }
-  }
-
-  const players = Array.from(playersMap.entries()).map(([normalized, player]) => {
-    const playerRaceCounts = raceCountsByPlayer.get(normalized) || new Map();
-
-    // Merge racetime categories that belong to the same game
-    const racesByGameId = new Map();
-    for (const [slug, count] of playerRaceCounts.entries()) {
-      const lowerSlug = String(slug || '').toLowerCase();
-      const gameId = canonicalGameIdBySlug.get(lowerSlug) || lowerSlug;
-      const existing = racesByGameId.get(gameId);
-      if (existing) {
-        existing.count += count;
-        continue;
-      }
-      racesByGameId.set(gameId, {
-        gameId,
-        gameSlug: slug,
-        gameName: gameDisplayBySlug.get(lowerSlug) || slug,
-        count
-      });
-    }
-
-    const totalRaces = Array.from(racesByGameId.values()).reduce((sum, g) => sum + g.count, 0);
-    const racesByGame = Array.from(racesByGameId.values())
-      .sort((a, b) => b.count - a.count || String(a.gameSlug).localeCompare(String(b.gameSlug)))
-      .slice(0, 3);
-
-    return {
-      name: player.name,
-      games: Array.from(player.games).sort(),
-      tournamentsCount: player.tournamentsCount,
-      tournaments: includeTournaments ? player.tournaments : [],
-      racesByGame,
-      totalRaces,
-      lastRaceAt: lastRaceByPlayer.get(normalized) || null,
-      racetimeUrl: player.racetimeUrl,
-      racetimeId: player.racetimeId,
-      userId: player.userId,
-      twitch: player.twitch
-    };
-  }).sort((a, b) => a.name.localeCompare(b.name));
-
-  return {
-    players,
-    total: players.length
-  };
+  if (id || !name) return null;
+  return { key: `n:${normalizeName(name)}`, name, userId: null, doc: null, names: [name] };
 }
 
 // Compare two players: head-to-head stats from common races
@@ -308,39 +185,30 @@ router.get('/compare', async (req, res, next) => {
   try {
     const name1 = (req.query.player1 || '').toString().trim();
     const name2 = (req.query.player2 || '').toString().trim();
-    if (!name1 || !name2) {
+    const id1 = (req.query.id1 || '').toString().trim();
+    const id2 = (req.query.id2 || '').toString().trim();
+    if ((!name1 && !id1) || (!name2 && !id2)) {
       return res.status(400).json({ error: 'Both player1 and player2 query params are required' });
     }
 
-    const aliasIndex = await loadAliasIndex(Player);
-    const canonical1 = getCanonicalName(aliasIndex, name1);
-    const canonical2 = getCanonicalName(aliasIndex, name2);
-    const norm1 = normalizeName(canonical1);
-    const norm2 = normalizeName(canonical2);
-
-    if (norm1 === norm2) {
+    // Each side as its player page shows it: a racetime account, else a name only
+    const [side1, side2] = await Promise.all([
+      resolveComparedPlayer({ id: id1, name: name1 }),
+      resolveComparedPlayer({ id: id2, name: name2 })
+    ]);
+    if (!side1 || !side2) {
+      return res.status(404).json({ error: 'Player not found' });
+    }
+    if (side1.key === side2.key) {
       return res.status(400).json({ error: 'Cannot compare a player with themselves' });
     }
 
-    // Collect all name variants (canonical + aliases) for each player
-    const aliases1 = [canonical1, name1, ...getAliases(aliasIndex, canonical1)];
-    const aliases2 = [canonical2, name2, ...getAliases(aliasIndex, canonical2)];
+    const [raceNames1, raceNames2] = await Promise.all([side1, side2].map(side => namesRacedWithoutAccount(Race, side.names)));
+    const races1 = buildPlayerRacesFilter({ userId: side1.userId, names: raceNames1 });
+    const races2 = buildPlayerRacesFilter({ userId: side2.userId, names: raceNames2 });
 
-    const nameSet1 = new Set(aliases1.map(n => normalizeName(n)));
-    const nameSet2 = new Set(aliases2.map(n => normalizeName(n)));
-
-    // Build regex patterns to match any alias for each player
-    const escapeRegex = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const makeOrRegex = names => new RegExp(
-      Array.from(names).map(n => `^${escapeRegex(n)}$`).join('|'), 'i'
-    );
-    const regex1 = makeOrRegex(new Set(aliases1));
-    const regex2 = makeOrRegex(new Set(aliases2));
-
-    // Find races where BOTH players appear in entrants
-    const commonRaces = await Race.find({
-      'entrants.userName': { $all: [regex1, regex2] }
-    }).sort({ startedAt: -1 }).lean();
+    // Races where BOTH players appear in entrants
+    const commonRaces = await Race.find({ $and: [races1.filter, races2.filter] }).sort({ startedAt: -1 }).lean();
 
     // Build game display map for category → game name mapping
     const { displayBySlug: gameDisplayBySlug, canonicalIdBySlug: gameIdBySlug } = await buildGameDisplayMaps();
@@ -351,9 +219,9 @@ router.get('/compare', async (req, res, next) => {
     const raceDetails = [];
 
     for (const race of commonRaces) {
-      const entrant1 = race.entrants.find(e => nameSet1.has(normalizeName(e.userName)));
-      const entrant2 = race.entrants.find(e => nameSet2.has(normalizeName(e.userName)));
-      if (!entrant1 || !entrant2) continue;
+      const entrant1 = race.entrants.find(races1.isPlayerEntrant);
+      const entrant2 = race.entrants.find(races2.isPlayerEntrant);
+      if (!entrant1 || !entrant2 || entrant1 === entrant2) continue;
 
       const p1Place = entrant1.place || null;
       const p2Place = entrant2.place || null;
@@ -451,9 +319,6 @@ router.get('/compare', async (req, res, next) => {
     }
 
     // Tournaments both entered: final ranks and the bracket matches between them
-    const [playerDoc1, playerDoc2] = await Promise.all([canonical1, canonical2].map(name =>
-      Player.findOne({ name: exactNameRegex(name) }).select('userId tournaments.tournamentId tournaments.finalRank').lean()
-    ));
     const rankByTournament = doc => new Map((doc?.tournaments || [])
       .filter(t => t.tournamentId && t.finalRank)
       .map(t => [String(t.tournamentId), t.finalRank]));
@@ -463,8 +328,8 @@ router.get('/compare', async (req, res, next) => {
       Match,
       raceIdByRoom,
       players: [
-        { key: 'player1', names: new Set(aliases1), userId: playerDoc1?.userId || null, rankByTournament: rankByTournament(playerDoc1) },
-        { key: 'player2', names: new Set(aliases2), userId: playerDoc2?.userId || null, rankByTournament: rankByTournament(playerDoc2) }
+        { key: 'player1', names: new Set(side1.names), userId: side1.userId, rankByTournament: rankByTournament(side1.doc) },
+        { key: 'player2', names: new Set(side2.names), userId: side2.userId, rankByTournament: rankByTournament(side2.doc) }
       ]
     });
 
@@ -477,8 +342,8 @@ router.get('/compare', async (req, res, next) => {
     }
 
     res.json({
-      player1: { name: canonical1 },
-      player2: { name: canonical2 },
+      player1: { name: side1.name, userId: side1.userId },
+      player2: { name: side2.name, userId: side2.userId },
       totalCommonRaces: raceDetails.length,
       headToHead: {
         player1Wins: p1Wins,
@@ -558,8 +423,8 @@ router.get('/count', async (req, res, next) => {
 // Get player by name (search Player collection)
 router.get('/by-name/:name', async (req, res, next) => {
   try {
-    const normalizedName = normalizeName(req.params.name);
-    const cacheKey = `players:by-name:${normalizedName}`;
+    // The exact name: several accounts of a name differ by case (helpers/player-identity.js)
+    const cacheKey = `players:by-name:${String(req.params.name).trim()}`;
     const cached = getPlayersCache(cacheKey);
     if (cached) {
       if (cached.__noContent) return res.status(204).end();
@@ -567,9 +432,8 @@ router.get('/by-name/:name', async (req, res, next) => {
     }
 
     // Case-insensitive search, by name then by alias (the page redirects aliases to the canonical name)
-    const nameRegex = exactNameRegex(req.params.name);
-    const player = await Player.findOne({ name: nameRegex }).populate('tournaments.tournamentId')
-      || await Player.findOne({ aliases: nameRegex }).populate('tournaments.tournamentId')
+    // Several racetime accounts of that name: helpers/player-identity.js picks one
+    const player = await findPlayerByName({ Player, Race, name: req.params.name, populate: 'tournaments.tournamentId' })
       || await findPlayerOfOtherName(req.params.name);
 
     if (!player) {
@@ -622,16 +486,21 @@ async function findPlayerOfOtherName(name) {
   if (accounts.size !== 1) return null;
 
   const [[userId, accountName]] = accounts;
-  const player = await Player.findOne({ userId }).populate('tournaments.tournamentId');
+  const player = await Player.findOne({ userId }).populate('tournaments.tournamentId').lean();
   if (player) return player;
   return accountName && normalizeName(accountName) !== normalizeName(name) ? { name: accountName } : null;
 }
 
-/** Player document whose name, or one of whose aliases, is `name` (case-insensitive). */
+/** The player of a name page (helpers/player-identity.js), and their own names. */
 async function findPlayerByNameOrAlias(name) {
-  const regex = exactNameRegex(name);
-  return await Player.findOne({ name: regex }).select('userId name aliases').lean()
-    || await Player.findOne({ aliases: regex }).select('userId name aliases').lean();
+  const player = await findPlayerByName({ Player, Race, name, select: 'userId name aliases' });
+  return player ? { player, names: await loadOwnNames(Player, player) } : { player: null, names: [] };
+}
+
+/** A player of a name page: their account and own names, else the name (no account). */
+async function namePageIdentity(name) {
+  const { player, names } = await findPlayerByNameOrAlias(name);
+  return player ? { userId: player.userId || null, names } : { userId: null, names: [name] };
 }
 
 function compactRaces(races, isPlayerEntrant) {
@@ -649,23 +518,16 @@ function compactRaces(races, isPlayerEntrant) {
 // Get races by player name (searches by userName in entrants)
 router.get('/by-name/:name/races', async (req, res, next) => {
   try {
-    const { Race } = require('../models');
     const name = req.params.name;
-    const normalizedName = normalizeName(name);
     const compact = isCompactRequest(req);
-    const cacheKey = `players:by-name-races${compact ? '-compact' : ''}:${normalizedName}`;
+    const cacheKey = `players:by-name-races${compact ? '-compact' : ''}:${String(name).trim()}`;
     const cached = getPlayersCache(cacheKey);
     if (cached) {
       return res.json(cached);
     }
     
-    // The name itself, plus the player's userId and aliases when it belongs to a known player
-    const player = await findPlayerByNameOrAlias(name);
-    const { filter, isPlayerEntrant } = buildPlayerRacesFilter({
-      userId: player?.userId,
-      names: [name, player?.name],
-      aliases: player?.aliases
-    });
+    const { userId, names } = await namePageIdentity(name);
+    const { filter, isPlayerEntrant } = buildPlayerRacesFilter({ userId, names: await namesRacedWithoutAccount(Race, names) });
     const query = Race.find(filter).sort({ startedAt: -1 });
 
     const result = compact
@@ -681,21 +543,20 @@ router.get('/by-name/:name/races', async (req, res, next) => {
 // Get player races by userId
 router.get('/:id/races', async (req, res, next) => {
   try {
-    const { Race } = require('../models');
     const userId = req.params.id;
-    const player = await Player.findOne({ userId }).select('aliases').lean();
-    const { filter, isPlayerEntrant } = buildPlayerRacesFilter({ userId, aliases: player?.aliases });
-    const query = Race.find(filter)
-      .sort({ startedAt: -1 });
+    const compact = isCompactRequest(req);
+    const cacheKey = `players:id-races-compact:${userId}`;
+    const cached = compact && getPlayersCache(cacheKey);
+    if (cached) return res.json(cached);
 
-    if (isCompactRequest(req)) {
-      const cacheKey = `players:id-races-compact:${userId}`;
-      const cached = getPlayersCache(cacheKey);
-      if (cached) {
-        return res.json(cached);
-      }
-      const races = await query.select(COMPACT_RACE_FIELDS).lean();
-      const result = { races: compactRaces(races, isPlayerEntrant) };
+    // The account's races, and those without account under its own names (SpeedRunsLive)
+    const player = await Player.findOne({ userId }).select('userId name aliases').lean();
+    const names = player ? await namesRacedWithoutAccount(Race, await loadOwnNames(Player, player)) : [];
+    const { filter, isPlayerEntrant } = buildPlayerRacesFilter({ userId, names });
+    const query = Race.find(filter).sort({ startedAt: -1 });
+
+    if (compact) {
+      const result = { races: compactRaces(await query.select(COMPACT_RACE_FIELDS).lean(), isPlayerEntrant) };
       setPlayersCache(cacheKey, result);
       return res.json(result);
     }
@@ -720,9 +581,8 @@ async function sendPlayerTournaments(res, cacheKey, lookup) {
 router.get('/by-name/:name/tournaments', async (req, res, next) => {
   try {
     const name = req.params.name;
-    await sendPlayerTournaments(res, `players:by-name-tournaments:${normalizeName(name)}`, async () => {
-      const player = await findPlayerByNameOrAlias(name);
-      return { userId: player?.userId || null, names: [name, player?.name, ...(player?.aliases || [])] };
+    await sendPlayerTournaments(res, `players:by-name-tournaments:${String(name).trim()}`, async () => {
+      return namePageIdentity(name);
     });
   } catch (error) {
     next(error);
@@ -733,8 +593,8 @@ router.get('/:id/tournaments', async (req, res, next) => {
   try {
     const userId = req.params.id;
     await sendPlayerTournaments(res, `players:id-tournaments:${userId}`, async () => {
-      const player = await Player.findOne({ userId }).select('name aliases').lean();
-      return { userId, names: [player?.name, ...(player?.aliases || [])] };
+      const player = await Player.findOne({ userId }).select('userId name aliases').lean();
+      return { userId, names: player ? await loadOwnNames(Player, player) : [] };
     });
   } catch (error) {
     next(error);

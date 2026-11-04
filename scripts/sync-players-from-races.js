@@ -93,9 +93,10 @@ async function collectRacePlayers(allowedSlugs, aliasIndex) {
       if (!userId) continue;
 
       if (!racePlayersByUserId.has(userId)) {
+        // An account is named as on racetime, even when another player has that name as alias
         racePlayersByUserId.set(userId, {
           userId,
-          name: canonicalName || userName || userId,
+          name: userName || userId,
           discriminator: entrant?.userDiscriminator || null,
           racetimeUrl: normalizeRacetimeProfileUrl(entrant?.userUrl || userId),
           totalRaces: 0,
@@ -112,7 +113,7 @@ async function collectRacePlayers(allowedSlugs, aliasIndex) {
 
       if (raceTs >= item.lastSeenTs) {
         item.lastSeenTs = raceTs;
-        if (canonicalName) item.name = canonicalName;
+        if (userName) item.name = userName;
         if (entrant?.userDiscriminator) item.discriminator = entrant.userDiscriminator;
         if (entrant?.userUrl) item.racetimeUrl = normalizeRacetimeProfileUrl(entrant.userUrl || userId);
       }

@@ -24,17 +24,28 @@ test('alias index resolves aliases to the canonical name', () => {
   assert.equal(getCanonicalName(null, 'Alpha'), 'Alpha');
 });
 
-test('player races filter: aliases never match a racetime account', () => {
-  const { filter, isPlayerEntrant } = buildPlayerRacesFilter({ userId: 'u1', names: ['Alpha'], aliases: ['Alf.'] });
-  assert.equal(filter.$or.length, 3);
+test('player races filter: names never match a racetime account', () => {
+  const { filter, isPlayerEntrant } = buildPlayerRacesFilter({ userId: 'u1', names: ['Alpha', 'Alf.'] });
+  assert.equal(filter.$or.length, 2);
 
   assert.equal(isPlayerEntrant({ userId: 'u1', userName: 'Renamed' }), true);
-  assert.equal(isPlayerEntrant({ userId: 'u2', userName: 'ALPHA' }), true);
-  assert.equal(isPlayerEntrant({ userName: 'alf.' }), true);
+  // Another account of the same name is someone else
+  assert.equal(isPlayerEntrant({ userId: 'u2', userName: 'ALPHA' }), false);
   assert.equal(isPlayerEntrant({ userId: 'u3', userName: 'Alf.' }), false);
+  // Entrants without account (SpeedRunsLive) under one of the names
+  assert.equal(isPlayerEntrant({ userName: 'alpha' }), true);
+  assert.equal(isPlayerEntrant({ userName: 'alf.', userId: '' }), true);
   // The dot is literal, not a regex wildcard
   assert.equal(isPlayerEntrant({ userName: 'Alfx' }), false);
   assert.equal(isPlayerEntrant({ userName: 'Alphabet' }), false);
+});
+
+test('player races filter: a player without account goes by name', () => {
+  const { filter, isPlayerEntrant } = buildPlayerRacesFilter({ names: ['Solo', 'Solo', null] });
+  assert.equal(filter.$or.length, 1);
+  assert.equal(isPlayerEntrant({ userName: 'solo' }), true);
+  assert.equal(isPlayerEntrant({ userId: 'u9', userName: 'Solo' }), false);
+  assert.equal(isPlayerEntrant({ userName: 'Solos' }), false);
 });
 
 test('player races filter without any identity matches nothing', () => {

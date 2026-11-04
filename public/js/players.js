@@ -103,7 +103,7 @@ function renderPlayers(players) {
 
     return `
       <div class="player-card" style="background-color: #1f2937; padding: 1.5rem; border-radius: 0.5rem; transition: background-color 0.2s; cursor: pointer; aspect-ratio: 1/1; display: flex; flex-direction: column; align-items: center;">
-        <h3 style="font-size: 1.1rem; font-weight: bold; color: white; margin-bottom: 0.75rem; text-align: center;"><a class="player-card-name" href="${escHtml(player.userId ? `/players/${safeEncodeURIComponent(player.userId)}` : `/players/name/${safeEncodeURIComponent(player.name)}`)}" style="color:inherit;text-decoration:none;">${escHtml(player.name)}</a></h3>
+        <h3 style="font-size: 1.1rem; font-weight: bold; color: white; margin-bottom: 0.75rem; text-align: center;"><a class="player-card-name" href="${escHtml(player.userId ? `/players/${safeEncodeURIComponent(player.userId)}` : `/players/name/${safeEncodeURIComponent(player.name)}`)}" style="color:inherit;text-decoration:none;">${escHtml(player.name)}${discriminatorHtml(player)}</a></h3>
         
         <img class="rt-avatar" 
              src="${escHtml(avatarSrc)}" 
@@ -187,6 +187,24 @@ function setupHoverEffects() {
   });
 }
 
+// Names worn by several racetime accounts: the cards add the racetime discriminator
+let sharedNames = new Set();
+function namesOfSeveralPlayers(players) {
+  const seen = new Set();
+  const shared = new Set();
+  for (const p of players) {
+    const key = String(p.name || '').toLowerCase();
+    if (seen.has(key)) shared.add(key);
+    seen.add(key);
+  }
+  return shared;
+}
+function discriminatorHtml(player) {
+  return player.discriminator && sharedNames.has(String(player.name || '').toLowerCase())
+    ? `<span class="player-discriminator" style="color:#9ca3af;font-weight:normal;">#${escHtml(player.discriminator)}</span>`
+    : '';
+}
+
 // Filter by the search box, sort by the selected order, render and count
 function filterPlayers(query) {
   const searchInput = document.getElementById('player-search');
@@ -227,6 +245,7 @@ async function loadPlayers() {
     
     // Store all players for filtering
     allPlayers = data.players;
+    sharedNames = namesOfSeveralPlayers(allPlayers);
     
     // Initial render
     filterPlayers('');

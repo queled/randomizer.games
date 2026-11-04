@@ -295,6 +295,8 @@ Chaque participant de tournoi garde le compte racetime qui a couru ses matchs (`
 
 La page d'un ancien pseudo ou d'un nom de bracket qui mène à un seul compte redirige vers la page du compte.
 
+Toutes les pages tranchent qui est qui avec la même règle ([`helpers/player-identity.js`](../helpers/player-identity.js)) : liste des joueurs, page joueur, comparaison, recherche, aperçu SEO. Deux comptes racetime du même nom (discriminants différents) sont deux joueurs ; la liste et la recherche affichent alors le discriminant (`pseudo#1234`). Une course sans compte (SpeedRunsLive, import manuel) ou un participant de tournoi sans `racetimeUserId` va au joueur qui a ce nom en alias, sinon au seul compte qui porte ce nom ; un nom porté par plusieurs comptes ne va à aucun et reste un joueur connu par son nom. Une page `/players/name/<nom>` d'un compte redirige vers `/players/<userId>` ; si plusieurs comptes portent ce nom, c'est celui écrit exactement ainsi, sinon celui qui a le plus de courses.
+
 ### Jeux (`games`)
 
 ```

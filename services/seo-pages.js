@@ -14,6 +14,7 @@ const { Game, Tournament, Player, Race } = require('../models');
 const { calculateTournamentStatus } = require('../helpers/tournament-status');
 const { buildPlayerRacesFilter } = require('../helpers/player-races-filter');
 const { countPlayerTournaments } = require('../helpers/player-tournaments');
+const { loadOwnNames, findPlayerByName, namesRacedWithoutAccount } = require('../helpers/player-identity');
 const { gameLabel, tournamentGameLabel } = require('../helpers/game-label');
 const { coverUrl } = require('../helpers/game-covers');
 const { readHistory } = require('../helpers/game-history');
@@ -230,10 +231,8 @@ async function tournamentMeta(query, siteUrl, lang) {
 }
 
 // Race count and most played games of a player, for a preview worth clicking.
-async function playerRaceSummary(player) {
-  const { filter } = player.userId
-    ? buildPlayerRacesFilter({ userId: player.userId, aliases: player.aliases })
-    : buildPlayerRacesFilter({ names: [player.name], aliases: player.aliases });
+async function playerRaceSummary(player, names) {
+  const { filter } = buildPlayerRacesFilter({ userId: player.userId, names: await namesRacedWithoutAccount(Race, names) });
   const byCategory = await Race.aggregate([
     { $match: filter },
     { $group: { _id: '$category', count: { $sum: 1 } } }
@@ -264,16 +263,17 @@ async function playerMeta(query, siteUrl, lang) {
   if (id) {
     player = await Player.findOne({ userId: id }).lean();
   } else if (name) {
-    player = await Player.findOne({ name }).collation({ locale: 'en', strength: 2 }).lean();
+    player = await findPlayerByName({ Player, Race, name });
   }
   if (!player) return null;
+  const ownNames = await loadOwnNames(Player, player);
 
   const playerName = player.name || player.userId;
   // Counted as the page counts them (/api/players/:id/races and /tournaments).
   // A slow count must not cost the whole preview: fall back to the generic text.
   const [{ total: racesCount, games, failed: countsFailed }, tournamentsCount] = await Promise.all([
-    playerRaceSummary(player),
-    countPlayerTournaments({ Tournament, userId: player.userId || null, names: [player.name, ...(player.aliases || [])] })
+    playerRaceSummary(player, ownNames),
+    countPlayerTournaments({ Tournament, userId: player.userId || null, names: ownNames })
   ]).catch((error) => {
     console.error('SEO counts failed for player:', error.message);
     return [{ total: 0, games: [], failed: true }, 0];

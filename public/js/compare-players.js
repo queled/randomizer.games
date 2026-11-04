@@ -58,12 +58,14 @@
 
   // ─── Avatar: racetime, else Twitch, in one request (like player-detail.js) ───
 
-  async function resolveAvatar(name) {
+  // The player of the account when known: several racetime accounts can share a name
+  async function resolveAvatar({ name, userId }) {
     try {
       const resp = await fetch(`/api/players?name=${encodeURIComponent(name)}`);
       if (!resp.ok) return null;
       const data = await resp.json();
-      const player = data.players?.[0];
+      const players = data.players || [];
+      const player = userId ? players.find(p => p.userId === userId) : players[0];
       if (!player) return null;
       const racetimeAccount = player.racetimeId || player.racetimeUrl || '';
       const twitch = player.twitch || '';
@@ -91,11 +93,32 @@
     playersLoadPromise = fetch('/api/players')
       .then(r => r.json())
       .then(data => {
-        allPlayers = (data.players || []).map(p => p.name).sort((a, b) => a.localeCompare(b));
+        const players = data.players || [];
+        // Several accounts of one name: the racetime discriminator tells them apart
+        const perName = new Map();
+        players.forEach(p => perName.set(String(p.name).toLowerCase(), (perName.get(String(p.name).toLowerCase()) || 0) + 1));
+        allPlayers = players.map(p => ({
+          name: p.name,
+          userId: p.userId || '',
+          label: perName.get(String(p.name).toLowerCase()) > 1 && p.discriminator ? `${p.name}#${p.discriminator}` : p.name
+        })).sort((a, b) => a.label.localeCompare(b.label));
         return allPlayers;
       })
       .catch(() => { allPlayers = []; return allPlayers; });
     return playersLoadPromise;
+  }
+
+  function pickSuggestion(input, li) {
+    input.value = li.dataset.name;
+    if (li.dataset.userId) input.dataset.userId = li.dataset.userId;
+    else delete input.dataset.userId;
+  }
+
+  // Player page: the account's page when known
+  function playerHref(player) {
+    return player.userId
+      ? `/players/${encodeURIComponent(player.userId)}`
+      : `/players/name/${encodeURIComponent(player.name)}`;
   }
 
   function setupAutocomplete(inputId, suggestionsId) {
@@ -106,14 +129,19 @@
     let debounceTimer = null;
 
     input.addEventListener('input', () => {
+      // A name typed again: no account chosen any more
+      delete input.dataset.userId;
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(async () => {
         const val = input.value.trim().toLowerCase();
         if (val.length < 2) { list.style.display = 'none'; list.innerHTML = ''; return; }
         const players = await loadPlayersList();
-        const matches = players.filter(n => n.toLowerCase().includes(val)).slice(0, 8);
+        // The exact name first (all its accounts), then the names starting with the text
+        const rank = p => { const n = p.name.toLowerCase(); return n === val ? 0 : n.startsWith(val) ? 1 : 2; };
+        const matches = players.filter(p => p.label.toLowerCase().includes(val))
+          .sort((a, b) => rank(a) - rank(b)).slice(0, 8);
         if (!matches.length) { list.style.display = 'none'; list.innerHTML = ''; return; }
-        list.innerHTML = matches.map(n => `<li data-name="${escHtml(n)}">${escHtml(n)}</li>`).join('');
+        list.innerHTML = matches.map(p => `<li data-name="${escHtml(p.name)}" data-user-id="${escHtml(p.userId)}">${escHtml(p.label)}</li>`).join('');
         list.style.display = 'block';
       }, 150);
     });
@@ -121,7 +149,7 @@
     list.addEventListener('click', (e) => {
       const li = e.target.closest('li');
       if (li) {
-        input.value = li.dataset.name;
+        pickSuggestion(input, li);
         list.style.display = 'none';
         list.innerHTML = '';
       }
@@ -141,7 +169,7 @@
         // If dropdown has highlighted, pick it; otherwise trigger compare
         const active = list.querySelector('li:hover');
         if (active) {
-          input.value = active.dataset.name;
+          pickSuggestion(input, active);
           list.style.display = 'none';
         } else {
           list.style.display = 'none';
@@ -161,16 +189,16 @@
 
     // Player names
     document.getElementById('cp-name1').textContent = p1;
-    document.getElementById('cp-name1').href = `/players/name/${encodeURIComponent(p1)}`;
+    document.getElementById('cp-name1').href = playerHref(data.player1);
     document.getElementById('cp-name2').textContent = p2;
-    document.getElementById('cp-name2').href = `/players/name/${encodeURIComponent(p2)}`;
+    document.getElementById('cp-name2').href = playerHref(data.player2);
     document.getElementById('cp-avatar-link1').href = document.getElementById('cp-name1').href;
     document.getElementById('cp-avatar-link2').href = document.getElementById('cp-name2').href;
 
     // Avatars (async, set placeholder first)
     document.getElementById('cp-avatar1').src = makeInitialAvatar(p1);
     document.getElementById('cp-avatar2').src = makeInitialAvatar(p2);
-    resolveAvatar(p1).then(url => {
+    resolveAvatar(data.player1).then(url => {
       if (url) {
         const img = document.getElementById('cp-avatar1');
         // No avatar (204) or an error: back to the initial
@@ -181,7 +209,7 @@
         img.src = url;
       }
     });
-    resolveAvatar(p2).then(url => {
+    resolveAvatar(data.player2).then(url => {
       if (url) {
         const img = document.getElementById('cp-avatar2');
         // No avatar (204) or an error: back to the initial
@@ -414,14 +442,17 @@
   }
 
   // ─── Main flow ───
-  async function doCompare(name1, name2) {
+  async function doCompare(name1, name2, id1, id2) {
     const loading = document.getElementById('compare-loading');
     const results = document.getElementById('compare-results');
     results.style.display = 'none';
     loading.style.display = 'block';
 
     try {
-      const resp = await fetch(`/api/players/compare?player1=${encodeURIComponent(name1)}&player2=${encodeURIComponent(name2)}`);
+      const params = new URLSearchParams({ player1: name1, player2: name2 });
+      if (id1) params.set('id1', id1);
+      if (id2) params.set('id2', id2);
+      const resp = await fetch(`/api/players/compare?${params}`);
       if (!resp.ok) {
         const err = await resp.json().catch(() => ({}));
         throw new Error(err.error || 'Failed to compare players');
@@ -434,6 +465,10 @@
       const url = new URL(window.location);
       url.searchParams.set('player1', name1);
       url.searchParams.set('player2', name2);
+      for (const [key, value] of [['id1', id1], ['id2', id2]]) {
+        if (value) url.searchParams.set(key, value);
+        else url.searchParams.delete(key);
+      }
       history.replaceState(null, '', url);
     } catch (err) {
       loading.style.display = 'none';
@@ -452,17 +487,25 @@
 
     // Compare button
     document.getElementById('compare-btn').addEventListener('click', () => {
-      const name1 = document.getElementById('player1-input').value.trim();
-      const name2 = document.getElementById('player2-input').value.trim();
-      if (name1 && name2) doCompare(name1, name2);
+      const input1 = document.getElementById('player1-input');
+      const input2 = document.getElementById('player2-input');
+      const name1 = input1.value.trim();
+      const name2 = input2.value.trim();
+      if (name1 && name2) doCompare(name1, name2, input1.dataset.userId, input2.dataset.userId);
     });
 
     // Pre-fill from URL params if available
     const p1 = qs('player1');
     const p2 = qs('player2');
-    if (p1) document.getElementById('player1-input').value = p1;
-    if (p2) document.getElementById('player2-input').value = p2;
-    if (p1 && p2) doCompare(p1, p2);
+    const id1 = qs('id1');
+    const id2 = qs('id2');
+    const input1 = document.getElementById('player1-input');
+    const input2 = document.getElementById('player2-input');
+    if (p1) input1.value = p1;
+    if (p2) input2.value = p2;
+    if (p1 && id1) input1.dataset.userId = id1;
+    if (p2 && id2) input2.dataset.userId = id2;
+    if (p1 && p2) doCompare(p1, p2, id1, id2);
   }
 
   if (document.readyState === 'loading') {

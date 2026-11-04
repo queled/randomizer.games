@@ -263,7 +263,9 @@
     const playerName = p.name || p.userId || '';
     if (playerCompareAction && playerName) {
       const compareLabel = typeof i18n !== 'undefined' ? (i18n.t('comparePlayers.compareWith') || 'Compare with another player') : 'Compare with another player';
-      playerCompareAction.innerHTML = `<a class="btn-compare btn-compare--stats" href="/compare-players?player1=${encodeURIComponent(playerName)}">⚔️ ${compareLabel}</a>`;
+      // The account too: several racetime accounts can share a name
+      const compareQuery = 'player1=' + encodeURIComponent(playerName) + (p.userId ? '&id1=' + encodeURIComponent(p.userId) : '');
+      playerCompareAction.innerHTML = `<a class="btn-compare btn-compare--stats" href="/compare-players?${escHtml(compareQuery)}">⚔️ ${compareLabel}</a>`;
     }
 
     updateGamesSummaryVisibility();
@@ -713,196 +715,94 @@
     renderRaces(races);
   }
 
+  // Another page of the site, in the same language, with the same query string and anchor
+  function redirectTo(path) {
+    const target = window.SiteUrls ? window.SiteUrls.localize(path, window.SiteUrls.lang) : path;
+    window.location.replace(target + window.location.search + window.location.hash);
+  }
+
+  function showRacesMessage(key, fallback) {
+    racesEl.innerHTML = `<p style="color:#9ca3af;">${escHtml(tr(key, fallback))}</p>`;
+  }
+
   async function loadByName(name){
     headerName.textContent = name;
 
-    // Races are the heaviest request: start it now, in parallel with the profile
-    const racesByNameRequest = fetch('/api/players/by-name/' + encodeURIComponent(name) + '/races?compact=1');
-    racesByNameRequest.catch(() => {});
-    let racesByNameResponse = null;
-    const fetchRacesByName = () => {
-      if (!racesByNameResponse) racesByNameResponse = racesByNameRequest;
-      else racesByNameResponse = fetch('/api/players/by-name/' + encodeURIComponent(name) + '/races?compact=1');
-      return racesByNameResponse;
-    };
+    // The player of that name, alias or former name (helpers/player-identity.js on the server)
+    let player = null;
+    try {
+      const res = await fetch('/api/players/by-name/' + encodeURIComponent(name), { headers: { Accept: 'application/json' } });
+      if (res.status === 200) player = await res.json();
+    } catch (e) { /* the page goes on with the name */ }
 
-    // Tournaments by racetime account when the name belongs to a known player
+    // A racetime account has the page of its id: several accounts can share a name
+    if (player && player.userId) {
+      redirectTo('/players/' + encodeURIComponent(player.userId));
+      return;
+    }
+    // The name is an alias (former name, Challonge name...): show the canonical profile
+    if (player && player.name && player.name.toLowerCase() !== name.toLowerCase()) {
+      redirectTo('/players/name/' + encodeURIComponent(player.name));
+      return;
+    }
+
+    // A player without racetime account: the races and tournaments of the name
+    const racesRequest = fetchJson('/api/players/by-name/' + encodeURIComponent(name) + '/races?compact=1')
+      .then(r => r.races || []);
+    racesRequest.catch(() => {});
     const tournamentsRequest = fetchJson('/api/players/by-name/' + encodeURIComponent(name) + '/tournaments')
       .then(r => r.tournaments || []).catch(() => []);
 
-    // First try the aggregated players list to get basic info
-    try {
-      const all = await fetchJson('/api/players?name=' + encodeURIComponent(name));
-      const aggregated = (all.players || []).find(p => p.name.toLowerCase() === name.toLowerCase());
-      
-      if (aggregated) {
-        const tournaments = await tournamentsRequest;
-        
-        // Enrich with racetimeUrl/twitch if available from aggregated data
-        const playerData = {
-          name: aggregated.name,
-          racetimeUrl: aggregated.racetimeUrl,
-          racetimeId: aggregated.racetimeId,
-          twitch: aggregated.twitch,
-          stats: { totalRaces: 0 }
-        };
-        
-        // If we don't have racetime info, try to find it
-        if (!playerData.racetimeUrl && !playerData.racetimeId) {
-          try {
-            const findRes = await fetch('/api/racetime/find?q=' + encodeURIComponent(name));
-            if (findRes.ok) {
-              const findData = await findRes.json();
-              if (findData && findData.url) {
-                playerData.racetimeUrl = findData.url;
-              }
-            }
-          } catch (e) { /* ignore */ }
-        }
-
-        // The Twitch button is added by renderProfile once the lookup answers,
-        // so the profile does not wait for racetime.gg before showing up
-        
-        renderProfile(playerData, tournaments, [], { deferCounts: true });
-        renderTournaments(tournaments);
-        
-        // Try to load races by player name
-        try {
-          const racesRes = await fetchRacesByName();
-          if (racesRes.ok) {
-            const racesData = await racesRes.json();
-            const races = racesData.races || [];
-            if (races.length > 0) {
-              // Update stats
-              playerData.stats.totalRaces = races.length;
-              renderProfile(playerData, tournaments, races);
-              renderRaces(races);
-            } else {
-              racesEl.innerHTML = `<p style="color:#9ca3af;">${escHtml(tr('playerDetail.noRaces', 'No races found.'))}</p>`;
-            }
-          } else {
-            racesEl.innerHTML = `<p style="color:#9ca3af;">${escHtml(tr('playerDetail.noRaces', 'No races found.'))}</p>`;
-          }
-        } catch (e) {
-          racesEl.innerHTML = `<p style="color:#9ca3af;">${escHtml(tr('playerDetail.racesError', 'Error loading races.'))}</p>`;
-        }
-        return;
-      }
-
-      // Try to fetch Player document by name from the Player collection (supports players imported directly)
-      let player;
+    // The players list knows the players without account who raced and entered a tournament
+    let listed = null;
+    if (!player) {
       try {
-        player = await fetchJson('/api/players/by-name/'+encodeURIComponent(name));
-      } catch (e) {
-        // Fallback: Player document not found — try to build a minimal profile from races and racetime lookup
-        let races = [];
-        try {
-          const racesRes = await fetchRacesByName();
-          if (racesRes.ok) {
-            const jr = await racesRes.json();
-            races = jr.races || [];
-          }
-        } catch (err) { /* ignore */ }
-
-        // Try to locate a racetime profile
-        let racetimeUrl = null;
-        try {
-          const findRes = await fetch('/api/racetime/find?q=' + encodeURIComponent(name));
-          if (findRes.ok) {
-            const fd = await findRes.json();
-            if (fd && fd.url) racetimeUrl = fd.url;
-          }
-        } catch (err) { /* ignore */ }
-
-        // Nobody behind the name (a bracket entry such as a co-op team): no empty profile
-        if (!races.length && !racetimeUrl) {
-          window.location.replace('/404.html');
-          return;
-        }
-
-        const playerData = {
-          name: name,
-          racetimeUrl: racetimeUrl || null,
-          racetimeId: null,
-          twitch: null,
-          stats: { totalRaces: races.length }
-        };
-
-        renderProfile(playerData, [], races);
-        if (races.length) renderRaces(races);
-        else racesEl.innerHTML = `<p style="color:#9ca3af;">${escHtml(tr('playerDetail.noRaces', 'No races found.'))}</p>`;
-        return;
-      }
-      // The name is an alias (former name, Challonge name...): show the canonical profile
-      if (player && player.name && player.name.toLowerCase() !== name.toLowerCase()) {
-        window.location.replace('/players/name/' + encodeURIComponent(player.name));
-        return;
-      }
-      const displayTournaments = await tournamentsRequest;
-
-      renderProfile(player, displayTournaments, [], { deferCounts: true });
-      renderTournaments(displayTournaments);
-
-      // Load races by userId or by name
-      if (player.userId) {
-        const jr = await fetchJson('/api/players/'+encodeURIComponent(player.userId)+'/races?compact=1');
-        const races = jr.races || [];
-        player.stats = player.stats || {};
-        player.stats.totalRaces = races.length;
-        renderProfile(player, displayTournaments, races);
-        renderRaces(races);
-      } else {
-        // Try by name
-        try {
-          const racesRes = await fetchRacesByName();
-          if (racesRes.ok) {
-            const racesData = await racesRes.json();
-            const races = racesData.races || [];
-            player.stats = player.stats || {};
-            player.stats.totalRaces = races.length;
-            renderProfile(player, displayTournaments, races);
-            renderRaces(races);
-          } else {
-            racesEl.innerHTML = `<p style="color:#9ca3af;">${escHtml(tr('playerDetail.noRaces', 'No races found.'))}</p>`;
-          }
-        } catch (e) {
-          racesEl.innerHTML = `<p style="color:#9ca3af;">${escHtml(tr('playerDetail.racesError', 'Error loading races.'))}</p>`;
-        }
-      }
-    } catch (err) {
-      // Fallback to aggregated list if direct player lookup fails
-      const all = await fetchJson('/api/players?name=' + encodeURIComponent(name));
-      const found = (all.players || []).find(p => p.name.toLowerCase() === name.toLowerCase());
-      if(!found) throw new Error('Player not found by name');
-      const tournaments = await tournamentsRequest;
-      
-      const playerData = {
-        name: found.name,
-        racetimeUrl: found.racetimeUrl,
-        racetimeId: found.racetimeId,
-        twitch: found.twitch,
-        stats: { totalRaces: 0 }
-      };
-      
-      renderProfile(playerData, tournaments, [], { deferCounts: true });
-      renderTournaments(tournaments);
-      
-      // Try to load races
-      try {
-        const racesRes = await fetchRacesByName();
-        if (racesRes.ok) {
-          const racesData = await racesRes.json();
-          const races = racesData.races || [];
-          playerData.stats.totalRaces = races.length;
-          renderProfile(playerData, tournaments, races);
-          renderRaces(races);
-        } else {
-          racesEl.innerHTML = `<p style="color:#9ca3af;">${escHtml(tr('playerDetail.noRaces', 'No races found.'))}</p>`;
-        }
-      } catch (e) {
-        racesEl.innerHTML = `<p style="color:#9ca3af;">${escHtml(tr('playerDetail.racesError', 'Error loading races.'))}</p>`;
-      }
+        const all = await fetchJson('/api/players?name=' + encodeURIComponent(name));
+        listed = (all.players || []).find(p => !p.userId && String(p.name).toLowerCase() === name.toLowerCase()) || null;
+      } catch (e) { /* ignore */ }
     }
+
+    const playerData = player || {
+      name: listed ? listed.name : name,
+      racetimeUrl: null,
+      racetimeId: null,
+      twitch: listed ? listed.twitch : null,
+      stats: { totalRaces: 0 }
+    };
+
+    // A racetime profile of that name the site has not read yet
+    if (!playerData.racetimeUrl && !playerData.racetimeId) {
+      try {
+        const findRes = await fetch('/api/racetime/find?q=' + encodeURIComponent(name));
+        if (findRes.ok) {
+          const findData = await findRes.json();
+          if (findData && findData.url) playerData.racetimeUrl = findData.url;
+        }
+      } catch (e) { /* ignore */ }
+    }
+
+    let races = [];
+    let racesFailed = false;
+    try {
+      races = await racesRequest;
+    } catch (e) {
+      racesFailed = true;
+    }
+
+    // Nobody behind the name (a bracket entry such as a co-op team): no empty profile
+    if (!player && !listed && !racesFailed && !races.length && !playerData.racetimeUrl) {
+      window.location.replace('/404.html');
+      return;
+    }
+
+    const tournaments = await tournamentsRequest;
+    playerData.stats = playerData.stats || {};
+    playerData.stats.totalRaces = races.length;
+    renderProfile(playerData, tournaments, races);
+    renderTournaments(tournaments);
+    if (racesFailed) showRacesMessage('playerDetail.racesError', 'Error loading races.');
+    else if (races.length) renderRaces(races);
+    else showRacesMessage('playerDetail.noRaces', 'No races found.');
   }
 
   // Ranks, dates and statuses follow the language

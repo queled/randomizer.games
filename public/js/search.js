@@ -136,6 +136,19 @@
     `;
   }
 
+  // Names of several racetime accounts among the results: their cards add the discriminator
+  let sharedPlayerNames = new Set();
+  function namesOfSeveralPlayers(players) {
+    const seen = new Set();
+    const shared = new Set();
+    for (const p of players) {
+      const key = String(p.name || '').toLowerCase();
+      if (seen.has(key)) shared.add(key);
+      seen.add(key);
+    }
+    return shared;
+  }
+
   // Render player card
   function renderPlayerCard(player) {
     // Most raced games with their race count, as on the players page; else the games seen in the results
@@ -165,7 +178,7 @@
         <img class="result-media avatar" src="${escHtml(avatar)}" alt="" loading="lazy" width="56" height="56"
              data-fallback-src="${escHtml(placeholder)}">
         <div class="result-body">
-          <div class="title">${highlightText(player.name, searchQuery)}</div>
+          <div class="title">${highlightText(player.name, searchQuery)}${player.discriminator && sharedPlayerNames.has(String(player.name || '').toLowerCase()) ? `<span style="color:#9ca3af;font-weight:normal;">#${escHtml(player.discriminator)}</span>` : ''}</div>
           ${gamesHtml}
         </div>
       </a>
@@ -295,6 +308,7 @@
     }
     
     if (currentFilter === 'all' || currentFilter === 'players') {
+      sharedPlayerNames = namesOfSeveralPlayers(results.players || []);
       html += renderSection('players', tr('search.tabPlayers', 'Players'), '👤', results.players, renderPlayerCard, counts.players || 0);
     }
 

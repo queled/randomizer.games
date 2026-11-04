@@ -5,24 +5,21 @@ const escapeRegex = s => String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const exactNameRegex = name => new RegExp('^' + escapeRegex(name) + '$', 'i');
 
 /**
- * Race filter for a player: their racetime userId (stable across renames), their
- * current name, and their aliases. Aliases only match entrants without a userId
- * (SpeedRunsLive history, manual imports), so they never capture someone else's
- * racetime account.
+ * Race filter for a player (helpers/player-identity.js): their racetime userId (stable
+ * across renames), and the entrants without account (SpeedRunsLive history, manual
+ * imports) under one of their own names. An entrant with an account is that account's
+ * only: a name never captures another racetime account of the same name.
  */
-function buildPlayerRacesFilter({ userId, names = [], aliases = [] }) {
+function buildPlayerRacesFilter({ userId, names = [] }) {
   const or = [];
-  const nameRegexes = names.filter(Boolean).map(exactNameRegex);
-  const aliasRegexes = aliases.filter(Boolean).map(exactNameRegex);
+  const nameRegexes = [...new Set(names.filter(Boolean))].map(exactNameRegex);
   if (userId) or.push({ 'entrants.userId': userId });
-  if (nameRegexes.length) or.push({ 'entrants.userName': { $in: nameRegexes } });
-  if (aliasRegexes.length) {
-    or.push({ entrants: { $elemMatch: { userName: { $in: aliasRegexes }, userId: { $in: [null, ''] } } } });
+  if (nameRegexes.length) {
+    or.push({ entrants: { $elemMatch: { userName: { $in: nameRegexes }, userId: { $in: [null, ''] } } } });
   }
 
   const isPlayerEntrant = e => (userId && e.userId === userId)
-    || nameRegexes.some(re => re.test(e.userName || ''))
-    || (!e.userId && aliasRegexes.some(re => re.test(e.userName || '')));
+    || (!e.userId && nameRegexes.some(re => re.test(e.userName || '')));
 
   return { filter: or.length ? { $or: or } : { _id: null }, isPlayerEntrant };
 }

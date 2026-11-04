@@ -27,11 +27,16 @@ function participantQuery(player) {
   return { $or: or };
 }
 
-// Who a participant is, with the same rule as the players list: the racetime account
-// that raced the participant's matches, else its bracket name
+// Who a participant is, with the same rule as the players list (helpers/player-identity.js):
+// the racetime account that raced the participant's matches, else its bracket name. A
+// participant linked to another account is someone else, even under the same name.
 function participantOwner(part, players) {
   const byAccount = players.find(p => p.userId && part.racetimeUserId === p.userId);
   if (byAccount) return byAccount.key;
+  if (part.racetimeUserId) {
+    const owner = players.find(p => !p.userId && p.normalizedNames.has(normalizeName(part.racetimeName)));
+    return owner ? owner.key : null;
+  }
   const rawName = normalizeName(part.racetimeName || part.displayName || part.name);
   if (!rawName) return null;
   const owner = players.find(p => p.normalizedNames.has(rawName));
@@ -206,4 +211,4 @@ async function buildCommonTournaments({ Tournament, Match, players, raceIdByRoom
   return { tournaments: result, summary };
 }
 
-module.exports = { buildCommonTournaments, racetimeRoomPath };
+module.exports = { buildCommonTournaments, racetimeRoomPath, participantOwner };

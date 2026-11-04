@@ -4,6 +4,7 @@ const { Game, Tournament, Race, Player } = require('../models');
 const { gameLabel: labelOfGame, loadGameLabels, tournamentGameLabel } = require('../helpers/game-label');
 const { getAllStreams } = require('./streams');
 const { buildGameDisplayMaps } = require('./players');
+const { accountKey, buildPlayerIdentity } = require('../helpers/player-identity');
 
 // The three games a player raced most, as on the players page: { gameId, gameName, count } by userId
 async function mostRacedGames(userIds) {
@@ -155,15 +156,17 @@ router.get('/', async (req, res, next) => {
 
     // 4. Search Players (also wanted by the streams: a found player's Twitch)
     // First, get Player documents: the same caps on every page, so the pages follow each other
-    const playerDocs = wants('players') || wants('streams')
+    const matchedDocs = wants('players') || wants('streams')
       ? await Player.find({
-        racetimeDeletedAt: null,
         $or: [
           { name: searchRegex },
           { racetimeId: searchRegex }
         ]
       }).sort({ name: 1 }).limit(500).lean()
       : [];
+    // Deleted racetime accounts are out of the results (their races stay)
+    const deletedUserIds = new Set(matchedDocs.filter(p => p.racetimeDeletedAt).map(p => p.userId));
+    const playerDocs = matchedDocs.filter(p => !p.racetimeDeletedAt);
 
     // Also search in tournament participants and race entrants
     const tournamentsWithPlayers = wants('players')
@@ -180,66 +183,53 @@ router.get('/', async (req, res, next) => {
       }).select('entrants category').sort({ startedAt: -1 }).limit(50).lean()
       : [];
 
-    // Build unique players map
+    // One result per player, told apart as on the players page (helpers/player-identity.js):
+    // two racetime accounts of the same name are two players
+    const identity = buildPlayerIdentity(matchedDocs);
     const playersMap = new Map();
+    const addPlayer = (key, player) => {
+      if (!key || (key.startsWith('u:') && deletedUserIds.has(key.slice(2)))) return null;
+      if (!playersMap.has(key)) playersMap.set(key, { ...player, games: new Set() });
+      return playersMap.get(key);
+    };
 
     // Add from Player documents
     playerDocs.forEach(p => {
-      const normalized = normalizeName(p.name);
-      if (!playersMap.has(normalized)) {
-        playersMap.set(normalized, {
-          name: p.name,
-          userId: p.userId,
-          racetimeId: p.racetimeId || p.userId,
-          racetimeUrl: p.racetimeUrl,
-          twitch: p.twitch,
-          games: new Set()
-        });
-      }
+      addPlayer(accountKey(p.userId), {
+        name: p.name,
+        discriminator: p.discriminator || null,
+        userId: p.userId,
+        racetimeId: p.racetimeId || p.userId,
+        racetimeUrl: p.racetimeUrl,
+        twitch: p.twitch
+      });
     });
 
     // Add from tournament participants
     tournamentsWithPlayers.forEach(tournament => {
-      if (tournament.participants) {
-        tournament.participants.forEach(participant => {
-          const playerName = participant.displayName || participant.name;
-          if (!playerName || !searchRegex.test(playerName)) return;
-          
-          const normalized = normalizeName(playerName);
-          if (!playersMap.has(normalized)) {
-            playersMap.set(normalized, {
-              name: playerName,
-              games: new Set()
-            });
-          }
-          if (tournament.gameName) {
-            playersMap.get(normalized).games.add(tournament.gameName);
-          }
-        });
-      }
+      (tournament.participants || []).forEach(participant => {
+        const playerName = participant.displayName || participant.name;
+        if (!playerName || !searchRegex.test(playerName)) return;
+        const key = identity.keyOfParticipant(participant);
+        const player = addPlayer(key, key.startsWith('u:')
+          ? { name: participant.racetimeName || playerName, userId: key.slice(2), racetimeId: key.slice(2) }
+          : { name: playerName });
+        if (player && tournament.gameName) player.games.add(tournament.gameName);
+      });
     });
 
     // Add from race entrants
     racesWithPlayers.forEach(race => {
-      if (race.entrants) {
-        race.entrants.forEach(entrant => {
-          const playerName = entrant.userName || (entrant.user && entrant.user.name);
-          if (!playerName || !searchRegex.test(playerName)) return;
-          
-          const normalized = normalizeName(playerName);
-          if (!playersMap.has(normalized)) {
-            playersMap.set(normalized, {
-              name: playerName,
-              userId: entrant.userId || (entrant.user && entrant.user.id),
-              racetimeId: entrant.userId || (entrant.user && entrant.user.id),
-              games: new Set()
-            });
-          }
-          if (race.category) {
-            playersMap.get(normalized).games.add(race.category);
-          }
-        });
-      }
+      (race.entrants || []).forEach(entrant => {
+        const playerName = entrant.userName || (entrant.user && entrant.user.name);
+        if (!playerName || !searchRegex.test(playerName)) return;
+        const userId = entrant.userId || (entrant.user && entrant.user.id) || null;
+        const key = identity.keyOfEntrant({ userId, userName: playerName });
+        const player = addPlayer(key, key.startsWith('u:')
+          ? { name: playerName, userId: key.slice(2), racetimeId: key.slice(2) }
+          : { name: playerName });
+        if (player && race.category) player.games.add(race.category);
+      });
     });
 
     // Convert players map to array: the exact name first, then the names starting with the query

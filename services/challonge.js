@@ -1,4 +1,6 @@
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
 
 class ChallongeAPI {
   constructor() {
@@ -46,7 +48,8 @@ class ChallongeAPI {
    */
   async getTournamentDetails(tournamentId) {
     try {
-      const data = await this.get(`/tournaments/${tournamentId}.json`, { include_participants: 1, include_matches: 1 });
+      const data = this.readCache(tournamentId) ||
+        this.writeCache(tournamentId, await this.get(`/tournaments/${tournamentId}.json`, { include_participants: 1, include_matches: 1 }));
       const tournament = data.tournament;
       return {
         tournamentData: this.formatTournament(tournament),
@@ -57,6 +60,29 @@ class ChallongeAPI {
       console.error(`Error fetching tournament ${tournamentId}:`, error.message);
       throw error;
     }
+  }
+
+  /**
+   * Answers kept on disk when CHALLONGE_CACHE_DIR is set (batch imports): a bracket
+   * already fetched is read again without spending the quota. Syncs leave it unset.
+   */
+  cachePath(tournamentId) {
+    const dir = process.env.CHALLONGE_CACHE_DIR;
+    return dir ? path.join(dir, `${String(tournamentId).toLowerCase().replace(/[^a-z0-9_-]/g, '_')}.json`) : null;
+  }
+
+  readCache(tournamentId) {
+    const file = this.cachePath(tournamentId);
+    return file && fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : null;
+  }
+
+  writeCache(tournamentId, data) {
+    const file = this.cachePath(tournamentId);
+    if (file) {
+      fs.mkdirSync(path.dirname(file), { recursive: true });
+      fs.writeFileSync(file, JSON.stringify(data));
+    }
+    return data;
   }
 
   /**

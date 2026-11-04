@@ -2534,9 +2534,14 @@ function attachMatchTooltip(card, match, parsedScores) {
 
   let cum1 = 0;
   let cum2 = 0;
-  // Filter out the 3rd game (index 2) if it's 0-0 (Challonge bug). Preserve original manche numbering.
-  const displayGames = parsedScores.games.map((g, i) => ({ g, i })).filter(item => !(item.i === 2 && item.g.p1 === 0 && item.g.p2 === 0));
-  if (!displayGames.length) return;
+  // Challonge pads a best-of with 0-0 games once the series is decided (3-0 in a BO5 → "…,0-0,0-0"):
+  // drop the trailing unplayed games, keeping the original manche numbering.
+  const displayGames = parsedScores.games.map((g, i) => ({ g, i }));
+  const isUnplayed = (g) => g.p1 === 0 && g.p2 === 0 && !g.fromRace;
+  while (displayGames.length && isUnplayed(displayGames[displayGames.length - 1].g)) {
+    displayGames.pop();
+  }
+  if (displayGames.length < 2) return;
 
   const lines = displayGames.map((item) => {
     const g = item.g;
@@ -4966,7 +4971,7 @@ function createBracketMatchCard(match, isFinal = false) {
           realGames.push({ p1: 0, p2: 1, ambiguous: false });
           cum2++;
         } else {
-          realGames.push({ p1: 0, p2: 0, ambiguous: false });
+          realGames.push({ p1: 0, p2: 0, ambiguous: false, fromRace: true });
         }
       }
       tooltipScores = {

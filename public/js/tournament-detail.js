@@ -4832,7 +4832,12 @@ function getBracketRoundLabels(matches, isDoubleElimination) {
   // start.gg numbers losers rounds from -3, Challonge from -1; the bracket has 2 losers rounds per winners round after the first
   const offset = list.some(m => m.startggSetId) ? 2 : 0;
   const loserRounds = [...new Set(list.map(m => m.round || 0).filter(r => r < 0))].sort((a, b) => b - a);
-  const lastLoserRound = Math.max(2 * winnersFinalRound - 2, ...loserRounds.map(r => -r - offset));
+  // With a grand final, the deepest losers round is the losers final: byes in round 1 (48 players
+  // in a 64 bracket) take one losers round away, which the bracket size alone cannot tell
+  const deepestLoserRound = Math.max(0, ...loserRounds.map(r => -r - offset));
+  const lastLoserRound = grandFinalRounds.size && deepestLoserRound
+    ? deepestLoserRound
+    : Math.max(2 * winnersFinalRound - 2, deepestLoserRound);
   numbered = 0;
   loserRounds.forEach(r => {
     const fromEnd = lastLoserRound - (-r - offset);

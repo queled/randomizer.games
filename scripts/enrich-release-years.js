@@ -203,7 +203,7 @@ async function main() {
 
   console.log(`\n✅ ${updated} années ${DRY_RUN ? 'trouvées' : 'enregistrées'}, ${notFound.length} introuvables, ${rejected.length} écartées`);
   if (rejected.length) console.log(`Écartées (homonymes possibles) :\n${rejected.map(line => `  - ${line}`).join('\n')}`);
-  if (notFound.length) console.log(notFound.map(line => `  - ${line}`).join('\n'));
+  if (notFound.length) console.log(`Introuvables :\n${notFound.map(line => `  - ${line}`).join('\n')}`);
   await mongoose.disconnect();
 }
 

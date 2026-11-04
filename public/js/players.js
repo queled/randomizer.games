@@ -139,7 +139,7 @@ function renderPlayers(players) {
             const gameSlug = slugAliases[rawSlug] || rawSlug;
             return `
               <div style="font-size: 0.75rem; color: #d1d5db; font-weight: 500; display: flex; align-items: center; white-space: nowrap; overflow: hidden;">
-                <a class="game-link" href="/games/${safeEncodeURIComponent(gameSlug)}" style="text-decoration: none; "overflow: hidden; text-overflow: ellipsis; flex: 1 1 auto; min-width: 0; cursor: pointer; color: #60a5fa; transition: color 0.2s;">${escHtml(game.gameName)}</a>
+                <a class="game-link" href="/games/${safeEncodeURIComponent(gameSlug)}" style="text-decoration: none; overflow: hidden; text-overflow: ellipsis; flex: 1 1 auto; min-width: 0; cursor: pointer; color: #60a5fa; transition: color 0.2s;">${escHtml(game.gameName)}</a>
                 <span style="color: #10b981; font-weight: bold; margin-left: 0.5ch; flex-shrink: 0; flex-grow: 0;">(${game.count})</span>
               </div>
             `;

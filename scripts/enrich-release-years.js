@@ -4,7 +4,11 @@
  *
  * La catégorie Twitch d'un jeu donne son identifiant IGDB (même base de jeux) : la date
  * vient de la fiche IGDB de cette catégorie. Sans catégorie Twitch, IGDB est cherché par
- * nom et seul un nom identique est retenu.
+ * nom et seul un nom identique est retenu, à deux conditions, car un autre jeu peut porter
+ * le même nom :
+ *   - une seule fiche IGDB porte ce nom (sinon on ne sait pas laquelle est la bonne) ;
+ *   - elle n'est pas sortie après la première release GitHub du randomizer (dépôts des
+ *     liens de la fiche) : un randomizer n'existe pas avant son jeu.
  * Seuls les jeux sans année sont modifiés (sauf --force).
  *
  * Usage:
@@ -90,9 +94,42 @@ async function fetchReleaseDates(token, igdbIds) {
   return result;
 }
 
+// Fiche IGDB du même nom, si elle est la seule (rejected : la raison du refus)
 async function searchByName(token, name) {
   const rows = await igdbQuery(token, `search "${name.replace(/"/g, '')}"; fields name,first_release_date; limit 10;`);
-  return rows.find(row => normalize(row.name) === normalize(name) && row.first_release_date) || null;
+  const same = rows.filter(row => normalize(row.name) === normalize(name) && row.first_release_date);
+  if (same.length > 1) return { rejected: `${same.length} fiches IGDB de ce nom` };
+  return same[0] || null;
+}
+
+// Dépôts GitHub (propriétaire/nom) des liens de la fiche
+function githubRepos(game) {
+  const urls = [game.resources?.officialSite?.url, ...(game.resources?.sites || []).map(site => site.url)];
+  const repos = urls
+    .map(url => /^https:\/\/github\.com\/([^/]+\/[^/#?]+)/.exec(url || '')?.[1]?.replace(/\.git$/, ''))
+    .filter(Boolean);
+  return [...new Set(repos)];
+}
+
+// Date de la première release GitHub des dépôts de la fiche, sinon null
+async function firstGithubRelease(game) {
+  let first = null;
+  for (const repo of githubRepos(game)) {
+    try {
+      const { data } = await axios.get(`https://api.github.com/repos/${repo}/releases`, {
+        params: { per_page: 100 },
+        headers: { 'User-Agent': 'randomizer.games', Accept: 'application/vnd.github+json' },
+        timeout: 15000
+      });
+      for (const release of data) {
+        const date = release.published_at && new Date(release.published_at);
+        if (date && (!first || date < first)) first = date;
+      }
+    } catch (error) {
+      console.warn(`  ⚠️ ${repo} : releases GitHub illisibles (${error.response?.status || error.message})`);
+    }
+  }
+  return first;
 }
 
 async function main() {
@@ -104,7 +141,7 @@ async function main() {
 
   const filter = FORCE ? {} : { $or: [{ 'official.releaseYear': null }, { 'official.releaseYear': { $exists: false } }] };
   if (ONLY_IDS) filter.id = { $in: ONLY_IDS };
-  const games = (await Game.find(filter).select('id name official integrations.twitch').lean())
+  const games = (await Game.find(filter).select('id name official resources integrations.twitch').lean())
     .filter(game => !SKIP_IDS.has(game.id));
   console.log(`🎮 ${games.length} jeux à traiter${DRY_RUN ? ' (simulation)' : ''}`);
 
@@ -115,6 +152,7 @@ async function main() {
 
   let updated = 0;
   const notFound = [];
+  const rejected = [];
   for (const game of games) {
     const gameName = game.official?.name || game.name;
     const categoryId = game.integrations?.twitch?.categoryId;
@@ -123,6 +161,16 @@ async function main() {
     if (!match?.first_release_date) {
       match = await searchByName(token, gameName);
       source = 'search';
+      if (match?.first_release_date) {
+        const firstRelease = await firstGithubRelease(game);
+        if (firstRelease && new Date(match.first_release_date * 1000) > firstRelease) {
+          match = { rejected: `fiche IGDB sortie le ${new Date(match.first_release_date * 1000).toISOString().slice(0, 10)}, après la 1re release du randomizer (${firstRelease.toISOString().slice(0, 10)})` };
+        }
+      }
+      if (match?.rejected) {
+        rejected.push(`${game.id} | ${gameName} | ${match.rejected}`);
+        continue;
+      }
     }
     if (!match?.first_release_date) {
       notFound.push(`${game.id} | ${gameName}`);
@@ -140,7 +188,8 @@ async function main() {
     updated++;
   }
 
-  console.log(`\n✅ ${updated} années ${DRY_RUN ? 'trouvées' : 'enregistrées'}, ${notFound.length} introuvables`);
+  console.log(`\n✅ ${updated} années ${DRY_RUN ? 'trouvées' : 'enregistrées'}, ${notFound.length} introuvables, ${rejected.length} écartées`);
+  if (rejected.length) console.log(`Écartées (homonymes possibles) :\n${rejected.map(line => `  - ${line}`).join('\n')}`);
   if (notFound.length) console.log(notFound.map(line => `  - ${line}`).join('\n'));
   await mongoose.disconnect();
 }

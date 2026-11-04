@@ -199,6 +199,7 @@
     // Filtered on the server so pagination counts only matching races
     if (currentFilter !== 'all') q.set('status', currentFilter);
     
+    saveFilters();
     const thisLoad = ++loadId;
     try{
       const res = await fetch('/api/runs?' + q.toString());
@@ -258,18 +259,31 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  function showActiveFilter() {
+    filterBtns.forEach(b => {
+      const active = b.dataset.filter === currentFilter;
+      b.style.background = active ? '#374151' : '#1f2937';
+      b.style.color = active ? 'white' : '#9ca3af';
+      b.classList.toggle('active', active);
+    });
+  }
+
+  // The filters are kept in the history entry, not the address and without a new entry:
+  // Back from a race finds them, and Back again leaves the page
+  function saveFilters() {
+    try {
+      history.replaceState({
+        ...(history.state || {}),
+        raceFilters: { game: currentGame, status: currentFilter, page }
+      }, '');
+    } catch (e) { /* file:// */ }
+  }
+
   // Filter button clicks
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      filterBtns.forEach(b => {
-        b.style.background = '#1f2937';
-        b.style.color = '#9ca3af';
-        b.classList.remove('active');
-      });
-      btn.style.background = '#374151';
-      btn.style.color = 'white';
-      btn.classList.add('active');
       currentFilter = btn.dataset.filter;
+      showActiveFilter();
       page = 1;
       load();
     });
@@ -293,12 +307,15 @@
     // Load the games list and the races at the same time
     gamesReady = loadGames();
     
-    // Pre-select game from URL parameter
-    const gameParam = getUrlParam('game');
-    if (gameParam) {
-      currentGame = gameParam;
-      gamesReady.then(() => { gameSelect.value = gameParam; });
-    }
+    // Filters saved in the history entry first (Back, reload), else the ?game= of a link;
+    // the browser's own restoring of the select is overridden
+    const saved = (history.state && history.state.raceFilters) || {};
+    currentGame = typeof saved.game === 'string' ? saved.game : (getUrlParam('game') || '');
+    gameSelect.value = currentGame;
+    if (currentGame) gamesReady.then(() => { gameSelect.value = currentGame; });
+    if (saved.status && [...filterBtns].some(b => b.dataset.filter === saved.status)) currentFilter = saved.status;
+    showActiveFilter();
+    if (Number.isInteger(saved.page) && saved.page > 1) page = saved.page;
     
     load();
   });

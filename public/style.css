@@ -3751,6 +3751,10 @@ a.compare-game-card:hover {
     color: #ef4444;
 }
 
+.compare-place-badge.live {
+    color: #60a5fa;
+}
+
 .compare-place-badge.other {
     color: #9ca3af;
 }

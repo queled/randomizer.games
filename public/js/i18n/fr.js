@@ -424,6 +424,7 @@ const fr = {
         finalRank: "Classement final",
         teammates: "Même équipe",
         tournamentOngoing: "En cours",
+        raceInProgress: "En cours",
         round: "Tour",
         losersRound: "Tour perdants",
         groupStage: "Poules",

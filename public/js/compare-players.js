@@ -47,8 +47,12 @@
     });
   }
 
-  function placeBadge(place, status) {
+  function placeBadge(place, status, raceInProgress) {
     const finished = status === 'done' || status === 'finished';
+    // Still running in a race not over yet: neither a place nor a forfeit
+    if (!finished && raceInProgress && status !== 'dnf' && status !== 'dq') {
+      return `<span class="compare-place-badge live">${t('comparePlayers.raceInProgress', 'In progress')}</span>`;
+    }
     if (!finished) return '<span class="compare-place-badge dnf">DNF</span>';
     if (place === 1) return '<span class="compare-place-badge gold">🥇 1st</span>';
     if (place === 2) return '<span class="compare-place-badge silver">🥈 2nd</span>';
@@ -414,7 +418,7 @@
       return;
     }
     container.innerHTML = races.map(r => {
-      const winnerClass = r.h2hWinner === 1 ? 'p1-won' : r.h2hWinner === 2 ? 'p2-won' : 'draw';
+      const winnerClass = r.inProgress ? 'live' : r.h2hWinner === 1 ? 'p1-won' : r.h2hWinner === 2 ? 'p2-won' : 'draw';
       const raceId = r.raceId || r._id || '';
       const raceLink = raceId
         ? `/races/${encodeURIComponent(raceId)}`
@@ -429,12 +433,12 @@
           <div class="compare-race-goal">${escHtml(r.goal || r.raceName || '')}</div>
           <div class="compare-race-results">
             <div class="compare-race-player left ${r.h2hWinner === 1 ? 'winner' : ''}">
-              ${placeBadge(r.player1.place, r.player1.status)}
+              ${placeBadge(r.player1.place, r.player1.status, r.inProgress)}
               <span class="compare-race-time">${formatTime(r.player1.finishTime, r.player1.finishTimeMs)}</span>
             </div>
             <div class="compare-race-player right ${r.h2hWinner === 2 ? 'winner' : ''}">
               <span class="compare-race-time">${formatTime(r.player2.finishTime, r.player2.finishTimeMs)}</span>
-              ${placeBadge(r.player2.place, r.player2.status)}
+              ${placeBadge(r.player2.place, r.player2.status, r.inProgress)}
             </div>
           </div>
         </a>`;

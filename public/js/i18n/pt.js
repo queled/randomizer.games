@@ -460,6 +460,7 @@ const pt = {
         finalRank: "Classificação final",
         teammates: "Mesma equipa",
         tournamentOngoing: "Em curso",
+        raceInProgress: "Em curso",
         round: "Ronda",
         losersRound: "Ronda de perdedores",
         groupStage: "Fase de grupos",

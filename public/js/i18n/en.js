@@ -436,6 +436,7 @@ const en = {
         finalRank: "Final rank",
         teammates: "Same team",
         tournamentOngoing: "In progress",
+        raceInProgress: "In progress",
         round: "Round",
         losersRound: "Losers round",
         groupStage: "Group stage",

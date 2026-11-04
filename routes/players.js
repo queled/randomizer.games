@@ -181,6 +181,9 @@ async function resolveComparedPlayer({ id, name }) {
 }
 
 // Compare two players: head-to-head stats from common races
+// Racetime race states before the race ends
+const RACE_RUNNING_STATUSES = new Set(['open', 'invitational', 'pending', 'in_progress']);
+
 router.get('/compare', async (req, res, next) => {
   try {
     const name1 = (req.query.player1 || '').toString().trim();
@@ -223,6 +226,8 @@ router.get('/compare', async (req, res, next) => {
       const entrant2 = race.entrants.find(races2.isPlayerEntrant);
       if (!entrant1 || !entrant2 || entrant1 === entrant2) continue;
 
+      // A race still running settles nothing yet: no win, draw or forfeit until it ends
+      const inProgress = RACE_RUNNING_STATUSES.has(race.status);
       const p1Place = entrant1.place || null;
       const p2Place = entrant2.place || null;
       const p1Finished = entrant1.status === 'done' || entrant1.status === 'finished';
@@ -230,7 +235,9 @@ router.get('/compare', async (req, res, next) => {
 
       // Head-to-head: who placed higher in THIS race?
       let h2hWinner = null;
-      if (p1Finished && p2Finished) {
+      if (inProgress) {
+        // Head-to-head decided once the race is over
+      } else if (p1Finished && p2Finished) {
         if (p1Place && p2Place) {
           if (p1Place < p2Place) { p1Wins++; h2hWinner = 1; }
           else if (p2Place < p1Place) { p2Wins++; h2hWinner = 2; }
@@ -258,6 +265,7 @@ router.get('/compare', async (req, res, next) => {
         goal: race.goal || null,
         startedAt: race.startedAt,
         totalEntrants: race.entrants.length,
+        inProgress,
         player1: {
           name: entrant1.userName,
           place: p1Place,
@@ -282,7 +290,8 @@ router.get('/compare', async (req, res, next) => {
     const p1Placements = { first: 0, second: 0, third: 0, dnf: 0, other: 0 };
     const p2Placements = { first: 0, second: 0, third: 0, dnf: 0, other: 0 };
 
-    for (const rd of raceDetails) {
+    const settledRaces = raceDetails.filter(rd => !rd.inProgress);
+    for (const rd of settledRaces) {
       for (const [pKey, placements] of [['player1', p1Placements], ['player2', p2Placements]]) {
         const p = rd[pKey];
         const finished = p.status === 'done' || p.status === 'finished';
@@ -296,7 +305,7 @@ router.get('/compare', async (req, res, next) => {
 
     // Average finish times (only when both finished)
     let p1TotalMs = 0, p1Count = 0, p2TotalMs = 0, p2Count = 0;
-    for (const rd of raceDetails) {
+    for (const rd of settledRaces) {
       if (rd.player1.finishTimeMs && (rd.player1.status === 'done' || rd.player1.status === 'finished')) {
         p1TotalMs += rd.player1.finishTimeMs;
         p1Count++;
@@ -309,7 +318,7 @@ router.get('/compare', async (req, res, next) => {
 
     // Games breakdown
     const gameBreakdown = {};
-    for (const rd of raceDetails) {
+    for (const rd of settledRaces) {
       const gn = rd.gameName || rd.category || 'Unknown';
       if (!gameBreakdown[gn]) gameBreakdown[gn] = { gameId: rd.gameId, count: 0, p1Wins: 0, p2Wins: 0, draws: 0 };
       gameBreakdown[gn].count++;
@@ -344,15 +353,15 @@ router.get('/compare', async (req, res, next) => {
     res.json({
       player1: { name: side1.name, userId: side1.userId },
       player2: { name: side2.name, userId: side2.userId },
-      totalCommonRaces: raceDetails.length,
+      totalCommonRaces: settledRaces.length,
       headToHead: {
         player1Wins: p1Wins,
         player2Wins: p2Wins,
         draws
       },
       winRate: {
-        player1: raceDetails.length ? Math.round((p1Wins / raceDetails.length) * 1000) / 10 : 0,
-        player2: raceDetails.length ? Math.round((p2Wins / raceDetails.length) * 1000) / 10 : 0
+        player1: settledRaces.length ? Math.round((p1Wins / settledRaces.length) * 1000) / 10 : 0,
+        player2: settledRaces.length ? Math.round((p2Wins / settledRaces.length) * 1000) / 10 : 0
       },
       placements: {
         player1: p1Placements,

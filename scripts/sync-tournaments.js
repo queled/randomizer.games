@@ -6,7 +6,7 @@
  * Re-fetches existing tournaments that are still "in progress" and discovers
  * recently-created ones since the last sync.
  * 
- * Designed to be called from cron / GitHub Actions on a regular schedule.
+ * Designed to be called from cron on a regular schedule.
  * 
  * Usage:
  *   node scripts/sync-tournaments.js                     # Default: update active + discover recent
@@ -445,7 +445,7 @@ async function main() {
     await discoverNewTournaments({ days: opts.days, dryRun: opts.dryRun });
   }
 
-  // Parseable summary (used by GitHub Actions to extract stats)
+  // Parseable summary (shown in the cron job logs)
   console.log('\n── RÉSUMÉ ──');
   console.log(`Mis à jour: ${totalUpdated}`);
   console.log(`Ignorés: ${totalSkipped}`);

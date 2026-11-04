@@ -3,7 +3,7 @@
  * Check Rando-List Changes
  * 
  * Vérifie s'il y a eu des changements dans le repo rando-list depuis la dernière sync.
- * Utilisé par le workflow GitHub Actions pour décider si une synchronisation est nécessaire.
+ * Utilisé par la tâche cron rando-list (scripts/cron/run-job.sh) pour décider si une synchronisation est nécessaire.
  * 
  * Output: JSON avec hasChanges (boolean) et newGames (array)
  * 

@@ -11,7 +11,7 @@ Mise en ligne de randomizer.games sur un VPS Hetzner Cloud (Ubuntu 24.04) qui h�
 | Nginx + Certbot | HTTPS et proxy vers l'application |
 | crontab | Les synchronisations (racetime, tournois, rando-list, Archipelago) et les sauvegardes, via [`scripts/cron/run-job.sh`](../scripts/cron/run-job.sh) |
 
-La base n'étant pas exposée sur Internet, les workflows GitHub Actions ne peuvent pas l'atteindre, même lancés à la main : leur travail est repris par la crontab (voir [ARCHITECTURE.md](ARCHITECTURE.md#tâches-planifiées)).
+La base n'est pas exposée sur Internet : toutes les tâches récurrentes tournent sur le serveur (voir [ARCHITECTURE.md](ARCHITECTURE.md#tâches-planifiées)). GitHub Actions ne sert plus qu'aux tests (`tests.yml`).
 
 ## Dimensionnement
 
@@ -169,9 +169,9 @@ npm run check-security
 
 ## 4. Migrer les données depuis Atlas
 
-Tant que le site tourne sur Atlas, les workflows GitHub Actions continuent d'y écrire. Pour ne rien perdre pendant la copie :
+Pour ne rien perdre pendant la copie :
 
-1. **Désactiver les workflows planifiés** sur GitHub : onglet **Actions**, puis pour `Sync Racetime Races`, `Sync Tournaments (Update Active)`, `Sync Tournaments (Discover New)` et `Sync Rando-List` : **⋯ → Disable workflow**. Les fichiers restent dans le dépôt, la désactivation est réversible.
+1. **Arrêter toute synchro qui écrit encore dans Atlas.**
 2. Attendre que les exécutions en cours se terminent.
 3. Copier la base, depuis le VPS. Dans Atlas, l'IP du VPS doit être autorisée (*Network Access*) le temps de la copie.
 
@@ -236,7 +236,7 @@ Pour rattraper une période où les tâches ne tournaient pas, voir [SYNC-WORKFL
 
 À la mise en place de la tâche `schedule-sites`, reprendre une fois les restreams des événements terminés : `node scripts/sync-schedule-sites.js --archive` (Mido's House et Hyrule Town Hall). Pour `race-vods`, reprendre une fois les 60 derniers jours : `node scripts/sync-race-vods.js --days 60`, puis `node scripts/sync-race-restreams.js --days 60` et, pour les temps forts plus anciens, `node scripts/sync-race-restreams.js --days 3650 --highlights` (à vérifier d'abord avec `--dry-run`). Pour localhorst, reprendre une fois tout l'historique : `node scripts/sync-localhorst.js --archive`, et de même pour les calendriers iCal : `node scripts/sync-ical-restreams.js --archive`. Pour l'ALTTPR League, reprendre une fois toutes les saisons : `node scripts/sync-alttpr-league.js`, et pour GDQ tous les marathons : `node scripts/sync-gdq-runs.js --all`.
 
-La resynchronisation complète d'un jeu (ancien workflow manuel `sync-racetime-game-full.yml`) se lance en SSH :
+La resynchronisation complète d'un jeu se lance en SSH :
 
 ```bash
 cd ~/randomizer-app

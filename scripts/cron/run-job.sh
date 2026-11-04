@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # Tâches récurrentes du serveur de production, lancées par la crontab
-# (voir docs/DEPLOYMENT.md). Elles reprennent les workflows GitHub Actions,
-# qui ne peuvent pas joindre une base MongoDB fermée au réseau.
+# (voir docs/DEPLOYMENT.md).
 #
 # Usage : scripts/cron/run-job.sh <tâche>
 #   racetime              nouvelles courses racetime.gg            (toutes les 5 min)

@@ -74,10 +74,6 @@ L'API Challonge n'autorise que 500 requêtes par 30 jours (au-delà : erreur 429
 
 À chaque exécution, `run-job.sh` écrit l'état de la tâche dans `~/logs/status/<tâche>.json` (début, fin, code de sortie, dernier succès, échecs de suite). La page **Monitoring** du panneau admin les lit (`services/job-health.js`), affiche l'horaire de chaque tâche (tiré de son expression cron), la durée de sa dernière exécution et l'heure de la prochaine, et la classe : ok, en cours, en échec (avec la fin de son journal), en retard (pas de succès depuis plus de deux périodes) ou jamais lancée. Elle montre aussi la dernière donnée écrite en base par la tâche (dernière course, dernière recherche de VOD, dernière archive…), qui trahit une tâche « réussie » sans rien faire. Le serveur et la crontab doivent partager le même `LOG_DIR` (`~/logs` par défaut). Pour resynchroniser entièrement un jeu : `node scripts/sync-racetime-game.js --game <slug> [--max-pages N]`.
 
-### Anciens workflows GitHub Actions
-
-Les workflows de `.github/workflows/` faisaient le même travail depuis les serveurs de GitHub, à une époque où la base était hébergée sur MongoDB Atlas. Ils ne peuvent pas joindre une base fermée au réseau : ils sont désactivés depuis l'onglet **Actions** au passage sur le serveur, et gardés dans le dépôt le temps de la transition. Ils utilisent les secrets `MONGODB_URI`, `STARTGG_API_TOKEN` et `CHALLONGE_API_KEY` et la variable facultative `RACETIME_RATE_LIMIT_MS`.
-
 ## Détection des tournois
 
 `discover-tournaments.js` retient un tournoi s'il correspond à :

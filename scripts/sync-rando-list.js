@@ -738,7 +738,7 @@ Workflow recommandé:
     
     console.log('\n✅ Sync terminé avec succès');
     
-    // Retourner les infos pour le workflow GitHub Actions
+    // Résumé lisible par machine, dans le journal de la tâche
     if (newGames.length > 0) {
       console.log('\n--- SYNC_RESULTS_JSON ---');
       console.log(JSON.stringify({

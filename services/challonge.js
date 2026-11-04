@@ -58,6 +58,8 @@ class ChallongeAPI {
         const times = matches.flatMap(m => [m.startedAt, m.completedAt]).filter(Boolean).map(d => new Date(d).getTime()).filter(Number.isFinite);
         if (times.length) tournamentData.startedAt = new Date(Math.min(...times)).toISOString();
       }
+      // A bracket not started yet only has the start date planned by the organizer
+      if (!tournamentData.startedAt && tournament.start_at) tournamentData.startedAt = tournament.start_at;
       return {
         tournamentData,
         participants: (tournament.participants || []).map(p => this.formatParticipant(p.participant)),

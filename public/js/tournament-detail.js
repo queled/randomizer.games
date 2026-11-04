@@ -4292,8 +4292,9 @@ function displayBracketSection(matches, container, bracketType = 'winner', isDou
       const aId = a.startggSetId || a.challongeId;
       const bId = b.startggSetId || b.challongeId;
       if (aId && bId) {
-        // Both have IDs, sort by ID (handle both string and numeric)
-        return aId.localeCompare ? aId.localeCompare(bId) : (aId - bId);
+        // Both have IDs, sort by ID. Numeric order: the sets of a bracket not started yet
+        // are named like 'preview_<group>_<round>_<n>', where n=13 comes after n=5
+        return String(aId).localeCompare(String(bId), undefined, { numeric: true });
       }
       // No ID available, keep insertion order (stable sort)
       return 0;

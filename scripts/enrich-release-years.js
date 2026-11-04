@@ -4,11 +4,11 @@
  *
  * La catégorie Twitch d'un jeu donne son identifiant IGDB (même base de jeux) : la date
  * vient de la fiche IGDB de cette catégorie. Sans catégorie Twitch, IGDB est cherché par
- * nom et seul un nom identique est retenu, à deux conditions, car un autre jeu peut porter
- * le même nom :
- *   - une seule fiche IGDB porte ce nom (sinon on ne sait pas laquelle est la bonne) ;
- *   - elle n'est pas sortie après la première release GitHub du randomizer (dépôts des
- *     liens de la fiche) : un randomizer n'existe pas avant son jeu.
+ * nom et seul un nom identique est retenu, si une seule fiche IGDB le porte (sinon on ne
+ * sait pas laquelle est la bonne).
+ * Dans les deux cas, la fiche IGDB est écartée si elle est sortie après la première release
+ * GitHub du randomizer (dépôts des liens de la fiche) : un randomizer n'existe pas avant son
+ * jeu, c'est donc un homonyme (catégorie Twitch mal rattachée, autre jeu du même nom).
  * Seuls les jeux sans année sont modifiés (sauf --force).
  *
  * Usage:
@@ -20,6 +20,8 @@
  * Variables d'environnement requises:
  *   TWITCH_CLIENT_ID     - Client ID de l'application Twitch (sert aussi pour IGDB)
  *   TWITCH_CLIENT_SECRET - Client Secret de l'application Twitch
+ * Facultative :
+ *   GITHUB_TOKEN         - Jeton GitHub, au-delà de 60 jeux par heure
  */
 
 const path = require('path');
@@ -118,7 +120,12 @@ async function firstGithubRelease(game) {
     try {
       const { data } = await axios.get(`https://api.github.com/repos/${repo}/releases`, {
         params: { per_page: 100 },
-        headers: { 'User-Agent': 'randomizer.games', Accept: 'application/vnd.github+json' },
+        headers: {
+          'User-Agent': 'randomizer.games',
+          Accept: 'application/vnd.github+json',
+          // Sans jeton, GitHub accepte 60 requêtes par heure
+          ...(process.env.GITHUB_TOKEN && { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` })
+        },
         timeout: 15000
       });
       for (const release of data) {
@@ -161,16 +168,17 @@ async function main() {
     if (!match?.first_release_date) {
       match = await searchByName(token, gameName);
       source = 'search';
-      if (match?.first_release_date) {
-        const firstRelease = await firstGithubRelease(game);
-        if (firstRelease && new Date(match.first_release_date * 1000) > firstRelease) {
-          match = { rejected: `fiche IGDB sortie le ${new Date(match.first_release_date * 1000).toISOString().slice(0, 10)}, après la 1re release du randomizer (${firstRelease.toISOString().slice(0, 10)})` };
-        }
+    }
+    if (match?.first_release_date) {
+      const firstRelease = await firstGithubRelease(game);
+      const released = new Date(match.first_release_date * 1000);
+      if (firstRelease && released > firstRelease) {
+        match = { rejected: `${source}: ${match.name}, sorti le ${released.toISOString().slice(0, 10)}, après la 1re release du randomizer (${firstRelease.toISOString().slice(0, 10)})` };
       }
-      if (match?.rejected) {
-        rejected.push(`${game.id} | ${gameName} | ${match.rejected}`);
-        continue;
-      }
+    }
+    if (match?.rejected) {
+      rejected.push(`${game.id} | ${gameName} | ${match.rejected}`);
+      continue;
     }
     if (!match?.first_release_date) {
       notFound.push(`${game.id} | ${gameName}`);

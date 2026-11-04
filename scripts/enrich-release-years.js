@@ -7,7 +7,7 @@
  * nom et seul un nom identique est retenu, si une seule fiche IGDB le porte (sinon on ne
  * sait pas laquelle est la bonne).
  * Dans les deux cas, la fiche IGDB est écartée si elle est sortie après la première release
- * GitHub du randomizer (dépôts des liens de la fiche) : un randomizer n'existe pas avant son
+ * GitHub du randomizer (dépôts propres à la fiche) : un randomizer n'existe pas avant son
  * jeu, c'est donc un homonyme (catégorie Twitch mal rattachée, autre jeu du même nom).
  * Seuls les jeux sans année sont modifiés (sauf --force).
  *
@@ -113,10 +113,15 @@ function githubRepos(game) {
   return [...new Set(repos)];
 }
 
-// Date de la première release GitHub des dépôts de la fiche, sinon null
+// Date de la première release GitHub des dépôts propres à la fiche, sinon null. Un dépôt
+// lié à d'autres fiches (même projet pour plusieurs jeux, fork Archipelago à plusieurs
+// mondes) peut avoir des releases d'avant la sortie du jeu : il n'est pas pris en compte.
 async function firstGithubRelease(game) {
   let first = null;
   for (const repo of githubRepos(game)) {
+    const prefix = new RegExp(`^https://github\\.com/${repo.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(/|$)`, 'i');
+    const shared = await Game.exists({ id: { $ne: game.id }, $or: [{ 'resources.officialSite.url': prefix }, { 'resources.sites.url': prefix }] });
+    if (shared) continue;
     try {
       const { data } = await axios.get(`https://api.github.com/repos/${repo}/releases`, {
         params: { per_page: 100 },

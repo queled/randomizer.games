@@ -266,8 +266,9 @@ async function updateActiveTournaments({ dryRun, challongeHours }) {
             state: tournamentData.state,
             participantsCount: tournamentData.participantsCount,
             participants,
-            startDate: tournamentData.startedAt,
-            endDate: tournamentData.completedAt,
+            // A date filled in by hand stays while Challonge has none (bracket never run on Challonge)
+            startDate: tournamentData.startedAt || tournament.startDate,
+            endDate: tournamentData.completedAt || tournament.endDate,
             description: cleanDescription(tournamentData.description),
             challongeSyncedAt: new Date(),
             'source.importedAt': new Date()

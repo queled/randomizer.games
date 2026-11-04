@@ -114,7 +114,7 @@ function getTournamentStatus(tournament) {
   // How long an 'active' tournament stays 'en cours' after its planned end date.
   const OVERTIME_GRACE_MS = 60 * DAY_MS;
   const FINISHED_STATES = ['complete', 'completed', 'awaiting_review'];
-  const RUNNING_STATES = ['active', 'underway', 'in_progress'];
+  const RUNNING_STATES = ['active', 'underway', 'in_progress', 'group_stages_underway', 'group_stages_finalized'];
 
   const parseDate = (value) => {
     if (!value) return null;
@@ -140,7 +140,8 @@ function getTournamentStatus(tournament) {
     return 'terminé';
   }
 
-  return start ? 'en cours' : 'à venir';
+  // Challonge gives no start date while a group stage is played: its state says it has begun
+  return start || RUNNING_STATES.includes(state) ? 'en cours' : 'à venir';
 }
 
 // Winner to show on a tournament card: only once the tournament is finished,

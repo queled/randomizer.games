@@ -27,6 +27,8 @@ const CASES = [
     endDate: daysFromNow(-90),
     midosHouse: { schedule: [{ startAt: daysFromNow(-100) }, { startAt: daysFromNow(2) }] }
   }, 'en cours'],
+  ['group stage underway, no start date', { state: 'group_stages_underway' }, 'en cours'],
+  ['pending, no start date', { state: 'pending' }, 'à venir'],
   ['invalid dates', { startDate: 'not a date', endDate: 'nope' }, 'à venir']
 ];
 

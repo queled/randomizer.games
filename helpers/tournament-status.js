@@ -10,7 +10,7 @@ const MAX_DURATION_MS = 365 * DAY_MS;
 const OVERTIME_GRACE_MS = 60 * DAY_MS;
 
 const FINISHED_STATES = ['complete', 'completed', 'awaiting_review'];
-const RUNNING_STATES = ['active', 'underway', 'in_progress'];
+const RUNNING_STATES = ['active', 'underway', 'in_progress', 'group_stages_underway', 'group_stages_finalized'];
 
 function parseDate(value) {
   if (!value) return null;
@@ -40,7 +40,8 @@ function calculateTournamentStatus(tournament, now = Date.now()) {
     return 'terminé';
   }
 
-  return start ? 'en cours' : 'à venir';
+  // Challonge gives no start date while a group stage is played: its state says it has begun
+  return start || RUNNING_STATES.includes(state) ? 'en cours' : 'à venir';
 }
 
 module.exports = { calculateTournamentStatus };

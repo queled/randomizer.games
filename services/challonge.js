@@ -51,10 +51,17 @@ class ChallongeAPI {
       const data = this.readCache(tournamentId) ||
         this.writeCache(tournamentId, await this.get(`/tournaments/${tournamentId}.json`, { include_participants: 1, include_matches: 1 }));
       const tournament = data.tournament;
+      const tournamentData = this.formatTournament(tournament);
+      const matches = (tournament.matches || []).map(m => this.formatMatch(m.match));
+      // Challonge leaves started_at empty while a group stage is played: its first match stands in
+      if (!tournamentData.startedAt) {
+        const times = matches.flatMap(m => [m.startedAt, m.completedAt]).filter(Boolean).map(d => new Date(d).getTime()).filter(Number.isFinite);
+        if (times.length) tournamentData.startedAt = new Date(Math.min(...times)).toISOString();
+      }
       return {
-        tournamentData: this.formatTournament(tournament),
+        tournamentData,
         participants: (tournament.participants || []).map(p => this.formatParticipant(p.participant)),
-        matches: (tournament.matches || []).map(m => this.formatMatch(m.match))
+        matches
       };
     } catch (error) {
       console.error(`Error fetching tournament ${tournamentId}:`, error.message);

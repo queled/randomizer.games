@@ -116,15 +116,35 @@ router.get('/', async (req, res, next) => {
 
     // The status is computed from the dates, so a status filter has to look at
     // every tournament before paginating; otherwise paginate in the database.
-    let tournamentsQuery = Tournament.find(query)
-      .populate('game', 'id name official randomizer')
-      .sort({ startDate: -1 });
-    if (!status) {
-      tournamentsQuery = tournamentsQuery
-        .limit(limitNum)
-        .skip((pageNum - 1) * limitNum);
+    // Newest first; a tournament without a start date has not begun, so it leads
+    // (MongoDB would put it last in a descending sort).
+    const findSorted = (filter, sort, skip, take) => {
+      let q = Tournament.find({ $and: [query, filter] })
+        .populate('game', 'id name official randomizer')
+        .sort(sort);
+      if (skip) q = q.skip(skip);
+      if (take != null) q = q.limit(take);
+      return q;
+    };
+    const undatedFilter = { startDate: null };
+    const datedFilter = { startDate: { $ne: null } };
+    let tournaments;
+    if (status) {
+      tournaments = [
+        ...await findSorted(undatedFilter, { createdAt: -1 }),
+        ...await findSorted(datedFilter, { startDate: -1 })
+      ];
+    } else {
+      const skip = (pageNum - 1) * limitNum;
+      const undatedCount = await Tournament.countDocuments({ $and: [query, undatedFilter] });
+      const undated = skip < undatedCount
+        ? await findSorted(undatedFilter, { createdAt: -1 }, skip, limitNum)
+        : [];
+      const dated = undated.length < limitNum
+        ? await findSorted(datedFilter, { startDate: -1 }, Math.max(0, skip - undatedCount), limitNum - undated.length)
+        : [];
+      tournaments = [...undated, ...dated];
     }
-    const tournaments = await tournamentsQuery;
 
     // Calculate status dynamically
     const tournamentsWithStatus = tournaments.map(t => {

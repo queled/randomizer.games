@@ -109,6 +109,7 @@
       q.set('status', statusParam);
     }
     
+    saveFiltersInUrl();
     const thisLoad = ++loadId;
     try{
       const res = await fetch('/api/tournaments?' + q.toString());
@@ -177,17 +178,34 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  function showActiveFilter() {
+    filterBtns.forEach(b => {
+      const active = b.dataset.filter === currentFilter;
+      b.style.background = active ? '#374151' : '#1f2937';
+      b.style.color = active ? 'white' : '#9ca3af';
+      b.classList.toggle('active', active);
+    });
+  }
+
+  // The filters live in the address, replaced rather than added to the history:
+  // Back from a tournament finds them, and Back again leaves the page
+  function saveFiltersInUrl() {
+    const params = new URLSearchParams(location.search);
+    const set = (key, value) => { if (value) params.set(key, value); else params.delete(key); };
+    set('game', currentGame);
+    set('status', currentFilter !== 'all' ? currentFilter : '');
+    set('page', page > 1 ? String(page) : '');
+    const qs = params.toString();
+    const target = location.pathname + (qs ? '?' + qs : '') + location.hash;
+    if (target !== location.pathname + location.search + location.hash) {
+      try { history.replaceState(history.state, '', target); } catch (e) { /* file:// */ }
+    }
+  }
+
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      filterBtns.forEach(b => {
-        b.style.background = '#1f2937';
-        b.style.color = '#9ca3af';
-        b.classList.remove('active');
-      });
-      btn.style.background = '#374151';
-      btn.style.color = 'white';
-      btn.classList.add('active');
       currentFilter = btn.dataset.filter;
+      showActiveFilter();
       page = 1;
       load();
     });
@@ -209,12 +227,16 @@
     // Load the games list and the tournaments at the same time
     gamesReady = loadGames();
     
-    // Pre-select game from URL parameter
+    // Filters from the address; the browser's own restoring of the select is overridden
     const gameParam = getUrlParam('game');
-    if (gameParam) {
-      currentGame = gameParam;
-      gamesReady.then(() => { gameSelect.value = gameParam; });
-    }
+    currentGame = gameParam || '';
+    gameSelect.value = currentGame;
+    if (gameParam) gamesReady.then(() => { gameSelect.value = currentGame; });
+    const statusParam = getUrlParam('status');
+    if (statusParam && [...filterBtns].some(b => b.dataset.filter === statusParam)) currentFilter = statusParam;
+    showActiveFilter();
+    const pageParam = parseInt(getUrlParam('page'), 10);
+    if (pageParam > 1) page = pageParam;
     
     load();
   });

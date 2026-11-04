@@ -109,7 +109,7 @@
       q.set('status', statusParam);
     }
     
-    saveFiltersInUrl();
+    saveFilters();
     const thisLoad = ++loadId;
     try{
       const res = await fetch('/api/tournaments?' + q.toString());
@@ -187,19 +187,15 @@
     });
   }
 
-  // The filters live in the address, replaced rather than added to the history:
+  // The filters are kept in the history entry, not the address and without a new entry:
   // Back from a tournament finds them, and Back again leaves the page
-  function saveFiltersInUrl() {
-    const params = new URLSearchParams(location.search);
-    const set = (key, value) => { if (value) params.set(key, value); else params.delete(key); };
-    set('game', currentGame);
-    set('status', currentFilter !== 'all' ? currentFilter : '');
-    set('page', page > 1 ? String(page) : '');
-    const qs = params.toString();
-    const target = location.pathname + (qs ? '?' + qs : '') + location.hash;
-    if (target !== location.pathname + location.search + location.hash) {
-      try { history.replaceState(history.state, '', target); } catch (e) { /* file:// */ }
-    }
+  function saveFilters() {
+    try {
+      history.replaceState({
+        ...(history.state || {}),
+        tournamentFilters: { game: currentGame, status: currentFilter, page }
+      }, '');
+    } catch (e) { /* file:// */ }
   }
 
   filterBtns.forEach(btn => {
@@ -227,16 +223,15 @@
     // Load the games list and the tournaments at the same time
     gamesReady = loadGames();
     
-    // Filters from the address; the browser's own restoring of the select is overridden
-    const gameParam = getUrlParam('game');
-    currentGame = gameParam || '';
+    // Filters saved in the history entry first (Back, reload), else the ?game= of a link;
+    // the browser's own restoring of the select is overridden
+    const saved = (history.state && history.state.tournamentFilters) || {};
+    currentGame = typeof saved.game === 'string' ? saved.game : (getUrlParam('game') || '');
     gameSelect.value = currentGame;
-    if (gameParam) gamesReady.then(() => { gameSelect.value = currentGame; });
-    const statusParam = getUrlParam('status');
-    if (statusParam && [...filterBtns].some(b => b.dataset.filter === statusParam)) currentFilter = statusParam;
+    if (currentGame) gamesReady.then(() => { gameSelect.value = currentGame; });
+    if (saved.status && [...filterBtns].some(b => b.dataset.filter === saved.status)) currentFilter = saved.status;
     showActiveFilter();
-    const pageParam = parseInt(getUrlParam('page'), 10);
-    if (pageParam > 1) page = pageParam;
+    if (Number.isInteger(saved.page) && saved.page > 1) page = saved.page;
     
     load();
   });

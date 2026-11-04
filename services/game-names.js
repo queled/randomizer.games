@@ -116,8 +116,10 @@ function randomizerShortNames(name, id) {
   return { shortName: `${initials} Randomizer`, tinyName: `${initials}R` };
 }
 
+// New games: Twitch category, release year, then the cover (fetch-covers.js
+// matches the IGDB entry through the category and the year found just before)
 function runEnrichment(ids) {
-  for (const script of ['enrich-twitch.js', 'enrich-release-years.js']) {
+  for (const script of ['enrich-twitch.js', 'enrich-release-years.js', 'fetch-covers.js']) {
     console.log(`\n▶ ${script} --ids ${ids.join(',')}`);
     const result = spawnSync(process.execPath, [path.join(__dirname, '..', 'scripts', script), '--ids', ids.join(',')], {
       stdio: 'inherit',

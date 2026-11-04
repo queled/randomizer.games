@@ -119,14 +119,10 @@ function buildCategoryQuery(gameDoc, gameIdLower, resolutionContext = { explicit
 
 function buildTournamentQuery(gameDoc, gameIdLower) {
   const gamePattern = GAME_NAME_PATTERNS[gameIdLower];
-  const conditions = [];
-
-  if (gameDoc?._id) {
-    conditions.push({ game: gameDoc._id });
-  }
+  const nameConditions = [];
 
   if (gamePattern) {
-    conditions.push({ gameName: { $regex: gamePattern } });
+    nameConditions.push({ gameName: { $regex: gamePattern } });
   }
 
   const candidateNames = [
@@ -138,8 +134,19 @@ function buildTournamentQuery(gameDoc, gameIdLower) {
 
   // Whole words only: a short name must not match inside a longer one
   candidateNames.forEach(name => {
-    conditions.push({ gameName: { $regex: new RegExp(`(^|[^a-z0-9])${escapeRegex(name)}($|[^a-z0-9])`, 'i') } });
+    nameConditions.push({ gameName: { $regex: new RegExp(`(^|[^a-z0-9])${escapeRegex(name)}($|[^a-z0-9])`, 'i') } });
   });
+
+  // A tournament linked to a game belongs to that game only; the name is a
+  // fallback for unlinked ones (a game called "Adventure" must not claim
+  // tournaments of "Zelda II: The Adventure of Link")
+  const conditions = [];
+  if (gameDoc?._id) {
+    conditions.push({ game: gameDoc._id });
+  }
+  if (nameConditions.length) {
+    conditions.push({ game: null, $or: nameConditions });
+  }
 
   if (conditions.length === 0) {
     return {};

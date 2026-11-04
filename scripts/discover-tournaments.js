@@ -1137,7 +1137,9 @@ async function getKnownChallongeIds() {
   const tournaments = await Tournament.find({
     $or: [{ challongeId: { $exists: true, $ne: null } }, { 'challongeBrackets.0': { $exists: true } }]
   }).select('challongeId challongeBrackets.challongeId').lean();
-  return tournaments.flatMap(t => [t.challongeId, ...(t.challongeBrackets || []).map(b => b.challongeId)]).filter(id => id != null).map(Number);
+  const skipped = await DiscoverySkip.find({ permanent: true, challongeId: { $ne: null } }).select('challongeId').lean();
+  return [...tournaments.flatMap(t => [t.challongeId, ...(t.challongeBrackets || []).map(b => b.challongeId)]), ...skipped.map(s => s.challongeId)]
+    .filter(id => id != null).map(Number);
 }
 
 // `details`: the tournament already fetched with getTournamentDetails, so it is not requested again
@@ -1146,7 +1148,8 @@ async function getKnownChallongeUrls() {
   const tournaments = await Tournament.find({
     $or: [{ challongeId: { $exists: true, $ne: null } }, { 'challongeBrackets.0': { $exists: true } }]
   }).select('fullUrl challongeBrackets.fullUrl').lean();
-  const urls = tournaments.flatMap(t => [t.fullUrl, ...(t.challongeBrackets || []).map(b => b.fullUrl)]);
+  const skipped = await DiscoverySkip.find({ permanent: true }).select('url').lean();
+  const urls = [...tournaments.flatMap(t => [t.fullUrl, ...(t.challongeBrackets || []).map(b => b.fullUrl)]), ...skipped.map(s => s.url)];
   return new Set(urls.map(url => url && parseChallongeRef(url)?.url.toLowerCase()).filter(Boolean));
 }
 

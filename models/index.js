@@ -583,12 +583,16 @@ playerSchema.pre('save', function() {
 });
 
 // Challonge bracket links the speedgaming.org discovery rejected (not a randomizer,
-// private bracket...), so it does not spend API requests on them every day
+// private bracket...), so it does not spend API requests on them every day.
+// A permanent skip (a copy of a bracket already imported from start.gg) counts as
+// imported for every discovery and is never retried.
 const discoverySkipSchema = new mongoose.Schema({
   url: { type: String, required: true, unique: true },
   title: String,
   reason: String,
-  checkedAt: Date
+  checkedAt: Date,
+  permanent: { type: Boolean, default: false },
+  challongeId: Number
 });
 
 // YouTube channels that archive restreams (scripts/discover-youtube-restreamers.js):

@@ -6,7 +6,8 @@
  *
  * Plan file: JSON array, in priority order, of
  *   { "url": "https://alttpr.challonge.com/main2023", "game": "alttp",
- *     "group": "Event name", "label": "Phase" }   // group/label: several brackets of one event
+ *     "group": "Event name", "label": "Phase",    // group/label: several brackets of one event
+ *     "name": "Display name", "skip": true }      // optional: rename, leave out
  *
  * Usage:
  *   node scripts/import-challonge-batch.js <plan.json> --fetch [--limit N]  # API requests, into the cache
@@ -27,6 +28,24 @@ process.env.CHALLONGE_CACHE_DIR = process.env.CHALLONGE_CACHE_DIR || path.join(o
 const connectDB = require('../config/database');
 const challongeAPI = require('../services/challonge');
 const { importChallongeTournament, parseChallongeRef, getKnownChallongeUrls } = require('./discover-tournaments');
+
+const FINISHED = ['complete', 'completed'];
+const ABANDONED_AFTER_MS = 180 * 24 * 3600 * 1000;
+
+/**
+ * A bracket the organizer never closed (still "underway" years later) would be read again
+ * by every sync, at the quota's expense: past six months without activity, it counts as over.
+ */
+function freezeAbandoned(t, matches) {
+  if (FINISHED.includes(String(t.state).toLowerCase())) return;
+  const times = [t.startedAt, ...matches.flatMap(m => [m.startedAt, m.completedAt])]
+    .filter(Boolean).map(d => new Date(d).getTime());
+  const last = times.length ? Math.max(...times) : null;
+  if (!last || Date.now() - last < ABANDONED_AFTER_MS) return;
+  console.log(`   🧊 ${t.name}: still "${t.state}" on Challonge, idle since ${new Date(last).toISOString().slice(0, 10)}, stored as complete`);
+  t.state = 'complete';
+  t.completedAt = t.completedAt || new Date(last).toISOString();
+}
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -81,6 +100,10 @@ async function main() {
       console.log(`${ref.apiId}${known}\n   ${t.name} [${t.gameName || 'no game'}] ${t.tournamentType}, ${t.participantsCount} players, ${details.matches.length} matches, ${t.state}, ${dates}${t.hasGroupStages ? ', group stage' : ''}`);
       continue;
     }
+
+    if (entry.skip) { console.log(`↪ Skipped: ${ref.apiId}`); continue; }
+    if (entry.name) t.name = entry.name;
+    freezeAbandoned(t, details.matches);
 
     await importChallongeTournament({ name: t.name, url: ref.apiId }, entry.game || null, {
       group: entry.group || null,

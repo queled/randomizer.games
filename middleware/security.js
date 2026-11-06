@@ -28,10 +28,12 @@ const createRateLimiter = (windowMs, max, message, skip = () => false) => {
   });
 };
 
-// General API rate limiter - More lenient in development (600 req/15min vs 150 in prod)
+// General API rate limiter: a page view costs 5 to 10 calls (data + the
+// audience beacon), so 600 per 15 minutes lets a visitor browse quickly
+// while still stopping a scraper.
 const apiLimiter = createRateLimiter(
   15 * 60 * 1000,
-  isDevelopment ? 600 : 150,
+  600,
   'Too many API requests, please try again later',
   (req) => isMediaRequest(req) || isAdminRequest(req)
 );

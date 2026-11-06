@@ -23,7 +23,8 @@ const JOBS = [
   { name: 'tournaments-discover', label: 'Découverte de tournois et asyncs ALTTPR', cron: '30 8 * * *', maxRun: 90 * MINUTE },
   { name: 'players', label: 'Joueurs et comptes racetime', cron: '0 10 * * *', maxRun: 70 * MINUTE },
   { name: 'challonge-check', label: 'Quota API Challonge', cron: '15 10 * * *', maxRun: 2 * MINUTE },
-  { name: 'backup', label: 'Sauvegarde de la base', cron: '30 3 * * *', maxRun: 30 * MINUTE }
+  { name: 'backup', label: 'Sauvegarde de la base', cron: '30 3 * * *', maxRun: 30 * MINUTE },
+  { name: 'publish-assets', label: 'Jaquettes et histoires vers GitHub', cron: '45 * * * *', maxRun: 2 * MINUTE }
 ];
 
 // Values of one cron field: *, n, a-b, with an optional /step, comma-separated

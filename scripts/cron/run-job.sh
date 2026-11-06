@@ -13,6 +13,7 @@
 #   players               joueurs et profils racetime.gg, comptes des participants (tous les jours)
 #   challonge-check       une requête pour savoir si le quota Challonge est revenu (tous les jours)
 #   backup                mongodump avec rotation                   (toutes les nuits)
+#   publish-assets        commite et pousse les jaquettes et histoires écrites sur le serveur (toutes les heures)
 #
 # Chaque tâche écrit dans $LOG_DIR/<tâche>.log (~/logs par défaut). Un verrou
 # empêche deux exécutions simultanées : si la précédente tourne encore, la
@@ -119,6 +120,35 @@ run_backup() {
   timeout 30m node scripts/backup-db.js
 }
 
+# Jaquettes et histoires écrites sur le serveur (admin, fetch-covers.js de la
+# tâche archipelago) : commitées et poussées sur main, pour que le prochain
+# git pull ne bute pas sur ces fichiers et que le dépôt les garde.
+PUBLISHED_PATHS=(public/assets/covers public/data/history)
+
+run_publish_assets() {
+  if [ -z "$(git status --porcelain -- "${PUBLISHED_PATHS[@]}")" ]; then
+    log "rien à publier"
+    return 0
+  fi
+  git fetch -q origin main || return 1
+  # Seulement quand le serveur est à jour : sinon le commit divergerait de
+  # main et bloquerait le prochain déploiement (git pull --ff-only)
+  if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
+    log "serveur pas à jour avec origin/main : publication remise après le prochain déploiement"
+    return 1
+  fi
+  git add -A -- "${PUBLISHED_PATHS[@]}" || return 1
+  git status --short -- "${PUBLISHED_PATHS[@]}"
+  git -c user.name="randomizer.games server" -c user.email="server@randomizer.games" \
+    commit -q -m "chore(assets): covers and histories written on the server" -- "${PUBLISHED_PATHS[@]}" || return 1
+  if ! git push -q origin HEAD:main; then
+    # main a bougé entre-temps : on défait le commit, les fichiers restent
+    git reset -q HEAD~1
+    return 1
+  fi
+  log "publié : $(git rev-parse --short HEAD)"
+}
+
 case "$JOB" in
   racetime)             fn=run_racetime ;;
   tournaments-update)   fn=run_tournaments_update ;;
@@ -130,8 +160,9 @@ case "$JOB" in
   players)              fn=run_players ;;
   challonge-check)      fn=run_challonge_check ;;
   backup)               fn=run_backup ;;
+  publish-assets)       fn=run_publish_assets ;;
   *)
-    echo "Usage: $0 <racetime|tournaments-update|schedule-sites|race-vods|tournaments-discover|rando-list|archipelago|players|challonge-check|backup>" >&2
+    echo "Usage: $0 <racetime|tournaments-update|schedule-sites|race-vods|tournaments-discover|rando-list|archipelago|players|challonge-check|backup|publish-assets>" >&2
     exit 2
     ;;
 esac

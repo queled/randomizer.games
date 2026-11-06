@@ -226,6 +226,7 @@ PATH=/usr/local/bin:/usr/bin:/bin
 0     10 * * * /home/randomizer/randomizer-app/scripts/cron/run-job.sh players
 15    10 * * * /home/randomizer/randomizer-app/scripts/cron/run-job.sh challonge-check
 30    3 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh backup
+45    * * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh publish-assets
 ```
 
 Ces horaires sont recopiés dans `services/job-health.js`, qui en tire l'horaire et la prochaine exécution affichés par la page **Monitoring** : les modifier aux deux endroits.
@@ -384,7 +385,7 @@ pm2 restart randomizer
 
 Les tâches planifiées prennent le nouveau code à leur prochaine exécution.
 
-Les histoires et les jaquettes des jeux modifiées depuis l'admin, ainsi que les jaquettes des jeux créés par la tâche `archipelago` (`fetch-covers.js`), sont écrites directement dans `public/data/history/` et `public/assets/covers/` sur le serveur. Avant un `git pull`, `git status` les montre : les commiter et les pousser depuis le serveur (ou les rapatrier dans le dépôt), sinon `git pull` refuse d'écraser ces fichiers. Le bouton « Lancer » de l'onglet Synchronisation passe par `scripts/cron/run-job.sh`, comme la crontab : mêmes journaux, même verrou.
+Les histoires et les jaquettes des jeux modifiées depuis l'admin, ainsi que les jaquettes des jeux créés par la tâche `archipelago` (`fetch-covers.js`), sont écrites directement dans `public/data/history/` et `public/assets/covers/` sur le serveur. La tâche `publish-assets` les commite et les pousse sur `main` toutes les heures (clé de déploiement en écriture). Elle attend que le serveur soit à jour avec `origin/main` (sinon son commit bloquerait le prochain `git pull --ff-only`) : elle publie à la première heure qui suit le déploiement. Le bouton « Lancer » de l'onglet Synchronisation passe par `scripts/cron/run-job.sh`, comme la crontab : mêmes journaux, même verrou.
 
 ## Checklist
 

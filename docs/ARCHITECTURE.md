@@ -67,7 +67,7 @@ En production, la base MongoDB tourne sur le même serveur que le site et n'éco
 | `players` | tous les jours à 10h UTC, une fois `tournaments-discover` terminée (85 min au plus) | `sync-players-from-races.js` : un joueur par compte racetime.gg (source de vérité), au nom de sa dernière course ; `sync-racetime-profiles.js --stale-days 7 --limit 1200` relit le profil racetime des joueurs (chacun une fois par semaine) : nom actuel, compte supprimé ; puis `link-participant-accounts.js --all --apply` relie chaque participant de tournoi au compte racetime qui a couru ses matchs (voir plus bas) |
 | `challonge-check` | tous les jours à 10h15 UTC | `check-challonge-quota.js` : une seule requête Challonge, en erreur sur la page de santé tant que le quota (500 requêtes sur 30 jours glissants) est épuisé ; à son retour, les imports Challonge en attente se lancent à la main |
 | `backup` | tous les jours à 3h30 | `backup-db.js` : archive `mongodump` de la base, 7 gardées |
-| `publish-assets` | toutes les heures à la 45e minute | commite et pousse sur `main` les jaquettes (`public/assets/covers/`) et histoires (`public/data/history/`) écrites sur le serveur par l'admin ou `fetch-covers.js`, si le serveur est à jour avec `origin/main` |
+| `publish-assets` | tous les jours à 6h45, après `archipelago` | commite et pousse sur `main` les jaquettes (`public/assets/covers/`) et histoires (`public/data/history/`) écrites sur le serveur par l'admin ou `fetch-covers.js`, si le serveur est à jour avec `origin/main` |
 
 Chaque tâche se lance aussi à la main : `scripts/cron/run-job.sh <tâche>`.
 

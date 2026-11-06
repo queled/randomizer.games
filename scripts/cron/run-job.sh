@@ -13,7 +13,7 @@
 #   players               joueurs et profils racetime.gg, comptes des participants (tous les jours)
 #   challonge-check       une requête pour savoir si le quota Challonge est revenu (tous les jours)
 #   backup                mongodump avec rotation                   (toutes les nuits)
-#   publish-assets        commite et pousse les jaquettes et histoires écrites sur le serveur (toutes les heures)
+#   publish-assets        commite et pousse les jaquettes et histoires écrites sur le serveur (tous les jours, après archipelago)
 #
 # Chaque tâche écrit dans $LOG_DIR/<tâche>.log (~/logs par défaut). Un verrou
 # empêche deux exécutions simultanées : si la précédente tourne encore, la

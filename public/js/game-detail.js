@@ -1098,6 +1098,15 @@
     return name;
   }
 
+  function marathonLanguageName(code) {
+    try {
+      const name = new Intl.DisplayNames([overviewLocale() || 'en'], { type: 'language' }).of(code);
+      return name ? name.charAt(0).toUpperCase() + name.slice(1) : code;
+    } catch (e) {
+      return String(code || '').toUpperCase();
+    }
+  }
+
   function renderMarathonRuns() {
     const section = document.getElementById('marathon-runs');
     const list = document.getElementById('marathon-runs-list');
@@ -1106,8 +1115,11 @@
     const rows = marathonRuns.map(run => {
       const date = run.startedAt ? new Date(run.startedAt).toLocaleDateString(locale, { year: 'numeric', month: 'short' }) : '';
       const video = (run.videos || []).find(v => sanitizeExternalUrl(v.url));
-      const vod = video
-        ? `<a class="vod-link" ${buildExternalLinkAttrs(video.url)}>▶ ${escapeHtml(t('gameDetail.marathonWatchVod', 'Watch the VOD'))}</a>`
+      // Restreams in another language, named in the site's language ("▶ French")
+      const restreams = (run.restreams || []).filter(r => sanitizeExternalUrl(r.url))
+        .map(r => `<a class="vod-link" ${buildExternalLinkAttrs(r.url)}>▶ ${escapeHtml(marathonLanguageName(r.language))}</a>`);
+      const vod = video || restreams.length
+        ? [video ? `<a class="vod-link" ${buildExternalLinkAttrs(video.url)}>▶ ${escapeHtml(t('gameDetail.marathonWatchVod', 'Watch the VOD'))}</a>` : '', ...restreams].filter(Boolean).join('<br>')
         : `<span class="text-muted">${escapeHtml(t('gameDetail.marathonNoVod', 'No VOD'))}</span>`;
       return `<tr>
         <td>${escapeHtml(run.event?.name || run.event?.short || '')}<div class="text-muted">${escapeHtml(date)}</div></td>

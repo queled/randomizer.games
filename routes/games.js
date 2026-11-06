@@ -217,7 +217,7 @@ router.get('/:id/marathon-runs', async (req, res, next) => {
     const { MarathonRun, Player } = require('../models');
     const { exactNameRegex } = require('../helpers/player-races-filter');
     const runs = await MarathonRun.find({ gameSlug: req.params.id })
-      .select('-_id source externalId event name category runners startedAt runTime videos')
+      .select('-_id source externalId event name category runners startedAt runTime videos restreams')
       .sort({ startedAt: -1 })
       .lean();
 

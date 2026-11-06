@@ -652,7 +652,10 @@ const marathonRunSchema = new mongoose.Schema({
   startedAt: Date,
   // Seconds
   runTime: Number,
-  videos: [{ _id: false, type: { type: String }, url: String }]
+  videos: [{ _id: false, type: { type: String }, url: String }],
+  // Restreams of the run in another language (scripts/sync-marathon-restreams.js), apart from
+  // `videos` that the marathon's sync rewrites
+  restreams: [{ _id: false, language: String, url: String, channel: String }]
 }, { timestamps: true });
 marathonRunSchema.index({ source: 1, externalId: 1 }, { unique: true });
 marathonRunSchema.index({ gameSlug: 1, startedAt: -1 });

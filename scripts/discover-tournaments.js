@@ -793,7 +793,8 @@ function parseChallongeRef(value) {
 
   const subdomain = url.hostname.split('.').slice(0, -2).filter(part => part !== 'www')[0] || null;
   const parts = url.pathname.split('/').filter(Boolean);
-  if (parts.length > 1 && /^[a-z]{2}(-[A-Za-z]{2})?$/.test(parts[0])) parts.shift();
+  // Language prefix: /de/<slug>, /pt-BR/<slug> or /pt_BR/<slug>
+  if (parts.length > 1 && /^[a-z]{2}([-_][A-Za-z]{2})?$/.test(parts[0])) parts.shift();
   // /tournaments/signup/<token> pages carry no resolvable slug
   if (!parts.length || parts[0] === 'tournaments') return null;
 

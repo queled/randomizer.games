@@ -157,7 +157,7 @@ const es = {
         stats: "Estadísticas",
         liveStreams: "Streams en vivo",
         marathonRuns: "En maratones",
-        marathonRunsDescription: "Runs y carreras de este randomizer en los maratones Games Done Quick, con su VOD.",
+        marathonRunsDescription: "Runs y carreras de este randomizer en maratones de speedrun (Games Done Quick y otros), con su VOD y sus restreams en otros idiomas.",
         marathonEvent: "Maratón",
         marathonCategory: "Categoría",
         marathonRunners: "Jugadores",

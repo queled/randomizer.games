@@ -169,7 +169,7 @@ const en = {
         liveStreams: "Live Streams",
         streamsComingSoon: "Twitch/YouTube/Kick integration coming soon...",
         marathonRuns: "At marathons",
-        marathonRunsDescription: "Runs and races of this randomizer at Games Done Quick marathons, with their VOD.",
+        marathonRunsDescription: "Runs and races of this randomizer at speedrun marathons (Games Done Quick and others), with their VOD and restreams in other languages.",
         marathonEvent: "Marathon",
         marathonCategory: "Category",
         marathonRunners: "Runners",

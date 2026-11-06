@@ -159,7 +159,7 @@ const de = {
         stats: "Statistiken",
         liveStreams: "Live-Streams",
         marathonRuns: "Bei Marathons",
-        marathonRunsDescription: "Runs und Rennen dieses Randomizers bei Games-Done-Quick-Marathons, mit VOD.",
+        marathonRunsDescription: "Runs und Rennen dieses Randomizers bei Speedrun-Marathons (Games Done Quick und andere), mit VOD und Restreams in anderen Sprachen.",
         marathonEvent: "Marathon",
         marathonCategory: "Kategorie",
         marathonRunners: "Runner",

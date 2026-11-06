@@ -192,7 +192,7 @@ const pt = {
         streams: "Transmissões",
         liveStreams: "Transmissões ao Vivo",
         marathonRuns: "Em maratonas",
-        marathonRunsDescription: "Runs e corridas deste randomizer nas maratonas Games Done Quick, com o VOD.",
+        marathonRunsDescription: "Runs e corridas deste randomizer em maratonas de speedrun (Games Done Quick e outras), com o VOD e os restreams em outros idiomas.",
         marathonEvent: "Maratona",
         marathonCategory: "Categoria",
         marathonRunners: "Jogadores",

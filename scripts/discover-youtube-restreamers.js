@@ -23,6 +23,7 @@
  *   node scripts/discover-youtube-restreamers.js --max-searches 45
  *   node scripts/discover-youtube-restreamers.js --revalidate  # every channel again
  *   node scripts/discover-youtube-restreamers.js --rejected    # the rejected channels again
+ *   node scripts/discover-youtube-restreamers.js --handles @a,@b  # only these channels, no search
  */
 
 const path = require('path');
@@ -54,13 +55,14 @@ const QUERY_LANGUAGES = ['', 'français', 'deutsch', 'español', 'português'];
 
 function parseArgs() {
   const args = process.argv.slice(2);
-  const opts = { dryRun: false, maxSearches: 45, revalidate: false, rejected: false };
+  const opts = { dryRun: false, maxSearches: 45, revalidate: false, rejected: false, handles: [] };
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
       case '--dry-run': opts.dryRun = true; break;
       case '--revalidate': opts.revalidate = true; break;
       case '--rejected': opts.rejected = true; break;
       case '--max-searches': opts.maxSearches = Math.max(0, parseInt(args[++i], 10) || 0); break;
+      case '--handles': opts.handles = String(args[++i] || '').split(',').map(h => h.trim().replace(/^.*youtube\.com\//i, '').replace(/^@/, '')).filter(Boolean); break;
     }
   }
   return opts;
@@ -111,23 +113,36 @@ async function main() {
   // Candidates: channel id → { source, twitchLogin }
   const candidates = new Map();
   const add = (id, fields) => { if (id && !candidates.has(id)) candidates.set(id, fields); };
-  Object.entries(MANUAL_CHANNELS).forEach(([id, twitchLogin]) => add(id, { source: 'manual', twitchLogin }));
-
-  const linkedIds = tournaments.flatMap(t => ((t.midosHouse && t.midosHouse.pastRestreams) || [])
-    .flatMap(r => r.restreams || []).map(s => youtube.videoId(s.vodUrl) || youtube.videoId(s.sourceUrl)).filter(Boolean));
-  for (const video of (await youtube.getVideos(linkedIds)).values()) add(video.snippet.channelId, { source: 'midos' });
-
   const known = new Map((await YoutubeChannel.find().lean()).map(c => [c.channelId, c]));
   const restreamers = twitchRestreamers(tournaments, races);
-  const linkedLogins = new Set([...known.values()].map(c => c.twitchLogin).filter(Boolean));
-  for (const login of restreamers.keys()) {
-    if (linkedLogins.has(login) || Object.values(MANUAL_CHANNELS).includes(login)) continue;
-    const channel = await youtube.getChannelByHandle(login);
-    if (channel) add(channel.id, { source: 'handle', twitchLogin: login });
+  if (opts.handles.length) {
+    // Channels suggested by hand: checked like a search's, kept only with enough races
+    opts.maxSearches = 0;
+    opts.revalidate = true;
+    for (const handle of opts.handles) {
+      const channel = await youtube.getChannelByHandle(handle);
+      if (!channel) { console.log(`❓ @${handle} : chaîne introuvable`); continue; }
+      const k = known.get(channel.id);
+      if (k) console.log(`ℹ️  @${handle} déjà en base : ${k.status} (${k.matchedRaces || 0} race(s))`);
+      add(channel.id, { source: k ? k.source : 'suggested', twitchLogin: k ? k.twitchLogin : null });
+    }
+  } else {
+    Object.entries(MANUAL_CHANNELS).forEach(([id, twitchLogin]) => add(id, { source: 'manual', twitchLogin }));
+
+    const linkedIds = tournaments.flatMap(t => ((t.midosHouse && t.midosHouse.pastRestreams) || [])
+      .flatMap(r => r.restreams || []).map(s => youtube.videoId(s.vodUrl) || youtube.videoId(s.sourceUrl)).filter(Boolean));
+    for (const video of (await youtube.getVideos(linkedIds)).values()) add(video.snippet.channelId, { source: 'midos' });
+
+    const linkedLogins = new Set([...known.values()].map(c => c.twitchLogin).filter(Boolean));
+    for (const login of restreamers.keys()) {
+      if (linkedLogins.has(login) || Object.values(MANUAL_CHANNELS).includes(login)) continue;
+      const channel = await youtube.getChannelByHandle(login);
+      if (channel) add(channel.id, { source: 'handle', twitchLogin: login });
+    }
   }
 
   // Searches not made yet, every tournament's name first, those with the most races without a restream VOD first
-  const searched = await YoutubeSearch.find().lean();
+  const searched = opts.handles.length ? [] : await YoutubeSearch.find().lean();
   const found = searched.flatMap(s => s.videos || []);
   const done = new Set(searched.map(s => s.query));
   const missing = new Map();
@@ -166,7 +181,7 @@ async function main() {
     if (matchVideo(video, index, channel).length) foundChannels.set(video.snippet.channelId, video.snippet.channelTitle);
   }
   [...foundChannels.keys()].forEach(id => add(id, { source: 'search' }));
-  known.forEach((k, id) => add(id, { source: k.source, twitchLogin: k.twitchLogin }));
+  if (!opts.handles.length) known.forEach((k, id) => add(id, { source: k.source, twitchLogin: k.twitchLogin }));
   console.log(`🔍 ${searches} recherche(s) YouTube, ${Math.max(0, queries.length - searches)} restante(s) ; ${new Set(found.map(v => v.channelId)).size} chaîne(s) dans les résultats, dont ${foundChannels.size} avec un restream ; ${candidates.size} chaîne(s) candidate(s)`);
 
   // Channels to (re)validate

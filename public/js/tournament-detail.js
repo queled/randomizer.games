@@ -2716,6 +2716,21 @@ function emptySlotLabel(match) {
   return match.walkover ? '—' : (i18n.t('tournamentDetail.tbd') || 'TBD');
 }
 
+// Series without any score from the source: games won in its races, if they agree with the winner
+function seriesScoreFromRaces(match, races) {
+  if (match.state !== 'complete' || !match.winnerId) return null;
+  let s1 = 0, s2 = 0;
+  for (const race of races) {
+    let side = null;
+    try { side = raceWinnerSide(match, race); } catch (e) {}
+    if (side === 1) s1++;
+    else if (side === 2) s2++;
+  }
+  if (s1 === s2) return null;
+  const leader = s1 > s2 ? match.player1Id : match.player2Id;
+  return leader === match.winnerId ? [s1, s2] : null;
+}
+
 // Times of the match's two players in one of its races
 function matchTimesFromRace(match, race, isMultiRaceSeries = false) {
   const isTeamMatch = !!(match.player1Members && match.player1Members.length && match.player2Members && match.player2Members.length);
@@ -2862,6 +2877,9 @@ function createMatchCard(match, races = []) {
   
   if (displayScore1 === null && displayScore2 === null && !isMultiRaceSeries) {
     [displayScore1, displayScore2] = winnerOnlyScore(match) || [null, null];
+  }
+  if (displayScore1 === null && displayScore2 === null && isMultiRaceSeries) {
+    [displayScore1, displayScore2] = seriesScoreFromRaces(match, matchRaces) || [null, null];
   }
 
   const player1Winner = match.winnerId != null && match.winnerId === match.player1Id;

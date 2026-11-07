@@ -1195,6 +1195,7 @@ async function importChallongeTournament(tournamentPreview, gameSlug = null, { g
       url: tournamentData.fullUrl || tournamentData.url || null,
       group,
       discoveredVia,
+      ...(tournamentData.originalName ? { originalName: tournamentData.originalName } : {}),
       importedAt: new Date()
     }
   };

@@ -248,6 +248,8 @@ const tournamentSchema = new mongoose.Schema({
     url: String,
     fullUrl: String,
     name: String,
+    // Title on Challonge, kept when the import plan gave the bracket another name
+    originalName: String,
     label: String,
     tournamentType: String,
     state: String,
@@ -374,6 +376,8 @@ const tournamentSchema = new mongoose.Schema({
     // Several brackets of one tournament share the same group name
     group: String,
     discoveredVia: String,
+    // Title on the source site, kept when the import gave the tournament another name
+    originalName: String,
     importedAt: Date
   }
 }, { timestamps: true });

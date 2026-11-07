@@ -116,7 +116,10 @@ async function main() {
     }
 
     if (entry.skip) { console.log(`↪ Skipped: ${ref.apiId}`); continue; }
-    if (entry.name) t.name = entry.name;
+    if (entry.name && entry.name !== t.name) {
+      t.originalName = t.name;
+      t.name = entry.name;
+    }
     freezeAbandoned(t, details.matches);
     if (FINISHED.includes(String(t.state).toLowerCase())) dropUnplayedSwissRounds(t, details);
 

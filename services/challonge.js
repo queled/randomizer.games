@@ -5,13 +5,12 @@ const path = require('path');
 /**
  * Some organizers never enter a score: Challonge then shows in its place the share of
  * the community votes for each player ("67-33" for 4 votes against 2), and puts it in
- * scores_csv too. Such a value, or a "0-0" beside a winner, says nothing about the match.
+ * scores_csv too. Such a value says nothing about the match.
  */
 function isVoteShareScore(match) {
   const score = /^\s*(\d+)\s*-\s*(\d+)\s*$/.exec(String(match.scores_csv || ''));
   if (!score) return false;
   const [s1, s2] = [Number(score[1]), Number(score[2])];
-  if (s1 === 0 && s2 === 0) return Boolean(match.winner_id);
   const v1 = Number(match.player1_votes) || 0;
   const v2 = Number(match.player2_votes) || 0;
   if (!v1 && !v2 || s1 + s2 !== 100) return false;

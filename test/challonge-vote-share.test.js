@@ -8,8 +8,8 @@ test('a score equal to the share of community votes is no score', () => {
   assert.strictEqual(isVoteShareScore({ scores_csv: '0-100', player1_votes: null, player2_votes: 3, winner_id: 2 }), true);
 });
 
-test('"0-0" beside a winner is no score, a draw without winner is one', () => {
-  assert.strictEqual(isVoteShareScore({ scores_csv: '0-0', winner_id: 1 }), true);
+test('"0-0" is kept: with a winner, it stands for a match won without being played', () => {
+  assert.strictEqual(isVoteShareScore({ scores_csv: '0-0', winner_id: 1 }), false);
   assert.strictEqual(isVoteShareScore({ scores_csv: '0-0', winner_id: null }), false);
 });
 

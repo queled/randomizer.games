@@ -4300,6 +4300,8 @@ const admin = {
       </div>
     `;
     
+    const hostCards = this.renderHostCards(host, row);
+
     container.innerHTML = `
       <div class="monitoring-summary monitoring-summary-${problems.length ? 'danger' : 'success'}">
         <strong>${problems.length ? `⚠️ ${this.escapeHtml(problems.join(' · '))}` : '✓ Tout fonctionne'}</strong>
@@ -4311,15 +4313,6 @@ const admin = {
 
       <div class="monitoring-grid">
         ${this.renderJobsCard(jobs)}
-
-        <div class="monitoring-card">
-          <h3 class="monitoring-card-title">🔌 Services</h3>
-          <div class="monitoring-items">
-            ${services.map(([name, status]) => row(name, `<span class="badge badge-${isOk(status) ? 'success' : status === 'warning' ? 'warning' : 'danger'}">${isOk(status) ? '✓' : '✗'} ${this.escapeHtml(status || 'unknown')}</span>`)).join('')}
-          </div>
-        </div>
-        
-        ${this.renderHostCards(host, row)}
 
         <div class="monitoring-card">
           <h3 class="monitoring-card-title">💻 Serveur</h3>
@@ -4334,6 +4327,10 @@ const admin = {
             ${row('Node.js', this.escapeHtml(system.nodeVersion || '-'))}
           </div>
         </div>
+
+        ${hostCards.updates}
+
+        ${hostCards.services}
 
         <div class="monitoring-card">
           <h3 class="monitoring-card-title">⚙️ PM2</h3>
@@ -4350,13 +4347,20 @@ const admin = {
             <p class="text-muted monitoring-sub">Le site ne tourne pas sous PM2 ici (normal en local). Sur le VPS, il est lancé par <code>pm2 start server.js --name randomizer</code>.</p>
           `}
         </div>
+
+        <div class="monitoring-card">
+          <h3 class="monitoring-card-title">🔌 Services</h3>
+          <div class="monitoring-items">
+            ${services.map(([name, status]) => row(name, `<span class="badge badge-${isOk(status) ? 'success' : status === 'warning' ? 'warning' : 'danger'}">${isOk(status) ? '✓' : '✗'} ${this.escapeHtml(status || 'unknown')}</span>`)).join('')}
+          </div>
+        </div>
       </div>
     `;
   },
   
   // systemd services of the VPS and its unattended upgrades (services/system-health.js)
   renderHostCards(host, row) {
-    if (!host) return '';
+    if (!host) return { services: '', updates: '' };
     const words = { running: 'actif', waiting: 'programmé', exited: 'terminé', inactive: 'arrêté', failed: 'en échec', absent: 'absent' };
     const word = (value) => this.escapeHtml(words[value] || value);
     const badges = {
@@ -4386,12 +4390,14 @@ const admin = {
       ? row('Paquets qui l’attendent', `<code>${reboot.packages.map(p => this.escapeHtml(p)).join('</code> <code>')}</code>`)
       : '';
 
-    return `
+    return {
+      services: `
       <div class="monitoring-card">
         <h3 class="monitoring-card-title">🧩 Services du serveur</h3>
         <div class="monitoring-items">${services}</div>
       </div>
-
+      `,
+      updates: `
       <div class="monitoring-card">
         <h3 class="monitoring-card-title">🔄 Mises à jour et redémarrage</h3>
         <div class="monitoring-items">
@@ -4405,7 +4411,8 @@ const admin = {
           ${row('Noyau', `<code>${this.escapeHtml(reboot.kernel)}</code> <span class="text-muted">· démarré ${this.formatRelativeTime(reboot.bootedAt)}</span>`)}
         </div>
       </div>
-    `;
+      `
+    };
   },
 
   // Scheduled tasks of the server's crontab (scripts/cron/run-job.sh)

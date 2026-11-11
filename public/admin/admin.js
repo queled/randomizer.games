@@ -4278,9 +4278,15 @@ const admin = {
     const jobs = Array.isArray(data.jobs) ? data.jobs : [];
     const failingJobs = jobs.filter(job => job.state === 'error' || job.state === 'late');
     const downServices = services.filter(([, status]) => !isOk(status));
+    const host = data.host;
+    const stoppedUnits = (host?.services || []).filter(unit => unit.state === 'error');
+    const notAtBoot = (host?.services || []).filter(unit => unit.state === 'warning');
     const problems = [
       failingJobs.length ? `${failingJobs.length} tâche${failingJobs.length > 1 ? 's' : ''} à vérifier (${failingJobs.map(job => job.name).join(', ')})` : '',
-      downServices.length ? `${downServices.map(([name]) => name).join(', ')} injoignable${downServices.length > 1 ? 's' : ''}` : ''
+      downServices.length ? `${downServices.map(([name]) => name).join(', ')} injoignable${downServices.length > 1 ? 's' : ''}` : '',
+      stoppedUnits.length ? `${stoppedUnits.map(unit => unit.label).join(', ')} arrêté${stoppedUnits.length > 1 ? 's' : ''} sur le serveur` : '',
+      notAtBoot.length ? `${notAtBoot.map(unit => unit.label).join(', ')} ne repartirai${notAtBoot.length > 1 ? 'en' : ''}t pas après un redémarrage` : '',
+      host?.reboot?.required && !host.updates?.autoReboot ? 'redémarrage du serveur à faire à la main' : ''
     ].filter(Boolean);
     const next = jobs.filter(job => job.nextRunAt).sort((a, b) => new Date(a.nextRunAt) - new Date(b.nextRunAt))[0];
     const running = jobs.filter(job => job.state === 'running');
@@ -4313,6 +4319,8 @@ const admin = {
           </div>
         </div>
         
+        ${this.renderHostCards(host, row)}
+
         <div class="monitoring-card">
           <h3 class="monitoring-card-title">💻 Serveur</h3>
           <div class="monitoring-items">
@@ -4346,6 +4354,60 @@ const admin = {
     `;
   },
   
+  // systemd services of the VPS and its unattended upgrades (services/system-health.js)
+  renderHostCards(host, row) {
+    if (!host) return '';
+    const words = { running: 'actif', waiting: 'programmé', exited: 'terminé', inactive: 'arrêté', failed: 'en échec', absent: 'absent' };
+    const word = (value) => this.escapeHtml(words[value] || value);
+    const badges = {
+      ok: (unit) => `<span class="badge badge-success">✓ ${word(unit.sub || unit.active)}</span>`,
+      warning: (unit) => `<span class="badge badge-warning">⚠️ ${word(unit.sub || unit.active)}, pas au démarrage</span>`,
+      error: (unit) => `<span class="badge badge-danger">✗ ${word(unit.active)}</span>`
+    };
+    const services = host.services.map(unit => row(
+      `${this.escapeHtml(unit.label)}<div class="text-muted monitoring-sub">${this.escapeHtml(unit.role)}</div>`,
+      `${badges[unit.state](unit)}${unit.since && unit.state !== 'error' ? `<div class="text-muted monitoring-sub">depuis ${this.formatDuration(Date.now() - new Date(unit.since))}</div>` : ''}`,
+      `${unit.unit} · ${unit.enabled === 'enabled' ? 'lancé au démarrage' : `démarrage : ${unit.enabled || 'inconnu'}`}`
+    )).join('');
+
+    const { updates, reboot } = host;
+    const atTime = updates.autoRebootTime && updates.autoRebootTime !== 'now' ? updates.autoRebootTime : null;
+    let rebootValue;
+    if (reboot.scheduled) {
+      rebootValue = `<span class="badge badge-warning">⏳ prévu ${this.formatUntil(reboot.scheduled.at)}</span><div class="text-muted monitoring-sub">${this.formatDateTime(reboot.scheduled.at)}</div>`;
+    } else if (reboot.required) {
+      rebootValue = updates.autoReboot
+        ? `<span class="badge badge-warning">⏳ en attente</span><div class="text-muted monitoring-sub">à ${this.escapeHtml(atTime || 'la fin')} UTC après le prochain passage des mises à jour</div>`
+        : `<span class="badge badge-danger">✗ à faire à la main</span><div class="text-muted monitoring-sub"><code>sudo reboot</code></div>`;
+    } else {
+      rebootValue = '<span class="badge badge-success">✓ aucun nécessaire</span>';
+    }
+    const packages = reboot.packages.length
+      ? row('Paquets qui l’attendent', `<code>${reboot.packages.map(p => this.escapeHtml(p)).join('</code> <code>')}</code>`)
+      : '';
+
+    return `
+      <div class="monitoring-card">
+        <h3 class="monitoring-card-title">🧩 Services du serveur</h3>
+        <div class="monitoring-items">${services}</div>
+      </div>
+
+      <div class="monitoring-card">
+        <h3 class="monitoring-card-title">🔄 Mises à jour et redémarrage</h3>
+        <div class="monitoring-items">
+          ${row('Dernier passage', updates.lastRunAt ? `<span data-tooltip="${this.escapeHtml(this.formatDateTime(updates.lastRunAt))}">${this.formatRelativeTime(updates.lastRunAt)}</span>` : '-', 'Mises à jour de sécurité installées par unattended-upgrades')}
+          ${row('Prochain passage', updates.nextRunAt ? `${this.formatUntil(updates.nextRunAt)} <span class="text-muted">· ${this.formatClock(updates.nextRunAt)}</span>` : '-')}
+          ${row('Redémarrage', rebootValue)}
+          ${packages}
+          ${row('Redémarrage automatique', updates.autoReboot
+            ? `si nécessaire, à ${this.escapeHtml(atTime || 'la fin des mises à jour')}${atTime ? ' UTC' : ''}`
+            : '<span class="text-muted">désactivé</span>')}
+          ${row('Noyau', `<code>${this.escapeHtml(reboot.kernel)}</code> <span class="text-muted">· démarré ${this.formatRelativeTime(reboot.bootedAt)}</span>`)}
+        </div>
+      </div>
+    `;
+  },
+
   // Scheduled tasks of the server's crontab (scripts/cron/run-job.sh)
   renderJobsCard(jobs) {
     if (!jobs.length) return '';

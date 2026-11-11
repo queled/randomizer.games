@@ -19,6 +19,7 @@ const { normalizePlayerName } = require('../helpers/player-aliases');
 const { syncParticipantAccounts } = require('../helpers/participant-accounts');
 const { fillMissingFinalRanks } = require('../helpers/bracket-ranks');
 const { JOBS, getJobsHealth, readJobLog } = require('../services/job-health');
+const { getSystemHealth } = require('../services/system-health');
 const { computeLinkCoverage, summarizeCoverage } = require('../services/link-coverage');
 const { mergeGames, changeGameId } = require('../services/game-merge');
 const { invalidateGamesWithStats } = require('./games');
@@ -1313,7 +1314,10 @@ router.get('/health', requireAdmin, async (req, res, next) => {
       startggStatus = 'error';
     }
     
-    const jobs = await getJobsHealth({ Game, Tournament, Race });
+    const [jobs, host] = await Promise.all([
+      getJobsHealth({ Game, Tournament, Race }),
+      getSystemHealth().catch(() => null)
+    ]);
 
     res.json({
       api: { status: 'ok', description: 'API du site Randomizer' },
@@ -1344,7 +1348,9 @@ router.get('/health', requireAdmin, async (req, res, next) => {
         unstableRestarts: Number(process.env.unstable_restarts) || 0,
         memoryLimit: Number(process.env.max_memory_restart) ? formatBytes(Number(process.env.max_memory_restart)) : null
       } : null,
-      jobs
+      jobs,
+      // systemd services and system updates of the VPS, null off Linux
+      host
     });
   } catch (error) {
     next(error);

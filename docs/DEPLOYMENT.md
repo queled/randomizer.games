@@ -347,6 +347,19 @@ sudo apt install -y unattended-upgrades
 sudo dpkg-reconfigure --priority=low unattended-upgrades
 ```
 
+Une mise à jour du noyau ou de la libc ne s'applique qu'au redémarrage. Le serveur redémarre donc seul, **uniquement quand une mise à jour l'exige** (`/var/run/reboot-required`), à 4h UTC le lendemain de son installation : après la sauvegarde de 3h30, avant les synchros de 6h. MongoDB, nginx, cron et PM2 (`pm2 startup` + `pm2 save`) sont lancés au démarrage, le site revient en une minute environ.
+
+```bash
+sudo tee /etc/apt/apt.conf.d/52unattended-upgrades-reboot <<'EOF'
+Unattended-Upgrade::Automatic-Reboot "true";
+Unattended-Upgrade::Automatic-Reboot-WithUsers "true";
+Unattended-Upgrade::Automatic-Reboot-Time "04:00";
+EOF
+apt-config dump | grep Automatic-Reboot   # vérification
+```
+
+L'onglet Monitoring de l'admin montre l'état de ces services, un redémarrage en attente et ses paquets. Un réglage système fait à la main doit survivre au redémarrage (fichier dans `/etc/sysctl.d/`, pas seulement `sysctl -w`).
+
 ## 10. Sauvegardes
 
 La base n'existe plus que sur ce serveur : les sauvegardes sont indispensables.

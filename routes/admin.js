@@ -20,6 +20,7 @@ const { syncParticipantAccounts } = require('../helpers/participant-accounts');
 const { fillMissingFinalRanks } = require('../helpers/bracket-ranks');
 const { JOBS, getJobsHealth, readJobLog } = require('../services/job-health');
 const { getSystemHealth } = require('../services/system-health');
+const youtube = require('../services/youtube');
 const { computeLinkCoverage, summarizeCoverage } = require('../services/link-coverage');
 const { mergeGames, changeGameId } = require('../services/game-merge');
 const { invalidateGamesWithStats } = require('./games');
@@ -1314,9 +1315,10 @@ router.get('/health', requireAdmin, async (req, res, next) => {
       startggStatus = 'error';
     }
     
-    const [jobs, host] = await Promise.all([
+    const [jobs, host, youtube] = await Promise.all([
       getJobsHealth({ Game, Tournament, Race }),
-      getSystemHealth().catch(() => null)
+      getSystemHealth().catch(() => null),
+      youtubeHealth()
     ]);
 
     res.json({
@@ -1326,6 +1328,7 @@ router.get('/health', requireAdmin, async (req, res, next) => {
       twitch: { status: twitchStatus },
       challonge: { status: challongeStatus },
       startgg: { status: startggStatus },
+      youtube,
       system: {
         now: new Date(),
         uptime: process.uptime(),
@@ -1356,6 +1359,27 @@ router.get('/health', requireAdmin, async (req, res, next) => {
     next(error);
   }
 });
+
+// YouTube Data API: a real call checks the key and the daily quota. It costs 1 unit
+// of the 10,000 a day, hence at most one every 10 minutes (144 a day at worst).
+const YOUTUBE_HEALTH_TTL = 10 * 60 * 1000;
+let youtubeHealthCache = null;
+
+async function youtubeHealth() {
+  if (!youtube.hasKey()) return { status: 'warning', detail: 'clé absente' };
+  if (youtubeHealthCache && youtubeHealthCache.expiresAt > Date.now()) return youtubeHealthCache.value;
+  let value;
+  try {
+    await youtube.ping();
+    value = { status: 'ok' };
+  } catch (error) {
+    if (youtube.isQuotaError(error)) value = { status: 'warning', detail: 'quota du jour épuisé' };
+    else if (error.response) value = { status: 'error', detail: `refusé (${error.response.status})` };
+    else value = { status: 'error', detail: 'injoignable' };
+  }
+  youtubeHealthCache = { value, expiresAt: Date.now() + YOUTUBE_HEALTH_TTL };
+  return value;
+}
 
 // Helper function
 function formatBytes(bytes) {

@@ -4267,23 +4267,29 @@ const admin = {
     if (updated) updated.textContent = `Mis à jour à ${new Date().toLocaleTimeString('fr-FR')}`;
 
     const isOk = (status) => status === 'ok' || status === 'online' || status === true;
+    const host = data.host;
+    const dbConnected = isOk(data.database?.status);
+    // On the VPS the site's link to MongoDB shows on the MongoDB row of the server
+    // services; elsewhere (dev against a remote base) it stays among these
     const services = [
-      ['API Randomizer', data.api?.status],
-      ['MongoDB', data.database?.status],
+      ...(host ? [] : [['MongoDB', data.database?.status]]),
       ['Racetime.gg', data.racetime?.status],
       ['Twitch API', data.twitch?.status],
       ['Challonge API', data.challonge?.status],
-      ['start.gg API', data.startgg?.status]
+      ['start.gg API', data.startgg?.status],
+      ['YouTube API', data.youtube?.status, data.youtube?.detail]
     ];
     const jobs = Array.isArray(data.jobs) ? data.jobs : [];
     const failingJobs = jobs.filter(job => job.state === 'error' || job.state === 'late');
-    const downServices = services.filter(([, status]) => !isOk(status));
-    const host = data.host;
+    const downServices = services.filter(([, status]) => status !== 'warning' && !isOk(status));
+    const limitedServices = services.filter(([, status]) => status === 'warning');
     const stoppedUnits = (host?.services || []).filter(unit => unit.state === 'error');
     const notAtBoot = (host?.services || []).filter(unit => unit.state === 'warning');
     const problems = [
       failingJobs.length ? `${failingJobs.length} tâche${failingJobs.length > 1 ? 's' : ''} à vérifier (${failingJobs.map(job => job.name).join(', ')})` : '',
       downServices.length ? `${downServices.map(([name]) => name).join(', ')} injoignable${downServices.length > 1 ? 's' : ''}` : '',
+      limitedServices.length ? limitedServices.map(([name, , detail]) => `${name} : ${detail || 'à vérifier'}`).join(', ') : '',
+      host && !dbConnected ? 'le site n’est plus connecté à MongoDB' : '',
       stoppedUnits.length ? `${stoppedUnits.map(unit => unit.label).join(', ')} arrêté${stoppedUnits.length > 1 ? 's' : ''} sur le serveur` : '',
       notAtBoot.length ? `${notAtBoot.map(unit => unit.label).join(', ')} ne repartirai${notAtBoot.length > 1 ? 'en' : ''}t pas après un redémarrage` : '',
       host?.reboot?.required && !host.updates?.autoReboot ? 'redémarrage du serveur à faire à la main' : ''
@@ -4300,7 +4306,7 @@ const admin = {
       </div>
     `;
     
-    const hostCards = this.renderHostCards(host, row);
+    const hostCards = this.renderHostCards(host, row, dbConnected);
 
     container.innerHTML = `
       <div class="monitoring-summary monitoring-summary-${problems.length ? 'danger' : 'success'}">
@@ -4349,9 +4355,9 @@ const admin = {
         </div>
 
         <div class="monitoring-card">
-          <h3 class="monitoring-card-title">🔌 Services</h3>
+          <h3 class="monitoring-card-title">🔌 Services externes</h3>
           <div class="monitoring-items">
-            ${services.map(([name, status]) => row(name, `<span class="badge badge-${isOk(status) ? 'success' : status === 'warning' ? 'warning' : 'danger'}">${isOk(status) ? '✓' : '✗'} ${this.escapeHtml(status || 'unknown')}</span>`)).join('')}
+            ${services.map(([name, status, detail]) => row(name, `<span class="badge badge-${isOk(status) ? 'success' : status === 'warning' ? 'warning' : 'danger'}">${isOk(status) ? '✓ ok' : `${status === 'warning' ? '⚠️' : '✗'} ${this.escapeHtml(detail || status || 'unknown')}`}</span>`)).join('')}
           </div>
         </div>
       </div>
@@ -4359,7 +4365,7 @@ const admin = {
   },
   
   // systemd services of the VPS and its unattended upgrades (services/system-health.js)
-  renderHostCards(host, row) {
+  renderHostCards(host, row, dbConnected = true) {
     if (!host) return { services: '', updates: '' };
     const words = { running: 'actif', waiting: 'programmé', exited: 'terminé', inactive: 'arrêté', failed: 'en échec', absent: 'absent' };
     const word = (value) => this.escapeHtml(words[value] || value);
@@ -4368,9 +4374,13 @@ const admin = {
       warning: (unit) => `<span class="badge badge-warning">⚠️ ${word(unit.sub || unit.active)}, pas au démarrage</span>`,
       error: (unit) => `<span class="badge badge-danger">✗ ${word(unit.active)}</span>`
     };
+    // MongoDB running is not enough: the site must also be connected to it
+    const siteLink = (unit) => unit.unit === 'mongod.service' && unit.state !== 'error'
+      ? (dbConnected ? ' <span class="badge badge-success">✓ site connecté</span>' : ' <span class="badge badge-danger">✗ site déconnecté</span>')
+      : '';
     const services = host.services.map(unit => row(
       `${this.escapeHtml(unit.label)}<div class="text-muted monitoring-sub">${this.escapeHtml(unit.role)}</div>`,
-      `${badges[unit.state](unit)}${unit.since && unit.state !== 'error' ? `<div class="text-muted monitoring-sub">depuis ${this.formatDuration(Date.now() - new Date(unit.since))}</div>` : ''}`,
+      `${badges[unit.state](unit)}${siteLink(unit)}${unit.since && unit.state !== 'error' ? `<div class="text-muted monitoring-sub">depuis ${this.formatDuration(Date.now() - new Date(unit.since))}</div>` : ''}`,
       `${unit.unit} · ${unit.enabled === 'enabled' ? 'lancé au démarrage' : `démarrage : ${unit.enabled || 'inconnu'}`}`
     )).join('');
 

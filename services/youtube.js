@@ -25,6 +25,11 @@ async function api(path, params) {
   return data;
 }
 
+/** Smallest call that checks the key and the quota (1 unit), for the admin health page */
+async function ping() {
+  await api('/i18nRegions', { part: 'snippet', hl: 'en' });
+}
+
 /** "youtube.com/watch?v=<id>", "youtu.be/<id>", "youtube.com/live/<id>" → id */
 function videoId(url) {
   const m = String(url || '').match(/^https?:\/\/(?:www\.|m\.)?(?:youtube\.com\/(?:watch\?(?:.*&)?v=|live\/)|youtu\.be\/)([\w-]{11})/);
@@ -130,4 +135,4 @@ function broadcastAt(video, startAt) {
   return `https://www.youtube.com/watch?v=${video.id}&t=${formatOffset(start - from)}`;
 }
 
-module.exports = { hasKey, videoId, channelId, channelUrl, getVideos, getChannels, getChannelByHandle, searchVideos, isQuotaError, getUploads, broadcastAt };
+module.exports = { hasKey, ping, videoId, channelId, channelUrl, getVideos, getChannels, getChannelByHandle, searchVideos, isQuotaError, getUploads, broadcastAt };

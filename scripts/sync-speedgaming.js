@@ -12,7 +12,9 @@
  * each, as for Mido's House, and sync-race-restreams.js the YouTube upload. A match
  * Mido's House already lists with the same channel is left as it is.
  * A tournament without a start.gg or Challonge bracket (sync-sheet-swiss.js) names its
- * schedule in `speedgamingEvent`, read even when the events page does not list it.
+ * schedule in `speedgamingEvent`, read even when the events page does not list it; so does
+ * a past edition of an event, SpeedGaming keeping one schedule for all its editions (several
+ * tournaments may name it, each reading the schedule between its own dates).
  *
  * Usage:
  *   node scripts/sync-speedgaming.js              # events of tournaments running or over for less than 60 days
@@ -184,7 +186,12 @@ async function main() {
   const tournaments = await Tournament.find({ $or: [{ 'source.type': 'startgg' }, { 'source.type': 'challonge' }, { speedgamingEvent: { $nin: [null, ''] } }] })
     .select('_id name fullUrl url source.url speedgamingEvent startDate endDate matches.startggSetId matches.player1.name matches.player2.name matches.completedAt matches.raceUrl matches.raceUrls midosHouse.pastRestreams').lean();
   const byBracket = new Map();
-  const bySlug = new Map(tournaments.filter(t => t.speedgamingEvent).map(t => [t.speedgamingEvent.toLowerCase(), t]));
+  // SpeedGaming keeps one schedule across the editions of an event: each tournament reads its own dates
+  const bySlug = new Map();
+  for (const t of tournaments.filter(t => t.speedgamingEvent)) {
+    const slug = t.speedgamingEvent.toLowerCase();
+    bySlug.set(slug, [...(bySlug.get(slug) || []), t]);
+  }
   // Schedules named by a tournament, missing from the events page
   for (const slug of bySlug.keys()) {
     if (!events.some(e => e.slug === slug) && (!opts.events.length || opts.events.includes(slug))) events.push({ title: slug, slug, brackets: [] });
@@ -197,16 +204,19 @@ async function main() {
   }
 
   for (const event of events) {
-    const tournament = bySlug.get(event.slug) || event.brackets.map(bracketKey).filter(Boolean).map(key => byBracket.get(key)).find(Boolean);
-    if (!tournament) continue;
-    const recent = !tournament.endDate || new Date(tournament.endDate).getTime() > Date.now() - RECENT_MS;
-    if (!opts.all && !opts.events.length && !recent) continue;
-    stats.events++;
-    try {
-      await syncEvent(event, tournament, opts, stats);
-    } catch (error) {
-      console.log(`   ❌ ${event.slug} : ${error.message}`);
-      stats.errors++;
+    const linked = event.brackets.map(bracketKey).filter(Boolean).map(key => byBracket.get(key)).find(Boolean);
+    const named = bySlug.get(event.slug) || [];
+    const editions = [...named, ...(linked && !named.includes(linked) ? [linked] : [])];
+    for (const tournament of editions) {
+      const recent = !tournament.endDate || new Date(tournament.endDate).getTime() > Date.now() - RECENT_MS;
+      if (!opts.all && !opts.events.length && !recent) continue;
+      stats.events++;
+      try {
+        await syncEvent(event, tournament, opts, stats);
+      } catch (error) {
+        console.log(`   ❌ ${event.slug} : ${error.message}`);
+        stats.errors++;
+      }
     }
   }
 

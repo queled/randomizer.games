@@ -4272,23 +4272,18 @@ const admin = {
     // On the VPS the site's link to MongoDB shows on the MongoDB row of the server
     // services; elsewhere (dev against a remote base) it stays among these
     const services = [
-      ...(host ? [] : [['MongoDB', data.database?.status]]),
-      ['Racetime.gg', data.racetime?.status],
-      ['Twitch API', data.twitch?.status],
-      ['Challonge API', data.challonge?.status],
-      ['start.gg API', data.startgg?.status],
-      ['YouTube API', data.youtube?.status, data.youtube?.detail]
+      ...(host ? [] : [{ name: 'MongoDB', status: data.database?.status, detail: 'site déconnecté', note: 'connexion du site' }]),
+      ...(Array.isArray(data.external) ? data.external : [])
     ];
     const jobs = Array.isArray(data.jobs) ? data.jobs : [];
     const failingJobs = jobs.filter(job => job.state === 'error' || job.state === 'late');
-    const downServices = services.filter(([, status]) => status !== 'warning' && !isOk(status));
-    const limitedServices = services.filter(([, status]) => status === 'warning');
+    const downServices = services.filter(service => service.status !== 'warning' && !isOk(service.status));
+    const limitedServices = services.filter(service => service.status === 'warning');
     const stoppedUnits = (host?.services || []).filter(unit => unit.state === 'error');
     const notAtBoot = (host?.services || []).filter(unit => unit.state === 'warning');
     const problems = [
       failingJobs.length ? `${failingJobs.length} tâche${failingJobs.length > 1 ? 's' : ''} à vérifier (${failingJobs.map(job => job.name).join(', ')})` : '',
-      downServices.length ? `${downServices.map(([name]) => name).join(', ')} injoignable${downServices.length > 1 ? 's' : ''}` : '',
-      limitedServices.length ? limitedServices.map(([name, , detail]) => `${name} : ${detail || 'à vérifier'}`).join(', ') : '',
+      [...downServices, ...limitedServices].map(service => `${service.name} : ${service.detail || 'à vérifier'}`).join(', '),
       host && !dbConnected ? 'le site n’est plus connecté à MongoDB' : '',
       stoppedUnits.length ? `${stoppedUnits.map(unit => unit.label).join(', ')} arrêté${stoppedUnits.length > 1 ? 's' : ''} sur le serveur` : '',
       notAtBoot.length ? `${notAtBoot.map(unit => unit.label).join(', ')} ne repartirai${notAtBoot.length > 1 ? 'en' : ''}t pas après un redémarrage` : '',
@@ -4357,7 +4352,13 @@ const admin = {
         <div class="monitoring-card">
           <h3 class="monitoring-card-title">🔌 Services externes</h3>
           <div class="monitoring-items">
-            ${services.map(([name, status, detail]) => row(name, `<span class="badge badge-${isOk(status) ? 'success' : status === 'warning' ? 'warning' : 'danger'}">${isOk(status) ? '✓ ok' : `${status === 'warning' ? '⚠️' : '✗'} ${this.escapeHtml(detail || status || 'unknown')}`}</span>`)).join('')}
+            ${services.map(service => {
+              const badge = isOk(service.status)
+                ? '<span class="badge badge-success">✓ ok</span>'
+                : `<span class="badge badge-${service.status === 'warning' ? 'warning' : 'danger'}">${service.status === 'warning' ? '⚠️' : '✗'} ${this.escapeHtml(service.detail || service.status || 'inconnu')}</span>`;
+              const note = [service.note, service.checkedAt ? this.formatRelativeTime(service.checkedAt) : ''].filter(Boolean).join(', ');
+              return row(this.escapeHtml(service.name), `${badge}${note ? `<div class="text-muted monitoring-sub">${this.escapeHtml(note)}</div>` : ''}`);
+            }).join('')}
           </div>
         </div>
       </div>

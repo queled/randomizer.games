@@ -20,7 +20,7 @@ const { syncParticipantAccounts } = require('../helpers/participant-accounts');
 const { fillMissingFinalRanks } = require('../helpers/bracket-ranks');
 const { JOBS, getJobsHealth, readJobLog } = require('../services/job-health');
 const { getSystemHealth } = require('../services/system-health');
-const youtube = require('../services/youtube');
+const { getExternalHealth } = require('../services/external-health');
 const { computeLinkCoverage, summarizeCoverage } = require('../services/link-coverage');
 const { mergeGames, changeGameId } = require('../services/game-merge');
 const { invalidateGamesWithStats } = require('./games');
@@ -1261,74 +1261,15 @@ router.get('/health', requireAdmin, async (req, res, next) => {
       // statfs is missing on some platforms
     }
     
-    // Test racetime.gg connectivity
-    let racetimeStatus = 'unknown';
-    try {
-      const axios = require('axios');
-      const raceResp = await axios.get('https://racetime.gg/health', { timeout: 5000 });
-      racetimeStatus = raceResp.status === 200 ? 'ok' : 'error';
-    } catch (e) {
-      // Try simple request
-      try {
-        const axios = require('axios');
-        await axios.get('https://racetime.gg/', { timeout: 5000 });
-        racetimeStatus = 'ok';
-      } catch {
-        racetimeStatus = 'error';
-      }
-    }
-    
-    // Test Twitch API connectivity
-    let twitchStatus = 'unknown';
-    try {
-      const axios = require('axios');
-      await axios.get('https://id.twitch.tv/oauth2/validate', { timeout: 5000, validateStatus: () => true });
-      twitchStatus = 'ok';
-    } catch {
-      twitchStatus = 'error';
-    }
-    
-    // Test Challonge API connectivity
-    let challongeStatus = 'unknown';
-    try {
-      const axios = require('axios');
-      const challResp = await axios.get('https://api.challonge.com/v1/tournaments.json', { 
-        timeout: 5000, 
-        validateStatus: () => true 
-      });
-      // 401 means the API is reachable (just no auth)
-      challongeStatus = (challResp.status === 200 || challResp.status === 401) ? 'ok' : 'error';
-    } catch {
-      challongeStatus = 'error';
-    }
-    
-    // Test start.gg (smash.gg) API connectivity
-    let startggStatus = 'unknown';
-    try {
-      const axios = require('axios');
-      const sgResp = await axios.post('https://api.start.gg/gql/alpha', 
-        { query: '{ __typename }' },
-        { timeout: 5000, validateStatus: () => true }
-      );
-      startggStatus = (sgResp.status === 200 || sgResp.status === 400 || sgResp.status === 401) ? 'ok' : 'error';
-    } catch {
-      startggStatus = 'error';
-    }
-    
-    const [jobs, host, youtube] = await Promise.all([
+    const [jobs, host] = await Promise.all([
       getJobsHealth({ Game, Tournament, Race }),
-      getSystemHealth().catch(() => null),
-      youtubeHealth()
+      getSystemHealth().catch(() => null)
     ]);
+    const external = await getExternalHealth(jobs);
 
     res.json({
-      api: { status: 'ok', description: 'API du site Randomizer' },
       database: { status: dbStatus },
-      racetime: { status: racetimeStatus },
-      twitch: { status: twitchStatus },
-      challonge: { status: challongeStatus },
-      startgg: { status: startggStatus },
-      youtube,
+      external,
       system: {
         now: new Date(),
         uptime: process.uptime(),
@@ -1359,27 +1300,6 @@ router.get('/health', requireAdmin, async (req, res, next) => {
     next(error);
   }
 });
-
-// YouTube Data API: a real call checks the key and the daily quota. It costs 1 unit
-// of the 10,000 a day, hence at most one every 10 minutes (144 a day at worst).
-const YOUTUBE_HEALTH_TTL = 10 * 60 * 1000;
-let youtubeHealthCache = null;
-
-async function youtubeHealth() {
-  if (!youtube.hasKey()) return { status: 'warning', detail: 'clé absente' };
-  if (youtubeHealthCache && youtubeHealthCache.expiresAt > Date.now()) return youtubeHealthCache.value;
-  let value;
-  try {
-    await youtube.ping();
-    value = { status: 'ok' };
-  } catch (error) {
-    if (youtube.isQuotaError(error)) value = { status: 'warning', detail: 'quota du jour épuisé' };
-    else if (error.response) value = { status: 'error', detail: `refusé (${error.response.status})` };
-    else value = { status: 'error', detail: 'injoignable' };
-  }
-  youtubeHealthCache = { value, expiresAt: Date.now() + YOUTUBE_HEALTH_TTL };
-  return value;
-}
 
 // Helper function
 function formatBytes(bytes) {

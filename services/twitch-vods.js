@@ -180,4 +180,4 @@ async function getLiveStreams(logins) {
   return streams;
 }
 
-module.exports = { twitchLogin, isYoutubeVideo, videoId, getUserIds, getArchives, getVideos, getExistingVideoIds, getKeptVideos, parseDuration, findArchive, findVod, getLiveStreams };
+module.exports = { getAppToken, twitchLogin, isYoutubeVideo, videoId, getUserIds, getArchives, getVideos, getExistingVideoIds, getKeptVideos, parseDuration, findArchive, findVod, getLiveStreams };

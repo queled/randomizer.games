@@ -1227,9 +1227,15 @@ a:hover {
   font-size: 0.875rem;
 }
 
+/* A badge above its note: both against the right edge */
 .monitoring-value {
   font-weight: 500;
   font-size: 0.875rem;
+  text-align: right;
+}
+
+.monitoring-item {
+  gap: 1rem;
 }
 
 /* ==================== RESPONSIVE ==================== */

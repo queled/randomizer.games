@@ -85,6 +85,18 @@ function eventLinks(html, siteKey) {
 }
 
 /**
+ * Challonge brackets the event page links ("challonge.com/<slug>", subdomain kept)
+ */
+async function getEventBracketLinks(series, event, siteKey) {
+  const html = String(await getPage(`/event/${encodeURIComponent(series)}/${encodeURIComponent(event)}`, siteKey));
+  const links = new Set();
+  for (const m of html.matchAll(/href="https?:\/\/(?:www\.)?((?:[a-z0-9-]+\.)?challonge\.com)\/(?:[a-z]{2}(?:_[A-Z]{2})?\/)?([A-Za-z0-9_-]+)\/?"/g)) {
+    if (m[1] !== 'assets.challonge.com') links.add(`${m[1].toLowerCase()}/${m[2]}`);
+  }
+  return [...links];
+}
+
+/**
  * Events listed on the home page (ongoing and upcoming), as "series/event" paths.
  */
 async function listCurrentEvents(siteKey) {
@@ -192,4 +204,4 @@ async function graphql(query, variables = {}, siteKey) {
   return data?.data;
 }
 
-module.exports = { SITES, siteOf, eventUrl, listCurrentEvents, listArchivedEvents, listGames, getEventRaces, parseRaceRow, graphql };
+module.exports = { SITES, siteOf, eventUrl, getEventBracketLinks, listCurrentEvents, listArchivedEvents, listGames, getEventRaces, parseRaceRow, graphql };

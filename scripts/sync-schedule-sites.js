@@ -143,6 +143,24 @@ async function findTournamentByRooms(races) {
   return Tournament.findById(best[0]).select('_id name midosHouse.pastRestreams').lean();
 }
 
+const escapeRegExp = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/**
+ * The tournament of a Challonge bracket the event page links: a bracket of the last phase
+ * alone holds too few of the event's rooms for findTournamentByRooms
+ */
+async function findTournamentByBracket(ev) {
+  const links = await scheduleSites.getEventBracketLinks(ev.series, ev.event, ev.site);
+  for (const link of links) {
+    const [host, slug] = link.split('/');
+    const re = new RegExp(`^https?://(www\\.)?${escapeRegExp(host)}/([a-z]{2}(_[A-Z]{2})?/)?${escapeRegExp(slug)}/?$`, 'i');
+    const tournament = await Tournament.findOne({ $or: [{ fullUrl: re }, { 'source.url': re }, { 'challongeBrackets.fullUrl': re }] })
+      .select('_id name midosHouse.pastRestreams').lean();
+    if (tournament) return tournament;
+  }
+  return null;
+}
+
 const roomPath = url => String(url || '').replace(/^https:\/\/racetime\.gg/, '');
 
 // Races the site gives with both their racetime.gg room and their start.gg set: linked to that
@@ -233,7 +251,7 @@ async function syncEvent(ev, { dryRun }, stats, syncedIds) {
   }
   if (!bySlug.size) {
     // No start.gg sets (Challonge, brackets run on the site): the tournament its racetime.gg rooms are linked to
-    const tournament = await findTournamentByRooms(upcoming.concat(past));
+    const tournament = await findTournamentByRooms(upcoming.concat(past)) || await findTournamentByBracket(ev);
     if (!tournament) {
       console.log(`   ⏭️  ${label} : pas de sets start.gg ni de tournoi lié à ses rooms racetime`);
       stats.noStartgg++;

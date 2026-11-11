@@ -4331,8 +4331,6 @@ const admin = {
 
         ${hostCards.updates}
 
-        ${hostCards.services}
-
         <div class="monitoring-card">
           <h3 class="monitoring-card-title">⚙️ PM2</h3>
           ${pm2 ? `
@@ -4348,6 +4346,8 @@ const admin = {
             <p class="text-muted monitoring-sub">Le site ne tourne pas sous PM2 ici (normal en local). Sur le VPS, il est lancé par <code>pm2 start server.js --name randomizer</code>.</p>
           `}
         </div>
+
+        ${hostCards.services}
 
         <div class="monitoring-card">
           <h3 class="monitoring-card-title">🔌 Services externes</h3>

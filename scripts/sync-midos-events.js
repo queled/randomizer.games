@@ -75,6 +75,20 @@ const EVENTS = {
       }
     }
   },
+  'wttbb/1': {
+    name: 'WeTryToBeBetter',
+    phases: {
+      Group: { name: 'Groups', bracketType: 'ROUND_ROBIN' },
+      Bracket: {
+        name: 'Bracket',
+        bracketType: 'DOUBLE_ELIMINATION',
+        rounds: {
+          'Winners Quarterfinal': 1, 'Winners Semifinal': 2, 'Winners Final': 3, 'Grand Final': 4,
+          'Losers Round 1': -1, 'Losers Quarterfinal': -2, 'Losers Semifinal': -3, 'Losers Final': -4
+        }
+      }
+    }
+  },
   'sco/2026': {
     name: 'SlugCentral Open 2026',
     teams: true,

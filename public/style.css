@@ -1466,6 +1466,25 @@ body.spoiler-mode .spoiler-text::before {
     gap: 1rem;
 }
 
+/* Links written by the server (services/seo-pages.js) until the page scripts
+   draw the real list, or instead of it without scripts */
+.page-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    line-height: 1.8;
+}
+
+.page-links a {
+    color: #60a5fa;
+}
+
+.page-links-columns {
+    columns: 18rem;
+    column-gap: 2rem;
+    padding: 0 1rem;
+}
+
 .two-column-grid {
     display: grid;
     /* minmax(0, …) lets a column shrink below its longest unbreakable line */

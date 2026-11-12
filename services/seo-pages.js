@@ -16,9 +16,9 @@ const { buildPlayerRacesFilter } = require('../helpers/player-races-filter');
 const { countPlayerTournaments } = require('../helpers/player-tournaments');
 const { loadOwnNames, findPlayerByName, namesRacedWithoutAccount } = require('../helpers/player-identity');
 const { gameLabel, tournamentGameLabel } = require('../helpers/game-label');
-const { coverUrl } = require('../helpers/game-covers');
+const { coverUrl, historyIds } = require('../helpers/game-covers');
 const { readHistory } = require('../helpers/game-history');
-const { cachedGameStats } = require('../routes/games');
+const { cachedGameStats, cachedGamesWithStats } = require('../routes/games');
 const { LANGUAGES, localizedPath } = require('../helpers/site-routes');
 const { texts, fill, count } = require('./seo-texts');
 const { isThinGame, isThinPlayer } = require('../helpers/thin-pages');
@@ -103,6 +103,28 @@ async function findGameForRaceCategory(category) {
   }).select('id name official randomizer').lean();
 }
 
+// Latest tournaments of a game linked from its page before the scripts list them
+const GAME_TOURNAMENT_LINKS = 30;
+
+/**
+ * The title of a game page: its name, then what the page holds for that game,
+ * so the words people search with are in it. Only the name while the counts
+ * are not known.
+ */
+function gameTitle(displayTitle, stats, hasHistory, lang) {
+  if (!stats) return `${displayTitle} - Randomizer`;
+  const t = texts(lang);
+  const topics = [
+    stats.totalRaces && t.topics.races,
+    stats.totalTournaments && t.topics.tournaments,
+    stats.totalRaces && t.topics.leaderboards
+  ].filter(Boolean);
+  // A game followed for its randomizer only: what its page tells about it
+  if (!topics.length) topics.push(...[hasHistory && t.topics.history, t.topics.resources].filter(Boolean));
+  const list = topics.length > 1 ? `${topics.slice(0, -1).join(', ')}${t.and}${topics.at(-1)}` : topics[0];
+  return fill(t.gameTitle, { title: displayTitle, topics: list });
+}
+
 async function gameMeta(query, siteUrl, lang) {
   const t = texts(lang);
   const id = String(query.id || '').trim();
@@ -114,9 +136,10 @@ async function gameMeta(query, siteUrl, lang) {
   const gameName = game.official?.name || game.name || displayTitle;
   // Each page gets its own description: what the randomizer does (the first
   // sentence of its history) and how much of it the site follows
-  const [history, stats] = await Promise.all([
+  const [history, stats, tournaments] = await Promise.all([
     readHistory(game.id).catch(() => null),
-    cachedGameStats(game.id)
+    cachedGameStats(game.id),
+    Tournament.find({ game: game._id }).sort({ startDate: -1 }).limit(GAME_TOURNAMENT_LINKS).select('name').lean()
   ]);
   // Histories are written in English and French: the other languages take the English one
   const intro = String(history?.intro?.[lang] || history?.intro?.en || '').trim();
@@ -140,13 +163,18 @@ async function gameMeta(query, siteUrl, lang) {
   const thin = stats && isThinGame({ ...stats, hasHistory: Boolean(history) });
 
   return {
-    title: `${displayTitle} - Randomizer`,
+    title: gameTitle(displayTitle, stats, Boolean(history), lang),
     robots: thin ? 'noindex,follow' : undefined,
     heading: displayTitle,
     description,
     canonicalPath,
     image,
     historyHtml: renderHistory(history, lang),
+    tournamentsHtml: renderLinks(
+      tournaments.filter((tournament) => tournament.name).map((tournament) => ({ path: `/tournaments/${tournament._id}`, label: tournament.name })),
+      lang,
+      'page-links'
+    ),
     jsonLd: [
       breadcrumb(siteUrl, [
         { name: t.crumbs.home, url: '/' },
@@ -203,6 +231,25 @@ function renderHistory(history, lang) {
       </ol>${sources ? `
       <h3 class="history-sources-title">${htmlEscape(texts(lang).historySources)}</h3><ul class="history-sources">${sources}</ul>` : ''}
     `;
+}
+
+// Links as a plain list: the page scripts draw the real cards over or beside it
+function renderLinks(links, lang, className) {
+  if (!links.length) return '';
+  const items = links.map(({ path: target, label }) => `<li><a href="${htmlEscape(localizedPath(lang, target))}">${htmlEscape(label)}</a></li>`).join('');
+  return `<ul class="${className}">${items}</ul>`;
+}
+
+/**
+ * Every game worth a search result, by name, for the games list read without
+ * its scripts (the grid is drawn from the API): crawlers that do not run them
+ * still find a link to each game page.
+ */
+function gameLinks(games, histories) {
+  return games
+    .filter((game) => game?.id && game.enabled !== false && !isThinGame({ ...game, hasHistory: histories.has(game.id.toLowerCase()) }))
+    .map((game) => ({ path: `/games/${encodeURIComponent(game.id)}`, label: gameLabel(game) }))
+    .sort((a, b) => a.label.localeCompare(b.label, 'en', { sensitivity: 'base' }));
 }
 
 const TOURNAMENT_STATUS_KEYS = { 'à venir': 'upcoming', 'en cours': 'ongoing', 'terminé': 'completed' };
@@ -561,6 +608,16 @@ async function renderPage(route, siteUrl) {
       .replace('<div id="history-content"></div>', () => `<div id="history-content">${meta.historyHtml}</div>`)
       .replace(/(<button class="tab-btn" data-tab="history"[^>]*?)\s+style="display:none;"/i, '$1');
   }
+  // The latest tournaments of the game, in the list game-detail.js fills afterwards
+  if (specific && file === '/game-detail.html' && meta.tournamentsHtml) {
+    html = html.replace('<div id="game-tournaments" class="card-list"></div>', () => `<div id="game-tournaments" class="card-list">${meta.tournamentsHtml}</div>`);
+  }
+  // Without scripts the grid of the games list stays empty: the games as links
+  if (file === '/games.html') {
+    const games = cachedGamesWithStats();
+    const links = games ? renderLinks(gameLinks(games, await historyIds()), lang, 'page-links page-links-columns') : '';
+    if (links) html = html.replace('<div id="games-grid"></div>', () => `<div id="games-grid"></div>\n        <noscript>${links}</noscript>`);
+  }
   if (specific) {
     // Tells seo.js the head already describes this entity.
     html = html.replace(/<html([^>]*)>/i, '<html$1 data-seo-ssr="1">');
@@ -569,4 +626,4 @@ async function renderPage(route, siteUrl) {
   return { status, html };
 }
 
-module.exports = { renderPage, renderHistory };
+module.exports = { renderPage, renderHistory, gameTitle, gameLinks, renderLinks };

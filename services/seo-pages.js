@@ -528,7 +528,7 @@ async function raceMeta(query, siteUrl, lang) {
     // What race-detail.js writes once loaded; the entrants by name, their
     // ranking and times left to it (and to the spoiler mode)
     fills: [
-      ['<p id="race-goal" class="race-goal"></p>', `<p id="race-goal" class="race-goal">${htmlEscape(label)}</p>`],
+      String(race.goal || '').trim() && ['<p id="race-goal" class="race-goal"></p>', `<p id="race-goal" class="race-goal">${htmlEscape(String(race.goal).trim())}</p>`],
       entrants && ['<div id="race-entrants-count" class="info-value">-</div>', `<div id="race-entrants-count" class="info-value">${entrants}</div>`],
       tournament?.name && [
         /<div id="tournament-link" class="tournament-link-card">([\s\S]*?)<a id="tournament-name" href="#"><\/a>/,

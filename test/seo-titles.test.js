@@ -46,3 +46,31 @@ test('the games list links every game worth a result, by name, in the language o
   assert.equal(renderLinks(links, 'en', 'page-links').includes('href="/games/zeta"'), true);
   assert.equal(renderLinks([], 'en', 'page-links'), '');
 });
+
+test('a tournament title names its game unless its own name does', () => {
+  const { tournamentTitle } = require('../services/seo-pages');
+  assert.equal(tournamentTitle('Winter Cup 3', 'Some Game Randomizer', 'en'), 'Winter Cup 3 - Some Game Randomizer - Randomizer');
+  assert.equal(tournamentTitle('Some Game Randomizer Winter Cup', 'Some Game Randomizer', 'en'), 'Some Game Randomizer Winter Cup - Tournament - Randomizer');
+  assert.equal(tournamentTitle('Some Game Randomizer Winter Cup', 'Some Game Randomizer', 'fr'), 'Some Game Randomizer Winter Cup - Tournoi - Randomizer');
+  assert.equal(tournamentTitle('Winter Cup 3', null, 'en'), 'Winter Cup 3 - Tournament - Randomizer');
+});
+
+test('players are linked once each, by name, whatever their place', () => {
+  const { playerLinks } = require('../services/seo-pages');
+  assert.deepEqual(playerLinks([
+    { userId: 'abc123', name: 'Zed' },
+    { userId: null, name: 'anna b' },
+    { userId: 'abc123', name: 'Zed again' },
+    { userId: null, name: '' }
+  ]), [
+    { path: '/players/name/anna%20b', label: 'anna b' },
+    { path: '/players/abc123', label: 'Zed' }
+  ]);
+});
+
+test('a description keeps its text, without its markup', () => {
+  const { plainText } = require('../services/seo-pages');
+  assert.equal(plainText('<p>Rules &amp; <b>format</b></p>\n<script>alert(1)</script><p>Sign&nbsp;up &lt;here&gt;</p>'), 'Rules & format Sign up <here>');
+  assert.equal(plainText(undefined), '');
+  assert.equal(plainText('<br>  <br>'), '');
+});

@@ -13,7 +13,7 @@ const mongoose = require('mongoose');
 const { Game, Tournament, Player, Race } = require('../models');
 const { calculateTournamentStatus } = require('../helpers/tournament-status');
 const { buildPlayerRacesFilter } = require('../helpers/player-races-filter');
-const { countPlayerTournaments } = require('../helpers/player-tournaments');
+const { listPlayerTournaments, participantLabel } = require('../helpers/player-tournaments');
 const { loadOwnNames, findPlayerByName, namesRacedWithoutAccount } = require('../helpers/player-identity');
 const { gameLabel, tournamentGameLabel } = require('../helpers/game-label');
 const { coverUrl, historyIds } = require('../helpers/game-covers');
@@ -252,6 +252,43 @@ function gameLinks(games, histories) {
     .sort((a, b) => a.label.localeCompare(b.label, 'en', { sensitivity: 'base' }));
 }
 
+// Where a player's page is: by racetime account, by name without one
+function playerPath({ userId, name }) {
+  if (userId) return `/players/${encodeURIComponent(userId)}`;
+  return name ? `/players/name/${encodeURIComponent(name)}` : null;
+}
+
+// One link per player, by name: an order that tells nothing of the results
+function playerLinks(players) {
+  const byPath = new Map();
+  for (const player of players) {
+    const target = playerPath(player);
+    if (target && player.name && !byPath.has(target)) byPath.set(target, { path: target, label: player.name });
+  }
+  return [...byPath.values()].sort((a, b) => a.label.localeCompare(b.label, 'en', { sensitivity: 'base' }));
+}
+
+// A bracket description comes as HTML: its text only, on one line
+function plainText(html) {
+  const entities = { amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'", apos: "'", nbsp: ' ' };
+  return String(html || '')
+    .replace(/<(script|style)[\s\S]*?<\/\1>/gi, ' ')
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/&(amp|lt|gt|quot|#39|apos|nbsp);/g, (match, name) => entities[name])
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * The title of a tournament page, with its game unless the name of the
+ * tournament says it already.
+ */
+function tournamentTitle(name, game, lang) {
+  const named = game && !String(name).toLowerCase().includes(game.toLowerCase());
+  // The game takes the place of the word "tournament", most names having it already
+  return named ? `${name} - ${game} - Randomizer` : fill(texts(lang).tournamentTitle, { name });
+}
+
 const TOURNAMENT_STATUS_KEYS = { 'à venir': 'upcoming', 'en cours': 'ongoing', 'terminé': 'completed' };
 
 function tournamentStatus(tournament, lang) {
@@ -266,7 +303,8 @@ async function tournamentMeta(query, siteUrl, lang) {
   const tournament = await Tournament.findById(id).populate('game', 'id name official randomizer').lean();
   if (!tournament) return null;
 
-  const tournamentGame = tournamentGameLabel(tournament) || 'randomizer';
+  const knownGame = tournamentGameLabel(tournament);
+  const tournamentGame = knownGame || 'randomizer';
   const status = tournamentStatus(tournament, lang);
   const participants = Number(tournament.participantsCount) || (Array.isArray(tournament.participants) ? tournament.participants.length : 0);
   // "Upcoming <game> tournament" in English, "Tournoi <game> à venir" in French
@@ -280,11 +318,34 @@ async function tournamentMeta(query, siteUrl, lang) {
   const image = coverUrl(tournament.game?.id);
 
   return {
-    title: fill(t.tournamentTitle, { name: tournament.name }),
+    title: tournamentTitle(tournament.name, knownGame, lang),
     heading: tournament.name,
     description,
     canonicalPath,
     image,
+    // What tournament-detail.js writes once loaded, results left to it: the
+    // participants are in their own tab, by name
+    fills: [
+      tournament.game?.id && knownGame && [
+        '<p id="tournament-game" class="tournament-game-name"></p>',
+        `<p id="tournament-game" class="tournament-game-name"><a href="${htmlEscape(localizedPath(lang, `/games/${encodeURIComponent(tournament.game.id)}`))}" style="color:inherit;text-decoration:none;">${htmlEscape(knownGame)}</a></p>`
+      ],
+      participants && [
+        '<p id="participants-count" class="info-value-lg">-</p>',
+        `<p id="participants-count" class="info-value-lg">${participants}</p>`
+      ],
+      plainText(tournament.description) && [
+        /<div id="description-container" class="tournament-description">([\s\S]*?)<p id="tournament-description"><\/p>/,
+        (match, label) => `<div id="description-container" class="tournament-description" style="display:block;">${label}<p id="tournament-description">${htmlEscape(plainText(tournament.description))}</p>`
+      ],
+      [
+        /(<div id="participants-list" class="participants-list">)[\s\S]*?(<\/div>)/,
+        (match, open, close) => {
+          const links = renderLinks(playerLinks((tournament.participants || []).map((part) => ({ userId: part.racetimeUserId, name: participantLabel(part) }))), lang, 'page-links page-links-columns');
+          return links ? `${open}${links}${close}` : match;
+        }
+      ]
+    ].filter(Boolean),
     jsonLd: [
       breadcrumb(siteUrl, [
         { name: t.crumbs.home, url: '/' },
@@ -309,9 +370,14 @@ async function tournamentMeta(query, siteUrl, lang) {
   };
 }
 
+// Latest races and tournaments of a player linked from their page before its scripts list them
+const PLAYER_RACE_LINKS = 20;
+const PLAYER_TOURNAMENT_LINKS = 30;
+
 // Race count and most played games of a player, for a preview worth clicking.
 async function playerRaceSummary(player, names) {
   const { filter } = buildPlayerRacesFilter({ userId: player.userId, names: await namesRacedWithoutAccount(Race, names) });
+  const latest = await Race.find(filter).sort({ startedAt: -1 }).limit(PLAYER_RACE_LINKS).select('category goal startedAt').maxTimeMS(3000).lean();
   const byCategory = await Race.aggregate([
     { $match: filter },
     { $group: { _id: '$category', count: { $sum: 1 } } }
@@ -328,9 +394,19 @@ async function playerRaceSummary(player, names) {
   }));
 
   const games = [...byGame.values()].sort((a, b) => b.count - a.count);
+  const labels = new Map();
+  for (const { _id: category } of byCategory) labels.set(category, gameLabel(await findGameForRaceCategory(category)) || category);
   return {
     total: games.reduce((sum, g) => sum + g.count, 0),
-    games: games.slice(0, 2).map((g) => g.name).filter(Boolean)
+    games: games.slice(0, 2).map((g) => g.name).filter(Boolean),
+    // "<game> - <goal> (<day>)", the day telling apart races of the same goal
+    latest: latest.map((race) => ({
+      path: `/races/${race._id}`,
+      label: [
+        [labels.get(race.category) || race.category, String(race.goal || '').trim()].filter(Boolean).join(' - '),
+        race.startedAt ? `(${new Date(race.startedAt).toISOString().slice(0, 10)})` : ''
+      ].filter(Boolean).join(' ')
+    }))
   };
 }
 
@@ -350,13 +426,14 @@ async function playerMeta(query, siteUrl, lang) {
   const playerName = player.name || player.userId;
   // Counted as the page counts them (/api/players/:id/races and /tournaments).
   // A slow count must not cost the whole preview: fall back to the generic text.
-  const [{ total: racesCount, games, failed: countsFailed }, tournamentsCount] = await Promise.all([
+  const [{ total: racesCount, games, latest, failed: countsFailed }, tournaments] = await Promise.all([
     playerRaceSummary(player, ownNames),
-    countPlayerTournaments({ Tournament, userId: player.userId || null, names: ownNames })
+    listPlayerTournaments({ Tournament, userId: player.userId || null, names: ownNames })
   ]).catch((error) => {
     console.error('SEO counts failed for player:', error.message);
-    return [{ total: 0, games: [], failed: true }, 0];
+    return [{ total: 0, games: [], latest: [], failed: true }, []];
   });
+  const tournamentsCount = tournaments.length;
   const facts = [
     racesCount && `${count(lang, 'races', racesCount)}${games.length ? ` (${games.join(', ')})` : ''}`,
     tournamentsCount && count(lang, 'tournaments', tournamentsCount)
@@ -380,6 +457,15 @@ async function playerMeta(query, siteUrl, lang) {
     description,
     canonicalPath,
     ogType: 'profile',
+    // The lists player-detail.js draws as cards once loaded
+    fills: [
+      ['<div id="player-races-list" class="card-list"></div>', `<div id="player-races-list" class="card-list">${renderLinks(latest, lang, 'page-links')}</div>`],
+      ['<div id="player-tournaments-list" class="card-list"></div>', `<div id="player-tournaments-list" class="card-list">${renderLinks(
+        tournaments.filter((tournament) => tournament.name).slice(0, PLAYER_TOURNAMENT_LINKS).map((tournament) => ({ path: `/tournaments/${tournament._id}`, label: tournament.name })),
+        lang,
+        'page-links'
+      )}</div>`]
+    ],
     jsonLd: [
       breadcrumb(siteUrl, [
         { name: t.crumbs.home, url: '/' },
@@ -439,6 +525,17 @@ async function raceMeta(query, siteUrl, lang) {
     description,
     canonicalPath,
     image,
+    // What race-detail.js writes once loaded; the entrants by name, their
+    // ranking and times left to it (and to the spoiler mode)
+    fills: [
+      ['<p id="race-goal" class="race-goal"></p>', `<p id="race-goal" class="race-goal">${htmlEscape(label)}</p>`],
+      entrants && ['<div id="race-entrants-count" class="info-value">-</div>', `<div id="race-entrants-count" class="info-value">${entrants}</div>`],
+      tournament?.name && [
+        /<div id="tournament-link" class="tournament-link-card">([\s\S]*?)<a id="tournament-name" href="#"><\/a>/,
+        (match, lead) => `<div id="tournament-link" class="tournament-link-card" style="display:block;">${lead}<a id="tournament-name" href="${htmlEscape(localizedPath(lang, `/tournaments/${tournament._id}`))}">${htmlEscape(tournament.name)}</a>`
+      ],
+      ['<div id="participants-list"></div>', `<div id="participants-list">${renderLinks(playerLinks((race.entrants || []).map((entrant) => ({ userId: entrant.userId, name: entrant.userName }))), lang, 'page-links page-links-columns')}</div>`]
+    ].filter(Boolean),
     jsonLd: [
       breadcrumb(siteUrl, [
         { name: t.crumbs.home, url: '/' },
@@ -618,6 +715,12 @@ async function renderPage(route, siteUrl) {
     const links = games ? renderLinks(gameLinks(games, await historyIds()), lang, 'page-links page-links-columns') : '';
     if (links) html = html.replace('<div id="games-grid"></div>', () => `<div id="games-grid"></div>\n        <noscript>${links}</noscript>`);
   }
+  // Parts of the page its entity fills in the HTML itself
+  if (specific) {
+    for (const [target, replacement] of meta.fills || []) {
+      html = html.replace(target, typeof replacement === 'function' ? replacement : () => replacement);
+    }
+  }
   if (specific) {
     // Tells seo.js the head already describes this entity.
     html = html.replace(/<html([^>]*)>/i, '<html$1 data-seo-ssr="1">');
@@ -626,4 +729,4 @@ async function renderPage(route, siteUrl) {
   return { status, html };
 }
 
-module.exports = { renderPage, renderHistory, gameTitle, gameLinks, renderLinks };
+module.exports = { renderPage, renderHistory, gameTitle, gameLinks, renderLinks, playerLinks, plainText, tournamentTitle };

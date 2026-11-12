@@ -99,6 +99,9 @@
     "nodemon": "^3.0.2"
   },
   "overrides": {
-    "qs": "^6.16.0"
+    "qs": "^6.16.0",
+    "nodemon": {
+      "minimatch": "^11.0.1"
+    }
   }
 }

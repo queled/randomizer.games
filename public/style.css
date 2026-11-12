@@ -1466,8 +1466,13 @@ body.spoiler-mode .spoiler-text::before {
     gap: 1rem;
 }
 
-/* Links written by the server (services/seo-pages.js) until the page scripts
-   draw the real list, or instead of it without scripts */
+/* Links written by the server (services/seo-pages.js) for crawlers and
+   browsers without scripts: with scripts (the .js class set by i18n-boot.js),
+   the page draws its own cards in their place and they are never shown */
+.js .page-links {
+    display: none;
+}
+
 .page-links {
     list-style: none;
     margin: 0;

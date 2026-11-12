@@ -2,6 +2,10 @@
  * Early language bootstrap, loaded synchronously in <head> on every page.
  * Kept as an external file so the Content-Security-Policy can forbid inline scripts.
  */
+// Scripts run on this page: the lists the server writes for crawlers
+// (.page-links) give way to the cards the page scripts draw, without a flash
+document.documentElement.classList.add('js');
+
 (function() {
     function supportedLanguage(lang) {
         return ['en', 'fr', 'es', 'de', 'it', 'pt'].indexOf(lang) !== -1;

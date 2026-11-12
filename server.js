@@ -357,7 +357,10 @@ const startServer = async () => {
     // Connect to MongoDB first
     await connectDB();
     
-    app.listen(PORT, () => {
+    // In production only the reverse proxy on the same machine talks to the
+    // app; HOST overrides it (0.0.0.0 for a container, for instance)
+    const host = process.env.HOST || (process.env.NODE_ENV === 'production' ? '127.0.0.1' : undefined);
+    app.listen(PORT, host, () => {
       console.log(`🚀 Randomizer API running on http://localhost:${PORT}`);
       console.log(`📊 Environment: ${process.env.NODE_ENV}`);
     });

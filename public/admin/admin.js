@@ -3966,6 +3966,7 @@ const admin = {
   async loadAudience() {
     const container = document.getElementById('audience-content');
     const days = document.getElementById('audience-days').value;
+    this.loadSearchConsole(days);
     try {
       const response = await fetch(`/api/admin/audience?days=${encodeURIComponent(days)}`, {
         headers: { 'Authorization': `Bearer ${this.token}` }
@@ -4066,6 +4067,86 @@ const admin = {
       tooltip.style.left = `${Math.min(Math.max(left, 80), chart.offsetWidth - 80)}px`;
     });
     chart.addEventListener('mouseleave', () => { tooltip.hidden = true; });
+  },
+
+  // Google Search Console, under the audience: an answer for another period is dropped
+  async loadSearchConsole(days) {
+    const container = document.getElementById('audience-search');
+    try {
+      const response = await fetch(`/api/admin/search-console?days=${encodeURIComponent(days)}`, {
+        headers: { 'Authorization': `Bearer ${this.token}` }
+      });
+      if (!response.ok) throw new Error();
+      const data = await response.json();
+      if (document.getElementById('audience-days').value !== days) return;
+      container.innerHTML = this.renderSearchConsole(data);
+    } catch (error) {
+      console.error('Error loading Search Console:', error);
+      container.innerHTML = '<div class="card"><h3 class="card-title">🔎 Recherche Google</h3><p class="text-muted">Search Console ne répond pas pour l’instant.</p></div>';
+    }
+  },
+
+  renderSearchConsole(data) {
+    if (!data.configured) return '';
+    const { total, sitemap } = data;
+    const dateLabel = day => new Date(`${day}T12:00:00Z`).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+    const decimal = value => value === null ? '–' : value.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    // Google names countries by three letters, the browser by two: the usual ones
+    // are named, the others keep their code
+    const REGIONS = {
+      fra: 'FR', bel: 'BE', che: 'CH', can: 'CA', lux: 'LU', usa: 'US', gbr: 'GB', irl: 'IE', aus: 'AU', nzl: 'NZ',
+      deu: 'DE', aut: 'AT', esp: 'ES', mex: 'MX', arg: 'AR', chl: 'CL', col: 'CO', per: 'PE', ita: 'IT', prt: 'PT',
+      bra: 'BR', nld: 'NL', swe: 'SE', nor: 'NO', dnk: 'DK', fin: 'FI', pol: 'PL', cze: 'CZ', hun: 'HU', rou: 'RO',
+      grc: 'GR', tur: 'TR', rus: 'RU', ukr: 'UA', jpn: 'JP', kor: 'KR', chn: 'CN', twn: 'TW', hkg: 'HK', sgp: 'SG',
+      ind: 'IN', idn: 'ID', phl: 'PH', tha: 'TH', vnm: 'VN', mys: 'MY', isr: 'IL', zaf: 'ZA', mar: 'MA', dza: 'DZ',
+      tun: 'TN', egy: 'EG'
+    };
+    const countries = new Intl.DisplayNames(['fr'], { type: 'region' });
+    const countryLabel = code => REGIONS[code] ? countries.of(REGIONS[code]) : code.toUpperCase();
+    const table = (rows, head, label) => rows.length ? `
+      <div class="table-container"><table class="table">
+        <thead><tr><th>${head}</th><th class="table-number">Affichages</th><th class="table-number">Clics</th><th class="table-number">Position</th></tr></thead>
+        <tbody>${rows.map(r => `<tr><td>${label(r.key)}</td><td class="table-number">${this.formatNumber(r.impressions)}</td><td class="table-number">${this.formatNumber(r.clicks)}</td><td class="table-number">${decimal(r.position)}</td></tr>`).join('')}</tbody>
+      </table></div>` : '<p class="text-muted">Rien sur la période</p>';
+    const path = (url) => { try { return new URL(url).pathname; } catch { return url; } };
+
+    return `
+      <div class="section-header">
+        <h2 class="section-title">🔎 Recherche Google</h2>
+        <span class="text-muted">du ${dateLabel(data.startDate)} au ${dateLabel(data.endDate)}</span>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon">👁️</div><div>
+          <div class="stat-value">${this.formatNumber(total.impressions)}</div><div class="stat-label">Affichages</div>
+          <div class="stat-sub">dans les résultats de Google</div>
+        </div></div>
+        <div class="stat-card"><div class="stat-icon">🖱️</div><div>
+          <div class="stat-value">${this.formatNumber(total.clicks)}</div><div class="stat-label">Clics</div>
+          <div class="stat-sub">${total.impressions ? `${decimal(100 * total.clicks / total.impressions)} % des affichages` : ''}</div>
+        </div></div>
+        <div class="stat-card"><div class="stat-icon">🥇</div><div>
+          <div class="stat-value">${decimal(total.position)}</div><div class="stat-label">Position moyenne</div>
+        </div></div>
+        <div class="stat-card"><div class="stat-icon">🗂️</div><div>
+          <div class="stat-value">${this.formatNumber(sitemap.indexed)}</div><div class="stat-label">Pages du sitemap indexées</div>
+          <div class="stat-sub">sur ${this.formatNumber(sitemap.submitted)} envoyées${sitemap.errors ? ` · ${this.formatNumber(sitemap.errors)} erreurs` : ''}</div>
+        </div></div>
+      </div>
+      <div class="stats-columns">
+        <div class="card">
+          <h3 class="card-title">💬 Recherches</h3>
+          ${table(data.queries, 'Recherche', k => this.escapeHtml(k))}
+        </div>
+        <div class="card">
+          <h3 class="card-title">📄 Pages affichées</h3>
+          ${table(data.pages, 'Page', k => `<a href="${this.escapeHtml(k)}" target="_blank" rel="noopener">${this.escapeHtml(path(k))}</a>`)}
+        </div>
+        <div class="card">
+          <h3 class="card-title">🌍 Pays</h3>
+          ${table(data.countries, 'Pays', k => this.escapeHtml(countryLabel(k)))}
+        </div>
+      </div>
+      <p class="text-muted audience-note">Chiffres de Google Search Console, en retard d’un à deux jours et relus une fois par heure. Google ne détaille pas les recherches trop rares : leur total peut être inférieur aux affichages.</p>`;
   },
 
   // Columns of visits per day, days without visits included

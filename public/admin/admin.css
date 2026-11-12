@@ -2371,6 +2371,13 @@ a:hover {
   font-size: 0.8125rem;
 }
 
+.table th.table-number,
+.table td.table-number {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
 .stats-columns {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));

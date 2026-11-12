@@ -1,5 +1,6 @@
 const axios = require('axios');
 const youtube = require('./youtube');
+const searchConsole = require('./search-console');
 const { getAppToken } = require('./twitch-vods');
 
 /**
@@ -73,6 +74,18 @@ const CHECKS = {
       if (youtube.isQuotaError(error)) return { status: 'warning', detail: 'quota du jour épuisé', note };
       return { ...failure(error, 'clé refusée'), note };
     }
+  },
+
+  // The service account must still be a user of the property
+  async searchConsole() {
+    const note = 'accès à la propriété vérifié';
+    if (!searchConsole.hasKey()) return { status: 'warning', detail: 'clé absente', note };
+    try {
+      await searchConsole.ping();
+      return { status: 'ok', note };
+    } catch (error) {
+      return { ...failure(error, 'accès refusé'), note };
+    }
   }
 };
 
@@ -99,13 +112,14 @@ function challongeFromJob(job) {
 
 // In the order of the monitoring page
 async function getExternalHealth(jobs = []) {
-  const [racetime, startgg, twitch, youtubeState] = await Promise.all(['racetime', 'startgg', 'twitch', 'youtube'].map(cached));
+  const [racetime, startgg, twitch, youtubeState, searchConsoleState] = await Promise.all(['racetime', 'startgg', 'twitch', 'youtube', 'searchConsole'].map(cached));
   return [
     { name: 'racetime.gg API', ...racetime },
     { name: 'Challonge API', ...challongeFromJob(jobs.find(job => job.name === 'challonge-check')) },
     { name: 'start.gg API', ...startgg },
     { name: 'Twitch API', ...twitch },
-    { name: 'YouTube API', ...youtubeState }
+    { name: 'YouTube API', ...youtubeState },
+    { name: 'Search Console API', ...searchConsoleState }
   ];
 }
 

@@ -28,6 +28,7 @@ const { readHistory, writeHistory, deleteHistory, renameHistory } = require('../
 const { coverIds, historyIds, writeCover, deleteCover, renameCover } = require('../helpers/game-covers');
 const { calculateTournamentStatus } = require('../helpers/tournament-status');
 const audience = require('../services/audience');
+const searchConsole = require('../services/search-console');
 
 function escapeRegex(value) {
   return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -907,6 +908,22 @@ router.get('/audience', requireAdmin, async (req, res, next) => {
     const days = [1, 7, 30, 90, 365].includes(Number(req.query.days)) ? Number(req.query.days) : 30;
     res.json(await audience.summarize(days));
   } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET /api/admin/search-console?days=30
+ * Google Search figures of the site, for the Audience tab. Google has nothing
+ * for the day itself: a day asks for the week.
+ */
+router.get('/search-console', requireAdmin, async (req, res, next) => {
+  try {
+    const days = [7, 30, 90, 365].includes(Number(req.query.days)) ? Number(req.query.days) : Number(req.query.days) === 1 ? 7 : 30;
+    res.json(await searchConsole.summarize(days));
+  } catch (error) {
+    // The audience of the site shows without Google
+    if (error.response || error.request) return res.status(502).json({ error: 'Search Console unavailable' });
     next(error);
   }
 });

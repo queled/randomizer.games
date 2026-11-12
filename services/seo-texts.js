@@ -23,6 +23,7 @@ const TEXTS = {
       '/race-detail.html': ['Race - Randomizer', 'Race details, standings and related tournament information.']
     },
     crumbs: { home: 'Home', games: 'Games', races: 'Races', tournaments: 'Tournaments', players: 'Players' },
+    historySources: 'Sources',
     races: { one: '{n} race', other: '{n} races' },
     tournaments: { one: '{n} tournament', other: '{n} tournaments' },
     participants: { one: '{n} participant', other: '{n} participants' },
@@ -64,6 +65,7 @@ const TEXTS = {
       '/race-detail.html': ['Course - Randomizer', 'Fiche de la course, classement et tournoi lié.']
     },
     crumbs: { home: 'Accueil', games: 'Jeux', races: 'Courses', tournaments: 'Tournois', players: 'Joueurs' },
+    historySources: 'Sources',
     races: { one: '{n} course', other: '{n} courses' },
     tournaments: { one: '{n} tournoi', other: '{n} tournois' },
     participants: { one: '{n} participant', other: '{n} participants' },
@@ -106,6 +108,7 @@ const TEXTS = {
       '/race-detail.html': ['Carrera - Randomizer', 'Ficha de la carrera, clasificación y torneo vinculado.']
     },
     crumbs: { home: 'Inicio', games: 'Juegos', races: 'Carreras', tournaments: 'Torneos', players: 'Jugadores' },
+    historySources: 'Fuentes',
     races: { one: '{n} carrera', other: '{n} carreras' },
     tournaments: { one: '{n} torneo', other: '{n} torneos' },
     participants: { one: '{n} participante', other: '{n} participantes' },
@@ -148,6 +151,7 @@ const TEXTS = {
       '/race-detail.html': ['Rennen - Randomizer', 'Renndetails, Rangliste und verknüpftes Turnier.']
     },
     crumbs: { home: 'Startseite', games: 'Spiele', races: 'Rennen', tournaments: 'Turniere', players: 'Spieler' },
+    historySources: 'Quellen',
     races: { one: '{n} Rennen', other: '{n} Rennen' },
     tournaments: { one: '{n} Turnier', other: '{n} Turniere' },
     participants: { one: '{n} Teilnehmer', other: '{n} Teilnehmern' },
@@ -189,6 +193,7 @@ const TEXTS = {
       '/race-detail.html': ['Gara - Randomizer', 'Scheda della gara, classifica e torneo collegato.']
     },
     crumbs: { home: 'Home', games: 'Giochi', races: 'Gare', tournaments: 'Tornei', players: 'Giocatori' },
+    historySources: 'Fonti',
     races: { one: '{n} gara', other: '{n} gare' },
     tournaments: { one: '{n} torneo', other: '{n} tornei' },
     participants: { one: '{n} partecipante', other: '{n} partecipanti' },
@@ -231,6 +236,7 @@ const TEXTS = {
       '/race-detail.html': ['Corrida - Randomizer', 'Ficha da corrida, classificação e torneio vinculado.']
     },
     crumbs: { home: 'Início', games: 'Jogos', races: 'Corridas', tournaments: 'Torneios', players: 'Jogadores' },
+    historySources: 'Fontes',
     races: { one: '{n} corrida', other: '{n} corridas' },
     tournaments: { one: '{n} torneio', other: '{n} torneios' },
     participants: { one: '{n} participante', other: '{n} participantes' },

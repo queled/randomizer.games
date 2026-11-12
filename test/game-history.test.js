@@ -34,3 +34,25 @@ test('normalizeHistory refuses a history without events or with a non-web source
     sources: [{ label: 'Bad', url: 'javascript:alert(1)' }]
   }), /Invalid source URL/);
 });
+
+test('the history is written into the page in its language, English when it has none', () => {
+  const { renderHistory } = require('../services/seo-pages');
+  const history = {
+    intro: { en: 'Shuffles <every> item.', fr: 'Mélange chaque objet.' },
+    events: [{ date: '2001', title: { en: 'First release', fr: 'Première version' }, text: { en: 'It "ships".', fr: 'Elle sort.' } }],
+    sources: [{ label: 'A & B', url: 'https://example.test/a?b=1&c=2' }, { label: 'Not a link', url: 'javascript:alert(1)' }]
+  };
+  const french = renderHistory(history, 'fr');
+  assert.match(french, /<p class="history-intro">Mélange chaque objet\.<\/p>/);
+  assert.match(french, /<h3 class="history-title">Première version<\/h3>/);
+  assert.match(french, /<a href="https:\/\/example\.test\/a\?b=1&amp;c=2" target="_blank" rel="noopener noreferrer">A &amp; B<\/a>/);
+  assert.doesNotMatch(french, /javascript:/);
+
+  const german = renderHistory(history, 'de');
+  assert.match(german, /Shuffles &lt;every&gt; item\./);
+  assert.match(german, /It &quot;ships&quot;\./);
+  assert.match(german, /<h3 class="history-sources-title">Quellen<\/h3>/);
+
+  assert.equal(renderHistory(null, 'en'), '');
+  assert.doesNotMatch(renderHistory({ intro: 'Plain text', events: [] }, 'en'), /history-sources/);
+});

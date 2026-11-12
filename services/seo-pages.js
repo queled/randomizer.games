@@ -146,6 +146,7 @@ async function gameMeta(query, siteUrl, lang) {
     description,
     canonicalPath,
     image,
+    historyHtml: renderHistory(history, lang),
     jsonLd: [
       breadcrumb(siteUrl, [
         { name: t.crumbs.home, url: '/' },
@@ -171,6 +172,37 @@ async function gameMeta(query, siteUrl, lang) {
       })
     ]
   };
+}
+
+// A history text in the language of the page: histories are written in English
+// and French, the other languages take the English one
+function historyText(value, lang) {
+  if (!value || typeof value === 'string') return value || '';
+  return value[lang] || value.en || value.fr || '';
+}
+
+/**
+ * The history of a game as game-detail.js draws it: in the HTML itself, crawlers
+ * read the text that sets a game page apart without running the page scripts.
+ */
+function renderHistory(history, lang) {
+  if (!history) return '';
+  const events = (history.events || []).map((event) => `
+      <li class="history-event">
+        <span class="history-date">${htmlEscape(historyText(event.date, lang))}</span>
+        <h3 class="history-title">${htmlEscape(historyText(event.title, lang))}</h3>
+        <p class="history-text">${htmlEscape(historyText(event.text, lang))}</p>
+      </li>`).join('');
+  const sources = (history.sources || [])
+    .filter((source) => /^https?:\/\//i.test(String(source.url || '')))
+    .map((source) => `<li><a href="${htmlEscape(source.url)}" target="_blank" rel="noopener noreferrer">${htmlEscape(source.label)}</a></li>`)
+    .join('');
+  return `
+      <p class="history-intro">${htmlEscape(historyText(history.intro, lang))}</p>
+      <ol class="history-timeline">${events}
+      </ol>${sources ? `
+      <h3 class="history-sources-title">${htmlEscape(texts(lang).historySources)}</h3><ul class="history-sources">${sources}</ul>` : ''}
+    `;
 }
 
 const TOURNAMENT_STATUS_KEYS = { 'à venir': 'upcoming', 'en cours': 'ongoing', 'terminé': 'completed' };
@@ -523,6 +555,12 @@ async function renderPage(route, siteUrl) {
       `<img id="game-poster" src="${htmlEscape(meta.image)}" alt="${htmlEscape(meta.heading)}" width="256" height="360" fetchpriority="high"`
     ));
   }
+  // The history and its tab, as the page scripts show them once loaded
+  if (specific && file === '/game-detail.html' && meta.historyHtml) {
+    html = html
+      .replace('<div id="history-content"></div>', () => `<div id="history-content">${meta.historyHtml}</div>`)
+      .replace(/(<button class="tab-btn" data-tab="history"[^>]*?)\s+style="display:none;"/i, '$1');
+  }
   if (specific) {
     // Tells seo.js the head already describes this entity.
     html = html.replace(/<html([^>]*)>/i, '<html$1 data-seo-ssr="1">');
@@ -531,4 +569,4 @@ async function renderPage(route, siteUrl) {
   return { status, html };
 }
 
-module.exports = { renderPage };
+module.exports = { renderPage, renderHistory };

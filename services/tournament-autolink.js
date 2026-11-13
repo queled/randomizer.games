@@ -901,5 +901,23 @@ module.exports = {
   applyAutoLinkProposals,
   getExpectedStartggRaceCount,
   hasAvailableStartggSlot,
-  getRaceLabelBracketSide
+  getRaceLabelBracketSide,
+  // The rules that keep or drop a candidate match, exported for the tests
+  getTournamentWindow,
+  getPhaseFamily,
+  getRaceLabelStage,
+  filterMatchesByRaceStage,
+  filterMatchesByBracketSide,
+  normalizeStartggMatches,
+  normalizeChallongeMatches,
+  parseChallongeRaceTimes,
+  contradictsRecordedTimes,
+  playedAfterMatch,
+  playedBeforeTournament,
+  getRaceGameNumber,
+  goalsLookAlike,
+  namesOtherEventSeries,
+  namesOtherEvent,
+  filterProposalsByGoal,
+  tooFarFromMatch
 };

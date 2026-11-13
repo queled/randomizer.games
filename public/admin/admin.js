@@ -4104,9 +4104,9 @@ const admin = {
     const countries = new Intl.DisplayNames(['fr'], { type: 'region' });
     const countryLabel = code => REGIONS[code] ? countries.of(REGIONS[code]) : code.toUpperCase();
     const table = (rows, head, label) => rows.length ? `
-      <div class="table-container"><table class="table">
-        <thead><tr><th>${head}</th><th class="table-number">Affichages</th><th class="table-number">Clics</th><th class="table-number">Position</th></tr></thead>
-        <tbody>${rows.map(r => `<tr><td>${label(r.key)}</td><td class="table-number">${this.formatNumber(r.impressions)}</td><td class="table-number">${this.formatNumber(r.clicks)}</td><td class="table-number">${decimal(r.position)}</td></tr>`).join('')}</tbody>
+      <div class="table-container search-table-wrap"><table class="table search-table">
+        <thead><tr><th>${head}</th><th class="table-number"><span class="th-full">Affichages</span><span class="th-short" title="Affichages">Affich.</span></th><th class="table-number">Clics</th><th class="table-number"><span class="th-full">Position</span><span class="th-short" title="Position moyenne">Pos.</span></th></tr></thead>
+        <tbody>${rows.map(r => `<tr><td class="search-key">${label(r.key)}</td><td class="table-number">${this.formatNumber(r.impressions)}</td><td class="table-number">${this.formatNumber(r.clicks)}</td><td class="table-number">${decimal(r.position)}</td></tr>`).join('')}</tbody>
       </table></div>` : '<p class="text-muted">Rien sur la période</p>';
     const path = (url) => { try { return new URL(url).pathname; } catch { return url; } };
 

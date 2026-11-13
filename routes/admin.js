@@ -27,6 +27,7 @@ const { invalidateGamesWithStats } = require('./games');
 const { readHistory, writeHistory, deleteHistory, renameHistory } = require('../helpers/game-history');
 const { coverIds, historyIds, writeCover, deleteCover, renameCover } = require('../helpers/game-covers');
 const { calculateTournamentStatus } = require('../helpers/tournament-status');
+const { buildCategoryQuery, buildCategoryResolutionContext } = require('../helpers/game-matching');
 const audience = require('../services/audience');
 const searchConsole = require('../services/search-console');
 
@@ -235,9 +236,11 @@ router.get('/games/:id', requireAdmin, async (req, res, next) => {
       return res.status(404).json({ error: 'Game not found' });
     }
     
-    // Add stats
+    // Add stats: races of all the game's racetime categories, as on its page
+    const allGames = await Game.find().select('id integrations.racetime.gameSlug integrations.racetime.gameSlugs').lean();
+    const categoryQuery = buildCategoryQuery(game, String(game.id).toLowerCase(), buildCategoryResolutionContext(allGames));
     const [raceCount, tournamentCount] = await Promise.all([
-      Race.countDocuments({ category: game.integrations?.racetime?.gameSlug || game.id }),
+      Race.countDocuments(categoryQuery),
       Tournament.countDocuments({ $or: [{ game: game._id }, { gameId: game.id }] })
     ]);
     
@@ -965,9 +968,7 @@ router.get('/content-stats', requireAdmin, async (req, res, next) => {
       ]),
       Race.aggregate([
         { $match: { startedAt: { $gte: monthAgo } } },
-        { $group: { _id: '$category', races: { $sum: 1 } } },
-        { $sort: { races: -1 } },
-        { $limit: 10 }
+        { $group: { _id: '$category', races: { $sum: 1 } } }
       ]),
       Tournament.aggregate([
         { $match: { startDate: { $ne: null } } },
@@ -979,14 +980,33 @@ router.get('/content-stats', requireAdmin, async (req, res, next) => {
       Player.countDocuments({ userId: { $ne: null }, racetimeDeletedAt: null, twitch: { $nin: [null, ''] } })
     ]);
 
-    // Racetime categories under the name of their game
-    const slugs = topCategories.map(c => c._id);
-    const games = await Game.find({ $or: [{ 'integrations.racetime.gameSlug': { $in: slugs } }, { 'integrations.racetime.gameSlugs': { $in: slugs } }] })
+    // Racetime categories of one game add up under that game, with the rules of the game pages
+    const allGames = await Game.find()
       .select('id name randomizer.shortName randomizer.displayName integrations.racetime.gameSlug integrations.racetime.gameSlugs')
       .lean();
+    const resolution = buildCategoryResolutionContext(allGames);
     const gameOfSlug = new Map();
-    games.forEach(g => [g.integrations?.racetime?.gameSlug, ...(g.integrations?.racetime?.gameSlugs || [])]
-      .filter(Boolean).forEach(slug => gameOfSlug.set(slug, g)));
+    for (const game of allGames) {
+      const query = buildCategoryQuery(game, String(game.id).toLowerCase(), resolution).category;
+      const slugs = typeof query === 'string' ? [query] : (query?.$in || []);
+      slugs.forEach(slug => { if (!gameOfSlug.has(slug)) gameOfSlug.set(slug, game); });
+    }
+    const racesByGame = new Map();
+    for (const { _id: slug, races } of topCategories) {
+      const game = gameOfSlug.get(String(slug || '').toLowerCase());
+      const key = game ? `game:${game.id}` : `slug:${slug}`;
+      const row = racesByGame.get(key) || {
+        slug,
+        gameId: game?.id || null,
+        name: game ? (game.randomizer?.displayName || game.randomizer?.shortName || game.name) : slug,
+        races: 0
+      };
+      row.races += races;
+      racesByGame.set(key, row);
+    }
+    const topGames = [...racesByGame.values()]
+      .sort((a, b) => b.races - a.races || String(a.name).localeCompare(String(b.name)))
+      .slice(0, 10);
 
     res.json({
       catalog: {
@@ -994,15 +1014,7 @@ router.get('/content-stats', requireAdmin, async (req, res, next) => {
         onRandoList, onArchipelago, onMultiworld, onApworld, withCategories
       },
       racesByMonth: racesByMonth.map(m => ({ month: m._id, races: m.races })),
-      topCategories: topCategories.map(c => {
-        const game = gameOfSlug.get(c._id);
-        return {
-          slug: c._id,
-          gameId: game?.id || null,
-          name: game ? (game.randomizer?.displayName || game.randomizer?.shortName || game.name) : c._id,
-          races: c.races
-        };
-      }),
+      topCategories: topGames,
       tournamentsByYear: tournamentsByYear.map(y => ({ year: y._id, tournaments: y.tournaments })),
       players: { total: playersTotal, activeLast30Days: playersActive, withTwitch: playersWithTwitch }
     });

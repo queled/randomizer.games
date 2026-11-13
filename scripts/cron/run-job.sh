@@ -132,22 +132,48 @@ run_publish_assets() {
     return 0
   fi
   git fetch -q origin main || return 1
-  # Seulement quand le serveur est à jour : sinon le commit divergerait de
-  # main et bloquerait le prochain déploiement (git pull --ff-only)
-  if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
-    log "serveur pas à jour avec origin/main : publication remise après le prochain déploiement"
+  local head base
+  head="$(git rev-parse HEAD)"
+  base="$(git rev-parse origin/main)"
+  # Le serveur peut être en retard sur main (commits pas encore déployés),
+  # mais pas en avance ni divergent
+  if ! git merge-base --is-ancestor "$head" "$base"; then
+    log "serveur divergent de origin/main : publication impossible, à régler à la main"
     return 1
   fi
+  # Si main a changé ces fichiers depuis le déploiement, les versions du
+  # serveur écraseraient les siennes : on attend le prochain déploiement
+  if [ -n "$(git diff --name-only "$head" "$base" -- "${PUBLISHED_PATHS[@]}")" ]; then
+    log "main a modifié des jaquettes ou histoires pas encore déployées : publication remise après le prochain déploiement"
+    return 0
+  fi
+
+  # Commit construit sur origin/main dans un index à part : le code du
+  # serveur (HEAD) ne bouge pas tant qu'il n'est pas déployé
+  local index commit
+  index="$(git rev-parse --git-dir)/publish-assets.index"
+  rm -f "$index"
+  if ! GIT_INDEX_FILE="$index" git read-tree "$base" ||
+     ! GIT_INDEX_FILE="$index" git add -A -- "${PUBLISHED_PATHS[@]}"; then
+    rm -f "$index"
+    return 1
+  fi
+  GIT_INDEX_FILE="$index" git diff --cached --stat "$base" -- "${PUBLISHED_PATHS[@]}"
+  commit="$(git -c user.name="randomizer.games server" -c user.email="server@randomizer.games" \
+    commit-tree "$(GIT_INDEX_FILE="$index" git write-tree)" -p "$base" \
+    -m "chore(assets): covers and histories written on the server")"
+  rm -f "$index"
+  [ -n "$commit" ] || return 1
+  # Refusé si main a bougé entre-temps : rien n'a changé ici, nouvel essai demain
+  git push -q origin "$commit:main" || return 1
+
+  # Fichiers indexés tels que publiés : le prochain git pull --ff-only les
+  # trouve déjà à jour au lieu de buter dessus
   git add -A -- "${PUBLISHED_PATHS[@]}" || return 1
-  git status --short -- "${PUBLISHED_PATHS[@]}"
-  git -c user.name="randomizer.games server" -c user.email="server@randomizer.games" \
-    commit -q -m "chore(assets): covers and histories written on the server" -- "${PUBLISHED_PATHS[@]}" || return 1
-  if ! git push -q origin HEAD:main; then
-    # main a bougé entre-temps : on défait le commit, les fichiers restent
-    git reset -q HEAD~1
-    return 1
+  if [ "$head" = "$base" ]; then
+    git merge -q --ff-only "$commit" || return 1
   fi
-  log "publié : $(git rev-parse --short HEAD)"
+  log "publié : $(git rev-parse --short "$commit")"
 }
 
 case "$JOB" in

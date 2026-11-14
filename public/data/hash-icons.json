@@ -413,6 +413,35 @@
       5
     ]
   },
+  "ladx": {
+    "categories": [
+      "ladxr"
+    ],
+    "icons": {
+      "Yoshi Doll": "Yoshi Doll.png",
+      "Ribbon": "Ribbon.png",
+      "Dog Food": "Dog Food.png",
+      "Bananas": "Bananas.png",
+      "Stick": "Stick.png",
+      "Honeycomb": "Honeycomb.png",
+      "Pineapple": "Pineapple.png",
+      "Hibiscus": "Hibiscus.png",
+      "Letter": "Letter.png",
+      "Broom": "Broom.png",
+      "Fishing Hook": "Fishing Hook.png",
+      "Necklace": "Necklace.png",
+      "Scale": "Scale.png",
+      "Magnifying Lens": "Magnifying Lens.png"
+    },
+    "minRun": 5,
+    "sizes": [
+      5
+    ],
+    "aliases": {
+      "Yoshi": "Yoshi Doll",
+      "Lens": "Magnifying Lens"
+    }
+  },
   "landstalker": {
     "categories": [
       "landstalker-rando"

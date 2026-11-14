@@ -1,0 +1,28 @@
+{
+  "game": "Link's Awakening DX Randomizer: the title screen shows 5 of the 14 trading sequence items (patches/titleScreen.py, seed % 14 in the order of the trade), written \"STICK / SCALE / ...\" in race infos (YOSHI = Yoshi Doll, LENS = Magnifying Lens); images: LADX item sprites (Zelda Wiki)",
+  "list": "https://github.com/daid/LADXR/blob/master/patches/titleScreen.py",
+  "minRun": 5,
+  "sizes": [
+    5
+  ],
+  "words": {
+    "Yoshi Doll": "https://zeldawiki.wiki/wiki/File:LADX_Yoshi_Doll_Sprite.png",
+    "Ribbon": "https://zeldawiki.wiki/wiki/File:LADX_Ribbon_Sprite.png",
+    "Dog Food": "https://zeldawiki.wiki/wiki/File:LADX_Dog_Food_Sprite.png",
+    "Bananas": "https://zeldawiki.wiki/wiki/File:LADX_Bananas_Sprite.png",
+    "Stick": "https://zeldawiki.wiki/wiki/File:LADX_Stick_Sprite.png",
+    "Honeycomb": "https://zeldawiki.wiki/wiki/File:LADX_Honeycomb_Sprite.png",
+    "Pineapple": "https://zeldawiki.wiki/wiki/File:LADX_Pineapple_Sprite.png",
+    "Hibiscus": "https://zeldawiki.wiki/wiki/File:LADX_Hibiscus_Sprite.png",
+    "Letter": "https://zeldawiki.wiki/wiki/File:LADX_Letter_Sprite.png",
+    "Broom": "https://zeldawiki.wiki/wiki/File:LADX_Broom_Sprite.png",
+    "Fishing Hook": "https://zeldawiki.wiki/wiki/File:LADX_Fishing_Hook_Sprite.png",
+    "Necklace": "https://zeldawiki.wiki/wiki/File:LADX_Necklace_Sprite.png",
+    "Scale": "https://zeldawiki.wiki/wiki/File:LADX_Scale_Sprite.png",
+    "Magnifying Lens": "https://zeldawiki.wiki/wiki/File:LADX_Magnifying_Lens_Sprite.png"
+  },
+  "aliases": {
+    "Yoshi": "Yoshi Doll",
+    "Lens": "Magnifying Lens"
+  }
+}

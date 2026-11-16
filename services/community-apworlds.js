@@ -22,6 +22,9 @@ const MIN_ROWS = 500;
 
 const STATUS = { stable: 'stable', unstable: 'unstable', 'broken on main': 'broken' };
 
+// Labels of the link cells, never a game's name
+const LINK_LABEL_RE = /^(thread|thread \(ad\)|channel|github|github releases|apworld|website|discord|ap\.gg|n\/a|poptracker|client|core pr)$/i;
+
 // Files of a zip archive, by name
 function unzip(buffer) {
   let end = buffer.length - 22;
@@ -133,6 +136,9 @@ async function fetchCommunityWorlds() {
     if (row <= headerRow[0]) continue;
     const name = cells.A?.text;
     if (!name || name.length > 120) continue;
+    // A row whose name is only a link label ("Thread", "Github"…): a row being
+    // edited, its game cell not filled in yet or overwritten
+    if (LINK_LABEL_RE.test(name) || ['links & downloads', 'setup guides', 'support'].some(h => col(cells, h).text === name)) continue;
     const stability = col(cells, 'stability').text.toLowerCase();
     if (!STATUS[stability]) continue; // section headers, notes
     worlds.push({

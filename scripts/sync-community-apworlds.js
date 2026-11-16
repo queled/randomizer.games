@@ -10,6 +10,9 @@
  *   2. OVERRIDES below;
  *   3. the game's names, exactly (site, official, randomizer, rando-list,
  *      Twitch, archipelago.gg / multiworld.gg world).
+ * A row renamed in the list goes back to its game before that: its name without
+ * brackets is one the game lost ("Name" → "Name (Author)"), or its repository
+ * is one of the game's APWorld links.
  * A row only a looser form of its name matches (subtitle, without brackets…)
  * is listed for review and left alone, as is a name several games match: no
  * guess, no false positive. A row nothing matches becomes a new game (Twitch
@@ -23,7 +26,9 @@
  * It drops them when the row leaves the list, and replaces a link added by
  * hand to the same repository. A row of the game's own archipelago.gg /
  * multiworld.gg world gets neither APWorld nor guide (the page stands for
- * them); a variant ("Name - Mode", "Name (Recomp)") keeps its own. Run it after
+ * them); a variant ("Name - Mode", "Name (Recomp)") keeps its own. A game the
+ * sync created whose rows left the list a week ago, with nothing else on it
+ * (integration, link, tournament), is deleted with its cover and history. Run it after
  * sync-archipelago-games.js, which ties those worlds.
  *
  * Usage:
@@ -33,12 +38,13 @@
  *   node scripts/sync-community-apworlds.js --verbose     # every row and its game
  */
 
+const fs = require('fs');
 const path = require('path');
 const mongoose = require('mongoose');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env'), quiet: true });
 
 const connectDB = require('../config/database');
-const { Game } = require('../models');
+const { Game, Tournament, MarathonRun, Race } = require('../models');
 const { fetchCommunityWorlds } = require('../services/community-apworlds');
 const { norm, withoutBrackets, subtitle, mainTitle, gameNames, pickCandidate, newGameId, randomizerShortNames, runEnrichment } = require('../services/game-names');
 
@@ -363,8 +369,9 @@ function planGame(game, rows, now) {
     mature: rows.some(r => r.mature),
     confidence: old.confidence === 'manual' && old.gameNames?.length ? 'manual' : 'auto'
   };
+  if (!rows.length) next.leftAt = old.leftAt || now;
   if (next.enabled !== !!old.enabled || JSON.stringify(next.gameNames) !== JSON.stringify(old.gameNames || []) ||
-      next.mature !== !!old.mature || next.confidence !== old.confidence) {
+      next.mature !== !!old.mature || next.confidence !== old.confidence || !!next.leftAt !== !!old.leftAt) {
     set['integrations.apworld'] = { ...next, lastSync: now };
   } else if (Object.keys(set).length) {
     set['integrations.apworld.lastSync'] = now;
@@ -399,6 +406,64 @@ function newGameDoc(id, name, rows, now) {
   };
 }
 
+// Days a game created for rows stays after they left the list: a row renamed
+// or put back meanwhile finds it again, with its cover and history
+const ORPHAN_GRACE_DAYS = 7;
+// More orphans at once: the list is more likely broken than emptied, none goes
+const MAX_ORPHANS_PER_RUN = 10;
+const OTHER_INTEGRATIONS = ['racetime', 'randoList', 'archipelago', 'multiworld', 'speedrun', 'startgg', 'challonge'];
+
+// What still holds a game besides its rows (its Twitch category alone does not)
+async function holds(game) {
+  const i = game.integrations || {};
+  if (i.apworld?.confidence === 'manual') return 'APWorld rattaché à la main';
+  const integration = OTHER_INTEGRATIONS.find(k => i[k]?.enabled);
+  if (integration) return `intégration ${integration}`;
+  if (i.racetime?.gameSlug || i.racetime?.gameSlugs?.length) return 'catégorie racetime';
+  const list = ['sites', 'trackers', 'guides', 'other'].find(k => game.resources?.[k]?.length);
+  if (list) return `resources.${list}`;
+  if (game.resources?.officialSite?.url) return 'site officiel';
+  if (await Tournament.exists({ $or: [{ game: game._id }, { gameId: game.id }, { gameSlug: game.id }] })) return 'tournoi';
+  if (await MarathonRun.exists({ game: game._id })) return 'run de marathon';
+  if (await Race.exists({ games: game.id })) return 'course multiworld';
+  return null;
+}
+
+/**
+ * Games the sync created whose rows left the list ORPHAN_GRACE_DAYS ago, with
+ * nothing else on them: deleted, with their cover and history (publish-assets
+ * commits their removal).
+ */
+async function deleteOrphans(now, options) {
+  const before = new Date(now - ORPHAN_GRACE_DAYS * 24 * 3600 * 1000);
+  const candidates = await Game.find({
+    'source.origin': SOURCE,
+    'integrations.apworld.enabled': { $ne: true },
+    'integrations.apworld.leftAt': { $lte: before }
+  }).lean();
+  const orphans = [];
+  for (const game of candidates) {
+    const reason = await holds(game);
+    if (reason) console.log(`  ↪ ${game.id} sorti du tableur, gardé : ${reason}`);
+    else orphans.push(game);
+  }
+  if (!orphans.length) return;
+  if (orphans.length > MAX_ORPHANS_PER_RUN) {
+    console.log(`\n⚠️ ${orphans.length} fiches sans rien de rattaché (${orphans.map(g => g.id).join(', ')}) : ` +
+      `plus de ${MAX_ORPHANS_PER_RUN} d’un coup, aucune supprimée, à vérifier`);
+    return;
+  }
+  console.log(`\n🗑️ Fiches supprimées (sorties du tableur depuis ${ORPHAN_GRACE_DAYS} jours, plus rien de rattaché) :`);
+  for (const game of orphans) {
+    console.log(`  - ${game.id} — ${game.name}`);
+    if (options.dryRun) continue;
+    await Game.deleteOne({ _id: game._id });
+    for (const file of [`assets/covers/${game.id}.webp`, `data/history/${game.id}.json`]) {
+      fs.rmSync(path.join(__dirname, '..', 'public', file), { force: true });
+    }
+  }
+}
+
 async function main() {
   const options = parseArgs();
   const now = new Date();
@@ -413,7 +478,7 @@ async function main() {
   }
 
   await connectDB();
-  const games = await Game.find({}, { id: 1, name: 1, official: 1, randomizer: 1, resources: 1, integrations: 1 }).lean();
+  const games = await Game.find({}, { id: 1, name: 1, official: 1, randomizer: 1, resources: 1, integrations: 1, source: 1 }).lean();
   const indexes = buildIndexes(games);
   if (options.dryRun) console.log('ℹ️ Simulation (--dry-run) : rien n’est écrit');
 
@@ -436,6 +501,26 @@ async function main() {
       if (rowByName.has(name) && !taken.has(name) && !OVERRIDES[name] && OVERRIDES[name] !== false) tie(game, rowByName.get(name), 'kept');
     }
   }
+  // Rows renamed in the list ("Name" → "Name (Author)", two forks of one world,
+  // a new name for the same repository): back on the game of the name they replace
+  const lost = new Map(); // name without brackets, or repository → games that lost a row
+  const addLost = (key, game) => key && lost.set(key, new Set([...(lost.get(key) || []), game]));
+  for (const game of games) {
+    const lostNames = (game.integrations?.apworld?.gameNames || []).filter(name => !rowByName.has(name));
+    if (!lostNames.length) continue;
+    for (const name of lostNames) addLost(norm(withoutBrackets(name)), game);
+    for (const site of game.resources?.sites || []) {
+      if (site.source === SOURCE && repoKey(site.url) && !/\/archipelago$/.test(repoKey(site.url))) addLost(repoKey(site.url), game);
+    }
+  }
+  for (const row of rows) {
+    if (taken.has(row.name) || row.name in OVERRIDES) continue;
+    const owners = new Set([row.links.url, row.guide.url].map(repoKey).flatMap(key => [...(lost.get(key) || [])]));
+    for (const game of lost.get(norm(withoutBrackets(row.name))) || []) owners.add(game);
+    const exact = indexes.strong.get(norm(row.name));
+    if (owners.size === 1 && (!exact || exact.has([...owners][0]))) tie([...owners][0], row, 'renamed');
+  }
+
   for (const row of rows) {
     if (taken.has(row.name)) continue;
     const { games: found, how, ambiguous, review, skip } = matchRow(row, indexes);
@@ -446,10 +531,12 @@ async function main() {
     else for (const game of found) tie(game, row, how);
   }
 
-  // Games tied to rows before, now on none: their links go
+  // Games tied to rows before, now on none: their links go (and a game created
+  // for them gets the date it left, see deleteOrphans)
   for (const game of games) {
     if (plan.has(game.id)) continue;
-    if (game.integrations?.apworld?.enabled || ['sites', 'trackers', 'guides', 'other'].some(k => (game.resources?.[k] || []).some(i => i.source === SOURCE))) {
+    if (game.integrations?.apworld?.enabled || ['sites', 'trackers', 'guides', 'other'].some(k => (game.resources?.[k] || []).some(i => i.source === SOURCE)) ||
+        (game.source?.origin === SOURCE && !game.integrations?.apworld?.leftAt)) {
       plan.set(game.id, []);
     }
   }
@@ -511,6 +598,8 @@ async function main() {
     `créés : ${options.dryRun || !options.create ? `${newGames.size} (non écrits)` : stats.created.length}, ` +
     `à vérifier : ${report.review.length + report.ambiguous.length}`);
   if (stats.removed.length) console.log(`Sortis du tableur : ${stats.removed.join(', ')}`);
+
+  await deleteOrphans(now, options);
 
   await mongoose.disconnect();
 

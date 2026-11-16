@@ -168,7 +168,9 @@ const gameSchema = new mongoose.Schema({
       gameNames: [String],          // names of the game's rows in the list
       mature: { type: Boolean, default: false }, // flagged 18+ / unrated there
       confidence: { type: String, enum: ['manual', 'auto'], default: 'manual' },
-      lastSync: Date
+      lastSync: Date,
+      // When its rows left the list (a game created for them, left with nothing, is deleted later)
+      leftAt: Date
     }
   },
   

@@ -1,5 +1,14 @@
 const { Game, Tournament, Race } = require('../models');
 
+// Multiworld races tied to a game (helpers/multiworld-races.js) follow its new id
+function renameRaceGames(oldId, newId) {
+  return Race.updateMany({ games: oldId }, [{
+    $set: {
+      games: { $setUnion: [{ $map: { input: '$games', as: 'g', in: { $cond: [{ $eq: ['$$g', oldId] }, newId, '$$g'] } } }, []] }
+    }
+  }]);
+}
+
 /**
  * Merging two games of the site into one, and changing a game's id.
  *
@@ -164,6 +173,7 @@ async function mergeGames(targetId, sourceId) {
     { $or: [{ gameId: sourceId }, { gameSlug: sourceId }, { game: source._id }] },
     { $set: { gameId: targetId, gameSlug: targetId, game: target._id } }
   );
+  await renameRaceGames(sourceId, targetId);
 
   await Game.deleteOne({ _id: source._id });
   return { mergedResources };
@@ -187,6 +197,7 @@ async function changeGameId(oldId, newId) {
   if (!slugs.includes(oldId)) {
     await Race.updateMany({ category: oldId }, { $set: { category: newId } });
   }
+  await renameRaceGames(oldId, newId);
 }
 
 module.exports = { mergeGames, changeGameId };

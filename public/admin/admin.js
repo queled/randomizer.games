@@ -434,6 +434,9 @@ const admin = {
       case 'race-linking':
         this.rlLoadTournaments();
         break;
+      case 'multiworld':
+        this.mwLoad();
+        break;
       case 'tournaments-mgmt':
         this.tmLoadTournaments();
         break;
@@ -4734,6 +4737,136 @@ const admin = {
   tmOpenLinking(id) {
     this.navigateTo('race-linking');
     this.rlSelectTournament(id);
+  },
+
+  // ==================== MULTIWORLD RACES ====================
+
+  async mwLoad(page = 1) {
+    const filter = document.getElementById('mw-filter')?.value || 'untied';
+    const list = document.getElementById('mw-list');
+    const requestId = this.mwRequest = (this.mwRequest || 0) + 1;
+    try {
+      await this.mwLoadGames();
+      const params = new URLSearchParams({ filter, page, limit: 25 });
+      const response = await fetch(`/api/admin/multiworld-races?${params}`, {
+        headers: { 'Authorization': `Bearer ${this.token}` }
+      });
+      if (!response.ok) throw new Error('Failed');
+      const data = await response.json();
+      if (requestId !== this.mwRequest) return;
+      this.mwRaces = new Map(data.races.map(race => [race._id, race]));
+      const c = data.counts || {};
+      document.getElementById('mw-counts').textContent =
+        `${c.untied ?? 0} à rattacher · ${c.tied ?? 0} rattachées (dont ${c.manual ?? 0} à la main) · ${c.all ?? 0} au total`;
+      list.innerHTML = data.races.length
+        ? data.races.map(race => this.mwRaceHtml(race)).join('')
+        : '<p class="text-muted">Aucune course.</p>';
+      this.mwRenderPagination(data.pagination);
+    } catch (error) {
+      console.error('Error loading multiworld races:', error);
+      this.showToast('Erreur lors du chargement des courses multiworld', 'error');
+    }
+  },
+
+  // Game picker options: "<id>" with the game's label
+  async mwLoadGames() {
+    if (this.mwGameLabels) return;
+    const response = await fetch('/api/admin/games?limit=5000&fields=light', {
+      headers: { 'Authorization': `Bearer ${this.token}` }
+    });
+    if (!response.ok) throw new Error('Failed to load games');
+    const data = await response.json();
+    const label = g => g.randomizer?.displayName || g.randomizer?.shortName || g.name || g.id;
+    this.mwGameLabels = new Map((data.games || []).map(g => [g.id, label(g)]));
+    document.getElementById('mw-games').innerHTML = (data.games || [])
+      .map(g => `<option value="${this.escapeHtml(g.id)}">${this.escapeHtml(label(g))}</option>`).join('');
+  },
+
+  mwRaceHtml(race) {
+    const esc = v => this.escapeHtml(v == null ? '' : String(v));
+    const date = race.startedAt ? new Date(race.startedAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) : 'sans date';
+    const source = race.gamesSource === 'manual' ? 'à la main' : race.games.length ? 'synchro' : '';
+    const chips = race.games.length
+      ? race.games.map(id => `<span class="mw-chip">${esc(this.mwGameLabels?.get(id) || id)} <code>${esc(id)}</code>
+          <button type="button" class="mw-chip-remove" title="Retirer" data-click="mwRemoveGame" data-args="${this.attrArgs([race._id, id])}">×</button></span>`).join('')
+      : `<span class="text-muted">${race.gamesSource === 'manual' ? 'Aucun jeu (choisi à la main)' : 'Aucun jeu'}</span>`;
+    const rooms = race.rooms.length
+      ? `<div class="mw-line text-muted">Rooms : ${race.rooms.map(room => `${esc(room.id)} → ${room.missing ? 'introuvable' : esc(room.games.join(', ') || 'aucun jeu')}`).join(' ; ')}</div>`
+      : '';
+    return `
+      <div class="mw-race" id="mw-race-${esc(race._id)}">
+        <div class="mw-race-head">
+          <a href="https://racetime.gg${esc(race.url)}" target="_blank" rel="noopener noreferrer">${esc(race.name)}</a>
+          <span class="text-muted">${esc(date)} · ${race.entrantCount} participant(s)</span>
+        </div>
+        <div class="mw-line"><strong>${esc(race.goal || 'Sans goal')}</strong></div>
+        ${race.info ? `<div class="mw-info">${esc(race.info)}</div>` : ''}
+        ${rooms}
+        ${race.entrants.length ? `<div class="mw-line text-muted">${esc(race.entrants.join(', '))}${race.entrantCount > race.entrants.length ? '…' : ''}</div>` : ''}
+        <div class="mw-games">${chips}${source ? `<span class="mw-source text-muted">(${source})</span>` : ''}</div>
+        <div class="mw-actions">
+          <input type="text" class="form-input mw-input" id="mw-input-${esc(race._id)}" list="mw-games" placeholder="Id du jeu…" autocomplete="off">
+          <button type="button" class="btn btn-sm btn-primary" data-click="mwAddGame" data-args="${this.attrArgs([race._id])}">Ajouter</button>
+          <button type="button" class="btn btn-sm btn-outline" data-click="mwSetNoGame" data-args="${this.attrArgs([race._id])}">Aucun jeu</button>
+          ${race.gamesSource === 'manual' ? `<button type="button" class="btn btn-sm btn-ghost" data-click="mwReset" data-args="${this.attrArgs([race._id])}">Rendre à la synchro</button>` : ''}
+        </div>
+      </div>`;
+  },
+
+  async mwSave(raceId, body) {
+    try {
+      const response = await fetch(`/api/admin/multiworld-races/${encodeURIComponent(raceId)}`, {
+        method: 'PATCH',
+        headers: { 'Authorization': `Bearer ${this.token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || 'Failed');
+      const race = this.mwRaces.get(raceId);
+      race.games = data.games || [];
+      race.gamesSource = data.gamesSource;
+      document.getElementById(`mw-race-${raceId}`).outerHTML = this.mwRaceHtml(race);
+      this.showToast(body.reset ? 'Course rendue à la synchro (prochain passage)' : 'Course enregistrée', 'success');
+    } catch (error) {
+      this.showToast(`Erreur : ${error.message}`, 'error');
+    }
+  },
+
+  mwAddGame(raceId) {
+    const input = document.getElementById(`mw-input-${raceId}`);
+    const id = (input?.value || '').trim().toLowerCase();
+    if (!id) return;
+    if (this.mwGameLabels && !this.mwGameLabels.has(id)) {
+      this.showToast(`Jeu inconnu : ${id}`, 'error');
+      return;
+    }
+    const race = this.mwRaces.get(raceId);
+    this.mwSave(raceId, { games: [...new Set([...race.games, id])] });
+  },
+
+  mwRemoveGame(raceId, gameId) {
+    const race = this.mwRaces.get(raceId);
+    this.mwSave(raceId, { games: race.games.filter(id => id !== gameId) });
+  },
+
+  mwSetNoGame(raceId) {
+    this.mwSave(raceId, { games: [] });
+  },
+
+  mwReset(raceId) {
+    this.mwSave(raceId, { reset: true });
+  },
+
+  mwRenderPagination(pagination) {
+    const container = document.getElementById('mw-pagination');
+    if (!pagination || pagination.pages <= 1) { container.innerHTML = ''; return; }
+    const { page, pages, total } = pagination;
+    let html = '<div class="pagination">';
+    if (page > 1) html += `<button class="btn btn-sm btn-outline" data-click="mwLoad" data-args="${this.attrArgs([page - 1])}">← Précédent</button>`;
+    html += `<span class="pagination-info">Page ${page} / ${pages} (${total} courses)</span>`;
+    if (page < pages) html += `<button class="btn btn-sm btn-outline" data-click="mwLoad" data-args="${this.attrArgs([page + 1])}">Suivant →</button>`;
+    html += '</div>';
+    container.innerHTML = html;
   },
 
   tmRenderPagination(page, totalPages, total) {

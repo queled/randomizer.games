@@ -14,6 +14,7 @@ let gamesWithStatsInFlight = null;
 const {
   buildCategoryResolutionContext,
   buildCategoryQuery,
+  buildGameRacesQuery,
   buildTournamentQuery,
   getExplicitRacetimeSlugs
 } = require('../helpers/game-matching');
@@ -57,6 +58,13 @@ async function computeGamesWithStats() {
   // (hundreds of simultaneous queries used to saturate the connection pool)
   const raceCountRows = await Race.aggregate([{ $group: { _id: '$category', count: { $sum: 1 }, last: { $max: '$startedAt' } } }]);
   const raceCountByCategory = new Map(raceCountRows.map(row => [row._id, row.count]));
+  // Multiworld races (racetime.gg/archipelago) count for each game they were played with
+  const multiworldRows = await Race.aggregate([
+    { $match: { games: { $exists: true, $ne: [] } } },
+    { $unwind: '$games' },
+    { $group: { _id: '$games', count: { $sum: 1 }, last: { $max: '$startedAt' } } }
+  ]);
+  const multiworldByGame = new Map(multiworldRows.map(row => [row._id, row]));
   // Latest race of each category: when a game page last changed, for the sitemap
   const lastRaceByCategory = new Map(raceCountRows.map(row => [row._id, row.last]));
 
@@ -87,15 +95,16 @@ async function computeGamesWithStats() {
     const categoryQuery = buildCategoryQuery(game, gameIdLower, resolutionContext);
 
     const categories = categoriesOf(categoryQuery);
+    const multiworld = multiworldByGame.get(gameIdLower);
     const [totalRaces, totalTournaments] = await Promise.all([
       categories
-        ? categories.reduce((sum, category) => sum + (raceCountByCategory.get(category) || 0), 0)
-        : Race.countDocuments(categoryQuery),
+        ? categories.reduce((sum, category) => sum + (raceCountByCategory.get(category) || 0), multiworld?.count || 0)
+        : Race.countDocuments(buildGameRacesQuery(game, gameIdLower, resolutionContext)),
       tournamentCounts ? tournamentCounts[index] : Tournament.countDocuments(tournamentQueries[index])
     ]);
 
     const lastRaceAt = categories
-      ? categories.map(category => lastRaceByCategory.get(category)).filter(Boolean).sort((a, b) => b - a)[0] || null
+      ? [...categories.map(category => lastRaceByCategory.get(category)), multiworld?.last].filter(Boolean).sort((a, b) => b - a)[0] || null
       : null;
 
     return {
@@ -256,14 +265,15 @@ router.get('/:id/stats', async (req, res, next) => {
     const gameDoc = await Game.findOne({ id: gameIdLower });
     const allGames = await Game.find().select('id integrations.racetime').lean();
     const resolutionContext = buildCategoryResolutionContext(allGames);
-    const categoryQuery = buildCategoryQuery(gameDoc, gameIdLower, resolutionContext);
+    // Its racetime categories and the multiworld races played with it
+    const raceQuery = buildGameRacesQuery(gameDoc, gameIdLower, resolutionContext);
     const tournamentQuery = buildTournamentQuery(gameDoc, gameIdLower);
     
     const totalTournaments = await Tournament.countDocuments(tournamentQuery);
-    const totalRaces = await Race.countDocuments(categoryQuery);
+    const totalRaces = await Race.countDocuments(raceQuery);
     
     // Get recent races
-    const recentRaces = await Race.find(categoryQuery)
+    const recentRaces = await Race.find(raceQuery)
       .sort({ startedAt: -1 })
       .limit(10);
     

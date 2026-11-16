@@ -448,13 +448,12 @@ function createRaceCard(race) {
 
   const totalEntrants = race.entrants?.length || 0;
   
-  const resolved = resolveGameForCategory(race.category);
-  const friendlyGameName = getGameDisplayName(resolved) || race.category || 'N/A';
+  const friendlyGameName = raceGameLabel(race, (key) => getGameDisplayName(resolveGameForCategory(key)) || (race.multiworld ? null : key)) || 'N/A';
 
   card.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:0.5rem;">
       <div style="flex:1;">
-        <div style="color:#fbbf24;font-weight:600;font-size:0.95rem;margin-bottom:0.25rem;">${escHtml(friendlyGameName)}</div>
+        <div style="color:#fbbf24;font-weight:600;font-size:0.95rem;margin-bottom:0.25rem;">${escHtml(friendlyGameName)}${multiworldBadge(race)}</div>
         <div style="color:#d1d5db;font-size:0.85rem;">${escHtml(race.goal || race.name || 'Sans objectif')}</div>
       </div>
       <span style="background:${statusColor};color:white;padding:0.25rem 0.5rem;border-radius:0.25rem;font-size:0.75rem;white-space:nowrap;">${escHtml(statusText)}</span>

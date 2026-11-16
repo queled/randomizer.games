@@ -16,6 +16,7 @@ const { buildPlayerRacesFilter } = require('../helpers/player-races-filter');
 const { listPlayerTournaments, participantLabel } = require('../helpers/player-tournaments');
 const { loadOwnNames, findPlayerByName, namesRacedWithoutAccount } = require('../helpers/player-identity');
 const { gameLabel, tournamentGameLabel } = require('../helpers/game-label');
+const { categoryLabel, multiworldRaceName } = require('../helpers/multiworld-races');
 const { coverUrl, historyIds } = require('../helpers/game-covers');
 const { readHistory } = require('../helpers/game-history');
 const { cachedGameStats, cachedGamesWithStats } = require('../routes/games');
@@ -377,10 +378,11 @@ const PLAYER_TOURNAMENT_LINKS = 30;
 // Race count and most played games of a player, for a preview worth clicking.
 async function playerRaceSummary(player, names) {
   const { filter } = buildPlayerRacesFilter({ userId: player.userId, names: await namesRacedWithoutAccount(Race, names) });
-  const latest = await Race.find(filter).sort({ startedAt: -1 }).limit(PLAYER_RACE_LINKS).select('category goal startedAt').maxTimeMS(3000).lean();
+  const latest = await Race.find(filter).sort({ startedAt: -1 }).limit(PLAYER_RACE_LINKS).select('category goal startedAt multiworld games').maxTimeMS(3000).lean();
   const byCategory = await Race.aggregate([
     { $match: filter },
-    { $group: { _id: '$category', count: { $sum: 1 } } }
+    // A multiworld race counts for the first game it was played with
+    { $group: { _id: { $cond: [{ $eq: ['$multiworld', true] }, { $ifNull: [{ $arrayElemAt: ['$games', 0] }, '$category'] }, '$category'] }, count: { $sum: 1 } } }
   ]).option({ maxTimeMS: 3000 });
 
   // Several racetime categories can belong to one game
@@ -388,14 +390,18 @@ async function playerRaceSummary(player, names) {
   await Promise.all(byCategory.map(async ({ _id: category, count }) => {
     const game = await findGameForRaceCategory(category);
     const key = game?.id || category;
-    const entry = byGame.get(key) || { name: gameLabel(game) || category, count: 0 };
+    const entry = byGame.get(key) || { name: gameLabel(game) || categoryLabel(category) || category, count: 0 };
     entry.count += count;
     byGame.set(key, entry);
   }));
 
   const games = [...byGame.values()].sort((a, b) => b.count - a.count);
   const labels = new Map();
-  for (const { _id: category } of byCategory) labels.set(category, gameLabel(await findGameForRaceCategory(category)) || category);
+  const categoryNames = [...new Set([...byCategory.map((row) => row._id), ...latest.flatMap((race) => [race.category, ...(race.games || [])])])];
+  for (const category of categoryNames) labels.set(category, gameLabel(await findGameForRaceCategory(category)) || categoryLabel(category) || category);
+  const raceGameName = (race) => (race.multiworld
+    ? multiworldRaceName((race.games || []).map((id) => labels.get(id)), race.category)
+    : labels.get(race.category) || race.category);
   return {
     total: games.reduce((sum, g) => sum + g.count, 0),
     games: games.slice(0, 2).map((g) => g.name).filter(Boolean),
@@ -403,7 +409,7 @@ async function playerRaceSummary(player, names) {
     latest: latest.map((race) => ({
       path: `/races/${race._id}`,
       label: [
-        [labels.get(race.category) || race.category, String(race.goal || '').trim()].filter(Boolean).join(' - '),
+        [raceGameName(race), String(race.goal || '').trim()].filter(Boolean).join(' - '),
         race.startedAt ? `(${new Date(race.startedAt).toISOString().slice(0, 10)})` : ''
       ].filter(Boolean).join(' ')
     }))
@@ -501,11 +507,19 @@ async function raceMeta(query, siteUrl, lang) {
   }
   if (!race) return null;
 
+  // A multiworld race: the games it was played with
+  const multiworldGames = race.multiworld && race.games?.length
+    ? await Game.find({ id: { $in: race.games } }).select('id name official randomizer').lean()
+    : [];
   const [game, tournament] = await Promise.all([
-    findGameForRaceCategory(race.category),
+    race.multiworld
+      ? race.games?.length ? multiworldGames.find((g) => g.id === race.games[0]) || null : null
+      : findGameForRaceCategory(race.category),
     race.tournamentId ? Tournament.findById(race.tournamentId).select('name').lean() : null
   ]);
-  const gameName = gameLabel(game) || race.category;
+  const gameName = race.multiworld
+    ? multiworldRaceName((race.games || []).map((id) => gameLabel(multiworldGames.find((g) => g.id === id))), race.category)
+    : gameLabel(game) || race.category;
   const goal = String(race.goal || '').trim() || 'Race';
   const matchup = String(race.matchPlayers || '').trim();
   const label = matchup ? `${matchup} (${goal})` : goal;

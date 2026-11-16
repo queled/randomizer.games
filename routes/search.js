@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { Game, Tournament, Race, Player } = require('../models');
 const { gameLabel: labelOfGame, loadGameLabels, tournamentGameLabel } = require('../helpers/game-label');
+const { categoryLabel, multiworldRaceName } = require('../helpers/multiworld-races');
 const { getAllStreams } = require('./streams');
 const { buildGameDisplayMaps } = require('./players');
 const { accountKey, buildPlayerIdentity } = require('../helpers/player-identity');
@@ -15,7 +16,9 @@ async function mostRacedGames(userIds) {
       { $match: { 'entrants.userId': { $in: userIds } } },
       { $unwind: '$entrants' },
       { $match: { 'entrants.userId': { $in: userIds }, category: { $nin: [null, ''] } } },
-      { $group: { _id: { userId: '$entrants.userId', category: '$category' }, count: { $sum: 1 } } }
+      // As on the players page: a multiworld race counts for its first game, if any
+      { $match: { $or: [{ multiworld: { $ne: true } }, { 'games.0': { $exists: true } }] } },
+      { $group: { _id: { userId: '$entrants.userId', category: { $cond: [{ $eq: ['$multiworld', true] }, { $arrayElemAt: ['$games', 0] }, '$category'] } }, count: { $sum: 1 } } }
     ])
   ]);
 
@@ -143,7 +146,7 @@ router.get('/', async (req, res, next) => {
         { goal: searchRegex },
         { info: searchRegex },
         { category: searchRegex },
-        ...(inferredCategories.length ? [{ category: { $in: inferredCategories } }] : [])
+        ...(inferredCategories.length ? [{ category: { $in: inferredCategories } }, { games: { $in: inferredCategories } }] : [])
       ]
     };
 
@@ -295,7 +298,10 @@ router.get('/', async (req, res, next) => {
           _id: r._id,
           name: r.name,
           category: r.category,
-          gameName: gameLabel(r.category),
+          gameName: r.multiworld
+            ? multiworldRaceName((r.games || []).map(id => gameLabel(id)), r.category)
+            : gameLabel(r.category) || categoryLabel(r.category),
+          multiworld: r.multiworld || undefined,
           goal: r.goal,
           status: r.status,
           startedAt: r.startedAt,

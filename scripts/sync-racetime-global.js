@@ -26,6 +26,7 @@ const { Game, Race } = require('../models');
 const racetimeAPI = require('../services/racetime');
 const { durationToMs } = racetimeAPI;
 const { loadGoalFilters, isGoalAllowed } = require('../helpers/racetime-goals');
+const { MULTIWORLD_CATEGORIES, resolveMultiworldRaces } = require('../helpers/multiworld-races');
 
 // Configuration
 const RATE_LIMIT_MS = parseInt(process.env.RACETIME_RATE_LIMIT_MS) || 1500;
@@ -55,6 +56,8 @@ async function getActiveSlugs() {
     const additional = game.integrations?.racetime?.gameSlugs || [];
     for (const slug of additional) activeSlugs.add(slug);
   }
+  // Multi-game categories: no game of their own, their races are tied to the games they were played with
+  for (const slug of MULTIWORLD_CATEGORIES) activeSlugs.add(slug);
   return activeSlugs;
 }
 
@@ -496,6 +499,9 @@ async function main() {
       console.log(`Erreurs: ${activeStats.errors + finalizeStats.errors + catchUpStats.errors}`);
       console.log('════════════════════════════════════');
     }
+
+    console.log('\n🌐 Courses multiworld...');
+    await resolveMultiworldRaces({ Race, Game, log: console.log });
     
   } catch (error) {
     console.error('\n❌ Erreur:', error);

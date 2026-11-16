@@ -229,6 +229,7 @@ const pt = {
     
     // Races page
     races: {
+        multiworldHint: "Corrida multiworld (Archipelago), jogada em equipe: fora das estatísticas",
         heading: "Corridas Randomizer",
         title: "Corridas",
         pageTitle: "Corridas de randomizer - Randomizer",

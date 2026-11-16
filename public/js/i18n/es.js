@@ -187,6 +187,7 @@ const es = {
     
     // Races page
     races: {
+        multiworldHint: "Carrera multiworld (Archipelago), jugada en equipo: fuera de las estadísticas",
         heading: "Carreras Randomizer",
         title: "Carreras",
         pageTitle: "Carreras de randomizer - Randomizer",

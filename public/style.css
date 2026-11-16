@@ -179,6 +179,20 @@ h1 {
     font-weight: 600;
 }
 
+/* Multiworld race (racetime.gg/archipelago): played in teams, out of the stats */
+.badge-multiworld {
+    display: inline-block;
+    margin-left: 0.4rem;
+    padding: 0.05rem 0.4rem;
+    border-radius: 0.25rem;
+    background-color: #4c1d95;
+    color: #ddd6fe;
+    font-size: 0.7rem;
+    font-weight: 600;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
 .status-ongoing {
     background-color: #059669;
     color: white;

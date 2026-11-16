@@ -57,7 +57,7 @@ En production, la base MongoDB tourne sur le même serveur que le site et n'éco
 
 | Tâche | Fréquence (UTC) | Ce qu'elle fait |
 |-------|-----------------|-----------------|
-| `racetime` | toutes les 5 min | `sync-racetime-global.js` : nouvelles courses, finalisation des courses bloquées « en cours » depuis plus de 24 h, rattrapage des courses terminées entre deux exécutions |
+| `racetime` | toutes les 5 min | `sync-racetime-global.js` : nouvelles courses, finalisation des courses bloquées « en cours » depuis plus de 24 h, rattrapage des courses terminées entre deux exécutions, puis rattachement des courses multiworld à leurs jeux (voir plus bas) |
 | `tournaments-update` | toutes les 15 min | `sync-tournaments.js --update-only` met à jour les tournois actifs, puis `auto-link-tournaments.js` rattache les courses aux matchs, et les tie-breaks de poule (room « tie-break » entre joueurs d'une même poule) à leur poule |
 | `race-vods` | toutes les 30 min | `sync-race-vods.js` : VOD Twitch des joueurs de chaque race, puis `sync-race-restreams.js` : restreams absents de Mido's House, trouvés par le titre Twitch ou YouTube (voir plus bas) |
 | `schedule-sites` | toutes les 15 min | `sync-speedgaming.js` : matchs restreamés par SpeedGaming (voir plus bas), puis `sync-schedule-sites.js` : horaires et restreams des races des tournois de Mido's House et Hyrule Town Hall, rattachement des courses par leur room, VOD Twitch des restreams, puis `sync-midos-league.js --current` : saison en cours de l'OoTR League, puis `sync-midos-events.js --active` : tournois Mido's House sans bracket en cours, puis `sync-speedrace.js` : VOD saisies sur Speedrace, puis `sync-localhorst.js` : restreams planifiés sur localhorst, puis `sync-ical-restreams.js` : restreams des calendriers iCal (voir plus bas) |
@@ -413,3 +413,14 @@ node scripts/import-games-csv.js data/games.csv --dry-run    # aperçu
 node scripts/import-games-csv.js data/games.csv --link-only  # ajoute les intégrations sans rien écraser
 node scripts/import-games-csv.js data/games.csv --full       # import complet (écrase)
 ```
+
+## Courses multiworld (racetime.gg/archipelago)
+
+La catégorie racetime `archipelago` regroupe des courses multi-jeux. Ce n'est pas un jeu du site : elle n'a pas de fiche. La synchro racetime importe ses courses (`multiworld: true`) et les rattache aux jeux joués (`games`), avec `helpers/multiworld-races.js`. Aucune devinette n'est faite sur le texte libre :
+
+1. le goal racetime, quand il nomme ses jeux (table `GOAL_GAMES`, par exemple « Kill Ganon (A Link to the Past) » → `alttp`) ;
+2. les rooms archipelago.gg liées dans l'info de la course (`/room/…`, ou `/new_room/…`, qui redirige vers la room) : l'API `api/room_status` donne le jeu de chaque slot. Ce nom est relié à une fiche par son nom exact (`integrations.archipelago.gameName`, `multiworld.gameName`, `apworld.gameNames`), seulement s'il ne désigne qu'une fiche. Les rooms lues sont gardées sur la course (`archipelagoRooms`) et ne sont pas relues ;
+3. à la main, dans l'onglet Multiworld de l'admin (`gamesSource: 'manual'`). La synchro ne touche plus ces courses, sauf après « Rendre à la synchro ».
+
+Une course sans indice ne reste rattachée à aucun jeu. Les courses rattachées apparaissent sur la fiche de leurs jeux (liste, nombre de courses), dans l'historique des joueurs et dans la recherche, avec un badge « Multiworld ». Comme elles se jouent en équipe, elles sont exclues du face-à-face de la comparaison de joueurs, des catégories et des classements. Dans les jeux les plus joués de la liste des joueurs et de la recherche, une course compte une seule fois, pour son premier jeu (les totaux restent justes) ; sur la page d’un joueur, elle compte pour chacun de ses jeux.
+

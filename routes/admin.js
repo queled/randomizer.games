@@ -28,6 +28,8 @@ const { readHistory, writeHistory, deleteHistory, renameHistory } = require('../
 const { coverIds, historyIds, writeCover, deleteCover, renameCover } = require('../helpers/game-covers');
 const { calculateTournamentStatus } = require('../helpers/tournament-status');
 const { buildCategoryQuery, buildCategoryResolutionContext } = require('../helpers/game-matching');
+const { MULTIWORLD_CATEGORIES } = require('../helpers/multiworld-races');
+const { validateObjectId } = require('../middleware/security');
 const audience = require('../services/audience');
 const searchConsole = require('../services/search-console');
 
@@ -2449,6 +2451,89 @@ router.delete('/tournaments-mgmt/:id', requireAdmin, async (req, res, next) => {
     res.json({ success: true, name: tournament.name });
   } catch (err) {
     next(err);
+  }
+});
+
+// ==================== MULTIWORLD RACES ====================
+// Races of the multi-game racetime categories (racetime.gg/archipelago): those
+// the sync could not tie to a game get their games here, by hand
+
+const MULTIWORLD_FILTERS = {
+  // Not tied yet: "no game" set by hand is an answer
+  untied: { 'games.0': { $exists: false }, gamesSource: { $ne: 'manual' } },
+  tied: { 'games.0': { $exists: true } },
+  manual: { gamesSource: 'manual' },
+  all: {}
+};
+
+router.get('/multiworld-races', requireAdmin, async (req, res, next) => {
+  try {
+    const filterKey = MULTIWORLD_FILTERS[req.query.filter] ? req.query.filter : 'untied';
+    const limit = Math.min(Math.max(parseInt(req.query.limit, 10) || 25, 1), 100);
+    const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
+    const base = { category: { $in: MULTIWORLD_CATEGORIES } };
+    const query = { ...base, ...MULTIWORLD_FILTERS[filterKey] };
+
+    const [races, total, counts] = await Promise.all([
+      Race.find(query)
+        .sort({ startedAt: -1, createdAt: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .select('name url category goal info status startedAt games gamesSource archipelagoRooms entrants.userName')
+        .lean(),
+      Race.countDocuments(query),
+      Promise.all(Object.entries(MULTIWORLD_FILTERS).map(async ([key, filter]) => [key, await Race.countDocuments({ ...base, ...filter })]))
+    ]);
+
+    res.json({
+      races: races.map(race => ({
+        _id: race._id,
+        name: race.name,
+        url: race.url,
+        goal: race.goal,
+        info: race.info ? String(race.info).slice(0, 500) : '',
+        status: race.status,
+        startedAt: race.startedAt,
+        games: race.games || [],
+        gamesSource: race.gamesSource || null,
+        rooms: (race.archipelagoRooms || []).map(room => ({ id: room.id, games: room.games || [], missing: !!room.missing })),
+        entrants: (race.entrants || []).map(e => e.userName).filter(Boolean).slice(0, 12),
+        entrantCount: (race.entrants || []).length
+      })),
+      counts: Object.fromEntries(counts),
+      pagination: { total, page, limit, pages: Math.ceil(total / limit) }
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// { games: [ids] } ties the race by hand ([] = no game); { reset: true } hands it back to the sync
+router.patch('/multiworld-races/:id', requireAdmin, validateObjectId('id'), async (req, res, next) => {
+  try {
+    const race = await Race.findOne({ _id: req.params.id, category: { $in: MULTIWORLD_CATEGORIES } }).select('_id').lean();
+    if (!race) return res.status(404).json({ error: 'Race not found' });
+
+    let update;
+    if (req.body?.reset === true) {
+      update = { $set: { gamesSource: 'auto', gamesCheckedAt: null } };
+    } else {
+      if (!Array.isArray(req.body?.games) || req.body.games.some(id => typeof id !== 'string')) {
+        return res.status(400).json({ error: 'games must be an array of game ids' });
+      }
+      const ids = [...new Set(req.body.games.map(id => id.trim().toLowerCase()).filter(Boolean))];
+      const known = await Game.find({ id: { $in: ids } }).select('id').lean();
+      const missing = ids.filter(id => !known.some(g => g.id === id));
+      if (missing.length) return res.status(400).json({ error: `Unknown game(s): ${missing.join(', ')}` });
+      update = { $set: { multiworld: true, games: ids, gamesSource: 'manual', gamesCheckedAt: new Date() } };
+    }
+
+    const updated = await Race.findByIdAndUpdate(race._id, update, { new: true, timestamps: false })
+      .select('games gamesSource').lean();
+    invalidateGamesWithStats();
+    res.json({ success: true, games: updated.games || [], gamesSource: updated.gamesSource });
+  } catch (error) {
+    next(error);
   }
 });
 

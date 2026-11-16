@@ -6,7 +6,7 @@ const racetime = require('../services/racetime');
 const {
   escapeRegex,
   buildCategoryResolutionContext,
-  buildCategoryQuery
+  buildGameRacesQuery
 } = require('../helpers/game-matching');
 
 // Get all races
@@ -21,13 +21,15 @@ router.get('/', async (req, res, next) => {
       query.status = status;
     }
     
-    // A game id resolves to all of its racetime categories, using the same rules as the game pages
+    // A game id resolves to all of its racetime categories, using the same rules as the game pages,
+    // and to the multiworld races played with it
     if (category) {
       const categoryLower = String(category).toLowerCase().trim();
       const games = await Game.find().select('id integrations.racetime').lean();
       const gameDoc = games.find(g => String(g.id || '').toLowerCase() === categoryLower);
       if (gameDoc) {
-        Object.assign(query, buildCategoryQuery(gameDoc, categoryLower, buildCategoryResolutionContext(games)));
+        // Its multiworld races too (racetime.gg/archipelago)
+        Object.assign(query, buildGameRacesQuery(gameDoc, categoryLower, buildCategoryResolutionContext(games)));
       } else {
         // Direct, case-insensitive exact match only (no prefix match)
         query.category = { $regex: new RegExp(`^${escapeRegex(category)}$`, 'i') };

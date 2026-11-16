@@ -179,7 +179,9 @@
       descriptionParts.push(`Linked tournament: ${tournament.name}.`);
     }
     const description = descriptionParts.join(' ');
-    const gameDoc = getGameDocForCategory(race?.category);
+    const gameDoc = race?.multiworld
+      ? (race.games || []).map(id => gamesById[id]).find(Boolean) || null
+      : getGameDocForCategory(race?.category);
     const image = gameDoc?.cover || '/assets/icon-512.png';
     const breadcrumb = window.RandomizerSEO.buildBreadcrumbList([
       { name: 'Home', url: '/' },
@@ -667,12 +669,18 @@
         return;
       }
 
-      let gameDisplayName = getGameDisplayName(race.category);
-      const gameDoc = getGameDocForCategory(race.category);
+      let gameDisplayName = raceGameLabel(race, getGameDisplayName);
+      const gameDoc = race.multiworld
+        ? (race.games || []).map(id => gamesById[id]).find(Boolean) || null
+        : getGameDocForCategory(race.category);
 
-      // Game name
-      if (gameDoc?.id) {
-        gameEl.innerHTML = `<a href="/games/${encodeURIComponent(gameDoc.id)}" style="color:inherit;text-decoration:none;">${escapeHtml(gameDisplayName)}</a>`;
+      // Game name; a multiworld race links each game it was played with
+      const gameLink = (doc) => `<a href="/games/${encodeURIComponent(doc.id)}" style="color:inherit;text-decoration:none;">${escapeHtml(gameLabel(doc) || doc.id)}</a>`;
+      if (race.multiworld) {
+        const docs = (race.games || []).map(id => gamesById[id]).filter(Boolean);
+        gameEl.innerHTML = (docs.length ? docs.map(gameLink).join(' + ') : escapeHtml(gameDisplayName)) + multiworldBadge(race);
+      } else if (gameDoc?.id) {
+        gameEl.innerHTML = gameLink(gameDoc);
       } else {
         gameEl.textContent = gameDisplayName;
       }

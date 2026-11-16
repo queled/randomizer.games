@@ -189,6 +189,7 @@ const de = {
     
     // Races page
     races: {
+        multiworldHint: "Multiworld-Rennen (Archipelago), im Team gespielt: nicht in den Statistiken",
         heading: "Randomizer-Rennen",
         title: "Rennen",
         pageTitle: "Randomizer-Rennen - Randomizer",

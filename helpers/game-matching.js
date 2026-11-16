@@ -117,6 +117,12 @@ function buildCategoryQuery(gameDoc, gameIdLower, resolutionContext = { explicit
   return { category: { $in: all } };
 }
 
+// Races of a game: those of its racetime categories, and the multiworld races
+// played with it (helpers/multiworld-races.js)
+function buildGameRacesQuery(gameDoc, gameIdLower, resolutionContext) {
+  return { $or: [buildCategoryQuery(gameDoc, gameIdLower, resolutionContext), { games: gameIdLower }] };
+}
+
 function buildTournamentQuery(gameDoc, gameIdLower) {
   const gamePattern = GAME_NAME_PATTERNS[gameIdLower];
   const nameConditions = [];
@@ -162,5 +168,6 @@ module.exports = {
   getExplicitRacetimeSlugs,
   buildCategoryResolutionContext,
   buildCategoryQuery,
+  buildGameRacesQuery,
   buildTournamentQuery
 };

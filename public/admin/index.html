@@ -60,6 +60,10 @@
           <span class="nav-icon">🔗</span>
           <span>Race ↔ Match</span>
         </button>
+        <button class="nav-item" data-section="multiworld">
+          <span class="nav-icon">🌐</span>
+          <span>Multiworld</span>
+        </button>
         <button class="nav-item" data-section="tournaments-mgmt">
           <span class="nav-icon">🏆</span>
           <span>Tournois</span>
@@ -538,6 +542,25 @@
       </section>
 
       <!-- Race-Match Linking Section -->
+      <section id="section-multiworld" class="admin-section">
+        <div class="section-header">
+          <h1 class="section-title">Courses multiworld</h1>
+        </div>
+        <p class="text-muted mw-intro">Courses de racetime.gg/archipelago. La synchro les rattache aux jeux par le goal ou par la room Archipelago liée dans l'info. Les autres se rattachent ici. Une course rattachée à la main n'est plus modifiée par la synchro.</p>
+        <div class="toolbar">
+          <select id="mw-filter" class="form-input form-select" style="max-width: 280px;" data-change="mwLoad">
+            <option value="untied">À rattacher</option>
+            <option value="tied">Rattachées</option>
+            <option value="manual">Rattachées à la main</option>
+            <option value="all">Toutes</option>
+          </select>
+          <span id="mw-counts" class="text-muted"></span>
+        </div>
+        <datalist id="mw-games"></datalist>
+        <div id="mw-list" class="mw-list"><p class="text-muted">Chargement…</p></div>
+        <div id="mw-pagination"></div>
+      </section>
+
       <section id="section-race-linking" class="admin-section">
         <div class="section-header">
           <h1 class="section-title">Association Race ↔ Match</h1>

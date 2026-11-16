@@ -193,6 +193,7 @@ const fr = {
     
     // Races page
     races: {
+        multiworldHint: "Course multiworld (Archipelago), jouée en équipe : hors statistiques",
         heading: "Courses Randomizer",
         title: "Courses",
         pageTitle: "Courses de randomizer - Randomizer",

@@ -126,11 +126,13 @@ async function buildPlayersResponse(includeTournaments) {
       { $match: { participantName: { $nin: [null, ''] } } }
     ]),
     Race.aggregate([
-      { $match: { entrants: { $exists: true, $ne: [] } } },
+      // A multiworld race counts for the first game it was played with (one race, one
+      // game: the totals stay right); one tied to no game counts for none
+      { $match: { entrants: { $exists: true, $ne: [] }, $or: [{ multiworld: { $ne: true } }, { 'games.0': { $exists: true } }] } },
       { $unwind: '$entrants' },
       {
         $project: {
-          category: '$category',
+          category: { $cond: [{ $eq: ['$multiworld', true] }, { $arrayElemAt: ['$games', 0] }, '$category'] },
           startedAt: '$startedAt',
           userId: '$entrants.userId',
           entrantName: { $ifNull: ['$entrants.userName', '$entrants.userId'] }
@@ -210,8 +212,9 @@ router.get('/compare', async (req, res, next) => {
     const races1 = buildPlayerRacesFilter({ userId: side1.userId, names: raceNames1 });
     const races2 = buildPlayerRacesFilter({ userId: side2.userId, names: raceNames2 });
 
-    // Races where BOTH players appear in entrants
-    const commonRaces = await Race.find({ $and: [races1.filter, races2.filter] }).sort({ startedAt: -1 }).lean();
+    // Races where BOTH players appear in entrants, multiworld ones aside: played in
+    // teams, their places tell nothing of a head-to-head
+    const commonRaces = await Race.find({ $and: [races1.filter, races2.filter, { multiworld: { $ne: true } }] }).sort({ startedAt: -1 }).lean();
 
     // Build game display map for category → game name mapping
     const { displayBySlug: gameDisplayBySlug, canonicalIdBySlug: gameIdBySlug } = await buildGameDisplayMaps();
@@ -459,7 +462,7 @@ router.get('/by-name/:name', async (req, res, next) => {
 
 // ?compact=1 (player page): only the fields the page displays, and only the
 // player's own entrant, instead of every entrant of every race (~10x smaller).
-const COMPACT_RACE_FIELDS = 'name category goal info status startedAt endedAt createdAt updatedAt entrants.userId entrants.userName entrants.place entrants.status';
+const COMPACT_RACE_FIELDS = 'name category goal info status startedAt endedAt createdAt updatedAt multiworld games entrants.userId entrants.userName entrants.place entrants.status';
 
 function isCompactRequest(req) {
   return req.query.compact === '1' || req.query.compact === 'true';

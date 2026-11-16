@@ -441,9 +441,9 @@
   function countGamesFromRaces(races){
     const uniqueGames = new Set();
     for (const race of races || []) {
-      const meta = getGameMetaFromCategory(race?.category || race?.game || race?.gameSlug);
-      if (meta.slug) {
-        uniqueGames.add(meta.gameId);
+      for (const key of raceGameKeys(race)) {
+        const meta = getGameMetaFromCategory(key);
+        if (meta.slug) uniqueGames.add(meta.gameId);
       }
     }
     return uniqueGames.size;
@@ -476,21 +476,27 @@
     return { slug, gameId, name: gameName };
   }
 
+  // Games of a race: its racetime category, or the games a multiworld race was played with
+  function raceGameKeys(race) {
+    if (race?.multiworld) return race.games || [];
+    const category = race?.category || race?.game || race?.gameSlug;
+    return category ? [category] : [];
+  }
+
   function buildGamesSummaryFromRaces(races) {
     const map = new Map();
 
     for (const race of races || []) {
-      const category = race?.category;
-      if (!category) continue;
+      for (const key of raceGameKeys(race)) {
+        const meta = getGameMetaFromCategory(key);
+        if (!meta.slug) continue;
 
-      const meta = getGameMetaFromCategory(category);
-      if (!meta.slug) continue;
-
-      // Group by canonical game so racetime categories of the same game merge
-      if (!map.has(meta.gameId)) {
-        map.set(meta.gameId, { slug: meta.slug, gameId: meta.gameId, name: meta.name || 'Jeu inconnu', count: 0 });
+        // Group by canonical game so racetime categories of the same game merge
+        if (!map.has(meta.gameId)) {
+          map.set(meta.gameId, { slug: meta.slug, gameId: meta.gameId, name: meta.name || 'Jeu inconnu', count: 0 });
+        }
+        map.get(meta.gameId).count += 1;
       }
-      map.get(meta.gameId).count += 1;
     }
 
     return Array.from(map.values())
@@ -676,8 +682,10 @@
         result = tr('playerDetail.dq', 'Disqualified');
       }
 
-      // The category field contains the game slug
-      const gameName = getGameDisplayName(r.category || r.name?.split('/')[0] || '');
+      // The category field contains the game slug; a multiworld race has its games' ids
+      const gameName = r.multiworld
+        ? raceGameLabel(r, key => getGameMetaFromCategory(key).name)
+        : getGameDisplayName(r.category || r.name?.split('/')[0] || '');
       const statusKey = RACE_STATUS_KEYS[r.status];
       const raceId = r._id || r.id || '';
 
@@ -687,6 +695,7 @@
         result,
         resultClass,
         subtitle: r.goal || r.info || 'Standard',
+        extra: multiworldBadge(r),
         meta: [formatShortDate(r.startedAt), statusKey ? tr('status.race.' + statusKey, r.status) : r.status]
       });
     }).join('\n');

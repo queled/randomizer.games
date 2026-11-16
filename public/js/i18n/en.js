@@ -205,6 +205,7 @@ const en = {
     
     // Races page
     races: {
+        multiworldHint: "Multiworld race (Archipelago), played in teams: not counted in the stats",
         heading: "Randomizer Races",
         title: "Races",
         pageTitle: "Randomizer Races - Randomizer",

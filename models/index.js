@@ -427,6 +427,16 @@ const raceSchema = new mongoose.Schema({
   recordable: Boolean,
   tournamentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Tournament' },
   matchId: { type: mongoose.Schema.Types.ObjectId, ref: 'Match' },
+  // Race of a multi-game category (racetime.gg/archipelago): played in teams, it
+  // shows on the pages of the games it was played with but stays out of the stats
+  multiworld: Boolean,
+  // Ids of those games (helpers/multiworld-races.js)
+  games: { type: [String], default: undefined },
+  // 'auto' (racetime goal, Archipelago room) or 'manual' (admin, never overwritten)
+  gamesSource: String,
+  gamesCheckedAt: Date,
+  // Archipelago rooms linked in the race info, and the games their slots played
+  archipelagoRooms: [{ _id: false, id: String, games: [String], fetchedAt: Date, missing: Boolean }],
   // Start.gg tournament info (when not linked to a specific Match document)
   tournamentPhase: String,  // e.g., "Preliminary Bracket", "Qualifications"
   tournamentPool: String,   // e.g., "1", "2", "A", "B"
@@ -632,6 +642,7 @@ tournamentSchema.index({ game: 1, startDate: -1 });
 matchSchema.index({ tournamentId: 1 });
 raceSchema.index({ tournamentId: 1 });
 raceSchema.index({ category: 1, startedAt: -1 });
+raceSchema.index({ games: 1, startedAt: -1 }, { sparse: true });
 // Add composite index for live queries
 raceSchema.index({ status: 1, startedAt: -1 });
 raceSchema.index({ 'vods.vodUrl': 1 }, { sparse: true });

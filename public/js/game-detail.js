@@ -220,6 +220,13 @@
     return `${m}:${String(ss).padStart(2,'0')}`;
   }
 
+  const escapeRaceText = (str) => String(str).replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  // Multiworld race (racetime.gg/archipelago) played with this game, among others
+  function multiworldHint() {
+    const value = typeof i18n !== 'undefined' ? i18n.t('races.multiworldHint') : null;
+    return value && value !== 'races.multiworldHint' ? value : 'Multiworld race (Archipelago), played in teams: not counted in the stats';
+  }
+
   function cardRace(r){
     const date = formatDate(r.startedAt);
     const entrantsCount = (r.entrants && r.entrants.length) || 0;
@@ -243,7 +250,7 @@
       <a href="${raceUrl}" style="text-decoration:none;color:inherit;display:block;">
         <div style="background:#374151;padding:1rem;border-radius:0.5rem;margin-bottom:0.75rem;transition:background 0.2s;cursor:pointer;" data-hover-style="background:#4b5563" data-rest-style="background:#374151">
           <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:0.25rem;">
-            <h4 style="color:#60a5fa;font-size:0.95rem;flex:1;">${r.goal || 'Standard'}</h4>
+            <h4 style="color:#60a5fa;font-size:0.95rem;flex:1;">${escapeRaceText(r.goal || 'Standard')}${r.multiworld ? ` <span class="badge-multiworld" title="${escapeRaceText(multiworldHint())}">Multiworld</span>` : ''}</h4>
             <span style="background:${statusColor};color:white;padding:0.125rem 0.5rem;border-radius:0.25rem;font-size:0.7rem;margin-left:0.5rem;">${statusText}</span>
           </div>
           ${winnerHtml}

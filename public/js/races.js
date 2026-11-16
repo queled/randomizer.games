@@ -101,7 +101,7 @@
     const winner = (r.entrants || []).find(e => e.place === 1);
     const totalEntrants = (r.entrants || []).length;
     
-    const gameName = getGameDisplayName(r.category);
+    const gameName = raceGameLabel(r, getGameDisplayName);
 
     let winnerHtml = '';
     if (winner) {
@@ -133,7 +133,7 @@
         <div style="background:#1f2937;padding:1.25rem;border-radius:0.5rem;cursor:pointer;transition:all 0.2s;height:100%;display:flex;flex-direction:column;" data-hover-style="background:#374151;transform:translateY(-2px)" data-rest-style="background:#1f2937;transform:translateY(0)">
           <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:0.5rem;">
             <div style="flex:1;min-width:0;">
-              <div style="color:#fbbf24;font-weight:600;font-size:0.95rem;margin-bottom:0.25rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(gameName)}</div>
+              <div style="color:#fbbf24;font-weight:600;font-size:0.95rem;margin-bottom:0.25rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(gameName)}${multiworldBadge(r)}</div>
               <div style="color:#d1d5db;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(r.goal || r.name || 'Standard')}</div>
             </div>
             <span style="background:${statusColor};color:white;padding:0.25rem 0.5rem;border-radius:0.25rem;font-size:0.7rem;white-space:nowrap;margin-left:0.5rem;flex-shrink:0;">${escHtml(statusText)}</span>

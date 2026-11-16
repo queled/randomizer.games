@@ -187,6 +187,7 @@ const it = {
     
     // Races page
     races: {
+        multiworldHint: "Gara multiworld (Archipelago), giocata in squadra: esclusa dalle statistiche",
         heading: "Gare Randomizer",
         title: "Gare",
         pageTitle: "Gare di randomizer - Randomizer",

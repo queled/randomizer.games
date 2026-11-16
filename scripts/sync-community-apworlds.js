@@ -410,7 +410,7 @@ function newGameDoc(id, name, rows, now) {
 // or put back meanwhile finds it again, with its cover and history
 const ORPHAN_GRACE_DAYS = 7;
 // More orphans at once: the list is more likely broken than emptied, none goes
-const MAX_ORPHANS_PER_RUN = 10;
+const MAX_ORPHANS_PER_RUN = 30;
 const OTHER_INTEGRATIONS = ['racetime', 'randoList', 'archipelago', 'multiworld', 'speedrun', 'startgg', 'challonge'];
 
 // What still holds a game besides its rows (its Twitch category alone does not)

@@ -6,7 +6,7 @@
  * like a Twitch restreamer is often someone else. Candidates come from:
  *   - the channels set by hand (MANUAL_CHANNELS) and those of the videos Mido's House links;
  *   - the YouTube channel each Twitch restreamer of Mido's House, or found on a race, links to
- *     in the "About" section of its Twitch page (kept with a single restream), else the one
+ *     on its Twitch page (kept with a single restream), else the one
  *     named like it (1 unit each);
  *   - YouTube searches for each tournament, those with the most races without a restream
  *     VOD first, then in each restream language

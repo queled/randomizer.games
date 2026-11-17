@@ -87,7 +87,8 @@ async function resolveChannelUrl(url) {
   const id = channelId(url);
   if (id) return id;
   const m = path.match(/^\/(?:(user|c)\/)?(@?[^/]+)/);
-  if (!m) return null;
+  // A video, a playlist… is not a channel
+  if (!m || (!m[1] && /^(?:watch|playlist|shorts|live|embed|results|feed|redirect|attribution_link)$/i.test(m[2]))) return null;
   const name = m[2].replace(/^@/, '');
   const tries = m[1] === 'user' ? [{ forUsername: name }] : [{ forHandle: `@${name}` }, { forUsername: name }];
   for (const params of tries) {

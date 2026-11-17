@@ -214,20 +214,23 @@ async function getCategoryArchives(categoryId, maxPages = 5) {
 }
 
 /**
- * YouTube links channels show in their "About" section, by login. Helix does not give
- * them: they come from the GraphQL API the Twitch site itself uses (15 channels a call,
- * its limit), with the site's public client id.
+ * YouTube links channels show on their page (panels, and the "About" social links), by
+ * login. Helix does not give them: they come from the GraphQL API the Twitch site itself
+ * uses (15 channels a call, its limit), with the site's public client id. Twitch answers
+ * the social links only to browsers (integrity check): from a server, the panels alone.
  */
 const GQL_CLIENT_ID = 'kimne78kx3ncx6brgo4mv6wki5h1ko';
 async function getYoutubeLinks(logins) {
   const links = new Map();
   for (let i = 0; i < logins.length; i += 15) {
     const chunk = logins.slice(i, i + 15);
-    const query = `query{${chunk.map((login, j) => `u${j}: user(login: ${JSON.stringify(login)}) { channel { socialMedias { url } } }`).join(' ')}}`;
+    const query = `query{${chunk.map((login, j) => `u${j}: user(login: ${JSON.stringify(login)}) { channel { socialMedias { url } } panels { ... on DefaultPanel { linkURL description } } }`).join(' ')}}`;
     const { data } = await axios.post('https://gql.twitch.tv/gql', { query }, { headers: { 'Client-Id': GQL_CLIENT_ID }, timeout: 20000 });
     chunk.forEach((login, j) => {
-      const user = data.data && data.data[`u${j}`];
-      const urls = ((user && user.channel && user.channel.socialMedias) || []).map(s => s.url).filter(u => /youtube\.com\//i.test(u));
+      const user = (data.data && data.data[`u${j}`]) || {};
+      const text = [...((user.channel && user.channel.socialMedias) || []).map(s => s.url),
+        ...(user.panels || []).filter(Boolean).flatMap(p => [p.linkURL, p.description])].filter(Boolean).join(' ');
+      const urls = [...new Set(text.match(/https?:\/\/(?:www\.|m\.)?youtube\.com\/[^\s)\]"<>]+/gi) || [])];
       if (urls.length) links.set(login, urls);
     });
   }

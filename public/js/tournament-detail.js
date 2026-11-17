@@ -1970,6 +1970,8 @@ const BRACKET_LEVELS = [
   /\b(middle|silver|medium|normal|intermediate)\b/i,
   /\b(lower|bronze|easy|beginner|novice)\b/i
 ];
+// Brackets played alongside the main one by its eliminated players
+const SIDE_BRACKET = /\b(consolation|best of the rest|alt|repechage)\b/i;
 function bracketLevel(name) {
   const level = BRACKET_LEVELS.findIndex(re => re.test(name || ''));
   return level === -1 ? 1 : level;
@@ -2005,11 +2007,10 @@ function phaseTier(name) {
 // one first, then the latest declared (Group I before Groups A-H).
 function sortPhasesNewestFirst(phaseNames, tournament, matches = []) {
   const declared = tournament && Array.isArray(tournament.phases) ? tournament.phases : [];
-  // Grouped Challonge brackets (Upper / Middle / Lower, Hard / Medium): strongest first
-  if (tournament && tournament.challongeBrackets?.length) {
-    const rank = name => { const p = declared.find(ph => ph.name === name); return p && p.phaseOrder ? p.phaseOrder : Infinity; };
-    return phaseNames.slice().sort((a, b) => (bracketLevel(a) - bracketLevel(b)) || (rank(a) - rank(b)));
-  }
+  // Grouped Challonge brackets are stored in the order they are played: side by side ones
+  // (Upper / Middle / Lower, Hard / Medium, groups) strongest first then in their order,
+  // a later stage (bracket after its groups) on top like any other phase
+  const challonge = Boolean(tournament && tournament.challongeBrackets?.length);
   const chronological = sortPhasesChronologically(declared, matches, tournament).map(p => p.name);
   const position = name => { const i = chronological.indexOf(name); return i === -1 ? chronological.length : i; };
   const phaseOrder = name => { const p = declared.find(ph => ph.name === name); return p && p.phaseOrder ? p.phaseOrder : 0; };
@@ -2026,6 +2027,8 @@ function sortPhasesNewestFirst(phaseNames, tournament, matches = []) {
     if (phaseTier(a) !== null && phaseTier(b) !== null) return true;
     const sa = spans[a], sb = spans[b];
     if (!sa || !sb || sa.last < sb.first || sb.last < sa.first) return false;
+    // A side bracket (consolation...) takes players of the main one while it is played
+    if (challonge && (SIDE_BRACKET.test(a || '') || SIDE_BRACKET.test(b || ''))) return true;
     const pa = players[a] || new Set();
     return ![...(players[b] || [])].some(n => pa.has(n));
   };
@@ -2039,10 +2042,13 @@ function sortPhasesNewestFirst(phaseNames, tournament, matches = []) {
   });
   // Main / Gold bracket first, then Silver, then Bronze
   const tier = name => /\bmain\b/i.test(name || '') ? 0 : phaseTier(name) ?? 1;
+  const inCluster = challonge
+    ? (a, b) => (bracketLevel(a) - bracketLevel(b)) || (phaseOrder(a) - phaseOrder(b))
+    : (a, b) => (tier(a) - tier(b)) || (phaseOrder(b) - phaseOrder(a));
   return clusters
     .map((cluster, index) => ({ cluster, index }))
     .sort((a, b) => b.index - a.index)
-    .flatMap(({ cluster }) => cluster.sort((a, b) => (tier(a) - tier(b)) || (phaseOrder(b) - phaseOrder(a))));
+    .flatMap(({ cluster }) => cluster.sort(inCluster));
 }
 
 function displayMatches(matches, tournament, races = []) {

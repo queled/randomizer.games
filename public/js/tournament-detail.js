@@ -21,7 +21,8 @@ window.addEventListener('spoilerModeChanged', () => {
     const finalStageMatches = currentMatches.filter(m => m && (m.groupId === null || m.groupId === undefined));
     const hasGroupsThenFinal = groupStageMatches.length > 0 && finalStageMatches.length > 0;
     
-    displayBracket(hasGroupsThenFinal ? finalStageMatches : currentMatches, currentTournament, currentRaces);
+    displayBracket(hasGroupsThenFinal ? finalStageMatches : currentMatches,
+      hasGroupsThenFinal ? withoutGroupOnlyPhases(currentTournament, groupStageMatches, finalStageMatches) : currentTournament, currentRaces);
     
     // Re-render group stages if present
     if (hasGroupsThenFinal) {
@@ -1564,7 +1565,8 @@ async function loadMatches(tournamentId) {
     }
 
     displayMatches(allMatches, currentTournament, races);
-    displayBracket(hasGroupsThenFinal ? finalStageMatches : allMatches, currentTournament, races);
+    displayBracket(hasGroupsThenFinal ? finalStageMatches : allMatches,
+      hasGroupsThenFinal ? withoutGroupOnlyPhases(currentTournament, groupStageMatches, finalStageMatches) : currentTournament, races);
     if (hasGroupsThenFinal) {
       displayGroupStages(groupStageMatches, currentTournament.participants || [], races);
     }
@@ -1901,6 +1903,14 @@ function createQualificationRaceCard(race) {
   }
 
   return card;
+}
+
+// The bracket tab of a groups-then-final tournament: phases played in groups only have their own
+// tab, so they are not listed there as not started
+function withoutGroupOnlyPhases(tournament, groupStageMatches, finalStageMatches) {
+  const finalPhases = new Set(finalStageMatches.map(m => m.phase));
+  const groupOnly = new Set(groupStageMatches.map(m => m.phase).filter(phase => phase && !finalPhases.has(phase)));
+  return { ...tournament, phases: (tournament.phases || []).filter(p => !groupOnly.has(p.name)) };
 }
 
 function computeGroupsThenFinalLabel(groupStageMatches, finalStageMatches) {

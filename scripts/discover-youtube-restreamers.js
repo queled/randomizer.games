@@ -5,8 +5,9 @@
  * The restreamers' YouTube channels are not listed anywhere, and a channel named
  * like a Twitch restreamer is often someone else. Candidates come from:
  *   - the channels set by hand (MANUAL_CHANNELS) and those of the videos Mido's House links;
- *   - the YouTube channel named like each Twitch restreamer of Mido's House, or found on
- *     a race (1 unit each);
+ *   - the YouTube channel each Twitch restreamer of Mido's House, or found on a race, links to
+ *     in the "About" section of its Twitch page (kept with a single restream), else the one
+ *     named like it (1 unit each);
  *   - YouTube searches for each tournament, those with the most races without a restream
  *     VOD first, then in each restream language
  *     (100 units each, --max-searches a run; a search is made once, kept in `youtubesearches`).
@@ -133,9 +134,21 @@ async function main() {
       .flatMap(r => r.restreams || []).map(s => youtube.videoId(s.vodUrl) || youtube.videoId(s.sourceUrl)).filter(Boolean));
     for (const video of (await youtube.getVideos(linkedIds)).values()) add(video.snippet.channelId, { source: 'midos' });
 
+    // The YouTube channel a Twitch restreamer links to on its page, else the one of the same name
+    const acceptedChannels = [...known.values()].filter(c => c.status === 'accepted');
     const linkedLogins = new Set([...known.values()].map(c => c.twitchLogin).filter(Boolean));
-    for (const login of restreamers.keys()) {
-      if (linkedLogins.has(login) || Object.values(MANUAL_CHANNELS).includes(login)) continue;
+    const logins = [...restreamers.keys()].filter(login => !acceptedChannels.some(c => c.twitchLogin === login) && !Object.values(MANUAL_CHANNELS).includes(login));
+    let declared = new Map();
+    try {
+      declared = await twitchVods.getYoutubeLinks(logins);
+    } catch (error) {
+      console.log(`⚠️  Liens YouTube des chaînes Twitch illisibles : ${error.message}`);
+    }
+    for (const login of logins) {
+      const ids = [];
+      for (const url of declared.get(login) || []) ids.push(await youtube.resolveChannelUrl(url));
+      ids.filter(Boolean).forEach(id => add(id, { source: 'twitch', twitchLogin: login }));
+      if (ids.some(Boolean) || linkedLogins.has(login)) continue;
       const channel = await youtube.getChannelByHandle(login);
       if (channel) add(channel.id, { source: 'handle', twitchLogin: login });
     }
@@ -188,7 +201,8 @@ async function main() {
   const stale = Date.now() - REVALIDATE_DAYS * 24 * 3600 * 1000;
   const toCheck = [...candidates].filter(([id, c]) => {
     const k = known.get(id);
-    return opts.revalidate || (opts.rejected && k && k.status === 'rejected') || !k || !k.validatedAt || new Date(k.validatedAt).getTime() < stale || (c.source === 'manual' && k.status !== 'accepted');
+    return opts.revalidate || (opts.rejected && k && k.status === 'rejected') || !k || !k.validatedAt || new Date(k.validatedAt).getTime() < stale
+      || (c.source === 'manual' && k.status !== 'accepted') || (c.source === 'twitch' && k.source !== 'twitch' && k.status !== 'accepted');
   });
   const channels = await youtube.getChannels(toCheck.map(([id]) => id));
   const oldest = new Date(Math.min(...races.map(r => new Date(r.startedAt).getTime())));
@@ -232,7 +246,8 @@ async function main() {
     const namedAfter = namedAfterLogin(normalizeName(channel.title)) || namedAfterLogin(normalizeName(channel.handle));
     const twitchLogin = candidate.twitchLogin || (known.get(id) && known.get(id).twitchLogin) || namedAfter || null;
     const topAudio = [...audio].sort((a, b) => b[1] - a[1])[0];
-    const accepted = candidate.source === 'manual' || candidate.source === 'midos' || matched.size >= MIN_MATCHES;
+    // A channel its Twitch restreamer links to is theirs for sure: one restream is enough
+    const accepted = candidate.source === 'manual' || candidate.source === 'midos' || matched.size >= (candidate.source === 'twitch' ? 1 : MIN_MATCHES);
     results.push({
       channelId: id, title: channel.title, handle: channel.handle, twitchLogin,
       language: (twitchLogin && restreamers.get(twitchLogin)) || (topAudio && LANGUAGE_NAMES[topAudio[0]]) || null,

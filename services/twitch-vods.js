@@ -213,4 +213,25 @@ async function getCategoryArchives(categoryId, maxPages = 5) {
   return videos;
 }
 
-module.exports = { getAppToken, twitchLogin, isYoutubeVideo, videoId, getUserIds, getArchives, getVideos, getExistingVideoIds, getKeptVideos, parseDuration, findArchive, findVod, getLiveStreams, getCategoryStreams, getCategoryArchives };
+/**
+ * YouTube links channels show in their "About" section, by login. Helix does not give
+ * them: they come from the GraphQL API the Twitch site itself uses (15 channels a call,
+ * its limit), with the site's public client id.
+ */
+const GQL_CLIENT_ID = 'kimne78kx3ncx6brgo4mv6wki5h1ko';
+async function getYoutubeLinks(logins) {
+  const links = new Map();
+  for (let i = 0; i < logins.length; i += 15) {
+    const chunk = logins.slice(i, i + 15);
+    const query = `query{${chunk.map((login, j) => `u${j}: user(login: ${JSON.stringify(login)}) { channel { socialMedias { url } } }`).join(' ')}}`;
+    const { data } = await axios.post('https://gql.twitch.tv/gql', { query }, { headers: { 'Client-Id': GQL_CLIENT_ID }, timeout: 20000 });
+    chunk.forEach((login, j) => {
+      const user = data.data && data.data[`u${j}`];
+      const urls = ((user && user.channel && user.channel.socialMedias) || []).map(s => s.url).filter(u => /youtube\.com\//i.test(u));
+      if (urls.length) links.set(login, urls);
+    });
+  }
+  return links;
+}
+
+module.exports = { getYoutubeLinks, getAppToken, twitchLogin, isYoutubeVideo, videoId, getUserIds, getArchives, getVideos, getExistingVideoIds, getKeptVideos, parseDuration, findArchive, findVod, getLiveStreams, getCategoryStreams, getCategoryArchives };

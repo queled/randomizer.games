@@ -620,7 +620,7 @@ const youtubeChannelSchema = new mongoose.Schema({
   // The Twitch channel it archives, and the language it restreams in
   twitchLogin: String,
   language: String,
-  // manual (set by hand), midos (videos Mido's House links), handle (same name as a Twitch restreamer), search (YouTube search)
+  // manual (set by hand), midos (videos Mido's House links), twitch (linked from a Twitch restreamer's page), handle (same name as a Twitch restreamer), search (YouTube search)
   source: String,
   status: { type: String, enum: ['accepted', 'rejected'] },
   matchedRaces: Number,

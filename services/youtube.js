@@ -80,6 +80,23 @@ async function getChannelByHandle(handle) {
   return c ? { id: c.id, title: c.snippet.title, handle: String(c.snippet.customUrl || '').replace(/^@/, ''), uploads: c.contentDetails.relatedPlaylists.uploads } : null;
 }
 
+/** Id of the channel a link points to: /channel/<id>, /@handle, /user/<name>, /c/<name> or /<name> (1 unit, none for an id) */
+async function resolveChannelUrl(url) {
+  let path;
+  try { path = decodeURIComponent(new URL(url).pathname); } catch { return null; }
+  const id = channelId(url);
+  if (id) return id;
+  const m = path.match(/^\/(?:(user|c)\/)?(@?[^/]+)/);
+  if (!m) return null;
+  const name = m[2].replace(/^@/, '');
+  const tries = m[1] === 'user' ? [{ forUsername: name }] : [{ forHandle: `@${name}` }, { forUsername: name }];
+  for (const params of tries) {
+    const data = await api('/channels', { part: 'id', ...params });
+    if ((data.items || [])[0]) return data.items[0].id;
+  }
+  return null;
+}
+
 /** Videos matching `query` (100 units): [{ videoId, channelId, title }] */
 async function searchVideos(query, { after, before } = {}) {
   const data = await api('/search', {
@@ -135,4 +152,4 @@ function broadcastAt(video, startAt) {
   return `https://www.youtube.com/watch?v=${video.id}&t=${formatOffset(start - from)}`;
 }
 
-module.exports = { hasKey, ping, videoId, channelId, channelUrl, getVideos, getChannels, getChannelByHandle, searchVideos, isQuotaError, getUploads, broadcastAt };
+module.exports = { hasKey, ping, videoId, channelId, channelUrl, getVideos, getChannels, getChannelByHandle, resolveChannelUrl, searchVideos, isQuotaError, getUploads, broadcastAt };

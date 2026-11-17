@@ -2,13 +2,14 @@
 /**
  * Discover & Import Randomizer/Multiworld tournaments
  * 
- * Searches start.gg and challonge.com for tournaments matching randomizer games
- * already present in the database, and imports new ones.
+ * Searches start.gg for tournaments matching randomizer games already present in
+ * the database, reads the brackets linked from speedgaming.org, Mido's House and
+ * Hyrule Town Hall, and imports new ones. Challonge has no public search: its
+ * brackets come from those sites or from links given by hand.
  * 
  * Usage:
  *   node scripts/discover-tournaments.js                      # Full discovery (all sources)
  *   node scripts/discover-tournaments.js --source startgg     # Start.gg only
- *   node scripts/discover-tournaments.js --source challonge   # Challonge only
  *   node scripts/discover-tournaments.js --dry-run            # Preview without importing
  *   node scripts/discover-tournaments.js --keywords "keyword1,keyword2"  # Extra keywords
  *   node scripts/discover-tournaments.js --max-pages 5        # Limit pagination (start.gg short-name queries: 5 max)
@@ -65,7 +66,7 @@ const STARTGG_ALIAS_MAX_PAGES = 5;
 function parseArgs() {
   const args = process.argv.slice(2);
   const opts = {
-    source: 'all',       // 'all', 'startgg', 'challonge', 'speedgaming', 'midos', 'hth'
+    source: 'all',       // 'all', 'startgg', 'speedgaming', 'midos', 'hth'
     dryRun: false,
     keywords: [],
     maxPages: DEFAULT_MAX_PAGES,
@@ -447,10 +448,14 @@ async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun,
     .map(tournament => String(tournament.startggSlug || '').split('/event/')[0]
       || StartGGAPI.extractSlugFromUrl(String(tournament.startggUrl || '')))
     .filter(Boolean));
+  // Tournaments whose every event copies one already stored (often its Challonge bracket)
+  const duplicateSlugs = new Set((await DiscoverySkip.find({ permanent: true, url: /^https:\/\/start\.gg\/tournament\// }).select('url').lean())
+    .map(skip => StartGGAPI.extractSlugFromUrl(skip.url)).filter(Boolean));
 
   console.log(`\n🔍 Start.gg: Searching ${games.length} game(s)...`);
 
   const isAlreadyImported = tournament => (
+    duplicateSlugs.has(String(tournament.slug || '').split('/event/')[0]) ||
     existingStartggTournamentIds.has(String(tournament.id)) ||
     existingStartggSlugs.has(String(tournament.slug || '').split('/event/')[0]) ||
     (tournament.events || []).some(event => existingStartggIds.has(String(event.id)))
@@ -482,8 +487,14 @@ async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun,
     }
 
     try {
-      await importStartGGTournament(api, tournament, { game, discoveredVia, forceGame });
-      stats.imported++;
+      const { saved, duplicates } = await importStartGGTournament(api, tournament, { game, discoveredVia, forceGame });
+      if (saved) {
+        stats.imported++;
+      } else {
+        stats.skipped++;
+        // Only copies of stored tournaments: not fetched again by the daily sources (links given by hand still are)
+        if (duplicates) await rememberStartGGDuplicate(tournament);
+      }
     } catch (err) {
       console.error(`         ❌ Error importing ${tournament.slug}: ${err.message}`);
       stats.errors++;
@@ -600,6 +611,17 @@ function isRandomizerTournament(tournament, searchTerms) {
 /**
  * Import a full tournament from start.gg (fetches detailed data then saves)
  */
+async function rememberStartGGDuplicate(tournament) {
+  const slug = String(tournament.slug || '').split('/event/')[0];
+  if (!slug) return;
+  await DiscoverySkip.updateOne(
+    { url: `https://start.gg/${slug}` },
+    { $set: { title: tournament.name, reason: 'duplicate of a stored tournament', checkedAt: new Date(), permanent: true } },
+    { upsert: true }
+  );
+}
+
+// Returns how many events were saved, and how many were left out as copies of stored tournaments
 async function importStartGGTournament(api, tournamentPreview, { game = null, discoveredVia = null, forceGame = false } = {}) {
   const slug = tournamentPreview.slug.startsWith('tournament/') ? tournamentPreview.slug : `tournament/${tournamentPreview.slug}`;
 
@@ -609,7 +631,7 @@ async function importStartGGTournament(api, tournamentPreview, { game = null, di
 
   if (!tournamentData || !tournamentData.events?.length) {
     console.log(`      ⚠️  No events found for ${tournamentPreview.name}`);
-    return;
+    return { saved: 0, duplicates: 0 };
   }
 
   // Skip sibling events tagged with another videogame (e.g. a non-randomizer side event)
@@ -646,6 +668,8 @@ async function importStartGGTournament(api, tournamentPreview, { game = null, di
     keptEvents.push(event);
   }
 
+  let saved = 0;
+  let duplicates = 0;
   for (const event of keptEvents) {
     const ownEvent = isOwnEvent(event);
     // Another game's event of a multi-game tournament: the game tied to its start.gg videogame, else its name
@@ -669,6 +693,7 @@ async function importStartGGTournament(api, tournamentPreview, { game = null, di
     const duplicateOf = await findProbableDuplicate(participants.map(p => p.name), event.startDate || tournamentData.startDate, event.id, tournamentData.id);
     if (duplicateOf) {
       console.log(`         ⏭️  Skipped "${tournamentData.name} - ${event.name}": same players and dates as existing "${duplicateOf}"`);
+      duplicates++;
       continue;
     }
 
@@ -772,9 +797,11 @@ async function importStartGGTournament(api, tournamentPreview, { game = null, di
       { upsert: true, new: true }
     );
 
+    saved++;
     const preservedLinks = existingLinkMap.size;
     console.log(`         ✅ ${tournamentPayload.name} – ${participants.length} participants, ${matches.length} matches${matchForGame ? ` → ${matchForGame.gameSlug}` : ''}${preservedLinks ? ` (${preservedLinks} liens préservés)` : ''}`);
   }
+  return { saved, duplicates };
 }
 
 // ─── SpeedGaming Discovery (speedgaming.org/events → Challonge and start.gg brackets) ─────
@@ -1070,66 +1097,6 @@ async function discoverHth({ games, dryRun }) {
 
 // ─── Challonge Discovery ────────────────────────────────────────────────────
 
-async function discoverChallonge({ searchTerms, games, keywords, since, dryRun }) {
-  if (!process.env.CHALLONGE_API_KEY) {
-    console.warn('⚠️  CHALLONGE_API_KEY not set – skipping Challonge discovery');
-    return { found: 0, imported: 0, skipped: 0, errors: 0 };
-  }
-
-  const stats = { found: 0, imported: 0, skipped: 0, errors: 0 };
-  const allKeywords = [...new Set([...RANDOMIZER_SIGNAL_KEYWORDS, ...keywords])];
-
-  console.log(`\n🔍 Challonge: Searching tournaments...`);
-
-  try {
-    const listOpts = { state: 'all' };
-    if (since) listOpts.createdAfter = since;
-
-    const tournaments = await challongeAPI.searchTournaments(allKeywords, listOpts);
-    stats.found = tournaments.length;
-
-    console.log(`   Found ${tournaments.length} matching tournaments`);
-
-    // Check existing
-    const existingChallongeIds = new Set(await getKnownChallongeIds());
-
-    for (const tournament of tournaments) {
-      if (existingChallongeIds.has(tournament.id)) {
-        stats.skipped++;
-        continue;
-      }
-
-      // Extra check: is this really a randomizer tournament?
-      const isRando = isRandomizerTournament(
-        { name: tournament.name, events: [{ name: tournament.name, game: { name: tournament.gameName || '' } }] },
-        games
-      );
-      if (!isRando) continue;
-
-      if (dryRun) {
-        console.log(`   📋 [DRY-RUN] Would import: ${tournament.name} (${tournament.url})`);
-        stats.imported++;
-        continue;
-      }
-
-      try {
-        await importChallongeTournament(tournament);
-        stats.imported++;
-      } catch (err) {
-        console.error(`   ❌ Error importing ${tournament.url}: ${err.message}`);
-        stats.errors++;
-      }
-
-      await sleep(RATE_LIMIT_MS);
-    }
-  } catch (err) {
-    console.error(`   ❌ Challonge listing error: ${err.message}`);
-    stats.errors++;
-  }
-
-  return stats;
-}
-
 /**
  * Import a single Challonge tournament (fetches full data including participants/matches)
  */
@@ -1306,16 +1273,6 @@ async function main() {
       games,
       dryRun: opts.dryRun,
       challongeUrls: opts.challongeUrls
-    });
-  }
-
-  if (opts.source === 'all' || opts.source === 'challonge') {
-    results.challonge = await discoverChallonge({
-      searchTerms,
-      games,
-      keywords: opts.keywords,
-      since: opts.since,
-      dryRun: opts.dryRun
     });
   }
 

@@ -63,7 +63,7 @@ En production, la base MongoDB tourne sur le même serveur que le site et n'éco
 | `schedule-sites` | toutes les 15 min | `sync-speedgaming.js` : matchs restreamés par SpeedGaming (voir plus bas), puis `sync-schedule-sites.js` : horaires et restreams des races des tournois de Mido's House et Hyrule Town Hall, rattachement des courses par leur room, VOD Twitch des restreams, puis `sync-midos-league.js --current` : saison en cours de l'OoTR League, puis `sync-midos-events.js --active` : tournois Mido's House sans bracket en cours, puis `sync-speedrace.js` : VOD saisies sur Speedrace, puis `sync-localhorst.js` : restreams planifiés sur localhorst, puis `sync-ical-restreams.js` : restreams des calendriers iCal (voir plus bas) |
 | `rando-list` | tous les jours à 6h | met à jour la copie locale de rando-list ; si `check-rando-list-changes.js` signale un nouveau commit, `sync-rando-list.js --detect-new` met à jour le cache et les ressources, puis signale les nouveaux jeux, à créer depuis le panneau admin |
 | `archipelago` | tous les jours à 6h20 | `sync-archipelago-games.js` : jeux listés sur [archipelago.gg](https://archipelago.gg/games) et [multiworld.gg](https://multiworld.gg/games) ; ajoute à chaque jeu sa page sur ces sites, le guide d'installation et le wiki (page vérifiée sur le wiki, titre corrigé ou lien retiré quand elle n'existe pas), crée les jeux absents (puis catégorie Twitch et année de sortie) et retire les liens des jeux qui en sont partis, puis `sync-community-apworlds.js` : APWorlds du tableur communautaire (voir plus bas) |
-| `tournaments-discover` | tous les jours à 8h30 UTC, après la remise à zéro du quota YouTube (minuit, heure du Pacifique) | `discover-tournaments.js --since <il y a 2 jours> --max-pages 3` : nouveaux tournois sur start.gg et Challonge, et ceux liés depuis Mido's House, Hyrule Town Hall et SpeedGaming, puis `sync-alttpr-asyncs.js` : séries async ALTTPR, puis `sync-alttpr-league.js --current` : saison en cours de l'ALTTPR League, puis `sync-gdq-runs.js` : runs randomizer des marathons GDQ (voir plus bas), puis `discover-youtube-restreamers.js --max-searches 40` : chaînes YouTube qui archivent des restreams (voir plus bas) |
+| `tournaments-discover` | tous les jours à 8h30 UTC, après la remise à zéro du quota YouTube (minuit, heure du Pacifique) | `discover-tournaments.js --since <il y a 2 jours> --max-pages 3` : nouveaux tournois sur start.gg, et ceux liés depuis Mido's House, Hyrule Town Hall et SpeedGaming, puis `sync-alttpr-asyncs.js` : séries async ALTTPR, puis `sync-alttpr-league.js --current` : saison en cours de l'ALTTPR League, puis `sync-gdq-runs.js` : runs randomizer des marathons GDQ (voir plus bas), puis `discover-youtube-restreamers.js --max-searches 40` : chaînes YouTube qui archivent des restreams (voir plus bas) |
 | `players` | tous les jours à 10h UTC, une fois `tournaments-discover` terminée (85 min au plus) | `sync-players-from-races.js` : un joueur par compte racetime.gg (source de vérité), au nom de sa dernière course ; `sync-racetime-profiles.js --stale-days 7 --limit 1200` relit le profil racetime des joueurs (chacun une fois par semaine) : nom actuel, compte supprimé ; puis `link-participant-accounts.js --all --apply` relie chaque participant de tournoi au compte racetime qui a couru ses matchs (voir plus bas) |
 | `challonge-check` | tous les jours à 10h15 UTC | `check-challonge-quota.js` : une seule requête Challonge, en erreur sur la page de santé tant que le quota (500 requêtes sur 30 jours glissants) est épuisé ; à son retour, les imports Challonge en attente se lancent à la main |
 | `backup` | tous les jours à 3h30 | `backup-db.js` : archive `mongodump` de la base, 7 gardées |
@@ -82,6 +82,10 @@ L'API Challonge n'autorise que 500 requêtes par 30 jours (au-delà : erreur 429
 1. des mots-clés génériques : `randomizer`, `randomiser`, `rando`, `multiworld`, `archipelago`…
 2. les noms des jeux présents en base (nom, acronymes) ;
 3. le jeu déclaré sur start.gg ou Challonge.
+
+Challonge n'a pas de recherche publique : son API (v1 comme v2.1) ne liste que les tournois du compte de la clé. Ses brackets arrivent donc par les sites qui les lient (SpeedGaming…) ou par les liens donnés à la main (`import-challonge.js`, `import-challonge-batch.js`, `--challonge-url`).
+
+Un tournoi start.gg dont chaque épreuve copie un tournoi déjà en base (mêmes joueurs, mêmes dates, souvent son bracket Challonge) n'est pas compté comme importé : il est noté dans `discoveryskips` (`permanent`) et les sources automatiques ne le relisent plus. Un slug donné à la main (`--startgg-slug`) est toujours relu.
 
 `discover-tournaments.js --source speedgaming` lit la page [speedgaming.org/events](https://speedgaming.org/events/), qui n'a pas d'API, et y prend les liens « Bracket/standings » de chaque événement. Un bracket start.gg passe par l'import start.gg ; un bracket Challonge coûte une requête, aussi n'est-il lu que si le titre de l'événement évoque un randomizer. Un lien écarté (pas un randomizer suivi, bracket privé ou supprimé) est noté dans `discoveryskips`. La source fait partie de la découverte quotidienne.
 
@@ -279,7 +283,7 @@ Les schémas sont dans [`models/index.js`](../models/index.js).
 | `marathonruns` | Un run randomizer d'un marathon (GDQ) : marathon, jeu, catégorie, joueurs, vidéos |
 | `youtubechannels` | Une chaîne YouTube candidate pour les restreams : gardée ou écartée, avec sa langue |
 | `youtubesearches` | Les recherches YouTube déjà faites par la découverte des chaînes, et leurs vidéos |
-| `discoveryskips` | Liens Challonge écartés par la découverte speedgaming.org (pas un randomizer, bracket privé…), revus après 30 jours |
+| `discoveryskips` | Liens Challonge écartés par la découverte speedgaming.org (pas un randomizer, bracket privé…), revus après 30 jours, et tournois start.gg doublons d'un tournoi en base (`permanent`) |
 | `rando_list_cache` | Copie brute de rando-list et métadonnées de la dernière synchronisation |
 
 ### Joueurs et participants
@@ -343,7 +347,7 @@ Les scripts qui écrivent en base proposent un mode `--dry-run` (ou n'écrivent 
 | `check-rando-list-changes.js` | — | Indique à la tâche `rando-list` si rando-list a changé |
 | `sync-archipelago-games.js` | `sync:archipelago` (+ `:dry`) | Jeux d'archipelago.gg et multiworld.gg : liens, nouveaux jeux (tâche `archipelago` ; `--no-create`, `--site`, `--verbose`) |
 | `sync-community-apworlds.js` | `sync:apworlds` (+ `:dry`) | APWorlds du tableur communautaire : liens, stabilité, nouveaux jeux (tâche `archipelago`, après la précédente ; `--no-create`, `--verbose`) |
-| `discover-tournaments.js` | `discover:tournaments` (+ `:dry`, `:startgg`, `:challonge`) | Découverte de tournois |
+| `discover-tournaments.js` | `discover:tournaments` (+ `:dry`, `:startgg`) | Découverte de tournois |
 | `sync-tournaments.js` | `sync:tournaments` (+ `:dry`, `:update`) | Mise à jour des tournois actifs |
 | `auto-link-tournaments.js` | `link:tournaments:active` | Rattache les courses aux matchs, et les tie-breaks à leur poule (`--all --tiebreaks-only` pour le rattrapage des anciens tournois) |
 | `sync-players-from-races.js` | `sync:players` (+ `:dry`) | Recalcule la collection des joueurs |

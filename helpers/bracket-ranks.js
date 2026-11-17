@@ -120,7 +120,21 @@ function computeChallongeProvisionalRanks({ tournamentType, challongeBrackets, p
     for (const name of [p.displayName, p.name]) if (name && !idByName.has(name)) idByName.set(name, String(p.challongeId));
   }
   const known = new Set((participants || []).map(p => String(p.challongeId)));
-  const entrant = (id, name) => (id != null && known.has(String(id)) ? String(id) : idByName.get(name) || null);
+  // Grouped brackets list a player once per bracket, possibly under another name: one entrant
+  // per racetime account, the one playing the bracket matches (not the group stage)
+  const direct = new Set((matches || []).filter(m => m.groupId == null)
+    .flatMap(m => [m.player1Id, m.player2Id]).filter(id => id != null).map(String));
+  const accountOf = new Map();
+  const entrantOfAccount = new Map();
+  for (const p of participants || []) {
+    if (!p.racetimeUserId) continue;
+    const id = String(p.challongeId);
+    accountOf.set(id, p.racetimeUserId);
+    const current = entrantOfAccount.get(p.racetimeUserId);
+    if (!current || (!direct.has(current) && direct.has(id))) entrantOfAccount.set(p.racetimeUserId, id);
+  }
+  const single = id => (id && accountOf.has(id) ? entrantOfAccount.get(accountOf.get(id)) : id);
+  const entrant = (id, name) => single(id != null && known.has(String(id)) ? String(id) : idByName.get(name) || null);
 
   const shaped = (matches || []).map(m => {
     const player1 = entrant(m.player1Id, m.player1Name);

@@ -5,6 +5,7 @@
  * so a bracket name never captures someone else's racetime account elsewhere.
  */
 const { normalizeName, scoreNameMatch } = require('./race-match-linking');
+const { sideNamesPlayer } = require('./restream-titles');
 const { escapeRegex, getExplicitRacetimeSlugs } = require('./game-matching');
 
 // How much better one pairing of the two entrants must fit the two bracket names
@@ -395,6 +396,29 @@ async function syncParticipantAccounts({ tournament, Race, knownAccounts = null,
     if (candidates.length !== 1) continue;
     const [userId, userName] = candidates[0];
     if (unlinked.some((other) => other !== participant && fits(other, userName))) continue;
+    changed.push({ name: participant.displayName || participant.name, from: null, to: userName });
+    participant.racetimeUserId = userId;
+    participant.racetimeName = userName;
+  }
+
+  // Grouped Challonge brackets list the same player once per bracket, the name sometimes
+  // changed from one to the next ("Abc42" in the groups, "Abc" in the final bracket):
+  // still unknown, a player takes the account of the one name it fits in another bracket
+  const bracketOf = (p) => (p.bracketChallongeId != null ? String(p.bracketChallongeId) : null);
+  const accountsInBracket = (bracket) => new Set(tournament.participants
+    .filter((p) => bracketOf(p) === bracket && p.racetimeUserId).map((p) => p.racetimeUserId));
+  for (const participant of tournament.participants.filter((p) => !p.racetimeUserId && bracketOf(p))) {
+    const own = bracketOf(participant);
+    const taken = accountsInBracket(own);
+    const names = [participant.displayName, participant.name].filter(Boolean);
+    const candidates = new Map();
+    for (const other of tournament.participants) {
+      if (!other.racetimeUserId || !bracketOf(other) || bracketOf(other) === own || taken.has(other.racetimeUserId)) continue;
+      const otherNames = [other.displayName, other.name, other.racetimeName].filter(Boolean);
+      if (names.some((name) => sideNamesPlayer(name, otherNames))) candidates.set(other.racetimeUserId, other.racetimeName);
+    }
+    if (candidates.size !== 1) continue;
+    const [[userId, userName]] = [...candidates];
     changed.push({ name: participant.displayName || participant.name, from: null, to: userName });
     participant.racetimeUserId = userId;
     participant.racetimeName = userName;

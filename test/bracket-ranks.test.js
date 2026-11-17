@@ -152,3 +152,29 @@ test('provisional: parallel brackets of unclear order tied at the round reached'
   });
   assert.deepEqual(ranksOf(ranks), { 1: 1, 3: 1, 2: 3, 4: 3 });
 });
+
+test('provisional: a player renamed between the group stage and the bracket stays one player', () => {
+  const ranks = computeChallongeProvisionalRanks({
+    tournamentType: 'single elimination',
+    challongeBrackets: [{ challongeId: 10 }, { challongeId: 20 }],
+    phases: [
+      { name: 'Groups', bracketType: 'single elimination', phaseOrder: 1 },
+      { name: 'Brackets', bracketType: 'single elimination', phaseOrder: 2 }
+    ],
+    participants: [
+      { challongeId: 1, name: 'Alpha', racetimeUserId: 'a' },
+      { challongeId: 3, name: 'Gamma', racetimeUserId: 'c' },
+      { challongeId: 11, name: 'Alpha42', racetimeUserId: 'a' },
+      { challongeId: 12, name: 'Beta' },
+      { challongeId: 13, name: 'Gamma', racetimeUserId: 'c' }
+    ],
+    matches: [
+      played(1, 101, 102, 101, { groupId: 9, player1Name: 'Alpha42', player2Name: 'Beta' }),
+      played(2, 101, 103, 101, { groupId: 9, player1Name: 'Alpha42', player2Name: 'Gamma' }),
+      played(3, 102, 103, 103, { groupId: 9, player1Name: 'Beta', player2Name: 'Gamma' }),
+      open(1, 1, 3, { phase: 'Brackets' })
+    ]
+  });
+  assert.equal(ranks.get('11'), undefined);
+  assert.deepEqual([ranks.get('1'), ranks.get('3'), ranks.get('12')], [1, 1, 3]);
+});

@@ -148,7 +148,7 @@ function buildTournamentQuery(gameDoc, gameIdLower) {
   // tournaments of "Zelda II: The Adventure of Link")
   const conditions = [];
   if (gameDoc?._id) {
-    conditions.push({ game: gameDoc._id });
+    conditions.push({ game: gameDoc._id }, { otherGames: gameDoc._id });
   }
   if (nameConditions.length) {
     conditions.push({ game: null, $or: nameConditions });

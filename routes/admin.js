@@ -244,7 +244,7 @@ router.get('/games/:id', requireAdmin, async (req, res, next) => {
     const categoryQuery = buildCategoryQuery(game, String(game.id).toLowerCase(), buildCategoryResolutionContext(allGames));
     const [raceCount, tournamentCount] = await Promise.all([
       Race.countDocuments(categoryQuery),
-      Tournament.countDocuments({ $or: [{ game: game._id }, { gameId: game.id }] })
+      Tournament.countDocuments({ $or: [{ game: game._id }, { otherGames: game._id }, { gameId: game.id }] })
     ]);
     
     const [covers, histories] = await Promise.all([coverIds(), historyIds()]);
@@ -2087,7 +2087,8 @@ router.get('/tournaments-mgmt', requireAdmin, async (req, res, next) => {
     }
 
     if (game) {
-      query.gameSlug = game;
+      const gameDoc = await Game.findOne({ id: game }).select('_id').lean();
+      query.$and = [{ $or: [{ gameSlug: game }, ...(gameDoc ? [{ otherGames: gameDoc._id }] : [])] }];
     }
 
     const pageNum = Math.max(1, parseInt(page, 10) || 1);
@@ -2110,6 +2111,7 @@ router.get('/tournaments-mgmt', requireAdmin, async (req, res, next) => {
         .skip((pageNum - 1) * limitNum)
         .limit(limitNum)
         .populate('game', 'id name randomizer.shortName randomizer.displayName')
+        .populate('otherGames', 'id')
         .lean(),
       Tournament.countDocuments(query)
     ]);
@@ -2132,6 +2134,7 @@ router.get('/tournaments-mgmt', requireAdmin, async (req, res, next) => {
       gameSlug: t.gameSlug,
       gameName: t.gameName || t.game?.name,
       gameShortName: t.game?.randomizer?.shortName,
+      otherGameSlugs: (t.otherGames || []).map(g => g.id).filter(Boolean),
       participantsCount: t.participantsCount || (t.participants || []).length,
       matchCount: (t.matches || []).length || 0,
       state: t.state,
@@ -2422,6 +2425,15 @@ router.put('/tournaments-mgmt/:id/game', requireAdmin, async (req, res, next) =>
     const { gameSlug } = req.body;
     const tournament = await Tournament.findById(req.params.id);
     if (!tournament) return res.status(404).json({ error: 'Tournament not found' });
+
+    // Other games it also shows on (multiworld crossover), the main one aside
+    if (Array.isArray(req.body.otherGameSlugs)) {
+      const slugs = [...new Set(req.body.otherGameSlugs.map(String).filter(slug => slug && slug !== gameSlug))];
+      const others = slugs.length ? await Game.find({ id: { $in: slugs } }).select('_id id').lean() : [];
+      const unknown = slugs.filter(slug => !others.some(g => g.id === slug));
+      if (unknown.length) return res.status(404).json({ error: `Jeu "${unknown[0]}" introuvable` });
+      tournament.otherGames = others.length ? others.map(g => g._id) : undefined;
+    }
 
     if (gameSlug) {
       const game = await Game.findOne({ id: gameSlug });

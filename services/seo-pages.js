@@ -140,7 +140,7 @@ async function gameMeta(query, siteUrl, lang) {
   const [history, stats, tournaments] = await Promise.all([
     readHistory(game.id).catch(() => null),
     cachedGameStats(game.id),
-    Tournament.find({ game: game._id }).sort({ startDate: -1 }).limit(GAME_TOURNAMENT_LINKS).select('name').lean()
+    Tournament.find({ $or: [{ game: game._id }, { otherGames: game._id }] }).sort({ startDate: -1 }).limit(GAME_TOURNAMENT_LINKS).select('name').lean()
   ]);
   // Histories are written in English and French: the other languages take the English one
   const intro = String(history?.intro?.[lang] || history?.intro?.en || '').trim();

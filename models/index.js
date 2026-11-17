@@ -216,6 +216,9 @@ const tournamentSchema = new mongoose.Schema({
   // keep legacy field for migration compatibility
   gameId: { type: String, required: false },
   gameName: String,
+  // Other games of a tournament played with several (multiworld crossover): it also
+  // shows on their pages; `game` stays the one its stats count for
+  otherGames: { type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Game' }], default: undefined },
   url: String,
   fullUrl: String,
   tournamentType: String,

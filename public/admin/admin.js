@@ -4702,7 +4702,7 @@ const admin = {
       const date = t.startDate
         ? `${formatDay(t.startDate)}${t.endDate && formatDay(t.endDate) !== formatDay(t.startDate) ? ` → ${formatDay(t.endDate)}` : ''}`
         : '-';
-      const gameName = t.gameShortName || t.gameSlug || t.gameName || '-';
+      const gameName = [t.gameShortName || t.gameSlug || t.gameName || '-', ...(t.otherGameSlugs || [])].join(' × ');
       const externalUrl = t.url || (t.startggSlug ? `https://start.gg/${t.startggSlug}` : null);
 
       return `<tr>
@@ -4726,7 +4726,7 @@ const admin = {
           <a class="icon-btn" href="/tournaments/${encodeURIComponent(t._id)}" target="_blank" rel="noopener" data-tooltip="Page publique" aria-label="Page publique">🌐</a>
           <button class="icon-btn" data-click="tmOpenLinking" data-args="${admin.attrArgs([String(t._id)])}" data-tooltip="Rattacher les courses" aria-label="Rattacher les courses">🔗</button>
           <button class="icon-btn" data-click="tmShowDetail" data-args="${admin.attrArgs([String(t._id)])}" data-tooltip="Détails du tournoi" aria-label="Détails du tournoi">ℹ️</button>
-          <button class="icon-btn" data-click="tmShowEditGame" data-args="${admin.attrArgs([String(t._id), String(t.gameSlug || '')])}" data-tooltip="Changer le jeu associé" aria-label="Changer le jeu associé">🎮</button>
+          <button class="icon-btn" data-click="tmShowEditGame" data-args="${admin.attrArgs([String(t._id), String(t.gameSlug || ''), (t.otherGameSlugs || []).join(',')])}" data-tooltip="Changer le jeu associé" aria-label="Changer le jeu associé">🎮</button>
           <button class="icon-btn icon-btn-danger" data-click="tmDeleteTournament" data-args="${admin.attrArgs([String(t._id), String(t.name)])}" data-tooltip="Supprimer" aria-label="Supprimer">🗑️</button>
         </td>
       </tr>`;
@@ -5063,19 +5063,28 @@ const admin = {
   },
 
   // Edit game association
-  async tmShowEditGame(tournamentId, currentGameSlug) {
+  async tmShowEditGame(tournamentId, currentGameSlug, otherGameSlugs = '') {
     document.getElementById('tm-edit-game-modal').style.display = 'flex';
     document.getElementById('tm-edit-game-tournament-id').value = tournamentId;
 
     const select = document.getElementById('tm-edit-game-select');
+    const othersSelect = document.getElementById('tm-edit-other-games-select');
     select.innerHTML = '<option value="">Aucun jeu (dissocier)</option>';
+    othersSelect.innerHTML = '';
+    const others = new Set(String(otherGameSlugs || '').split(',').filter(Boolean));
     const games = this.tmGamesCache || [];
     games.forEach(g => {
+      const label = `${g.randomizer?.shortName || g.name} (${g.id})`;
       const opt = document.createElement('option');
       opt.value = g.id;
-      opt.textContent = `${g.randomizer?.shortName || g.name} (${g.id})`;
+      opt.textContent = label;
       if (g.id === currentGameSlug) opt.selected = true;
       select.appendChild(opt);
+      const otherOpt = document.createElement('option');
+      otherOpt.value = g.id;
+      otherOpt.textContent = label;
+      if (others.has(g.id)) otherOpt.selected = true;
+      othersSelect.appendChild(otherOpt);
     });
   },
 
@@ -5086,12 +5095,13 @@ const admin = {
   async tmSaveGameAssociation() {
     const tournamentId = document.getElementById('tm-edit-game-tournament-id').value;
     const gameSlug = document.getElementById('tm-edit-game-select').value;
+    const otherGameSlugs = [...document.getElementById('tm-edit-other-games-select').selectedOptions].map(opt => opt.value);
 
     try {
       const response = await fetch(`/api/admin/tournaments-mgmt/${tournamentId}/game`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${this.token}` },
-        body: JSON.stringify({ gameSlug })
+        body: JSON.stringify({ gameSlug, otherGameSlugs })
       });
       if (!response.ok) throw new Error('Erreur lors de la sauvegarde');
 

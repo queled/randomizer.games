@@ -823,8 +823,11 @@ function displayTournamentInfo(tournament) {
   document.title = `${tournament.name} - Randomizer`;
   const tournamentGameEl = document.getElementById('tournament-game');
   const tournamentGameLabel = window.gameLabel(tournament.game) || tournament.gameName || 'Unknown game';
+  const gameLink = (game, label) => `<a href="/games/${encodeURIComponent(game.id)}" style="color:inherit;text-decoration:none;">${escHtml(label)}</a>`;
+  // A multiworld crossover lists its other games after the main one
+  const otherGames = (tournament.otherGames || []).filter(game => game?.id);
   if (tournament.game?.id) {
-    tournamentGameEl.innerHTML = `<a href="/games/${encodeURIComponent(tournament.game.id)}" style="color:inherit;text-decoration:none;">${escHtml(tournamentGameLabel)}</a>`;
+    tournamentGameEl.innerHTML = [gameLink(tournament.game, tournamentGameLabel), ...otherGames.map(game => gameLink(game, window.gameLabel(game) || game.id))].join(' × ');
   } else {
     tournamentGameEl.textContent = tournamentGameLabel;
   }

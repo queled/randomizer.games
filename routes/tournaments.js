@@ -192,7 +192,7 @@ router.get('/', async (req, res, next) => {
 // Get tournament by ID
 router.get('/:id', validateObjectId('id'), async (req, res, next) => {
   try {
-    const tournament = await Tournament.findById(req.params.id).populate('game');
+    const tournament = await Tournament.findById(req.params.id).populate('game').populate('otherGames', 'id name official randomizer');
     
     if (!tournament) {
       return res.status(404).json({ error: 'Tournament not found' });

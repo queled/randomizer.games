@@ -49,7 +49,8 @@ const MANUAL_CHANNELS = {
   UCe_uLJvuvlohlZ6RPNClkLw: 'aosuna',
   UCho0rakwbqB87CDoE6x5CuA: 'randomizerbrasil',
   UCRg3lnaAXr2wH2py2Jy34HA: null,
-  UChfm7rmNqD6k3Ri_Ze32t5A: null
+  UChfm7rmNqD6k3Ri_Ze32t5A: null,
+  'UCPe0dAxDwi8Siw0X-RDRfrg': 'gylgamesh501'
 };
 // Searches of a tournament: its name, then with each restream language
 const QUERY_LANGUAGES = ['', 'français', 'deutsch', 'español', 'português'];

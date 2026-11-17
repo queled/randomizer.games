@@ -21,6 +21,7 @@ const JOBS = [
   { name: 'rando-list', label: 'rando-list', cron: '0 6 * * *', maxRun: 20 * MINUTE },
   { name: 'archipelago', label: 'Jeux Archipelago et Multiworld', cron: '20 6 * * *', maxRun: 15 * MINUTE },
   { name: 'tournaments-discover', label: 'Découverte de tournois et asyncs ALTTPR', cron: '30 8 * * *', maxRun: 90 * MINUTE },
+  { name: 'tournaments-organizers', label: 'Tournois des organisateurs start.gg', cron: '30 11 * * 1', maxRun: 30 * MINUTE },
   { name: 'players', label: 'Joueurs et comptes racetime', cron: '0 10 * * *', maxRun: 70 * MINUTE },
   { name: 'challonge-check', label: 'Quota API Challonge', cron: '15 10 * * *', maxRun: 2 * MINUTE },
   { name: 'backup', label: 'Sauvegarde de la base', cron: '30 3 * * *', maxRun: 30 * MINUTE },
@@ -39,24 +40,25 @@ function cronField(field, min, max) {
   return [...values].sort((a, b) => a - b);
 }
 
-// Minutes and hours (UTC) of a task; the crontab only uses these two fields
+// Minutes, hours and weekdays (UTC, 0 = Sunday) of a task; the crontab leaves days of the month and months at *
 function parseCron(cron) {
-  const [minute, hour] = cron.split(/\s+/);
-  return { minutes: cronField(minute, 0, 59), hours: cronField(hour, 0, 23) };
+  const [minute, hour, , , weekday = '*'] = cron.split(/\s+/);
+  return { minutes: cronField(minute, 0, 59), hours: cronField(hour, 0, 23), weekdays: cronField(weekday, 0, 6) };
 }
 
 // Time between two runs, for evenly spaced schedules like the crontab's
-function periodOf({ minutes, hours }) {
+function periodOf({ minutes, hours, weekdays = [0, 1, 2, 3, 4, 5, 6] }) {
+  if (weekdays.length < 7) return (7 / weekdays.length) * DAY;
   if (hours.length === 24) return (60 / minutes.length) * MINUTE;
   return DAY / hours.length;
 }
 
-function nextRun({ minutes, hours }, now) {
+function nextRun({ minutes, hours, weekdays = [0, 1, 2, 3, 4, 5, 6] }, now) {
   const next = new Date(now);
   next.setUTCSeconds(0, 0);
-  for (let i = 0; i < 2 * 24 * 60; i++) {
+  for (let i = 0; i < 8 * 24 * 60; i++) {
     next.setUTCMinutes(next.getUTCMinutes() + 1);
-    if (minutes.includes(next.getUTCMinutes()) && hours.includes(next.getUTCHours())) return next;
+    if (minutes.includes(next.getUTCMinutes()) && hours.includes(next.getUTCHours()) && weekdays.includes(next.getUTCDay())) return next;
   }
   return null;
 }
@@ -194,4 +196,4 @@ function readJobLog(name) {
   return readLogTail(name, 400, 64 * 1024);
 }
 
-module.exports = { JOBS, getJobsHealth, jobState, readJobLog };
+module.exports = { JOBS, getJobsHealth, jobState, readJobLog, parseCron, periodOf, nextRun };

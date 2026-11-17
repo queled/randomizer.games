@@ -8,6 +8,7 @@
 #   schedule-sites        restreams SpeedGaming, horaires, restreams et VOD des races (Mido's House, Hyrule Town Hall), saisons de ligue, VOD Speedrace, plannings localhorst et iCal (toutes les 15 min)
 #   race-vods             VOD Twitch des joueurs, restreams trouvés sur Twitch (toutes les 30 min)
 #   tournaments-discover  nouveaux tournois des 2 derniers jours, séries async, saisons de ligue, runs GDQ et leurs restreams en français, chaînes YouTube de restream (tous les jours)
+#   tournaments-organizers  autres tournois des organisateurs des tournois start.gg en base (le lundi)
 #   rando-list            cache rando-list, si le dépôt a changé    (tous les jours)
 #   archipelago           jeux d'archipelago.gg et multiworld.gg, puis APWorlds communautaires (tous les jours)
 #   players               joueurs et profils racetime.gg, comptes des participants (tous les jours)
@@ -113,6 +114,10 @@ run_players() {
   return "$status"
 }
 
+run_tournaments_organizers() {
+  timeout 30m node scripts/discover-tournaments.js --source organizers
+}
+
 run_challonge_check() {
   timeout 2m node scripts/check-challonge-quota.js
 }
@@ -182,6 +187,7 @@ case "$JOB" in
   schedule-sites)       fn=run_schedule_sites ;;
   race-vods)            fn=run_race_vods ;;
   tournaments-discover) fn=run_tournaments_discover ;;
+  tournaments-organizers) fn=run_tournaments_organizers ;;
   rando-list)           fn=run_rando_list ;;
   archipelago)          fn=run_archipelago ;;
   players)              fn=run_players ;;
@@ -189,7 +195,7 @@ case "$JOB" in
   backup)               fn=run_backup ;;
   publish-assets)       fn=run_publish_assets ;;
   *)
-    echo "Usage: $0 <racetime|tournaments-update|schedule-sites|race-vods|tournaments-discover|rando-list|archipelago|players|challonge-check|backup|publish-assets>" >&2
+    echo "Usage: $0 <racetime|tournaments-update|schedule-sites|race-vods|tournaments-discover|tournaments-organizers|rando-list|archipelago|players|challonge-check|backup|publish-assets>" >&2
     exit 2
     ;;
 esac

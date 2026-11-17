@@ -960,6 +960,8 @@ function displayParticipants(participants, matches = [], options = {}) {
   const opt = (options && typeof options === 'object' && !Array.isArray(options)) ? options : {};
   const rankOnly = !!opt.rankOnly;
   participants = groupTeamParticipants(participants);
+  const stages = mergeBracketStages(participants);
+  participants = stages.participants;
 
   // Best-effort ranking when Challonge doesn't provide finalRank yet (e.g. awaiting_review).
   // Only used when rankOnly=true (Groups→SE).
@@ -1137,7 +1139,7 @@ function displayParticipants(participants, matches = [], options = {}) {
   const brackets = (currentTournament && currentTournament.challongeBrackets) || [];
   const phaseNames = ((currentTournament && currentTournament.phases) || []).map(p => p.name);
   const bracketIndex = p => brackets.findIndex(b => p && p.bracketChallongeId != null && Number(b.challongeId) === Number(p.bracketChallongeId));
-  const groupByBracket = brackets.length > 1 && sorted.some(p => bracketIndex(p) >= 0);
+  const groupByBracket = !stages.merged && brackets.length > 1 && sorted.some(p => bracketIndex(p) >= 0);
   if (groupByBracket) {
     const rankOf = p => {
       const i = bracketIndex(p);
@@ -1352,7 +1354,47 @@ function enrichMatchesWithParticipantNames(matches, participants) {
 // start.gg sets show a player as "Prefix | GamerTag", the participant is its gamer tag
 function isParticipantName(name, participant) {
   if (!name) return false;
-  return [name, name.split(' | ').pop()].some(n => n === participant.name || n === participant.displayName);
+  const names = participant.stageNames || [participant.name, participant.displayName];
+  return [name, name.split(' | ').pop()].some(n => names.includes(n));
+}
+
+// Grouped Challonge brackets played one after the other (groups then bracket) list a player
+// once per stage, sometimes under another name: one row per player (racetime account, else
+// name), the latest stage's, with one ranking. Brackets played side by side share nobody.
+function mergeBracketStages(participants) {
+  const brackets = (currentTournament && currentTournament.challongeBrackets) || [];
+  const stageOf = p => brackets.findIndex(b => p && p.bracketChallongeId != null && Number(b.challongeId) === Number(p.bracketChallongeId));
+  const keyOf = p => p.racetimeUserId || `name:${String(p.displayName || p.name || '').trim().toLowerCase()}`;
+  if (brackets.length < 2 || participants.some(p => p.members || p.unnamedTeam)) return { participants, merged: false };
+  const stagesOf = new Map();
+  participants.forEach(p => {
+    const stage = stageOf(p);
+    if (stage === -1) return;
+    if (!stagesOf.has(keyOf(p))) stagesOf.set(keyOf(p), new Set());
+    stagesOf.get(keyOf(p)).add(stage);
+  });
+  if (![...stagesOf.values()].some(s => s.size > 1)) return { participants, merged: false };
+
+  const rows = new Map();
+  participants
+    .map((p, i) => ({ p, i, stage: stageOf(p) }))
+    .sort((a, b) => (a.stage - b.stage) || (a.i - b.i))
+    .forEach(({ p }) => {
+      const key = keyOf(p);
+      const previous = rows.get(key);
+      const names = [...new Set([p.name, p.displayName].filter(Boolean))];
+      if (!previous) {
+        rows.set(key, { ...p, stageNames: names });
+        return;
+      }
+      rows.set(key, {
+        ...p,
+        finalRank: p.finalRank ?? previous.finalRank,
+        seed: p.seed ?? previous.seed,
+        stageNames: [...new Set([...previous.stageNames, ...names])]
+      });
+    });
+  return { participants: [...rows.values()], merged: true };
 }
 
 // Co-op tournaments list each player with the team they raced in: show one row per team

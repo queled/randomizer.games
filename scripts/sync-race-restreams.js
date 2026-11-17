@@ -33,6 +33,8 @@
  *   node scripts/sync-race-restreams.js --days 60 --recheck   # again for races already searched (a channel added)
  *   node scripts/sync-race-restreams.js --days 3650 --highlights   # older races: highlights
  *   node scripts/sync-race-restreams.js --days 3650 --youtube-only # older races: YouTube alone
+ *   node scripts/sync-race-restreams.js --days 3650 --youtube-only --tournament <id> [--tournament <id>]
+ *                                                       # only the races of these tournaments (just imported)
  *   node scripts/sync-race-restreams.js --dry-run
  */
 
@@ -68,17 +70,23 @@ function sleep(ms) {
 
 function parseArgs() {
   const args = process.argv.slice(2);
-  const opts = { dryRun: false, days: 2, highlights: false, recheck: false, youtubeOnly: false };
+  const opts = { dryRun: false, days: 2, highlights: false, recheck: false, youtubeOnly: false, tournaments: [] };
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
       case '--dry-run': opts.dryRun = true; break;
       case '--highlights': opts.highlights = true; break;
       case '--recheck': opts.recheck = true; break;
       case '--youtube-only': opts.youtubeOnly = true; break;
+      case '--tournament': opts.tournaments.push(args[++i]); break;
       case '--days': opts.days = Math.max(1, parseInt(args[++i], 10) || 2); break;
     }
   }
   return opts;
+}
+
+// Races of the tournaments given with --tournament, or of every tournament
+function tournamentFilter({ tournaments }) {
+  return tournaments && tournaments.length ? { $in: tournaments.map(id => new mongoose.Types.ObjectId(id)) } : { $ne: null };
 }
 
 function roomPath(url) {
@@ -198,10 +206,11 @@ async function liveInCategories(livePending, categoryByTournament) {
 }
 
 // Running races, and finished ones still within reach of their past broadcast
-async function findRestreams({ dryRun, days, recheck }, stats) {
+async function findRestreams(opts, stats) {
+  const { dryRun, days, recheck } = opts;
   const now = Date.now();
   const races = (await Race.find({
-    tournamentId: { $ne: null },
+    tournamentId: tournamentFilter(opts),
     url: /^\/[^/]+\/[^/]+$/,
     $or: [
       { status: { $in: LIVE_STATUSES } },
@@ -342,10 +351,11 @@ async function findRestreams({ dryRun, days, recheck }, stats) {
 }
 
 // Highlights and uploads of the tournaments' restreamers (and community channels) for older races without a restream VOD
-async function findHighlights({ dryRun, days }, stats) {
+async function findHighlights(opts, stats) {
+  const { dryRun, days } = opts;
   const since = new Date(Date.now() - days * 24 * 3600 * 1000);
   const races = await Race.find({
-    tournamentId: { $ne: null },
+    tournamentId: tournamentFilter(opts),
     status: 'finished',
     url: /^\/[^/]+\/[^/]+$/,
     startedAt: { $gte: since }
@@ -406,12 +416,13 @@ function youtubeVideoIds(tournaments, races) {
 }
 
 // Restreams archived on YouTube, on the channels the discovery kept (scripts/discover-youtube-restreamers.js)
-async function findYoutubeRestreams({ dryRun, days }, stats) {
+async function findYoutubeRestreams(opts, stats) {
+  const { dryRun, days } = opts;
   const since = new Date(Date.now() - Math.max(days, YOUTUBE_MIN_DAYS) * 24 * 3600 * 1000);
   const known = await YoutubeChannel.find({ status: 'accepted' }).lean();
   if (!known.length) return;
   const races = await Race.find({
-    tournamentId: { $ne: null },
+    tournamentId: tournamentFilter(opts),
     status: 'finished',
     url: /^\/[^/]+\/[^/]+$/,
     startedAt: { $gte: since }
@@ -482,8 +493,9 @@ async function findYoutubeRestreams({ dryRun, days }, stats) {
 }
 
 // VODs Twitch or YouTube has deleted since they were found: the link goes, the channel stays
-async function checkVods({ dryRun }, stats) {
-  const races = await Race.find({ 'restreams.vodUrl': { $type: 'string' } }).select('_id restreams').lean();
+async function checkVods(opts, stats) {
+  const { dryRun } = opts;
+  const races = await Race.find({ 'restreams.vodUrl': { $type: 'string' }, ...(opts.tournaments.length ? { tournamentId: tournamentFilter(opts) } : {}) }).select('_id restreams').lean();
   const streams = races.flatMap(r => r.restreams);
   const twitchIds = streams.map(s => twitchVods.videoId(s.vodUrl)).filter(Boolean);
   const youtubeIds = youtube.hasKey() ? streams.map(s => youtube.videoId(s.vodUrl)).filter(Boolean) : [];

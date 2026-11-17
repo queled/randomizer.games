@@ -19,6 +19,7 @@ const connectDB = require('../config/database');
 const sanitizeHtml = require('sanitize-html');
 const StartGGAPI = require('../services/startgg');
 const findGameForTournament = require('../helpers/find-game-for-tournament');
+const { findProbableDuplicate, startggExclusion } = require('../helpers/tournament-duplicates');
 
 function parseStartGGSlug(input) {
   if (!input) return null;
@@ -92,6 +93,17 @@ async function main() {
       const participants = StartGGAPI.buildParticipants(event);
 
       console.log(`   Found ${participants.length} unique participants`);
+
+      // Same players and dates as a tournament from another source (Challonge, Mido's House...): not imported twice
+      const duplicateOf = await findProbableDuplicate(Tournament, {
+        playerNames: participants.map(p => p.name),
+        startDate: event.startDate || tournamentData.startDate,
+        exclude: startggExclusion(event.id, tournamentData.id)
+      });
+      if (duplicateOf) {
+        console.log(`   ⏭️  Skipped: same players and dates as existing "${duplicateOf}"`);
+        continue;
+      }
 
       // Determine bracket type from phases
       const bracketType = event.phases?.[0]?.bracketType || 'SINGLE_ELIMINATION';

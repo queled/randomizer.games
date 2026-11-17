@@ -18,6 +18,7 @@ const { Game, Tournament, Match, Race, Player } = require('../models');
 const { normalizePlayerName } = require('../helpers/player-aliases');
 const { syncParticipantAccounts } = require('../helpers/participant-accounts');
 const { fillMissingFinalRanks } = require('../helpers/bracket-ranks');
+const { findProbableDuplicate, findChallongeDuplicate } = require('../helpers/tournament-duplicates');
 const { JOBS, getJobsHealth, readJobLog } = require('../services/job-health');
 const { getSystemHealth } = require('../services/system-health');
 const { getExternalHealth } = require('../services/external-health');
@@ -2325,6 +2326,16 @@ router.post('/tournaments-mgmt/import', requireAdmin, async (req, res, next) => 
         tournamentPayload.participants = StartGGAPI.buildParticipants(event);
       }
 
+      // Same players and dates as a tournament from another source (Challonge, Mido's House...): not imported twice
+      if (tournamentPayload.participants?.length && !(await Tournament.exists({ startggSlug: detected.slug }))) {
+        const duplicateOf = await findProbableDuplicate(Tournament, {
+          playerNames: tournamentPayload.participants.map(p => p.name),
+          startDate: tournamentPayload.startDate,
+          exclude: { startggId: null }
+        });
+        if (duplicateOf) return res.status(409).json({ error: `Doublon de « ${duplicateOf} » (mêmes joueurs, mêmes dates)` });
+      }
+
       const tournament = await Tournament.findOneAndUpdate(
         { startggSlug: detected.slug },
         { $set: tournamentPayload },
@@ -2341,6 +2352,10 @@ router.post('/tournaments-mgmt/import', requireAdmin, async (req, res, next) => 
 
       // Ranks of the played bracket while the organizer has not finalized it
       const participants = fillMissingFinalRanks({ tournamentData, participants: details.participants, matches });
+
+      // Same players and dates as a tournament from another source (start.gg, Mido's House...): not imported twice
+      const duplicateOf = await findChallongeDuplicate(Tournament, { tournamentData, participants });
+      if (duplicateOf) return res.status(409).json({ error: `Doublon de « ${duplicateOf} » (mêmes joueurs, mêmes dates)` });
 
       const tournamentPayload = {
         name: tournamentData.name,

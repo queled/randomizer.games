@@ -27,7 +27,7 @@ process.env.CHALLONGE_CACHE_DIR = process.env.CHALLONGE_CACHE_DIR || path.join(o
 
 const connectDB = require('../config/database');
 const challongeAPI = require('../services/challonge');
-const { importChallongeTournament, parseChallongeRef, getKnownChallongeUrls } = require('./discover-tournaments');
+const { importChallongeTournament, findChallongeDuplicate, parseChallongeRef, getKnownChallongeUrls } = require('./discover-tournaments');
 
 const FINISHED = ['complete', 'completed'];
 const ABANDONED_AFTER_MS = 180 * 24 * 3600 * 1000;
@@ -110,7 +110,8 @@ async function main() {
 
     if (mode === '--summary') {
       const dates = [t.startedAt, t.completedAt].map(d => (d ? String(d).slice(0, 10) : '?')).join(' → ');
-      const known = knownUrls.has(ref.url.toLowerCase()) ? ' (in database)' : '';
+      const duplicateOf = await findChallongeDuplicate({ tournamentData: t, participants: details.participants });
+      const known = knownUrls.has(ref.url.toLowerCase()) ? ' (in database)' : (duplicateOf ? ` (DUPLICATE of "${duplicateOf}")` : '');
       console.log(`${ref.apiId}${known}\n   ${t.name} [${t.gameName || 'no game'}] ${t.tournamentType}, ${t.participantsCount} players, ${details.matches.length} matches, ${t.state}, ${dates}${t.hasGroupStages ? ', group stage' : ''}`);
       continue;
     }

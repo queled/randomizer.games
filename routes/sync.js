@@ -6,6 +6,7 @@ const racetimeAPI = require('../services/racetime');
 const { Tournament, Match, Race, Player, Game } = require('../models');
 const findGameForTournament = require('../helpers/find-game-for-tournament');
 const { fillMissingFinalRanks } = require('../helpers/bracket-ranks');
+const { findChallongeDuplicate } = require('../helpers/tournament-duplicates');
 const { rankMatchesForRace, selectBestCandidate } = require('../helpers/race-match-linking');
 const { strictLimiter, validateObjectId } = require('../middleware/security');
 const { requireAdmin } = require('../middleware/admin-auth');
@@ -34,6 +35,10 @@ router.post('/tournament/:challongeId', async (req, res, next) => {
     const { tournamentData, matches } = details;
     // Ranks of the played bracket while the organizer has not finalized it
     const participants = fillMissingFinalRanks({ tournamentData, participants: details.participants, matches });
+
+    // Same players and dates as a tournament from another source (start.gg, Mido's House...): not imported twice
+    const duplicateOf = await findChallongeDuplicate(Tournament, { tournamentData, participants });
+    if (duplicateOf) return res.status(409).json({ error: `Duplicate of "${duplicateOf}" (same players and dates)` });
 
     // Resolve game relation (prefer request override)
     const match = await findGameForTournament({

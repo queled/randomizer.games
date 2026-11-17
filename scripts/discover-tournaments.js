@@ -10,6 +10,7 @@
  * Usage:
  *   node scripts/discover-tournaments.js                      # Full discovery (all sources)
  *   node scripts/discover-tournaments.js --source startgg     # Start.gg only
+ *   node scripts/discover-tournaments.js --source organizers --dry-run  # other tournaments of the organisers of stored start.gg ones
  *   node scripts/discover-tournaments.js --dry-run            # Preview without importing
  *   node scripts/discover-tournaments.js --keywords "keyword1,keyword2"  # Extra keywords
  *   node scripts/discover-tournaments.js --max-pages 5        # Limit pagination (start.gg short-name queries: 5 max)
@@ -32,6 +33,9 @@ const { Game, Tournament, Match, Race, DiscoverySkip } = require('../models');
 const StartGGAPI = require('../services/startgg');
 const challongeAPI = require('../services/challonge');
 const findGameForTournament = require('../helpers/find-game-for-tournament');
+const { playerKey, findProbableDuplicate, startggExclusion } = require('../helpers/tournament-duplicates');
+const duplicates = require('../helpers/tournament-duplicates');
+const findChallongeDuplicate = args => duplicates.findChallongeDuplicate(Tournament, args);
 const sanitizeHtml = require('sanitize-html');
 const { saveGroupedChallongeBracket } = require('../services/challonge-bracket-groups');
 const { fillMissingFinalRanks } = require('../helpers/bracket-ranks');
@@ -66,7 +70,7 @@ const STARTGG_ALIAS_MAX_PAGES = 5;
 function parseArgs() {
   const args = process.argv.slice(2);
   const opts = {
-    source: 'all',       // 'all', 'startgg', 'speedgaming', 'midos', 'hth'
+    source: 'all',       // 'all', 'startgg', 'organizers', 'speedgaming', 'midos', 'hth'
     dryRun: false,
     keywords: [],
     maxPages: DEFAULT_MAX_PAGES,
@@ -132,37 +136,6 @@ async function withStartGGRetry(call, attempts = 3) {
       await sleep(60000);
     }
   }
-}
-
-const playerKey = value => String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-
-/**
- * The same event can exist on two platforms (e.g. a Challonge bracket and its start.gg twin):
- * flag an existing tournament starting within 45 days with (almost) the same players.
- * Two different start.gg tournaments are never twins (weekly series share their players).
- */
-async function findProbableDuplicate(playerNames, startDate, startggEventId, startggTournamentId) {
-  const wanted = new Set(playerNames.map(playerKey).filter(Boolean));
-  if (wanted.size < 4) return null;
-
-  const query = {
-    startggId: { $ne: startggEventId },
-    $or: [{ startggId: null }, { startggTournamentId }]
-  };
-  if (startDate) {
-    const time = new Date(startDate).getTime();
-    const windowMs = 45 * 24 * 60 * 60 * 1000;
-    query.startDate = { $gte: new Date(time - windowMs), $lte: new Date(time + windowMs) };
-  }
-
-  for (const existing of await Tournament.find(query).select('name participants.name').lean()) {
-    const known = new Set((existing.participants || []).map(p => playerKey(p.name)).filter(Boolean));
-    const smaller = Math.min(known.size, wanted.size);
-    if (smaller < 4 || smaller / Math.max(known.size, wanted.size) < 0.7) continue;
-    const shared = [...known].filter(name => wanted.has(name)).length;
-    if (shared / smaller >= 0.8) return existing.name;
-  }
-  return null;
 }
 
 function normalizeText(value) {
@@ -419,7 +392,8 @@ function cleanDescription(description) {
 
 // ─── Start.gg Discovery ─────────────────────────────────────────────────────
 
-async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun, games, tournamentSlugs = [], discoveredVia = null, trustSource = false, forceGame = false, reimport = false }) {
+// `candidates`: tournament previews listed elsewhere (an organiser's tournaments), sorted like search results
+async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun, games, tournamentSlugs = [], candidates = null, discoveredVia = null, trustSource = false, forceGame = false, reimport = false }) {
   if (!process.env.STARTGG_API_TOKEN) {
     console.warn('⚠️  STARTGG_API_TOKEN not set – skipping start.gg discovery');
     return { found: 0, imported: 0, skipped: 0, errors: 0 };
@@ -477,23 +451,15 @@ async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun,
       return;
     }
 
-    if (dryRun) {
-      console.log(`         📋 [DRY-RUN] Would import: ${tournament.name} (${tournament.slug}) → ${game.id}`);
-      tournament.events?.forEach(event => {
-        console.log(`            └── Event: ${event.name} (${event.numEntrants || '?'} entrants) – Game: ${event.game?.name || 'N/A'}`);
-      });
-      stats.imported++;
-      return;
-    }
-
     try {
-      const { saved, duplicates } = await importStartGGTournament(api, tournament, { game, discoveredVia, forceGame });
+      // A dry run reads the tournament too: copies of stored tournaments show up before any write
+      const { saved, duplicates } = await importStartGGTournament(api, tournament, { game, discoveredVia, forceGame, dryRun });
       if (saved) {
         stats.imported++;
       } else {
         stats.skipped++;
-        // Only copies of stored tournaments: not fetched again by the daily sources (links given by hand still are)
-        if (duplicates) await rememberStartGGDuplicate(tournament);
+        // Only copies of stored tournaments: not fetched again by the daily sources
+        if (duplicates && !dryRun) await rememberStartGGDuplicate(tournament);
       }
     } catch (err) {
       console.error(`         ❌ Error importing ${tournament.slug}: ${err.message}`);
@@ -527,36 +493,42 @@ async function discoverStartGG({ searchTerms, keywords, maxPages, since, dryRun,
 
   if (tournamentSlugs.length) return stats;
 
-  const searchQueries = buildStartGGSearchQueries(games, keywords);
-  const genericQueries = new Set(STARTGG_GENERIC_QUERIES);
-  console.log(`   ${searchQueries.length} queries (generic keywords + randomizer short names), alias queries capped at ${STARTGG_ALIAS_MAX_PAGES} pages`);
-
   const results = new Map(); // slug → tournament, a tournament often answers several queries
-  for (const [index, searchQuery] of searchQueries.entries()) {
-    const pageLimit = genericQueries.has(searchQuery)
-      ? maxPages
-      : Math.min(maxPages ?? STARTGG_ALIAS_MAX_PAGES, STARTGG_ALIAS_MAX_PAGES);
-
-    for (let page = 1; pageLimit == null || page <= pageLimit; page++) {
-      try {
-        const searchOpts = { perPage: STARTGG_RESULTS_PER_PAGE, page };
-        if (since) searchOpts.afterDate = since;
-
-        const result = await withStartGGRetry(() => api.searchTournaments(searchQuery, searchOpts));
-        if (!result.tournaments.length) break;
-
-        for (const tournament of result.tournaments) {
-          if (tournament?.slug && !results.has(tournament.slug)) results.set(tournament.slug, tournament);
-        }
-        if (page >= result.totalPages) break;
-      } catch (err) {
-        console.error(`   ❌ Search error "${searchQuery}" page ${page}: ${err.message}`);
-        stats.errors++;
-        break;
-      }
+  if (candidates) {
+    for (const tournament of candidates) {
+      if (tournament?.slug && !results.has(tournament.slug)) results.set(tournament.slug, tournament);
     }
+  } else {
+    const searchQueries = buildStartGGSearchQueries(games, keywords);
+    const genericQueries = new Set(STARTGG_GENERIC_QUERIES);
+    console.log(`   ${searchQueries.length} queries (generic keywords + randomizer short names), alias queries capped at ${STARTGG_ALIAS_MAX_PAGES} pages`);
 
-    if ((index + 1) % 50 === 0) console.log(`   … ${index + 1}/${searchQueries.length} queries, ${results.size} tournaments seen`);
+    for (const [index, searchQuery] of searchQueries.entries()) {
+      const pageLimit = genericQueries.has(searchQuery)
+        ? maxPages
+        : Math.min(maxPages ?? STARTGG_ALIAS_MAX_PAGES, STARTGG_ALIAS_MAX_PAGES);
+
+      for (let page = 1; pageLimit == null || page <= pageLimit; page++) {
+        try {
+          const searchOpts = { perPage: STARTGG_RESULTS_PER_PAGE, page };
+          if (since) searchOpts.afterDate = since;
+
+          const result = await withStartGGRetry(() => api.searchTournaments(searchQuery, searchOpts));
+          if (!result.tournaments.length) break;
+
+          for (const tournament of result.tournaments) {
+            if (tournament?.slug && !results.has(tournament.slug)) results.set(tournament.slug, tournament);
+          }
+          if (page >= result.totalPages) break;
+        } catch (err) {
+          console.error(`   ❌ Search error "${searchQuery}" page ${page}: ${err.message}`);
+          stats.errors++;
+          break;
+        }
+      }
+
+      if ((index + 1) % 50 === 0) console.log(`   … ${index + 1}/${searchQueries.length} queries, ${results.size} tournaments seen`);
+    }
   }
 
   console.log(`\n   ${results.size} tournaments seen, checking games...`);
@@ -622,10 +594,10 @@ async function rememberStartGGDuplicate(tournament) {
 }
 
 // Returns how many events were saved, and how many were left out as copies of stored tournaments
-async function importStartGGTournament(api, tournamentPreview, { game = null, discoveredVia = null, forceGame = false } = {}) {
+async function importStartGGTournament(api, tournamentPreview, { game = null, discoveredVia = null, forceGame = false, dryRun = false } = {}) {
   const slug = tournamentPreview.slug.startsWith('tournament/') ? tournamentPreview.slug : `tournament/${tournamentPreview.slug}`;
 
-  console.log(`      ⬇️  Importing: ${tournamentPreview.name}`);
+  console.log(`      ⬇️  ${dryRun ? '[DRY-RUN] Reading' : 'Importing'}: ${tournamentPreview.name}`);
 
   const tournamentData = await withStartGGRetry(() => api.getTournament(slug));
 
@@ -690,10 +662,20 @@ async function importStartGGTournament(api, tournamentPreview, { game = null, di
 
     const participants = StartGGAPI.buildParticipants(event);
 
-    const duplicateOf = await findProbableDuplicate(participants.map(p => p.name), event.startDate || tournamentData.startDate, event.id, tournamentData.id);
+    const duplicateOf = await findProbableDuplicate(Tournament, {
+      playerNames: participants.map(p => p.name),
+      startDate: event.startDate || tournamentData.startDate,
+      exclude: startggExclusion(event.id, tournamentData.id)
+    });
     if (duplicateOf) {
       console.log(`         ⏭️  Skipped "${tournamentData.name} - ${event.name}": same players and dates as existing "${duplicateOf}"`);
       duplicates++;
+      continue;
+    }
+
+    if (dryRun) {
+      console.log(`         📋 [DRY-RUN] Would import: ${StartGGAPI.eventTournamentName(tournamentData.name, event.name)} – ${participants.length} participants${matchForGame ? ` → ${matchForGame.gameSlug}` : ''}`);
+      saved++;
       continue;
     }
 
@@ -964,15 +946,28 @@ async function discoverSpeedGaming({ games, dryRun, challongeUrls = [] }) {
         continue;
       }
 
+      // Same event as a tournament from another source: never fetched again (the quota is small)
+      const duplicateOf = await findChallongeDuplicate({ tournamentData: tournament, participants: details.participants });
+      if (duplicateOf) {
+        console.log(`   ↪ Duplicate of "${duplicateOf}": ${tournament.name} (${ref.url})`);
+        if (!dryRun) {
+          await DiscoverySkip.updateOne({ url: urlKey }, {
+            $set: { reason: 'duplicate of a stored tournament', title, checkedAt: new Date(), permanent: true, challongeId: tournament.id }
+          }, { upsert: true });
+        }
+        stats.skipped++;
+        continue;
+      }
+
       if (dryRun) {
         console.log(`   📋 [DRY-RUN] Would import: ${tournament.name} (${ref.url}) → ${match.game.id} (${match.reason}${match.alias ? `: ${match.alias}` : ''}) – ${tournament.participantsCount} participants, ${tournament.state}${group ? ` – bracket${label ? ` "${label}"` : ''} of "${group}"` : ''}`);
         stats.imported++;
         continue;
       }
 
-      await importChallongeTournament({ name: tournament.name, url: ref.apiId }, match.game.id, { group, label, discoveredVia: 'speedgaming.org', details });
+      const { saved } = await importChallongeTournament({ name: tournament.name, url: ref.apiId }, match.game.id, { group, label, discoveredVia: 'speedgaming.org', details });
       existingIds.add(String(tournament.id));
-      stats.imported++;
+      if (saved) stats.imported++; else stats.skipped++;
     } catch (err) {
       console.error(`   ❌ Error processing ${link}: ${err.message}`);
       stats.errors++;
@@ -985,6 +980,49 @@ async function discoverSpeedGaming({ games, dryRun, challongeUrls = [] }) {
     for (const key of Object.keys(stats)) stats[key] += startgg[key] || 0;
   }
 
+  return stats;
+}
+
+// ─── start.gg organisers (owners of stored tournaments → their other tournaments) ─────
+
+// start.gg has no randomizer category and its search skips tournaments not made
+// discoverable: the people who organised a stored randomizer tournament list them all
+async function discoverStartGGOrganizers({ games, dryRun }) {
+  if (!process.env.STARTGG_API_TOKEN) {
+    console.warn('⚠️  STARTGG_API_TOKEN not set – skipping start.gg organisers');
+    return { found: 0, imported: 0, skipped: 0, errors: 0 };
+  }
+  const api = new StartGGAPI();
+  const stored = await Tournament.find({ $or: [{ startggSlug: { $ne: null } }, { startggUrl: { $ne: null } }] })
+    .select('startggSlug startggUrl').lean();
+  const slugs = [...new Set(stored
+    .map(t => String(t.startggSlug || '').split('/event/')[0] || StartGGAPI.extractSlugFromUrl(String(t.startggUrl || '')))
+    .filter(slug => slug && slug.startsWith('tournament/')))];
+
+  console.log(`\n🔍 start.gg organisers: owners of ${slugs.length} stored tournaments...`);
+  let owners;
+  try {
+    owners = [...new Set((await withStartGGRetry(() => api.getTournamentOwners(slugs))).values())];
+  } catch (err) {
+    console.error(`   ❌ Could not read the owners: ${err.message}`);
+    return { found: 0, imported: 0, skipped: 0, errors: 1 };
+  }
+
+  const candidates = [];
+  let errors = 0;
+  for (const owner of owners) {
+    try {
+      candidates.push(...await withStartGGRetry(() => api.getUserAdminTournaments(owner)));
+    } catch (err) {
+      console.error(`   ❌ Tournaments of an organiser: ${err.message}`);
+      errors++;
+    }
+    await sleep(RATE_LIMIT_MS);
+  }
+  console.log(`   ${owners.length} organisers, ${candidates.length} tournaments listed`);
+
+  const stats = await discoverStartGG({ games, dryRun, candidates, discoveredVia: 'startgg-organizer' });
+  stats.errors += errors;
   return stats;
 }
 
@@ -1129,11 +1167,18 @@ async function importChallongeTournament(tournamentPreview, gameSlug = null, { g
   const { tournamentData, matches, participants: rawParticipants } = details || await challongeAPI.getTournamentDetails(challongeId);
   if (!tournamentData) {
     console.log(`   ⚠️  No data returned for ${challongeId}`);
-    return;
+    return { saved: false };
   }
 
   // Ranks of the played bracket while the organizer has not finalized it
   const participants = fillMissingFinalRanks({ tournamentData, participants: rawParticipants, matches });
+
+  // A bracket already stored is updated; a new one must not copy a tournament from another source
+  const duplicateOf = await findChallongeDuplicate({ tournamentData, participants });
+  if (duplicateOf) {
+    console.log(`      ⏭️  Skipped "${tournamentData.name}": same players and dates as existing "${duplicateOf}"`);
+    return { saved: false, duplicateOf };
+  }
 
   // Determine game
   const matchForGame = await findGameForTournament({
@@ -1181,7 +1226,7 @@ async function importChallongeTournament(tournamentPreview, gameSlug = null, { g
       { group, label, tournamentData, participants, matches, payload: tournamentPayload }
     );
     console.log(`      ✅ ${tournamentData.name} → "${tournament.name}" / ${phaseName} – ${participants.length} participants, ${matches.length} matches`);
-    return;
+    return { saved: true };
   }
 
   const tournament = await Tournament.findOneAndUpdate(
@@ -1222,7 +1267,9 @@ async function importChallongeTournament(tournamentPreview, gameSlug = null, { g
   }
 
   console.log(`      ✅ ${tournamentData.name} – ${participants.length} participants, ${matches.length} matches${matchForGame ? ` → ${matchForGame.gameSlug}` : ''}`);
+  return { saved: true };
 }
+
 
 // ─── Main ────────────────────────────────────────────────────────────────────
 
@@ -1258,6 +1305,11 @@ async function main() {
       forceGame: Boolean(opts.game && opts.startggSlugs.length && games?.length === 1),
       reimport: opts.startggSlugs.length > 0
     });
+  }
+
+  // Not in 'all' yet: its first results are reviewed by hand
+  if (opts.source === 'organizers') {
+    results.organizers = await discoverStartGGOrganizers({ games, dryRun: opts.dryRun });
   }
 
   if (opts.source === 'all' || opts.source === 'midos') {
@@ -1305,4 +1357,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { importChallongeTournament, parseChallongeRef, getKnownChallongeUrls };
+module.exports = { importChallongeTournament, findChallongeDuplicate, parseChallongeRef, getKnownChallongeUrls };

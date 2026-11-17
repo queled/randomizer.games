@@ -558,26 +558,7 @@ class StartGGAPI {
     const data = await this.query(q, { perPage, page, filter });
     const result = data.tournaments || {};
     return {
-      tournaments: (result.nodes || []).map(t => ({
-        id: t.id,
-        name: t.name,
-        slug: t.slug,
-        startDate: t.startAt ? new Date(t.startAt * 1000) : null,
-        endDate: t.endAt ? new Date(t.endAt * 1000) : null,
-        numAttendees: t.numAttendees,
-        state: t.state,
-        events: (t.events || []).map(e => ({
-          id: e.id,
-          name: e.name,
-          slug: e.slug,
-          numEntrants: e.numEntrants,
-          state: e.state,
-          game: e.videogame ? {
-            id: e.videogame.id,
-            name: e.videogame.displayName || e.videogame.name
-          } : null
-        }))
-      })),
+      tournaments: (result.nodes || []).map(t => StartGGAPI.formatTournamentPreview(t)),
       totalPages: result.pageInfo?.totalPages || 0,
       total: result.pageInfo?.total || 0
     };
@@ -591,6 +572,79 @@ class StartGGAPI {
    */
   async searchTournamentsByGame(videogameIds, options = {}) {
     return this.searchTournaments(null, { ...options, videogameIds });
+  }
+
+  /**
+   * A tournament as listed by a search or a user's tournaments (no sets nor entrants)
+   */
+  static formatTournamentPreview(t) {
+    return {
+      id: t.id,
+      name: t.name,
+      slug: t.slug,
+      startDate: t.startAt ? new Date(t.startAt * 1000) : null,
+      endDate: t.endAt ? new Date(t.endAt * 1000) : null,
+      numAttendees: t.numAttendees,
+      state: t.state,
+      events: (t.events || []).map(e => ({
+        id: e.id,
+        name: e.name,
+        slug: e.slug,
+        numEntrants: e.numEntrants,
+        state: e.state,
+        game: e.videogame ? {
+          id: e.videogame.id,
+          name: e.videogame.displayName || e.videogame.name
+        } : null
+      }))
+    };
+  }
+
+  /**
+   * Owner (start.gg user id) of each tournament slug, read 20 slugs per request
+   * @param {Array<string>} slugs - "tournament/<name>"
+   * @returns {Map<string, string>} slug → owner id
+   */
+  async getTournamentOwners(slugs) {
+    const owners = new Map();
+    for (let i = 0; i < slugs.length; i += 20) {
+      const chunk = slugs.slice(i, i + 20);
+      const fields = chunk.map((slug, j) => `t${j}: tournament(slug: ${JSON.stringify(slug)}) { slug owner { id } }`).join('\n');
+      const data = await this.query(`query TournamentOwners {\n${fields}\n}`);
+      for (const tournament of Object.values(data || {})) {
+        if (tournament?.owner?.id) owners.set(tournament.slug, String(tournament.owner.id));
+      }
+    }
+    return owners;
+  }
+
+  /**
+   * Tournaments a user organises (admin view), listed even when not discoverable in the search
+   * @param {string} userId
+   * @returns {Array} tournament previews
+   */
+  async getUserAdminTournaments(userId, { perPage = 50, maxPages = 10 } = {}) {
+    const q = `
+      query UserAdminTournaments($id: ID!, $perPage: Int!, $page: Int!) {
+        user(id: $id) {
+          tournaments(query: { perPage: $perPage, page: $page, filter: { tournamentView: "admin" } }) {
+            pageInfo { totalPages }
+            nodes {
+              id name slug startAt endAt numAttendees state
+              events { id name slug numEntrants state videogame { id name displayName } }
+            }
+          }
+        }
+      }
+    `;
+    const tournaments = [];
+    for (let page = 1; page <= maxPages; page++) {
+      const data = await this.query(q, { id: userId, perPage, page });
+      const result = data?.user?.tournaments;
+      tournaments.push(...(result?.nodes || []).map(t => StartGGAPI.formatTournamentPreview(t)));
+      if (!result || page >= (result.pageInfo?.totalPages || 0)) break;
+    }
+    return tournaments;
   }
 
   /**

@@ -36,7 +36,7 @@ Chaque étape a besoin de ce que les précédentes ont écrit en base :
 | 5 | Mido's House et Hyrule Town Hall | `node scripts/sync-schedule-sites.js` | les tournois start.gg (3) et les courses liées (4), pour l'heure de départ réelle et les événements sans sets start.gg |
 | 5b | VOD Speedrace | `node scripts/sync-speedrace.js` | les restreams Mido's House (5) |
 | 6 | VOD des joueurs | `node scripts/sync-race-vods.js` | les courses terminées (1) |
-| 7 | Restreams Twitch | `node scripts/sync-race-restreams.js` | les courses rattachées à un tournoi (4) et les chaînes de restream connues de Mido's House (5), plus les chaînes communautaires |
+| 7 | Restreams Twitch | `node scripts/sync-race-restreams.js` | les courses rattachées à un tournoi (4) et les chaînes de restream connues de Mido's House (5), plus les chaînes communautaires, celles déjà trouvées dans le tournoi et la catégorie Twitch du jeu (directs, rediffusions de la semaine) |
 
 Les étapes 1 et 2 sont indépendantes l'une de l'autre, et l'étape 6 ne dépend que de la 1. Lancer quand même le tout dans l'ordre du tableau : c'est le plus simple et rien n'est fait deux fois.
 
@@ -94,7 +94,7 @@ Points d'attention :
 
 - **Racetime** : sans `--catch-up-since`, le script ne repasse qu'une tranche de catégories par exécution (un quart) ; pour une période, il faut le rattrapage.
 - **Auto-link** : sans argument, il ne traite que les tournois actifs. Pour un tournoi terminé depuis : `node scripts/auto-link-tournaments.js <tournamentId>`.
-- **Twitch** : par défaut les étapes 6 et 7 prennent les 2 derniers jours. Au-delà, passer `--days N` ; Twitch ne garde les rediffusions que 7 à 60 jours selon la chaîne. Pour des races plus anciennes, `sync-race-restreams.js --highlights` cherche dans les temps forts.
+- **Twitch** : par défaut les étapes 6 et 7 prennent les 2 derniers jours. Au-delà, passer `--days N` ; Twitch ne garde les rediffusions que 7 à 60 jours selon la chaîne. Pour des races plus anciennes, `sync-race-restreams.js --highlights` cherche dans les temps forts. Les rediffusions de la catégorie du jeu, qui rattrapent un restream manqué en direct, ne remontent qu'à une semaine : pour une chaîne inconnue, un `--days` plus long n'y change rien.
 - Chaque script accepte `--dry-run` (sauf `sync-racetime-global.js`) pour vérifier avant d'écrire.
 
 Sur le serveur, on peut aussi lancer les tâches de la crontab dans l'ordre, avec leurs verrous et leurs journaux (`~/logs/<tâche>.log`), mais sur leurs fenêtres par défaut :

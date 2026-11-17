@@ -5,6 +5,8 @@
  * `challongeBrackets` so imports and syncs refresh the right one.
  */
 
+const { sideNamesPlayer } = require('../helpers/restream-titles');
+
 const COMPLETE_STATES = ['complete', 'completed', 'awaiting_review'];
 
 function tokens(name) {
@@ -32,6 +34,40 @@ function aggregateState(brackets) {
   return 'underway';
 }
 
+// Share of a bracket's players coming from an earlier one for it to be that one's next phase
+const NEXT_PHASE_SHARE = 0.75;
+
+function playerName(p) {
+  return p.displayName || p.name || '';
+}
+
+/**
+ * Brackets in the order they are played, whatever order they were imported in. A bracket
+ * goes after another when it started later and most of its players (3 in 4, a name possibly
+ * shortened) come from that one, as a bracket stage after its groups; brackets played side
+ * by side (groups, tiers) have players of their own and keep their order.
+ * `playersOf(bracket)` gives the participants of a bracket.
+ */
+function orderBrackets(brackets, playersOf) {
+  const startOf = b => (b.startDate ? new Date(b.startDate).getTime() : NaN);
+  const names = new Map(brackets.map(b => [b, (playersOf(b) || []).map(playerName).filter(Boolean)]));
+  const follows = (later, earlier) => {
+    if (!(startOf(earlier) < startOf(later))) return false;
+    const players = names.get(later);
+    if (players.length < 2) return false;
+    // A name may be shortened from one bracket to the next ("Abc" for "Abc42")
+    const fromEarlier = players.filter(name => sideNamesPlayer(name, names.get(earlier))).length;
+    return fromEarlier >= NEXT_PHASE_SHARE * players.length;
+  };
+  const remaining = [...brackets];
+  const ordered = [];
+  while (remaining.length) {
+    const next = remaining.findIndex(b => !remaining.some(other => other !== b && follows(b, other)));
+    ordered.push(...remaining.splice(next >= 0 ? next : 0, 1));
+  }
+  return ordered;
+}
+
 /**
  * Save one Challonge bracket into the Tournament of its group, creating it if needed.
  * `bracket` holds the data fetched from Challonge; `payload` the fields the caller
@@ -57,21 +93,23 @@ async function saveGroupedChallongeBracket({ Tournament, Match, Race }, { group,
     endDate: tournamentData.completedAt || null
   };
 
-  const brackets = (parent?.challongeBrackets || []).map(b => (b.toObject ? b.toObject() : b));
-  const index = brackets.findIndex(b => Number(b.challongeId) === challongeId);
-  if (index >= 0) brackets[index] = { ...brackets[index], ...entry, label: label || brackets[index].label };
-  else brackets.push(entry);
+  const stored = (parent?.challongeBrackets || []).map(b => (b.toObject ? b.toObject() : b));
+  const index = stored.findIndex(b => Number(b.challongeId) === challongeId);
+  if (index >= 0) stored[index] = { ...stored[index], ...entry, label: label || stored[index].label };
+  else stored.push(entry);
+
+  const otherParticipants = (parent?.participants || [])
+    .map(p => (p.toObject ? p.toObject() : p))
+    .filter(p => p.bracketChallongeId != null && Number(p.bracketChallongeId) !== challongeId);
+  const bracketParticipants = participants.map(p => ({ ...p, bracketChallongeId: challongeId }));
+  const allParticipants = [...otherParticipants, ...bracketParticipants];
+  const brackets = orderBrackets(stored, b => allParticipants.filter(p => Number(p.bracketChallongeId) === Number(b.challongeId)));
 
   // Brackets without an explicit label are named after what sets their name apart from
   // their siblings, recomputed as brackets join the group
   const derived = deriveBracketLabels(brackets.map(b => b.name));
   const phaseNames = brackets.map((b, i) => b.label || derived[i]);
   const phaseName = phaseNames[brackets.findIndex(b => Number(b.challongeId) === challongeId)];
-
-  const otherParticipants = (parent?.participants || [])
-    .map(p => (p.toObject ? p.toObject() : p))
-    .filter(p => p.bracketChallongeId != null && Number(p.bracketChallongeId) !== challongeId);
-  const bracketParticipants = participants.map(p => ({ ...p, bracketChallongeId: challongeId }));
 
   const startDates = brackets.map(b => b.startDate).filter(Boolean).map(d => new Date(d).getTime());
   const endDates = brackets.map(b => b.endDate).filter(Boolean).map(d => new Date(d).getTime());
@@ -153,5 +191,6 @@ async function saveGroupedChallongeBracket({ Tournament, Match, Race }, { group,
 
 module.exports = {
   deriveBracketLabels,
+  orderBrackets,
   saveGroupedChallongeBracket
 };

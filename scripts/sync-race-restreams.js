@@ -13,6 +13,9 @@
  *   - running race: that channel live now;
  *   - finished race: its past broadcast covering the race start, linked at
  *     that moment, looked up until 12 h after the race end;
+ * Running races also look at every channel live in the game's Twitch category (and the
+ * ones its players stream in), finished races without a VOD at the category's past
+ * broadcasts of the week; a channel found once is looked up for the tournament's other races.
  *   - --highlights: highlights / uploads (kept by Twitch) for older races, when
  *     the title fits one race of the tournament only.
  * Then on YouTube (with YOUTUBE_API_KEY), where restreamers archive their broadcasts
@@ -51,6 +54,8 @@ const LIVE_STATUSES = ['open', 'invitational', 'in_progress'];
 // A highlight is cut from the broadcast within days of the race
 const HIGHLIGHT_MAX_DELAY_MS = 14 * 24 * 3600 * 1000;
 const SAME_RACE_MS = 3600 * 1000;
+// Twitch lists a category's past broadcasts of the last week
+const CATEGORY_ARCHIVES_MS = 6 * 24 * 3600 * 1000;
 // Community channels restreaming in their language, looked up for every
 // tournament; the language comes from the broadcast
 const COMMUNITY_RESTREAMERS = ['randomizerbrasil'];
@@ -163,16 +168,22 @@ async function tournamentRestreamers(tournamentIds) {
   return new Map([...byTournament].map(([key, logins]) => [key, [...logins]]));
 }
 
+// Twitch category of each tournament's game (tournament id → game_id)
+async function gameCategories(tournaments) {
+  const gameIds = [...new Set([...tournaments.values()].map(c => c.tournament.game).filter(Boolean).map(String))];
+  const games = gameIds.length ? await Game.find({ _id: { $in: gameIds } }).select('integrations.twitch.categoryId').lean() : [];
+  const byGame = new Map(games.map(g => [String(g._id), g.integrations && g.integrations.twitch && g.integrations.twitch.categoryId]));
+  return new Map([...tournaments].map(([id, c]) => [id, byGame.get(String(c.tournament.game)) || null]).filter(([, category]) => category));
+}
+
 /**
  * Channels live now (login → stream) in the Twitch categories of running races: the
  * category of their game, and those their players stream in (a randomizer is often
  * streamed under the original game). Players' own channels are left in, the caller skips them.
  */
-async function liveInCategories(livePending, tournaments) {
+async function liveInCategories(livePending, categoryByTournament) {
   if (!livePending.length) return new Map();
-  const gameIds = [...new Set(livePending.map(p => p.context.tournament.game).filter(Boolean).map(String))];
-  const games = gameIds.length ? await Game.find({ _id: { $in: gameIds } }).select('integrations.twitch.categoryId').lean() : [];
-  const categories = new Set(games.map(g => g.integrations && g.integrations.twitch && g.integrations.twitch.categoryId).filter(Boolean));
+  const categories = new Set(livePending.map(p => categoryByTournament.get(String(p.race.tournamentId))).filter(Boolean));
   const playerLogins = [...new Set(livePending.flatMap(p => [...p.own]))];
   if (playerLogins.length) {
     for (const stream of (await twitchVods.getLiveStreams(playerLogins)).values()) {
@@ -232,10 +243,11 @@ async function findRestreams({ dryRun, days, recheck }, stats) {
     }
   }
 
+  const categoryByTournament = await gameCategories(tournaments);
   // Running races: any channel live in the game's Twitch categories may be restreaming them
   const live = new Map();
   try {
-    for (const [login, stream] of await liveInCategories(pending.filter(p => LIVE_STATUSES.includes(p.race.status)), tournaments)) {
+    for (const [login, stream] of await liveInCategories(pending.filter(p => LIVE_STATUSES.includes(p.race.status)), categoryByTournament)) {
       live.set(login, stream);
       for (const p of pending) {
         if (!LIVE_STATUSES.includes(p.race.status) || p.channels.includes(login)) continue;
@@ -249,8 +261,7 @@ async function findRestreams({ dryRun, days, recheck }, stats) {
   }
 
   const logins = [...new Set(pending.flatMap(p => p.channels))];
-  if (!logins.length) return;
-  const userIds = await twitchVods.getUserIds(logins);
+  const userIds = logins.length ? await twitchVods.getUserIds(logins) : new Map();
   const liveLogins = [...new Set(pending.filter(p => LIVE_STATUSES.includes(p.race.status)).flatMap(p => p.channels))].filter(login => !live.has(login));
   if (liveLogins.length) for (const [login, stream] of await twitchVods.getLiveStreams(liveLogins)) live.set(login, stream);
   const archivesByLogin = new Map();
@@ -260,8 +271,20 @@ async function findRestreams({ dryRun, days, recheck }, stats) {
     }
     return archivesByLogin.get(login);
   };
+  // Past broadcasts of the week in a category, read once per run
+  const archivesByCategory = new Map();
+  const getCategoryArchives = async category => {
+    if (!archivesByCategory.has(category)) {
+      archivesByCategory.set(category, await twitchVods.getCategoryArchives(category).catch(error => {
+        console.log(`   ❌ Rediffusions de la catégorie ${category} : ${error.message}`);
+        stats.errors++;
+        return [];
+      }));
+    }
+    return archivesByCategory.get(category);
+  };
 
-  for (const { race, context, players, channels } of pending) {
+  for (const { race, context, players, own, known, channels } of pending) {
     const isLive = LIVE_STATUSES.includes(race.status);
     let found = 0;
     for (const login of channels) {
@@ -288,6 +311,25 @@ async function findRestreams({ dryRun, days, recheck }, stats) {
       });
       found++;
       console.log(`   📺 ${race.url} : ${login}${isLive ? ' (live)' : ''} « ${title} »`);
+    }
+    // Finished without a restream VOD: a broadcast of the week in the game's category that
+    // covers the race start and names its players (a channel no one knew, missed live)
+    const category = categoryByTournament.get(String(race.tournamentId));
+    if (!isLive && !found && category && !(race.restreams || []).some(s => s.vodUrl)
+      && Date.now() - new Date(race.startedAt).getTime() < CATEGORY_ARCHIVES_MS) {
+      for (const video of await getCategoryArchives(category)) {
+        const login = String(video.user_login || '').toLowerCase();
+        if (!login || own.has(login) || known.has(login)) continue;
+        const archive = twitchVods.findArchive([video], race.startedAt);
+        if (!archive || !titleNamesRace(video.title, players.map(p => p.names)) || !fitsTournament(video.title, context.tournament)) continue;
+        setRestream(race, login, {
+          language: context.languageByLogin.get(login) || LANGUAGE_NAMES[video.language] || undefined,
+          title: video.title,
+          vodUrl: archive.url
+        });
+        found++;
+        console.log(`   📺 ${race.url} : ${login} (catégorie) « ${video.title} »`);
+      }
     }
     stats.races++;
     stats.restreams += found;

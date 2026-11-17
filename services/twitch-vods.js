@@ -195,4 +195,22 @@ async function getCategoryStreams(categoryId, maxPages = 3) {
   return streams;
 }
 
-module.exports = { getAppToken, twitchLogin, isYoutubeVideo, videoId, getUserIds, getArchives, getVideos, getExistingVideoIds, getKeptVideos, parseDuration, findArchive, findVod, getLiveStreams, getCategoryStreams };
+/**
+ * Past broadcasts of the last week in a Twitch category (its game_id), newest first,
+ * `maxPages` × 100 at most.
+ */
+async function getCategoryArchives(categoryId, maxPages = 5) {
+  const videos = [];
+  let cursor = null;
+  for (let page = 0; page < maxPages; page++) {
+    const params = new URLSearchParams({ game_id: String(categoryId), type: 'archive', period: 'week', sort: 'time', first: '100' });
+    if (cursor) params.append('after', cursor);
+    const { data, pagination } = await helix('/videos', params);
+    videos.push(...(data || []));
+    cursor = pagination && pagination.cursor;
+    if (!cursor || !(data || []).length) break;
+  }
+  return videos;
+}
+
+module.exports = { getAppToken, twitchLogin, isYoutubeVideo, videoId, getUserIds, getArchives, getVideos, getExistingVideoIds, getKeptVideos, parseDuration, findArchive, findVod, getLiveStreams, getCategoryStreams, getCategoryArchives };

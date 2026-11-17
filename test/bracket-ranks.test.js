@@ -178,3 +178,30 @@ test('provisional: a player renamed between the group stage and the bracket stay
   assert.equal(ranks.get('11'), undefined);
   assert.deepEqual([ranks.get('1'), ranks.get('3'), ranks.get('12')], [1, 1, 3]);
 });
+
+test('provisional: the group stage of a grouped bracket ranks its knocked out players by their record', () => {
+  // The first bracket is stored with its final stage type (single elimination): its group
+  // stage is still a round robin. C (3-1) lost only in round 1, D and E (0-3) later.
+  const g = (round, p1, p2, winner) => played(round, p1, p2, winner, { groupId: 9, phase: 'Groups' });
+  const ranks = computeChallongeProvisionalRanks({
+    tournamentType: 'single elimination',
+    challongeBrackets: [{ challongeId: 10 }, { challongeId: 20 }],
+    phases: [
+      { name: 'Groups', bracketType: 'single elimination', phaseOrder: 1 },
+      { name: 'Brackets', bracketType: 'single elimination', phaseOrder: 2 }
+    ],
+    participants: [
+      ...['A', 'B', 'C', 'D', 'E'].map((name, i) => ({ challongeId: i + 1, name, racetimeUserId: name })),
+      { challongeId: 11, name: 'A', racetimeUserId: 'A' },
+      { challongeId: 12, name: 'B', racetimeUserId: 'B' }
+    ],
+    matches: [
+      g(1, 1, 3, 1), g(1, 2, 5, 2),
+      g(2, 3, 4, 3), g(2, 1, 5, 1),
+      g(3, 3, 5, 3), g(3, 2, 4, 2),
+      g(4, 3, 2, 3), g(4, 1, 4, 1),
+      open(1, 11, 12, { phase: 'Brackets' })
+    ]
+  });
+  assert.deepEqual(['11', '12', '3', '4', '5'].map(id => ranks.get(id)), [1, 1, 3, 4, 4]);
+});

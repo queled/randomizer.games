@@ -106,6 +106,8 @@ function fillMissingFinalRanks({ tournamentData, participants, matches }) {
 }
 
 const GROUP_PHASE = 'Groups';
+// Name of the group stage of a grouped bracket's phase
+const GROUP_STAGE_SUFFIX = ' (groups)';
 
 /**
  * Ranks of a Challonge tournament still running, from the matches played so far, as start.gg
@@ -136,6 +138,11 @@ function computeChallongeProvisionalRanks({ tournamentType, challongeBrackets, p
   const single = id => (id && accountOf.has(id) ? entrantOfAccount.get(accountOf.get(id)) : id);
   const entrant = (id, name) => single(id != null && known.has(String(id)) ? String(id) : idByName.get(name) || null);
 
+  // Grouped brackets: a bracket's group stage is a round robin phase of its own, just before
+  // that bracket's final stage (its stored type is the final stage's, never the groups')
+  const grouped = Boolean(challongeBrackets?.length);
+  const groupPhaseOf = m => (grouped ? `${m.phase || ''}${GROUP_STAGE_SUFFIX}` : GROUP_PHASE);
+
   const shaped = (matches || []).map(m => {
     const player1 = entrant(m.player1Id, m.player1Name);
     const player2 = entrant(m.player2Id, m.player2Name);
@@ -143,7 +150,7 @@ function computeChallongeProvisionalRanks({ tournamentType, challongeBrackets, p
       ? (String(m.winnerId) === String(m.player1Id) ? player1 : String(m.winnerId) === String(m.player2Id) ? player2 : null)
       : null;
     return {
-      phase: m.groupId != null ? GROUP_PHASE : m.phase || '',
+      phase: m.groupId != null ? groupPhaseOf(m) : m.phase || '',
       round: m.round,
       winnerId: winner,
       player1: { startggEntrantId: player1 },
@@ -157,7 +164,37 @@ function computeChallongeProvisionalRanks({ tournamentType, challongeBrackets, p
     if (shaped.some(m => m.phase === GROUP_PHASE)) phases.push({ name: GROUP_PHASE, bracketType: 'round robin', phaseOrder: 1 });
     return computeProvisionalRanks(shaped, phases);
   }
-  return computeProvisionalRanks(...parallelBracketPhases(shaped, storedPhases || []));
+  const isGroupStage = name => name.endsWith(GROUP_STAGE_SUFFIX);
+  const allPhases = withGroupStages(storedPhases || [], shaped);
+  const groupMatches = shaped.filter(m => isGroupStage(m.phase));
+  const groupPhases = allPhases.filter(p => isGroupStage(p.name));
+  const bracketMatches = shaped.filter(m => !isGroupStage(m.phase));
+  const bracketPhases = allPhases.filter(p => !isGroupStage(p.name));
+  const [rankedMatches, rankedPhases] = parallelBracketPhases(bracketMatches, bracketPhases);
+  // Brackets following one another: each group stage just before its bracket
+  if (rankedMatches === bracketMatches && rankedPhases === bracketPhases) return computeProvisionalRanks(shaped, allPhases);
+  // Side by side brackets, reordered or ranked together: their group stages all come before them
+  return computeProvisionalRanks([...groupMatches, ...rankedMatches], [
+    ...groupPhases.map((p, i) => ({ ...p, phaseOrder: i + 1 })),
+    ...rankedPhases.map(p => ({ ...p, phaseOrder: (p.phaseOrder || 0) + groupPhases.length }))
+  ]);
+}
+
+/**
+ * The stored phases with a round robin phase before each one whose bracket played a group stage.
+ */
+function withGroupStages(phases, matches) {
+  const names = new Set(matches.map(m => m.phase).filter(name => name.endsWith(GROUP_STAGE_SUFFIX)));
+  const ordered = [...phases].sort((a, b) => (a.phaseOrder || 0) - (b.phaseOrder || 0));
+  const out = [];
+  for (const phase of ordered) {
+    const groups = `${phase.name}${GROUP_STAGE_SUFFIX}`;
+    if (names.delete(groups)) out.push({ name: groups, bracketType: 'round robin' });
+    out.push({ ...phase });
+  }
+  // Group stages of an undeclared phase come first
+  return [...[...names].map(name => ({ name, bracketType: 'round robin' })), ...out]
+    .map((p, i) => ({ ...p, phaseOrder: i + 1 }));
 }
 
 /**

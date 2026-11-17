@@ -623,7 +623,7 @@ class StartGGAPI {
    * @param {string} userId
    * @returns {Array} tournament previews
    */
-  async getUserAdminTournaments(userId, { perPage = 50, maxPages = 10 } = {}) {
+  async getUserAdminTournaments(userId, { perPage = 20, maxPages = 25 } = {}) {
     const q = `
       query UserAdminTournaments($id: ID!, $perPage: Int!, $page: Int!) {
         user(id: $id) {

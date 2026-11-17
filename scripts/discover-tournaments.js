@@ -1009,10 +1009,21 @@ async function discoverStartGGOrganizers({ games, dryRun }) {
   }
 
   const candidates = [];
+  const knownSlugs = new Set(slugs);
+  // Tournaments on the start.gg game of one of the organiser's stored tournaments, but not named like
+  // a randomizer (a "Crosskeys" event...): listed for review, never imported on their own
+  const toReview = [];
   let errors = 0;
   for (const owner of owners) {
     try {
-      candidates.push(...await withStartGGRetry(() => api.getUserAdminTournaments(owner)));
+      const listed = await withStartGGRetry(() => api.getUserAdminTournaments(owner));
+      candidates.push(...listed);
+      const gameIds = tournament => (tournament.events || []).map(event => String(event.game?.id || '')).filter(Boolean);
+      const storedGames = new Set(listed.filter(t => knownSlugs.has(t.slug)).flatMap(gameIds));
+      for (const tournament of listed) {
+        if (knownSlugs.has(tournament.slug) || RANDOMIZER_SIGNAL_PATTERN.test(buildTournamentSearchText(tournament))) continue;
+        if (gameIds(tournament).some(id => storedGames.has(id))) toReview.push(tournament);
+      }
     } catch (err) {
       console.error(`   ❌ Tournaments of an organiser: ${err.message}`);
       errors++;
@@ -1023,6 +1034,16 @@ async function discoverStartGGOrganizers({ games, dryRun }) {
 
   const stats = await discoverStartGG({ games, dryRun, candidates, discoveredVia: 'startgg-organizer' });
   stats.errors += errors;
+
+  const reviewed = new Set((await DiscoverySkip.find({ permanent: true, url: /^https:\/\/start\.gg\/tournament\// }).select('url').lean()).map(skip => StartGGAPI.extractSlugFromUrl(skip.url)));
+  const pending = [...new Map(toReview.filter(t => !reviewed.has(t.slug)).map(t => [t.slug, t])).values()];
+  if (pending.length) {
+    console.log(`\n   🔍 ${pending.length} tournament(s) on the game of a stored tournament of their organiser, not named like a randomizer (check, then --game <id> --startgg-slug <slug>):`);
+    for (const tournament of pending) {
+      const eventGames = [...new Set((tournament.events || []).map(event => event.game?.name).filter(Boolean))].join(', ');
+      console.log(`      • ${tournament.startDate ? tournament.startDate.toISOString().slice(0, 10) : '?'} ${tournament.name} [${eventGames}] – ${tournament.slug}`);
+    }
+  }
   return stats;
 }
 

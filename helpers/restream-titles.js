@@ -59,7 +59,20 @@ function countNamedPlayers(title, players) {
 function titleNamesRace(title, players) {
   if (NOT_A_MATCH.test(String(title || ''))) return false;
   const needed = Math.max(2, Math.ceil(players.length / 2));
-  return players.length >= 2 && countNamedPlayers(title, players) >= needed;
+  return players.length >= 2 && (countNamedPlayers(title, players) >= needed || matchupNamesDuel(title, players));
+}
+
+/**
+ * A 1v1 whose title gives a player a shortened name ("Abc" for "AbcV" or "abc_def"):
+ * each side of "A vs B" has to stand for a different one of the two players.
+ */
+function matchupNamesDuel(title, players) {
+  if (players.length !== 2) return false;
+  const matchup = parseMatchup(title);
+  if (!matchup) return false;
+  const [a, b] = matchup.sides;
+  const fits = (side, names) => sideNamesPlayer(side, names);
+  return (fits(a, players[0]) && fits(b, players[1])) || (fits(a, players[1]) && fits(b, players[0]));
 }
 
 /**

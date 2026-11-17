@@ -180,4 +180,19 @@ async function getLiveStreams(logins) {
   return streams;
 }
 
-module.exports = { getAppToken, twitchLogin, isYoutubeVideo, videoId, getUserIds, getArchives, getVideos, getExistingVideoIds, getKeptVideos, parseDuration, findArchive, findVod, getLiveStreams };
+/** Channels live right now in a Twitch category (its game_id), most viewed first, `maxPages` × 100 at most */
+async function getCategoryStreams(categoryId, maxPages = 3) {
+  const streams = [];
+  let cursor = null;
+  for (let page = 0; page < maxPages; page++) {
+    const params = new URLSearchParams({ game_id: String(categoryId), first: '100' });
+    if (cursor) params.append('after', cursor);
+    const { data, pagination } = await helix('/streams', params);
+    streams.push(...(data || []));
+    cursor = pagination && pagination.cursor;
+    if (!cursor || !(data || []).length) break;
+  }
+  return streams;
+}
+
+module.exports = { getAppToken, twitchLogin, isYoutubeVideo, videoId, getUserIds, getArchives, getVideos, getExistingVideoIds, getKeptVideos, parseDuration, findArchive, findVod, getLiveStreams, getCategoryStreams };

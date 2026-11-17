@@ -39,7 +39,7 @@ const mongoose = require('mongoose');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env'), quiet: true });
 
 const connectDB = require('../config/database');
-const { Race, Tournament, YoutubeChannel } = require('../models');
+const { Game, Race, Tournament, YoutubeChannel } = require('../models');
 const twitchVods = require('../services/twitch-vods');
 const youtube = require('../services/youtube');
 const { titleFitsEvent, titleNamesRace, LANGUAGE_NAMES } = require('../helpers/restream-titles');
@@ -142,6 +142,50 @@ function setRestream(race, login, fields) {
   return entry;
 }
 
+/**
+ * Twitch channels that restreamed a race of each tournament (tournament id → logins):
+ * looked up again for its other races, so a restream seen live once is found on later races
+ * too, and a race missed live gets its VOD all the same.
+ */
+async function tournamentRestreamers(tournamentIds) {
+  const byTournament = new Map();
+  if (!tournamentIds.length) return byTournament;
+  const races = await Race.find({ tournamentId: { $in: tournamentIds }, 'restreams.url': /twitch\.tv\//i })
+    .select('tournamentId restreams.url').lean();
+  for (const race of races) {
+    const key = String(race.tournamentId);
+    if (!byTournament.has(key)) byTournament.set(key, new Set());
+    race.restreams.forEach(st => {
+      const login = twitchVods.twitchLogin(st.url);
+      if (login) byTournament.get(key).add(login);
+    });
+  }
+  return new Map([...byTournament].map(([key, logins]) => [key, [...logins]]));
+}
+
+/**
+ * Channels live now (login → stream) in the Twitch categories of running races: the
+ * category of their game, and those their players stream in (a randomizer is often
+ * streamed under the original game). Players' own channels are left in, the caller skips them.
+ */
+async function liveInCategories(livePending, tournaments) {
+  if (!livePending.length) return new Map();
+  const gameIds = [...new Set(livePending.map(p => p.context.tournament.game).filter(Boolean).map(String))];
+  const games = gameIds.length ? await Game.find({ _id: { $in: gameIds } }).select('integrations.twitch.categoryId').lean() : [];
+  const categories = new Set(games.map(g => g.integrations && g.integrations.twitch && g.integrations.twitch.categoryId).filter(Boolean));
+  const playerLogins = [...new Set(livePending.flatMap(p => [...p.own]))];
+  if (playerLogins.length) {
+    for (const stream of (await twitchVods.getLiveStreams(playerLogins)).values()) {
+      if (stream.game_id) categories.add(String(stream.game_id));
+    }
+  }
+  const streams = new Map();
+  for (const category of categories) {
+    for (const stream of await twitchVods.getCategoryStreams(category)) streams.set(stream.user_login.toLowerCase(), stream);
+  }
+  return streams;
+}
+
 // Running races, and finished ones still within reach of their past broadcast
 async function findRestreams({ dryRun, days, recheck }, stats) {
   const now = Date.now();
@@ -160,8 +204,9 @@ async function findRestreams({ dryRun, days, recheck }, stats) {
   console.log(`\n🏁 ${races.length} race(s) de tournoi à chercher`);
 
   const tournaments = new Map((await Tournament.find({ _id: { $in: [...new Set(races.map(r => String(r.tournamentId)))] } })
-    .select('_id name midosHouse.site midosHouse.series midosHouse.event midosHouse.pastRestreams midosHouse.schedule').lean())
+    .select('_id name game midosHouse.site midosHouse.series midosHouse.event midosHouse.pastRestreams midosHouse.schedule').lean())
     .map(t => [String(t._id), { tournament: t, ...midosHouseRestreams(t) }]));
+  const restreamersByTournament = await tournamentRestreamers([...tournaments.keys()]);
 
   // Each race's players and the channels that may restream it
   const pending = [];
@@ -176,18 +221,38 @@ async function findRestreams({ dryRun, days, recheck }, stats) {
       const done = new Set((race.restreams || []).filter(s => s.vodUrl).map(s => twitchVods.twitchLogin(s.url)));
       const channels = [...new Set([...context.languageByLogin.keys(), ...COMMUNITY_RESTREAMERS, opener].filter(Boolean))]
         .filter(login => !own.has(login) && !known.has(login) && !done.has(login));
-      pending.push({ race, context, players, channels });
+      // Channels already found for this race (live, VOD still to link) or for another race of the tournament
+      const found = (race.restreams || []).map(st => twitchVods.twitchLogin(st.url)).filter(Boolean);
+      const extra = [...found, ...(restreamersByTournament.get(String(race.tournamentId)) || [])]
+        .filter(login => !own.has(login) && !known.has(login) && !done.has(login) && !channels.includes(login));
+      pending.push({ race, context, players, own, known, done, channels: [...channels, ...new Set(extra)] });
     } catch (error) {
       console.log(`   ❌ ${race.url} : ${error.message}`);
       stats.errors++;
     }
   }
 
+  // Running races: any channel live in the game's Twitch categories may be restreaming them
+  const live = new Map();
+  try {
+    for (const [login, stream] of await liveInCategories(pending.filter(p => LIVE_STATUSES.includes(p.race.status)), tournaments)) {
+      live.set(login, stream);
+      for (const p of pending) {
+        if (!LIVE_STATUSES.includes(p.race.status) || p.channels.includes(login)) continue;
+        if (p.own.has(login) || p.known.has(login) || p.done.has(login)) continue;
+        if (titleNamesRace(stream.title, p.players.map(pl => pl.names)) && fitsTournament(stream.title, p.context.tournament)) p.channels.push(login);
+      }
+    }
+  } catch (error) {
+    console.log(`   ❌ Catégories Twitch : ${error.message}`);
+    stats.errors++;
+  }
+
   const logins = [...new Set(pending.flatMap(p => p.channels))];
   if (!logins.length) return;
   const userIds = await twitchVods.getUserIds(logins);
-  const liveLogins = [...new Set(pending.filter(p => LIVE_STATUSES.includes(p.race.status)).flatMap(p => p.channels))];
-  const live = liveLogins.length ? await twitchVods.getLiveStreams(liveLogins) : new Map();
+  const liveLogins = [...new Set(pending.filter(p => LIVE_STATUSES.includes(p.race.status)).flatMap(p => p.channels))].filter(login => !live.has(login));
+  if (liveLogins.length) for (const [login, stream] of await twitchVods.getLiveStreams(liveLogins)) live.set(login, stream);
   const archivesByLogin = new Map();
   const getArchives = async login => {
     if (!archivesByLogin.has(login)) {

@@ -1159,8 +1159,8 @@ function displayParticipants(participants, matches = [], options = {}) {
         bracketStart = sortedIdx;
         const b = brackets[bi];
         const header = document.createElement('h3');
-        header.className = 'text-gold';
-        header.style.cssText = `font-size: 1.25rem; font-weight: bold; margin: ${sortedIdx ? '1.5rem' : '0'} 0 0.5rem;`;
+        header.className = 'section-title';
+        if (sortedIdx) header.style.marginTop = '1.5rem';
         header.textContent = b ? (b.label || phaseNames[bi] || b.name) : '—';
         container.appendChild(header);
       }
@@ -2109,9 +2109,8 @@ function displayMatches(matches, tournament, races = []) {
 
       // Phase header
       const phaseHeader = document.createElement('h3');
-      phaseHeader.style.cssText = phaseIdx > 0 ? 'font-size: 1.25rem; font-weight: bold; margin-top: 2.5rem; margin-bottom: 1rem; padding-top: 1.5rem; border-top: 2px solid #374151;' : 'font-size: 1.25rem; font-weight: bold; margin-top: 0.5rem; margin-bottom: 1rem;';
+      phaseHeader.className = phaseIdx > 0 ? 'section-title section-title--separated' : 'section-title';
       phaseHeader.textContent = translatePhaseName(phaseName);
-      phaseHeader.classList.add('text-gold');
       container.appendChild(phaseHeader);
 
       // Tie-breaks close the groups: on top of the phase, the list running newest first
@@ -2149,7 +2148,6 @@ function displayMatches(matches, tournament, races = []) {
           const roundHeader = document.createElement('h4');
           roundHeader.style.cssText = 'font-size: 1.1rem; font-weight: bold; margin-top: 1.25rem; margin-bottom: 0.75rem;';
           roundHeader.textContent = roundName;
-          roundHeader.classList.add('text-gold');
           container.appendChild(roundHeader);
 
           winnerByRound[round]
@@ -2207,9 +2205,8 @@ function displayMatches(matches, tournament, races = []) {
   if (isGroupsThenFinalSE) {
     // Finals first
     const finalsHeader = document.createElement('h3');
-    finalsHeader.style.cssText = 'font-size: 1.25rem; font-weight: bold; margin-top: 0.5rem; margin-bottom: 1rem;';
+    finalsHeader.className = 'section-title';
     finalsHeader.textContent = i18n.t('tournamentDetail.finalStage') || 'Finals — Single Elimination';
-    finalsHeader.classList.add('text-gold');
     container.appendChild(finalsHeader);
 
     // Group final stage matches by round and show titles (Finale, Demi-finales, ...)
@@ -2227,7 +2224,6 @@ function displayMatches(matches, tournament, races = []) {
       const roundTitle = document.createElement('h3');
       roundTitle.style.cssText = 'font-size: 1.1rem; font-weight: bold; margin-top: 1.25rem; margin-bottom: 0.75rem;';
       roundTitle.textContent = finalRoundLabels.label(round);
-      roundTitle.classList.add('text-gold');
       container.appendChild(roundTitle);
 
       byRound[round]
@@ -2243,9 +2239,8 @@ function displayMatches(matches, tournament, races = []) {
 
     // Groups after finals
     const gsHeader = document.createElement('h3');
-    gsHeader.style.cssText = 'font-size: 1.25rem; font-weight: bold; margin-top: 2rem; margin-bottom: 1rem;';
+    gsHeader.className = 'section-title section-title--separated';
     gsHeader.textContent = i18n.t('tournamentDetail.groupStage') || 'Group Stage';
-    gsHeader.classList.add('text-gold');
     container.appendChild(gsHeader);
 
     const groupIds = Array.from(new Set(groupStageMatches.map(m => m.groupId)))
@@ -2278,16 +2273,14 @@ function displayMatches(matches, tournament, races = []) {
   let renderGroupStage = null;
   if (hasGroupsThenFinal) {
     const finalsHeader = document.createElement('h3');
-    finalsHeader.style.cssText = 'font-size: 1.25rem; font-weight: bold; margin-top: 0.5rem; margin-bottom: 1rem;';
+    finalsHeader.className = 'section-title';
     finalsHeader.textContent = `${translatePhaseName('Finals')} — ${formatTournamentType('double elimination')}`;
-    finalsHeader.classList.add('text-gold');
     container.appendChild(finalsHeader);
 
     renderGroupStage = () => {
       const gsHeader = document.createElement('h3');
-      gsHeader.style.cssText = 'font-size: 1.25rem; font-weight: bold; margin-top: 2rem; margin-bottom: 1rem;';
+      gsHeader.className = 'section-title section-title--separated';
       gsHeader.textContent = i18n.t('tournamentDetail.groupStage') || 'Group Stage';
-      gsHeader.classList.add('text-gold');
       container.appendChild(gsHeader);
 
       const groupIds = Array.from(new Set(groupStageMatches.map(m => m.groupId)))
@@ -2347,7 +2340,6 @@ function displayMatches(matches, tournament, races = []) {
     roundHeader.style.cssText = 'font-size: 1.25rem; font-weight: bold; margin-top: 1.5rem; margin-bottom: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;';
     roundHeader.textContent = roundName;
     roundHeader.title = roundName;
-    roundHeader.classList.add('text-gold');
     container.appendChild(roundHeader);
 
     winnerByRound[round]
@@ -2377,10 +2369,9 @@ function displayMatches(matches, tournament, races = []) {
 
 function appendTiebreakMatches(container, races) {
   if (!races.length) return;
-  const header = document.createElement('h4');
-  header.style.cssText = 'font-size: 1.1rem; font-weight: bold; margin-top: 1.25rem; margin-bottom: 0.75rem;';
+  const header = document.createElement('h3');
+  header.className = 'section-title section-title--separated';
   header.textContent = i18n.t('tournamentDetail.tiebreaks') || 'Tie-breaks';
-  header.classList.add('text-gold');
   container.appendChild(header);
   races.forEach(r => container.appendChild(createTiebreakCard(r, { inMatchList: true })));
 }
@@ -3551,7 +3542,7 @@ function displayGroupStages(groupMatches, participants, races = []) {
     
     // Group title
     const title = document.createElement('h3');
-    title.style.cssText = 'font-size: 1.1rem; font-weight: bold; margin-bottom: 0.75rem; color: #fbbf24; text-align: center;';
+    title.className = 'card-title';
     title.textContent = `${i18n.t('tournamentDetail.group') || 'Group'} ${letter}`;
     groupContainer.appendChild(title);
     
@@ -3855,7 +3846,7 @@ function displayMultiPhaseBracket(matches, container, isDoubleElimination, phase
     
     // Phase title
     const phaseTitle = document.createElement('h3');
-    phaseTitle.style.cssText = 'font-size: 1.5rem; font-weight: bold; margin-bottom: 1.5rem; text-align: center; color: #fbbf24;';
+    phaseTitle.className = 'section-title';
     phaseTitle.textContent = translatePhaseName(phaseName);
     phaseSection.appendChild(phaseTitle);
     
@@ -3924,7 +3915,7 @@ function displayStandingsPhase(phaseMatches, container, isSwiss, phaseName = nul
 
     if (!isSwiss) {
       const title = document.createElement('h4');
-      title.style.cssText = 'font-size: 1.1rem; font-weight: bold; margin-bottom: 0.75rem; color: #fbbf24; text-align: center;';
+      title.className = 'card-title';
       // League divisions are named already ("Division 7B")
       title.textContent = /^division\s/i.test(key)
         ? key
@@ -4093,7 +4084,7 @@ function appendRemainingTiebreaks(container) {
   const section = document.createElement('div');
   section.className = 'phase-section';
   section.style.cssText = 'margin-top: 3rem; border-top: 2px solid #374151; padding-top: 2rem;';
-  section.innerHTML = `<h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1.5rem; text-align: center; color: #fbbf24;">${escHtml(i18n.t('tournamentDetail.tiebreaks') || 'Tie-breaks')}</h3>`;
+  section.innerHTML = `<h3 class="section-title">${escHtml(i18n.t('tournamentDetail.tiebreaks') || 'Tie-breaks')}</h3>`;
   const grid = document.createElement('div');
   grid.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;';
   remaining.forEach(r => {
@@ -4131,7 +4122,7 @@ function displaySpoilerGroupsOnly(groupMatches, participants, container) {
     
     // Group title
     const title = document.createElement('h3');
-    title.style.cssText = 'font-size: 1rem; font-weight: bold; margin-bottom: 0.75rem; color: #fbbf24; text-align: center;';
+    title.className = 'card-title';
     title.textContent = `${i18n.t('tournamentDetail.group') || 'Group'} ${letter}`;
     groupContainer.appendChild(title);
     
@@ -4295,10 +4286,10 @@ function displayDoubleEliminationBracket(matches, container, isPoolBracket = fal
     section.style.cssText = 'margin-bottom: 2rem;';
 
     const title = document.createElement('h3');
-    title.style.cssText = 'font-size: 1.25rem; font-weight: bold; margin-bottom: 1rem; text-align: center;';
+    title.className = 'section-title';
     title.textContent = `${icon} ${i18n.t(`tournamentDetail.${titleKey}`) || fallback}`;
-    if (side === 'winner') title.classList.add('text-gold');
-    else title.style.color = '#ef4444';
+    // Losers side in red, like its rounds
+    if (side !== 'winner') title.style.color = '#ef4444';
     section.appendChild(title);
 
     const bracketDiv = document.createElement('div');
@@ -4437,7 +4428,6 @@ function createRoundColumn(matches, round, width, label, roundIndex = 0, isGrand
   header.style.cssText = 'font-weight: bold; margin-bottom: 0.75rem; text-align: center; padding: 0.4rem; background-color: #374151; border-radius: 0.25rem; font-size: 0.75rem;';
   
   header.textContent = label;
-  header.classList.add('text-gold');
   
   roundColumn.appendChild(header);
   

@@ -2382,6 +2382,30 @@ body.spoiler-mode .spoiler-text::before {
     margin-bottom: 1rem;
 }
 
+/* Sections inside a tab (phases, tie-breaks, winners / losers side) */
+.section-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #fbbf24;
+    text-align: left;
+    margin: 0 0 1rem;
+}
+
+.section-title--separated {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid #374151;
+}
+
+/* Title of a card (group, division) */
+.card-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #fbbf24;
+    text-align: center;
+    margin: 0 0 0.75rem;
+}
+
 .bracket-wrapper {
     width: 100%;
     overflow-x: auto;
@@ -2649,6 +2673,10 @@ body.spoiler-mode .spoiler-text::before {
 
     .tab-content-title {
         font-size: 1.25rem;
+    }
+
+    .section-title {
+        font-size: 1.1rem;
     }
 
     .challonge-btn {

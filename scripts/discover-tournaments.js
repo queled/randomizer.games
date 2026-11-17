@@ -1019,7 +1019,7 @@ async function discoverStartGGOrganizers({ games, dryRun }) {
       const listed = await withStartGGRetry(() => api.getUserAdminTournaments(owner));
       candidates.push(...listed);
       const gameIds = tournament => (tournament.events || []).map(event => String(event.game?.id || '')).filter(Boolean);
-      // A game counts when the stored tournaments are a third of the organiser's ones on it: a
+      // A game counts when the stored tournaments are a quarter of the organiser's ones on it: a
       // randomizer organiser on that game, not a club running weeklies of the base game
       const perGame = new Map();
       for (const tournament of listed) {
@@ -1030,7 +1030,7 @@ async function discoverStartGGOrganizers({ games, dryRun }) {
           perGame.set(id, count);
         }
       }
-      const storedGames = new Set([...perGame].filter(([, count]) => count.stored && count.stored * 3 >= count.all).map(([id]) => id));
+      const storedGames = new Set([...perGame].filter(([, count]) => count.stored && count.stored * 4 >= count.all).map(([id]) => id));
       for (const tournament of listed) {
         if (knownSlugs.has(tournament.slug) || RANDOMIZER_SIGNAL_PATTERN.test(buildTournamentSearchText(tournament))) continue;
         if (gameIds(tournament).some(id => storedGames.has(id))) toReview.push(tournament);

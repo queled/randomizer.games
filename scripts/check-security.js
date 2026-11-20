@@ -143,9 +143,11 @@ console.log('\n🧱 Vérification du JavaScript inline (compatibilité CSP)...')
   }
 }
 
-// 8. Vérifier que node_modules/.bin/pm2 existe (si PM2 est requis)
+// 8. Vérifier que PM2 est installé (globalement, comme sur le VPS). On cherche
+// la commande sans la lancer : « pm2 -v » démarrerait un démon PM2.
 console.log('\n🚀 Vérification PM2 (optionnel)...');
-if (fs.existsSync('node_modules/.bin/pm2')) {
+const pm2Found = require('child_process').spawnSync('sh', ['-c', 'command -v pm2'], { stdio: 'ignore' }).status === 0;
+if (pm2Found) {
   console.log('✅ PM2 installé (recommandé pour production)');
 } else {
   console.warn('⚠️  ATTENTION: PM2 non installé (recommandé pour production)');

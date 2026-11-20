@@ -13,6 +13,7 @@ const { isThinGame, isThinPlayer } = require('./helpers/thin-pages');
 const { getGamesWithStatsCached } = require('./routes/games');
 const { getPlayersList } = require('./routes/players');
 const { COVERS_DIR, coverIds, coverPublicUrl } = require('./helpers/game-covers');
+const { securityTxt } = require('./helpers/security-txt');
 const { 
   apiLimiter, 
   mediaLimiter,
@@ -280,6 +281,14 @@ app.get(['/sitemap.xml', '/sitemaps/:file.xml'], async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+});
+
+// Where to report a vulnerability (RFC 9116). express.static skips dot folders
+// such as /.well-known, hence a route of its own
+app.get(['/.well-known/security.txt', '/security.txt'], (req, res) => {
+  res.type('text/plain; charset=utf-8');
+  res.set('Cache-Control', 'public, max-age=86400');
+  res.send(securityTxt());
 });
 
 // Serve static files. Images rarely change, so browsers may reuse them for a

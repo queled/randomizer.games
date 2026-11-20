@@ -29,3 +29,7 @@ jobs:
 
       - name: Tests
         run: npm test
+        env:
+          # Pas de .env ici : le mode développement permet de charger les routes
+          # (jeton admin par défaut) sans base ni secret
+          NODE_ENV: development

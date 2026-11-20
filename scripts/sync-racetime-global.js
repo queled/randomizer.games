@@ -120,6 +120,8 @@ async function syncActiveRaces() {
           finishedAt: e.finished_at || e.finishedAt,
           place: e.place,
           placeOrdinal: e.place_ordinal || e.placeOrdinal,
+          // Raw entrants have a team object, formatted ones its name
+          team: e.team?.name || e.team || undefined,
           comment: e.comment
         }));
         
@@ -233,6 +235,8 @@ async function finalizeCompletedRaces(activeUrls) {
           finishedAt: e.finished_at || e.finishedAt,
           place: e.place,
           placeOrdinal: e.place_ordinal || e.placeOrdinal,
+          // Raw entrants have a team object, formatted ones its name
+          team: e.team?.name || e.team || undefined,
           comment: e.comment
         }));
         
@@ -278,6 +282,8 @@ async function upsertPastRace(raceData, gameSlug, stats, goalFilters) {
       finishedAt: e.finished_at || e.finishedAt,
       place: e.place,
       placeOrdinal: e.place_ordinal || e.placeOrdinal,
+      // Raw entrants have a team object, formatted ones its name
+      team: e.team?.name || e.team || undefined,
       comment: e.comment
     }));
 

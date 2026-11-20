@@ -121,6 +121,8 @@ async function syncGameRaces(gameId, maxPages = 100) {
                   finishedAt: e.finishedAt,
                   place: e.place,
                   placeOrdinal: e.placeOrdinal,
+                  // Raw entrants have a team object, formatted ones its name
+                  team: e.team?.name || e.team || undefined,
                   comment: e.comment
                 })),
                 source: {
@@ -234,6 +236,8 @@ async function syncDirectFromRacetime(slug, maxPages) {
                   finishedAt: e.finishedAt,
                   place: e.place,
                   placeOrdinal: e.placeOrdinal,
+                  // Raw entrants have a team object, formatted ones its name
+                  team: e.team?.name || e.team || undefined,
                   comment: e.comment
                 })),
                 source: {

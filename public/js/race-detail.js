@@ -577,6 +577,8 @@
 
     const html = sorted.map((e, idx) => {
       const name = escapeHtml(e.userName || unknown);
+      // Team of a team race, after the name
+      const team = e.team ? `<span style="color:#9ca3af;margin-left:0.35rem;white-space:nowrap;">(${escapeHtml(e.team)})</span>` : '';
       // An account has the page of its id: several accounts can share a name
       const playerLink = e.userId ? `/players/${encodeURIComponent(e.userId)}`
         : e.userName ? `/players/name/${encodeURIComponent(e.userName)}` : '#';
@@ -586,7 +588,7 @@
         return `
           <div style="display:flex;align-items:center;padding:1rem;background:#2d3748;margin-bottom:0.5rem;border-radius:0.375rem;transition:background 0.2s;" data-hover-style="background:#4a5568" data-rest-style="background:#2d3748">
             <div style="flex:1;display:flex;align-items:center;min-width:0;">
-              <a href="${playerLink}" style="color:#fff;text-decoration:none;">${name}</a>
+              <a href="${playerLink}" style="color:#fff;text-decoration:none;">${name}</a>${team}
               ${renderTwitchLink(e)}${renderVodLink(e)}
             </div>
           </div>
@@ -610,7 +612,7 @@
           <div class="spoiler-block" style="display:flex;align-items:center;gap:0.375rem;padding:1rem;background:${bgColor};border-left:3px solid ${borderColor};margin-bottom:0.5rem;border-radius:0.375rem;transition:background 0.2s;" data-hover-style="background:#4a5568" data-rest-style="background:${bgColor}">
             <div style="width:60px;min-width:60px;text-align:center;font-size:1.25rem;color:#fbbf24;">${rank}</div>
             <div style="flex:1;display:flex;align-items:center;min-width:0;padding-left:0.2rem;">
-              <a href="${playerLink}" style="color:${nameColor};font-weight:${isWinner ? '600' : '400'};text-decoration:none;">${name}</a>
+              <a href="${playerLink}" style="color:${nameColor};font-weight:${isWinner ? '600' : '400'};text-decoration:none;">${name}</a>${team}
               ${renderTwitchLink(e)}${renderVodLink(e)}
             </div>
             <div style="color:${timeColor};font-weight:600;font-family:monospace;font-size:1rem;">${timeStr}</div>

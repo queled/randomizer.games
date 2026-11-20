@@ -178,6 +178,8 @@ class RacetimeAPI {
       finishedAt: entrant.finished_at,
       place: entrant.place,
       placeOrdinal: entrant.place_ordinal,
+      // Team of a team race (co-op, multiworld): the race stays individual
+      team: entrant.team?.name,
       score: entrant.score,
       scoreChange: entrant.score_change,
       comment: entrant.comment
@@ -199,6 +201,7 @@ class RacetimeAPI {
       finishedAt: entrant.finishedAt,
       place: entrant.place,
       placeOrdinal: entrant.placeOrdinal,
+      team: entrant.team,
       comment: entrant.comment
     }));
   }

@@ -488,6 +488,8 @@ const raceSchema = new mongoose.Schema({
     finishedAt: Date,
     place: Number,
     placeOrdinal: String,
+    // Team of a team race (co-op, multiworld); the race stays individual
+    team: String,
     comment: String
   }],
   // optional normalized source metadata

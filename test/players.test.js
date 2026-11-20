@@ -25,17 +25,18 @@ test('alias index resolves aliases to the canonical name', () => {
 });
 
 test('player races filter: names never match a racetime account', () => {
-  const { filter, isPlayerEntrant } = buildPlayerRacesFilter({ userId: 'u1', names: ['Alpha', 'Alf.'] });
+  const { filter, isPlayerEntrant } = buildPlayerRacesFilter({ userId: 'u1', names: ['Alpha', 'alpha', 'Alf.'] });
   assert.equal(filter.$or.length, 2);
+  // Exact spellings: the name index is read directly
+  assert.deepEqual(filter.$or[1].entrants.$elemMatch.userName, { $in: ['Alpha', 'alpha', 'Alf.'] });
 
   assert.equal(isPlayerEntrant({ userId: 'u1', userName: 'Renamed' }), true);
   // Another account of the same name is someone else
-  assert.equal(isPlayerEntrant({ userId: 'u2', userName: 'ALPHA' }), false);
+  assert.equal(isPlayerEntrant({ userId: 'u2', userName: 'Alpha' }), false);
   assert.equal(isPlayerEntrant({ userId: 'u3', userName: 'Alf.' }), false);
-  // Entrants without account (SpeedRunsLive) under one of the names
+  // Entrants without account (SpeedRunsLive) under one of the spellings
   assert.equal(isPlayerEntrant({ userName: 'alpha' }), true);
-  assert.equal(isPlayerEntrant({ userName: 'alf.', userId: '' }), true);
-  // The dot is literal, not a regex wildcard
+  assert.equal(isPlayerEntrant({ userName: 'Alf.', userId: '' }), true);
   assert.equal(isPlayerEntrant({ userName: 'Alfx' }), false);
   assert.equal(isPlayerEntrant({ userName: 'Alphabet' }), false);
 });
@@ -43,7 +44,7 @@ test('player races filter: names never match a racetime account', () => {
 test('player races filter: a player without account goes by name', () => {
   const { filter, isPlayerEntrant } = buildPlayerRacesFilter({ names: ['Solo', 'Solo', null] });
   assert.equal(filter.$or.length, 1);
-  assert.equal(isPlayerEntrant({ userName: 'solo' }), true);
+  assert.equal(isPlayerEntrant({ userName: 'Solo' }), true);
   assert.equal(isPlayerEntrant({ userId: 'u9', userName: 'Solo' }), false);
   assert.equal(isPlayerEntrant({ userName: 'Solos' }), false);
 });

@@ -119,10 +119,11 @@ async function findPlayerByName({ Player, Race, name, select, populate }) {
   return pool[best];
 }
 
-// Names raced under without account (SpeedRunsLive history, manual imports), normalized:
-// a player's name is looked for in the races only when some race has it so, since a
-// case-insensitive name lookup reads the whole name index (~200 ms) where an account
-// lookup takes a few ms. A superset (every entrant of those races) is enough.
+// Names raced under without account (SpeedRunsLive history, manual imports), as spelled
+// in the races and grouped by normalized name. A player's name is looked for in the
+// races only when some race has it so, and under those exact spellings: an exact name
+// is a lookup in the name index (a few ms), where a case-insensitive pattern reads the
+// whole index (~300 ms, several seconds when crawlers and syncs run at once).
 const ACCOUNTLESS_NAMES_TTL = 60 * 60 * 1000;
 const accountlessNames = { expires: 0, promise: null };
 
@@ -130,7 +131,16 @@ function loadAccountlessNames(Race) {
   if (accountlessNames.promise && accountlessNames.expires > Date.now()) return accountlessNames.promise;
   accountlessNames.expires = Date.now() + ACCOUNTLESS_NAMES_TTL;
   accountlessNames.promise = Race.distinct('entrants.userName', { entrants: { $elemMatch: { userId: { $in: [null, ''] } } } })
-    .then(names => new Set(names.map(normalizePlayerName).filter(Boolean)))
+    .then(names => {
+      const byKey = new Map();
+      for (const name of names) {
+        const key = normalizePlayerName(name);
+        if (!key) continue;
+        if (!byKey.has(key)) byKey.set(key, []);
+        byKey.get(key).push(name);
+      }
+      return byKey;
+    })
     .catch(error => {
       accountlessNames.expires = 0;
       throw error;
@@ -138,11 +148,22 @@ function loadAccountlessNames(Race) {
   return accountlessNames.promise;
 }
 
-/** The names among `names` that some race entrant without account has. */
+/**
+ * The spellings, as raced by some entrant without account, of the names in `names`:
+ * the same name whatever its case. A superset (every entrant of those races) is
+ * enough, buildPlayerRacesFilter keeps the entrants without account.
+ */
 async function namesRacedWithoutAccount(Race, names) {
   if (!names.length) return [];
-  const known = await loadAccountlessNames(Race);
-  return names.filter(name => known.has(normalizePlayerName(name)));
+  const byKey = await loadAccountlessNames(Race);
+  const spellings = new Set();
+  for (const name of names) {
+    const lower = String(name).toLowerCase();
+    for (const spelling of byKey.get(normalizePlayerName(name)) || []) {
+      if (String(spelling).toLowerCase() === lower) spellings.add(spelling);
+    }
+  }
+  return [...spellings];
 }
 
 module.exports = { accountKey, nameKey, buildPlayerIdentity, loadOwnNames, findPlayerByName, namesRacedWithoutAccount };

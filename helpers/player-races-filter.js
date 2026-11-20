@@ -7,19 +7,21 @@ const exactNameRegex = name => new RegExp('^' + escapeRegex(name) + '$', 'i');
 /**
  * Race filter for a player (helpers/player-identity.js): their racetime userId (stable
  * across renames), and the entrants without account (SpeedRunsLive history, manual
- * imports) under one of their own names. An entrant with an account is that account's
- * only: a name never captures another racetime account of the same name.
+ * imports) under one of `names`, the exact spellings those entrants have
+ * (namesRacedWithoutAccount). An entrant with an account is that account's only: a
+ * name never captures another racetime account of the same name.
  */
 function buildPlayerRacesFilter({ userId, names = [] }) {
   const or = [];
-  const nameRegexes = [...new Set(names.filter(Boolean))].map(exactNameRegex);
+  const spellings = [...new Set(names.filter(Boolean).map(String))];
   if (userId) or.push({ 'entrants.userId': userId });
-  if (nameRegexes.length) {
-    or.push({ entrants: { $elemMatch: { userName: { $in: nameRegexes }, userId: { $in: [null, ''] } } } });
+  if (spellings.length) {
+    or.push({ entrants: { $elemMatch: { userName: { $in: spellings }, userId: { $in: [null, ''] } } } });
   }
 
+  const nameSet = new Set(spellings);
   const isPlayerEntrant = e => (userId && e.userId === userId)
-    || (!e.userId && nameRegexes.some(re => re.test(e.userName || '')));
+    || (!e.userId && nameSet.has(e.userName));
 
   return { filter: or.length ? { $or: or } : { _id: null }, isPlayerEntrant };
 }

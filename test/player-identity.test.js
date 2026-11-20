@@ -154,11 +154,12 @@ test('compare: a participant linked to another account is not the player', () =>
   assert.equal(participantOwner({ name: 'Pixel' }, players), 'player1');
 });
 
-test('names raced without account: only those some accountless entrant has', async () => {
+test('names raced without account: their spellings in the races, whatever the case', async () => {
   const { namesRacedWithoutAccount } = require('../helpers/player-identity');
   let calls = 0;
-  const Race = { distinct: async () => { calls++; return ['CometSRL', 'Élan', null]; } };
-  assert.deepEqual(await namesRacedWithoutAccount(Race, ['Comet', 'cometsrl', 'elan']), ['cometsrl', 'elan']);
+  const Race = { distinct: async () => { calls++; return ['CometSRL', 'cometsrl', 'Élan', 'Nova', null]; } };
+  // Both cases of a name; an accent is another name, as in a case-insensitive search
+  assert.deepEqual(await namesRacedWithoutAccount(Race, ['Comet', 'COMETSRL', 'elan', 'Nova']), ['CometSRL', 'cometsrl', 'Nova']);
   assert.deepEqual(await namesRacedWithoutAccount(Race, []), []);
   // Read once, then from the cache
   await namesRacedWithoutAccount(Race, ['Comet']);

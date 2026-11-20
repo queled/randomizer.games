@@ -5,7 +5,6 @@ const { securityTxt } = require('../helpers/security-txt');
 test('security.txt: the required fields are there', () => {
   const text = securityTxt(new Date('2030-03-15T12:34:56Z'));
   assert.match(text, /^Contact: https:\/\/github\.com\/.+\/security\/advisories\/new$/m);
-  assert.match(text, /^Contact: mailto:/m);
   assert.match(text, /^Canonical: https:\/\/randomizer\.games\/\.well-known\/security\.txt$/m);
   assert.ok(text.endsWith('\n'));
 });

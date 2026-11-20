@@ -4,7 +4,7 @@
 
 Please **do not open a public issue** for security problems.
 
-Report them privately through GitHub: **Security → Report a vulnerability** on this repository (private vulnerability reporting), or by email to contact@randomizer.games.
+Report them privately through GitHub: **Security → Report a vulnerability** on this repository (private vulnerability reporting).
 
 Include what you found, how to reproduce it, and the impact you expect. You will get an answer as soon as possible; please give a reasonable delay to fix the issue before disclosing it.
 

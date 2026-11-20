@@ -1,4 +1,4 @@
-// security.txt (RFC 9116): where to report a vulnerability, same channels as
+// security.txt (RFC 9116): where to report a vulnerability, same channel as
 // SECURITY.md. The file must say when it expires; the date is set a year after
 // each request so that it never goes stale.
 const SITE = 'https://randomizer.games';
@@ -10,7 +10,6 @@ const securityTxt = (now = new Date()) => {
   expires.setUTCHours(0, 0, 0, 0);
   return [
     `Contact: ${REPO}/security/advisories/new`,
-    'Contact: mailto:contact@randomizer.games',
     `Expires: ${expires.toISOString()}`,
     'Preferred-Languages: en, fr',
     `Policy: ${REPO}/security/policy`,

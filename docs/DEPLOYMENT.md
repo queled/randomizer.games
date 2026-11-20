@@ -6,7 +6,7 @@ Mise en ligne de randomizer.games sur un VPS Hetzner Cloud (Ubuntu 24.04) qui h�
 
 | Composant | Rôle |
 |-----------|------|
-| MongoDB 8.0 | La base, joignable uniquement depuis le serveur lui-même (`127.0.0.1`) |
+| MongoDB 9.0 | La base, joignable uniquement depuis le serveur lui-même (`127.0.0.1`) |
 | Node.js + PM2 | L'application (`server.js`), une seule instance |
 | Nginx + Certbot | HTTPS et proxy vers l'application |
 | crontab | Les synchronisations (racetime, tournois, rando-list, Archipelago) et les sauvegardes, via [`scripts/cron/run-job.sh`](../scripts/cron/run-job.sh) |
@@ -67,10 +67,10 @@ Dépôt officiel de MongoDB (le paquet `mongodb` d'Ubuntu est obsolète). `mongo
 
 ```bash
 sudo apt install -y gnupg curl
-curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc \
-  | sudo gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg --dearmor
-echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/8.0 multiverse" \
-  | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
+curl -fsSL https://pgp.mongodb.com/server-9.asc \
+  | sudo gpg -o /usr/share/keyrings/mongodb-server-9.gpg --dearmor
+echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-9.gpg ] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/9.0 multiverse" \
+  | sudo tee /etc/apt/sources.list.d/mongodb-org-9.0.list
 sudo apt update
 sudo apt install -y mongodb-org
 sudo systemctl enable --now mongod
@@ -343,6 +343,11 @@ Chez Namecheap : **Domain List → Manage → Advanced DNS**. Supprimer les enre
 | A | `www` | IPv4 du VPS |
 | AAAA | `@` | IPv6 du VPS |
 | AAAA | `www` | IPv6 du VPS |
+| CAA | `@` | `0 issue "letsencrypt.org"` : seul Let's Encrypt peut délivrer un certificat pour le domaine |
+| TXT | `@` | `v=spf1 -all` : le domaine n'envoie aucun e-mail |
+| TXT | `_dmarc` | `v=DMARC1; p=reject; adkim=s; aspf=s;` : les e-mails se faisant passer pour le domaine sont rejetés |
+
+Le domaine ne reçoit pas d'e-mail non plus (**Mail Settings → No Email Service**) : les signalements de sécurité passent par GitHub (voir [SECURITY.md](../SECURITY.md)). Garder le TXT `google-site-verification` de la Search Console.
 
 Une fois le DNS propagé (`dig randomizer.games`) :
 
@@ -450,7 +455,18 @@ pm2 restart randomizer
 
 Les tâches planifiées prennent le nouveau code à leur prochaine exécution.
 
-Les histoires et les jaquettes des jeux modifiées depuis l'admin, ainsi que les jaquettes des jeux créés par la tâche `archipelago` (`fetch-covers.js`), sont écrites directement dans `public/data/history/` et `public/assets/covers/` sur le serveur. La tâche `publish-assets` les commite et les pousse sur `main` tous les jours à 6h45 UTC, après la tâche `archipelago` (clé de déploiement en écriture). Son commit est construit sur `origin/main` même si le serveur n'est pas encore déployé (le code du serveur ne bouge pas), et les fichiers publiés restent indexés sur le serveur pour que le prochain `git pull --ff-only` passe. Elle remet la publication au lendemain seulement si `main` a lui-même modifié des jaquettes ou histoires pas encore déployées, et échoue si le serveur a des commits absents de `main`. Le bouton « Lancer » de l'onglet Synchronisation passe par `scripts/cron/run-job.sh`, comme la crontab : mêmes journaux, même verrou.
+Les histoires et les jaquettes des jeux modifiées depuis l'admin, ainsi que les jaquettes des jeux créés par la tâche `archipelago` (`fetch-covers.js`), sont écrites directement dans `public/data/history/` et `public/assets/covers/` sur le serveur. La tâche `publish-assets` les commite et les pousse sur `main` tous les jours à 6h45 UTC, après la tâche `archipelago` (clé de déploiement en écriture). Une règle GitHub (ruleset « Protect main ») interdit sur `main` le force-push et la suppression : la clé peut ajouter des commits, pas réécrire l'historique. Son commit est construit sur `origin/main` même si le serveur n'est pas encore déployé (le code du serveur ne bouge pas), et les fichiers publiés restent indexés sur le serveur pour que le prochain `git pull --ff-only` passe. Elle remet la publication au lendemain seulement si `main` a lui-même modifié des jaquettes ou histoires pas encore déployées, et échoue si le serveur a des commits absents de `main`. Le bouton « Lancer » de l'onglet Synchronisation passe par `scripts/cron/run-job.sh`, comme la crontab : mêmes journaux, même verrou.
+
+## Changer de version majeure de MongoDB
+
+Les mises à jour automatiques suivent une seule branche (`mongodb-org/9.0`). Pour la suivante, comme de 8.0 à 9.0 le 2026-11-20 :
+
+1. Lire les notes de compatibilité, et tester l'application contre la nouvelle version avec une copie de la base (restaurer une sauvegarde dans deux `mongod` locaux, ancienne et nouvelle version, et comparer les réponses des mêmes URL).
+2. Vérifier que le FCV est celui de la version actuelle : `db.adminCommand({ getParameter: 1, featureCompatibilityVersion: 1 })`.
+3. Arrêter la crontab (`sudo systemctl stop cron`), attendre la fin des tâches en cours, lancer la tâche `backup` et garder une copie de l'archive hors du serveur.
+4. `pm2 stop randomizer`, `sudo systemctl stop mongod`, remplacer la clé et le dépôt apt (étape 2), `sudo apt install mongodb-org`, `sudo systemctl start mongod`.
+5. `pm2 start randomizer`, `sudo systemctl start cron`, vérifier le site et les journaux des tâches.
+6. Après quelques jours sans problème, passer le FCV à la nouvelle version : `db.adminCommand({ setFeatureCompatibilityVersion: "9.0", confirm: true })`. Avant cette étape, on peut revenir à l'ancienne version en réinstallant ses paquets ; après, non.
 
 ## Checklist
 

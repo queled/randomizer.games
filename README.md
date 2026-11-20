@@ -33,7 +33,7 @@ Something missing or wrong, like a tournament, a player under two names, or a ra
 
 ## Running it locally
 
-You need **Node.js 20+** and a **MongoDB** database (local or [Atlas](https://www.mongodb.com/atlas)).
+You need **Node.js 24+** and a **MongoDB** database (local or [Atlas](https://www.mongodb.com/atlas)).
 
 ```bash
 git clone https://github.com/queled/randomizer.games.git

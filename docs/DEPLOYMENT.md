@@ -53,8 +53,8 @@ echo '/swapfile none swap sw 0 0' >> /etc/fstab
 Puis, en tant que `randomizer` :
 
 ```bash
-# Node.js LTS (22.x)
-curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+# Node.js LTS (26.x)
+curl -fsSL https://deb.nodesource.com/setup_26.x | sudo -E bash -
 sudo apt install -y nodejs nginx git
 
 # PM2 (gestionnaire de processus)

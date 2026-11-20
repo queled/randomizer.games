@@ -314,7 +314,7 @@ router.put('/games/:id', requireAdmin, async (req, res, next) => {
     const game = await Game.findOneAndUpdate(
       { id: req.params.id },
       { $set: flattenObject(updateData) },
-      { new: true, runValidators: true }
+      { returnDocument: 'after', runValidators: true }
     );
     
     if (!game) {
@@ -418,7 +418,7 @@ router.patch('/games/:id', requireAdmin, async (req, res, next) => {
     const game = await Game.findOneAndUpdate(
       { id: req.params.id },
       { $set: updates },
-      { new: true, runValidators: true }
+      { returnDocument: 'after', runValidators: true }
     );
     
     if (!game) {
@@ -450,7 +450,7 @@ router.delete('/games/:id', requireAdmin, async (req, res, next) => {
       const game = await Game.findOneAndUpdate(
         { id: req.params.id },
         { $set: { enabled: false } },
-        { new: true }
+        { returnDocument: 'after' }
       );
       if (!game) {
         return res.status(404).json({ error: 'Game not found' });
@@ -584,7 +584,7 @@ router.put('/games/:id/resources', requireAdmin, async (req, res, next) => {
     const game = await Game.findOneAndUpdate(
       { id: req.params.id },
       { $set: { resources } },
-      { new: true }
+      { returnDocument: 'after' }
     );
     
     if (!game) {
@@ -621,7 +621,7 @@ router.patch('/games/:id/resources/official-site', requireAdmin, async (req, res
           }
         } 
       },
-      { new: true }
+      { returnDocument: 'after' }
     );
     
     if (!game) {
@@ -658,7 +658,7 @@ router.post('/games/:id/resources/trackers', requireAdmin, async (req, res, next
           }
         } 
       },
-      { new: true }
+      { returnDocument: 'after' }
     );
     
     if (!game) {
@@ -727,7 +727,7 @@ router.post('/games/:id/resources/guides', requireAdmin, async (req, res, next) 
           }
         } 
       },
-      { new: true }
+      { returnDocument: 'after' }
     );
     
     if (!game) {
@@ -785,7 +785,7 @@ router.patch('/games/:id/integrations/racetime', requireAdmin, async (req, res, 
     const game = await Game.findOneAndUpdate(
       { id: req.params.id },
       { $set: updates },
-      { new: true }
+      { returnDocument: 'after' }
     );
     
     if (!game) {
@@ -816,7 +816,7 @@ router.patch('/games/:id/integrations/rando-list', requireAdmin, async (req, res
     const game = await Game.findOneAndUpdate(
       { id: req.params.id },
       { $set: updates },
-      { new: true }
+      { returnDocument: 'after' }
     );
     
     if (!game) {
@@ -1248,7 +1248,7 @@ router.put('/players/:id', requireAdmin, async (req, res, next) => {
     const player = await Player.findOneAndUpdate(
       { userId: req.params.id },
       { $set: update },
-      { new: true }
+      { returnDocument: 'after' }
     );
     
     if (!player) {
@@ -2342,7 +2342,7 @@ router.post('/tournaments-mgmt/import', requireAdmin, async (req, res, next) => 
       const tournament = await Tournament.findOneAndUpdate(
         { startggSlug: detected.slug },
         { $set: tournamentPayload },
-        { upsert: true, new: true }
+        { upsert: true, returnDocument: 'after' }
       );
 
       return res.json({ success: true, tournament: { _id: tournament._id, name: tournament.name }, created: !tournament.isNew });
@@ -2381,7 +2381,7 @@ router.post('/tournaments-mgmt/import', requireAdmin, async (req, res, next) => 
       const tournament = await Tournament.findOneAndUpdate(
         { challongeId: tournamentData.id },
         { $set: tournamentPayload },
-        { upsert: true, new: true }
+        { upsert: true, returnDocument: 'after' }
       );
 
       // Upsert matches
@@ -2555,7 +2555,7 @@ router.patch('/multiworld-races/:id', requireAdmin, validateObjectId('id'), asyn
       update = { $set: { multiworld: true, games: ids, gamesSource: 'manual', gamesCheckedAt: new Date() } };
     }
 
-    const updated = await Race.findByIdAndUpdate(race._id, update, { new: true, timestamps: false })
+    const updated = await Race.findByIdAndUpdate(race._id, update, { returnDocument: 'after', timestamps: false })
       .select('games gamesSource').lean();
     invalidateGamesWithStats();
     res.json({ success: true, games: updated.games || [], gamesSource: updated.gamesSource });

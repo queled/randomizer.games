@@ -101,7 +101,7 @@ async function main(){
   const tournament = await Tournament.findOneAndUpdate(
     { challongeId: tournamentData.id },
     { $set: tournamentPayload, $currentDate: { updatedAt: true } },
-    { upsert: true, new: true }
+    { upsert: true, returnDocument: 'after' }
   );
 
   console.log('Tournament saved:', tournament._id.toString(), tournament.name);

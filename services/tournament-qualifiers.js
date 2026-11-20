@@ -262,7 +262,7 @@ async function importRacetimeRace({ raceUrl, Race, Player }) {
         source: { type: 'racetime', externalId: raceData.name, url: `https://racetime.gg${url}`, importedAt: new Date() }
       }
     },
-    { upsert: true, new: true }
+    { upsert: true, returnDocument: 'after' }
   );
 
   for (const entrant of raceData.entrants || []) {

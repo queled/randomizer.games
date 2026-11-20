@@ -143,7 +143,7 @@ async function saveGroupedChallongeBracket({ Tournament, Match, Race }, { group,
   };
 
   const tournament = parent
-    ? await Tournament.findByIdAndUpdate(parent._id, { $set: groupPayload, $currentDate: { updatedAt: true } }, { new: true })
+    ? await Tournament.findByIdAndUpdate(parent._id, { $set: groupPayload, $currentDate: { updatedAt: true } }, { returnDocument: 'after' })
     : await Tournament.create(groupPayload);
 
   // A bracket imported on its own before being grouped: hand its races over, then drop it

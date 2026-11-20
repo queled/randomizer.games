@@ -566,7 +566,7 @@ router.patch('/:id/resources', requireAdmin, async (req, res, next) => {
     const game = await Game.findOneAndUpdate(
       { id: req.params.id },
       { $set: updateData },
-      { new: true }
+      { returnDocument: 'after' }
     );
     
     if (!game) {

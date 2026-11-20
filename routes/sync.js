@@ -90,7 +90,7 @@ router.post('/tournament/:challongeId', async (req, res, next) => {
     const tournament = await Tournament.findOneAndUpdate(
       { challongeId: tournamentData.id },
       { $set: tournamentPayload, $currentDate: { updatedAt: true } },
-      { upsert: true, new: true }
+      { upsert: true, returnDocument: 'after' }
     );
 
     // Create a mapping for both regular participant IDs and group player IDs
@@ -170,7 +170,7 @@ router.post('/races/:tournamentId', validateObjectId('tournamentId'), async (req
           tournamentId: tournament._id,
           source: { type: 'racetime', externalId: externalId, url: raceData.url || null, importedAt: new Date() }
         }, $currentDate: { updatedAt: true } },
-        { upsert: true, new: true }
+        { upsert: true, returnDocument: 'after' }
       );
 
       // Update player stats
@@ -246,7 +246,7 @@ router.post('/race', async (req, res, next) => {
         ...raceData,
         tournamentId: tournament ? tournament._id : undefined
       }, $currentDate: { updatedAt: true } },
-      { upsert: true, new: true }
+      { upsert: true, returnDocument: 'after' }
     );
 
     // If tournament provided, try to link to a Match similar to bulk logic

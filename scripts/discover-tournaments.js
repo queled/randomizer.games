@@ -776,7 +776,7 @@ async function importStartGGTournament(api, tournamentPreview, { game = null, di
     await Tournament.findOneAndUpdate(
       { startggId: event.id },
       { $set: tournamentPayload, $currentDate: { updatedAt: true } },
-      { upsert: true, new: true }
+      { upsert: true, returnDocument: 'after' }
     );
 
     saved++;
@@ -1264,7 +1264,7 @@ async function importChallongeTournament(tournamentPreview, gameSlug = null, { g
   const tournament = await Tournament.findOneAndUpdate(
     { challongeId: tournamentData.id },
     { $set: tournamentPayload, $currentDate: { updatedAt: true } },
-    { upsert: true, new: true }
+    { upsert: true, returnDocument: 'after' }
   );
 
   // Build participant map

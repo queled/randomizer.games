@@ -7,4 +7,12 @@ Disallow: /api/admin/
 Disallow: /api/sync/
 Disallow: /api/search
 
+# AI crawlers that fetch tens of thousands of pages a day and bring no visitors.
+# Link previews (facebookexternalhit) and search engines are not concerned.
+User-agent: meta-externalagent
+Disallow: /
+
+User-agent: ElevenlabsCrawler
+Disallow: /
+
 Sitemap: https://randomizer.games/sitemap.xml

@@ -1164,7 +1164,7 @@ function displayParticipants(participants, matches = [], options = {}) {
         bracketStart = sortedIdx;
         const b = brackets[bi];
         const header = document.createElement('h3');
-        header.className = 'section-title';
+        header.className = 'tab-section-title';
         if (sortedIdx) header.style.marginTop = '1.5rem';
         header.textContent = b ? (b.label || phaseNames[bi] || b.name) : '—';
         container.appendChild(header);
@@ -2154,7 +2154,7 @@ function displayMatches(matches, tournament, races = []) {
 
       // Phase header
       const phaseHeader = document.createElement('h3');
-      phaseHeader.className = phaseIdx > 0 ? 'section-title section-title--separated' : 'section-title';
+      phaseHeader.className = phaseIdx > 0 ? 'tab-section-title tab-section-title--separated' : 'tab-section-title';
       phaseHeader.textContent = translatePhaseName(phaseName);
       container.appendChild(phaseHeader);
 
@@ -2250,7 +2250,7 @@ function displayMatches(matches, tournament, races = []) {
   if (isGroupsThenFinalSE) {
     // Finals first
     const finalsHeader = document.createElement('h3');
-    finalsHeader.className = 'section-title';
+    finalsHeader.className = 'tab-section-title';
     finalsHeader.textContent = i18n.t('tournamentDetail.finalStage') || 'Finals — Single Elimination';
     container.appendChild(finalsHeader);
 
@@ -2284,7 +2284,7 @@ function displayMatches(matches, tournament, races = []) {
 
     // Groups after finals
     const gsHeader = document.createElement('h3');
-    gsHeader.className = 'section-title section-title--separated';
+    gsHeader.className = 'tab-section-title tab-section-title--separated';
     gsHeader.textContent = i18n.t('tournamentDetail.groupStage') || 'Group Stage';
     container.appendChild(gsHeader);
 
@@ -2318,13 +2318,13 @@ function displayMatches(matches, tournament, races = []) {
   let renderGroupStage = null;
   if (hasGroupsThenFinal) {
     const finalsHeader = document.createElement('h3');
-    finalsHeader.className = 'section-title';
+    finalsHeader.className = 'tab-section-title';
     finalsHeader.textContent = `${translatePhaseName('Finals')} — ${formatTournamentType('double elimination')}`;
     container.appendChild(finalsHeader);
 
     renderGroupStage = () => {
       const gsHeader = document.createElement('h3');
-      gsHeader.className = 'section-title section-title--separated';
+      gsHeader.className = 'tab-section-title tab-section-title--separated';
       gsHeader.textContent = i18n.t('tournamentDetail.groupStage') || 'Group Stage';
       container.appendChild(gsHeader);
 
@@ -2415,7 +2415,7 @@ function displayMatches(matches, tournament, races = []) {
 function appendTiebreakMatches(container, races) {
   if (!races.length) return;
   const header = document.createElement('h3');
-  header.className = 'section-title section-title--separated';
+  header.className = 'tab-section-title tab-section-title--separated';
   header.textContent = i18n.t('tournamentDetail.tiebreaks') || 'Tie-breaks';
   container.appendChild(header);
   races.forEach(r => container.appendChild(createTiebreakCard(r, { inMatchList: true })));
@@ -3891,7 +3891,7 @@ function displayMultiPhaseBracket(matches, container, isDoubleElimination, phase
     
     // Phase title
     const phaseTitle = document.createElement('h3');
-    phaseTitle.className = 'section-title';
+    phaseTitle.className = 'tab-section-title';
     phaseTitle.textContent = translatePhaseName(phaseName);
     phaseSection.appendChild(phaseTitle);
     
@@ -4129,7 +4129,7 @@ function appendRemainingTiebreaks(container) {
   const section = document.createElement('div');
   section.className = 'phase-section';
   section.style.cssText = 'margin-top: 3rem; border-top: 2px solid #374151; padding-top: 2rem;';
-  section.innerHTML = `<h3 class="section-title">${escHtml(i18n.t('tournamentDetail.tiebreaks') || 'Tie-breaks')}</h3>`;
+  section.innerHTML = `<h3 class="tab-section-title">${escHtml(i18n.t('tournamentDetail.tiebreaks') || 'Tie-breaks')}</h3>`;
   const grid = document.createElement('div');
   grid.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;';
   remaining.forEach(r => {
@@ -4331,7 +4331,7 @@ function displayDoubleEliminationBracket(matches, container, isPoolBracket = fal
     section.style.cssText = 'margin-bottom: 2rem;';
 
     const title = document.createElement('h3');
-    title.className = 'section-title';
+    title.className = 'tab-section-title';
     title.textContent = `${icon} ${i18n.t(`tournamentDetail.${titleKey}`) || fallback}`;
     // Losers side in red, like its rounds
     if (side !== 'winner') title.style.color = '#ef4444';

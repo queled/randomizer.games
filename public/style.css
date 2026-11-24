@@ -2383,7 +2383,7 @@ body.spoiler-mode .spoiler-text::before {
 }
 
 /* Sections inside a tab (phases, tie-breaks, winners / losers side) */
-.section-title {
+.tab-section-title {
     font-size: 1.25rem;
     font-weight: bold;
     color: #fbbf24;
@@ -2391,7 +2391,7 @@ body.spoiler-mode .spoiler-text::before {
     margin: 0 0 1rem;
 }
 
-.section-title--separated {
+.tab-section-title--separated {
     margin-top: 2.5rem;
     padding-top: 1.5rem;
     border-top: 2px solid #374151;
@@ -2675,7 +2675,7 @@ body.spoiler-mode .spoiler-text::before {
         font-size: 1.25rem;
     }
 
-    .section-title {
+    .tab-section-title {
         font-size: 1.1rem;
     }
 

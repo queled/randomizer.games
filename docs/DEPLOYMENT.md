@@ -356,7 +356,17 @@ sudo apt install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d randomizer.games -d www.randomizer.games
 ```
 
-Certbot ajoute la configuration HTTPS et programme le renouvellement automatique. Le cookie de session admin n'est envoyé qu'en HTTPS en production : l'admin ne fonctionne qu'une fois le certificat en place.
+Certbot ajoute la configuration HTTPS et programme le renouvellement automatique. Dans le bloc `listen 80` qu'il crée, faire pointer la redirection de `www` directement sur le domaine principal, pour une seule redirection au lieu de deux :
+
+```nginx
+    if ($host = www.randomizer.games) {
+        return 301 https://randomizer.games$request_uri;
+    }
+```
+
+Activer aussi **DNSSEC** chez Namecheap (Advanced DNS → DNSSEC) : Namecheap signe la zone et transmet la clé au registre `.games`.
+
+Le cookie de session admin n'est envoyé qu'en HTTPS en production : l'admin ne fonctionne qu'une fois le certificat en place.
 
 ## 9. Durcir le serveur
 

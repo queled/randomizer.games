@@ -306,6 +306,28 @@ server {
 }
 ```
 
+Deux robots d'IA (`meta-externalagent`, `ElevenlabsCrawler`) lisaient des dizaines de milliers de pages par jour sans amener de visiteurs. `public/robots.txt` leur interdit le site, et comme Meta ne lit pas ce fichier, `/etc/nginx/conf.d/ai-crawlers.conf` leur répond 403 partout sauf sur `/robots.txt` :
+
+```nginx
+map $http_user_agent $ai_crawler {
+    default 0;
+    ~*meta-externalagent 1;
+    ~*ElevenlabsCrawler 1;
+}
+map "$ai_crawler:$uri" $block_ai_crawler {
+    default 0;
+    "~^1:(?!/robots\.txt$)" 1;
+}
+```
+
+avec, dans le bloc `server` HTTPS, juste après `server_tokens off;` :
+
+```nginx
+    if ($block_ai_crawler) {
+        return 403;
+    }
+```
+
 `/etc/nginx/conf.d/ratelimit.conf` limite le débit des pages rendues par l'application (chacune interroge MongoDB). Les fichiers statiques ne sont pas comptés et l'API garde ses propres limites (`middleware/security.js`) :
 
 ```nginx

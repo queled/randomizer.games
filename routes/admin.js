@@ -14,7 +14,7 @@ const {
   requireAdmin 
 } = require('../middleware/admin-auth');
 const { adminLoginLimiter } = require('../middleware/security');
-const { Game, Tournament, Match, Race, Player } = require('../models');
+const { Game, Tournament, Match, Race, Player, CrawlerDay } = require('../models');
 const { normalizePlayerName } = require('../helpers/player-aliases');
 const { syncParticipantAccounts } = require('../helpers/participant-accounts');
 const { fillMissingFinalRanks } = require('../helpers/bracket-ranks');
@@ -33,6 +33,7 @@ const { MULTIWORLD_CATEGORIES } = require('../helpers/multiworld-races');
 const { validateObjectId } = require('../middleware/security');
 const audience = require('../services/audience');
 const searchConsole = require('../services/search-console');
+const crawlLog = require('../services/crawl-log');
 
 function escapeRegex(value) {
   return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -913,6 +914,19 @@ router.get('/audience', requireAdmin, async (req, res, next) => {
   try {
     const days = [1, 7, 30, 90, 365].includes(Number(req.query.days)) ? Number(req.query.days) : 30;
     res.json(await audience.summarize(days));
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET /api/admin/crawlers?days=30
+ * What the verified search engine crawlers fetched each day, for the Audience tab
+ */
+router.get('/crawlers', requireAdmin, async (req, res, next) => {
+  try {
+    const days = [7, 30, 90, 365].includes(Number(req.query.days)) ? Number(req.query.days) : Number(req.query.days) === 1 ? 7 : 30;
+    res.json(await crawlLog.summarize(CrawlerDay, days));
   } catch (error) {
     next(error);
   }

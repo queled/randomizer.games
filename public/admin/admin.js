@@ -4075,18 +4075,41 @@ const admin = {
   // Google Search Console, under the audience: an answer for another period is dropped
   async loadSearchConsole(days) {
     const container = document.getElementById('audience-search');
-    try {
-      const response = await fetch(`/api/admin/search-console?days=${encodeURIComponent(days)}`, {
-        headers: { 'Authorization': `Bearer ${this.token}` }
-      });
-      if (!response.ok) throw new Error();
-      const data = await response.json();
-      if (document.getElementById('audience-days').value !== days) return;
-      container.innerHTML = this.renderSearchConsole(data);
-    } catch (error) {
-      console.error('Error loading Search Console:', error);
-      container.innerHTML = '<div class="card"><h3 class="card-title">🔎 Recherche Google</h3><p class="text-muted">Search Console ne répond pas pour l’instant.</p></div>';
-    }
+    const get = async (path) => {
+      const response = await fetch(`${path}?days=${encodeURIComponent(days)}`, { headers: { 'Authorization': `Bearer ${this.token}` } });
+      if (!response.ok) throw new Error(`${path}: HTTP ${response.status}`);
+      return response.json();
+    };
+    // The crawl shows without Google, and Google without the crawl
+    const [search, crawl] = await Promise.allSettled([get('/api/admin/search-console'), get('/api/admin/crawlers')]);
+    if (document.getElementById('audience-days').value !== days) return;
+    if (search.status === 'rejected') console.error('Error loading Search Console:', search.reason);
+    if (crawl.status === 'rejected') console.error('Error loading crawlers:', crawl.reason);
+    container.innerHTML = (search.status === 'fulfilled'
+      ? this.renderSearchConsole(search.value)
+      : '<div class="card"><h3 class="card-title">🔎 Recherche Google</h3><p class="text-muted">Search Console ne répond pas pour l’instant.</p></div>')
+      + (crawl.status === 'fulfilled' ? this.renderCrawlDays(crawl.value, search.value?.daily || []) : '');
+  },
+
+  // Day by day: what the verified crawlers fetched, and what Google then showed
+  renderCrawlDays(crawl, searchDays) {
+    const byDay = new Map();
+    const row = day => byDay.get(day) || byDay.set(day, { day, google: null, bing: null, search: null }).get(day);
+    for (const r of crawl.daily) if (r.engine === 'google' || r.engine === 'bing') row(r.day)[r.engine] = r;
+    for (const r of searchDays) if (r.impressions || r.clicks) row(r.key).search = r;
+    const days = [...byDay.values()].sort((a, b) => b.day.localeCompare(a.day));
+    const dateLabel = day => new Date(`${day}T12:00:00Z`).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
+    const n = value => value ? this.formatNumber(value) : '<span class="text-muted">0</span>';
+    const pages = r => r ? `${n(r.pages)}${r.pages ? ` <span class="text-muted">(${this.formatNumber(r.distinct)} diff.)</span>` : ''}` : n(0);
+    return `
+      <div class="card mt-4">
+        <h3 class="card-title">🤖 Exploration et résultats, jour par jour</h3>
+        ${days.length ? `<div class="table-container search-table-wrap"><table class="table search-table">
+          <thead><tr><th>Jour</th><th class="table-number">Google : pages lues</th><th class="table-number"><span class="th-full">Google : rendus (API)</span><span class="th-short" title="Appels à l’API pendant le rendu des pages">API</span></th><th class="table-number">Bing : pages lues</th><th class="table-number"><span class="th-full">Affichages</span><span class="th-short" title="Affichages">Affich.</span></th><th class="table-number">Clics</th></tr></thead>
+          <tbody>${days.map(d => `<tr><td>${dateLabel(d.day)}</td><td class="table-number">${pages(d.google)}</td><td class="table-number">${n(d.google?.api)}</td><td class="table-number">${pages(d.bing)}</td><td class="table-number">${n(d.search?.impressions)}</td><td class="table-number">${n(d.search?.clicks)}</td></tr>`).join('')}</tbody>
+        </table></div>` : '<p class="text-muted">Aucun passage de robot vérifié sur la période</p>'}
+        <p class="text-muted audience-note">Seuls comptent les robots dont l’adresse appartient vraiment à Google ou Bing : beaucoup de scanners se font passer pour Googlebot. Une page n’apparaît dans les résultats qu’une fois lue, puis indexée. Jours de Google (heure du Pacifique) ; comptage depuis le 24 novembre 2026.</p>
+      </div>`;
   },
 
   renderSearchConsole(data) {

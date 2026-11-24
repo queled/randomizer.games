@@ -711,6 +711,22 @@ const pageViewSchema = new mongoose.Schema({
 pageViewSchema.index({ at: 1 }, { expireAfterSeconds: 395 * 24 * 3600 });
 pageViewSchema.index({ source: 1, at: 1 });
 
+// Search engine crawlers (services/crawl-log.js): what each verified crawler fetched
+// per day, in Google's days (Pacific time) to sit beside the Search Console figures
+const crawlerDaySchema = new mongoose.Schema({
+  day: { type: String, required: true },
+  engine: { type: String, required: true },
+  // Site pages, API calls made while rendering them, everything else (files, sitemap)
+  pages: { type: Number, default: 0 },
+  api: { type: Number, default: 0 },
+  other: { type: Number, default: 0 },
+  // The distinct pages fetched that day
+  paths: [String],
+  at: { type: Date, required: true }
+}, { versionKey: false });
+crawlerDaySchema.index({ day: 1, engine: 1 }, { unique: true });
+crawlerDaySchema.index({ at: 1 }, { expireAfterSeconds: 400 * 24 * 3600 });
+
 // The random salt of each day's visitor ids, dropped once the day is over
 const audienceSaltSchema = new mongoose.Schema({
   day: { type: String, required: true, unique: true },
@@ -728,6 +744,7 @@ module.exports = {
   MarathonRun: mongoose.model('MarathonRun', marathonRunSchema),
   AdminSession: mongoose.model('AdminSession', adminSessionSchema),
   PageView: mongoose.model('PageView', pageViewSchema),
+  CrawlerDay: mongoose.model('CrawlerDay', crawlerDaySchema),
   AudienceSalt: mongoose.model('AudienceSalt', audienceSaltSchema),
   YoutubeChannel: mongoose.model('YoutubeChannel', youtubeChannelSchema),
   YoutubeSearch: mongoose.model('YoutubeSearch', youtubeSearchSchema)

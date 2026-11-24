@@ -6,7 +6,8 @@ const cookieParser = require('cookie-parser');
 const fs = require('fs');
 const path = require('path');
 const connectDB = require('./config/database');
-const { Tournament, Race } = require('./models');
+const { Tournament, Race, CrawlerDay } = require('./models');
+const { crawlLogger } = require('./services/crawl-log');
 const seoPages = require('./services/seo-pages');
 const { parseSitePath, legacyTarget } = require('./helpers/site-routes');
 const { isThinGame, isThinPlayer } = require('./helpers/thin-pages');
@@ -171,6 +172,9 @@ app.use((req, res, next) => {
   if (req.get('host') === SITE_HOST && req.protocol === 'https') return next();
   res.redirect(301, `${SITE_URL}${req.originalUrl}`);
 });
+
+// What the verified search engine crawlers fetch each day (admin Audience tab)
+app.use(crawlLogger(CrawlerDay));
 
 // Security middleware
 app.use(helmet());

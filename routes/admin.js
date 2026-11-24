@@ -14,7 +14,7 @@ const {
   requireAdmin 
 } = require('../middleware/admin-auth');
 const { adminLoginLimiter } = require('../middleware/security');
-const { Game, Tournament, Match, Race, Player, CrawlerDay } = require('../models');
+const { Game, Tournament, Match, Race, Player, CrawlerDay, PageView } = require('../models');
 const { normalizePlayerName } = require('../helpers/player-aliases');
 const { syncParticipantAccounts } = require('../helpers/participant-accounts');
 const { fillMissingFinalRanks } = require('../helpers/bracket-ranks');
@@ -926,7 +926,7 @@ router.get('/audience', requireAdmin, async (req, res, next) => {
 router.get('/crawlers', requireAdmin, async (req, res, next) => {
   try {
     const days = [7, 30, 90, 365].includes(Number(req.query.days)) ? Number(req.query.days) : Number(req.query.days) === 1 ? 7 : 30;
-    res.json(await crawlLog.summarize(CrawlerDay, days));
+    res.json(await crawlLog.summarize({ CrawlerDay, PageView }, days));
   } catch (error) {
     next(error);
   }

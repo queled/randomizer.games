@@ -51,15 +51,41 @@ function crawlLogger(CrawlerDay) {
   };
 }
 
-/** Each day of the last `days` days with a crawl: pages, distinct pages, API calls. */
-async function summarize(CrawlerDay, days, now = new Date()) {
+// A visitor sent by Google Search (google.com, google.fr…), as the audience records it
+const GOOGLE_REFERRER = /^google\.[a-z.]+$/;
+
+/**
+ * The last `days` days, in Google's days: what each verified crawler fetched, the
+ * distinct pages over the whole period, and the visits that came from Google
+ * (PageView, the site's own audience), to set beside Search Console.
+ */
+async function summarize({ CrawlerDay, PageView }, days, now = new Date()) {
   const from = dayOf(new Date(now.getTime() - (days - 1) * 86400000));
-  const rows = await CrawlerDay.aggregate([
-    { $match: { day: { $gte: from } } },
-    { $project: { _id: 0, day: 1, engine: 1, pages: 1, api: 1, other: 1, distinct: { $size: { $ifNull: ['$paths', []] } } } },
-    { $sort: { day: 1, engine: 1 } }
+  const [daily, totals, visits] = await Promise.all([
+    CrawlerDay.aggregate([
+      { $match: { day: { $gte: from } } },
+      { $project: { _id: 0, day: 1, engine: 1, pages: 1, api: 1, other: 1, distinct: { $size: { $ifNull: ['$paths', []] } } } },
+      { $sort: { day: 1, engine: 1 } }
+    ]),
+    CrawlerDay.aggregate([
+      { $match: { day: { $gte: from } } },
+      { $project: { engine: 1, pages: 1, paths: { $ifNull: ['$paths', []] } } },
+      { $group: { _id: '$engine', pages: { $sum: '$pages' }, paths: { $push: '$paths' } } },
+      { $project: { _id: 0, engine: '$_id', pages: 1, distinct: { $size: { $reduce: { input: '$paths', initialValue: [], in: { $setUnion: ['$$value', '$$this'] } } } } } }
+    ]),
+    // One visit per visitor and day, as in the audience; days a little over the
+    // period are dropped by the day filter
+    PageView.aggregate([
+      { $match: { at: { $gte: new Date(now.getTime() - (days + 1) * 86400000) }, referrer: GOOGLE_REFERRER } },
+      { $group: { _id: { day: { $dateToString: { date: '$at', format: '%Y-%m-%d', timezone: 'America/Los_Angeles' } }, visitor: '$visitor' } } },
+      { $group: { _id: '$_id.day', visits: { $sum: 1 } } },
+      { $match: { _id: { $gte: from } } },
+      { $project: { _id: 0, day: '$_id', visits: 1 } },
+      { $sort: { day: 1 } }
+    ])
   ]);
-  return { from, to: dayOf(now), daily: rows };
+  const first = await CrawlerDay.findOne().sort({ day: 1 }).select('day').lean();
+  return { from, to: dayOf(now), since: first?.day || null, daily, totals, googleVisits: visits };
 }
 
 module.exports = { engineOf, kindOf, dayOf, recordCrawl, crawlLogger, summarize };

@@ -347,9 +347,10 @@ const admin = {
     });
   },
 
-  // On phones, table rows turn into cards: each cell carries its column title
+  // On phones, table rows turn into cards: each cell carries its column title.
+  // Small tables of figures (table-plain) stay tables, more readable in a column.
   labelTableCells() {
-    document.querySelectorAll('table.table').forEach(table => {
+    document.querySelectorAll('table.table:not(.table-plain)').forEach(table => {
       const headers = [...table.querySelectorAll('thead th')].map(th => th.textContent.trim());
       if (!headers.length) return;
       table.classList.add('table-cards');
@@ -357,7 +358,11 @@ const admin = {
         let col = 0;
         for (const cell of row.cells) {
           const label = headers[col];
-          if (label && cell.colSpan === 1) cell.dataset.label = label;
+          if (label && cell.colSpan === 1) {
+            cell.dataset.label = label;
+            // A title on two lines needs a taller cell, or it runs into the next one
+            cell.classList.toggle('td-label-long', label.length > 14);
+          }
           col += cell.colSpan;
         }
       });
@@ -3987,6 +3992,7 @@ const admin = {
     const { current, previous } = data;
     if (!data.firstViewAt) {
       container.innerHTML = '<p class="text-muted">Aucune visite enregistrée pour l’instant.</p>';
+      document.getElementById('audience-details').innerHTML = '';
       return;
     }
     const PAGE_LABELS = {
@@ -4031,9 +4037,13 @@ const admin = {
         <h3 class="card-title">📅 Visites par jour</h3>
         ${this.renderAudienceDays(data)}
         <p class="text-muted audience-note">Mesure sans cookie depuis le ${new Date(data.firstViewAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}. Une visite = un visiteur sur une journée ; robots et navigation de l’admin exclus.</p>
-      </div>
+      </div>`;
 
-      <div class="stats-columns mt-4">
+    document.getElementById('audience-details').innerHTML = `
+      <div class="section-header mt-4">
+        <h2 class="section-title">👥 Détail des visites</h2>
+      </div>
+      <div class="stats-columns">
         <div class="card">
           <h3 class="card-title">🔝 Pages les plus visitées</h3>
           ${data.pages.length ? this.renderBars(data.pages.map(r => ({
@@ -4061,18 +4071,23 @@ const admin = {
     const chart = container.querySelector('.audience-days');
     const tooltip = container.querySelector('.audience-tooltip');
     if (!chart) return;
-    chart.addEventListener('mouseover', (event) => {
+    // Hovered with a mouse, tapped on a phone
+    const show = (event) => {
       const bar = event.target.closest('.audience-day');
       if (!bar) return;
       tooltip.innerHTML = `<strong>${dateLabel(bar.dataset.day)}</strong><br>${this.formatNumber(bar.dataset.visits)} visites · ${this.formatNumber(bar.dataset.views)} pages vues`;
       tooltip.hidden = false;
+      const half = tooltip.offsetWidth / 2;
       const left = bar.offsetLeft + bar.offsetWidth / 2;
-      tooltip.style.left = `${Math.min(Math.max(left, 80), chart.offsetWidth - 80)}px`;
-    });
+      tooltip.style.left = `${Math.min(Math.max(left, half), chart.offsetWidth - half)}px`;
+    };
+    chart.addEventListener('mouseover', show);
+    chart.addEventListener('click', show);
     chart.addEventListener('mouseleave', () => { tooltip.hidden = true; });
   },
 
-  // Google Search Console, under the audience: an answer for another period is dropped
+  // Google under the audience, loaded apart: Search Console and the crawl log each
+  // show without the other, and an answer for another period is dropped
   async loadSearchConsole(days) {
     const container = document.getElementById('audience-search');
     const get = async (path) => {
@@ -4080,99 +4095,123 @@ const admin = {
       if (!response.ok) throw new Error(`${path}: HTTP ${response.status}`);
       return response.json();
     };
-    // The crawl shows without Google, and Google without the crawl
     const [search, crawl] = await Promise.allSettled([get('/api/admin/search-console'), get('/api/admin/crawlers')]);
     if (document.getElementById('audience-days').value !== days) return;
     if (search.status === 'rejected') console.error('Error loading Search Console:', search.reason);
     if (crawl.status === 'rejected') console.error('Error loading crawlers:', crawl.reason);
-    container.innerHTML = (search.status === 'fulfilled'
-      ? this.renderSearchConsole(search.value)
-      : '<div class="card"><h3 class="card-title">🔎 Recherche Google</h3><p class="text-muted">Search Console ne répond pas pour l’instant.</p></div>')
-      + (crawl.status === 'fulfilled' ? this.renderCrawlDays(crawl.value, search.value?.daily || []) : '');
+    container.innerHTML = this.renderGoogle(
+      search.status === 'fulfilled' ? search.value : { failed: true },
+      crawl.status === 'fulfilled' ? crawl.value : null
+    );
   },
 
-  // Day by day: what the verified crawlers fetched, and what Google then showed
-  renderCrawlDays(crawl, searchDays) {
+  // Google, step by step: pages read by its crawler, shown in its results, clicked,
+  // and the visits that followed (the site's own audience)
+  renderGoogle(search, crawl) {
+    const hasSearch = search.configured === true;
+    if (!hasSearch && !crawl) {
+      return search.failed ? '<div class="card"><h3 class="card-title">🔎 Google</h3><p class="text-muted">Search Console et le suivi des robots ne répondent pas pour l’instant.</p></div>' : '';
+    }
+    const dayLabel = (day, opts = {}) => new Date(`${day}T12:00:00Z`).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', timeZone: 'UTC', ...opts });
+    const decimal = value => value === null || value === undefined ? '–' : value.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    const count = value => value === null || value === undefined ? '–' : this.formatNumber(value);
+    const total = hasSearch ? search.total : null;
+    const googleCrawl = crawl?.totals.find(t => t.engine === 'google');
+    const googleVisits = crawl ? crawl.googleVisits.reduce((sum, d) => sum + d.visits, 0) : null;
+    const crawlSince = crawl?.since && crawl.since > crawl.from ? `depuis le ${dayLabel(crawl.since, { month: 'long' })}` : 'pages différentes';
+
+    // Days with anything, latest first
     const byDay = new Map();
-    const row = day => byDay.get(day) || byDay.set(day, { day, google: null, bing: null, search: null }).get(day);
-    for (const r of crawl.daily) if (r.engine === 'google' || r.engine === 'bing') row(r.day)[r.engine] = r;
-    for (const r of searchDays) if (r.impressions || r.clicks) row(r.key).search = r;
-    const days = [...byDay.values()].sort((a, b) => b.day.localeCompare(a.day));
-    const dateLabel = day => new Date(`${day}T12:00:00Z`).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
-    const n = value => value ? this.formatNumber(value) : '<span class="text-muted">0</span>';
-    const pages = r => r ? `${n(r.pages)}${r.pages ? ` <span class="text-muted">(${this.formatNumber(r.distinct)} diff.)</span>` : ''}` : n(0);
-    return `
-      <div class="card mt-4">
-        <h3 class="card-title">🤖 Exploration et résultats, jour par jour</h3>
-        ${days.length ? `<div class="table-container search-table-wrap"><table class="table search-table">
-          <thead><tr><th>Jour</th><th class="table-number">Google : pages lues</th><th class="table-number"><span class="th-full">Google : rendus (API)</span><span class="th-short" title="Appels à l’API pendant le rendu des pages">API</span></th><th class="table-number">Bing : pages lues</th><th class="table-number"><span class="th-full">Affichages</span><span class="th-short" title="Affichages">Affich.</span></th><th class="table-number">Clics</th></tr></thead>
-          <tbody>${days.map(d => `<tr><td>${dateLabel(d.day)}</td><td class="table-number">${pages(d.google)}</td><td class="table-number">${n(d.google?.api)}</td><td class="table-number">${pages(d.bing)}</td><td class="table-number">${n(d.search?.impressions)}</td><td class="table-number">${n(d.search?.clicks)}</td></tr>`).join('')}</tbody>
-        </table></div>` : '<p class="text-muted">Aucun passage de robot vérifié sur la période</p>'}
-        <p class="text-muted audience-note">Seuls comptent les robots dont l’adresse appartient vraiment à Google ou Bing : beaucoup de scanners se font passer pour Googlebot. Une page n’apparaît dans les résultats qu’une fois lue, puis indexée. Jours de Google (heure du Pacifique) ; comptage depuis le 24 novembre 2026.</p>
-      </div>`;
-  },
+    const row = day => byDay.get(day) || byDay.set(day, { day }).get(day);
+    for (const r of crawl?.daily || []) if (r.engine === 'google' || r.engine === 'bing') row(r.day)[r.engine] = r;
+    for (const r of hasSearch ? search.daily : []) if (r.impressions || r.clicks) row(r.key).search = r;
+    for (const r of crawl?.googleVisits || []) row(r.day).visits = r.visits;
+    const days = [...byDay.values()].sort((x, y) => y.day.localeCompare(x.day));
+    const cell = value => value ? this.formatNumber(value) : '<span class="text-muted">·</span>';
+    const read = r => r?.distinct ? `<span title="${this.formatNumber(r.pages)} lectures de pages, ${this.formatNumber(r.api)} appels à l’API pendant le rendu">${this.formatNumber(r.distinct)}</span>` : cell(0);
 
-  renderSearchConsole(data) {
-    if (!data.configured) return '';
-    const { total, sitemap } = data;
-    const dateLabel = day => new Date(`${day}T12:00:00Z`).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', timeZone: 'UTC' });
-    const decimal = value => value === null ? '–' : value.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-    // Google names countries by three letters, the browser by two: the usual ones
-    // are named, the others keep their code
     const REGIONS = {
       fra: 'FR', bel: 'BE', che: 'CH', can: 'CA', lux: 'LU', usa: 'US', gbr: 'GB', irl: 'IE', aus: 'AU', nzl: 'NZ',
       deu: 'DE', aut: 'AT', esp: 'ES', mex: 'MX', arg: 'AR', chl: 'CL', col: 'CO', per: 'PE', ita: 'IT', prt: 'PT',
       bra: 'BR', nld: 'NL', swe: 'SE', nor: 'NO', dnk: 'DK', fin: 'FI', pol: 'PL', cze: 'CZ', hun: 'HU', rou: 'RO',
       grc: 'GR', tur: 'TR', rus: 'RU', ukr: 'UA', jpn: 'JP', kor: 'KR', chn: 'CN', twn: 'TW', hkg: 'HK', sgp: 'SG',
       ind: 'IN', idn: 'ID', phl: 'PH', tha: 'TH', vnm: 'VN', mys: 'MY', isr: 'IL', zaf: 'ZA', mar: 'MA', dza: 'DZ',
-      tun: 'TN', egy: 'EG'
+      tun: 'TN', egy: 'EG', bgr: 'BG', blz: 'BZ'
     };
     const countries = new Intl.DisplayNames(['fr'], { type: 'region' });
     const countryLabel = code => REGIONS[code] ? countries.of(REGIONS[code]) : code.toUpperCase();
     const table = (rows, head, label) => rows.length ? `
-      <div class="table-container search-table-wrap"><table class="table search-table">
+      <div class="table-container search-table-wrap"><table class="table table-plain search-table">
         <thead><tr><th>${head}</th><th class="table-number"><span class="th-full">Affichages</span><span class="th-short" title="Affichages">Affich.</span></th><th class="table-number">Clics</th><th class="table-number"><span class="th-full">Position</span><span class="th-short" title="Position moyenne">Pos.</span></th></tr></thead>
         <tbody>${rows.map(r => `<tr><td class="search-key">${label(r.key)}</td><td class="table-number">${this.formatNumber(r.impressions)}</td><td class="table-number">${this.formatNumber(r.clicks)}</td><td class="table-number">${decimal(r.position)}</td></tr>`).join('')}</tbody>
       </table></div>` : '<p class="text-muted">Rien sur la période</p>';
     const path = (url) => { try { return new URL(url).pathname; } catch { return url; } };
+    const sitemap = hasSearch ? search.sitemap : null;
 
     return `
       <div class="section-header">
-        <h2 class="section-title">🔎 Recherche Google</h2>
-        <span class="text-muted">du ${dateLabel(data.startDate)} au ${dateLabel(data.endDate)}</span>
+        <h2 class="section-title">🔎 Google : de l’exploration à la visite</h2>
+        ${hasSearch ? `<span class="text-muted">du ${dayLabel(search.startDate)} au ${dayLabel(search.endDate)}</span>` : ''}
       </div>
-      <div class="stats-grid">
+      <div class="stats-grid google-steps">
+        <div class="stat-card"><div class="stat-icon">🕷️</div><div>
+          <div class="stat-value">${count(googleCrawl ? googleCrawl.distinct : crawl ? 0 : null)}</div><div class="stat-label">Pages lues par Google</div>
+          <div class="stat-sub">${crawl ? crawlSince : 'suivi indisponible'}</div>
+        </div></div>
         <div class="stat-card"><div class="stat-icon">👁️</div><div>
-          <div class="stat-value">${this.formatNumber(total.impressions)}</div><div class="stat-label">Affichages</div>
-          <div class="stat-sub">dans les résultats de Google</div>
+          <div class="stat-value">${count(total?.impressions)}</div><div class="stat-label">Affichages</div>
+          <div class="stat-sub">${total ? `position moyenne ${decimal(total.position)}` : 'Search Console indisponible'}</div>
         </div></div>
         <div class="stat-card"><div class="stat-icon">🖱️</div><div>
-          <div class="stat-value">${this.formatNumber(total.clicks)}</div><div class="stat-label">Clics</div>
-          <div class="stat-sub">${total.impressions ? `${decimal(100 * total.clicks / total.impressions)} % des affichages` : ''}</div>
+          <div class="stat-value">${count(total?.clicks)}</div><div class="stat-label">Clics</div>
+          <div class="stat-sub">${total?.impressions ? `${decimal(100 * total.clicks / total.impressions)} % des affichages` : ''}</div>
         </div></div>
-        <div class="stat-card"><div class="stat-icon">🥇</div><div>
-          <div class="stat-value">${decimal(total.position)}</div><div class="stat-label">Position moyenne</div>
-        </div></div>
-        <div class="stat-card"><div class="stat-icon">🗂️</div><div>
-          <div class="stat-value">${this.formatNumber(sitemap.indexed)}</div><div class="stat-label">Pages du sitemap indexées</div>
-          <div class="stat-sub">sur ${this.formatNumber(sitemap.submitted)} envoyées${sitemap.errors ? ` · ${this.formatNumber(sitemap.errors)} erreurs` : ''}</div>
+        <div class="stat-card"><div class="stat-icon">🚪</div><div>
+          <div class="stat-value">${count(googleVisits)}</div><div class="stat-label">Visites venues de Google</div>
+          <div class="stat-sub">mesurées sur le site</div>
         </div></div>
       </div>
-      <div class="stats-columns">
+
+      <div class="card mt-4">
+        <h3 class="card-title">📆 Jour par jour</h3>
+        ${days.length ? `<div class="table-container search-table-wrap"><table class="table table-plain search-table google-days">
+          <thead><tr>
+            <th>Jour</th>
+            <th class="table-number"><span class="th-full">Pages lues</span><span class="th-short" title="Pages différentes lues par Google">Lues</span></th>
+            <th class="table-number"><span class="th-full">Affichages</span><span class="th-short" title="Affichages dans Google">Affich.</span></th>
+            <th class="table-number">Clics</th>
+            <th class="table-number"><span class="th-full">Visites</span><span class="th-short" title="Visites venues de Google">Visites</span></th>
+            <th class="table-number"><span class="th-full">Bing : lues</span><span class="th-short" title="Pages différentes lues par Bing">Bing</span></th>
+          </tr></thead>
+          <tbody>${days.map(d => `<tr>
+            <td class="google-day">${dayLabel(d.day, { weekday: 'short' })}</td>
+            <td class="table-number">${read(d.google)}</td>
+            <td class="table-number">${cell(d.search?.impressions)}</td>
+            <td class="table-number">${cell(d.search?.clicks)}</td>
+            <td class="table-number">${cell(d.visits)}</td>
+            <td class="table-number">${read(d.bing)}</td>
+          </tr>`).join('')}</tbody>
+        </table></div>` : '<p class="text-muted">Rien sur la période</p>'}
+        <p class="text-muted audience-note">Une page doit d’abord être lue par Google, puis indexée, avant d’être affichée dans ses résultats. « Pages lues » ne compte que les robots dont l’adresse appartient vraiment à Google ou à Bing (beaucoup de scanners se font passer pour Googlebot), depuis le 24 novembre 2026. Jours de Google (heure du Pacifique) ; affichages et clics arrivent avec un à deux jours de retard.</p>
+      </div>
+
+      ${hasSearch ? `
+      <div class="stats-columns mt-4">
         <div class="card">
           <h3 class="card-title">💬 Recherches</h3>
-          ${table(data.queries, 'Recherche', k => this.escapeHtml(k))}
+          ${table(search.queries, 'Recherche', k => this.escapeHtml(k))}
         </div>
         <div class="card">
           <h3 class="card-title">📄 Pages affichées</h3>
-          ${table(data.pages, 'Page', k => `<a href="${this.escapeHtml(k)}" target="_blank" rel="noopener">${this.escapeHtml(path(k))}</a>`)}
+          ${table(search.pages, 'Page', k => `<a href="${this.escapeHtml(k)}" target="_blank" rel="noopener">${this.escapeHtml(path(k))}</a>`)}
         </div>
         <div class="card">
           <h3 class="card-title">🌍 Pays</h3>
-          ${table(data.countries, 'Pays', k => this.escapeHtml(countryLabel(k)))}
+          ${table(search.countries, 'Pays', k => this.escapeHtml(countryLabel(k)))}
         </div>
       </div>
-      <p class="text-muted audience-note">Chiffres de Google Search Console, en retard d’un à deux jours et relus une fois par heure. Google ne détaille pas les recherches trop rares : leur total peut être inférieur aux affichages.</p>`;
+      <p class="text-muted audience-note">Chiffres de Google Search Console, relus une fois par heure. Google ne détaille pas les recherches trop rares : leur total peut être inférieur aux affichages.${sitemap?.submitted ? ` Sitemap : ${this.formatNumber(sitemap.submitted)} pages envoyées${sitemap.lastDownloaded ? `, lu par Google le ${new Date(sitemap.lastDownloaded).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}` : ''}.` : ''}</p>` : `
+      <p class="text-muted audience-note">${search.failed ? 'Search Console ne répond pas pour l’instant : affichages et clics manquent.' : 'Search Console n’est pas configurée.'}</p>`}`;
   },
 
   // Columns of visits per day, days without visits included
@@ -4260,13 +4299,13 @@ const admin = {
       <div class="stats-columns mt-4">
         <div class="card">
           <h3 class="card-title">📚 Fiches complètes</h3>
-          <table class="table table-compact">
+          <table class="table table-compact coverage-table">
             <tbody>
               ${coverage.map(([label, value, missing]) => {
                 const percent = c.games ? Math.round(100 * value / c.games) : 0;
                 return `
                   <tr>
-                    <td>${label}</td>
+                    <td class="coverage-label">${label}</td>
                     <td class="stat-coverage"><span class="stat-bar-track"><span class="stat-bar-fill" style="width: ${percent}%"></span></span></td>
                     <td class="nowrap">${this.formatNumber(value)} <span class="text-muted">(${percent} %)</span></td>
                     <td>${missing && value < c.games ? `<button class="btn btn-sm btn-ghost" data-click="navigateToGamesWithFilter" data-args="${admin.attrArgs([missing])}">${this.formatNumber(c.games - value)} manquants →</button>` : ''}</td>

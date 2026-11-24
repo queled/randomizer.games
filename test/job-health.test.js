@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { parseCron, periodOf, nextRun } = require('../services/job-health');
+const { JOBS, jobState, parseCron, periodOf, nextRun } = require('../services/job-health');
 
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -19,4 +19,13 @@ test('a weekly task waits for its weekday', () => {
 
 test('a task every 15 minutes keeps its period', () => {
   assert.equal(periodOf(parseCron('2-59/15 * * * *')), 15 * 60 * 1000);
+});
+
+test('an exit code a task gives to a measured state is a warning, not a failure', () => {
+  const job = JOBS.find((j) => j.name === 'challonge-check');
+  const now = new Date('2026-01-05T12:00:00Z');
+  const status = { state: 'done', startedAt: '2026-01-05T10:15:00Z', exitCode: 1, lastSuccessAt: '2025-12-20T10:15:00Z' };
+  assert.equal(jobState({ ...job, period: DAY }, status, now), 'warning');
+  assert.equal(jobState({ ...job, period: DAY }, { ...status, exitCode: 2 }, now), 'error');
+  assert.equal(jobState({ ...JOBS.find((j) => j.name === 'indexnow'), period: DAY }, status, now), 'error');
 });

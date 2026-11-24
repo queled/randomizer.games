@@ -11,7 +11,7 @@ test('Challonge takes its state from the daily quota check, without calling the 
   assert.equal(challongeFromJob({ state: 'ok', exitCode: 0, startedAt }).status, 'ok');
   assert.equal(challongeFromJob({ state: 'running', startedAt }).status, 'ok');
   assert.deepEqual(
-    [challongeFromJob({ state: 'error', exitCode: 1, startedAt }).status, challongeFromJob({ state: 'error', exitCode: 1, startedAt }).detail],
+    [challongeFromJob({ state: 'warning', exitCode: 1, startedAt }).status, challongeFromJob({ state: 'warning', exitCode: 1, startedAt }).detail],
     ['warning', 'quota épuisé']
   );
   assert.equal(challongeFromJob({ state: 'error', exitCode: 2, startedAt }).status, 'error');

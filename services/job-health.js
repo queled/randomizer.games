@@ -23,7 +23,8 @@ const JOBS = [
   { name: 'tournaments-discover', label: 'Découverte de tournois et asyncs ALTTPR', cron: '30 8 * * *', maxRun: 90 * MINUTE },
   { name: 'tournaments-organizers', label: 'Tournois des organisateurs start.gg', cron: '30 11 * * 1', maxRun: 30 * MINUTE },
   { name: 'players', label: 'Joueurs et comptes racetime', cron: '0 10 * * *', maxRun: 70 * MINUTE },
-  { name: 'challonge-check', label: 'Quota API Challonge', cron: '15 10 * * *', maxRun: 2 * MINUTE },
+  // Exit code 1 is the quota measured as exhausted, not a failure of the check
+  { name: 'challonge-check', label: 'Quota API Challonge', cron: '15 10 * * *', maxRun: 2 * MINUTE, warnings: { 1: 'quota épuisé' } },
   { name: 'backup', label: 'Sauvegarde de la base', cron: '30 3 * * *', maxRun: 30 * MINUTE },
   { name: 'publish-assets', label: 'Jaquettes et histoires vers GitHub', cron: '45 6 * * *', maxRun: 2 * MINUTE },
   { name: 'indexnow', label: 'Pages signalées à Bing (IndexNow)', cron: '0 7 * * *', maxRun: 5 * MINUTE }
@@ -105,6 +106,7 @@ function toDate(value) {
 
 /**
  * ok: last run succeeded and is recent; running: a run is under way;
+ * warning: last run ended with an exit code the task gives to a state it measured;
  * error: last run failed, or a run outlasts its timeouts;
  * late: no success for over two periods; unknown: never ran on this server.
  */
@@ -114,6 +116,7 @@ function jobState(job, status, now) {
   if (status.state === 'running' && startedAt) {
     return now - startedAt > job.maxRun + 5 * MINUTE ? 'error' : 'running';
   }
+  if (job.warnings?.[status.exitCode]) return 'warning';
   if (status.exitCode !== 0 && status.exitCode !== null) return 'error';
   const lastSuccessAt = toDate(status.lastSuccessAt);
   if (!lastSuccessAt || now - lastSuccessAt > 2 * job.period + job.maxRun) return 'late';
@@ -179,6 +182,7 @@ async function getJobsHealth(models, now = Date.now()) {
       minutes: schedule.minutes,
       nextRunAt: nextRun(schedule, now),
       state,
+      warning: state === 'warning' ? job.warnings[status.exitCode] : null,
       startedAt,
       // While a run is under way, endedAt and exitCode are those of the previous one
       endedAt,

@@ -2536,12 +2536,12 @@ const admin = {
       unknown: ['muted', '— jamais lancée']
     };
     document.getElementById('sync-jobs-body').innerHTML = jobs.map(job => {
-      const [badge, text] = states[job.state] || states.unknown;
+      const [badge, text] = job.state === 'warning' ? ['warning', `⚠️ ${job.warning}`] : states[job.state] || states.unknown;
       const frequency = job.everyMinutes >= 1440 ? 'tous les jours' : `toutes les ${job.everyMinutes} min`;
       const last = job.startedAt
         ? `<span data-tooltip="${this.escapeHtml(this.formatDateTime(job.startedAt))}">${this.formatRelativeTime(job.startedAt)}</span>${job.durationMs ? ` <span class="text-muted">· ${this.formatDuration(job.durationMs)}</span>` : ''}`
         : '<span class="text-muted">-</span>';
-      const detail = job.exitCode && job.state !== 'running'
+      const detail = job.exitCode && job.state !== 'running' && job.state !== 'warning'
         ? `<div class="text-muted table-sub">code ${job.exitCode}${job.consecutiveFailures > 1 ? `, ${job.consecutiveFailures} échecs de suite` : ''}</div>`
         : '';
       return `
@@ -4584,7 +4584,9 @@ const admin = {
     };
     const failure = (job) => {
       const details = [];
-      if (job.state === 'running') {
+      if (job.state === 'warning') {
+        if (job.lastSuccessAt) details.push(`depuis ${this.formatRelativeTime(job.lastSuccessAt)}`);
+      } else if (job.state === 'running') {
         if (job.consecutiveFailures) details.push(`précédente en échec (${job.consecutiveFailures}×)`);
       } else if (job.exitCode === 124) {
         details.push('délai dépassé');
@@ -4614,7 +4616,7 @@ const admin = {
       `;
     };
     const rowsOf = (list) => list.map(job => {
-      const state = states[job.state] || states.unknown;
+      const state = job.state === 'warning' ? { badge: 'warning', text: `⚠️ ${job.warning}` } : states[job.state] || states.unknown;
       const detail = failure(job);
       return `
         <tr>

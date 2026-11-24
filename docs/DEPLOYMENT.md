@@ -228,6 +228,7 @@ PATH=/usr/local/bin:/usr/bin:/bin
 15    10 * * * /home/randomizer/randomizer-app/scripts/cron/run-job.sh challonge-check
 30    3 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh backup
 45    6 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh publish-assets
+0     7 * * *  /home/randomizer/randomizer-app/scripts/cron/run-job.sh indexnow
 ```
 
 Ces horaires sont recopiés dans `services/job-health.js`, qui en tire l'horaire et la prochaine exécution affichés par la page **Monitoring** : les modifier aux deux endroits.

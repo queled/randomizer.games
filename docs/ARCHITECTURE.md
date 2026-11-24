@@ -69,6 +69,7 @@ En production, la base MongoDB tourne sur le même serveur que le site et n'éco
 | `challonge-check` | tous les jours à 10h15 UTC | `check-challonge-quota.js` : une seule requête Challonge, en erreur sur la page de santé tant que le quota (500 requêtes sur 30 jours glissants) est épuisé ; à son retour, les imports Challonge en attente se lancent à la main |
 | `backup` | tous les jours à 3h30 | `backup-db.js` : archive `mongodump` de la base, 7 gardées |
 | `publish-assets` | tous les jours à 6h45, après `archipelago` | commite et pousse sur `main` les jaquettes (`public/assets/covers/`) et histoires (`public/data/history/`) écrites sur le serveur par l'admin ou `fetch-covers.js`, par un commit construit sur `origin/main` (le serveur peut être en retard) |
+| `indexnow` | tous les jours à 7h | `submit-indexnow.js` : signale à IndexNow (Bing, Yandex, Seznam, Naver…) les pages du sitemap nouvelles ou modifiées depuis le dernier envoi, toutes la première fois ; la clé `INDEXNOW_KEY` est servie à `/<clé>.txt`. Google n'y participe pas et lit le sitemap |
 
 Chaque tâche se lance aussi à la main : `scripts/cron/run-job.sh <tâche>`.
 

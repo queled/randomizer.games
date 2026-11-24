@@ -15,6 +15,7 @@
 #   challonge-check       une requête pour savoir si le quota Challonge est revenu (tous les jours)
 #   backup                mongodump avec rotation                   (toutes les nuits)
 #   publish-assets        commite et pousse les jaquettes et histoires écrites sur le serveur (tous les jours, après archipelago)
+#   indexnow              signale à Bing, Yandex… les pages nouvelles ou modifiées du sitemap (tous les jours)
 #
 # Chaque tâche écrit dans $LOG_DIR/<tâche>.log (~/logs par défaut). Un verrou
 # empêche deux exécutions simultanées : si la précédente tourne encore, la
@@ -181,6 +182,10 @@ run_publish_assets() {
   log "publié : $(git rev-parse --short "$commit")"
 }
 
+run_indexnow() {
+  timeout 5m node scripts/submit-indexnow.js
+}
+
 case "$JOB" in
   racetime)             fn=run_racetime ;;
   tournaments-update)   fn=run_tournaments_update ;;
@@ -194,8 +199,9 @@ case "$JOB" in
   challonge-check)      fn=run_challonge_check ;;
   backup)               fn=run_backup ;;
   publish-assets)       fn=run_publish_assets ;;
+  indexnow)             fn=run_indexnow ;;
   *)
-    echo "Usage: $0 <racetime|tournaments-update|schedule-sites|race-vods|tournaments-discover|tournaments-organizers|rando-list|archipelago|players|challonge-check|backup|publish-assets>" >&2
+    echo "Usage: $0 <racetime|tournaments-update|schedule-sites|race-vods|tournaments-discover|tournaments-organizers|rando-list|archipelago|players|challonge-check|backup|publish-assets|indexnow>" >&2
     exit 2
     ;;
 esac

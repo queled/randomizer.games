@@ -14,6 +14,7 @@ const { getGamesWithStatsCached } = require('./routes/games');
 const { getPlayersList } = require('./routes/players');
 const { COVERS_DIR, coverIds, coverPublicUrl } = require('./helpers/game-covers');
 const { securityTxt } = require('./helpers/security-txt');
+const { isIndexNowKey } = require('./helpers/indexnow');
 const { 
   apiLimiter, 
   mediaLimiter,
@@ -290,6 +291,16 @@ app.get(['/.well-known/security.txt', '/security.txt'], (req, res) => {
   res.set('Cache-Control', 'public, max-age=86400');
   res.send(securityTxt());
 });
+
+// IndexNow key (scripts/submit-indexnow.js): the engines fetch it to check that
+// the pages submitted for the site come from the site
+const INDEXNOW_KEY = isIndexNowKey(process.env.INDEXNOW_KEY) ? process.env.INDEXNOW_KEY : null;
+if (INDEXNOW_KEY) {
+  app.get(`/${INDEXNOW_KEY}.txt`, (req, res) => {
+    res.type('text/plain; charset=utf-8');
+    res.send(INDEXNOW_KEY);
+  });
+}
 
 // Serve static files. Images rarely change, so browsers may reuse them for a
 // day instead of revalidating each one on every page view. JS/CSS keep the
